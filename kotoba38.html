@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kotoba 38 - Flashcard Minimalis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            surface: {
+              DEFAULT: '#121215',
+              card: '#18181b',
+              border: '#27272a',
+              muted: '#71717a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      background-color: #0c0c0e;
+    }
+
+    .jp-font {
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+
+    .perspective {
+      perspective: 1000px;
+    }
+
+    .preserve-3d {
+      transform-style: preserve-3d;
+    }
+
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+
+    .card-transition {
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+<body class="text-zinc-100 min-h-screen flex flex-col items-center justify-between p-4 sm:p-6 antialiased">
+
+  <!-- Header -->
+  <header class="w-full max-w-lg flex items-center justify-between py-2">
+    <div>
+      <h1 class="text-base font-bold tracking-tight text-white flex items-center gap-2">
+        <span>Kotoba 38</span>
+        <span class="text-xs px-2 py-0.5 rounded-md bg-emerald-950/80 border border-emerald-800/60 text-emerald-400 font-medium">Bab 38</span>
+      </h1>
+      <p class="text-xs text-zinc-500">Minna no Nihongo • 42 Kotoba</p>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button 
+        onclick="shuffleDeck()" 
+        class="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition text-sm" 
+        title="Acak Kartu (R)">
+        🔀
+      </button>
+      <button 
+        onclick="toggleListDrawer()" 
+        class="px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 text-xs font-semibold transition flex items-center gap-1.5">
+        <span>📖</span>
+        <span>Daftar (<span id="total-badge">42</span>)</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="w-full max-w-lg flex-1 flex flex-col items-center justify-center my-auto py-3">
+
+    <!-- Progress bar & Counter -->
+    <div class="w-full flex items-center justify-between text-xs text-zinc-500 mb-2 px-1">
+      <span>Kartu <strong id="card-counter" class="text-zinc-200 font-semibold">1</strong> dari <span id="deck-size">42</span></span>
+      <div class="flex items-center gap-2">
+        <span id="mastered-badge" class="hidden text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">✓ Hafal</span>
+        <span id="card-group" class="text-[11px] text-zinc-400">Kata Kerja II</span>
+      </div>
+    </div>
+
+    <!-- Minimal Progress Line -->
+    <div class="w-full h-1 bg-zinc-900 rounded-full mb-4 overflow-hidden">
+      <div id="progress-line" class="h-full bg-emerald-500 transition-all duration-300" style="width: 2%;"></div>
+    </div>
+
+    <!-- 3D Card Box -->
+    <div class="w-full perspective">
+      <div 
+        id="card-element" 
+        onclick="flipCard()"
+        class="relative w-full h-80 sm:h-96 preserve-3d card-transition cursor-pointer rounded-2xl border border-zinc-800 bg-zinc-900 shadow-xl flex items-center justify-center">
+
+        <!-- DEPAN (Kanji & Furigana) -->
+        <div class="absolute inset-0 backface-hidden p-6 flex flex-col justify-between items-center text-center">
+          <div class="w-full flex justify-between items-center">
+            <span class="text-[11px] text-zinc-500 uppercase font-semibold tracking-wider">Jepang</span>
+            <button 
+              onclick="event.stopPropagation(); playAudio();" 
+              class="p-2 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800 transition" 
+              title="Dengarkan Suara (A)">
+              🔊
+            </button>
+          </div>
+
+          <!-- Central Text -->
+          <div class="my-auto select-none">
+            <div id="card-furigana" class="jp-font text-base text-zinc-400 font-normal mb-1">
+              そだてます
+            </div>
+            <div id="card-kanji" class="jp-font text-4xl sm:text-5xl font-bold text-white tracking-wide">
+              育てます
+            </div>
+            <div id="card-romaji" class="text-xs sm:text-sm text-zinc-500 mt-2 font-mono">
+              sodatemasu
+            </div>
+          </div>
+
+          <div class="text-[11px] text-zinc-600 flex items-center gap-1.5">
+            <span>Ketuk kartu untuk melihat arti</span>
+            <span>•</span>
+            <kbd class="px-1 py-0.5 bg-zinc-800 text-zinc-400 rounded text-[10px]">Spasi</kbd>
+          </div>
+        </div>
+
+        <!-- BELAKANG (Arti & Penjelasan) -->
+        <div class="absolute inset-0 backface-hidden rotate-y-180 p-6 flex flex-col justify-between items-center text-center bg-zinc-900 rounded-2xl">
+          <div class="w-full flex justify-between items-center">
+            <span class="text-[11px] text-emerald-500 uppercase font-semibold tracking-wider">Arti & Keterangan</span>
+            <button 
+              onclick="event.stopPropagation(); playAudio();" 
+              class="p-2 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800 transition" 
+              title="Dengarkan Suara (A)">
+              🔊
+            </button>
+          </div>
+
+          <!-- Meaning & Detail -->
+          <div class="my-auto px-2">
+            <div class="text-xs text-zinc-500 mb-1">Bahasa Indonesia</div>
+            <h2 id="card-meaning" class="text-2xl sm:text-3xl font-bold text-white mb-4">
+              memelihara, membesarkan
+            </h2>
+
+            <!-- Minimal Detail Box -->
+            <div id="card-example-box" class="bg-zinc-950/70 border border-zinc-800/80 rounded-xl p-3 text-left">
+              <div id="card-example-jp" class="jp-font text-xs sm:text-sm text-zinc-200 font-medium">
+                子供を育てます。
+              </div>
+              <div id="card-example-id" class="text-[11px] text-zinc-400 mt-1">
+                Membesarkan anak.
+              </div>
+            </div>
+          </div>
+
+          <div class="text-[11px] text-zinc-600">
+            Ketuk kartu untuk kembali
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="w-full flex items-center justify-between gap-2.5 mt-4">
+      <button 
+        onclick="prevCard()" 
+        class="flex-1 py-3 px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs font-semibold transition active:scale-95 flex items-center justify-center gap-1">
+        <span>←</span>
+        <span>Sebelumnya</span>
+      </button>
+
+      <button 
+        onclick="flipCard()" 
+        class="flex-1 py-3 px-3 rounded-xl bg-white hover:bg-zinc-200 text-zinc-950 text-xs font-bold transition active:scale-95 shadow-sm">
+        Balik Kartu
+      </button>
+
+      <button 
+        onclick="nextCard()" 
+        class="flex-1 py-3 px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs font-semibold transition active:scale-95 flex items-center justify-center gap-1">
+        <span>Berikutnya</span>
+        <span>→</span>
+      </button>
+    </div>
+
+    <!-- Hafal Toggle Button -->
+    <div class="w-full mt-2.5">
+      <button 
+        id="btn-toggle-master" 
+        onclick="toggleMasterCurrent()" 
+        class="w-full py-2 px-3 rounded-xl border border-zinc-800 bg-zinc-950/80 hover:border-zinc-700 text-zinc-400 hover:text-white text-xs font-medium transition flex items-center justify-center gap-2">
+        <span id="master-icon">☆</span>
+        <span id="master-label">Tandai Sudah Hafal (M)</span>
+      </button>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-center gap-1.5 mt-4 text-xs">
+      <button onclick="setFilter('all')" id="btn-filter-all" class="filter-btn px-3 py-1 rounded-full bg-zinc-800 text-white font-medium">Semua (42)</button>
+      <button onclick="setFilter('verb')" id="btn-filter-verb" class="filter-btn px-3 py-1 rounded-full text-zinc-500 hover:text-zinc-300 font-medium">Kata Kerja</button>
+      <button onclick="setFilter('noun')" id="btn-filter-noun" class="filter-btn px-3 py-1 rounded-full text-zinc-500 hover:text-zinc-300 font-medium">Kata Benda</button>
+      <button onclick="setFilter('other')" id="btn-filter-other" class="filter-btn px-3 py-1 rounded-full text-zinc-500 hover:text-zinc-300 font-medium">Percakapan & Bacaan</button>
+      <button onclick="setFilter('unmastered')" id="btn-filter-unmastered" class="filter-btn px-3 py-1 rounded-full text-amber-500/80 hover:text-amber-400 font-medium">Belum Hafal</button>
+    </div>
+
+  </main>
+
+  <!-- Footer shortcuts -->
+  <footer class="w-full max-w-lg text-center py-2 text-[11px] text-zinc-600">
+    Pintasan: <kbd class="px-1 bg-zinc-900 rounded border border-zinc-800">Spasi</kbd> Balik • <kbd class="px-1 bg-zinc-900 rounded border border-zinc-800">←</kbd> <kbd class="px-1 bg-zinc-900 rounded border border-zinc-800">→</kbd> Geser • <kbd class="px-1 bg-zinc-900 rounded border border-zinc-800">M</kbd> Hafal • <kbd class="px-1 bg-zinc-900 rounded border border-zinc-800">A</kbd> Suara
+  </footer>
+
+  <div id="list-drawer" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-end sm:items-center justify-center">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-lg h-[80vh] sm:rounded-2xl rounded-t-2xl flex flex-col overflow-hidden shadow-2xl">
+      
+      <!-- Drawer Header -->
+      <div class="p-4 border-b border-zinc-800 flex items-center justify-between">
+        <div>
+          <h3 class="text-sm font-bold text-white">Daftar Lengkap Kotoba Bab 38</h3>
+          <p class="text-xs text-zinc-500">Klik kosakata untuk langsung membuka kartu</p>
+        </div>
+        <button onclick="toggleListDrawer()" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 text-sm">
+          ✕
+        </button>
+      </div>
+
+      <!-- Quick Search Bar -->
+      <div class="p-3 border-b border-zinc-800/70 bg-zinc-900">
+        <input 
+          type="text" 
+          id="search-input" 
+          oninput="filterList(this.value)"
+          placeholder="Cari kanji, romaji, atau arti..." 
+          class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white placeholder:text-zinc-600 outline-none focus:border-zinc-600 transition"
+        >
+      </div>
+
+      <!-- Scrollable List -->
+      <div id="list-content" class="flex-1 overflow-y-auto p-3 space-y-1.5 divide-y divide-zinc-800/40">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Data lengkap seluruh 42 kosakata Pelajaran 38 (Halaman 76 & 77)
+    const KOTOBA_38 = [
+      { id: 1, kanji: "育てます", furigana: "そだてます", romaji: "sodatemasu", arti: "memelihara, membesarkan", type: "verb", group: "Kata Kerja II", exJp: "子供を一生懸命育てます。", exId: "Membesarkan anak dengan sekuat tenaga." },
+      { id: 2, kanji: "運びます", furigana: "はこびます", romaji: "hakobimasu", arti: "membawa, mengangkut", type: "verb", group: "Kata Kerja I", exJp: "荷物を車で運びます。", exId: "Mengangkut barang dengan mobil." },
+      { id: 3, kanji: "亡くなります", furigana: "なくなります", romaji: "nakunarimasu", arti: "meninggal (halus dari しにます)", type: "verb", group: "Kata Kerja I", exJp: "祖父が去年亡くなりました。", exId: "Kakek meninggal tahun lalu." },
+      { id: 4, kanji: "入院します", furigana: "にゅういんします", romaji: "nyuuinshimasu", arti: "masuk rumah sakit", type: "verb", group: "Kata Kerja III", exJp: "病気で入院します。", exId: "Masuk rumah sakit karena sakit." },
+      { id: 5, kanji: "退院します", furigana: "たいいんします", romaji: "taiinshimasu", arti: "keluar dari rumah sakit", type: "verb", group: "Kata Kerja III", exJp: "来週退院します。", exId: "Minggu depan keluar rumah sakit." },
+      { id: 6, kanji: "入れます [電源を～]", furigana: "いれます [でんげんを～]", romaji: "iremasu [dengen o~]", arti: "menghidupkan [aliran listrik]", type: "verb", group: "Kata Kerja II", exJp: "電源を入れましたか。", exId: "Apakah sudah menyalakan listriknya?" },
+      { id: 7, kanji: "切ります [電源を～]", furigana: "きります [でんげんを～]", romaji: "kirimasu [dengen o~]", arti: "mematikan [aliran listrik]", type: "verb", group: "Kata Kerja I", exJp: "使わないときは電源を切ります。", exId: "Matikan listrik jika tidak digunakan." },
+      { id: 8, kanji: "掛けます [かぎを～]", furigana: "かけます [かぎを～]", romaji: "kakemasu [kagi o~]", arti: "mengunci [kunci]", type: "verb", group: "Kata Kerja II", exJp: "ドアにかぎを掛けました。", exId: "Saya sudah mengunci pintu." },
+      { id: 9, kanji: "気持ちがいい", furigana: "きもちがいい", romaji: "kimochi ga ii", arti: "senang, merasa enak, nyaman", type: "other", group: "Sifat / Kondisi", exJp: "朝の風は気持ちがいいです。", exId: "Angin pagi rasanya segar/enak." },
+      { id: 10, kanji: "気持ちが悪い", furigana: "きもちがわるい", romaji: "kimochi ga warui", arti: "jijik, merasa tidak enak (badan)", type: "other", group: "Sifat / Kondisi", exJp: "気分が悪くて気持ちが悪い。", exId: "Badan merasa tidak enak." },
+      { id: 11, kanji: "大きな～", furigana: "おおきな～", romaji: "ookina~", arti: "besar ～", type: "other", group: "Kata Sambung/Sifat", exJp: "大きな夢があります。", exId: "Punya impian yang besar." },
+      { id: 12, kanji: "小さな～", furigana: "ちいさな～", romaji: "chiisana~", arti: "kecil ～", type: "other", group: "Kata Sambung/Sifat", exJp: "小さなミスを直します。", exId: "Memperbaiki kesalahan kecil." },
+      { id: 13, kanji: "赤ちゃん", furigana: "あかちゃん", romaji: "akachan", arti: "bayi", type: "noun", group: "Kata Benda", exJp: "赤ちゃんがすやすや眠っています。", exId: "Bayi sedang tidur dengan pulas." },
+      { id: 14, kanji: "小学校", furigana: "しょうがっこう", romaji: "shougakkou", arti: "Sekolah Dasar (SD)", type: "noun", group: "Kata Benda", exJp: "小学校に通っています。", exId: "Bersekolah di SD." },
+      { id: 15, kanji: "中学校", furigana: "ちゅうがっこう", romaji: "chuugakkou", arti: "Sekolah Menengah Pertama (SMP)", type: "noun", group: "Kata Benda", exJp: "中学校の卒業式です。", exId: "Upacara kelulusan SMP." },
+      { id: 16, kanji: "駅前", furigana: "えきまえ", romaji: "ekimae", arti: "depan stasiun", type: "noun", group: "Kata Benda", exJp: "駅前のカフェで会いましょう。", exId: "Ayo bertemu di kafe depan stasiun." },
+      { id: 17, kanji: "海岸", furigana: "かいがん", romaji: "kaigan", arti: "pantai, pesisir", type: "noun", group: "Kata Benda", exJp: "海岸を散歩しました。", exId: "Jalan santai di pantai." },
+      { id: 18, kanji: "うそ", furigana: "うそ", romaji: "uso", arti: "bohong, kebohongan", type: "noun", group: "Kata Benda", exJp: "うそをついてはいけません。", exId: "Tidak boleh berbohong." },
+      { id: 19, kanji: "書類", furigana: "しょるい", romaji: "shorui", arti: "dokumen, berkas / surat", type: "noun", group: "Kata Benda", exJp: "書類を提出してください。", exId: "Tolong kumpulkan dokumennya." },
+      { id: 20, kanji: "電源", furigana: "でんげん", romaji: "dengen", arti: "aliran listrik / tombol power", type: "noun", group: "Kata Benda", exJp: "電源ボタンを押します。", exId: "Tekan tombol power listrik." },
+      { id: 21, kanji: "～製", furigana: "～せい", romaji: "~sei", arti: "buatan ～", type: "other", group: "Akhiran", exJp: "これは日本製です。", exId: "Ini adalah buatan Jepang." },
+      
+      // Bagian Percakapan (Kaiwa - Halaman 77)
+      { id: 22, kanji: "回覧", furigana: "かいらん", romaji: "kairan", arti: "edaran, surat keliling", type: "noun", group: "Percakapan / Kaiwa", exJp: "回覧を回してください。", exId: "Tolong teruskan surat edarannya." },
+      { id: 23, kanji: "研究室", furigana: "けんきゅうしつ", romaji: "kenkyuushitsu", arti: "ruang penelitian, lab", type: "noun", group: "Percakapan / Kaiwa", exJp: "先生の研究室に行きます。", exId: "Pergi ke ruang penelitian dosen." },
+      { id: 24, kanji: "きちんと", furigana: "きちんと", romaji: "kichinto", arti: "dengan rapi / tertib", type: "other", group: "Percakapan / Kaiwa", exJp: "本をきちんと並べます。", exId: "Menata buku dengan rapi." },
+      { id: 25, kanji: "整理します", furigana: "せいりします", romaji: "seirishimasu", arti: "merapikan, menertibkan", type: "verb", group: "Kata Kerja III", exJp: "机の上を整理します。", exId: "Merapikan bagian atas meja." },
+      { id: 26, kanji: "～という本", furigana: "～というほん", romaji: "~to iu hon", arti: "buku yang berjudul ～", type: "other", group: "Percakapan / Kaiwa", exJp: "「こころ」という本を読みました。", exId: "Membaca buku yang berjudul 'Kokoro'." },
+      { id: 27, kanji: "ー冊", furigana: "ーさつ", romaji: "-satsu", arti: "(satuan bilangan untuk buku dll.)", type: "other", group: "Penghitung", exJp: "本を２冊買いました。", exId: "Membeli dua buku." },
+      { id: 28, kanji: "はんこ", furigana: "はんこ", romaji: "hanko", arti: "stempel, cap", type: "noun", group: "Percakapan / Kaiwa", exJp: "ここに判子を押してください。", exId: "Tolong cap stempel di sini." },
+      { id: 29, kanji: "押します [はんこを～]", furigana: "おします [はんこを～]", romaji: "oshimasu [hanko o~]", arti: "mencap, menstempel", type: "verb", group: "Kata Kerja I", exJp: "書類にはんこを押します。", exId: "Mencap dokumen." },
+
+      // Bagian Bacaan (Yomimono - Halaman 77)
+      { id: 30, kanji: "双子", furigana: "ふたご", romaji: "futago", arti: "kembar", type: "noun", group: "Bacaan / Yomimono", exJp: "双子の姉妹です。", exId: "Saudari perempuan kembar." },
+      { id: 31, kanji: "姉妹", furigana: "しまい", romaji: "shimai", arti: "saudara perempuan", type: "noun", group: "Bacaan / Yomimono", exJp: "私たちは仲良し姉妹です。", exId: "Kami saudara perempuan yang rukun." },
+      { id: 32, kanji: "５年生", furigana: "５ねんせい", romaji: "gonensei", arti: "kelas lima", type: "other", group: "Bacaan / Yomimono", exJp: "今年で小学５年生になります。", exId: "Tahun ini naik ke kelas 5 SD." },
+      { id: 33, kanji: "似ています", furigana: "にています", romaji: "niteimasu", arti: "mirip, menyerupai", type: "verb", group: "Kata Kerja II", exJp: "顔がよく似ています。", exId: "Wajahnya sangat mirip." },
+      { id: 34, kanji: "性格", furigana: "せいかく", romaji: "seikaku", arti: "tabiat, sifat, karakter", type: "noun", group: "Bacaan / Yomimono", exJp: "明るい性格をしています。", exId: "Memiliki sifat yang ceria." },
+      { id: 35, kanji: "おとなしい", furigana: "おとなしい", romaji: "otonashii", arti: "pendiam, patuh, kalem", type: "other", group: "Kata Sifat -i", exJp: "妹はおとなしい性格です。", exId: "Adik perempuan pendiam sifatnya." },
+      { id: 36, kanji: "世話をします", furigana: "せわをします", romaji: "sewa o shimasu", arti: "mengurus, merawat", type: "verb", group: "Kata Kerja III", exJp: "ペットの世話をします。", exId: "Merawat hewan peliharaan." },
+      { id: 37, kanji: "時間がたちます", furigana: "じかんが たちます", romaji: "jikan ga tachimasu", arti: "waktu berlalu", type: "verb", group: "Kata Kerja I", exJp: "時間がたつのは早いです。", exId: "Waktu berlalu sangat cepat." },
+      { id: 38, kanji: "大好き[な]", furigana: "だいすき[な]", romaji: "daisuki[na]", arti: "suka sekali, gemar sekali", type: "other", group: "Kata Sifat -na", exJp: "アニメが大好きです。", exId: "Saya sangat suka anime." },
+      { id: 39, kanji: "ー点", furigana: "ーてん", romaji: "-ten", arti: "angka －, skor －", type: "other", group: "Penghitung", exJp: "テストで100点を取りました。", exId: "Mendapat skor 100 di ujian." },
+      { id: 40, kanji: "クラス", furigana: "クラス", romaji: "kurasu", arti: "kelas", type: "noun", group: "Bacaan / Yomimono", exJp: "同じクラスの友達です。", exId: "Teman satu kelas." },
+      { id: 41, kanji: "けんかします", furigana: "けんかします", romaji: "kenkashimasu", arti: "bertengkar, berkelahi", type: "verb", group: "Kata Kerja III", exJp: "兄とけんかしました。", exId: "Bertengkar dengan abang." },
+      { id: 42, kanji: "不思議[な]", furigana: "ふしぎ[な]", romaji: "fushigi[na]", arti: "luar biasa, aneh, misterius", type: "other", group: "Kata Sifat -na", exJp: "不思議なことが起こりました。", exId: "Terjadi hal yang aneh/ajaib." }
+    ];
+
+    let currentFilter = 'all';
+    let currentList = [...KOTOBA_38];
+    let currentIndex = 0;
+    let isFlipped = false;
+    let masteredIds = new Set(JSON.parse(localStorage.getItem('kotoba38_mastered') || '[]'));
+
+    function renderCard() {
+      if (currentList.length === 0) {
+        document.getElementById('card-furigana').textContent = '';
+        document.getElementById('card-kanji').textContent = 'Selesai!';
+        document.getElementById('card-romaji').textContent = 'Semua kata sudah Anda kuasai.';
+        document.getElementById('card-meaning').textContent = 'Luar Biasa!';
+        document.getElementById('card-example-jp').textContent = '';
+        document.getElementById('card-example-id').textContent = 'Pilih filter lain untuk mengulang.';
+        document.getElementById('card-counter').textContent = '0';
+        document.getElementById('deck-size').textContent = '0';
+        document.getElementById('progress-line').style.width = '100%';
+        return;
+      }
+
+      if (currentIndex >= currentList.length) currentIndex = 0;
+      const item = currentList[currentIndex];
+      const cardEl = document.getElementById('card-element');
+
+      // Reset flip state
+      isFlipped = false;
+      cardEl.classList.remove('rotate-y-180');
+
+      // Counters & Group
+      document.getElementById('card-counter').textContent = currentIndex + 1;
+      document.getElementById('deck-size').textContent = currentList.length;
+      document.getElementById('card-group').textContent = item.group;
+
+      // Mastered badge & button state
+      const isMastered = masteredIds.has(item.id);
+      const masterBadge = document.getElementById('mastered-badge');
+      const masterIcon = document.getElementById('master-icon');
+      const masterLabel = document.getElementById('master-label');
+      
+      if (isMastered) {
+        masterBadge.classList.remove('hidden');
+        masterIcon.textContent = '★';
+        masterLabel.textContent = 'Sudah Dihafal (Klik untuk Batal)';
+        document.getElementById('btn-toggle-master').className = "w-full py-2 px-3 rounded-xl border border-emerald-700/60 bg-emerald-950/40 text-emerald-400 text-xs font-semibold transition flex items-center justify-center gap-2";
+      } else {
+        masterBadge.classList.add('hidden');
+        masterIcon.textContent = '☆';
+        masterLabel.textContent = 'Tandai Sudah Hafal (M)';
+        document.getElementById('btn-toggle-master').className = "w-full py-2 px-3 rounded-xl border border-zinc-800 bg-zinc-950/80 hover:border-zinc-700 text-zinc-400 hover:text-white text-xs font-medium transition flex items-center justify-center gap-2";
+      }
+
+      // Progress bar percentage
+      const pct = ((currentIndex + 1) / currentList.length) * 100;
+      document.getElementById('progress-line').style.width = `${pct}%`;
+
+      // Front Face
+      document.getElementById('card-furigana').textContent = item.furigana;
+      document.getElementById('card-kanji').textContent = item.kanji;
+      document.getElementById('card-romaji').textContent = item.romaji;
+
+      // Back Face
+      document.getElementById('card-meaning').textContent = item.arti;
+      document.getElementById('card-example-jp').textContent = item.exJp;
+      document.getElementById('card-example-id').textContent = item.exId;
+    }
+
+    function flipCard() {
+      if (currentList.length === 0) return;
+      const cardEl = document.getElementById('card-element');
+      isFlipped = !isFlipped;
+      if (isFlipped) {
+        cardEl.classList.add('rotate-y-180');
+      } else {
+        cardEl.classList.remove('rotate-y-180');
+      }
+    }
+
+    function nextCard() {
+      if (currentList.length === 0) return;
+      currentIndex = (currentIndex + 1) % currentList.length;
+      renderCard();
+    }
+
+    function prevCard() {
+      if (currentList.length === 0) return;
+      currentIndex = (currentIndex - 1 + currentList.length) % currentList.length;
+      renderCard();
+    }
+
+    function shuffleDeck() {
+      currentList.sort(() => Math.random() - 0.5);
+      currentIndex = 0;
+      renderCard();
+    }
+
+    function playAudio() {
+      if (currentList.length === 0) return;
+      const item = currentList[currentIndex];
+      if (!item || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      // Bersihkan teks dari kurung agar suara audio alami
+      const cleanWord = (item.kanji || item.furigana).replace(/\[.*?\]/g, '').trim();
+      const utterance = new SpeechSynthesisUtterance(cleanWord);
+      utterance.lang = 'ja-JP';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function toggleMasterCurrent() {
+      if (currentList.length === 0) return;
+      const item = currentList[currentIndex];
+      if (masteredIds.has(item.id)) {
+        masteredIds.delete(item.id);
+      } else {
+        masteredIds.add(item.id);
+      }
+      localStorage.setItem('kotoba38_mastered', JSON.stringify([...masteredIds]));
+
+      // Jika sedang berada di mode 'unmastered', filter ulang
+      if (currentFilter === 'unmastered') {
+        currentList = KOTOBA_38.filter(k => !masteredIds.has(k.id));
+      }
+      renderCard();
+    }
+
+    function setFilter(type) {
+      currentFilter = type;
+      if (type === 'all') {
+        currentList = [...KOTOBA_38];
+      } else if (type === 'verb') {
+        currentList = KOTOBA_38.filter(k => k.type === 'verb');
+      } else if (type === 'noun') {
+        currentList = KOTOBA_38.filter(k => k.type === 'noun');
+      } else if (type === 'other') {
+        currentList = KOTOBA_38.filter(k => k.type === 'other');
+      } else if (type === 'unmastered') {
+        currentList = KOTOBA_38.filter(k => !masteredIds.has(k.id));
+      }
+
+      currentIndex = 0;
+      
+      // Update styling pill buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.className = "filter-btn px-3 py-1 rounded-full text-zinc-500 hover:text-zinc-300 font-medium";
+      });
+      const activeBtn = document.getElementById(`btn-filter-${type}`);
+      if (activeBtn) {
+        if (type === 'unmastered') {
+          activeBtn.className = "filter-btn px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold";
+        } else {
+          activeBtn.className = "filter-btn px-3 py-1 rounded-full bg-zinc-800 text-white font-semibold";
+        }
+      }
+
+      renderCard();
+    }
+
+    const listDrawer = document.getElementById('list-drawer');
+    function toggleListDrawer() {
+      if (listDrawer.classList.contains('hidden')) {
+        listDrawer.classList.remove('hidden');
+        listDrawer.classList.add('flex');
+        renderFullList();
+      } else {
+        listDrawer.classList.add('hidden');
+        listDrawer.classList.remove('flex');
+      }
+    }
+
+    function renderFullList(query = '') {
+      const container = document.getElementById('list-content');
+      container.innerHTML = '';
+
+      const q = query.toLowerCase().trim();
+      const filtered = KOTOBA_38.filter(item => 
+        item.kanji.toLowerCase().includes(q) ||
+        item.furigana.toLowerCase().includes(q) ||
+        item.romaji.toLowerCase().includes(q) ||
+        item.arti.toLowerCase().includes(q)
+      );
+
+      filtered.forEach((item) => {
+        const isM = masteredIds.has(item.id);
+        const row = document.createElement('div');
+        row.className = "py-2.5 px-3 rounded-xl hover:bg-zinc-800/70 cursor-pointer flex items-center justify-between transition";
+        row.onclick = () => {
+          currentFilter = 'all';
+          currentList = [...KOTOBA_38];
+          currentIndex = KOTOBA_38.findIndex(k => k.id === item.id);
+          renderCard();
+          toggleListDrawer();
+        };
+
+        row.innerHTML = `
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="jp-font text-sm font-bold text-white">${item.kanji}</span>
+              <span class="jp-font text-xs text-zinc-400">(${item.furigana})</span>
+              ${isM ? '<span class="text-[10px] text-emerald-400">✓</span>' : ''}
+            </div>
+            <p class="text-xs text-zinc-300 mt-0.5">${item.arti}</p>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] text-zinc-500 block">${item.group}</span>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function filterList(val) {
+      renderFullList(val);
+    }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        flipCard();
+      } else if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        nextCard();
+      } else if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        prevCard();
+      } else if (e.key.toLowerCase() === 'a') {
+        playAudio();
+      } else if (e.key.toLowerCase() === 'm') {
+        toggleMasterCurrent();
+      } else if (e.key.toLowerCase() === 'r') {
+        shuffleDeck();
+      }
+    });
+
+    // Bootstrapping
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('total-badge').textContent = KOTOBA_38.length;
+      renderCard();
+    });
+  </script>
+</body>
+</html>
