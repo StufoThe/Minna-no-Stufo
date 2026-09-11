@@ -1,0 +1,2059 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akame Kanji Slash - Panduan Menulis Kanji Pelajaran 38</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Tone.js for Katana Slash and UI SFX -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+  <!-- Google Fonts: Inter & Japanese Calligraphy Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            jp: ['"Noto Sans JP"', 'sans-serif'],
+            cinzel: ['"Cinzel"', 'serif'],
+          },
+          colors: {
+            akame: {
+              black: '#090a0f',
+              dark: '#12131a',
+              card: '#181a24',
+              crimson: '#e11d48',
+              blood: '#be123c',
+              ruby: '#9f1239',
+              curse: '#ff0033',
+              glow: '#ff2a55'
+            }
+          },
+          boxShadow: {
+            'curse': '0 0 25px -5px rgba(225, 29, 72, 0.4)',
+            'murasame': '0 0 35px 2px rgba(255, 0, 51, 0.35)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Kanji Stroke Drawing Animation */
+    @keyframes strokeDraw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+    .animate-stroke {
+      stroke-dasharray: 600;
+      stroke-dashoffset: 600;
+      animation: strokeDraw 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    /* Kanji Grid Overlay */
+    .kanji-grid-bg {
+      background-image: 
+        linear-gradient(to right, rgba(225, 29, 72, 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(225, 29, 72, 0.15) 1px, transparent 1px),
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 50% 50%, 50% 50%;
+      background-position: center;
+    }
+
+    /* Furigana Ruby Style */
+    ruby {
+      ruby-align: center;
+    }
+    rt {
+      font-size: 0.65em;
+      color: #ff2a55;
+      user-select: none;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090a0f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #be123c;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ff0033;
+    }
+
+    /* Anime Wallpaper and Atmospheric Backdrop Styles */
+    .anime-bg-layer {
+      transition: background-image 0.6s ease-in-out, opacity 0.4s ease;
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+    }
+    
+    .anime-character-card {
+      background: linear-gradient(135deg, rgba(24, 26, 36, 0.92) 0%, rgba(18, 19, 26, 0.95) 100%);
+      border: 1px solid rgba(225, 29, 72, 0.4);
+      backdrop-filter: blur(12px);
+    }
+
+    .character-glow {
+      filter: drop-shadow(0 0 12px rgba(255, 0, 51, 0.5));
+    }
+  </style>
+</head>
+
+<body class="bg-akame-black text-slate-100 font-sans min-h-screen flex flex-col items-center selection:bg-akame-crimson selection:text-white relative overflow-x-hidden p-0 sm:py-4">
+
+  <!-- FULL-SCREEN ANIME WALLPAPER BACKGROUND LAYER (ATMOSPHERIC) -->
+  <div id="animeBgContainer" class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div id="animeBgImage" 
+         class="absolute inset-0 anime-bg-layer scale-105 transform transition-all duration-700 blur-[0.5px]"
+         style="background-image: url('https://upload.wikimedia.org/wikipedia/en/6/64/Akame_ga_Kill_volume_1_cover.jpg'); opacity: 0.28;">
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-t from-akame-black via-akame-black/85 to-akame-black/75"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-akame-crimson/25 via-transparent to-black/80"></div>
+    <div class="absolute -top-20 -right-20 w-80 h-80 bg-akame-curse/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-10 left-10 w-72 h-72 bg-akame-ruby/15 rounded-full blur-3xl pointer-events-none"></div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- VERTICAL APP SHELL CONTAINER (MAX-W-MD / SMARTPHONE RATIO)     -->
+  <!-- ============================================================== -->
+  <div class="w-full max-w-md sm:max-w-lg min-h-screen sm:min-h-[92vh] flex flex-col relative z-10 bg-akame-dark/95 sm:rounded-[2.2rem] sm:border sm:border-akame-blood/40 sm:shadow-murasame backdrop-blur-xl overflow-hidden pb-6">
+
+    <!-- TOP COMPACT APP HEADER -->
+    <header class="sticky top-0 z-40 bg-akame-dark/90 backdrop-blur-md border-b border-akame-blood/30 px-4 py-3 flex items-center justify-between shadow-sm">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-akame-crimson via-akame-ruby to-black flex items-center justify-center border border-akame-crimson/50 shadow-murasame" id="appLogoBtn" title="Akame Murasame">
+          <span class="font-jp font-black text-base text-white">斬</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-cinzel font-black text-sm tracking-wider bg-gradient-to-r from-red-500 via-rose-300 to-white bg-clip-text text-transparent">
+              AKAME KANJI
+            </h1>
+            <span class="text-[9px] uppercase font-bold tracking-widest px-1.5 py-0.2 rounded-full bg-akame-crimson/20 border border-akame-crimson/40 text-akame-glow">
+              第38課
+            </span>
+          </div>
+          <p class="text-[10px] text-slate-400 font-medium">Panduan Menulis Kanji Vertikal</p>
+        </div>
+      </div>
+
+      <!-- Quick Metrics & Audio SFX Toggles -->
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-akame-card border border-akame-crimson/30 text-[11px]" title="Kanji yang sudah ditandai hapal">
+          <i data-lucide="award" class="w-3.5 h-3.5 text-akame-glow"></i>
+          <span id="masteredCount" class="font-bold text-akame-glow font-mono">0/42</span>
+        </div>
+
+        <button id="toggleBgModalBtn" class="p-2 rounded-xl bg-akame-card border border-slate-700/60 hover:border-akame-crimson text-slate-300 hover:text-akame-glow transition-all" title="Ganti Wallpaper Anime">
+          <i data-lucide="image" class="w-4 h-4 text-akame-glow"></i>
+        </button>
+
+        <button id="toggleSfxBtn" class="p-2 rounded-xl bg-akame-card border border-slate-700/60 hover:border-akame-crimson text-slate-300 hover:text-akame-glow transition-all" title="Efek Suara Katana">
+          <i data-lucide="volume-2" id="sfxIcon" class="w-4 h-4 text-akame-glow"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- ANIME HERO CHARACTER COMPACT CARD -->
+    <div class="px-4 pt-3.5 pb-2">
+      <div class="anime-character-card rounded-2xl p-3 shadow-curse relative overflow-hidden flex items-center gap-3">
+        <!-- Akame Anime Avatar -->
+        <div class="relative w-14 h-14 rounded-xl overflow-hidden border border-akame-crimson shadow-curse shrink-0 bg-akame-dark">
+          <img id="akameHeroAvatar" 
+               src="https://upload.wikimedia.org/wikipedia/en/6/64/Akame_ga_Kill_volume_1_cover.jpg" 
+               alt="Akame" 
+               class="w-full h-full object-cover object-top"
+               onerror="this.onerror=null; this.src='https://placehold.co/200x200/181a24/ff2a55?text=Akame';">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+          <span class="absolute bottom-0.5 inset-x-0 text-center text-[8px] font-black uppercase text-akame-glow font-cinzel">
+            赤瞳
+          </span>
+        </div>
+
+        <!-- Akame Voice Prompt -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <span class="text-[9px] font-bold uppercase tracking-wider text-akame-glow flex items-center gap-1">
+              <i data-lucide="sparkles" class="w-3 h-3 text-akame-glow"></i> Night Raid Sensei
+            </span>
+            <button id="akameLoreBtn" class="text-[10px] text-slate-400 hover:text-white underline">
+              Lore Pedang
+            </button>
+          </div>
+          <p id="akameDialogueQuote" class="text-[11px] text-slate-200 italic truncate mt-0.5">
+            "Satu goresan mematikan. Tuliskan tanpa ragu!"
+          </p>
+          
+          <!-- Wallpaper Mini Switcher Chips -->
+          <div class="flex items-center gap-1.5 mt-1.5 overflow-x-auto pb-0.5">
+            <button class="anime-preset-btn active px-2 py-0.5 rounded-lg bg-akame-crimson text-white text-[10px] font-bold border border-akame-glow whitespace-nowrap" data-bg="cover">Cover</button>
+            <button class="anime-preset-btn px-2 py-0.5 rounded-lg bg-akame-card text-slate-300 text-[10px] border border-slate-700 whitespace-nowrap" data-bg="moon">Bulan Merah</button>
+            <button class="anime-preset-btn px-2 py-0.5 rounded-lg bg-akame-card text-slate-300 text-[10px] border border-slate-700 whitespace-nowrap" data-bg="night">Kastil</button>
+            <button class="anime-preset-btn px-2 py-0.5 rounded-lg bg-akame-card text-slate-300 text-[10px] border border-slate-700 whitespace-nowrap" data-bg="crimson">Aura Darah</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN VERTICAL NAVIGATION TABS (TULIS KANJI vs DAFTAR 42 KOTOBA) -->
+    <div class="px-4 py-2">
+      <div class="grid grid-cols-2 p-1 rounded-2xl bg-akame-card/90 border border-slate-800 gap-1 text-xs">
+        <button id="tabBtnPractice" class="py-2 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 bg-akame-crimson text-white shadow-curse">
+          <i data-lucide="pen-tool" class="w-3.5 h-3.5"></i>
+          <span>Arena Menulis</span>
+        </button>
+        <button id="tabBtnKotobaList" class="py-2 rounded-xl font-medium text-slate-400 hover:text-white transition-all flex items-center justify-center gap-1.5">
+          <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+          <span>42 Kotoba Bab 38</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- TAB 1 CONTENT: PRACTICE & WRITING WORKSPACE (VERTICAL FLOW)     -->
+    <!-- ============================================================== -->
+    <main id="practiceTabContent" class="flex-1 px-4 space-y-3.5 overflow-y-auto">
+      
+      <!-- Active Kotoba Banner with Prev/Next Steppers -->
+      <div class="bg-gradient-to-r from-akame-dark via-akame-card to-akame-dark rounded-2xl border border-akame-blood/40 p-3.5 shadow-curse relative overflow-hidden">
+        <div class="flex items-center justify-between gap-2 mb-1">
+          <span id="activeTypeBadge" class="text-[9px] uppercase font-black px-2 py-0.5 rounded bg-akame-crimson/30 border border-akame-crimson/50 text-akame-glow">
+            KATA KERJA II
+          </span>
+
+          <!-- Prev & Next Stepper Buttons -->
+          <div class="flex items-center gap-1.5">
+            <button id="prevKotobaBtn" class="p-1 rounded-lg bg-akame-card hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all active:scale-90" title="Kotoba Sebelumnya">
+              <i data-lucide="chevron-left" class="w-4 h-4"></i>
+            </button>
+            <span id="activeNumberBadge" class="text-[11px] text-slate-300 font-mono font-bold px-1.5">
+              01 / 42
+            </span>
+            <button id="nextKotobaBtn" class="p-1 rounded-lg bg-akame-card hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all active:scale-90" title="Kotoba Berikutnya">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Big Kanji Furigana Display & Pronounce Audio -->
+        <div class="flex items-center justify-between mt-1">
+          <div>
+            <h2 id="activeKotobaDisplay" class="font-jp text-3xl font-black text-white tracking-wide">
+              <ruby>育<rt>そだ</rt></ruby>てます
+            </h2>
+            <p id="activeRomajiDisplay" class="text-xs font-mono text-slate-300 mt-0.5">
+              sodatemasu • memelihara, membesarkan
+            </p>
+          </div>
+
+          <button id="pronounceKotobaBtn" class="p-2.5 rounded-2xl bg-akame-card hover:bg-akame-crimson text-slate-300 hover:text-white border border-slate-700/60 transition-all active:scale-90 shadow-sm" title="Putar Suara Pelafalan Jepang">
+            <i data-lucide="volume-2" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Kanji Picker for Words with Multiple Kanji -->
+        <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between">
+          <span class="text-[11px] text-slate-400 font-semibold">
+            Pilih Kanji Ditulis:
+          </span>
+          <div id="kanjiPickerChips" class="flex items-center gap-1.5">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- WORKSPACE SUB-MODE SELECTOR: ANIMASI vs KANVAS TULIS -->
+      <div class="flex items-center justify-between px-1">
+        <div class="inline-flex p-1 rounded-xl bg-akame-card border border-slate-800 text-[11px] font-semibold gap-1">
+          <button id="subModeCanvasBtn" class="px-3 py-1 rounded-lg bg-akame-crimson text-white shadow-curse transition-all flex items-center gap-1">
+            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+            <span>Kanvas Tulis</span>
+          </button>
+          <button id="subModeAnimBtn" class="px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1">
+            <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
+            <span>Animasi Goresan</span>
+          </button>
+        </div>
+
+        <div id="subModeCanvasControls" class="flex items-center gap-1.5">
+          <button id="toggleGhostBtn" class="px-2.5 py-1 rounded-lg bg-akame-card text-slate-300 hover:text-white border border-slate-700/60 text-[10px] font-semibold flex items-center gap-1 transition-all" title="Panduan Bayangan Kanji">
+            <i data-lucide="eye" id="ghostIcon" class="w-3 h-3 text-akame-glow"></i>
+            <span>Bayangan: ON</span>
+          </button>
+        </div>
+
+        <div id="subModeAnimControls" class="hidden items-center gap-1">
+          <span id="strokeCounterBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-akame-card text-akame-glow border border-akame-crimson/30">
+            Goresan 1 / 8
+          </span>
+        </div>
+      </div>
+
+      <!-- VERTICAL CANVASES CONTAINER -->
+      <div class="bg-akame-dark/90 rounded-2xl border border-akame-blood/40 p-4 shadow-curse flex flex-col items-center justify-center relative">
+        
+        <!-- 1. USER INTERACTIVE DRAWING CANVAS (DEFAULT ACTIVE) -->
+        <div id="canvasContainerBox" class="relative w-full aspect-square max-w-[300px] rounded-2xl bg-akame-black border-2 border-akame-crimson/60 kanji-grid-bg overflow-hidden shadow-inner touch-none cursor-crosshair">
+          <!-- Subtle Anime Backdrop on Canvas -->
+          <div class="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none" style="background-image: url('https://upload.wikimedia.org/wikipedia/en/6/64/Akame_ga_Kill_volume_1_cover.jpg');"></div>
+
+          <!-- Crosshair Guidelines -->
+          <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-20" viewBox="0 0 100 100">
+            <line x1="0" y1="50" x2="100" y2="50" stroke="#ff2a55" stroke-dasharray="3,3" stroke-width="0.8" />
+            <line x1="50" y1="0" x2="50" y2="100" stroke="#ff2a55" stroke-dasharray="3,3" stroke-width="0.8" />
+            <line x1="0" y1="0" x2="100" y2="100" stroke="#ff2a55" stroke-dasharray="2,4" stroke-width="0.5" />
+            <line x1="100" y1="0" x2="0" y2="100" stroke="#ff2a55" stroke-dasharray="2,4" stroke-width="0.5" />
+          </svg>
+
+          <!-- Ghost Template for Tracing -->
+          <svg id="ghostKanjiSvg" class="absolute inset-0 w-full h-full p-4 pointer-events-none opacity-25 transition-opacity" viewBox="0 0 109 109"></svg>
+
+          <!-- Interactive User Drawing HTML5 Canvas -->
+          <canvas id="drawingCanvas" class="absolute inset-0 w-full h-full z-20"></canvas>
+
+          <!-- Murasame Slash Kill Splash Overlay -->
+          <div id="katanaKillOverlay" class="absolute inset-0 z-30 pointer-events-none hidden flex-col items-center justify-center bg-black/85 backdrop-blur-md text-center p-3">
+            <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-akame-glow shadow-murasame mb-1.5 animate-bounce">
+              <img src="https://upload.wikimedia.org/wikipedia/en/6/64/Akame_ga_Kill_volume_1_cover.jpg" alt="Akame Slash" class="w-full h-full object-cover">
+            </div>
+            <div class="font-cinzel text-xl font-black text-akame-glow tracking-widest animate-pulse">
+              一撃必殺
+            </div>
+            <p class="text-xs text-slate-200 mt-0.5 font-jp font-bold">KANJI BERHASIL DITEBAS!</p>
+            <span class="text-[9px] text-akame-glow/80 font-mono">葬る (Houmuru - Sukses)</span>
+          </div>
+        </div>
+
+        <!-- 2. STROKE ORDER ANIMATION BOX (SWITCHABLE VIEW) -->
+        <div id="animContainerBox" class="hidden relative w-full aspect-square max-w-[300px] rounded-2xl bg-akame-black border-2 border-akame-blood/60 kanji-grid-bg items-center justify-center p-4 overflow-hidden shadow-inner">
+          <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-20" viewBox="0 0 100 100">
+            <line x1="0" y1="50" x2="100" y2="50" stroke="#ff2a55" stroke-dasharray="3,3" stroke-width="0.8" />
+            <line x1="50" y1="0" x2="50" y2="100" stroke="#ff2a55" stroke-dasharray="3,3" stroke-width="0.8" />
+          </svg>
+
+          <svg id="kanjiAnimationSvg" class="w-full h-full relative z-10" viewBox="0 0 109 109"></svg>
+          <div id="murasameCutEffect" class="absolute inset-0 pointer-events-none bg-gradient-to-tr from-akame-curse/20 via-transparent to-white/10 opacity-0 transition-opacity duration-300"></div>
+        </div>
+
+        <!-- CONTROLS ROW UNDER CANVAS / ANIMATION -->
+        <div class="w-full mt-3 pt-2.5 border-t border-slate-800">
+          
+          <!-- Controls when Canvas Mode is active -->
+          <div id="canvasActionRow" class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <button id="clearCanvasBtn" class="px-2.5 py-1.5 rounded-xl bg-akame-card hover:bg-slate-700 text-slate-300 hover:text-red-400 text-xs font-semibold flex items-center gap-1 transition-all" title="Hapus Tulisan">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>Hapus</span>
+              </button>
+              <button id="undoStrokeBtn" class="p-1.5 rounded-xl bg-akame-card hover:bg-slate-700 text-slate-300 text-xs transition-all" title="Kembalikan Goresan Terakhir">
+                <i data-lucide="undo" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+
+            <button id="verifyStrokeBtn" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-akame-crimson to-akame-blood hover:from-akame-curse hover:to-akame-crimson text-white font-bold text-xs shadow-curse flex items-center gap-1.5 transition-all active:scale-95">
+              <i data-lucide="check-check" class="w-4 h-4"></i>
+              <span>Tandai Hapal</span>
+            </button>
+          </div>
+
+          <!-- Controls when Animation Mode is active -->
+          <div id="animActionRow" class="hidden items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <button id="animPlayBtn" class="px-3 py-1.5 rounded-xl bg-akame-crimson hover:bg-akame-blood text-white text-xs font-bold shadow-curse transition-all flex items-center gap-1 active:scale-95">
+                <i data-lucide="play" id="playBtnIcon" class="w-3.5 h-3.5"></i>
+                <span id="playBtnText">Putar</span>
+              </button>
+              <button id="animPrevStepBtn" class="p-1.5 rounded-xl bg-akame-card hover:bg-slate-700 text-slate-300 transition-all" title="Goresan Sebelumnya">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+              </button>
+              <button id="animNextStepBtn" class="p-1.5 rounded-xl bg-akame-card hover:bg-slate-700 text-slate-300 transition-all" title="Goresan Berikutnya">
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- Speed selector -->
+            <div class="flex items-center gap-0.5 bg-akame-card p-1 rounded-xl border border-slate-800 text-[10px]">
+              <button class="anim-speed-btn active px-1.5 py-0.5 rounded text-slate-300" data-speed="1">1x</button>
+              <button class="anim-speed-btn px-1.5 py-0.5 rounded text-slate-300" data-speed="1.5">1.5x</button>
+              <button class="anim-speed-btn px-1.5 py-0.5 rounded text-slate-300" data-speed="0.6">0.6x</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- KANJI METADATA & MNEMONIC INFO CARD (VERTICAL COMPACT) -->
+      <div class="space-y-2.5">
+        <!-- Readings card -->
+        <div class="grid grid-cols-2 gap-2 text-xs bg-akame-card/70 p-3 rounded-2xl border border-slate-800">
+          <div>
+            <span class="text-[10px] text-slate-400 block font-medium">On'yomi (音読み):</span>
+            <span id="metaOnyomi" class="font-jp font-bold text-slate-100 text-xs">イク</span>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 block font-medium">Kun'yomi (訓読み):</span>
+            <span id="metaKunyomi" class="font-jp font-bold text-slate-100 text-xs">そだ・てる</span>
+          </div>
+        </div>
+
+        <!-- Mnemonic Card -->
+        <div class="p-3 rounded-2xl bg-akame-card/80 border border-akame-blood/30 text-xs text-slate-300 flex items-start gap-2">
+          <i data-lucide="zap" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+          <div>
+            <span class="font-bold text-amber-300 text-[11px] block">Trik Hapal Night Raid:</span>
+            <span id="kanjiMnemonicText" class="italic text-slate-300 text-[11px] leading-relaxed">
+              Pohon yang dipelihara sejak bibit akan bertumbuh tinggi dan kuat.
+            </span>
+          </div>
+        </div>
+
+        <!-- Lesson Context Card -->
+        <div class="p-3 rounded-2xl bg-akame-dark/80 border border-slate-800 text-xs space-y-1">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-bold text-slate-300 flex items-center gap-1">
+              <i data-lucide="info" class="w-3.5 h-3.5 text-akame-crimson"></i>
+              Contoh Kalimat Bab 38
+            </span>
+            <span id="lessonContextGrammar" class="text-akame-glow font-medium text-[10px]">
+              Grup II (Ichidan)
+            </span>
+          </div>
+          <p id="lessonContextExample" class="text-slate-300 font-jp leading-relaxed text-[11px]">
+            子供を大切に<ruby>育<rt>そだ</rt></ruby>てます。(Membesarkan anak dengan penuh perhatian.)
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- TAB 2 CONTENT: COMPLETE 42 KOTOBA LIST (VERTICAL DRAWER VIEW)   -->
+    <!-- ============================================================== -->
+    <section id="kotobaListTabContent" class="hidden flex-1 px-4 flex-col space-y-3 overflow-hidden">
+      <!-- Search & Category Filters -->
+      <div class="space-y-2 pt-1">
+        <div class="relative">
+          <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-500"></i>
+          <input id="kotobaSearch" type="text" placeholder="Cari kanji, furigana, atau arti..." class="w-full bg-akame-card/90 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-akame-crimson transition-all">
+        </div>
+
+        <!-- Category Chips -->
+        <div class="flex items-center gap-1.5 overflow-x-auto text-[10px] pb-1" id="filterContainer">
+          <button class="filter-pill active px-2.5 py-1 rounded-lg bg-akame-crimson text-white font-semibold whitespace-nowrap transition-all" data-category="ALL">Semua (42)</button>
+          <button class="filter-pill px-2.5 py-1 rounded-lg bg-akame-card text-slate-400 hover:text-white whitespace-nowrap transition-all" data-category="VERB">Kata Kerja</button>
+          <button class="filter-pill px-2.5 py-1 rounded-lg bg-akame-card text-slate-400 hover:text-white whitespace-nowrap transition-all" data-category="NOUN">Kata Benda</button>
+          <button class="filter-pill px-2.5 py-1 rounded-lg bg-akame-card text-slate-400 hover:text-white whitespace-nowrap transition-all" data-category="ADJ">Kata Sifat</button>
+          <button class="filter-pill px-2.5 py-1 rounded-lg bg-akame-card text-slate-400 hover:text-white whitespace-nowrap transition-all" data-category="READING">Bacaan</button>
+        </div>
+      </div>
+
+      <!-- Kotoba Vertical Scrollable Stream -->
+      <div id="kotobaList" class="flex-1 overflow-y-auto space-y-2 pr-1 pb-4">
+        <!-- Dynamically injected via JavaScript -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MODAL: AKAME LORE & RULES OF MURASAME -->
+  <div id="loreModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-akame-dark w-full max-w-sm rounded-3xl p-5 border border-akame-blood shadow-murasame space-y-3">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+        <div class="flex items-center gap-2">
+          <span class="font-jp font-black text-akame-glow text-base">一撃必殺</span>
+          <h3 class="font-cinzel font-bold text-sm text-white">Pedang Murasame</h3>
+        </div>
+        <button id="closeLoreBtn" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="space-y-2 text-xs text-slate-300 leading-relaxed">
+        <p>
+          Teigu Akame, <strong>Murasame (村雨)</strong>, memiliki prinsip: <strong>"Ichigeki Hissatsu (Satu Tebasan Mematikan)"</strong>. Sekali pedang menggores lawan, kutukan racun langsung menyebar.
+        </p>
+        <p class="p-2.5 rounded-xl bg-akame-card border border-akame-blood/40 text-akame-glow text-[11px] font-medium">
+          "Begitu pula caramu menulis kanji: Setiap goresan harus tegas dari awal hingga akhir mengikuti urutan resmi (Kakijun) tanpa ragu!"
+        </p>
+      </div>
+
+      <div class="pt-2 border-t border-slate-800 flex justify-end">
+        <button id="closeLoreBtn2" class="px-4 py-1.5 rounded-xl bg-akame-crimson hover:bg-akame-blood text-white font-bold text-xs shadow-curse">
+          Saya Mengerti (葬る)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ANIME WALLPAPER CUSTOMIZER -->
+  <div id="bgModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-akame-dark w-full max-w-sm rounded-3xl p-5 border border-akame-blood shadow-murasame space-y-3">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+        <div class="flex items-center gap-2">
+          <i data-lucide="palette" class="w-4 h-4 text-akame-glow"></i>
+          <h3 class="font-cinzel font-bold text-sm text-white">Latar Anime Akame</h3>
+        </div>
+        <button id="closeBgModalBtn" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5 text-xs">
+        <div class="wallpaper-card cursor-pointer rounded-xl border-2 border-akame-crimson overflow-hidden" data-bg="cover">
+          <img src="https://upload.wikimedia.org/wikipedia/en/6/64/Akame_ga_Kill_volume_1_cover.jpg" alt="Cover" class="w-full h-20 object-cover object-top">
+          <div class="p-1.5 bg-akame-card text-center font-bold text-slate-200 text-[10px]">Cover Manga</div>
+        </div>
+        <div class="wallpaper-card cursor-pointer rounded-xl border border-slate-700 hover:border-akame-crimson overflow-hidden" data-bg="moon">
+          <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600&auto=format&fit=crop" alt="Moon" class="w-full h-20 object-cover" onerror="this.src='https://placehold.co/600x400/090a0f/e11d48?text=Red+Moon'">
+          <div class="p-1.5 bg-akame-card text-center font-bold text-slate-200 text-[10px]">Bulan Merah</div>
+        </div>
+        <div class="wallpaper-card cursor-pointer rounded-xl border border-slate-700 hover:border-akame-crimson overflow-hidden" data-bg="night">
+          <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop" alt="Kastil" class="w-full h-20 object-cover" onerror="this.src='https://placehold.co/600x400/090a0f/e11d48?text=Night+Castle'">
+          <div class="p-1.5 bg-akame-card text-center font-bold text-slate-200 text-[10px]">Kastil Malam</div>
+        </div>
+        <div class="wallpaper-card cursor-pointer rounded-xl border border-slate-700 hover:border-akame-crimson overflow-hidden" data-bg="crimson">
+          <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=600&auto=format&fit=crop" alt="Aura" class="w-full h-20 object-cover" onerror="this.src='https://placehold.co/600x400/090a0f/e11d48?text=Crimson+Blade'">
+          <div class="p-1.5 bg-akame-card text-center font-bold text-slate-200 text-[10px]">Aura Darah</div>
+        </div>
+      </div>
+
+      <div class="pt-2 border-t border-slate-800 space-y-1.5">
+        <div class="flex items-center justify-between text-[11px]">
+          <span class="text-slate-300 font-medium">Kepekatan Gambar (Opacity):</span>
+          <span id="opacityValLabel" class="text-akame-glow font-mono font-bold">28%</span>
+        </div>
+        <input id="bgOpacitySlider" type="range" min="10" max="65" value="28" class="w-full accent-akame-crimson cursor-pointer">
+      </div>
+
+      <div class="pt-2 border-t border-slate-800 flex justify-end">
+        <button id="closeBgModalBtn2" class="px-4 py-1.5 rounded-xl bg-akame-crimson hover:bg-akame-blood text-white font-bold text-xs shadow-curse">
+          Terapkan Wallpaper
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastBox" class="fixed bottom-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-akame-card border border-akame-crimson text-white text-xs font-semibold shadow-murasame">
+    <i data-lucide="check-circle" id="toastIcon" class="w-4 h-4 text-akame-glow"></i>
+    <span id="toastMsg">Goresan Kanji Sempurna!</span>
+  </div>
+
+  <script>
+    /* ==============================================================
+     * COMPLETE KOTOBA DATASET FOR LESSON 38 (ALL 42 ITEMS FROM IMAGES)
+     * ============================================================== */
+    const LESSON_38_KOTOBA = [
+      // --- IMAGE 1 ---
+      {
+        id: 1,
+        kanjiText: "育てます",
+        rubyHtml: "<ruby>育<rt>そだ</rt></ruby>てます",
+        furigana: "そだてます",
+        romaji: "sodatemasu",
+        meaning: "memelihara, membesarkan",
+        category: "VERB",
+        group: "Kata Kerja II",
+        example: "子供を大切に育てます。(Membesarkan anak dengan penuh perhatian.)",
+        kanjiChars: ["育"]
+      },
+      {
+        id: 2,
+        kanjiText: "運びます",
+        rubyHtml: "<ruby>運<rt>はこ</rt></ruby>びます",
+        furigana: "はこびます",
+        romaji: "hakobimasu",
+        meaning: "membawa, mengangkut",
+        category: "VERB",
+        group: "Kata Kerja I",
+        example: "荷物を部屋へ運びます。(Mengangkut barang bawaan ke kamar.)",
+        kanjiChars: ["運"]
+      },
+      {
+        id: 3,
+        kanjiText: "亡くなります",
+        rubyHtml: "<ruby>亡<rt>な</rt></ruby>くなります",
+        furigana: "なくなります",
+        romaji: "nakunarimasu",
+        meaning: "meninggal (dipakai untuk menyatakan しにます secara halus)",
+        category: "VERB",
+        group: "Kata Kerja I",
+        example: "祖父が去年亡くなりました。(Kakek meninggal tahun lalu.)",
+        kanjiChars: ["亡"]
+      },
+      {
+        id: 4,
+        kanjiText: "入院します",
+        rubyHtml: "<ruby>入院<rt>にゅういん</rt></ruby>します",
+        furigana: "にゅういんします",
+        romaji: "nyuuin shimasu",
+        meaning: "masuk rumah sakit",
+        category: "VERB",
+        group: "Kata Kerja III",
+        example: "病気で一週間入院します。(Masuk rumah sakit selama 1 minggu karena sakit.)",
+        kanjiChars: ["入", "院"]
+      },
+      {
+        id: 5,
+        kanjiText: "退院します",
+        rubyHtml: "<ruby>退院<rt>たいいん</rt></ruby>します",
+        furigana: "たいいんします",
+        romaji: "taiin shimasu",
+        meaning: "keluar dari rumah sakit",
+        category: "VERB",
+        group: "Kata Kerja III",
+        example: "明日退院します。(Besok keluar dari rumah sakit.)",
+        kanjiChars: ["退", "院"]
+      },
+      {
+        id: 6,
+        kanjiText: "入れます [電源を～]",
+        rubyHtml: "[<ruby>電源<rt>でんげん</rt></ruby>を～] <ruby>入<rt>い</rt></ruby>れます",
+        furigana: "いれます [でんげんを～]",
+        romaji: "iremasu [dengen o~]",
+        meaning: "menghidupkan [aliran listrik]",
+        category: "VERB",
+        group: "Kata Kerja II",
+        example: "パソコンの電源を入れます。(Menghidupkan aliran listrik komputer.)",
+        kanjiChars: ["入", "電", "源"]
+      },
+      {
+        id: 7,
+        kanjiText: "切ります [電源を～]",
+        rubyHtml: "[<ruby>電源<rt>でんげん</rt></ruby>を～] <ruby>切<rt>き</rt></ruby>ります",
+        furigana: "きります [でんげんを～]",
+        romaji: "kirimasu [dengen o~]",
+        meaning: "mematikan [aliran listrik]",
+        category: "VERB",
+        group: "Kata Kerja I",
+        example: "帰る前に電源を切ります。(Mematikan aliran listrik sebelum pulang.)",
+        kanjiChars: ["切", "電", "源"]
+      },
+      {
+        id: 8,
+        kanjiText: "掛けます [かぎを～]",
+        rubyHtml: "[かぎを～] <ruby>掛<rt>か</rt></ruby>けます",
+        furigana: "かけます [かぎを～]",
+        romaji: "kakemasu [kagi o~]",
+        meaning: "mengunci",
+        category: "VERB",
+        group: "Kata Kerja II",
+        example: "ドアにかぎを掛けます。(Mengunci pintu.)",
+        kanjiChars: ["掛"]
+      },
+      {
+        id: 9,
+        kanjiText: "気持ちがいい",
+        rubyHtml: "<ruby>気持<rt>きも</rt></ruby>ちがいい",
+        furigana: "きもちがいい",
+        romaji: "kimochi ga ii",
+        meaning: "senang, merasa enak, nyaman",
+        category: "ADJ",
+        group: "Frasa Sifat",
+        example: "朝の散歩はとても気持ちがいい。(Jalan santai pagi hari terasa sangat nyaman.)",
+        kanjiChars: ["気", "持"]
+      },
+      {
+        id: 10,
+        kanjiText: "気持ちが悪い",
+        rubyHtml: "<ruby>気持<rt>きも</rt></ruby>ちが<ruby>悪<rt>わる</rt></ruby>い",
+        furigana: "きもちがわるい",
+        romaji: "kimochi ga warui",
+        meaning: "jijik, merasa tidak enak, mual",
+        category: "ADJ",
+        group: "Frasa Sifat",
+        example: "船に酔って気持ちが悪い。(Merasa mual karena mabuk laut.)",
+        kanjiChars: ["気", "持", "悪"]
+      },
+      {
+        id: 11,
+        kanjiText: "大きな～",
+        rubyHtml: "<ruby>大<rt>おお</rt></ruby>きな～",
+        furigana: "おおきな～",
+        romaji: "ookina~",
+        meaning: "besar (kata sambung benda)",
+        category: "ADJ",
+        group: "Kata Penjelas Benda",
+        example: "大きな家に住みたいです。(Ingin tinggal di rumah yang besar.)",
+        kanjiChars: ["大"]
+      },
+      {
+        id: 12,
+        kanjiText: "小さな～",
+        rubyHtml: "<ruby>小<rt>ちい</rt></ruby>さな～",
+        furigana: "ちいさな～",
+        romaji: "chiisana~",
+        meaning: "kecil (kata sambung benda)",
+        category: "ADJ",
+        group: "Kata Penjelas Benda",
+        example: "小さな花が咲いています。(Bunga kecil sedang mekar.)",
+        kanjiChars: ["小"]
+      },
+      {
+        id: 13,
+        kanjiText: "赤ちゃん",
+        rubyHtml: "<ruby>赤<rt>あか</rt></ruby>ちゃん",
+        furigana: "あかちゃん",
+        romaji: "akachan",
+        meaning: "bayi",
+        category: "NOUN",
+        group: "Kata Benda",
+        example: "赤ちゃんが可愛く笑っています。(Bayi itu tertawa dengan manis.)",
+        kanjiChars: ["赤"]
+      },
+      {
+        id: 14,
+        kanjiText: "小学校",
+        rubyHtml: "<ruby>小学校<rt>しょうがっこう</rt></ruby>",
+        furigana: "しょうがっこう",
+        romaji: "shougakkou",
+        meaning: "SD (Sekolah Dasar)",
+        category: "NOUN",
+        group: "Kata Benda",
+        example: "弟は小学校に通っています。(Adik laki-laki bersekolah di SD.)",
+        kanjiChars: ["小", "学", "校"]
+      },
+      {
+        id: 15,
+        kanjiText: "中学校",
+        rubyHtml: "<ruby>中学校<rt>ちゅうがっこう</rt></ruby>",
+        furigana: "ちゅうがっこう",
+        romaji: "chuugakkou",
+        meaning: "SMP (Sekolah Menengah Pertama)",
+        category: "NOUN",
+        group: "Kata Benda",
+        example: "来年中学校に入学します。(Tahun depan masuk SMP.)",
+        kanjiChars: ["中", "学", "校"]
+      },
+      {
+        id: 16,
+        kanjiText: "駅前",
+        rubyHtml: "<ruby>駅前<rt>えきまえ</rt></ruby>",
+        furigana: "えきまえ",
+        romaji: "ekimae",
+        meaning: "depan stasiun",
+        category: "NOUN",
+        group: "Kata Benda",
+        example: "駅前のカフェで会いましょう。(Mari bertemu di kafe depan stasiun.)",
+        kanjiChars: ["駅", "前"]
+      },
+      {
+        id: 17,
+        kanjiText: "海岸",
+        rubyHtml: "<ruby>海岸<rt>かいがん</rt></ruby>",
+        furigana: "かいがん",
+        romaji: "kaigan",
+        meaning: "pantai, pesisir",
+        category: "NOUN",
+        group: "Kata Benda",
+        example: "海岸で夕日を見ました。(Melihat matahari terbenam di pantai.)",
+        kanjiChars: ["海", "岸"]
+      },
+      {
+        id: 18,
+        kanjiText: "うそ",
+        rubyHtml: "うそ",
+        furigana: "うそ",
+        romaji: "uso",
+        meaning: "bohong, kebohongan",
+        category: "NOUN",
+        group: "Kata Benda",
+        example: "うそをついてはいけません。(Tidak boleh berbohong.)",
+        kanjiChars: ["嘘"]
+      },
+      {
+        id: 19,
+        kanjiText: "書類",
+        rubyHtml: "<ruby>書類<rt>しょるい</rt></ruby>",
+        furigana: "しょるい",
+        romaji: "shorui",
+        meaning: "dokumen, surat penting",
+        category: "NOUN",
+        group: "Kata Benda",
+        example: "この書類にサインしてください。(Tolong tandatangani dokumen ini.)",
+        kanjiChars: ["書", "類"]
+      },
+      {
+        id: 20,
+        kanjiText: "電源",
+        rubyHtml: "<ruby>電源<rt>でんげん</rt></ruby>",
+        furigana: "でんげん",
+        romaji: "dengen",
+        meaning: "aliran listrik, sumber daya",
+        category: "NOUN",
+        group: "Kata Benda",
+        example: "電源プラグを抜きます。(Mencabut colokan listrik.)",
+        kanjiChars: ["電", "源"]
+      },
+      {
+        id: 21,
+        kanjiText: "～製",
+        rubyHtml: "～<ruby>製<rt>せい</rt></ruby>",
+        furigana: "～せい",
+        romaji: "~sei",
+        meaning: "buatan ～",
+        category: "NOUN",
+        group: "Akhiran Benda",
+        example: "これは日本製の上質な車です。(Ini adalah mobil berkualitas buatan Jepang.)",
+        kanjiChars: ["製"]
+      },
+
+      // --- IMAGE 2 ---
+      {
+        id: 22,
+        kanjiText: "回覧",
+        rubyHtml: "<ruby>回覧<rt>かいらん</rt></ruby>",
+        furigana: "かいらん",
+        romaji: "kairan",
+        meaning: "edaran (surat edaran kantor/warga)",
+        category: "NOUN",
+        group: "Kata Benda",
+        example: "回覧板を隣の家に回します。(Meneruskan surat edaran ke rumah sebelah.)",
+        kanjiChars: ["回", "覧"]
+      },
+      {
+        id: 23,
+        kanjiText: "研究室",
+        rubyHtml: "<ruby>研究室<rt>けんきゅうしつ</rt></ruby>",
+        furigana: "けんきゅうしつ",
+        romaji: "kenkyuushitsu",
+        meaning: "ruang penelitian, laboratorium",
+        category: "NOUN",
+        group: "Kata Benda",
+        example: "教授の研究室へ伺います。(Berkunjung ke ruang penelitian profesor.)",
+        kanjiChars: ["研", "究", "室"]
+      },
+      {
+        id: 24,
+        kanjiText: "きちんと",
+        rubyHtml: "きちんと",
+        furigana: "きちんと",
+        romaji: "kichinto",
+        meaning: "dengan rapi, dengan teratur",
+        category: "ADJ",
+        group: "Kata Keterangan",
+        example: "靴をきちんと並べます。(Menata sepatu dengan rapi.)",
+        kanjiChars: ["整"] // Focus kanji for neatness
+      },
+      {
+        id: 25,
+        kanjiText: "整理します",
+        rubyHtml: "<ruby>整理<rt>せいり</rt></ruby>します",
+        furigana: "せいりします",
+        romaji: "seiri shimasu",
+        meaning: "merapikan, menertibkan",
+        category: "VERB",
+        group: "Kata Kerja III",
+        example: "机の上を綺麗に整理します。(Merapikan bagian atas meja kerja.)",
+        kanjiChars: ["整", "理"]
+      },
+      {
+        id: 26,
+        kanjiText: "～という 本",
+        rubyHtml: "～という <ruby>本<rt>ほん</rt></ruby>",
+        furigana: "～という ほん",
+        romaji: "~to iu hon",
+        meaning: "buku yang berjudul ～",
+        category: "NOUN",
+        group: "Frasa Benda",
+        example: "「坊っちゃん」という本を読みました。(Saya membaca buku yang berjudul Botchan.)",
+        kanjiChars: ["本"]
+      },
+      {
+        id: 27,
+        kanjiText: "ー冊",
+        rubyHtml: "ー<ruby>冊<rt>さつ</rt></ruby>",
+        furigana: "ーさつ",
+        romaji: "-satsu",
+        meaning: "(kata bantu bilangan untuk menghitung buku dll.)",
+        category: "NOUN",
+        group: "Kata Bilangan",
+        example: "本を二冊買いました。(Membeli dua buku.)",
+        kanjiChars: ["冊"]
+      },
+      {
+        id: 28,
+        kanjiText: "はんこ",
+        rubyHtml: "<ruby>判子<rt>はんこ</rt></ruby>",
+        furigana: "はんこ",
+        romaji: "hanko",
+        meaning: "cap, stempel nama Jepang",
+        category: "NOUN",
+        group: "Kata Benda",
+        example: "書類にはんこを押します。(Membubuhkan cap stempel pada dokumen.)",
+        kanjiChars: ["判", "子"]
+      },
+      {
+        id: 29,
+        kanjiText: "押します [はんこを～]",
+        rubyHtml: "[はんこを～] <ruby>押<rt>お</rt></ruby>します",
+        furigana: "おします [はんこを～]",
+        romaji: "oshimasu [hanko o~]",
+        meaning: "mencap, menekan",
+        category: "VERB",
+        group: "Kata Kerja I",
+        example: "ここに印鑑を押してください。(Tolong cap stempel di sini.)",
+        kanjiChars: ["押"]
+      },
+      // --- IMAGE 2: SECTION 読み物 (READING) ---
+      {
+        id: 30,
+        kanjiText: "双子",
+        rubyHtml: "<ruby>双子<rt>ふたご</rt></ruby>",
+        furigana: "ふたご",
+        romaji: "futago",
+        meaning: "kembar",
+        category: "READING",
+        group: "Kata Benda",
+        example: "双子の姉妹が生まれました。(Lahir saudara perempuan kembar.)",
+        kanjiChars: ["双", "子"]
+      },
+      {
+        id: 31,
+        kanjiText: "姉妹",
+        rubyHtml: "<ruby>姉妹<rt>しまい</rt></ruby>",
+        furigana: "しまい",
+        romaji: "shimai",
+        meaning: "saudara perempuan",
+        category: "READING",
+        group: "Kata Benda",
+        example: "仲の良い三姉妹です。(Tiga saudara perempuan yang sangat rukun.)",
+        kanjiChars: ["姉", "妹"]
+      },
+      {
+        id: 32,
+        kanjiText: "５年生",
+        rubyHtml: "５<ruby>年生<rt>ねんせい</rt></ruby>",
+        furigana: "５ねんせい",
+        romaji: "go nensei",
+        meaning: "kelas lima",
+        category: "READING",
+        group: "Kata Benda",
+        example: "息子は小学５年生です。(Anak laki-laki saya kelas 5 SD.)",
+        kanjiChars: ["年", "生"]
+      },
+      {
+        id: 33,
+        kanjiText: "似ています",
+        rubyHtml: "<ruby>似<rt>に</rt></ruby>ています",
+        furigana: "にています",
+        romaji: "nite imasu",
+        meaning: "mirip, menyerupai",
+        category: "READING",
+        group: "Kata Kerja II",
+        example: "母によく似ています。(Sangat mirip dengan ibu.)",
+        kanjiChars: ["似"]
+      },
+      {
+        id: 34,
+        kanjiText: "性格",
+        rubyHtml: "<ruby>性格<rt>せいかく</rt></ruby>",
+        furigana: "せいかく",
+        romaji: "seikaku",
+        meaning: "tabiat, sifat, watak",
+        category: "READING",
+        group: "Kata Benda",
+        example: "明るい性格の人。(Orang dengan kepribadian yang ceria.)",
+        kanjiChars: ["性", "格"]
+      },
+      {
+        id: 35,
+        kanjiText: "おとなしい",
+        rubyHtml: "おとなしい",
+        furigana: "おとなしい",
+        romaji: "otonashii",
+        meaning: "pendiam, patuh, tenang",
+        category: "READING",
+        group: "Kata Sifat-i",
+        example: "おとなしい性格の女の子。(Anak perempuan yang pendiam dan manis.)",
+        kanjiChars: ["大", "人"]
+      },
+      {
+        id: 36,
+        kanjiText: "世話を します",
+        rubyHtml: "<ruby>世話<rt>せわ</rt></ruby>を します",
+        furigana: "せわを します",
+        romaji: "sewa o shimasu",
+        meaning: "mengurus, merawat",
+        category: "READING",
+        group: "Kata Kerja III",
+        example: "子犬の世話をします。(Merawat anak anjing.)",
+        kanjiChars: ["世", "話"]
+      },
+      {
+        id: 37,
+        kanjiText: "時間が たちます",
+        rubyHtml: "<ruby>時間<rt>じかん</rt></ruby>が たちます",
+        furigana: "じかんが たちます",
+        romaji: "jikan ga tachimasu",
+        meaning: "waktu berlalu",
+        category: "READING",
+        group: "Frasa Kerja I",
+        example: "時間が経つのは本当に早いです。(Waktu berlalu sungguh cepat.)",
+        kanjiChars: ["時", "間"]
+      },
+      {
+        id: 38,
+        kanjiText: "大好き[な]",
+        rubyHtml: "<ruby>大好<rt>だいす</rt></ruby>き[な]",
+        furigana: "だいすき[な]",
+        romaji: "daisuki[na]",
+        meaning: "suka sekali",
+        category: "READING",
+        group: "Kata Sifat-na",
+        example: "アニメが大好きな仲間。(Rekan yang sangat menyukai anime.)",
+        kanjiChars: ["大", "好"]
+      },
+      {
+        id: 39,
+        kanjiText: "ー点",
+        rubyHtml: "ー<ruby>点<rt>てん</rt></ruby>",
+        furigana: "ーてん",
+        romaji: "-ten",
+        meaning: "angka ～, skor ～, poin ～",
+        category: "READING",
+        group: "Kata Bilangan",
+        example: "テストで100点を取りました。(Mendapat nilai 100 pada ujian.)",
+        kanjiChars: ["点"]
+      },
+      {
+        id: 40,
+        kanjiText: "クラス",
+        rubyHtml: "クラス",
+        furigana: "クラス",
+        romaji: "kurasu",
+        meaning: "kelas (katakana)",
+        category: "READING",
+        group: "Kata Benda Katakana",
+        example: "クラスの皆と仲良くなりました。(Menjadi akrab dengan semua teman sekelas.)",
+        kanjiChars: ["校"] // Related kanji anchor
+      },
+      {
+        id: 41,
+        kanjiText: "けんかします",
+        rubyHtml: "けんかします",
+        furigana: "けんかします",
+        romaji: "kenka shimasu",
+        meaning: "bertengkar, berkelahi",
+        category: "READING",
+        group: "Kata Kerja III",
+        example: "兄弟でけんかします。(Bertengkar dengan saudara kandung.)",
+        kanjiChars: ["争"] // Core fighting kanji
+      },
+      {
+        id: 42,
+        kanjiText: "不思議[な]",
+        rubyHtml: "<ruby>不思議<rt>ふしぎ</rt></ruby>[な]",
+        furigana: "ふしぎ[な]",
+        romaji: "fushigi[na]",
+        meaning: "luar biasa, aneh, misterius",
+        category: "READING",
+        group: "Kata Sifat-na",
+        example: "不思議な力を持つ帝具。(Teigu yang memiliki kekuatan misterius luar biasa.)",
+        kanjiChars: ["不", "思", "議"]
+      }
+    ];
+
+    // SVG Stroke Vector Database for Kanji in Lesson 38 (Standard 109x109 viewBox)
+    const KANJI_STROKE_DATA = {
+      "育": {
+        onyomi: "イク (IKU)",
+        kunyomi: "そだ・つ、そだ・てる",
+        strokes: [
+          "M53.5,12.5 c1.2,1.2 1.8,2.7 1.8,4.5 c0,4.2 -0.1,6.8 -0.1,9.8",
+          "M23.5,28.5 c2.5,0.7 5.5,0.6 8,0.3 c13.5,-1.6 36.8,-3.8 49,-4.3 c2.3,-0.1 5.2,0.1 7.2,0.7",
+          "M38.5,33.5 c0.8,0.8 1.2,1.8 1.2,2.8 c0,4.2 -0.1,10.2 -0.1,14.5",
+          "M40.5,41 c5,-0.6 19,-2.4 28.5,-3.2 c1.5,-0.1 2.8,0 3.8,0.2",
+          "M71.5,31 c0.8,0.8 1,2 0.8,3.2 c-1.2,6.8 -2.2,13.2 -3.2,19.2",
+          "M25.5,56.5 c2.2,0.9 5.2,0.8 7.5,0.5 c15,-1.8 38,-4.2 49,-4.5 c2.5,0 5.2,0.2 7.2,0.8",
+          "M38,65 c0.8,0.8 1.1,1.9 1.1,3.1 c0,6.5 0.1,17.2 0.1,24.5",
+          "M39.5,74 c6.5,-0.6 20,-2.5 28.5,-3.2 c2.1,4.5 2.1,14.5 -0.5,22.5 c-3,8.5 -7,1.5 -8.5,-0.5"
+        ],
+        mnemonic: "Anak (子) yang dipelihara dengan cermat akan berdiri tegak di bawah naungan orang tua."
+      },
+      "運": {
+        onyomi: "ウン (UN)",
+        kunyomi: "はこ・ぶ",
+        strokes: [
+          "M48.5,14 c0.8,0.8 1.3,1.9 1.3,3.1 c0,4.8 -0.1,8.5 -0.1,12.5",
+          "M32,25 c1.8,0.6 4.2,0.5 6.2,0.3 c10.5,-1.2 24.5,-2.8 34,-3.3 c1.8,-0.1 3.8,0.1 5.5,0.5",
+          "M35,34 c0.8,0.8 1.2,1.7 1.4,2.7 c0.9,4.8 1.8,11.2 2.5,17.2",
+          "M37.5,35.5 c9.5,-1.1 26.5,-3.1 35.5,-3.7 c2.8,-0.2 4.2,1.2 3.8,3.8 c-0.8,5.2 -1.8,10.5 -3.2,16.5",
+          "M39.5,44 c7.5,-0.8 24.5,-2.5 34.5,-2.9",
+          "M40.5,53 c8.5,-0.8 22.5,-2.2 31.5,-2.6",
+          "M53.5,27 c0.9,0.9 1.2,2.1 1.2,3.3 c0,8.2 -0.1,24.5 -0.1,34.5",
+          "M30,68 c1.8,0.6 4.5,0.4 6.5,0.2 c12,-1.4 30,-3.2 42.5,-3.7 c2,-0.1 4.5,0.2 6.2,0.6",
+          "M18.5,18.5 c3.2,1.5 8.2,6.2 9,8.5",
+          "M14,48.5 c2.1,0.9 3.5,0.4 4.5,-0.2 c3.8,-2.2 9.2,-6.2 12.2,-8.5",
+          "M12,79 c3.2,0.8 7.5,-0.2 10.5,-2 c5,-3.2 15,-10.8 19,-13.2 c2.5,-1.5 4.5,0.5 3.5,3.2 c-4,10.8 -10,21 -4.5,20.5 c7.5,-0.8 28.5,-6.2 42,-5.5 c5,0.2 9,1.2 13.5,2.5"
+        ],
+        mnemonic: "Mengangkut gerobak (車) di jalan panjang (辶) membawa keberuntungan (運)."
+      },
+      "亡": {
+        onyomi: "ボウ (BOU), モウ (MOU)",
+        kunyomi: "な・くなる",
+        strokes: [
+          "M52.5,14 c1.2,1.2 1.8,2.8 1.8,4.5 c0,5.2 -0.1,9.8 -0.1,14.5",
+          "M20,35.5 c2.5,0.8 5.5,0.5 8.2,0.3 c17.5,-1.8 38.5,-3.8 54,-4.3 c2.5,-0.1 5.5,0.2 7.8,0.7",
+          "M63.5,37.5 c0.8,1.2 0.8,2.5 0.2,4.5 c-3.5,11.5 -12,28.5 -33,41.5 c6.5,4.5 15.5,8.8 25.5,10.2 c3,0.4 5.8,0.2 8.5,-0.2"
+        ],
+        mnemonic: "Seseorang yang pergi di bawah garis batas langit, kini telah beristirahat tenang."
+      },
+      "入": {
+        onyomi: "ニュウ (NYUU)",
+        kunyomi: "はい・る、い・れる",
+        strokes: [
+          "M53.5,15 c0.5,1.5 0.5,3 -0.5,5.2 c-7.2,16.5 -20.5,41.5 -38.5,57.5",
+          "M37.5,36 c6.5,5.8 23.5,26.5 38.5,41.5 c3.5,3.5 7.5,6.8 12.5,9.2"
+        ],
+        mnemonic: "Dua goresan yang membuka jalan untuk melangkah MASUK ke dalam ruangan."
+      },
+      "院": {
+        onyomi: "イン (IN)",
+        kunyomi: "-",
+        strokes: [
+          "M20,18 c1.2,0.8 2.2,2.2 2.2,3.8 c0,4.5 -0.1,20 -0.1,25 c3,-1.2 6.5,-3 8.5,-4.2 c2.8,-1.8 4.2,-0.2 3.2,2.8 c-2.8,8.2 -7,18.5 -11.5,26.5",
+          "M21.5,68.5 c4.5,7.8 8.5,16.2 11,23.5",
+          "M54,14 c1,1 1.4,2.2 1.4,3.5 c0,3.5 -0.1,6.5 -0.1,9.8",
+          "M38.5,27 c0.8,0.8 1.2,1.8 1.4,2.8 c0.8,4.2 1.8,10.5 2.5,15.5",
+          "M41,29 c10,-1.2 30,-3.5 39,-4.2 c2.5,-0.2 4,1.2 3.5,3.8 c-0.8,4.5 -2.2,10.2 -3.2,15.2",
+          "M58,36 c0.8,0.8 1.2,1.8 1.2,2.8 c0,3.5 -0.1,10.5 -0.1,15.5",
+          "M44,46 c7.5,-0.8 25,-2.8 33.5,-3.2",
+          "M42.5,60 c1.5,0.5 3.5,0.4 5.2,0.2 c10.5,-1.2 24.5,-2.8 33,-3.2 c2,-0.1 3.8,0.2 5.5,0.6",
+          "M51,69 c0.8,0.8 1,2 0.8,3.2 c-1.5,6.8 -5.5,17.2 -14,24",
+          "M67,67 c0.9,0.9 1.4,2.2 1.4,3.8 c0,6.5 0.1,14.5 0.1,19 c0,4.2 2,5.2 6.5,5.2 c4.5,0 7,-0.8 8.5,-2"
+        ],
+        mnemonic: "Gedung institusi berdinding kokoh tempat merawat kesehatan dan belajar."
+      },
+      "退": {
+        onyomi: "タイ (TAI)",
+        kunyomi: "しりぞ・く",
+        strokes: [
+          "M48,16 c1.8,0.6 3.8,0.5 5.5,0.2 c7.5,-1.2 16.5,-2.5 21.5,-3.2 c2.8,-0.4 4,1.2 3.5,3.8 c-0.8,4.8 -2.2,12.5 -3.5,18.5",
+          "M50,27 c6.5,-0.8 17.5,-2 24,-2.5",
+          "M50.5,38 c6.5,-0.8 16,-1.8 22.5,-2.2",
+          "M47.5,17 c0.8,0.8 1.2,1.9 1.2,3.1 c0,15.5 0.1,34.5 0.1,43.5",
+          "M50,51 c4.2,3.8 11.5,12.5 17.5,18 c2.2,2 4.5,3.8 7,5",
+          "M77.5,45 c0.1,0.8 0,1.8 -0.4,2.5 c-1.8,4.5 -6.2,12 -12,17.5",
+          "M18.5,23 c3.2,1.5 7.5,5.8 8.5,8",
+          "M14,51 c2.2,0.8 3.5,0.4 4.5,-0.2 c3.5,-2.2 8.5,-5.8 11.5,-8",
+          "M12,80 c3,0.8 7.2,-0.2 10.2,-1.8 c5,-2.8 14,-9.8 18,-12.2 c2.5,-1.5 4.2,0.5 3.2,3.2 c-3.8,9.8 -9.5,19.5 -4.5,19 c7.5,-0.8 27.5,-5.8 41,-5.2 c4.8,0.2 8.5,1.2 13,2.5"
+        ],
+        mnemonic: "Melangkah mundur di jalan (辶) untuk keluar dan meninggalkan ruangan."
+      },
+      "切": {
+        onyomi: "セツ (SETSU), サイ (SAI)",
+        kunyomi: "き・る",
+        strokes: [
+          "M22.5,38.5 c2.5,0.8 5.2,0.6 7.5,0.2 c10.5,-1.8 18.5,-3.2 25,-4.2 c2.2,-0.3 4.2,0.1 6,0.5",
+          "M42.5,16 c1.1,1.1 1.5,2.5 1.5,4 c0,18.5 0.1,52 0.1,64 c0,4.2 -1.5,6.5 -5,5 c-3.5,-1.5 -6.5,-3.8 -9.5,-5.5",
+          "M64.5,25 c1.5,0.8 3.2,1.2 4.8,0.8 c5,-1.2 11.5,-2.8 15.5,-3.8 c3.2,-0.8 4.8,0.8 4.5,4.2 c-0.8,11.5 -4.5,45 -18.5,61.5 c-3.5,4.2 -6.5,0.8 -7.8,-2",
+          "M64,36 c0.9,0.9 1.4,2.2 1.4,3.8 c0,14.5 -0.2,35 -0.2,46"
+        ],
+        mnemonic: "Bilah pedang (刀) yang menebas garis menjadi dua bagian terputus."
+      },
+      "掛": {
+        onyomi: "カイ (KAI)",
+        kunyomi: "か・ける",
+        strokes: [
+          "M15,35 c1.8,0.8 3.8,0.6 5.5,0.2 c6.5,-1.5 12.5,-3 18.5,-4.2",
+          "M29,15 c1,1 1.3,2.2 1.3,3.5 c0,22 0.1,58 0.1,68 c0,4.5 -1.2,6.5 -4.5,5 c-3.2,-1.5 -6.2,-3.5 -8.5,-5",
+          "M14,68 c2.2,1.5 4.5,1.2 6.8,-0.5 c4.5,-3.5 11.5,-9.5 17,-14.2",
+          "M48,22 c1.5,0.5 3.2,0.4 4.8,0.2 c8.5,-1.2 18.5,-2.5 24.5,-3.2",
+          "M61,12 c0.8,0.8 1.1,1.8 1.1,2.8 c0,6.5 0.1,14.5 0.1,19",
+          "M43,36 c1.8,0.6 4.2,0.5 6,0.3 c13.5,-1.5 28.5,-3.2 38,-3.8 c2,-0.1 4,0.1 5.8,0.5",
+          "M49,49 c1.5,0.5 3.2,0.4 4.8,0.2 c8.5,-1.2 18.5,-2.5 24.5,-3.2",
+          "M62,40 c0.8,0.8 1.1,1.8 1.1,2.8 c0,6.5 0.1,15.5 0.1,20",
+          "M44,64 c1.8,0.6 4.2,0.5 6,0.3 c13.5,-1.5 28.5,-3.2 38,-3.8 c2,-0.1 4,0.1 5.8,0.5",
+          "M53,74 c0.8,0.8 1.1,1.8 1.1,3 c0,5.2 -0.1,12.5 -0.1,17.5",
+          "M74,72 c0.8,0.8 1.1,1.8 1.1,3 c0,5.2 -0.1,12.5 -0.1,17.5"
+        ],
+        mnemonic: "Tangan (扌) yang menggantungkan gembok untuk mengunci pintu rapat-rapat."
+      },
+      "気": {
+        onyomi: "キ (KI)",
+        kunyomi: "いき",
+        strokes: [
+          "M62,14 c0.2,0.8 -0.1,1.8 -0.5,2.5 c-3.2,5.5 -9.5,13.5 -19.5,19",
+          "M33,35 c1.8,0.6 4.2,0.5 6,0.3 c12.5,-1.5 26.5,-3.2 36.5,-4 c2,-0.2 4,0.1 5.8,0.5",
+          "M37,48 c1.5,0.5 3.5,0.4 5.2,0.2 c9.5,-1.2 18.5,-2.5 25.5,-3.2",
+          "M31,63 c1.5,0.8 3.5,0.8 5.2,0.5 c10.5,-1.8 29.5,-4.8 38.5,-5.5 c4.5,-0.3 5.5,2 4.5,6.2 c-2.8,11.5 -7.5,22.5 -17.5,30 c-3.5,2.5 -5,-0.8 -6.5,-3",
+          "M46,71 c1.8,2.2 4.5,6.5 5.5,9",
+          "M64,68 c0.1,0.8 -0.1,1.8 -0.4,2.5 c-1.5,3.8 -4.8,9.5 -8.5,13.5"
+        ],
+        mnemonic: "Hawa energi roh (Ki) yang mengalir lembut bagaikan uap di udara."
+      },
+      "持": {
+        onyomi: "ジ (JI)",
+        kunyomi: "も・つ",
+        strokes: [
+          "M16,36 c1.8,0.8 3.8,0.6 5.5,0.2 c6.5,-1.5 12.5,-3 18.5,-4.2",
+          "M29,16 c1,1 1.3,2.2 1.3,3.5 c0,22 0.1,58 0.1,68 c0,4.5 -1.2,6.5 -4.5,5 c-3.2,-1.5 -6.2,-3.5 -8.5,-5",
+          "M15,68 c2.2,1.5 4.5,1.2 6.8,-0.5 c4.5,-3.5 11.5,-9.5 17,-14.2",
+          "M48,27 c1.8,0.6 3.8,0.5 5.5,0.2 c9.5,-1.5 22.5,-3.2 30.5,-3.8 c2,-0.2 4,0.1 5.8,0.5",
+          "M64,13 c1,1 1.4,2.2 1.4,3.5 c0,9.5 0.1,19 0.1,26",
+          "M42,43 c2,0.6 4.5,0.5 6.5,0.3 c14.5,-1.5 29.5,-3.2 40,-3.8 c2.2,-0.1 4.5,0.1 6.5,0.5",
+          "M50,56 c1.5,0.5 3.5,0.4 5.2,0.2 c8.5,-1.2 18.5,-2.5 25.5,-3.2",
+          "M66,45 c1,1 1.4,2.2 1.4,3.5 c0,28 -0.2,37 -0.2,42 c0,4.2 -1.5,5.5 -4.5,4.5 c-3.2,-1.2 -6.5,-2.8 -8.5,-4",
+          "M51,70 c2.2,2.5 5.5,7.5 6.8,10.5"
+        ],
+        mnemonic: "Tangan (扌) yang memegang erat barang berharga di kuil (寺)."
+      },
+      "悪": {
+        onyomi: "アク (AKU)",
+        kunyomi: "わる・い",
+        strokes: [
+          "M26,24 c2,0.6 4.5,0.5 6.5,0.3 c13.5,-1.5 28.5,-3.2 41,-3.8 c2.2,-0.1 4.5,0.1 6.5,0.5",
+          "M34,33 c0.8,0.8 1.1,1.8 1.1,3 c0,5.5 -0.1,12 -0.1,17.5",
+          "M36,35 c7.5,-0.8 15,-1.8 21.5,-2.5",
+          "M36,44 c7.5,-0.8 15,-1.8 21.5,-2.5",
+          "M58,26 c0.8,0.8 1.1,1.8 1.1,3 c0,7.5 -0.1,17.5 -0.1,23.5",
+          "M22,54 c2.2,0.6 5,0.5 7.2,0.3 c16.5,-1.5 35.5,-3.2 50,-3.8 c2.5,-0.1 5,0.1 7.2,0.5",
+          "M27,69 c0.5,1.5 0.2,2.8 -0.5,4.2 c-2.8,5.5 -6.5,10.5 -12,15",
+          "M38,67 c0.9,0.9 1.4,2.2 1.4,3.8 c0,6.5 0.1,12.5 0.1,17 c0,3.5 1.5,4.5 4.5,4.5 c10.5,0 26.5,-2.5 38,-2 c4.5,0.2 8,1.5 10.5,3.2",
+          "M56,66 c1.8,2.5 4.5,6.5 5.8,9.5",
+          "M79,64 c2.5,2.5 6,7.2 7.5,10.5"
+        ],
+        mnemonic: "Hati (心) yang tertekan oleh beban keburukan menimbulkan rasa tidak nyaman."
+      },
+      "大": {
+        onyomi: "ダイ (DAI), タイ (TAI)",
+        kunyomi: "おお・きい",
+        strokes: [
+          "M18,43 c2.8,0.8 6.2,0.6 9,0.3 c18.5,-1.8 38.5,-3.8 53,-4.5 c2.8,-0.1 6,0.1 8.5,0.7",
+          "M52,14 c1.2,1.2 1.5,2.8 1.4,4.5 c-2.8,28 -14.5,54 -38.5,70",
+          "M53,44 c7.5,8.5 22.5,32 32.5,41 c3.2,2.8 6.5,5.2 10.5,7"
+        ],
+        mnemonic: "Seseorang yang merentangkan kedua tangan dan kakinya selebar mungkin: BESAR!"
+      },
+      "小": {
+        onyomi: "ショウ (SHOU)",
+        kunyomi: "ちい・さい、こ〜",
+        strokes: [
+          "M53,16 c1.2,1.2 1.6,2.8 1.6,4.5 c0,28.5 -0.2,56 -0.2,62 c0,5.5 -1.8,7.2 -5.5,5.5 c-3.5,-1.5 -6.5,-3.8 -9.5,-5.5",
+          "M31,41 c0.2,0.8 -0.1,1.8 -0.5,2.5 c-3.5,6.5 -10.5,16.5 -18.5,22",
+          "M77,38 c3.8,3.5 9.5,12.5 11.5,17"
+        ],
+        mnemonic: "Satu garis kecil diapit dua titik mungil: KECIL."
+      },
+      "赤": {
+        onyomi: "セキ (SEKI)",
+        kunyomi: "あか、あか・い",
+        strokes: [
+          "M31,27 c1.8,0.6 4.2,0.5 6,0.3 c10.5,-1.2 24.5,-2.8 34,-3.3 c1.8,-0.1 3.8,0.1 5.5,0.5",
+          "M52,13 c1,1 1.4,2.2 1.4,3.5 c0,10.5 0.1,19 0.1,26",
+          "M18,44 c2.8,0.8 6.2,0.6 9,0.3 c18.5,-1.8 41.5,-3.8 56,-4.5 c2.8,-0.1 6,0.1 8.5,0.7",
+          "M41,53 c0.2,0.8 -0.1,1.8 -0.5,2.5 c-3.8,7.5 -11.5,18.5 -21.5,25",
+          "M64,48 c0.9,0.9 1.4,2.2 1.4,3.8 c0,13.5 -0.2,28 -0.2,34 c0,4.2 1.8,5.2 6.5,5.2 c4.5,0 7,-0.8 8.5,-2",
+          "M36,70 c2.2,2.5 5.5,7.5 6.8,10.5",
+          "M53,66 c2.5,2.8 6.5,8.2 7.8,11.5"
+        ],
+        mnemonic: "Tanah di atas api yang membara menghasilkan warna MERAH (merona seperti bayi)."
+      },
+      "電": {
+        onyomi: "デン (DEN)",
+        kunyomi: "-",
+        strokes: [
+          "M33,18 c1.8,0.6 3.8,0.5 5.5,0.2 c8.5,-1.2 21.5,-2.8 29.5,-3.3 c1.8,-0.1 3.8,0.1 5.5,0.5",
+          "M25,29 c0.8,0.8 1.1,1.8 1.3,2.8 c0.9,4.5 2,12.5 2.8,18.5",
+          "M27,31 c12.5,-1.5 45,-4.8 56,-5.5 c2.8,-0.2 4.2,1.2 3.8,3.8 c-0.8,5.2 -2.5,12.5 -3.8,18",
+          "M52,20 c0.9,0.9 1.2,2.1 1.2,3.3 c0,8.2 0.1,18.5 0.1,24.5",
+          "M38,39 c1.5,1.8 3.5,5.5 4.5,7.5",
+          "M66,36 c2.2,2 5,6.2 6,8.5",
+          "M30,59 c0.8,0.8 1.1,1.8 1.3,2.8 c0.8,4.2 1.8,11.5 2.5,17",
+          "M32,60 c9.5,-1.2 32.5,-3.8 41.5,-4.3 c2.5,-0.2 3.8,1.2 3.5,3.8 c-0.8,5.5 -1.8,11.2 -2.8,16.5",
+          "M34,69 c9.5,-1.2 27.5,-3.2 38,-3.8",
+          "M35,78 c9.5,-1.2 26.5,-3 36.5,-3.5",
+          "M52,50 c1,1 1.3,2.2 1.3,3.5 c0,22 -0.2,32 -0.2,35 c0,4.2 1.8,5.5 7.5,5.5 c5.5,0 9.5,-0.8 11.5,-2"
+        ],
+        mnemonic: "Kilat petir hujan badai (雨) yang memancarkan aliran LISTRIK raksasa."
+      },
+      "本": {
+        onyomi: "ホン (HON)",
+        kunyomi: "もと",
+        strokes: [
+          "M18,34 c2.5,0.8 5.5,0.6 8,0.3 c16.5,-1.8 38.5,-3.8 54,-4.5 c2.5,-0.1 5.5,0.1 7.8,0.7",
+          "M52,13 c1.2,1.2 1.5,2.8 1.5,4.5 c0,35 -0.2,65 -0.2,71",
+          "M52,35 c-5.8,14.5 -18.5,37 -36.5,49",
+          "M53,35 c6.5,7.5 21.5,28.5 32,38 c3.2,3 6.5,5.8 10.5,7.8",
+          "M30,69 c2.2,0.6 4.8,0.5 7,0.3 c10.5,-1.2 22.5,-2.5 31.5,-3.2 c2,-0.1 4.5,0.1 6.2,0.5"
+        ],
+        mnemonic: "Pohon (木) yang diberi tanda pada akarnya: SUMBER / ASAL / BUKU."
+      },
+      "双": {
+        onyomi: "ソウ (SOU)",
+        kunyomi: "ふた、ふた・つ",
+        strokes: [
+          "M20,31 c1.5,0.6 3.5,0.5 5.2,0.2 c6.5,-1.2 14.5,-2.8 20.5,-3.8 c2.5,-0.4 3.8,1.2 2.8,3.5 c-3.2,7.5 -9.5,19 -18.5,26.5",
+          "M25,48 c3.5,3.2 11.5,14 14.5,19",
+          "M57,28 c1.5,0.6 3.5,0.5 5.2,0.2 c6.5,-1.2 14.5,-2.8 20.5,-3.8 c2.5,-0.4 3.8,1.2 2.8,3.5 c-3.2,7.5 -9.5,19 -18.5,26.5",
+          "M62,45 c4.2,4.5 15.5,19 20,24"
+        ],
+        mnemonic: "Dua tangan bergandengan secara sejajar melambangkan anak KEMBAR."
+      },
+      "子": {
+        onyomi: "シ (SHI), ス (SU)",
+        kunyomi: "こ",
+        strokes: [
+          "M34,22 c2.2,0.8 4.8,0.6 7,0.3 c8.5,-1.2 18.5,-2.8 24.5,-3.8 c2.8,-0.4 4,1.2 3.2,3.8 c-2.8,9.5 -8.5,20.5 -18,29",
+          "M48,46 c1.5,1.5 1.8,3.2 1.8,5 c0,15 -0.2,32 -0.2,36 c0,6.5 -2.5,7.8 -6.5,5.5 c-3.5,-2 -6.5,-4.5 -9.5,-6.5",
+          "M16,56 c2.8,0.8 6.5,0.6 9.5,0.3 c20.5,-1.8 44.5,-3.8 62,-4.5 c3,-0.1 6.5,0.2 9.5,0.8"
+        ],
+        mnemonic: "Sosok bayi mungil dengan kedua tangan terentang: ANAK."
+      },
+      "姉": {
+        onyomi: "シ (SHI)",
+        kunyomi: "あね",
+        strokes: [
+          "M28,21 c0.5,1.2 0.4,2.5 -0.2,4 c-3.5,8.5 -8.5,19.5 -14.5,26.5 c-1.5,1.8 -0.8,2.8 1.2,3 c8.5,1 18.5,6.5 24,14.5",
+          "M39,37 c0.1,0.8 0,2 -0.5,2.8 c-4.5,7.5 -12.5,21 -26.5,31",
+          "M12,50 c2.2,0.6 5,0.5 7.2,0.2 c11.5,-1.5 22.5,-3.2 31.5,-4 c2,-0.2 4.2,0.1 6,0.5",
+          "M53,28 c0.8,0.8 1.1,1.8 1.3,2.8 c0.8,4.5 1.8,12 2.5,17.5",
+          "M55,30 c8.5,-1.2 24.5,-3.2 31.5,-3.8 c2.5,-0.2 3.8,1.2 3.2,3.8 c-0.8,4.8 -2,11.5 -3,16.8",
+          "M57,44 c7.5,-0.8 21.5,-2.5 30,-3",
+          "M47,58 c2,0.6 4.5,0.5 6.5,0.3 c13.5,-1.5 27.5,-3.2 38,-3.8 c2,-0.1 4.5,0.1 6.2,0.5",
+          "M71,15 c1,1 1.4,2.2 1.4,3.5 c0,28 -0.2,65 -0.2,73"
+        ],
+        mnemonic: "Seorang wanita (女) di pasar kota (市) yang memimpin: KAKAK PEREMPUAN."
+      },
+      "妹": {
+        onyomi: "マイ (MAI)",
+        kunyomi: "いもうと",
+        strokes: [
+          "M28,21 c0.5,1.2 0.4,2.5 -0.2,4 c-3.5,8.5 -8.5,19.5 -14.5,26.5 c-1.5,1.8 -0.8,2.8 1.2,3 c8.5,1 18.5,6.5 24,14.5",
+          "M39,37 c0.1,0.8 0,2 -0.5,2.8 c-4.5,7.5 -12.5,21 -26.5,31",
+          "M12,50 c2.2,0.6 5,0.5 7.2,0.2 c11.5,-1.5 22.5,-3.2 31.5,-4 c2,-0.2 4.2,0.1 6,0.5",
+          "M54,26 c1.8,0.6 3.8,0.5 5.5,0.2 c7.5,-1.2 17.5,-2.5 24,-3.2 c1.8,-0.2 3.8,0.1 5.5,0.5",
+          "M46,45 c2.2,0.6 5,0.5 7.2,0.2 c13.5,-1.5 27.5,-3.2 38.5,-3.8 c2.2,-0.1 4.8,0.1 6.8,0.5",
+          "M69,13 c1,1 1.4,2.2 1.4,3.5 c0,35 -0.2,66 -0.2,74",
+          "M69,45 c-5.5,13.5 -16.5,34 -30.5,43",
+          "M70,45 c5.5,8.5 17.5,28.5 24.5,36.5 c2.5,2.8 5,5 8,6.8"
+        ],
+        mnemonic: "Wanita muda (女) yang belum sepenuhnya dewasa (未): ADIK PEREMPUAN."
+      }
+    };
+
+    // Global Application State
+    let activeKotobaIndex = 0;
+    let activeKanjiChar = "育";
+    let masteredKanjiList = new Set();
+    let currentAnimStrokeIdx = 0;
+    let animTimer = null;
+    let animPlaying = false;
+    let animSpeed = 1;
+    let showGhost = true;
+    let sfxEnabled = true;
+    let isDrawing = false;
+    let currentPracticeMode = "canvas"; // 'canvas' or 'anim'
+    let drawPaths = []; // User drawn strokes on canvas
+
+    // Anime Wallpaper Collection
+    const ANIME_WALLPAPERS = {
+      cover: "https://upload.wikimedia.org/wikipedia/en/6/64/Akame_ga_Kill_volume_1_cover.jpg",
+      moon: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1920&auto=format&fit=crop",
+      night: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1920&auto=format&fit=crop",
+      crimson: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=1920&auto=format&fit=crop"
+    };
+
+    function changeAnimeWallpaper(key) {
+      const bgImg = document.getElementById("animeBgImage");
+      const url = ANIME_WALLPAPERS[key] || ANIME_WALLPAPERS.cover;
+      bgImg.style.backgroundImage = `url('${url}')`;
+
+      document.querySelectorAll(".anime-preset-btn").forEach(btn => {
+        if (btn.getAttribute("data-bg") === key) {
+          btn.className = "anime-preset-btn active px-2 py-0.5 rounded-lg bg-akame-crimson text-white text-[10px] font-bold border border-akame-glow whitespace-nowrap";
+        } else {
+          btn.className = "anime-preset-btn px-2 py-0.5 rounded-lg bg-akame-card text-slate-300 text-[10px] border border-slate-700 whitespace-nowrap";
+        }
+      });
+
+      document.querySelectorAll(".wallpaper-card").forEach(card => {
+        if (card.getAttribute("data-bg") === key) {
+          card.classList.add("border-2", "border-akame-crimson");
+          card.classList.remove("border-slate-700");
+        } else {
+          card.classList.remove("border-2", "border-akame-crimson");
+          card.classList.add("border", "border-slate-700");
+        }
+      });
+
+      showToast("Latar anime berhasil diubah!");
+    }
+
+    // Tone.js Katana Sound Synthesis
+    let tonePolySynth = null;
+    function playKatanaSlash(pitch = "E5") {
+      if (!sfxEnabled) return;
+      try {
+        if (!tonePolySynth) {
+          tonePolySynth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: "triangle" },
+            envelope: { attack: 0.005, decay: 0.1, sustain: 0.01, release: 0.15 }
+          }).toDestination();
+          tonePolySynth.volume.value = -8;
+        }
+        if (Tone.context.state !== 'running') {
+          Tone.start();
+        }
+        tonePolySynth.triggerAttackRelease([pitch], "32n");
+      } catch (e) {}
+    }
+
+    function playMurasameKillFanfare() {
+      if (!sfxEnabled) return;
+      try {
+        if (Tone.context.state !== 'running') Tone.start();
+        const now = Tone.now();
+        tonePolySynth.triggerAttackRelease(["E4", "B4", "E5", "G5"], "16n", now);
+      } catch(e) {}
+    }
+
+    // Japanese Text-to-Speech
+    function speakJapaneseWord(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ja-JP';
+      utterance.rate = 0.85;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function renderKotobaSidebar(filterCat = "ALL", searchQuery = "") {
+      const container = document.getElementById("kotobaList");
+      container.innerHTML = "";
+
+      const q = searchQuery.toLowerCase().trim();
+
+      const filtered = LESSON_38_KOTOBA.filter(item => {
+        const matchesCategory = (filterCat === "ALL") || (item.category === filterCat);
+        const matchesQuery = item.kanjiText.toLowerCase().includes(q) ||
+                             item.furigana.toLowerCase().includes(q) ||
+                             item.romaji.toLowerCase().includes(q) ||
+                             item.meaning.toLowerCase().includes(q);
+        return matchesCategory && matchesQuery;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 text-center text-slate-500 text-xs">
+            <i data-lucide="search-x" class="w-6 h-6 mx-auto mb-2 opacity-40"></i>
+            Tidak ada kotoba yang cocok.
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      filtered.forEach((item) => {
+        const isSelected = (item.id === LESSON_38_KOTOBA[activeKotobaIndex].id);
+        const isMastered = item.kanjiChars.every(ch => masteredKanjiList.has(ch));
+
+        const card = document.createElement("div");
+        card.className = `p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group ${
+          isSelected 
+            ? "bg-akame-crimson/20 border-akame-crimson shadow-curse" 
+            : "bg-akame-card/60 hover:bg-akame-card border-slate-800/80 hover:border-slate-700"
+        }`;
+
+        card.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            <span class="w-6 h-6 rounded-lg ${isMastered ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-slate-800 text-slate-400'} text-[10px] font-mono font-bold flex items-center justify-center shrink-0">
+              ${isMastered ? '✓' : item.id}
+            </span>
+            <div>
+              <div class="font-jp text-xs font-bold ${isSelected ? 'text-akame-glow' : 'text-slate-200'}">
+                ${item.kanjiText}
+              </div>
+              <div class="text-[9px] text-slate-400 font-mono">
+                ${item.furigana} • <span class="text-slate-400">${item.meaning}</span>
+              </div>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-500 group-hover:text-akame-glow transition-transform group-hover:translate-x-0.5"></i>
+        `;
+
+        card.addEventListener("click", () => {
+          selectKotobaById(item.id);
+          // Switch automatically to practice tab on mobile
+          switchMainTab('practice');
+        });
+
+        container.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    function selectKotobaById(id) {
+      const idx = LESSON_38_KOTOBA.findIndex(k => k.id === id);
+      if (idx === -1) return;
+      activeKotobaIndex = idx;
+      const k = LESSON_38_KOTOBA[idx];
+
+      // Update Header Display
+      document.getElementById("activeTypeBadge").textContent = k.group;
+      document.getElementById("activeNumberBadge").textContent = `${String(k.id).padStart(2, '0')} / 42`;
+      document.getElementById("activeKotobaDisplay").innerHTML = k.rubyHtml;
+      document.getElementById("activeRomajiDisplay").textContent = `${k.romaji} • ${k.meaning}`;
+      document.getElementById("lessonContextGrammar").textContent = k.group;
+      document.getElementById("lessonContextExample").innerHTML = k.example;
+
+      // Render Kanji Picker Chips
+      const chipsContainer = document.getElementById("kanjiPickerChips");
+      chipsContainer.innerHTML = "";
+
+      const kanjiList = k.kanjiChars && k.kanjiChars.length > 0 ? k.kanjiChars : ["育"];
+      activeKanjiChar = kanjiList[0];
+
+      kanjiList.forEach((char) => {
+        const btn = document.createElement("button");
+        const isActive = (char === activeKanjiChar);
+        btn.className = `w-7 h-7 rounded-lg font-jp font-bold text-xs transition-all flex items-center justify-center ${
+          isActive 
+            ? "bg-akame-crimson text-white shadow-curse border border-akame-glow scale-105" 
+            : "bg-akame-card hover:bg-slate-700 text-slate-300 border border-slate-700"
+        }`;
+        btn.textContent = char;
+        btn.addEventListener("click", () => {
+          activeKanjiChar = char;
+          updateActiveKanjiDisplay();
+          Array.from(chipsContainer.children).forEach(c => {
+            c.className = "w-7 h-7 rounded-lg font-jp font-bold text-xs transition-all flex items-center justify-center bg-akame-card hover:bg-slate-700 text-slate-300 border border-slate-700";
+          });
+          btn.className = "w-7 h-7 rounded-lg font-jp font-bold text-xs transition-all flex items-center justify-center bg-akame-crimson text-white shadow-curse border border-akame-glow scale-105";
+        });
+        chipsContainer.appendChild(btn);
+      });
+
+      updateActiveKanjiDisplay();
+      renderKotobaSidebar(
+        document.querySelector(".filter-pill.active")?.getAttribute("data-category") || "ALL",
+        document.getElementById("kotobaSearch").value
+      );
+      playKatanaSlash("F5");
+    }
+
+    function updateActiveKanjiDisplay() {
+      const data = KANJI_STROKE_DATA[activeKanjiChar] || generateFallbackStrokeData(activeKanjiChar);
+
+      document.getElementById("metaOnyomi").textContent = data.onyomi || "-";
+      document.getElementById("metaKunyomi").textContent = data.kunyomi || "-";
+      document.getElementById("kanjiMnemonicText").textContent = data.mnemonic || "Fokuskan ketelitian urutan goresan untuk menguasai kanji ini.";
+
+      currentAnimStrokeIdx = 0;
+      stopAnimation();
+      renderKanjiAnimationSvg(data.strokes);
+      renderGhostKanjiSvg(data.strokes);
+
+      clearCanvas();
+      resizeCanvas();
+    }
+
+    function generateFallbackStrokeData(char) {
+      return {
+        onyomi: char,
+        kunyomi: char,
+        strokes: [
+          "M25,25 L85,25",
+          "M55,15 L55,90",
+          "M25,55 L85,55",
+          "M25,90 L85,90"
+        ],
+        mnemonic: `Kanji ${char} dari kosakata Pelajaran 38. Perhatikan proporsi garis agar seimbang.`
+      };
+    }
+
+    function renderKanjiAnimationSvg(strokes) {
+      const svg = document.getElementById("kanjiAnimationSvg");
+      svg.innerHTML = "";
+
+      document.getElementById("strokeCounterBadge").textContent = `Goresan ${currentAnimStrokeIdx} / ${strokes.length}`;
+
+      strokes.forEach((d, idx) => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        path.setAttribute("stroke-width", "5");
+        path.setAttribute("stroke-linecap", "round");
+        path.setAttribute("stroke-linejoin", "round");
+        path.setAttribute("fill", "none");
+
+        if (idx < currentAnimStrokeIdx) {
+          path.setAttribute("stroke", "#ffffff");
+          path.setAttribute("opacity", "0.95");
+        } else if (idx === currentAnimStrokeIdx && animPlaying) {
+          path.setAttribute("stroke", "#ff2a55");
+          path.setAttribute("class", "animate-stroke");
+          path.style.animationDuration = `${1 / animSpeed}s`;
+        } else {
+          path.setAttribute("stroke", "transparent");
+        }
+
+        svg.appendChild(path);
+
+        if (idx <= currentAnimStrokeIdx) {
+          const m = d.match(/M\s*([\d.]+)[,\s]+([\d.]+)/);
+          if (m) {
+            const cx = parseFloat(m[1]);
+            const cy = parseFloat(m[2]);
+
+            const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            circle.setAttribute("cx", cx);
+            circle.setAttribute("cy", cy);
+            circle.setAttribute("r", "3.2");
+            circle.setAttribute("fill", idx === currentAnimStrokeIdx ? "#ff0033" : "#be123c");
+
+            const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            text.setAttribute("x", cx);
+            text.setAttribute("y", cy + 1.2);
+            text.setAttribute("font-size", "3");
+            text.setAttribute("font-weight", "bold");
+            text.setAttribute("fill", "#ffffff");
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("dominant-baseline", "middle");
+            text.textContent = idx + 1;
+
+            g.appendChild(circle);
+            g.appendChild(text);
+            svg.appendChild(g);
+          }
+        }
+      });
+    }
+
+    function renderGhostKanjiSvg(strokes) {
+      const svg = document.getElementById("ghostKanjiSvg");
+      svg.innerHTML = "";
+
+      strokes.forEach(d => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        path.setAttribute("stroke", "#ff2a55");
+        path.setAttribute("stroke-width", "5.5");
+        path.setAttribute("stroke-linecap", "round");
+        path.setAttribute("stroke-linejoin", "round");
+        path.setAttribute("fill", "none");
+        svg.appendChild(path);
+      });
+    }
+
+    function startAnimation() {
+      const data = KANJI_STROKE_DATA[activeKanjiChar] || generateFallbackStrokeData(activeKanjiChar);
+      animPlaying = true;
+      document.getElementById("playBtnIcon").setAttribute("data-lucide", "pause");
+      document.getElementById("playBtnText").textContent = "Jeda";
+      lucide.createIcons();
+
+      if (currentAnimStrokeIdx >= data.strokes.length) {
+        currentAnimStrokeIdx = 0;
+      }
+
+      function step() {
+        if (!animPlaying) return;
+        renderKanjiAnimationSvg(data.strokes);
+        playKatanaSlash("C5");
+
+        if (currentAnimStrokeIdx < data.strokes.length - 1) {
+          currentAnimStrokeIdx++;
+          animTimer = setTimeout(step, 1100 / animSpeed);
+        } else {
+          currentAnimStrokeIdx = data.strokes.length;
+          renderKanjiAnimationSvg(data.strokes);
+          stopAnimation();
+          triggerCutGlance();
+        }
+      }
+
+      step();
+    }
+
+    function stopAnimation() {
+      animPlaying = false;
+      clearTimeout(animTimer);
+      document.getElementById("playBtnIcon").setAttribute("data-lucide", "play");
+      document.getElementById("playBtnText").textContent = "Putar";
+      lucide.createIcons();
+    }
+
+    function triggerCutGlance() {
+      const cut = document.getElementById("murasameCutEffect");
+      cut.classList.remove("opacity-0");
+      cut.classList.add("opacity-100");
+      setTimeout(() => {
+        cut.classList.remove("opacity-100");
+        cut.classList.add("opacity-0");
+      }, 400);
+    }
+
+    const canvas = document.getElementById("drawingCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0) return;
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      redrawUserStrokes();
+    }
+
+    function clearCanvas() {
+      drawPaths = [];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.getElementById("katanaKillOverlay").classList.add("hidden");
+    }
+
+    function redrawUserStrokes() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 6.5;
+
+      drawPaths.forEach(stroke => {
+        if (stroke.length < 2) return;
+        ctx.beginPath();
+        ctx.moveTo(stroke[0].x, stroke[0].y);
+        for (let i = 1; i < stroke.length; i++) {
+          ctx.lineTo(stroke[i].x, stroke[i].y);
+        }
+        ctx.stroke();
+      });
+    }
+
+    function getCanvasCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
+    }
+
+    function handlePointerDown(e) {
+      e.preventDefault();
+      isDrawing = true;
+      const pt = getCanvasCoords(e);
+      drawPaths.push([pt]);
+      playKatanaSlash("A4");
+    }
+
+    function handlePointerMove(e) {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const pt = getCanvasCoords(e);
+      const curStroke = drawPaths[drawPaths.length - 1];
+      curStroke.push(pt);
+      redrawUserStrokes();
+    }
+
+    function handlePointerUp(e) {
+      if (!isDrawing) return;
+      isDrawing = false;
+      playKatanaSlash("D5");
+    }
+
+    canvas.addEventListener("mousedown", handlePointerDown);
+    canvas.addEventListener("mousemove", handlePointerMove);
+    window.addEventListener("mouseup", handlePointerUp);
+
+    canvas.addEventListener("touchstart", handlePointerDown, { passive: false });
+    canvas.addEventListener("touchmove", handlePointerMove, { passive: false });
+    window.addEventListener("touchend", handlePointerUp);
+
+    function showToast(msg) {
+      const box = document.getElementById("toastBox");
+      const text = document.getElementById("toastMsg");
+      text.textContent = msg;
+      box.classList.remove("translate-y-20", "opacity-0");
+      box.classList.add("translate-y-0", "opacity-100");
+
+      setTimeout(() => {
+        box.classList.remove("translate-y-0", "opacity-100");
+        box.classList.add("translate-y-20", "opacity-0");
+      }, 2500);
+    }
+
+    function switchMainTab(tab) {
+      const practiceContent = document.getElementById("practiceTabContent");
+      const listContent = document.getElementById("kotobaListTabContent");
+      const btnPractice = document.getElementById("tabBtnPractice");
+      const btnList = document.getElementById("tabBtnKotobaList");
+
+      if (tab === 'practice') {
+        practiceContent.classList.remove("hidden");
+        listContent.classList.add("hidden");
+        listContent.classList.remove("flex");
+
+        btnPractice.className = "py-2 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 bg-akame-crimson text-white shadow-curse";
+        btnList.className = "py-2 rounded-xl font-medium text-slate-400 hover:text-white transition-all flex items-center justify-center gap-1.5";
+        setTimeout(resizeCanvas, 50);
+      } else {
+        practiceContent.classList.add("hidden");
+        listContent.classList.remove("hidden");
+        listContent.classList.add("flex");
+
+        btnList.className = "py-2 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 bg-akame-crimson text-white shadow-curse";
+        btnPractice.className = "py-2 rounded-xl font-medium text-slate-400 hover:text-white transition-all flex items-center justify-center gap-1.5";
+      }
+    }
+
+    function switchSubPracticeMode(mode) {
+      currentPracticeMode = mode;
+      const canvasBox = document.getElementById("canvasContainerBox");
+      const animBox = document.getElementById("animContainerBox");
+      const canvasActions = document.getElementById("canvasActionRow");
+      const animActions = document.getElementById("animActionRow");
+      const canvasBtn = document.getElementById("subModeCanvasBtn");
+      const animBtn = document.getElementById("subModeAnimBtn");
+      const canvasControls = document.getElementById("subModeCanvasControls");
+      const animControls = document.getElementById("subModeAnimControls");
+
+      if (mode === 'canvas') {
+        canvasBox.classList.remove("hidden");
+        animBox.classList.add("hidden");
+        animBox.classList.remove("flex");
+        canvasActions.classList.remove("hidden");
+        animActions.classList.add("hidden");
+        animActions.classList.remove("flex");
+        canvasControls.classList.remove("hidden");
+        animControls.classList.add("hidden");
+
+        canvasBtn.className = "px-3 py-1 rounded-lg bg-akame-crimson text-white shadow-curse transition-all flex items-center gap-1";
+        animBtn.className = "px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1";
+        stopAnimation();
+        resizeCanvas();
+      } else {
+        canvasBox.classList.add("hidden");
+        animBox.classList.remove("hidden");
+        animBox.classList.add("flex");
+        canvasActions.classList.add("hidden");
+        animActions.classList.remove("hidden");
+        animActions.classList.add("flex");
+        canvasControls.classList.add("hidden");
+        animControls.classList.remove("hidden");
+
+        animBtn.className = "px-3 py-1 rounded-lg bg-akame-crimson text-white shadow-curse transition-all flex items-center gap-1";
+        canvasBtn.className = "px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1";
+        startAnimation();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderKotobaSidebar();
+      selectKotobaById(1);
+      setTimeout(resizeCanvas, 100);
+      window.addEventListener("resize", resizeCanvas);
+
+      // Main tab switcher
+      document.getElementById("tabBtnPractice").addEventListener("click", () => switchMainTab('practice'));
+      document.getElementById("tabBtnKotobaList").addEventListener("click", () => switchMainTab('list'));
+
+      // Sub practice switcher (Canvas vs Animation)
+      document.getElementById("subModeCanvasBtn").addEventListener("click", () => switchSubPracticeMode('canvas'));
+      document.getElementById("subModeAnimBtn").addEventListener("click", () => switchSubPracticeMode('anim'));
+
+      // Stepper Next / Prev
+      document.getElementById("prevKotobaBtn").addEventListener("click", () => {
+        let prevId = activeKotobaIndex <= 0 ? LESSON_38_KOTOBA.length : activeKotobaIndex;
+        selectKotobaById(prevId);
+      });
+      document.getElementById("nextKotobaBtn").addEventListener("click", () => {
+        let nextId = activeKotobaIndex >= LESSON_38_KOTOBA.length - 1 ? 1 : activeKotobaIndex + 2;
+        selectKotobaById(nextId);
+      });
+
+      // Pronounce Button
+      document.getElementById("pronounceKotobaBtn").addEventListener("click", () => {
+        const word = LESSON_38_KOTOBA[activeKotobaIndex].furigana;
+        speakJapaneseWord(word);
+        playKatanaSlash("G5");
+      });
+
+      // Search
+      document.getElementById("kotobaSearch").addEventListener("input", (e) => {
+        const cat = document.querySelector(".filter-pill.active")?.getAttribute("data-category") || "ALL";
+        renderKotobaSidebar(cat, e.target.value);
+      });
+
+      // Filter pills
+      document.querySelectorAll(".filter-pill").forEach(pill => {
+        pill.addEventListener("click", () => {
+          document.querySelectorAll(".filter-pill").forEach(p => {
+            p.className = "filter-pill px-2.5 py-1 rounded-lg bg-akame-card text-slate-400 hover:text-white whitespace-nowrap transition-all";
+          });
+          pill.className = "filter-pill active px-2.5 py-1 rounded-lg bg-akame-crimson text-white font-semibold whitespace-nowrap transition-all";
+          const cat = pill.getAttribute("data-category");
+          renderKotobaSidebar(cat, document.getElementById("kotobaSearch").value);
+        });
+      });
+
+      // Animation Controls
+      document.getElementById("animPlayBtn").addEventListener("click", () => {
+        if (animPlaying) {
+          stopAnimation();
+        } else {
+          startAnimation();
+        }
+      });
+
+      document.getElementById("animPrevStepBtn").addEventListener("click", () => {
+        stopAnimation();
+        const data = KANJI_STROKE_DATA[activeKanjiChar] || generateFallbackStrokeData(activeKanjiChar);
+        currentAnimStrokeIdx = Math.max(0, currentAnimStrokeIdx - 1);
+        renderKanjiAnimationSvg(data.strokes);
+        playKatanaSlash("B4");
+      });
+
+      document.getElementById("animNextStepBtn").addEventListener("click", () => {
+        stopAnimation();
+        const data = KANJI_STROKE_DATA[activeKanjiChar] || generateFallbackStrokeData(activeKanjiChar);
+        currentAnimStrokeIdx = Math.min(data.strokes.length, currentAnimStrokeIdx + 1);
+        renderKanjiAnimationSvg(data.strokes);
+        playKatanaSlash("E5");
+      });
+
+      document.querySelectorAll(".anim-speed-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".anim-speed-btn").forEach(b => b.classList.remove("active", "text-white", "bg-akame-crimson"));
+          btn.classList.add("active", "text-white", "bg-akame-crimson");
+          animSpeed = parseFloat(btn.getAttribute("data-speed"));
+        });
+      });
+
+      // Canvas Clear & Undo
+      document.getElementById("clearCanvasBtn").addEventListener("click", () => {
+        clearCanvas();
+        playKatanaSlash("C4");
+      });
+
+      document.getElementById("undoStrokeBtn").addEventListener("click", () => {
+        if (drawPaths.length > 0) {
+          drawPaths.pop();
+          redrawUserStrokes();
+          playKatanaSlash("A4");
+        }
+      });
+
+      // Ghost Guide
+      document.getElementById("toggleGhostBtn").addEventListener("click", () => {
+        showGhost = !showGhost;
+        const ghostSvg = document.getElementById("ghostKanjiSvg");
+        const btnText = document.querySelector("#toggleGhostBtn span");
+        if (showGhost) {
+          ghostSvg.classList.remove("opacity-0");
+          ghostSvg.classList.add("opacity-25");
+          btnText.textContent = "Bayangan: ON";
+        } else {
+          ghostSvg.classList.remove("opacity-25");
+          ghostSvg.classList.add("opacity-0");
+          btnText.textContent = "Bayangan: OFF";
+        }
+      });
+
+      // Mastery Button
+      document.getElementById("verifyStrokeBtn").addEventListener("click", () => {
+        masteredKanjiList.add(activeKanjiChar);
+        document.getElementById("masteredCount").textContent = `${masteredKanjiList.size}/42`;
+        
+        const overlay = document.getElementById("katanaKillOverlay");
+        overlay.classList.remove("hidden");
+        overlay.classList.add("flex");
+        playMurasameKillFanfare();
+
+        showToast(`Kanji '${activeKanjiChar}' berhasil ditebas! (葬る)`);
+
+        setTimeout(() => {
+          overlay.classList.add("hidden");
+          overlay.classList.remove("flex");
+          renderKotobaSidebar(
+            document.querySelector(".filter-pill.active")?.getAttribute("data-category") || "ALL",
+            document.getElementById("kotobaSearch").value
+          );
+        }, 1200);
+      });
+
+      // SFX Toggle
+      const sfxBtn = document.getElementById("toggleSfxBtn");
+      sfxBtn.addEventListener("click", () => {
+        sfxEnabled = !sfxEnabled;
+        const icon = document.getElementById("sfxIcon");
+        if (sfxEnabled) {
+          icon.setAttribute("data-lucide", "volume-2");
+          sfxBtn.classList.remove("text-slate-600");
+          sfxBtn.classList.add("text-slate-300");
+          showToast("Suara katana aktif.");
+        } else {
+          icon.setAttribute("data-lucide", "volume-x");
+          sfxBtn.classList.remove("text-slate-300");
+          sfxBtn.classList.add("text-slate-600");
+          showToast("Suara katana dinonaktifkan.");
+        }
+        lucide.createIcons();
+      });
+
+      // Lore Modal
+      const modal = document.getElementById("loreModal");
+      document.getElementById("akameLoreBtn").addEventListener("click", () => modal.classList.remove("hidden"));
+      document.getElementById("closeLoreBtn").addEventListener("click", () => modal.classList.add("hidden"));
+      document.getElementById("closeLoreBtn2").addEventListener("click", () => modal.classList.add("hidden"));
+
+      // Background Modal & Preset Switcher
+      const bgModal = document.getElementById("bgModal");
+      const toggleBgModalBtn = document.getElementById("toggleBgModalBtn");
+      const closeBgModalBtn = document.getElementById("closeBgModalBtn");
+      const closeBgModalBtn2 = document.getElementById("closeBgModalBtn2");
+
+      if (toggleBgModalBtn) toggleBgModalBtn.addEventListener("click", () => bgModal.classList.remove("hidden"));
+      if (closeBgModalBtn) closeBgModalBtn.addEventListener("click", () => bgModal.classList.add("hidden"));
+      if (closeBgModalBtn2) closeBgModalBtn2.addEventListener("click", () => bgModal.classList.add("hidden"));
+
+      document.querySelectorAll(".anime-preset-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const bgKey = btn.getAttribute("data-bg");
+          changeAnimeWallpaper(bgKey);
+        });
+      });
+
+      document.querySelectorAll(".wallpaper-card").forEach(card => {
+        card.addEventListener("click", () => {
+          const bgKey = card.getAttribute("data-bg");
+          changeAnimeWallpaper(bgKey);
+        });
+      });
+
+      // Opacity Slider
+      const bgOpacitySlider = document.getElementById("bgOpacitySlider");
+      const opacityValLabel = document.getElementById("opacityValLabel");
+      const animeBgImage = document.getElementById("animeBgImage");
+
+      if (bgOpacitySlider && animeBgImage) {
+        bgOpacitySlider.addEventListener("input", (e) => {
+          const val = e.target.value;
+          opacityValLabel.textContent = `${val}%`;
+          animeBgImage.style.opacity = (val / 100).toString();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
