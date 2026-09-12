@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+<html lang="ja" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shunshin no Stufo - 瞬身の学習</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Noto Sans JP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@500;700;900&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            jp: ['"Noto Sans JP"', 'sans-serif']
+          },
+          colors: {
+            zinc: {
+              850: '#1e1e24',
+              950: '#09090b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #f4f4f5;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .jp-font {
+      font-family: '"Noto Sans JP"', sans-serif;
+    }
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    /* Global Furigana & Romaji Toggle Controls */
+    body.hide-furigana rt {
+      display: none !important;
+    }
+    body.hide-romaji .romaji-display {
+      display: none !important;
+    }
+    /* Ruby Furigana Typography Enhancement */
+    ruby {
+      ruby-align: center;
+      ruby-position: over;
+    }
+    rt {
+      font-size: 0.58em;
+      line-height: 1;
+      color: #fbbf24;
+      font-weight: 700;
+      letter-spacing: normal;
+    }
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #18181b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3f3f46;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between text-zinc-100 antialiased p-2 sm:p-4">
+
+  <header class="w-full max-w-xl mx-auto flex flex-col gap-2.5 pt-1 pb-2">
+    <!-- Top Bar: Brand, Furigana, Romaji, Shuffle, Teleport, & Drawer Buttons -->
+    <div class="flex items-center justify-between bg-zinc-900/90 border border-zinc-800 p-2.5 rounded-2xl shadow-lg backdrop-blur">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">⚡</span>
+        <div>
+          <h1 class="text-sm font-black tracking-tight text-white flex items-center gap-1.5">
+            <span>Shunshin no Stufo</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-amber-400 border border-amber-500/30 font-mono">瞬身</span>
+          </h1>
+          <p class="text-[10px] text-zinc-400 font-medium">N4 / JFT A2 • Minna 35-40 & 40 Kanji Irodori</p>
+        </div>
+      </div>
+
+      <!-- Action Icons: Furigana, Romaji, Shuffle, Shunshin & Drawer -->
+      <div class="flex items-center gap-1.5">
+        <button 
+          id="btn-furigana-toggle" 
+          onclick="toggleFuriganaGlobal()" 
+          class="px-2 py-1.5 rounded-xl border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-xs font-bold transition flex items-center gap-1"
+          title="Nyalakan/Matikan Furigana (Keyboard: F)">
+          <span>ふ</span>
+          <span id="furigana-status-text" class="text-[10px] text-amber-400">ON</span>
+        </button>
+
+        <button 
+          id="btn-romaji-toggle" 
+          onclick="toggleRomajiGlobal()" 
+          class="px-2 py-1.5 rounded-xl border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-xs font-bold transition flex items-center gap-1"
+          title="Nyalakan/Matikan Romaji (Keyboard: O)">
+          <span class="font-mono text-[11px]">Ro</span>
+          <span id="romaji-status-text" class="text-[10px] text-amber-400">ON</span>
+        </button>
+
+        <button 
+          id="btn-shuffle-deck"
+          onclick="shuffleCurrentDeck()" 
+          class="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white text-xs transition active:scale-95" 
+          title="Acak Kartu Flashcard (Keyboard: R)">
+          🔀
+        </button>
+
+        <button 
+          id="btn-teleport-toggle"
+          onclick="toggleTeleportMode()" 
+          class="px-2 py-1.5 rounded-xl border border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-amber-400 hover:border-amber-500/40 text-xs font-bold transition flex items-center gap-1 active:scale-95"
+          title="Mode Shunshin Teleport Otomatis (Keyboard: T)">
+          <span>⚡</span>
+          <span id="teleport-label" class="text-[10px]">Shunshin: OFF</span>
+        </button>
+
+        <button 
+          onclick="toggleListDrawer()" 
+          class="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white text-xs transition relative active:scale-95" 
+          title="Daftar Lengkap 248 Kotoba & Kanji">
+          <span>📖</span>
+          <span id="drawer-counter-badge" class="absolute -top-1 -right-1 text-[9px] bg-amber-500 text-zinc-950 font-black px-1 rounded-full leading-tight">248</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mode Belajar Switcher -->
+    <div class="grid grid-cols-2 bg-zinc-900/90 border border-zinc-800/90 p-1 rounded-xl text-xs font-bold shadow-inner">
+      <button 
+        id="mode-tab-flashcard" 
+        onclick="switchStudyMode('card')" 
+        class="py-2 rounded-lg bg-zinc-800 text-white shadow transition flex items-center justify-center gap-2">
+        <span>🃏</span>
+        <span>Flashcard Kilat</span>
+      </button>
+      <button 
+        id="mode-tab-quiz" 
+        onclick="switchStudyMode('quiz')" 
+        class="py-2 rounded-lg text-zinc-400 hover:text-white transition flex items-center justify-center gap-2">
+        <span>🎯</span>
+        <span>Simulasi Ujian (Shiken)</span>
+      </button>
+    </div>
+
+    <!-- Sub-Nav Deck Selector Flashcard -->
+    <div id="deck-selector-flashcard" class="grid grid-cols-3 sm:grid-cols-6 gap-1 text-[10px] sm:text-[11px] font-semibold bg-zinc-950/80 p-1 rounded-xl border border-zinc-800">
+      <button onclick="setCardDeck('b37')" id="deck-btn-b37" class="deck-btn py-1.5 rounded-lg bg-amber-500 text-zinc-950 font-bold transition text-center">Bab 37 (52)</button>
+      <button onclick="setCardDeck('b38')" id="deck-btn-b38" class="deck-btn py-1.5 rounded-lg text-zinc-400 hover:text-white transition text-center">Bab 38 (45)</button>
+      <button onclick="setCardDeck('b39')" id="deck-btn-b39" class="deck-btn py-1.5 rounded-lg text-zinc-400 hover:text-white transition text-center">Bab 39 (45)</button>
+      <button onclick="setCardDeck('b40')" id="deck-btn-b40" class="deck-btn py-1.5 rounded-lg text-zinc-400 hover:text-white transition text-center">Bab 40 (66)</button>
+      <button onclick="setCardDeck('kanji')" id="deck-btn-kanji" class="deck-btn py-1.5 rounded-lg text-zinc-400 hover:text-white transition text-center">Irodori (40)</button>
+      <button onclick="setCardDeck('all')" id="deck-btn-all" class="deck-btn py-1.5 rounded-lg text-zinc-400 hover:text-white transition text-center">Semua (248)</button>
+    </div>
+
+    <!-- Sub-Nav Selector Simulasi Ujian (Bab 35 - 38 & Kanji Tricky) -->
+    <div id="deck-selector-quiz" class="hidden grid-cols-3 gap-1 text-[11px] font-semibold bg-zinc-950/80 p-1 rounded-xl border border-zinc-800">
+      <button onclick="setQuizDeck('simulasi_all')" id="quiz-deck-btn-simulasi_all" class="quiz-deck-btn py-1.5 rounded-lg bg-emerald-600 text-white font-bold transition text-center shadow">
+        Simulasi 4 Bab (40 Acak)
+      </button>
+      <button onclick="setQuizDeck('kanji_tricky')" id="quiz-deck-btn-kanji_tricky" class="quiz-deck-btn py-1.5 rounded-lg text-zinc-400 hover:text-white transition text-center">
+        Kanji Tricky (40)
+      </button>
+      <button onclick="setQuizDeck('mix_all')" id="quiz-deck-btn-mix_all" class="quiz-deck-btn py-1.5 rounded-lg text-zinc-400 hover:text-white transition text-center">
+        Semua Soal Mix
+      </button>
+    </div>
+  </header>
+
+  <main class="w-full max-w-xl flex-1 flex flex-col justify-center items-center my-auto py-2">
+    
+    <!-- FLASHCARD VIEW -->
+    <div id="view-flashcard" class="w-full flex flex-col items-center">
+      <!-- Info Header Flashcard -->
+      <div class="w-full flex items-center justify-between text-xs text-zinc-400 mb-2 px-2">
+        <div class="flex items-center gap-2">
+          <span>Kartu <strong id="card-curr" class="text-amber-400 font-bold">1</strong> / <span id="card-total">52</span></span>
+          <span id="card-category-badge" class="text-[10px] px-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300 font-medium">Bab 37 Minna</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="toggleMasterCurrent()" id="btn-mastered" class="p-1 rounded bg-zinc-900 text-zinc-400 hover:text-amber-400 text-xs border border-zinc-800" title="Tandai Dikuasai (M)">
+            ⭐ Simpan
+          </button>
+        </div>
+      </div>
+
+      <!-- 3D Interactive Flip Card -->
+      <div class="w-full h-72 sm:h-80 perspective-1000 cursor-pointer select-none" onclick="flipCard()">
+        <div id="flashcard-inner" class="w-full h-full relative transform-style-3d transition-transform duration-200 shadow-2xl">
+          
+          <!-- Front Face: Kanji, Furigana, Romaji -->
+          <div class="absolute inset-0 w-full h-full backface-hidden rounded-3xl border border-zinc-800 bg-gradient-to-b from-zinc-900 to-zinc-950 p-6 flex flex-col items-center justify-between text-center shadow-xl">
+            <div class="w-full flex justify-between items-center text-zinc-500 text-[11px]">
+              <span id="card-front-tag" class="px-2 py-0.5 rounded-full bg-zinc-800/80 text-amber-400 font-semibold text-[10px]">KATA KERJA</span>
+              <button onclick="event.stopPropagation(); playCardAudio();" class="p-1.5 rounded-lg bg-zinc-800/80 text-zinc-300 hover:text-white text-xs" title="Dengarkan Suara (Keyboard: A)">
+                🔊 Dengarkan
+              </button>
+            </div>
+
+            <!-- Target Word Display -->
+            <div class="my-auto">
+              <div id="card-front-furigana" class="text-sm sm:text-base text-amber-400 font-bold jp-font mb-1 tracking-wider min-h-[1.5rem]">ほめます</div>
+              <div id="card-front-kanji" class="text-4xl sm:text-5xl font-black text-white jp-font tracking-wide">褒めます</div>
+              <div id="card-front-romaji" class="romaji-display text-xs sm:text-sm text-zinc-400 font-mono mt-2">homemasu</div>
+            </div>
+
+            <div class="text-[11px] text-zinc-500 font-medium flex items-center gap-1.5">
+              <span>🔄 Ketuk untuk melihat arti & contoh</span>
+            </div>
+          </div>
+
+          <!-- Back Face: Meaning, Reibun, Notes -->
+          <div class="absolute inset-0 w-full h-full backface-hidden rotate-y-180 rounded-3xl border border-amber-500/30 bg-gradient-to-b from-zinc-900 via-zinc-900 to-zinc-950 p-5 flex flex-col items-center justify-between text-center shadow-2xl">
+            <div class="w-full flex justify-between items-center text-zinc-500 text-[11px]">
+              <span class="text-amber-400 font-bold text-[10px]">PENJELASAN & REIBUN</span>
+              <button onclick="event.stopPropagation(); playCardAudio();" class="p-1 rounded-lg bg-zinc-800/80 text-zinc-300 hover:text-white text-xs">
+                🔊
+              </button>
+            </div>
+
+            <div class="my-auto w-full px-2">
+              <h3 id="card-back-meaning" class="text-xl sm:text-2xl font-black text-white mb-3">memuji</h3>
+              <div class="bg-zinc-950/70 border border-zinc-800/80 rounded-xl p-2.5 text-left text-xs space-y-1.5">
+                <div id="card-back-example-jp" class="jp-font font-bold text-amber-300 text-[13px]">先生に 褒められました。</div>
+                <div id="card-back-example-id" class="text-zinc-400 text-[11px]">Dipuji oleh guru.</div>
+              </div>
+              <div id="card-back-note" class="text-[11px] text-zinc-500 mt-2 italic">Bentuk Pasif: 褒められます</div>
+            </div>
+
+            <div class="text-[10px] text-zinc-500">Ketuk untuk kembali ke depan</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Navigation & Control Buttons -->
+      <div class="w-full flex items-center justify-between gap-3 mt-4">
+        <button onclick="prevCard()" class="flex-1 py-3 rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-200 font-bold text-xs hover:bg-zinc-800 hover:border-zinc-700 transition active:scale-95 flex items-center justify-center gap-1.5">
+          <span>◀</span>
+          <span>Sebelumnya (J)</span>
+        </button>
+        <button onclick="flipCard()" class="px-5 py-3 rounded-2xl bg-amber-500 text-zinc-950 font-black text-xs hover:bg-amber-400 transition active:scale-95 shadow-md flex items-center justify-center gap-1">
+          <span>Balik (Space)</span>
+        </button>
+        <button onclick="nextCard()" class="flex-1 py-3 rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-200 font-bold text-xs hover:bg-zinc-800 hover:border-zinc-700 transition active:scale-95 flex items-center justify-center gap-1.5">
+          <span>Berikutnya (K)</span>
+          <span>▶</span>
+        </button>
+      </div>
+
+      <!-- Shunshin Speed Picker Bar -->
+      <div class="flex items-center gap-2 mt-3 text-[10px] text-zinc-500 bg-zinc-900/50 px-3 py-1.5 rounded-xl border border-zinc-850">
+        <span>Tempo Shunshin:</span>
+        <button onclick="setTeleportSpeed(800)" id="spd-btn-800" class="px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 hover:text-white">0.8s (Kilat)</button>
+        <button onclick="setTeleportSpeed(1200)" id="spd-btn-1200" class="px-2 py-0.5 rounded bg-amber-500 text-zinc-950 font-bold">1.2s (Cepat)</button>
+        <button onclick="setTeleportSpeed(2000)" id="spd-btn-2000" class="px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 hover:text-white">2.0s</button>
+      </div>
+    </div>
+
+    <!-- SIMULASI SHIKEN QUIZ VIEW -->
+    <div id="view-quiz" class="w-full hidden flex-col items-center">
+      <!-- Quiz Status Header -->
+      <div class="w-full flex items-center justify-between text-xs text-zinc-400 mb-2 px-1">
+        <div class="flex items-center gap-2">
+          <span>Soal <strong id="quiz-curr" class="text-white font-bold">1</strong> / <span id="quiz-total">40</span></span>
+          <span class="flex items-center gap-1 text-emerald-400 font-semibold ml-2">
+            <span>🔥</span> <span id="quiz-streak">0</span>
+          </span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="quiz-deck-badge" class="text-[10px] px-2 py-0.5 rounded bg-zinc-900 text-amber-400 border border-amber-500/30 font-semibold">Simulasi 4 Bab</span>
+          <button onclick="restartQuiz()" class="text-zinc-500 hover:text-zinc-300 text-[11px] underline">Reset</button>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="w-full h-1 bg-zinc-900 rounded-full mb-3 overflow-hidden">
+        <div id="quiz-progress" class="h-full bg-emerald-500 transition-all duration-300" style="width: 2.5%;"></div>
+      </div>
+
+      <!-- Question Card (Bersih & Autentik seperti Kertas Ujian Asli) -->
+      <div id="quiz-card" class="w-full py-6 px-4 rounded-3xl border border-zinc-800 bg-zinc-900/90 shadow-2xl flex flex-col items-center justify-center text-center relative min-h-[160px]">
+        <button onclick="playQuizAudio()" class="absolute top-3 right-3 text-zinc-400 hover:text-white text-xs p-1 rounded-lg bg-zinc-800" title="Dengarkan Soal (A)">
+          🔊
+        </button>
+
+        <div class="w-full px-2 my-auto">
+          <!-- Kalimat Pertanyaan Rumpang Lengkap Furigana -->
+          <div id="quiz-question-text" class="jp-font text-lg sm:text-xl font-bold text-white tracking-wide leading-relaxed">
+            <!-- Injected via JS with <ruby> -->
+          </div>
+        </div>
+
+        <div id="quiz-feedback-text" class="h-4 text-[11px] font-semibold text-zinc-500 mt-2">
+          Pilih salah satu dari a, b, c, atau d
+        </div>
+      </div>
+
+      <!-- 4 Option Buttons (Large & Extra Bold Fonts) -->
+      <div id="quiz-options-container" class="w-full grid grid-cols-1 gap-2.5 mt-3">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Pembahasan Bunpou Interaktif (Jelas, Gamblang, Disertai Arti Kalimat) -->
+      <div id="quiz-explanation-box" class="hidden w-full mt-3 p-4 rounded-2xl bg-zinc-900 border border-zinc-800 text-left text-xs space-y-2 animate-fadeIn">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="w-full max-w-xl mx-auto py-2 text-center text-[10px] text-zinc-500 flex flex-col gap-1 border-t border-zinc-900">
+    <div class="flex items-center justify-center gap-2 flex-wrap">
+      <span class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400 font-mono">F: Furigana</span>
+      <span class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400 font-mono">O: Romaji</span>
+      <span class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400 font-mono">Space: Balik</span>
+      <span class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400 font-mono">J / K: Navigasi</span>
+      <span class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400 font-mono">1-4 / A-D: Jawab Kuis</span>
+    </div>
+  </footer>
+
+  <!-- DRAWER DAFTAR LENGKAP KOTOBA & KANJI (248 ITEMS) -->
+  <div id="list-drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-zinc-950 border-l border-zinc-800 z-50 transform translate-x-full transition-transform duration-200 flex flex-col">
+    <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/70">
+      <div class="flex items-center gap-2">
+        <span class="text-base">📖</span>
+        <h3 class="font-black text-sm text-white">Daftar Lengkap (248 Item)</h3>
+      </div>
+      <button onclick="toggleListDrawer()" class="p-1.5 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white text-xs">
+        ✕ Tutup
+      </button>
+    </div>
+
+    <!-- Search & Filter Controls in Drawer -->
+    <div class="p-3 border-b border-zinc-800/80 flex flex-col gap-2 bg-zinc-900/40">
+      <div class="relative">
+        <input 
+          id="drawer-search-input" 
+          type="text" 
+          placeholder="Cari Kanji, Kana, atau arti Bahasa Indonesia..." 
+          oninput="handleDrawerSearch(this.value)"
+          class="w-full bg-zinc-900 border border-zinc-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500 transition">
+        <span class="absolute right-3 top-2.5 text-zinc-500 text-xs">🔍</span>
+      </div>
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
+        <button onclick="filterDrawerCategory('all')" id="drawer-pill-all" class="drawer-pill px-2.5 py-1 rounded-lg bg-amber-500 text-zinc-950 font-bold whitespace-nowrap">Semua (248)</button>
+        <button onclick="filterDrawerCategory('b37')" id="drawer-pill-b37" class="drawer-pill px-2.5 py-1 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white whitespace-nowrap">Bab 37 (52)</button>
+        <button onclick="filterDrawerCategory('b38')" id="drawer-pill-b38" class="drawer-pill px-2.5 py-1 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white whitespace-nowrap">Bab 38 (45)</button>
+        <button onclick="filterDrawerCategory('b39')" id="drawer-pill-b39" class="drawer-pill px-2.5 py-1 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white whitespace-nowrap">Bab 39 (45)</button>
+        <button onclick="filterDrawerCategory('b40')" id="drawer-pill-b40" class="drawer-pill px-2.5 py-1 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white whitespace-nowrap">Bab 40 (66)</button>
+        <button onclick="filterDrawerCategory('kanji')" id="drawer-pill-kanji" class="drawer-pill px-2.5 py-1 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white whitespace-nowrap">Irodori (40)</button>
+        <button onclick="filterDrawerCategory('mastered')" id="drawer-pill-mastered" class="drawer-pill px-2.5 py-1 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white whitespace-nowrap">Dikuasai ⭐</button>
+      </div>
+    </div>
+
+    <!-- Items Scroll Container -->
+    <div id="drawer-item-list" class="flex-1 overflow-y-auto p-3 space-y-2 divide-y divide-zinc-900">
+      <!-- Injected dynamically via JS -->
+    </div>
+  </div>
+
+  <!-- Toast Notification Box -->
+  <div id="toast-box" class="fixed bottom-14 bg-zinc-800 border border-zinc-700 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-2xl opacity-0 pointer-events-none transition duration-200 z-50">
+    Pesan Toast
+  </div>
+
+  <script>
+    /* ========================================================
+       DATA MASTER: KOTOBA BAB 37 MINNA NO NIHONGO (52 ITEM LENGKAP)
+       ======================================================== */
+    const KOTOBA_37 = [
+      { id: 'b37_01', deck: 'b37', kanji: '褒めます', furigana: 'ほめます', romaji: 'homemasu', meaning: 'Memuji', tag: 'Kata Kerja II', exampleJp: '先生は 学生を 褒めました。', exampleId: 'Guru memuji siswa tersebut.', note: 'Bentuk Pasif: 褒められます' },
+      { id: 'b37_02', deck: 'b37', kanji: 'しかります', furigana: 'しかります', romaji: 'shikarimasu', meaning: 'Memarahi', tag: 'Kata Kerja I', exampleJp: '母に しかられました。', exampleId: 'Dimarahi oleh ibu.', note: 'Bentuk Pasif: しかられます' },
+      { id: 'b37_03', deck: 'b37', kanji: '誘います', furigana: 'さそいます', romaji: 'sasoimasu', meaning: 'Mengajak', tag: 'Kata Kerja I', exampleJp: '友達を 映画に 誘いました。', exampleId: 'Mengajak teman nonton bioskop.', note: 'Bentuk Pasif: 誘われます' },
+      { id: 'b37_04', deck: 'b37', kanji: '招待します', furigana: 'しょうたいします', romaji: 'shoutaishimasu', meaning: 'Mengundang', tag: 'Kata Kerja III', exampleJp: '結婚式に 招待されました。', exampleId: 'Diundang ke pesta pernikahan.', note: 'Bentuk Pasif: 招待されます' },
+      { id: 'b37_05', deck: 'b37', kanji: '頼みます', furigana: 'たのみます', romaji: 'tanomimasu', meaning: 'Meminta, memohon', tag: 'Kata Kerja I', exampleJp: '部長に 仕事を 頼まれました。', exampleId: 'Diminta pekerjaan oleh manajer.', note: 'Bentuk Pasif: 頼まれます' },
+      { id: 'b37_06', deck: 'b37', kanji: '注意します', furigana: 'ちゅういします', romaji: 'chuuyishimasu', meaning: 'Menasihati, memperingatkan', tag: 'Kata Kerja III', exampleJp: '先生に 注意されました。', exampleId: 'Diberi peringatan oleh guru.', note: 'Bentuk Pasif: 注意されます' },
+      { id: 'b37_07', deck: 'b37', kanji: 'とります', furigana: 'とります', romaji: 'torimasu', meaning: 'Mencuri, mengambil', tag: 'Kata Kerja I', exampleJp: '泥棒に お金を とられました。', exampleId: 'Uang saya dicuri oleh pencuri.', note: 'Pola Kerugian: [Pelaku] に [Benda] を とられる' },
+      { id: 'b37_08', deck: 'b37', kanji: '踏みます', furigana: 'ふみます', romaji: 'fumimasu', meaning: 'Menginjak', tag: 'Kata Kerja I', exampleJp: '電車で 足を 踏まれました。', exampleId: 'Kaki saya terinjak di kereta.', note: 'Bentuk Pasif: 踏まれます' },
+      { id: 'b37_09', deck: 'b37', kanji: '壊します', furigana: 'こわします', romaji: 'kowashimasu', meaning: 'Merusak', tag: 'Kata Kerja I', exampleJp: '弟に パソコンを 壊されました。', exampleId: 'Komputer saya dirusak oleh adik.', note: 'Bentuk Pasif: 壊されます' },
+      { id: 'b37_10', deck: 'b37', kanji: '汚します', furigana: 'よごします', romaji: 'yogoshimasu', meaning: 'Mengotori', tag: 'Kata Kerja I', exampleJp: '服を 汚されました。', exampleId: 'Baju saya dikotori orang lain.', note: 'Bentuk Pasif: 汚されます' },
+      { id: 'b37_11', deck: 'b37', kanji: '行います', furigana: 'おこないます', romaji: 'okonaimasu', meaning: 'Mengadakan, menyelenggarakan', tag: 'Kata Kerja I', exampleJp: 'オリンピックが 行われます。', exampleId: 'Olimpiade diselenggarakan.', note: 'Pasif fakta umum' },
+      { id: 'b37_12', deck: 'b37', kanji: '輸出します', furigana: 'ゆしゅつします', romaji: 'yushutsushimasu', meaning: 'Mengekspor', tag: 'Kata Kerja III', exampleJp: '車が 輸出されています。', exampleId: 'Mobil diekspor ke berbagai negara.', note: 'Lawan kata: 輸入します' },
+      { id: 'b37_13', deck: 'b37', kanji: '輸入します', furigana: 'ゆにゅうします', romaji: 'yunyuushimasu', meaning: 'Mengimpor', tag: 'Kata Kerja III', exampleJp: '石油を 輸入しています。', exampleId: 'Mengimpor minyak bumi.', note: 'Lawan kata: 輸出します' },
+      { id: 'b37_14', deck: 'b37', kanji: '翻訳します', furigana: 'ほんやくします', romaji: 'honyakushimasu', meaning: 'Menerjemahkan (tulisan)', tag: 'Kata Kerja III', exampleJp: '小説が 日本語に 翻訳されました。', exampleId: 'Novel diterjemahkan ke bahasa Jepang.', note: 'Pola: ～に翻訳される' },
+      { id: 'b37_15', deck: 'b37', kanji: '発明します', furigana: 'はつめいします', romaji: 'hatsumeishimasu', meaning: 'Menciptakan, menemukan (alat)', tag: 'Kata Kerja III', exampleJp: 'ベルによって 電話が 発明されました。', exampleId: 'Telepon diciptakan oleh Bell.', note: 'Pelaku penemu: ～によって' },
+      { id: 'b37_16', deck: 'b37', kanji: '発見します', furigana: 'はっけんします', romaji: 'hakkenshimasu', meaning: 'Menemukan (tempat/hal baru)', tag: 'Kata Kerja III', exampleJp: 'コロンブスによって アメリカが 発見されました。', exampleId: 'Benua Amerika ditemukan oleh Columbus.', note: 'Pelaku penemu: ～によって' },
+      { id: 'b37_17', deck: 'b37', kanji: '米', furigana: 'こめ', romaji: 'kome', meaning: 'Beras', tag: 'Kata Benda', exampleJp: 'お酒は 米から 作られます。', exampleId: 'Sake dibuat dari beras.', note: 'Bahan berubah wujud: から' },
+      { id: 'b37_18', deck: 'b37', kanji: '麦', furigana: 'むぎ', romaji: 'mugi', meaning: 'Gandum', tag: 'Kata Benda', exampleJp: 'ビールは 麦から 作られます。', exampleId: 'Bir dibuat dari gandum.', note: 'Bahan baku nabati' },
+      { id: 'b37_19', deck: 'b37', kanji: '石油', furigana: 'せきゆ', romaji: 'sekiyu', meaning: 'Minyak tanah, minyak bumi', tag: 'Kata Benda', exampleJp: '石油は 輸入されています。', exampleId: 'Minyak bumi diimpor dari luar negeri.', note: 'Komoditas impor Jepang' },
+      { id: 'b37_20', deck: 'b37', kanji: '原料', furigana: 'げんりょう', romaji: 'genryou', meaning: 'Bahan baku', tag: 'Kata Benda', exampleJp: 'ビールの 原料は 麦です。', exampleId: 'Bahan baku bir adalah gandum.', note: 'Bahan mentah kimia/olahan' },
+      { id: 'b37_21', deck: 'b37', kanji: 'インスタントラーメン', furigana: 'インスタントラーメン', romaji: 'insutanto raamen', meaning: 'Mie instan', tag: 'Kata Benda', exampleJp: 'インスタントラーメンは 日本で 発明されました。', exampleId: 'Mie instan diciptakan di Jepang.', note: 'Diciptakan Momofuku Ando' },
+      { id: 'b37_22', deck: 'b37', kanji: 'デート', furigana: 'デート', romaji: 'deeto', meaning: 'Kencan', tag: 'Kata Benda', exampleJp: '日曜日に デートを します。', exampleId: 'Berkencan di hari Minggu.', note: 'Kegiatan berpasangan' },
+      { id: 'b37_23', deck: 'b37', kanji: '泥棒', furigana: 'どろぼう', romaji: 'dorobou', meaning: 'Pencuri', tag: 'Kata Benda', exampleJp: '泥棒に 財布を 盗まれました。', exampleId: 'Dompet dicuri oleh maling.', note: 'Pelaku meiwaku ukemi' },
+      { id: 'b37_24', deck: 'b37', kanji: '警官', furigana: 'けいかん', romaji: 'keikan', meaning: 'Polisi', tag: 'Kata Benda', exampleJp: '警官に 道を 聞きました。', exampleId: 'Bertanya arah jalan ke polisi.', note: 'Petugas kepolisian' },
+      { id: 'b37_25', deck: 'b37', kanji: '世界中', furigana: 'せかいじゅう', romaji: 'sekaijuu', meaning: 'Seluruh dunia', tag: 'Kata Keterangan', exampleJp: 'アニメは 世界中で 愛されています。', exampleId: 'Anime dicintai di seantero dunia.', note: 'Penanda cakupan ruang' },
+      { id: 'b37_26', deck: 'b37', kanji: '～中', furigana: '～じゅう', romaji: '~juu', meaning: 'Seluruh ～', tag: 'Akhiran', exampleJp: '日本中で 有名です。', exampleId: 'Terkenal di seluruh Jepang.', note: 'Menyatakan cakupan penuh' },
+      { id: 'b37_27', deck: 'b37', kanji: '－世紀', furigana: '－せいき', romaji: '-seiki', meaning: 'Abad ke －', tag: 'Penghitung', exampleJp: '21世紀に なりました。', exampleId: 'Telah memasuki abad ke-21.', note: 'Satuan 100 tahun' },
+      { id: 'b37_28', deck: 'b37', kanji: '何語', furigana: 'なにご', romaji: 'nanigo', meaning: 'Bahasa apa', tag: 'Kata Tanya', exampleJp: 'これは 何語で 書かれていますか。', exampleId: 'Ini ditulis dalam bahasa apa?', note: 'Menanyakan ragam bahasa' },
+      { id: 'b37_29', deck: 'b37', kanji: 'だれか', furigana: 'だれか', romaji: 'dareka', meaning: 'Seseorang, siapa', tag: 'Kata Ganti', exampleJp: 'だれかに 呼ばれました。', exampleId: 'Dipanggil oleh seseorang.', note: 'Partikel penanda orang acak' },
+      { id: 'b37_30', deck: 'b37', kanji: 'よかったですね。', furigana: 'よかったですね。', romaji: 'yokatta desu ne.', meaning: 'Bagus, ya / Syukurlah ya.', tag: 'Ungkapan', exampleJp: '試験に 合格して、よかったですね。', exampleId: 'Lulus ujian, syukurlah ya.', note: 'Respon ikut senang' },
+      { id: 'b37_31', deck: 'b37', kanji: 'ロシア', furigana: 'ロシア', romaji: 'roshia', meaning: 'Rusia', tag: 'Nama Negara', exampleJp: 'ロシアは 世界で 一番 広い 国です。', exampleId: 'Rusia adalah negara terluas di dunia.', note: 'Negara di Eropa/Asia' },
+      { id: 'b37_32', deck: 'b37', kanji: '皆様', furigana: 'みなさま', romaji: 'minasama', meaning: 'Semuanya (Hormat)', tag: 'Kata Hormat', exampleJp: '皆様、ご清聴 ありがとうございました。', exampleId: 'Hadirin sekalian, terima kasih.', note: 'Bentuk sopan dari 皆さん' },
+      { id: 'b37_33', deck: 'b37', kanji: '焼けます', furigana: 'やけます [うちが～]', romaji: 'yakemasu [uchi ga~]', meaning: '[Rumah] terbakar', tag: 'Kata Kerja II', exampleJp: '火事で 家が 焼けました。', exampleId: 'Rumah terbakar karena kebakaran.', note: 'Intransitif (mengalami kebakaran)' },
+      { id: 'b37_34', deck: 'b37', kanji: 'その後', furigana: 'そのご', romaji: 'sonogo', meaning: 'Setelah, sesudah itu', tag: 'Kata Sambung', exampleJp: 'その後、どうなりましたか。', exampleId: 'Sesudah itu, bagaimana jadinya?', note: 'Menyatakan urutan waktu resmi' },
+      { id: 'b37_35', deck: 'b37', kanji: '世界遺産', furigana: 'せかいいさん', romaji: 'sekai isan', meaning: 'Situs Warisan Dunia UNESCO', tag: 'Kata Benda', exampleJp: '富士山は 世界遺産に 登録されました。', exampleId: 'Gunung Fuji didaftarkan sebagai Warisan Dunia.', note: 'Cagar budaya/alam dunia' },
+      { id: 'b37_36', deck: 'b37', kanji: '～の一つ', furigana: '～のひとつ', romaji: '~no hitotsu', meaning: 'Salah satu ～', tag: 'Frasa', exampleJp: 'これは 日本の 名所の一つです。', exampleId: 'Ini adalah salah satu tempat terkenal di Jepang.', note: 'Pola frasa klasifikasi' },
+      { id: 'b37_37', deck: 'b37', kanji: '金色', furigana: 'きんいろ', romaji: 'kin-iro', meaning: 'Warna emas', tag: 'Kata Benda', exampleJp: '金色の 建物が 美しいです。', exampleId: 'Bangunan berwarna emas itu indah.', note: 'Warna logam mulia' },
+      { id: 'b37_38', deck: 'b37', kanji: '本物', furigana: 'ほんもの', romaji: 'honmono', meaning: 'Asli, barang tulen', tag: 'Kata Benda', exampleJp: 'これは 本物の ダイヤモンドです。', exampleId: 'Ini adalah berlian asli.', note: 'Lawan kata: 偽物 (tiruan)' },
+      { id: 'b37_39', deck: 'b37', kanji: '金', furigana: 'きん', romaji: 'kin', meaning: 'Emas', tag: 'Kata Benda', exampleJp: '金メダルを 獲得しました。', exampleId: 'Meraih medali emas.', note: 'Logam mulia' },
+      { id: 'b37_40', deck: 'b37', kanji: '－キロ', furigana: '－キロ', romaji: '-kiro', meaning: 'Kilogram, kilometer', tag: 'Satuan', exampleJp: 'ここから 5キロ 離れています。', exampleId: 'Berjarak 5 kilometer dari sini.', note: 'Bisa jarak atau berat' },
+      { id: 'b37_41', deck: 'b37', kanji: '美しい', furigana: 'うつくしい', romaji: 'utsukushii', meaning: 'Indah, elok', tag: 'Kata Sifat-i', exampleJp: '夕焼けが とても 美しいです。', exampleId: 'Langit senja sangatlah indah.', note: 'Keindahan visual elegan' },
+      { id: 'b37_42', deck: 'b37', kanji: '豪華[な]', furigana: 'ごうか[な]', romaji: 'gouka[na]', meaning: 'Mewah', tag: 'Kata Sifat-na', exampleJp: '豪華な ホテルに 泊まりました。', exampleId: 'Menginap di hotel yang mewah.', note: 'Kemegahan megah' },
+      { id: 'b37_43', deck: 'b37', kanji: '彫刻', furigana: 'ちょうこく', romaji: 'choukoku', meaning: 'Ukiran, pahatan', tag: 'Kata Benda', exampleJp: '日光東照宮の 彫刻は 見事です。', exampleId: 'Pahatan Nikko Toshogu sangat mengagumkan.', note: 'Karya seni ukir' },
+      { id: 'b37_44', deck: 'b37', kanji: '言い伝え', furigana: 'いいつたえ', romaji: 'iitsutae', meaning: 'Tradisi, legenda tutur', tag: 'Kata Benda', exampleJp: '古い 言い伝えが 残っています。', exampleId: 'Legenda tutur kuno masih tersisa.', note: 'Cerita rakyat turun-temurun' },
+      { id: 'b37_45', deck: 'b37', kanji: '眠ります', furigana: 'ねむります', romaji: 'nemurimasu', meaning: 'Tidur', tag: 'Kata Kerja I', exampleJp: 'ぐっすり 眠りました。', exampleId: 'Tidur dengan lelap.', note: 'Kondisi lelap tertidur' },
+      { id: 'b37_46', deck: 'b37', kanji: '彫ります', furigana: 'ほります', romaji: 'horimasu', meaning: 'Mengukir, memahat', tag: 'Kata Kerja I', exampleJp: '木に 仏像を 彫ります。', exampleId: 'Memahat patung Buddha di kayu.', note: 'Tindakan membuat pahatan' },
+      { id: 'b37_47', deck: 'b37', kanji: '仲間', furigana: 'なかま', romaji: 'nakama', meaning: 'Teman, kawan seperjuangan', tag: 'Kata Benda', exampleJp: '仕事の 仲間と 乾杯しました。', exampleId: 'Bersulang bersama rekan-rekan kerja.', note: 'Ikatan persahabatan erat' },
+      { id: 'b37_48', deck: 'b37', kanji: 'しかし', furigana: 'しかし', romaji: 'shikashi', meaning: 'Tetapi, namun', tag: 'Kata Sambung', exampleJp: '探しました。しかし、ありませんでした。', exampleId: 'Sudah dicari. Namun, tidak ada.', note: 'Penghubung perlawanan' },
+      { id: 'b37_49', deck: 'b37', kanji: 'そのあと', furigana: 'そのあと', romaji: 'sono ato', meaning: 'Setelah itu, sesudah itu', tag: 'Kata Keterangan', exampleJp: 'ご飯を 食べて、そのあと 散歩しました。', exampleId: 'Makan nasi, sesudah itu jalan-jalan.', note: 'Urutan aktivitas santai' },
+      { id: 'b37_50', deck: 'b37', kanji: '一生懸命', furigana: 'いっしょうけんめい', romaji: 'isshoukenmei', meaning: 'Sungguh-sungguh', tag: 'Kata Keterangan', exampleJp: '一生懸命 日本語を 勉強します。', exampleId: 'Belajar bahasa Jepang dengan sungguh-sungguh.', note: 'Bekerja keras sepenuh hati' },
+      { id: 'b37_51', deck: 'b37', kanji: 'ねずみ', furigana: 'ねずみ', romaji: 'nezumi', meaning: 'Tikus', tag: 'Kata Benda', exampleJp: '台所に ねずみが いました。', exampleId: 'Ada tikus di dapur.', note: 'Hewan pengerat' },
+      { id: 'b37_52', deck: 'b37', kanji: '一匹もいません。', furigana: 'いっぴきもいません。', romaji: 'ippiki mo imasen.', meaning: 'Tidak ada seekor pun.', tag: 'Frasa', exampleJp: '猫のおかげで、ねずみは 一匹もいません。', exampleId: 'Berkat kucing, tikus tidak ada seekor pun.', note: 'Penghitung hewan kecil: 匹' }
+    ];
+
+    /* ========================================================
+       DATA MASTER: KOTOBA BAB 38 MINNA NO NIHONGO (45 ITEM LENGKAP)
+       ======================================================== */
+    const KOTOBA_38 = [
+      { id: 'b38_01', deck: 'b38', kanji: '育てます', furigana: 'そだてます', romaji: 'sodatemasu', meaning: 'Memelihara, membesarkan', tag: 'Kata Kerja II', exampleJp: '庭で 花を 育てるのが 好きです。', exampleId: 'Suka memelihara bunga di halaman.', note: 'Pola: ～のを育てる' },
+      { id: 'b38_02', deck: 'b38', kanji: '運びます', furigana: 'はこびます', romaji: 'hakobimasu', meaning: 'Membawa, mengangkut', tag: 'Kata Kerja I', exampleJp: '荷物を 運ぶのを 手伝ってください。', exampleId: 'Tolong bantu mengangkut barang.', note: 'Pola: ～のを手伝う' },
+      { id: 'b38_03', deck: 'b38', kanji: '亡くなります', furigana: 'なくなります', romaji: 'nakunarimasu', meaning: 'Meninggal (halus dari しにます)', tag: 'Kata Kerja I', exampleJp: '祖父は 去年 亡くなりました。', exampleId: 'Kakek meninggal tahun lalu.', note: 'Ungkapan sopan kematian' },
+      { id: 'b38_04', deck: 'b38', kanji: '入院します', furigana: 'にゅういんします', romaji: 'nyuuinshimasu', meaning: 'Masuk rumah sakit', tag: 'Kata Kerja III', exampleJp: '病気で 入院しました。', exampleId: 'Dirawat di rumah sakit karena sakit.', note: 'Lawan kata: 退院します' },
+      { id: 'b38_05', deck: 'b38', kanji: '退院します', furigana: 'たいいんします', romaji: 'taiinshimasu', meaning: 'Keluar dari rumah sakit', tag: 'Kata Kerja III', exampleJp: '来週 退院できます。', exampleId: 'Bisa pulang dari rumah sakit minggu depan.', note: 'Selesai rawat inap' },
+      { id: 'b38_06', deck: 'b38', kanji: '入れます', furigana: 'いれます [でんげんを～]', romaji: 'iremasu [dengen o~]', meaning: 'Menghidupkan [aliran listrik]', tag: 'Kata Kerja II', exampleJp: '電源を 入れるのを 忘れました。', exampleId: 'Lupa menyalakan tombol daya listrik.', note: 'Lawan kata: 切ります' },
+      { id: 'b38_07', deck: 'b38', kanji: '切ります', furigana: 'きります [でんげんを～]', romaji: 'kirimasu [dengen o~]', meaning: 'Mematikan [aliran listrik]', tag: 'Kata Kerja I', exampleJp: 'パソコンの 電源を 切ります。', exampleId: 'Mematikan daya listrik komputer.', note: 'Pola: 電源を切る' },
+      { id: 'b38_08', deck: 'b38', kanji: '掛けます', furigana: 'かけます [かぎを～]', romaji: 'kakemasu [kagi o~]', meaning: 'Mengunci', tag: 'Kata Kerja II', exampleJp: 'ドアに かぎを 掛けるのを 忘れました。', exampleId: 'Lupa mengunci pintu.', note: 'Pola: かぎを掛ける' },
+      { id: 'b38_09', deck: 'b38', kanji: '気持ちがいい', furigana: 'きもちがいい', romaji: 'kimochi ga ii', meaning: 'Senang, merasa enak/nyaman', tag: 'Kata Sifat-i', exampleJp: '朝の 散歩は 気持ちがいいです。', exampleId: 'Jalan santai pagi hari terasa nyaman sekali.', note: 'Kenyamanan fisik/mental' },
+      { id: 'b38_10', deck: 'b38', kanji: '気持ちが悪い', furigana: 'きもちがわるい', romaji: 'kimochi ga warui', meaning: 'Jijik, merasa tidak enak', tag: 'Kata Sifat-i', exampleJp: '気分が 悪くて 気持ちが悪いです。', exampleId: 'Badan tidak fit dan merasa tidak enak.', note: 'Rasa mual/kurang nyaman' },
+      { id: 'b38_11', deck: 'b38', kanji: '大きな～', furigana: 'おおきな～', romaji: 'ookina~', meaning: 'Besar', tag: 'Rentaishi', exampleJp: '大きな 声で 歌います。', exampleId: 'Menyanyi dengan suara yang lantang besar.', note: 'Kata penjelas nomina langsung' },
+      { id: 'b38_12', deck: 'b38', kanji: '小さな～', furigana: 'ちいさな～', romaji: 'chiisana~', meaning: 'Kecil', tag: 'Rentaishi', exampleJp: '小さな 魚が 泳いでいます。', exampleId: 'Ikan kecil sedang berenang.', note: 'Kata penjelas nomina langsung' },
+      { id: 'b38_13', deck: 'b38', kanji: '赤ちゃん', furigana: 'あかちゃん', romaji: 'akachan', meaning: 'Bayi', tag: 'Kata Benda', exampleJp: '赤ちゃんが 眠っています。', exampleId: 'Bayi sedang tidur lelap.', note: 'Anak yang baru lahir' },
+      { id: 'b38_14', deck: 'b38', kanji: '小学校', furigana: 'しょうがっこう', romaji: 'shougakkou', meaning: 'SD (Sekolah Dasar)', tag: 'Kata Benda', exampleJp: '弟は 小学校に 通っています。', exampleId: 'Adik bersekolah di SD.', note: 'Jenjang pendidikan 6 tahun' },
+      { id: 'b38_15', deck: 'b38', kanji: '中学校', furigana: 'ちゅうがっこう', romaji: 'chuugakkou', meaning: 'SMP', tag: 'Kata Benda', exampleJp: '中学校の 先生に なりました。', exampleId: 'Menjadi guru SMP.', note: 'Jenjang pendidikan 3 tahun' },
+      { id: 'b38_16', deck: 'b38', kanji: '駅前', furigana: 'えきまえ', romaji: 'ekimae', meaning: 'Depan stasiun', tag: 'Kata Benda', exampleJp: '駅前の カフェで 会いましょう。', exampleId: 'Ayo bertemu di kafe depan stasiun.', note: 'Area di hadapan stasiun' },
+      { id: 'b38_17', deck: 'b38', kanji: '海岸', furigana: 'かいがん', romaji: 'kaigan', meaning: 'Pantai, pesisir', tag: 'Kata Benda', exampleJp: '海岸を 散歩するのが 好きです。', exampleId: 'Suka berjalan santai di pinggir pantai.', note: 'Garis tepi laut' },
+      { id: 'b38_18', deck: 'b38', kanji: 'うそ', furigana: 'うそ', romaji: 'uso', meaning: 'Bohong, kebohongan', tag: 'Kata Benda', exampleJp: 'うそを ついては いけません。', exampleId: 'Tidak boleh berbohong.', note: 'Pola: うそをつく' },
+      { id: 'b38_19', deck: 'b38', kanji: '書類', furigana: 'しょるい', romaji: 'shorui', meaning: 'Dokumen, surat penting', tag: 'Kata Benda', exampleJp: '大切な 書類を なくしました。', exampleId: 'Kehilangan dokumen penting.', note: 'Berkas arsip kertas' },
+      { id: 'b38_20', deck: 'b38', kanji: '電源', furigana: 'でんげん', romaji: 'dengen', meaning: 'Aliran listrik, sakelar daya', tag: 'Kata Benda', exampleJp: '電源を 入れてください。', exampleId: 'Tolong nyalakan aliran listriknya.', note: 'Tombol daya' },
+      { id: 'b38_21', deck: 'b38', kanji: '～製', furigana: '～せい', romaji: '~sei', meaning: 'Buatan ～', tag: 'Akhiran', exampleJp: 'これは 日本製の 時計です。', exampleId: 'Ini jam tangan buatan Jepang.', note: 'Penanda asal produksi negara/merk' },
+      { id: 'b38_22', deck: 'b38', kanji: '[あ、]いけない。', furigana: '[あ、]いけない。', romaji: '[a,] ikenai.', meaning: 'Aduh, celaka / gawat', tag: 'Kata Seru', exampleJp: 'あ、いけない！鍵を 忘れました。', exampleId: 'Aduh gawat! Kuncinya tertinggal.', note: 'Dipakai saat keliru/gagal spontan' },
+      { id: 'b38_23', deck: 'b38', kanji: 'お先に[失礼します]。', furigana: 'おさきに[しつれいします]。', romaji: 'osaki ni [shitsureishimasu].', meaning: 'Saya permisi duluan.', tag: 'Ungkapan', exampleJp: 'お疲れさまでした。お先に 失礼します。', exampleId: 'Terima kasih atas kerja kerasnya. Saya pamit duluan.', note: 'Ucapan saat pulang kerja lebih awal' },
+      { id: 'b38_24', deck: 'b38', kanji: '原爆ドーム', furigana: 'げんばくドーム', romaji: 'genbaku doomu', meaning: 'Monumen bom atom Hiroshima', tag: 'Landmark', exampleJp: '広島の 原爆ドームを 見学しました。', exampleId: 'Mengunjungi Monumen Kubah Bom Atom di Hiroshima.', note: 'Monumen perdamaian dunia' },
+      { id: 'b38_25', deck: 'b38', kanji: '回覧', furigana: 'かいらん', romaji: 'kairan', meaning: 'Edaran, surat edaran berantai', tag: 'Kata Benda', exampleJp: '回覧を 次の 人へ 回してください。', exampleId: 'Tolong teruskan surat edaran ini ke orang berikutnya.', note: 'Tradisi kairanban Jepang' },
+      { id: 'b38_26', deck: 'b38', kanji: '研究室', furigana: 'けんきゅうしつ', romaji: 'kenkyuushitsu', meaning: 'Ruang penelitian, laboratorium', tag: 'Kata Benda', exampleJp: '教授の 研究室へ 行きます。', exampleId: 'Pergi ke ruang penelitian profesor.', note: 'Laboratorium riset dosen' },
+      { id: 'b38_27', deck: 'b38', kanji: 'きちんと', furigana: 'きちんと', romaji: 'kichinto', meaning: 'Dengan rapi, tertib teratur', tag: 'Kata Keterangan', exampleJp: '靴を きちんと 並べます。', exampleId: 'Menata sepatu dengan rapi teratur.', note: 'Kerapian dan keteraturan' },
+      { id: 'b38_28', deck: 'b38', kanji: '整理します', furigana: 'せいりします', romaji: 'seirishimasu', meaning: 'Merapikan, mengatur urutan', tag: 'Kata Kerja III', exampleJp: '机の 上を 整理します。', exampleId: 'Merapikan meja kerja.', note: 'Mengatur agar rapi bersih' },
+      { id: 'b38_29', deck: 'b38', kanji: '～という本', furigana: '～というほん', romaji: '~to iu hon', meaning: 'Buku yang berjudul ～', tag: 'Frasa', exampleJp: '「雪国」という 本を 読みました。', exampleId: 'Membaca buku yang berjudul "Yukiguni".', note: 'Pola: Nama + という' },
+      { id: 'b38_30', deck: 'b38', kanji: '－冊', furigana: '－さつ', romaji: '-satsu', meaning: 'Kata bantu bilangan untuk buku', tag: 'Penghitung', exampleJp: '本を 3冊 買いました。', exampleId: 'Membeli 3 buah buku.', note: 'Satuan jilid buku/majalah' },
+      { id: 'b38_31', deck: 'b38', kanji: 'はんこ', furigana: 'はんこ', romaji: 'hanko', meaning: 'Cap stempel nama', tag: 'Kata Benda', exampleJp: '書類に はんこが 必要です。', exampleId: 'Dokumen ini membutuhkan stempel nama.', note: 'Stempel tanda tangan resmi Jepang' },
+      { id: 'b38_32', deck: 'b38', kanji: '押します', furigana: 'おします [はんこを～]', romaji: 'oshimasu [hanko o~]', meaning: 'Mencap stempel', tag: 'Kata Kerja I', exampleJp: 'ここに はんこを 押してください。', exampleId: 'Tolong bubuhkan cap stempel di sini.', note: 'Pola: はんこを押す' },
+      { id: 'b38_33', deck: 'b38', kanji: '双子', furigana: 'ふたご', romaji: 'futago', meaning: 'Kembar', tag: 'Kata Benda', exampleJp: 'あの 二人は 双子です。', exampleId: 'Kedua orang itu adalah saudara kembar.', note: 'Lahir bersamaan' },
+      { id: 'b38_34', deck: 'b38', kanji: '姉妹', furigana: 'しまい', romaji: 'shimai', meaning: 'Saudara perempuan', tag: 'Kata Benda', exampleJp: '仲の いい 姉妹です。', exampleId: 'Saudara perempuan yang akur.', note: 'Kakak & adik perempuan' },
+      { id: 'b38_35', deck: 'b38', kanji: '5年生', furigana: 'ごねんせい', romaji: 'gonensei', meaning: 'Kelas lima', tag: 'Kata Benda', exampleJp: '妹は 小学校 5年生です。', exampleId: 'Adik perempuan duduk di kelas 5 SD.', note: 'Tingkat kelas 5' },
+      { id: 'b38_36', deck: 'b38', kanji: '似ています', furigana: 'にています', romaji: 'niteimasu', meaning: 'Mirip, menyerupai', tag: 'Kata Kerja II', exampleJp: '母に よく 似ています。', exampleId: 'Sangat mirip dengan ibu.', note: 'Pola: ～に似ている' },
+      { id: 'b38_37', deck: 'b38', kanji: '性格', furigana: 'せいかく', romaji: 'seikaku', meaning: 'Tabiat, sifat karakter', tag: 'Kata Benda', exampleJp: '二人は 性格が 全然 違います。', exampleId: 'Keduanya memiliki sifat watak yang sama sekali beda.', note: 'Karakter seseorang' },
+      { id: 'b38_38', deck: 'b38', kanji: 'おとなしい', furigana: 'おとなしい', romaji: 'otonashii', meaning: 'Pendiam, patuh penurut', tag: 'Kata Sifat-i', exampleJp: '彼は おとなしい 学生です。', exampleId: 'Dia adalah murid yang pendiam dan tertib.', note: 'Tidak banyak ulah' },
+      { id: 'b38_39', deck: 'b38', kanji: '世話をします', furigana: 'せわをします', romaji: 'sewa o shimasu', meaning: 'Mengurus, merawat', tag: 'Kata Kerja III', exampleJp: '犬の 世話を するのは 楽しいです。', exampleId: 'Mengurus anjing itu menyenangkan.', note: 'Pola: ～の世話をする' },
+      { id: 'b38_40', deck: 'b38', kanji: '時間がたちます', furigana: 'じかんがたちます', romaji: 'jikan ga tachimasu', meaning: 'Waktu berlalu', tag: 'Kata Kerja I', exampleJp: '時間が たつのは 早いです。', exampleId: 'Waktu berlalu begitu cepatnya.', note: 'Pola: 時間がたつのは早い' },
+      { id: 'b38_41', deck: 'b38', kanji: '大好き[な]', furigana: 'だいすき[な]', romaji: 'daisuki[na]', meaning: 'Suka sekali, gemar sekali', tag: 'Kata Sifat-na', exampleJp: '日本のアニメが 大好きです。', exampleId: 'Suka sekali dengan anime Jepang.', note: 'Rasa suka mendalam' },
+      { id: 'b38_42', deck: 'b38', kanji: '－点', furigana: '－てん', romaji: '-ten', meaning: 'Angka -, skor nilai -', tag: 'Penghitung', exampleJp: 'テストで 100点を 取りました。', exampleId: 'Mendapat nilai 100 di ujian.', note: 'Nilai poin ujian' },
+      { id: 'b38_43', deck: 'b38', kanji: 'クラス', furigana: 'クラス', romaji: 'kurasu', meaning: 'Kelas', tag: 'Kata Benda', exampleJp: 'クラスで 一番 背が 高いです。', exampleId: 'Paling tinggi di kelasnya.', note: 'Kelompok belajar' },
+      { id: 'b38_44', deck: 'b38', kanji: 'けんかします', furigana: 'けんかします', romaji: 'kenkashimasu', meaning: 'Bertengkar, berkelahi', tag: 'Kata Kerja III', exampleJp: '弟と よく けんかします。', exampleId: 'Sering bertengkar dengan adik.', note: 'Pola: ～とけんかする' },
+      { id: 'b38_45', deck: 'b38', kanji: '不思議[な]', furigana: 'ふしぎ[な]', romaji: 'fushigi[na]', meaning: 'Luar biasa, aneh penuh misteri', tag: 'Kata Sifat-na', exampleJp: 'とても 不思議な 話ですね。', exampleId: 'Cerita yang sangat misterius dan aneh ya.', note: 'Hal gaib/mengherankan' }
+    ];
+
+    /* ========================================================
+       DATA MASTER: KOTOBA BAB 39 MINNA NO NIHONGO (45 ITEM DARI FOTO HAL 82 & 83)
+       ======================================================== */
+    const KOTOBA_39 = [
+      { id: 'b39_01', deck: 'b39', kanji: '答えます', furigana: 'こたえます [しつもんに～]', romaji: 'kotaemasu [shitsumon ni~]', meaning: 'Menjawab [pertanyaan]', tag: 'Kata Kerja II', exampleJp: '質問に 答えてください。', exampleId: 'Tolong jawab pertanyaannya.', note: 'Pola: 質問に答えます' },
+      { id: 'b39_02', deck: 'b39', kanji: '倒れます', furigana: 'たおれます [ビルが～]', romaji: 'taoremasu [biru ga~]', meaning: '[Gedung] roboh, tumbang', tag: 'Kata Kerja II', exampleJp: '地震で ビルが 倒れました。', exampleId: 'Gedung roboh karena gempa bumi.', note: 'Pola: 地震で倒れました' },
+      { id: 'b39_03', deck: 'b39', kanji: '焼けます', furigana: 'やけます [うちが～]', romaji: 'yakemasu [uchi ga~]', meaning: '[Rumah] terbakar', tag: 'Kata Kerja II', exampleJp: '火事で うちが 焼けました。', exampleId: 'Rumah terbakar karena kebakaran.', note: 'Intransitif kebakaran' },
+      { id: 'b39_04', deck: 'b39', kanji: '焼けます', furigana: 'やけます [パンが～]', romaji: 'yakemasu [pan ga~]', meaning: '[Roti] dipanggang', tag: 'Kata Kerja II', exampleJp: 'いい 匂いで パンが 焼けました。', exampleId: 'Rotinya telah matang terpanggang harum.', note: 'Panggangan matang' },
+      { id: 'b39_05', deck: 'b39', kanji: '焼けます', furigana: 'やけます [肉が～]', romaji: 'yakemasu [niku ga~]', meaning: '[Daging] dipanggang', tag: 'Kata Kerja II', exampleJp: '網の 上で 肉が 焼けました。', exampleId: 'Daging telah matang terpanggang di atas kawat pemanggang.', note: 'Panggang daging' },
+      { id: 'b39_06', deck: 'b39', kanji: '通ります', furigana: 'とおります [みちを～]', romaji: 'toorimasu [michi o~]', meaning: 'Lewat [jalan]', tag: 'Kata Kerja I', exampleJp: 'この 道を 通って 駅へ 行きます。', exampleId: 'Melewati jalan ini untuk pergi ke stasiun.', note: 'Pola: 道を通る' },
+      { id: 'b39_07', deck: 'b39', kanji: '死にます', furigana: 'しにます', romaji: 'shinimasu', meaning: 'Meninggal, mati', tag: 'Kata Kerja I', exampleJp: '事故で 多くの 人が 死にました。', exampleId: 'Banyak orang meninggal karena kecelakaan.', note: 'Bentuk te: 死んで' },
+      { id: 'b39_08', deck: 'b39', kanji: 'びっくりします', furigana: 'びっくりします', romaji: 'bikkurishimasu', meaning: 'Terkejut, kaget', tag: 'Kata Kerja III', exampleJp: '大きな 音に びっくりしました。', exampleId: 'Kaget terperanjat karena suara keras.', note: 'Pola sebab: ～て、びっくりしました' },
+      { id: 'b39_09', deck: 'b39', kanji: 'がっかりします', furigana: 'がっかりします', romaji: 'gakkarishimasu', meaning: 'Kecewa', tag: 'Kata Kerja III', exampleJp: '試験に 落ちて がっかりしました。', exampleId: 'Kecewa karena tidak lulus ujian.', note: 'Perasaan putus asa/kecewa' },
+      { id: 'b39_10', deck: 'b39', kanji: '安心します', furigana: 'あんしんします', romaji: 'anshinshimasu', meaning: 'Bersenang hati, merasa lega', tag: 'Kata Kerja III', exampleJp: '家族の 声を 聞いて 安心しました。', exampleId: 'Merasa lega mendengar suara keluarga.', note: 'Perasaan tenang' },
+      { id: 'b39_11', deck: 'b39', kanji: '遅刻します', furigana: 'ちこくします', romaji: 'chikokushimasu', meaning: 'Masuk/datang terlambat', tag: 'Kata Kerja III', exampleJp: '電車が 遅れて 遅刻しました。', exampleId: 'Terlambat karena kereta terlambat.', note: 'Pola: 会社/学校に遅刻する' },
+      { id: 'b39_12', deck: 'b39', kanji: '早退します', furigana: 'そうたいします', romaji: 'soutaishimasu', meaning: 'Pulang sebelum waktunya', tag: 'Kata Kerja III', exampleJp: '熱が あるので 早退します。', exampleId: 'Pulang cepat karena demam.', note: 'Izin pulang lebih awal' },
+      { id: 'b39_13', deck: 'b39', kanji: 'けんかします', furigana: 'けんかします', romaji: 'kenkashimasu', meaning: 'Bertengkar, berkelahi', tag: 'Kata Kerja III', exampleJp: '友達と けんかしてしまいました。', exampleId: 'Tidak sengaja bertengkar dengan teman.', note: 'Pertengkaran mulut/fisik' },
+      { id: 'b39_14', deck: 'b39', kanji: '離婚します', furigana: 'りこんします', romaji: 'rikonshimasu', meaning: 'Bercerai', tag: 'Kata Kerja III', exampleJp: '両親が 離婚しました。', exampleId: 'Orang tua bercerai.', note: 'Lawan kata: 結婚します' },
+      { id: 'b39_15', deck: 'b39', kanji: '複雑[な]', furigana: 'ふくざつ[な]', romaji: 'fukuzatsu[na]', meaning: 'Rumit', tag: 'Kata Sifat-na', exampleJp: 'この 機械の 使い方は 複雑です。', exampleId: 'Cara pemakaian mesin ini rumit.', note: 'Lawan kata: 簡単[な]' },
+      { id: 'b39_16', deck: 'b39', kanji: '邪魔[な]', furigana: 'じゃま[な]', romaji: 'jama[na]', meaning: 'Gangguan, menghalangi', tag: 'Kata Sifat-na', exampleJp: '荷物が 邪魔で 通れません。', exampleId: 'Barang bawaan menghalangi sehingga tak bisa lewat.', note: 'Pola: お邪魔します' },
+      { id: 'b39_17', deck: 'b39', kanji: '汚い', furigana: 'きたない', romaji: 'kitanai', meaning: 'Kotor', tag: 'Kata Sifat-i', exampleJp: '部屋が とても 汚いです。', exampleId: 'Kamarnya sangat kotor.', note: 'Lawan kata: きれい[な]' },
+      { id: 'b39_18', deck: 'b39', kanji: 'うれしい', furigana: 'うれしい', romaji: 'ureshii', meaning: 'Senang, gembira', tag: 'Kata Sifat-i', exampleJp: 'プレゼントを もらって うれしいです。', exampleId: 'Senang sekali mendapatkan hadiah.', note: 'Emosi kebahagiaan hati' },
+      { id: 'b39_19', deck: 'b39', kanji: '悲しい', furigana: 'かなしい', romaji: 'kanashii', meaning: 'Sedih', tag: 'Kata Sifat-i', exampleJp: '犬が 死んで 悲しいです。', exampleId: 'Sedih karena anjing peliharaan mati.', note: 'Emosi kesedihan mendalam' },
+      { id: 'b39_20', deck: 'b39', kanji: '恥ずかしい', furigana: 'はずかしい', romaji: 'hazukashii', meaning: 'Malu', tag: 'Kata Sifat-i', exampleJp: '間違えて 恥ずかしかったです。', exampleId: 'Merasa malu karena keliru.', note: 'Perasaan canggung/malu' },
+      { id: 'b39_21', deck: 'b39', kanji: '地震', furigana: 'じしん', romaji: 'jishin', meaning: 'Gempa bumi', tag: 'Kata Benda', exampleJp: '昨日の 夜、大きな 地震が ありました。', exampleId: 'Tadi malam terjadi gempa bumi besar.', note: 'Bencana alam tektonik' },
+      { id: 'b39_22', deck: 'b39', kanji: '台風', furigana: 'たいふう', romaji: 'taifuu', meaning: 'Topan, taifun', tag: 'Kata Benda', exampleJp: '台風で 木が 倒れました。', exampleId: 'Pohon tumbang diterpa badai topan.', note: 'Pola: 台風で (karena topan)' },
+      { id: 'b39_23', deck: 'b39', kanji: '火事', furigana: 'かじ', romaji: 'kaji', meaning: 'Kebakaran', tag: 'Kata Benda', exampleJp: '火事で ビルが 焼けました。', exampleId: 'Gedung hangus karena insiden kebakaran.', note: 'Bencana amukan api' },
+      { id: 'b39_24', deck: 'b39', kanji: '事故', furigana: 'じこ', romaji: 'jiko', meaning: 'Kecelakaan', tag: 'Kata Benda', exampleJp: '交通事故に 気をつけてください。', exampleId: 'Berhati-hatilah terhadap kecelakaan lalu lintas.', note: 'Pola sebab: 事故で' },
+      { id: 'b39_25', deck: 'b39', kanji: '[お]見合い', furigana: '[お]みあい', romaji: '[o]miai', meaning: 'Pertemuan pertama perjodohan', tag: 'Kata Benda', exampleJp: '来週 お見合いを します。', exampleId: 'Minggu depan akan melangsungkan pertemuan perjodohan.', note: 'Tradisi perjodohan di Jepang' },
+      { id: 'b39_26', deck: 'b39', kanji: '電話代', furigana: 'でんわだい', romaji: 'denwadai', meaning: 'Rekening telepon', tag: 'Kata Benda', exampleJp: '今月の 電話代が 高かったです。', exampleId: 'Tagihan telepon bulan ini mahal.', note: 'Biaya pulsa/sambungan' },
+      { id: 'b39_27', deck: 'b39', kanji: '～代', furigana: '～だい', romaji: '~dai', meaning: 'Rekening, ongkos, biaya, tarif, sewa', tag: 'Akhiran Biaya', exampleJp: '部屋代を 払いました。', exampleId: 'Membayar sewa kamar.', note: 'Penanda ongkos pengeluaran' },
+      { id: 'b39_28', deck: 'b39', kanji: 'フロント', furigana: 'フロント', romaji: 'furonto', meaning: 'Bagian resepsionis (front office)', tag: 'Kata Benda', exampleJp: 'フロントで 鍵を 預けました。', exampleId: 'Menitipkan kunci di resepsionis hotel.', note: 'Meja lobi hotel' },
+      { id: 'b39_29', deck: 'b39', kanji: '－号室', furigana: '－ごうしつ', romaji: '-goushitsu', meaning: 'Nomor kamar -', tag: 'Penghitung', exampleJp: 'わたしの 部屋は 305号室です。', exampleId: 'Kamar saya adalah nomor 305.', note: 'Satuan nomor ruangan' },
+      { id: 'b39_30', deck: 'b39', kanji: '汗', furigana: 'あせ', romaji: 'ase', meaning: 'Keringat', tag: 'Kata Benda', exampleJp: '運動して 汗を かきました。', exampleId: 'Berkeringat sehabis berolahraga.', note: 'Pola: 汗をかきます' },
+      { id: 'b39_31', deck: 'b39', kanji: 'タオル', furigana: 'タオル', romaji: 'taoru', meaning: 'Handuk', tag: 'Kata Benda', exampleJp: 'タオルで 汗を ふきます。', exampleId: 'Menyeka keringat dengan handuk.', note: 'Kain penyeka' },
+      { id: 'b39_32', deck: 'b39', kanji: 'せっけん', furigana: 'せっけん', romaji: 'sekken', meaning: 'Sabun', tag: 'Kata Benda', exampleJp: 'せっけんで 手を 洗います。', exampleId: 'Mencuci tangan menggunakan sabun.', note: 'Pembersih mandi/tangan' },
+      { id: 'b39_33', deck: 'b39', kanji: '大勢', furigana: 'おおぜい', romaji: 'oozei', meaning: 'Banyak orang', tag: 'Kata Keterangan', exampleJp: '広場に 大勢の 人が 集まりました。', exampleId: 'Banyak orang berkumpul di tanah lapang.', note: 'Jumlah orang banyak' },
+      { id: 'b39_34', deck: 'b39', kanji: 'お疲れさまでした。', furigana: 'おつかれさまでした。', romaji: 'otsukaresama deshita.', meaning: 'Terima kasih atas kerja keras Anda.', tag: 'Ungkapan', exampleJp: '今日も 一日、お疲れさまでした。', exampleId: 'Hari ini seharian, terima kasih atas kerja kerasnya.', note: 'Salam rekan kerja' },
+      { id: 'b39_35', deck: 'b39', kanji: '伺います。', furigana: 'うかがいます。', romaji: 'ukagaimasu.', meaning: 'Saya akan datang. (merendah untuk いきます)', tag: 'Kenjougo I', exampleJp: '明日 3時に そちらへ 伺います。', exampleId: 'Besok jam 3 saya akan berkunjung ke sana.', note: 'Bentuk rendah hati (Kenjougo)' },
+      { id: 'b39_36', deck: 'b39', kanji: '途中で', furigana: 'とちゅうで', romaji: 'tochuu de', meaning: 'Di tengah perjalanan', tag: 'Kata Keterangan', exampleJp: '来る 途中で 事故に あいました。', exampleId: 'Mengalami kecelakaan di tengah perjalanan datang ke mari.', note: 'Pola: ～の途中で' },
+      { id: 'b39_37', deck: 'b39', kanji: 'トラック', furigana: 'トラック', romaji: 'torakku', meaning: 'Truk', tag: 'Kata Benda', exampleJp: 'トラックに 荷物を 積みます。', exampleId: 'Memuat barang ke dalam mobil truk.', note: 'Kendaraan angkut besar' },
+      { id: 'b39_38', deck: 'b39', kanji: 'ぶつかります', furigana: 'ぶつかります', romaji: 'butsukarimasu', meaning: 'Bertubrukan, bertabrakan', tag: 'Kata Kerja I', exampleJp: '車と トラックが ぶつかりました。', exampleId: 'Mobil bertabrakan dengan truk.', note: 'Pola: ～とぶつかる' },
+      { id: 'b39_39', deck: 'b39', kanji: '並びます', furigana: 'ならびます', romaji: 'narabimasu', meaning: 'Antre, berbaris rapi', tag: 'Kata Kerja I', exampleJp: '店の 前に 長い 列が 並びました。', exampleId: 'Antrean panjang berbaris di depan toko.', note: 'Berdiri teratur' },
+      { id: 'b39_40', deck: 'b39', kanji: '大人', furigana: 'おとな', romaji: 'otona', meaning: 'Orang dewasa', tag: 'Kata Benda', exampleJp: '大人も 子供も 楽しめます。', exampleId: 'Orang dewasa maupun anak-anak bisa menikmati.', note: 'Lawan kata: 子供' },
+      { id: 'b39_41', deck: 'b39', kanji: '洋服', furigana: 'ようふく', romaji: 'youfuku', meaning: 'Pakaian cara barat', tag: 'Kata Benda', exampleJp: 'デパートで 洋服を 買いました。', exampleId: 'Membeli baju gaya barat di toserba.', note: 'Lawan kata: 和服 (baju tradisional)' },
+      { id: 'b39_42', deck: 'b39', kanji: '西洋化します', furigana: 'せいようかします', romaji: 'seiyoukashimasu', meaning: 'Westernisasi (kebarat-baratan)', tag: 'Kata Kerja III', exampleJp: '日本の 生活が 西洋化しました。', exampleId: 'Gaya hidup Jepang mengalami westernisasi.', note: 'Modernisasi ala barat' },
+      { id: 'b39_43', deck: 'b39', kanji: '合います', furigana: 'あいます', romaji: 'aimasu', meaning: 'Cocok, sesuai', tag: 'Kata Kerja I', exampleJp: 'この 靴は 足の サイズに 合います。', exampleId: 'Sepatu ini cocok dan pas dengan ukuran kaki.', note: 'Pola: サイズ・好みに合います' },
+      { id: 'b39_44', deck: 'b39', kanji: '今では', furigana: 'いまでは', romaji: 'ima dewa', meaning: 'Sekarang ini (dibanding dahulu)', tag: 'Keterangan', exampleJp: '今では 誰でも スマホを 持っています。', exampleId: 'Sekarang ini siapa pun memiliki ponsel pintar.', note: 'Kondisi masa kini' },
+      { id: 'b39_45', deck: 'b39', kanji: '成人式', furigana: 'せいじんしき', romaji: 'seijinshiki', meaning: 'Upacara pada Hari Menjadi Dewasa', tag: 'Budaya/Tradisi', exampleJp: '1月に 成人式が 行われます。', exampleId: 'Upacara kedewasaan diselenggarakan pada bulan Januari.', note: 'Tradisi perayaan usia 20 tahun di Jepang' }
+    ];
+
+    /* ========================================================
+       DATA MASTER: KOTOBA BAB 40 MINNA NO NIHONGO (66 ITEM DARI FOTO HAL 88 & 89)
+       ======================================================== */
+    const KOTOBA_40 = [
+      { id: 'b40_01', deck: 'b40', kanji: '数えます', furigana: 'かぞえます', romaji: 'kazoemasu', meaning: 'Menghitung', tag: 'Kata Kerja II', exampleJp: '人数を 数えます。', exampleId: 'Menghitung jumlah orang.', note: 'Pola: ～かどうか数えます' },
+      { id: 'b40_02', deck: 'b40', kanji: '測ります、量ります', furigana: 'はかります', romaji: 'hakarimasu', meaning: 'Mengukur, menimbang', tag: 'Kata Kerja I', exampleJp: '長さや 重さを はかります。', exampleId: 'Mengukur panjang atau menimbang berat.', note: 'Panjang/waktu: 測る | Berat: 量る' },
+      { id: 'b40_03', deck: 'b40', kanji: '確かめます', furigana: 'たしかめます', romaji: 'tashikamemasu', meaning: 'Memastikan', tag: 'Kata Kerja II', exampleJp: '時間が 合っているか 確かめます。', exampleId: 'Memastikan apakah waktunya tepat.', note: 'Pola: [V-Biasa] か確かめる' },
+      { id: 'b40_04', deck: 'b40', kanji: '合います', furigana: 'あいます [サイズが～]', romaji: 'aimasu [saizu ga~]', meaning: '[Ukurannya] tepat, cocok', tag: 'Kata Kerja I', exampleJp: 'この 靴の サイズが 合います。', exampleId: 'Ukuran sepatu ini pas dan tepat.', note: 'Kecocokan ukuran fisik' },
+      { id: 'b40_05', deck: 'b40', kanji: '出発します', furigana: 'しゅっぱつします', romaji: 'shuppatsushimasu', meaning: 'Berangkat', tag: 'Kata Kerja III', exampleJp: '新幹線が 何時に 出発するか 調べます。', exampleId: 'Mencari tahu Shinkansen berangkat jam berapa.', note: 'Lawan kata: 到着します' },
+      { id: 'b40_06', deck: 'b40', kanji: '到着します', furigana: 'とうちゃくします', romaji: 'touchakushimasu', meaning: 'Tiba', tag: 'Kata Kerja III', exampleJp: '飛行機が もう 到着したか 聞いてみます。', exampleId: 'Mencoba menanyakan apakah pesawat sudah tiba.', note: 'Lawan kata: 出発します' },
+      { id: 'b40_07', deck: 'b40', kanji: '酔います', furigana: 'よいます', romaji: 'yoimasu', meaning: 'Mabuk', tag: 'Kata Kerja I', exampleJp: 'お酒に 酔ってしまいました。', exampleId: 'Mabuk karena minuman keras.', note: 'Bisa mabuk kendaraan: 車に酔う' },
+      { id: 'b40_08', deck: 'b40', kanji: '危険[な]', furigana: 'きけん[な]', romaji: 'kiken[na]', meaning: 'Berbahaya', tag: 'Kata Sifat-na', exampleJp: '夜の 一人歩きは 危険です。', exampleId: 'Berjalan sendirian di malam hari berbahaya.', note: 'Lawan kata: 安全[な]' },
+      { id: 'b40_09', deck: 'b40', kanji: '必要[な]', furigana: 'ひつよう[な]', romaji: 'hitsuyou[na]', meaning: 'Perlu', tag: 'Kata Sifat-na', exampleJp: 'ビザが 必要かどうか 確かめてください。', exampleId: 'Tolong pastikan apakah visa diperlukan atau tidak.', note: 'Pola: 必要かどうか' },
+      { id: 'b40_10', deck: 'b40', kanji: '宇宙', furigana: 'うちゅう', romaji: 'uchuu', meaning: 'Luar angkasa', tag: 'Kata Benda', exampleJp: 'いつか 宇宙へ 行ってみたいです。', exampleId: 'Suatu saat nanti ingin coba pergi ke luar angkasa.', note: 'Alam antariksa' },
+      { id: 'b40_11', deck: 'b40', kanji: '地球', furigana: 'ちきゅう', romaji: 'chikyuu', meaning: 'Bumi', tag: 'Kata Benda', exampleJp: '地球は 青くて 美しいです。', exampleId: 'Bumi berwarna biru dan indah.', note: 'Planet tempat tinggal manusia' },
+      { id: 'b40_12', deck: 'b40', kanji: '忘年会', furigana: 'ぼうねんかい', romaji: 'bounenkai', meaning: 'Pesta akhir tahun', tag: 'Kata Benda', exampleJp: '忘年会に 出席するかどうか 答えてください。', exampleId: 'Tolong jawab apakah akan hadir di pesta akhir tahun.', note: 'Tradisi kumpul akhir tahun di Jepang' },
+      { id: 'b40_13', deck: 'b40', kanji: '新年会', furigana: 'しんねんかい', romaji: 'shinnenkai', meaning: 'Pesta tahun baru', tag: 'Kata Benda', exampleJp: '1月に 新年会を 行います。', exampleId: 'Menyelenggarakan pesta tahun baru di bulan Januari.', note: 'Pesta menyambut tahun baru' },
+      { id: 'b40_14', deck: 'b40', kanji: '二次会', furigana: 'にじかい', romaji: 'nijikai', meaning: 'Pertemuan berikutnya (setelah pesta)', tag: 'Kata Benda', exampleJp: '二次会は 近くの 居酒屋へ 行きます。', exampleId: 'Acara pesta ronde kedua pergi ke izakaya terdekat.', note: 'Pesta ronde kedua' },
+      { id: 'b40_15', deck: 'b40', kanji: '大会', furigana: 'たいかい', romaji: 'taikai', meaning: 'Perlombaan', tag: 'Kata Benda', exampleJp: 'スピーチ大会に 参加します。', exampleId: 'Ikut serta dalam lomba pidato.', note: 'Kompetisi atau turnamen' },
+      { id: 'b40_16', deck: 'b40', kanji: 'マラソン', furigana: 'マラソン', romaji: 'marason', meaning: 'Lari maraton', tag: 'Kata Benda', exampleJp: '42キロの マラソンを 走りました。', exampleId: 'Berlari maraton sejauh 42 km.', note: 'Dari bahasa Inggris "marathon"' },
+      { id: 'b40_17', deck: 'b40', kanji: 'コンテスト', furigana: 'コンテスト', romaji: 'kontesuto', meaning: 'Lomba, kontes', tag: 'Kata Benda', exampleJp: 'カラオケコンテストで 優勝しました。', exampleId: 'Menjadi juara pertama di kontes karaoke.', note: 'Dari bahasa Inggris "contest"' },
+      { id: 'b40_18', deck: 'b40', kanji: '表', furigana: 'おもて', romaji: 'omote', meaning: 'Bagian muka', tag: 'Kata Benda', exampleJp: '封筒の 表に 宛先を 書きます。', exampleId: 'Menulis alamat tujuan di bagian muka amplop.', note: 'Lawan kata: 裏' },
+      { id: 'b40_19', deck: 'b40', kanji: '裏', furigana: 'うら', romaji: 'ura', meaning: 'Bagian belakang', tag: 'Kata Benda', exampleJp: 'カードの 裏に 名前を 書いてください。', exampleId: 'Tolong tulis nama di bagian belakang kartu.', note: 'Lawan kata: 表' },
+      { id: 'b40_20', deck: 'b40', kanji: '返事', furigana: 'へんじ', romaji: 'henji', meaning: 'Balasan, jawaban', tag: 'Kata Benda', exampleJp: '早く 返事を ください。', exampleId: 'Tolong beri balasan secepatnya.', note: 'Balasan pesan/panggilan' },
+      { id: 'b40_21', deck: 'b40', kanji: '申し込み', furigana: 'もうしこみ', romaji: 'moushikomi', meaning: 'Lamaran, pendaftaran', tag: 'Kata Benda', exampleJp: '試験の 申し込みは 締め切られました。', exampleId: 'Pendaftaran ujian telah ditutup.', note: 'Aplikasi registrasi' },
+      { id: 'b40_22', deck: 'b40', kanji: 'ほんとう', furigana: 'ほんとう', romaji: 'hontou', meaning: 'Kebenaran, fakta', tag: 'Kata Benda', exampleJp: 'その 話が ほんとうかどうか 分かりません。', exampleId: 'Saya tidak tahu apakah cerita itu kebenaran atau bukan.', note: 'Pola: ほんとうかどうか' },
+      { id: 'b40_23', deck: 'b40', kanji: 'まちがい', furigana: 'まちがい', romaji: 'machigai', meaning: 'Kesalahan', tag: 'Kata Benda', exampleJp: '計算に まちがいが ないか 確かめます。', exampleId: 'Memastikan apakah tidak ada kesalahan pada hitungan.', note: 'Pola: まちがいがないか' },
+      { id: 'b40_24', deck: 'b40', kanji: '傷', furigana: 'きず', romaji: 'kizu', meaning: 'Luka', tag: 'Kata Benda', exampleJp: '足に 小さな 傷が あります。', exampleId: 'Ada luka gores kecil di kaki.', note: 'Luka badan atau lecet barang' },
+      { id: 'b40_25', deck: 'b40', kanji: 'ズボン', furigana: 'ズボン', romaji: 'zubon', meaning: 'Celana panjang', tag: 'Kata Benda', exampleJp: 'この ズボンを はいてみても いいですか。', exampleId: 'Bolehkah saya mencoba memakai celana panjang ini?', note: 'Pola: はいてみる' },
+      { id: 'b40_26', deck: 'b40', kanji: '長さ', furigana: 'ながさ', romaji: 'nagasa', meaning: 'Panjangnya (kata benda dari ながい)', tag: 'Kata Benda (-さ)', exampleJp: '机の 長さを 測ってみましょう。', exampleId: 'Mari mencoba mengukur panjang meja.', note: 'Nominalisasi kata sifat-i: ～さ' },
+      { id: 'b40_27', deck: 'b40', kanji: '重さ', furigana: 'おもさ', romaji: 'omosa', meaning: 'Beratnya (kata benda dari おもい)', tag: 'Kata Benda (-さ)', exampleJp: 'スーツケースの 重さは 何キロですか。', exampleId: 'Berapa kg berat koper bawaannya?', note: 'Nominalisasi kata sifat-i: ～さ' },
+      { id: 'b40_28', deck: 'b40', kanji: '高さ', furigana: 'たかさ', romaji: 'takasa', meaning: 'Tingginya (kata benda dari たかい)', tag: 'Kata Benda (-さ)', exampleJp: 'あの ビルの 高さを 知っていますか。', exampleId: 'Tahukah Anda tinggi gedung itu?', note: 'Nominalisasi kata sifat-i: ～さ' },
+      { id: 'b40_29', deck: 'b40', kanji: '大きさ', furigana: 'おおきさ', romaji: 'ookisa', meaning: 'Besarnya (kata benda dari おおきい)', tag: 'Kata Benda (-さ)', exampleJp: '部屋の 大きさを 確かめました。', exampleId: 'Memastikan besarnya ukuran ruangan.', note: 'Nominalisasi kata sifat-i: ～さ' },
+      { id: 'b40_30', deck: 'b40', kanji: '[－]便', furigana: '[－]びん', romaji: '[-]bin', meaning: 'Nomor pesawat terbang', tag: 'Penghitung', exampleJp: 'JL107便は もうすぐ 出発します。', exampleId: 'Penerbangan JL107 sebentar lagi berangkat.', note: 'Nomor kode penerbangan' },
+      { id: 'b40_31', deck: 'b40', kanji: '－号', furigana: '－ごう', romaji: '-gou', meaning: 'Nomor kereta api, nomor topan', tag: 'Penghitung', exampleJp: '台風12号が 近づいています。', exampleId: 'Topan nomor 12 sedang mendekat.', note: 'Nomor Shinkansen / Siklon' },
+      { id: 'b40_32', deck: 'b40', kanji: '－個', furigana: '－こ', romaji: '-ko', meaning: 'Kata bantu bilangan untuk benda kecil', tag: 'Penghitung', exampleJp: '卵を 6個 買いました。', exampleId: 'Membeli 6 butir telur.', note: 'Penghitung benda kecil bulat' },
+      { id: 'b40_33', deck: 'b40', kanji: '－本', furigana: '－ほん（－ぽん、－ぼん）', romaji: '-hon (-pon, -bon)', meaning: 'Kata bantu bilangan untuk benda panjang', tag: 'Penghitung', exampleJp: 'ビールを 2本 飲みました。', exampleId: 'Minum bir 2 botol.', note: 'Penghitung botol, pensil, payung' },
+      { id: 'b40_34', deck: 'b40', kanji: '－杯', furigana: '－はい（－ばい、－ぱい）', romaji: '-hai (-bai, -pai)', meaning: 'Kata bantu bilangan untuk cangkir, gelas dll.', tag: 'Penghitung', exampleJp: 'お茶を もう 1杯 いかがですか。', exampleId: 'Mau tambah secangkir teh lagi?', note: 'Penghitung takaran isi gelas' },
+      { id: 'b40_35', deck: 'b40', kanji: '－キロ', furigana: '－キロ', romaji: '-kiro', meaning: 'kg, km', tag: 'Satuan Ukur', exampleJp: 'ここから 空港まで 15キロ あります。', exampleId: 'Dari sini sampai bandara ada 15 km.', note: 'Bisa kilometer atau kilogram' },
+      { id: 'b40_36', deck: 'b40', kanji: '－グラム', furigana: '－グラム', romaji: '-guramu', meaning: 'gram', tag: 'Satuan Ukur', exampleJp: '砂糖を 100グラム 入れます。', exampleId: 'Memasukkan 100 gram gula.', note: 'Satuan berat gram' },
+      { id: 'b40_37', deck: 'b40', kanji: '－センチ', furigana: '－センチ', romaji: '-senchi', meaning: 'cm', tag: 'Satuan Ukur', exampleJp: 'ズボンの 丈を 3センチ 短くします。', exampleId: 'Memendekkan celana sepanjang 3 cm.', note: 'Satuan sentimeter' },
+      { id: 'b40_38', deck: 'b40', kanji: '－ミリ', furigana: '－ミリ', romaji: '-miri', meaning: 'mm', tag: 'Satuan Ukur', exampleJp: 'あと 2ミリ 切ってください。', exampleId: 'Tolong potong 2 mm lagi.', note: 'Satuan milimeter' },
+      { id: 'b40_39', deck: 'b40', kanji: '～以上', furigana: '～いじょう', romaji: '~ijou', meaning: 'Lebih dari ～', tag: 'Keterangan Jumlah', exampleJp: '18歳以上の 方なら 参加できます。', exampleId: 'Yang berusia 18 tahun ke atas bisa ikut.', note: 'Termasuk angka batasnya' },
+      { id: 'b40_40', deck: 'b40', kanji: '～以下', furigana: '～いか', romaji: '~ika', meaning: 'Kurang dari ～', tag: 'Keterangan Jumlah', exampleJp: '70点以下は 不合格です。', exampleId: 'Di bawah 70 poin tidak lulus.', note: 'Termasuk angka batasnya' },
+      { id: 'b40_41', deck: 'b40', kanji: 'さあ', furigana: 'さあ', romaji: 'saa', meaning: 'Bagaimana ya? (dipakai saat tak pasti)', tag: 'Kata Seru', exampleJp: 'さあ、わたしには よく 分かりません。', exampleId: 'Wah bagaimana ya, saya kurang begitu paham.', note: 'Respon ketidakpastian' },
+      { id: 'b40_42', deck: 'b40', kanji: 'ゴッホ', furigana: 'ゴッホ', romaji: 'gohho', meaning: 'Vincent van Gogh (1853-1890)', tag: 'Tokoh', exampleJp: 'ゴッホの 絵が 展示されています。', exampleId: 'Lukisan Van Gogh sedang dipamerkan.', note: 'Pelukis tersohor Belanda' },
+      { id: 'b40_43', deck: 'b40', kanji: '雪祭り', furigana: 'ゆきまつり', romaji: 'yukimatsuri', meaning: 'Festival Salju di Sapporo', tag: 'Budaya/Tradisi', exampleJp: '札幌の 雪祭りに 行ったことが あります。', exampleId: 'Pernah pergi ke Festival Salju Sapporo.', note: 'Festival musim dingin legendaris' },
+      { id: 'b40_44', deck: 'b40', kanji: 'のぞみ', furigana: 'のぞみ', romaji: 'nozomi', meaning: 'Nama kereta api Shinkansen', tag: 'Nama Kereta', exampleJp: 'のぞみ号は とても 速いです。', exampleId: 'Kereta Shinkansen Nozomi sangat cepat.', note: 'Kereta peluru ekspres' },
+      { id: 'b40_45', deck: 'b40', kanji: 'JL', furigana: 'JL', romaji: 'jei-eru', meaning: 'Perusahaan Penerbangan Jepang (JAL)', tag: 'Nama Maskapai', exampleJp: 'JLは 日本航空の ことです。', exampleId: 'JL adalah singkatan Japan Airlines.', note: 'Maskapai resmi JAL' },
+      { id: 'b40_46', deck: 'b40', kanji: 'どうでしょうか。', furigana: 'どうでしょうか。', romaji: 'dou deshō ka.', meaning: 'Bagaimana～? (kata hormat untuk どうですか)', tag: 'Ungkapan Sopan', exampleJp: 'この 色は どうでしょうか。', exampleId: 'Bagaimana menurut Anda warna yang ini?', note: 'Bentuk lebih sopan dari どうですか' },
+      { id: 'b40_47', deck: 'b40', kanji: 'クラス', furigana: 'クラス', romaji: 'kurasu', meaning: 'Kelas', tag: 'Kata Benda', exampleJp: 'クラスの 友達と 旅行します。', exampleId: 'Bepergian wisata bersama teman sekelas.', note: 'Dari bahasa Inggris "class"' },
+      { id: 'b40_48', deck: 'b40', kanji: 'テスト', furigana: 'テスト', romaji: 'tesuto', meaning: 'Ujian', tag: 'Kata Benda', exampleJp: '明日の テストの 準備を します。', exampleId: 'Mempersiapkan diri untuk ujian besok.', note: 'Ujian berkala' },
+      { id: 'b40_49', deck: 'b40', kanji: '成績', furigana: 'せいせき', romaji: 'seiseki', meaning: 'Hasil, tanda prestasi', tag: 'Kata Benda', exampleJp: 'テストの 成績が よかったです。', exampleId: 'Nilai hasil ujiannya memuaskan bagus.', note: 'Tanda hasil belajar' },
+      { id: 'b40_50', deck: 'b40', kanji: 'ところで', furigana: 'ところで', romaji: 'tokorode', meaning: 'Ngomong-ngomong (mengganti topik)', tag: 'Kata Sambung', exampleJp: 'ところで、お昼ご飯は もう 食べましたか。', exampleId: 'Ngomong-ngomong, sudah makan siang?', note: 'Transisi pengalih topik' },
+      { id: 'b40_51', deck: 'b40', kanji: 'いらっしゃいます', furigana: 'いらっしゃいます', romaji: 'irasshaimasu', meaning: 'Datang (kata hormat untuk きます)', tag: 'Sonkeigo I', exampleJp: '社長が もう いらっしゃいました。', exampleId: 'Bapak Presiden Direktur sudah datang.', note: 'Bentuk hormat untuk きます' },
+      { id: 'b40_52', deck: 'b40', kanji: '様子', furigana: 'ようす', romaji: 'yousu', meaning: 'Keadaan, sikap, tingkah-laku', tag: 'Kata Benda', exampleJp: '子供たちの 様子を 見守ります。', exampleId: 'Memperhatikan gerak-gerik tingkah laku anak-anak.', note: 'Kondisi situasi tingkah laku' },
+      { id: 'b40_53', deck: 'b40', kanji: '事件', furigana: 'じけん', romaji: 'jiken', meaning: 'Peristiwa, perkara', tag: 'Kata Benda', exampleJp: '昨日 近くで 事件が 起きました。', exampleId: 'Kemarin ada insiden perkara terjadi di dekat sini.', note: 'Kasus perkara kriminal/peristiwa' },
+      { id: 'b40_54', deck: 'b40', kanji: 'オートバイ', furigana: 'オートバイ', romaji: 'ootobai', meaning: 'Sepeda motor', tag: 'Kata Benda', exampleJp: 'オートバイで 配達を します。', exampleId: 'Mengantar barang dengan sepeda motor.', note: 'Kendaraan roda dua bermotor' },
+      { id: 'b40_55', deck: 'b40', kanji: '爆弾', furigana: 'ばくだん', romaji: 'bakudan', meaning: 'Bom', tag: 'Kata Benda', exampleJp: '爆弾が 爆発しました。', exampleId: 'Bom meledak.', note: 'Bahan peledak bahaya' },
+      { id: 'b40_56', deck: 'b40', kanji: '積みます', furigana: 'つみます', romaji: 'tsumimasu', meaning: 'Memuat', tag: 'Kata Kerja I', exampleJp: '荷物を 車に 積みます。', exampleId: 'Memuat barang ke dalam mobil.', note: 'Memuat barang di kendaraan' },
+      { id: 'b40_57', deck: 'b40', kanji: '運転手', furigana: 'うんてんしゅ', romaji: 'untenshu', meaning: 'Supir', tag: 'Kata Benda', exampleJp: 'バスの 運転手さんに 挨拶しました。', exampleId: 'Menyapa pak supir bus.', note: 'Profesi pengemudi' },
+      { id: 'b40_58', deck: 'b40', kanji: '離れた', furigana: 'はなれた', romaji: 'hanareta', meaning: 'Terpencil, jauh', tag: 'Bentuk Kata', exampleJp: '駅から 離れた 静かな 家です。', exampleId: 'Rumah tenang yang letaknya jauh dari stasiun.', note: 'Kondisi lokasi terpisah jarak' },
+      { id: 'b40_59', deck: 'b40', kanji: 'が', furigana: 'が', romaji: 'ga', meaning: 'Tetapi', tag: 'Kata Sambung', exampleJp: '探しましたが、見つかりません。', exampleId: 'Sudah mencari, tetapi belum ketemu.', note: 'Penyambung makna berlawanan' },
+      { id: 'b40_60', deck: 'b40', kanji: '急に', furigana: 'きゅうに', romaji: 'kyuuni', meaning: 'Tiba-tiba', tag: 'Kata Keterangan', exampleJp: '急に 電話が 鳴りました。', exampleId: 'Tiba-tiba telepon berdering.', note: 'Kejadian tak terduga seketika' },
+      { id: 'b40_61', deck: 'b40', kanji: '動かします', furigana: 'うごかします', romaji: 'ugokashimasu', meaning: 'Menjalankan', tag: 'Kata Kerja I', exampleJp: '車を 動かします。', exampleId: 'Menjalankan mobil.', note: 'Transitif: ～を動かす' },
+      { id: 'b40_62', deck: 'b40', kanji: '一生懸命', furigana: 'いっしょうけんめい', romaji: 'isshoukenmei', meaning: 'Dengan sungguh-sungguh', tag: 'Kata Keterangan', exampleJp: '一生懸命 働きます。', exampleId: 'Bekerja dengan sungguh-sungguh.', note: 'Penuh kesungguhan hati' },
+      { id: 'b40_63', deck: 'b40', kanji: '犯人', furigana: 'はんにん', romaji: 'hannin', meaning: 'Pelaku kejahatan', tag: 'Kata Benda', exampleJp: '犯人は だれでしょうか。', exampleId: 'Siapakah gerangan pelaku kejahatannya?', note: 'Tersangka pelaku perkara' },
+      { id: 'b40_64', deck: 'b40', kanji: '手に入れます', furigana: 'てにいれます', romaji: 'te ni iremasu', meaning: 'Mendapat, memperoleh', tag: 'Kata Kerja II', exampleJp: '欲しかった チケットを 手に入れました。', exampleId: 'Berhasil memperoleh tiket yang diinginkan.', note: 'Mendapatkan barang/peluang' },
+      { id: 'b40_65', deck: 'b40', kanji: '今でも', furigana: 'いまでも', romaji: 'ima demo', meaning: 'Sekarang pun', tag: 'Kata Keterangan', exampleJp: '今でも 彼の 歌が 好きです。', exampleId: 'Sampai sekarang pun saya masih menyukai lagunya.', note: 'Berlanjut hingga saat ini' },
+      { id: 'b40_66', deck: 'b40', kanji: 'うわさします', furigana: 'うわさします', romaji: 'uwasashimasu', meaning: 'Menggunjing, menggosip', tag: 'Kata Kerja III', exampleJp: '町の 人たちが うわさしています。', exampleId: 'Warga kota sedang menggunjingkan gosip itu.', note: 'Membicarakan kabar desas-desus' }
+    ];
+
+    /* ========================================================
+       DATA MASTER: 40 KANJI IRODORI (LENGKAP DARI FOTO HAL 1, 2, 9, 10)
+       ======================================================== */
+    const KANJI_IRODORI = [
+      { id: 'kj_01', deck: 'kanji', kanji: '注文', furigana: 'ちゅうもん', romaji: 'chuumon', meaning: 'Pesanan', tag: 'Kanji Irodori', exampleJp: '料理を注文しました。', exampleId: 'Memesan makanan.', note: 'Foto 1' },
+      { id: 'kj_02', deck: 'kanji', kanji: '会計', furigana: 'かいけい', romaji: 'kaikei', meaning: 'Kasir, pembayaran', tag: 'Kanji Irodori', exampleJp: 'お会計をお願いします。', exampleId: 'Minta tolong kasir/bon.', note: 'Foto 1' },
+      { id: 'kj_03', deck: 'kanji', kanji: '予約', furigana: 'よやく', romaji: 'yoyaku', meaning: 'Reservasi, pemesanan tempat', tag: 'Kanji Irodori', exampleJp: 'ホテルを予約しました。', exampleId: 'Memesan kamar hotel.', note: 'Foto 1' },
+      { id: 'kj_04', deck: 'kanji', kanji: '電話番号', furigana: 'でんわばんごう', romaji: 'denwabangou', meaning: 'Nomor telepon', tag: 'Kanji Irodori', exampleJp: '電話番号を教えてください。', exampleId: 'Tolong beritahu nomor telepon Anda.', note: 'Foto 1' },
+      { id: 'kj_05', deck: 'kanji', kanji: '～様', furigana: '～さま', romaji: '~sama', meaning: 'Tuan/Nyonya', tag: 'Kanji Irodori', exampleJp: '田中様、いらっしゃいませ。', exampleId: 'Selamat datang Tuan Tanaka.', note: 'Foto 1' },
+      { id: 'kj_06', deck: 'kanji', kanji: 'ご飯', furigana: 'ごはん', romaji: 'gohan', meaning: 'Nasi, makanan', tag: 'Kanji Irodori', exampleJp: '朝ご飯を食べました。', exampleId: 'Makan sarapan pagi.', note: 'Foto 1' },
+      { id: 'kj_07', deck: 'kanji', kanji: '牛乳', furigana: 'ぎゅうにゅう', romaji: 'gyuunyuu', meaning: 'Susu sapi', tag: 'Kanji Irodori', exampleJp: '冷たい牛乳を飲みます。', exampleId: 'Minum susu sapi dingin.', note: 'Foto 1' },
+      { id: 'kj_08', deck: 'kanji', kanji: '生', furigana: 'なま', romaji: 'nama', meaning: 'Mentah, segar', tag: 'Kanji Irodori', exampleJp: '生ビールをください。', exampleId: 'Tolong bir segar (draft beer).', note: 'Foto 1' },
+      { id: 'kj_09', deck: 'kanji', kanji: '禁煙', furigana: 'きんえん', romaji: 'kin-en', meaning: 'Dilarang merokok', tag: 'Kanji Irodori', exampleJp: 'この部屋は禁煙です。', exampleId: 'Ruangan ini dilarang merokok.', note: 'Foto 1' },
+      { id: 'kj_10', deck: 'kanji', kanji: '自由', furigana: 'じゆう', romaji: 'jiyuu', meaning: 'Bebas, merdeka', tag: 'Kanji Irodori', exampleJp: '自由席に座ります。', exampleId: 'Duduk di kursi bebas reservasi.', note: 'Foto 1' },
+      { id: 'kj_11', deck: 'kanji', kanji: '写真', furigana: 'しゃしん', romaji: 'shashin', meaning: 'Foto', tag: 'Kanji Irodori', exampleJp: '写真を撮ってもいいですか。', exampleId: 'Bolehkah mengambil foto?', note: 'Foto 2' },
+      { id: 'kj_12', deck: 'kanji', kanji: '歌', furigana: 'うた', romaji: 'uta', meaning: 'Lagu', tag: 'Kanji Irodori', exampleJp: '日本の歌が好きです。', exampleId: 'Suka lagu Jepang.', note: 'Foto 2' },
+      { id: 'kj_13', deck: 'kanji', kanji: '歌手', furigana: 'かしゅ', romaji: 'kashu', meaning: 'Penyanyi', tag: 'Kanji Irodori', exampleJp: '有名な歌手です。', exampleId: 'Penyanyi tersohor.', note: 'Foto 2' },
+      { id: 'kj_14', deck: 'kanji', kanji: '上手[な]', furigana: 'じょうず[な]', romaji: 'jouzu[na]', meaning: 'Mahir, pandai', tag: 'Kanji Irodori', exampleJp: '日本語が上手ですね。', exampleId: 'Bahasa Jepang Anda mahir ya.', note: 'Foto 2' },
+      { id: 'kj_15', deck: 'kanji', kanji: '明るい', furigana: 'あかるい', romaji: 'akarui', meaning: 'Terang, ceria', tag: 'Kanji Irodori', exampleJp: '部屋が明るいです。', exampleId: 'Ruangannya terang.', note: 'Foto 2' },
+      { id: 'kj_16', deck: 'kanji', kanji: '長い', furigana: 'ながい', romaji: 'nagai', meaning: 'Panjang', tag: 'Kanji Irodori', exampleJp: '夏休みは長いです。', exampleId: 'Liburan musim panas panjang.', note: 'Foto 2' },
+      { id: 'kj_17', deck: 'kanji', kanji: '短い', furigana: 'みじかい', romaji: 'mijikai', meaning: 'Pendek', tag: 'Kanji Irodori', exampleJp: 'スカートが短いです。', exampleId: 'Roknya pendek.', note: 'Foto 2' },
+      { id: 'kj_18', deck: 'kanji', kanji: '着る', furigana: 'きる', romaji: 'kiru', meaning: 'Memakai pakaian', tag: 'Kanji Irodori', exampleJp: 'コートを着ます。', exampleId: 'Memakai mantel jaket.', note: 'Foto 2' },
+      { id: 'kj_19', deck: 'kanji', kanji: '立つ', furigana: 'たつ', romaji: 'tatsu', meaning: 'Berdiri', tag: 'Kanji Irodori', exampleJp: '席を立ちました。', exampleId: 'Berdiri dari tempat duduk.', note: 'Foto 2' },
+      { id: 'kj_20', deck: 'kanji', kanji: '泣く', furigana: 'なく', romaji: 'naku', meaning: 'Menangis', tag: 'Kanji Irodori', exampleJp: '赤ちゃんが泣いています。', exampleId: 'Bayi sedang menangis.', note: 'Foto 2' },
+      { id: 'kj_21', deck: 'kanji', kanji: '山', furigana: 'やま', romaji: 'yama', meaning: 'Gunung', tag: 'Kanji Irodori', exampleJp: '山に登ります。', exampleId: 'Mendaki gunung.', note: 'Foto 9' },
+      { id: 'kj_22', deck: 'kanji', kanji: '川', furigana: 'かわ', romaji: 'kawa', meaning: 'Sungai', tag: 'Kanji Irodori', exampleJp: '川で泳ぎます。', exampleId: 'Berenang di sungai.', note: 'Foto 9' },
+      { id: 'kj_23', deck: 'kanji', kanji: '海', furigana: 'うみ', romaji: 'umi', meaning: 'Laut', tag: 'Kanji Irodori', exampleJp: '海が青いです。', exampleId: 'Lautnya berwarna biru.', note: 'Foto 9' },
+      { id: 'kj_24', deck: 'kanji', kanji: '島', furigana: 'しま', romaji: 'shima', meaning: 'Pulau', tag: 'Kanji Irodori', exampleJp: '小さな島に住んでいます。', exampleId: 'Tinggal di pulau kecil.', note: 'Foto 9' },
+      { id: 'kj_25', deck: 'kanji', kanji: '森', furigana: 'もり', romaji: 'mori', meaning: 'Hutan lebat', tag: 'Kanji Irodori', exampleJp: '静かな森を歩きます。', exampleId: 'Berjalan di hutan lebat yang hening.', note: 'Foto 9' },
+      { id: 'kj_26', deck: 'kanji', kanji: '客', furigana: 'きゃく', romaji: 'kyaku', meaning: 'Tamu, pelanggan', tag: 'Kanji Irodori', exampleJp: 'お客様が来ました。', exampleId: 'Tamu pelanggan telah tiba.', note: 'Foto 9' },
+      { id: 'kj_27', deck: 'kanji', kanji: '観光地', furigana: 'かんこうち', romaji: 'kankouchi', meaning: 'Tempat wisata', tag: 'Kanji Irodori', exampleJp: '京都は有名な観光地です。', exampleId: 'Kyoto adalah tempat wisata yang terkenal.', note: 'Foto 9' },
+      { id: 'kj_28', deck: 'kanji', kanji: '意味', furigana: 'いみ', romaji: 'imi', meaning: 'Arti, makna', tag: 'Kanji Irodori', exampleJp: 'この言葉の意味は何ですか。', exampleId: 'Apa arti kata ini?', note: 'Foto 9' },
+      { id: 'kj_29', deck: 'kanji', kanji: '経験', furigana: 'けいけん', romaji: 'keiken', meaning: 'Pengalaman', tag: 'Kanji Irodori', exampleJp: 'いい経験になりました。', exampleId: 'Menjadi sebuah pengalaman berharga.', note: 'Foto 9' },
+      { id: 'kj_30', deck: 'kanji', kanji: '男の子', furigana: 'おとこのこ', romaji: 'otokonoko', meaning: 'Anak laki-laki', tag: 'Kanji Irodori', exampleJp: '元気な男の子です。', exampleId: 'Anak laki-laki yang lincah berenergi.', note: 'Foto 10' },
+      { id: 'kj_31', deck: 'kanji', kanji: '女の子', furigana: 'おんなのこ', romaji: 'onnanoko', meaning: 'Anak perempuan', tag: 'Kanji Irodori', exampleJp: 'かわいい女の子ですね。', exampleId: 'Anak perempuan yang manis ya.', note: 'Foto 10' },
+      { id: 'kj_32', deck: 'kanji', kanji: 'お祝い', furigana: 'おいわい', romaji: 'oiwai', meaning: 'Perayaan, hadiah selamat', tag: 'Kanji Irodori', exampleJp: '結婚のお祝いを贈ります。', exampleId: 'Mengirimkan hadiah selamat pernikahan.', note: 'Foto 10' },
+      { id: 'kj_33', deck: 'kanji', kanji: '誕生日', furigana: 'たんじょうび', romaji: 'tanjoubi', meaning: 'Hari ulang tahun', tag: 'Kanji Irodori', exampleJp: 'お誕生日おめでとう！', exampleId: 'Selamat ulang tahun!', note: 'Foto 10' },
+      { id: 'kj_34', deck: 'kanji', kanji: '結婚', furigana: 'けっこん', romaji: 'kekkon', meaning: 'Pernikahan', tag: 'Kanji Irodori', exampleJp: '来月結婚します。', exampleId: 'Akan menikah bulan depan.', note: 'Foto 10' },
+      { id: 'kj_35', deck: 'kanji', kanji: '時計', furigana: 'とけい', romaji: 'tokei', meaning: 'Jam tangan, arloji', tag: 'Kanji Irodori', exampleJp: '時計を見ました。', exampleId: 'Melihat ke arah jam.', note: 'Foto 10' },
+      { id: 'kj_36', deck: 'kanji', kanji: '幸せ[な]', furigana: 'しあわせ[な]', romaji: 'shiawase[na]', meaning: 'Bahagia', tag: 'Kanji Irodori', exampleJp: '毎日が幸せです。', exampleId: 'Setiap hari terasa bahagia.', note: 'Foto 10' },
+      { id: 'kj_37', deck: 'kanji', kanji: '生まれる', furigana: 'うまれる', romaji: 'umareru', meaning: 'Lahir', tag: 'Kanji Irodori', exampleJp: '東京で生まれました。', exampleId: 'Lahir di kota Tokyo.', note: 'Foto 10' },
+      { id: 'kj_38', deck: 'kanji', kanji: '思う', furigana: 'おもう', romaji: 'omou', meaning: 'Berpikir, mengira', tag: 'Kanji Irodori', exampleJp: 'そう思います。', exampleId: 'Saya kira juga begitu.', note: 'Foto 10' },
+      { id: 'kj_39', deck: 'kanji', kanji: '選ぶ', furigana: 'えらぶ', romaji: 'erabu', meaning: 'Memilih', tag: 'Kanji Irodori', exampleJp: '好きな色を選んでください。', exampleId: 'Silakan memilih warna yang disukai.', note: 'Foto 10' },
+      { id: 'kj_40', deck: 'kanji', kanji: '合格する', furigana: 'ごうかくする', romaji: 'goukakusuru', meaning: 'Lulus ujian', tag: 'Kanji Irodori', exampleJp: 'N4試験に合格しました！', exampleId: 'Lulus ujian sertifikasi N4!', note: 'Foto 10' }
+    ];
+
+    // Master Consolidation of All 248 Items
+    const ALL_CARD_DATA = [...KOTOBA_37, ...KOTOBA_38, ...KOTOBA_39, ...KOTOBA_40, ...KANJI_IRODORI];
+
+    /* ========================================================
+       BANK 40 SOAL SIMULASI SHIKEN BUNPOU (BAB 35-38 LENGKAP FURIGANA)
+       ======================================================== */
+    const BUNPOU_EXAM_40 = [
+      // BAB 35: Syarat ～ば, ～なら, ～ば～ほど
+      {
+        id: 'bp_01',
+        chapter: '35',
+        question: '<ruby>時間<rt>じかん</rt></ruby>が（　）、<ruby>映画<rt>えいが</rt></ruby>を <ruby>見<rt>み</rt></ruby>に <ruby>行<rt>い</rt></ruby>きませんか。',
+        arti: 'Kalau ada waktu, maukah pergi nonton bioskop?',
+        rumus: 'Kata Kerja Golongan I & Bentuk ある ➔ あれば (Bentuk Syarat ～ば)',
+        options: [
+          { text: 'あれば', correct: true },
+          { text: 'あたら', correct: false, reason: 'Bukan bentuk lampau ta-ra yang lazim untuk ある.' },
+          { text: 'あらば', correct: false, reason: 'Konjugasi syarat Golongan I mengganti vokal /i/ menjadi /e/ + ba (ari ➔ areba).' },
+          { text: 'あるなら', correct: false, reason: 'あるなら biasa untuk menanggapi topik orang lain, bukan menyatakan kondisi sendiri.' }
+        ]
+      },
+      {
+        id: 'bp_02',
+        chapter: '35',
+        question: '<ruby>安<rt>やす</rt></ruby>（　）、この パソコンを <ruby>買<rt>か</rt></ruby>いたいです。',
+        arti: 'Kalau murah, saya ingin membeli komputer ini.',
+        rumus: 'Kata Sifat-i ➔ buang [い] + ければ (yasui ➔ yasukereba)',
+        options: [
+          { text: 'ければ', correct: true },
+          { text: 'いなら', correct: false, reason: 'Untuk kata sifat-i murni syarat standar menggunakan ～ければ.' },
+          { text: 'いば', correct: false, reason: 'Bentuk [い] tidak bisa langsung ditempel [ば].' },
+          { text: 'いだったら', correct: false, reason: 'Konjugasi keliru untuk kata sifat-i.' }
+        ]
+      },
+      {
+        id: 'bp_03',
+        chapter: '35',
+        question: 'A:「<ruby>来週<rt>らいしゅう</rt></ruby>から <ruby>旅行<rt>りょこう</rt></ruby>に <ruby>行<rt>い</rt></ruby>くんですが、どこが いいですか。」<br>B:「<ruby>温泉<rt>おんせん</rt></ruby>（　）、<ruby>箱根<rt>はこね</rt></ruby>が おすすめですよ。」',
+        arti: 'A: Minggu depan mau jalan-jalan, enaknya ke mana ya?<br>B: Kalau onsen (pemandian air panas), Hakone sangat direkomendasikan lho.',
+        rumus: 'Kata Benda + なら (menyambut topik dan memberikan saran terbaik)',
+        options: [
+          { text: 'なら', correct: true },
+          { text: 'ば', correct: false, reason: 'Kata benda tidak bisa ditempel [ば] secara langsung.' },
+          { text: 'ならば', correct: false, reason: 'Bentuk klasik kaku, dalam percakapan sehari-hari memakai [なら].' },
+          { text: 'たら', correct: false, reason: 'たら bukan penanda rekomendasi topik usulan.' }
+        ]
+      },
+      {
+        id: 'bp_04',
+        chapter: '35',
+        question: '<ruby>日本語<rt>にほんご</rt></ruby>は <ruby>使<rt>つか</rt></ruby>えば <ruby>使<rt>つか</rt></ruby>う（　）、<ruby>上手<rt>じょうず</rt></ruby>に なります。',
+        arti: 'Bahasa Jepang itu semakin sering digunakan, akan semakin mahir.',
+        rumus: 'Pola Semakin... Semakin...: [V-ば] + [V-Bentuk Kamus] + ほど',
+        options: [
+          { text: 'ほど', correct: true },
+          { text: 'ように', correct: false, reason: 'ように menyatakan tujuan/supaya, bukan gradasi kelipatan (semakin... semakin).' },
+          { text: 'なら', correct: false, reason: 'なら bukan pasangan dari konjugasi ～ば.' },
+          { text: 'くらい', correct: false, reason: 'くらい menyatakan perkiraan tingkat/kira-kira.' }
+        ]
+      },
+      {
+        id: 'bp_05',
+        chapter: '35',
+        question: 'パスポートを <ruby>落<rt>お</rt></ruby>としたんですが、どう（　）いいですか。',
+        arti: 'Paspor saya hilang terjatuh, sebaiknya saya harus bagaimana ya?',
+        rumus: 'Meminta Saran/Petunjuk: [V-ば] + いいですか (sureba ii desu ka)',
+        options: [
+          { text: 'すれば', correct: true },
+          { text: 'したら', correct: false, reason: 'Walaupun doushitara ii desu ka ada, dalam materi Bab 35 pola standar dousureba ii desu ka.' },
+          { text: 'しては', correct: false, reason: 'Bentuk larangan te wa ikemasen, bukan meminta saran.' },
+          { text: 'するなら', correct: false, reason: 'Tidak digunakan untuk menanyakan petunjuk diri sendiri.' }
+        ]
+      },
+      {
+        id: 'bp_06',
+        chapter: '35',
+        question: '<ruby>明日<rt>あした</rt></ruby> <ruby>都合<rt>つごう</rt></ruby>が（　）、<ruby>一緒<rt>いっしょ</rt></ruby>に ご<ruby>飯<rt>はん</rt></ruby>を <ruby>食<rt>た</rt></ruby>べませんか。',
+        arti: 'Kalau besok ada waktu luang (kondisi baik), maukah makan bareng?',
+        rumus: 'Kata Sifat-na: buang [な] + なら (tsugou ga ii ➔ yokereba / tsugou ga warukereba)',
+        options: [
+          { text: 'よければ', correct: true },
+          { text: 'いいなら', correct: false, reason: 'Bentuk syarat kata sifat いい adalah よければ (bukan ii-nara).' },
+          { text: 'いいば', correct: false, reason: 'Bentuk konjugasi keliru total.' },
+          { text: 'よくなら', correct: false, reason: 'Tidak ada konjugasi yoku-nara.' }
+        ]
+      },
+      {
+        id: 'bp_07',
+        chapter: '35',
+        question: 'もっと <ruby>練習<rt>れんしゅう</rt></ruby>（　）、<ruby>試合<rt>しあい</rt></ruby>に <ruby>勝<rt>か</rt></ruby>てますよ。',
+        arti: 'Kalau lebih giat berlatih, pasti bisa menang pertandingan lho.',
+        rumus: 'Kata Kerja Golongan III: します ➔ すれば',
+        options: [
+          { text: 'すれば', correct: true },
+          { text: 'したらば', correct: false, reason: 'Bentuk kuno berlebihan.' },
+          { text: 'しれば', correct: false, reason: 'Golongan III します berubah menjadi すれば (bukan shi-reba).' },
+          { text: 'すると', correct: false, reason: 'Bentuk と tidak digunakan untuk dorongan/anjuran berpotensi.' }
+        ]
+      },
+      {
+        id: 'bp_08',
+        chapter: '35',
+        question: '<ruby>薬<rt>くすり</rt></ruby>を <ruby>飲<rt>の</rt></ruby>（　）、すぐに <ruby>熱<rt>ねつ</rt></ruby>が <ruby>下<rt>さ</rt></ruby>がりますよ。',
+        arti: 'Kalau minum obat ini, demamnya akan segera turun lho.',
+        rumus: 'Kata Kerja Golongan I: nomimasu ➔ vokal /i/ jadi /e/ + ba (nomeba)',
+        options: [
+          { text: 'めば', correct: true },
+          { text: 'まえば', correct: false, reason: 'Bukan vokal /a/.' },
+          { text: 'みば', correct: false, reason: 'Bentuk ます tidak langsung ditempel ば.' },
+          { text: 'んだらば', correct: false, reason: 'Konjugasi tidak baku.' }
+        ]
+      },
+      {
+        id: 'bp_09',
+        chapter: '35',
+        question: '<ruby>静<rt>しず</rt></ruby>か（　）、この <ruby>部屋<rt>へや</rt></ruby>で <ruby>勉強<rt>べんきょう</rt></ruby>したいです。',
+        arti: 'Kalau tenang/sunyi, saya ingin belajar di kamar ini.',
+        rumus: 'Kata Sifat-na: buang [な] + なら (shizuka nara)',
+        options: [
+          { text: 'なら', correct: true },
+          { text: 'であれば', correct: false, reason: 'Bentuk sangat formal bahasa tulisan.' },
+          { text: 'ば', correct: false, reason: 'Kata sifat-na tidak bisa langsung ditempel [ば].' },
+          { text: 'たら', correct: false, reason: 'Harus shizuka datta-ra.' }
+        ]
+      },
+      {
+        id: 'bp_10',
+        chapter: '35',
+        question: '<ruby>操作<rt>そうさ</rt></ruby>が <ruby>簡単<rt>かんたん</rt></ruby>なら（　）ほど、みんなが <ruby>使<rt>つか</rt></ruby>いやすいです。',
+        arti: 'Semakin operasinya mudah, semakin gampang digunakan siapa pun.',
+        rumus: 'Kata Sifat-na + なら... Kata Sifat-na + なほど',
+        options: [
+          { text: '簡単な', correct: true },
+          { text: '簡単で', correct: false, reason: 'Sebelum ほど untuk kata sifat-na harus berakhiran な.' },
+          { text: '簡単', correct: false, reason: 'Wajib partikel な sebelum ほど.' },
+          { text: '簡単だ', correct: false, reason: 'Bentuk だ tidak menempel langsung pada ほど.' }
+        ]
+      },
+
+      // BAB 36: ～ように (Tujuan), ～ようになる (Perubahan), ～ようにしている
+      {
+        id: 'bp_11',
+        chapter: '36',
+        question: '<ruby>風邪<rt>かぜ</rt></ruby>を（　）ように、<ruby>温<rt>あたた</rt></ruby>かい <ruby>服<rt>ふく</rt></ruby>を <ruby>着<rt>き</rt></ruby>ています。',
+        arti: 'Supaya tidak masuk angin/flu, saya memakai pakaian hangat.',
+        rumus: 'Tujuan Negatif: [V-ない] + ように (hikanai you ni)',
+        options: [
+          { text: 'ひかない', correct: true },
+          { text: 'ひく', correct: false, reason: 'Jika memakai bentuk positif [hiku] artinya: "supaya masuk angin" (kontradiktif).' },
+          { text: 'ひかないで', correct: false, reason: 'Bentuk -naide tidak digabung dengan ように.' },
+          { text: 'ひかなくて', correct: false, reason: 'Bukan bentuk te.' }
+        ]
+      },
+      {
+        id: 'bp_12',
+        chapter: '36',
+        question: '<ruby>毎日<rt>まいにち</rt></ruby> <ruby>練習<rt>れんしゅう</rt></ruby>して、50メートル（　）ようになりました。',
+        arti: 'Berlatih tiap hari, sekarang sudah menjadi bisa berenang 50 meter.',
+        rumus: 'Perubahan Kemampuan: [V-Potensial] + ようになりました (oyogeru you ni...)',
+        options: [
+          { text: '泳げる', correct: true },
+          { text: '泳ぐ', correct: false, reason: 'Pola perubahan kemampuan wajib menggunakan kata kerja bentuk potensial (oyogeru).' },
+          { text: '泳ぎます', correct: false, reason: 'Bukan bentuk masu.' },
+          { text: '泳いだ', correct: false, reason: 'Bukan bentuk lampau ta.' }
+        ]
+      },
+      {
+        id: 'bp_13',
+        chapter: '36',
+        question: '<ruby>忘<rt>わす</rt></ruby>れものを（　）ように、メモを <ruby>取<rt>と</rt></ruby>っておきます。',
+        arti: 'Supaya tidak lupa barang bawaan, saya mencatat di memo terlebih dahulu.',
+        rumus: 'Kata Kerja Bentuk Negatif: shinai + you ni',
+        options: [
+          { text: 'しない', correct: true },
+          { text: 'する', correct: false, reason: 'Suru you ni berarti "supaya kelupaan barang" (kebalikan).' },
+          { text: 'せず', correct: false, reason: 'Bentuk sastra kaku.' },
+          { text: 'しなかった', correct: false, reason: 'Bukan bentuk lampau.' }
+        ]
+      },
+      {
+        id: 'bp_14',
+        chapter: '36',
+        question: '<ruby>後<rt>うし</rt></ruby>ろの <ruby>人<rt>ひと</rt></ruby>にも（　）ように、<ruby>大<rt>おお</rt></ruby>きな <ruby>声<rt>こえ</rt></ruby>で <ruby>話<rt>はな</rt></ruby>してください。',
+        arti: 'Tolong bicara dengan suara lantang supaya orang di belakang juga bisa mendengar.',
+        rumus: 'Kata Kerja Intransitif Potensial: kikoeru + you ni (supaya terdengar)',
+        options: [
+          { text: '聞こえる', correct: true },
+          { text: '聞く', correct: false, reason: 'Kiku menyatakan tindakan sengaja, untuk situasi terdengar sampai belakang gunakan [聞こえる].' },
+          { text: '聞きます', correct: false, reason: 'Sebelum ように harus bentuk kamus.' },
+          { text: '聞ける', correct: false, reason: 'Kikoeru adalah kata kerja alami untuk suara yang menjangkau telinga.' }
+        ]
+      },
+      {
+        id: 'bp_15',
+        chapter: '36',
+        question: '<ruby>健康<rt>けんこう</rt></ruby>の ために、<ruby>野菜<rt>やさい</rt></ruby>を たくさん <ruby>食<rt>た</rt></ruby>べる（　）しています。',
+        arti: 'Demi kesehatan, saya membiasakan diri untuk banyak makan sayuran.',
+        rumus: 'Membiasakan Diri Terus Menerus: [V-Kamus / V-ない] + ようにしています',
+        options: [
+          { text: 'ように', correct: true },
+          { text: 'ことに', correct: false, reason: 'ことにする menyatakan keputusan satu kali, ようにしている menyatakan usaha pembiasaan berkala.' },
+          { text: 'そうに', correct: false, reason: 'Menyatakan tampak/kelihatannya.' },
+          { text: 'ために', correct: false, reason: 'ために sudah ada di awal kalimat (kenkou no tame ni).' }
+        ]
+      },
+      {
+        id: 'bp_16',
+        chapter: '36',
+        question: 'メガネを かけないと、<ruby>新聞<rt>しんぶん</rt></ruby>の <ruby>字<rt>じ</rt></ruby>が（　）ようになりました。',
+        arti: 'Kalau tidak memakai kacamata, saya jadi tidak bisa membaca huruf di koran.',
+        rumus: 'Perubahan Negatif Kemampuan: yomenaku narimashita (dari yomenai)',
+        options: [
+          { text: '読めなく', correct: true },
+          { text: '読まなく', correct: false, reason: 'Yomanaku artinya "jadi tidak membaca (kebiasaan)", bukan hilangnya kemampuan mata.' },
+          { text: '読めない', correct: false, reason: 'Sebelum narimashita huruf [い] berubah menjadi [く].' },
+          { text: '読めなくない', correct: false, reason: 'Bentuk dobel negatif.' }
+        ]
+      },
+      {
+        id: 'bp_17',
+        chapter: '36',
+        question: '<ruby>子供<rt>こども</rt></ruby>が <ruby>触<rt>さわ</rt></ruby>（　）ように、ハサミを <ruby>高<rt>たか</rt></ruby>い <ruby>所<rt>ところ</rt></ruby>に <ruby>置<rt>お</rt></ruby>きました。',
+        arti: 'Supaya anak-anak tidak menyentuhnya, saya menaruh gunting di tempat tinggi.',
+        rumus: 'Kata Kerja Golongan I: sawarimasu ➔ sawaranai + you ni',
+        options: [
+          { text: 'らない', correct: true },
+          { text: 'る', correct: false, reason: 'Kalau sawaru artinya "supaya disentuh anak" (bahaya).' },
+          { text: 'りません', correct: false, reason: 'Bukan bentuk formal masen.' },
+          { text: 'らなくて', correct: false, reason: 'Bukan bentuk te.' }
+        ]
+      },
+      {
+        id: 'bp_18',
+        chapter: '36',
+        question: '日本へ <ruby>来<rt>き</rt></ruby>てから、<ruby>生<rt>なま</rt></ruby>の <ruby>魚<rt>さかな</rt></ruby>が（　）ようになりました。',
+        arti: 'Semenjak datang ke Jepang, saya jadi bisa makan ikan mentah (sashimi).',
+        rumus: 'Potensial Golongan II: taberaremasu ➔ taberareru + you ni narimashita',
+        options: [
+          { text: '食べられる', correct: true },
+          { text: '食べる', correct: false, reason: 'Perubahan dari tak bisa jadi bisa membutuhkan bentuk potensial (taberareru).' },
+          { text: '食べた', correct: false, reason: 'Bukan bentuk lampau.' },
+          { text: '食べさせる', correct: false, reason: 'Bentuk kausatif menyuruh makan.' }
+        ]
+      },
+      {
+        id: 'bp_19',
+        chapter: '36',
+        question: '<ruby>約束<rt>やくそく</rt></ruby>の <ruby>時間<rt>じかん</rt></ruby>に <ruby>遅<rt>おく</rt></ruby>れない（　）してくださいね。',
+        arti: 'Tolong usahakan jangan sampai terlambat dari jam janji temu ya.',
+        rumus: 'Permohonan Usaha: [V-ない] + ようにしてください',
+        options: [
+          { text: 'ように', correct: true },
+          { text: 'そうに', correct: false, reason: 'Bukan pola permohonan kebiasaan.' },
+          { text: 'ために', correct: false, reason: 'ために untuk tujuan yang dapat dikontrol sepenuhnya oleh tindakan diri.' },
+          { text: '通りに', correct: false, reason: 'Tourini berarti "sesuai dengan".' }
+        ]
+      },
+      {
+        id: 'bp_20',
+        chapter: '36',
+        question: '<ruby>早<rt>はや</rt></ruby>く <ruby>日本語<rt>にほんご</rt></ruby>が（　）ように、アニメを たくさん <ruby>見<rt>み</rt></ruby>ています。',
+        arti: 'Supaya lekas bisa mengerti bahasa Jepang, saya banyak menonton anime.',
+        rumus: 'Kata Kerja Tanpa Kehendak: wakaru (sudah bermakna mampu) + you ni',
+        options: [
+          { text: '分かる', correct: true },
+          { text: '分かれる', correct: false, reason: 'Wakareru artinya berpisah/bercabang, bukan bentuk potensial dari wakaru.' },
+          { text: '分かります', correct: false, reason: 'Harus bentuk kamus biasa sebelum ように.' },
+          { text: '分かって', correct: false, reason: 'Bukan bentuk te.' }
+        ]
+      },
+
+      // BAB 37: Ukemi (Pasif Langsung, Kerugian, ～によって, から vs で)
+      {
+        id: 'bp_21',
+        chapter: '37',
+        question: 'わたしは <ruby>先生<rt>せんせい</rt></ruby>（　）<ruby>褒<rt>ほ</rt></ruby>められました。',
+        arti: 'Saya dipuji oleh guru.',
+        rumus: 'Pelaku pada Kalimat Pasif (Ukemi) selalu ditandai partikel に.',
+        options: [
+          { text: 'に', correct: true },
+          { text: 'を', correct: false, reason: 'Partikel を menandai objek sasaran aktif, bukan pelaku pasif.' },
+          { text: 'で', correct: false, reason: 'で untuk alat/lokasi kegiatan.' },
+          { text: 'から', correct: false, reason: 'Untuk orang yang memberi pujian secara langsung digunakan に.' }
+        ]
+      },
+      {
+        id: 'bp_22',
+        chapter: '37',
+        question: '<ruby>朝<rt>あさ</rt></ruby>の <ruby>電車<rt>でんしゃ</rt></ruby>で、<ruby>知<rt>し</rt></ruby>らない <ruby>人<rt>ひと</rt></ruby>に <ruby>足<rt>あし</rt></ruby>を（　）。',
+        arti: 'Di kereta pagi hari, kaki saya diinjak oleh orang tak dikenal.',
+        rumus: 'Pasif Kerugian (Meiwaku no Ukemi): fumu ➔ fumareました',
+        options: [
+          { text: '踏まれました', correct: true },
+          { text: '踏みました', correct: false, reason: 'Ini bentuk aktif biasa (artinya Anda yang menginjak orang lain).' },
+          { text: '踏ませました', correct: false, reason: 'Bentuk kausatif (menyuruh orang menginjak).' },
+          { text: '踏めました', correct: false, reason: 'Bentuk potensial (mampu menginjak).' }
+        ]
+      },
+      {
+        id: 'bp_23',
+        chapter: '37',
+        question: '<ruby>電話<rt>でんわ</rt></ruby>は ベル（　）<ruby>発明<rt>はつめい</rt></ruby>されました。',
+        arti: 'Telepon diciptakan oleh Bell.',
+        rumus: 'Penemu Karya / Penemuan Bersejarah Besar: Pelaku + によって',
+        options: [
+          { text: 'によって', correct: true },
+          { text: 'に', correct: false, reason: 'Untuk karya cipta/penemuan besar penemu bersejarah wajib menggunakan ～によって.' },
+          { text: 'から', correct: false, reason: 'から berarti dari/titik awal.' },
+          { text: 'で', correct: false, reason: 'で bukan penanda pelaku penemu karya.' }
+        ]
+      },
+      {
+        id: 'bp_24',
+        chapter: '37',
+        question: 'この お<ruby>酒<rt>さけ</rt></ruby>は おいしい <ruby>米<rt>こめ</rt></ruby>（　）<ruby>作<rt>つく</rt></ruby>られます。',
+        arti: 'Sake (minuman keras) ini dibuat dari beras yang lezat.',
+        rumus: 'Bahan Baku Kimia/Berubah Wujud Total: から (Bahan mentah tampak fisik: で)',
+        options: [
+          { text: 'から', correct: true },
+          { text: 'で', correct: false, reason: 'Beras telah difermentasi menjadi cairan bening sehingga bentuk aslinya hilang, maka wajib から.' },
+          { text: 'に', correct: false, reason: 'に bukan penanda bahan baku.' },
+          { text: 'を', correct: false, reason: 'Pada kalimat pasif bahan tidak ditandai partikel を.' }
+        ]
+      },
+      {
+        id: 'bp_25',
+        chapter: '37',
+        question: '<ruby>昔<rt>むかし</rt></ruby>の <ruby>日本<rt>にほん</rt></ruby>の <ruby>家<rt>いえ</rt></ruby>は <ruby>木<rt>き</rt></ruby>（　）<ruby>作<rt>つく</rt></ruby>られていました。',
+        arti: 'Rumah Jepang zaman dahulu dibuat dari kayu.',
+        rumus: 'Bahan Baku Masih Terlihat Bentuk Fisik Aslinya: で',
+        options: [
+          { text: 'で', correct: true },
+          { text: 'から', correct: false, reason: 'Kayu rumah masih terlihat kasat mata wujud kayunya, sehingga memakai で (bukan から).' },
+          { text: 'に', correct: false, reason: 'に keliru.' },
+          { text: 'へ', correct: false, reason: 'へ penanda arah.' }
+        ]
+      },
+      {
+        id: 'bp_26',
+        chapter: '37',
+        question: '<ruby>雨<rt>あめ</rt></ruby>に（　）、<ruby>服<rt>ふく</rt></ruby>が びしょぬれに なりました。',
+        arti: 'Kehujanan (terkena hujan), pakaian saya jadi basah kuyup.',
+        rumus: 'Pasif Kerugian Fenomena Alam: ame ni furarete (mengalami kerugian karena hujan)',
+        options: [
+          { text: '降られて', correct: true },
+          { text: '降って', correct: false, reason: 'Bentuk aktif biasa tidak mencerminkan penderitaan/kerugian diri.' },
+          { text: '降らせて', correct: false, reason: 'Bentuk kausatif menyuruh turun.' },
+          { text: '降らなくて', correct: false, reason: 'Bentuk negatif tidak turun.' }
+        ]
+      },
+      {
+        id: 'bp_27',
+        chapter: '37',
+        question: '<ruby>泥棒<rt>どろぼう</rt></ruby>に お<ruby>金<rt>かね</rt></ruby>を（　）しまいました。',
+        arti: 'Uang saya tercuri oleh maling.',
+        rumus: 'Pasif Golongan I: torimasu ➔ torarete',
+        options: [
+          { text: 'とられて', correct: true },
+          { text: 'とって', correct: false, reason: 'Totte berarti Anda yang mengambil uang.' },
+          { text: 'とらせて', correct: false, reason: 'Menyuruh mengambil.' },
+          { text: 'とれなくて', correct: false, reason: 'Tidak dapat mengambil.' }
+        ]
+      },
+      {
+        id: 'bp_28',
+        chapter: '37',
+        question: '<ruby>日本<rt>にほん</rt></ruby>の アニメは <ruby>世界中<rt>せかいじゅう</rt></ruby>で（　）。',
+        arti: 'Anime Jepang ditonton di seluruh penjuru dunia.',
+        rumus: 'Fakta Umum yang Sedang Berlangsung: Pasif Bentuk -te imasu (mirarete imasu)',
+        options: [
+          { text: '見られています', correct: true },
+          { text: '見ています', correct: false, reason: 'Bentuk aktif (anime menonton).' },
+          { text: '見せられています', correct: false, reason: 'Bentuk kausatif-pasif (dipaksa menonton).' },
+          { text: '見えます', correct: false, reason: 'Miemasu berarti terlihat secara visual alami.' }
+        ]
+      },
+      {
+        id: 'bp_29',
+        chapter: '37',
+        question: '<ruby>夜遅<rt>よるおそ</rt></ruby>く <ruby>友達<rt>ともだち</rt></ruby>に（　）、<ruby>困<rt>こま</rt></ruby>りました。',
+        arti: 'Didatangi teman larut malam, saya jadi kerepotan.',
+        rumus: 'Pasif Golongan III: kuru ➔ こられる (korarete)',
+        options: [
+          { text: '来られて', correct: true },
+          { text: 'きられて', correct: false, reason: 'Kanji 来 pada bentuk pasif dibaca ko- (korarete), bukan ki-.' },
+          { text: '来させて', correct: false, reason: 'Bentuk kausatif menyuruh datang.' },
+          { text: '来て', correct: false, reason: 'Bentuk aktif biasa.' }
+        ]
+      },
+      {
+        id: 'bp_30',
+        chapter: '37',
+        question: '<ruby>来月<rt>らいげつ</rt></ruby> <ruby>東京<rt>とうきょう</rt></ruby>で <ruby>国際会議<rt>こくさいかいぎ</rt></ruby>が（　）。',
+        arti: 'Bulan depan konferensi internasional akan diselenggarakan di Tokyo.',
+        rumus: 'Kegiatan/Acara sebagai Subjek Pasif: okonawaremasu (dari okonaimasu)',
+        options: [
+          { text: '行われます', correct: true },
+          { text: '行います', correct: false, reason: 'Subjeknya konferensi bukan manusia pelaku aktif, wajib bentuk pasif okonawaremasu.' },
+          { text: '行かせます', correct: false, reason: 'Bentuk menyuruh pergi.' },
+          { text: '行けます', correct: false, reason: 'Bentuk potensial mampu pergi.' }
+        ]
+      },
+
+      // BAB 38: Meishika Nominalisasi (～のは＋形容詞, ～のが＋好/速, ～のを忘れる, ～のを知る)
+      {
+        id: 'bp_31',
+        chapter: '38',
+        question: '<ruby>朝<rt>あさ</rt></ruby> <ruby>早<rt>はや</rt></ruby>く（　）のは、<ruby>体<rt>からだ</rt></ruby>に いいです。',
+        arti: 'Bangun pagi-pagi sekali itu baik untuk kesehatan badan.',
+        rumus: 'Nominalisasi Kegiatan: [V-Kamus] + のは + Kata Sifat (okiru no wa)',
+        options: [
+          { text: '起きる', correct: true },
+          { text: '起きます', correct: false, reason: 'Sebelum partikel pengganti [の] harus kata kerja bentuk kamus/biasa.' },
+          { text: '起きて', correct: false, reason: 'Bentuk -te tidak bisa langsung ditempel partikel [の].' },
+          { text: '起きた', correct: false, reason: 'Untuk prinsip kesehatan umum gunakan bentuk kamus non-lampau.' }
+        ]
+      },
+      {
+        id: 'bp_32',
+        chapter: '38',
+        question: '<ruby>母<rt>はは</rt></ruby>は <ruby>料理<rt>りょうり</rt></ruby>を（　）のが とても <ruby>上手<rt>じょうず</rt></ruby>です。',
+        arti: 'Ibu saya sangat mahir membuat masakan.',
+        rumus: 'Menyatakan Kemahiran/Kesukaan: [V-Kamus] + のが + 上手/好き',
+        options: [
+          { text: '作る', correct: true },
+          { text: '作ります', correct: false, reason: 'Sebelum のが 上手 harus bentuk kamus dasar (tsukuru).' },
+          { text: '作って', correct: false, reason: 'Bentuk -te keliru.' },
+          { text: '作った', correct: false, reason: 'Bukan bentuk lampau.' }
+        ]
+      },
+      {
+        id: 'bp_33',
+        chapter: '38',
+        question: '<ruby>出<rt>で</rt></ruby>かける とき、<ruby>鍵<rt>かぎ</rt></ruby>を（　）のを <ruby>忘<rt>わす</rt></ruby>れました。',
+        arti: 'Saat pergi keluar, saya lupa mengunci pintu.',
+        rumus: 'Lupa Melakukan Suatu Tindakan: [V-Kamus] + のを忘れました (kakeru no o...)',
+        options: [
+          { text: '掛ける', correct: true },
+          { text: '掛けます', correct: false, reason: 'Sebelum のを忘れる wajib bentuk kamus biasa.' },
+          { text: '掛けた', correct: false, reason: 'Pola standar memakai bentuk kamus non-lampau.' },
+          { text: '掛けて', correct: false, reason: 'Bukan bentuk sambung te.' }
+        ]
+      },
+      {
+        id: 'bp_34',
+        chapter: '38',
+        question: '<ruby>田中<rt>たなか</rt></ruby>さんが <ruby>結婚<rt>けっこん</rt></ruby>した（　）を <ruby>知<rt>し</rt></ruby>っていますか。',
+        arti: 'Apakah Anda tahu fakta bahwa saudara Tanaka telah menikah?',
+        rumus: 'Menanyakan Informasi/Fakta Konkret: [V-Biasa] + のを知っていますか',
+        options: [
+          { text: 'の', correct: true },
+          { text: 'こと', correct: false, reason: 'Bab 38 fokus pada nominalisasi pengganti kalimat langsung menggunakan の.' },
+          { text: 'と', correct: false, reason: 'と untuk penanda kutipan kalimat.' },
+          { text: 'か', correct: false, reason: 'Bukan partikel tanya di tengah kalimat sebelum を.' }
+        ]
+      },
+      {
+        id: 'bp_35',
+        chapter: '38',
+        question: '<ruby>彼<rt>かれ</rt></ruby>は <ruby>走<rt>はし</rt></ruby>る（　）が とても <ruby>速<rt>はや</rt></ruby>いです。',
+        arti: 'Dia berlarinya sangat cepat sekali.',
+        rumus: 'Sifat Fisik yang Terlihat Langsung (cepat/lambat): [V-Kamus] + のが + 速い/遅い',
+        options: [
+          { text: 'の', correct: true },
+          { text: 'こと', correct: false, reason: 'Untuk hal fisik yang tampak oleh indra penglihatan langsung digunakan partikel の.' },
+          { text: 'もの', correct: false, reason: 'もの menyatakan benda konkret berwujud.' },
+          { text: 'ほう', correct: false, reason: 'ほう untuk pilihan komparasi.' }
+        ]
+      },
+      {
+        id: 'bp_36',
+        chapter: '38',
+        question: '<ruby>荷物<rt>にもつ</rt></ruby>を（　）のを <ruby>手伝<rt>てつだ</rt></ruby>ってください。',
+        arti: 'Tolong bantu saya membawa barang-barang ini.',
+        rumus: 'Membantu Tindakan Fisik: [V-Kamus] + のを手伝う (hakobu no o tetsudau)',
+        options: [
+          { text: '運ぶ', correct: true },
+          { text: '運びます', correct: false, reason: 'Sebelum の wajib bentuk kamus (hakobu).' },
+          { text: '運んで', correct: false, reason: 'Bentuk te salah.' },
+          { text: '運ばれる', correct: false, reason: 'Bukan bentuk pasif.' }
+        ]
+      },
+      {
+        id: 'bp_37',
+        chapter: '38',
+        question: 'わたしが <ruby>生<rt>う</rt></ruby>まれた（　）は、<ruby>静<rt>しず</rt></ruby>かな <ruby>田舎<rt>いなか</rt></ruby>の <ruby>町<rt>まち</rt></ruby>です。',
+        arti: 'Tempat di mana saya dilahirkan adalah sebuah kota pedesaan yang tenang.',
+        rumus: 'Kalimat Penekanan (Kyouchou Koubun): [V-Biasa] + のは ... です',
+        options: [
+          { text: 'の', correct: true },
+          { text: 'こと', correct: false, reason: 'Pola penekanan Bab 38 menggunakan pengganti nomina [の].' },
+          { text: 'ところ', correct: false, reason: 'Meskipun bermakna tempat, struktur gramatikal penekanan bab 38 menggunakan [の].' },
+          { text: 'もの', correct: false, reason: 'もの menyatakan benda padat/barang.' }
+        ]
+      },
+      {
+        id: 'bp_38',
+        chapter: '38',
+        question: '<ruby>一人<rt>ひとり</rt></ruby>で この<ruby>重<rt>おも</rt></ruby>い <ruby>荷物<rt>にもつ</rt></ruby>を <ruby>持<rt>も</rt></ruby>つ（　）は <ruby>無理<rt>むり</rt></ruby>です。',
+        arti: 'Mengangkat barang berat ini sendirian adalah hal yang mustahil.',
+        rumus: 'Nominalisasi Evaluasi Subjek: [V-Kamus] + のは + Kata Sifat (muri desu)',
+        options: [
+          { text: 'の', correct: true },
+          { text: 'こと', correct: false, reason: 'Penilaian langsung atas tindakan fisik memakai [の].' },
+          { text: 'と', correct: false, reason: 'と bukan partikel penanda pokok bahasan nominalisasi.' },
+          { text: 'が', correct: false, reason: 'Subjek kalimat penilai sifat memakai partikel のは.' }
+        ]
+      },
+      {
+        id: 'bp_39',
+        chapter: '38',
+        question: '<ruby>電気<rt>でんき</rt></ruby>を（　）のを <ruby>忘<rt>わす</rt></ruby>れて <ruby>寝<rt>ね</rt></ruby>てしまいました。',
+        arti: 'Saya ketiduran dalam keadaan lupa mematikan lampu.',
+        rumus: 'Pola: kesu (mematikan) + no o wasuremashita',
+        options: [
+          { text: '消す', correct: true },
+          { text: '消します', correct: false, reason: 'Sebelum のを忘れる harus bentuk kamus biasa (kesu).' },
+          { text: '消して', correct: false, reason: 'Bentuk -te keliru.' },
+          { text: '消した', correct: false, reason: 'Bukan bentuk lampau.' }
+        ]
+      },
+      {
+        id: 'bp_40',
+        chapter: '38',
+        question: '<ruby>鈴木<rt>すずき</rt></ruby>さんが <ruby>入院<rt>にゅういん</rt></ruby>した（　）は <ruby>先週<rt>せんしゅう</rt></ruby>です。',
+        arti: 'Waktu di saat saudara Suzuki masuk rumah sakit adalah minggu lalu.',
+        rumus: 'Penekanan Waktu: [V-Lampau] + のは [Keterangan Waktu] です',
+        options: [
+          { text: 'の', correct: true },
+          { text: 'こと', correct: false, reason: 'Pola penekanan (emphasis sentence) menggunakan kata ganti [の].' },
+          { text: 'とき', correct: false, reason: 'Bukan pola toki wa senshuu desu.' },
+          { text: '日', correct: false, reason: 'Struktur penekanan tata bahasa Bab 38 menggunakan [の].' }
+        ]
+      }
+    ];
+
+    /* ========================================================
+       BANK KANJI TRICKY DENGAN PENGECOH MIRIP VISUAL KERTAS UJIAN
+       ======================================================== */
+    const KANJI_TRICKY_BANK = [
+      {
+        id: 'kjq_01',
+        furigana: 'しあわせ',
+        meaning: 'Bahagia',
+        question: '「しあわせ」に 入る <ruby>漢字<rt>かんじ</rt></ruby>を 一つ 選んでください。',
+        options: [
+          { text: '幸せ', correct: true },
+          { text: '辛', correct: false, reason: '辛 dibaca "karai" (pedas) atau "tsurai" (pahit/pedih). Kurang satu garis di atas dibanding 幸!' },
+          { text: '達', correct: false, reason: '達 terdapat radikal jalan 辶, artinya sampai/ahli (seperti pada 友達).' },
+          { text: '執', correct: false, reason: '執 memiliki bagian kanan berbeda, artinya memegang/melaksanakan.' }
+        ]
+      },
+      {
+        id: 'kjq_02',
+        furigana: 'えらぶ',
+        meaning: 'Memilih',
+        question: '「えらぶ」に 入る <ruby>漢字<rt>かんじ</rt></ruby>を 一つ 選んでください。',
+        options: [
+          { text: '選ぶ', correct: true },
+          { text: '達ぶ', correct: false, reason: 'Pengecoh jebakan radikal 辶! Bagian kanannya adalah 幸 bukan 巽.' },
+          { text: '遠ぶ', correct: false, reason: '遠 adalah kanji "tooi" (jauh).' },
+          { text: '遣ぶ', correct: false, reason: '遣 adalah kanji "tsukawasu" (mengutus/mengirim).' }
+        ]
+      },
+      {
+        id: 'kjq_03',
+        furigana: 'けっこん',
+        meaning: 'Pernikahan',
+        question: '「けっこん」に 入る <ruby>漢字<rt>かんじ</rt></ruby>を 一つ 選んでください。',
+        options: [
+          { text: '結婚', correct: true },
+          { text: '離婚', correct: false, reason: '離婚 dibaca "rikon" (perceraian), kebalikan dari menikah.' },
+          { text: '健康', correct: false, reason: '健康 dibaca "kenkou" (kesehatan).' },
+          { text: '結緍', correct: false, reason: 'Huruf kanan 緍 bukan radikal wanita 女, ini jebakan coretan kertas ujian!' }
+        ]
+      },
+      {
+        id: 'kjq_04',
+        furigana: 'もり',
+        meaning: 'Hutan lebat',
+        question: '「もり」に 入る <ruby>漢字<rt>かんじ</rt></ruby>を 一つ 選んでください。',
+        options: [
+          { text: '森', correct: true },
+          { text: '林', correct: false, reason: '林 terdiri dari 2 pohon (木) dibaca "hayashi" (rimba kecil), sedangkan 森 ada 3 pohon (mori).' },
+          { text: '木', correct: false, reason: '木 hanya satu pohon dibaca "ki".' },
+          { text: '麻', correct: false, reason: '麻 dibaca "asa" (rami/ganja).' }
+        ]
+      },
+      {
+        id: 'kjq_05',
+        furigana: 'けいけん',
+        meaning: 'Pengalaman',
+        question: '「けいけん」に 入る <ruby>漢字<rt>かんじ</rt></ruby>を 一つ 選んでください。',
+        options: [
+          { text: '経験', correct: true },
+          { text: '体験', correct: false, reason: '体験 dibaca "taiken" (pengalaman fisik pribadi), kanji awalnya 体 bukan 経.' },
+          { text: '体経', correct: false, reason: 'Urutan terbalik dan salah kanji.' },
+          { text: '経検', correct: false, reason: 'Kanji kedua 検 adalah kensa (pemeriksaan), bukan 験 (tes/pengalaman).' }
+        ]
+      },
+      {
+        id: 'kjq_06',
+        furigana: 'いみ',
+        meaning: 'Arti, makna',
+        question: '「いみ」に 入る <ruby>漢字<rt>かんじ</rt></ruby>を 一つ 選んでください。',
+        options: [
+          { text: '意味', correct: true },
+          { text: '急味', correct: false, reason: '急 dibaca "isogu" (terburu-buru), bukan 意 (maksud/pikiran).' },
+          { text: '注意', correct: false, reason: '注意 dibaca "chuui" (perhatian/peringatan).' },
+          { text: '意見', correct: false, reason: '意見 dibaca "iken" (pendapat/opini).' }
+        ]
+      },
+      {
+        id: 'kjq_07',
+        furigana: 'ちゅうもん',
+        meaning: 'Pesanan',
+        question: '「ちゅうもん」に 入る <ruby>漢字<rt>かんじ</rt></ruby>を 一つ 選んでください。',
+        options: [
+          { text: '注文', correct: true },
+          { text: '注問', correct: false, reason: 'Kanji kedua memakai 問 (pertanyaan) padahal seharusnya 文.' },
+          { text: '柱文', correct: false, reason: 'Kanji awal 柱 adalah pilar tiang (radikal kayu 木).' },
+          { text: '住文', correct: false, reason: 'Kanji awal 住 adalah sumu (tinggal).' }
+        ]
+      },
+      {
+        id: 'kjq_08',
+        furigana: 'かいけい',
+        meaning: 'Kasir, perhitungan',
+        question: '「かいけい」に 入る <ruby>漢字<rt>かんじ</rt></ruby>を 一つ 選んでください。',
+        options: [
+          { text: '会計', correct: true },
+          { text: '会見', correct: false, reason: '会見 dibaca "kaiken" (konferensi pers).' },
+          { text: '合計', correct: false, reason: '合計 dibaca "goukei" (jumlah total).' },
+          { text: '開計', correct: false, reason: 'Kanji awal 開 artinya membuka (hiraku).' }
+        ]
+      },
+      {
+        id: 'kjq_09',
+        furigana: 'きんえん',
+        meaning: 'Dilarang merokok',
+        question: '「きんえん」に 入る <ruby>漢字<rt>かんじ</rt></ruby>を 一つ 選んでください。',
+        options: [
+          { text: '禁煙', correct: true },
+          { text: '禁火', correct: false, reason: 'Bukan kanji api 火 melainkan asap rokok 煙.' },
+          { text: '喫煙', correct: false, reason: '喫煙 dibaca "kitsuen" (area boleh merokok), kebalikan dari dilarang merokok!' },
+          { text: '森煙', correct: false, reason: 'Kanji 森 keliru.' }
+        ]
+      },
+      {
+        id: 'kjq_10',
+        furigana: 'うた',
+        meaning: 'Lagu',
+        question: '「うた」に 入る <ruby>漢字<rt>かんじ</rt></ruby>を 一つ 選んでください。',
+        options: [
+          { text: '歌', correct: true },
+          { text: '声', correct: false, reason: '声 dibaca "koe" (suara manusia).' },
+          { text: '哥', correct: false, reason: 'Kurang bagian radikal menguap 欠 di sebelah kanannya.' },
+          { text: '音', correct: false, reason: '音 dibaca "oto" atau "on" (bunyi).' }
+        ]
+      }
+    ];
+
+    /* ========================================================
+       STATE APLIKASI GLOBAL
+       ======================================================== */
+    let studyMode = 'card'; // 'card' atau 'quiz'
+    let currentCardDeck = 'b37';
+    let currentQuizDeck = 'simulasi_all';
+    
+    let filteredCardList = [...KOTOBA_37];
+    let cardIndex = 0;
+    let isCardFlipped = false;
+    
+    let showGlobalFurigana = true;
+    let showGlobalRomaji = true;
+
+    let isTeleportRunning = false;
+    let teleportSpeedMs = 1200; // default 1.2 detik cepat
+    let teleportTimer = null;
+
+    let masteredItemIds = new Set();
+    let drawerCurrentFilter = 'all';
+
+    // Quiz State
+    let quizQueue = [];
+    let quizCurrent = 0;
+    let quizStreak = 0;
+    let quizTotal = 0;
+    let quizCorrect = 0;
+    let isQuizLocked = false;
+    let activeQuizOptions = [];
+
+    /* ========================================================
+       AUDIO SYNTHESIZER & SPEECH API
+       ======================================================== */
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playBeep(freq, type = 'sine', duration = 0.1) {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch(e) {
+        // audio context silent fallback
+      }
+    }
+
+    function playWhooshSound() {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(650, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.15);
+      } catch(e) {}
+    }
+
+    function speakJapanese(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const cleanText = text.replace(/\[.*?\]/g, '').replace(/（.*?）/g, '').replace(/[～・]/g, '');
+      const utter = new SpeechSynthesisUtterance(cleanText);
+      utter.lang = 'ja-JP';
+      utter.rate = 0.95;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function playCardAudio() {
+      if (filteredCardList.length === 0) return;
+      const item = filteredCardList[cardIndex];
+      speakJapanese(item.kanji || item.furigana);
+    }
+
+    function playQuizAudio() {
+      if (!quizQueue[quizCurrent]) return;
+      const q = quizQueue[quizCurrent];
+      const textToSpeak = (q.furigana ? q.furigana : q.question).replace(/<.*?>/g, '').replace(/（.*?）/g, '');
+      speakJapanese(textToSpeak);
+    }
+
+    /* ========================================================
+       LOGIKA FLASHCARD CONTROLLER
+       ======================================================== */
+    function setCardDeck(deckKey) {
+      currentCardDeck = deckKey;
+
+      document.querySelectorAll('.deck-btn').forEach(btn => {
+        btn.className = "deck-btn py-1.5 rounded-lg text-zinc-400 hover:text-white transition text-center";
+      });
+      const activeBtn = document.getElementById(`deck-btn-${deckKey}`);
+      if (activeBtn) {
+        activeBtn.className = "deck-btn py-1.5 rounded-lg bg-amber-500 text-zinc-950 font-bold transition text-center shadow";
+      }
+
+      if (deckKey === 'all') {
+        filteredCardList = [...ALL_CARD_DATA];
+      } else if (deckKey === 'kanji') {
+        filteredCardList = [...KANJI_IRODORI];
+      } else if (deckKey === 'b37') {
+        filteredCardList = [...KOTOBA_37];
+      } else if (deckKey === 'b38') {
+        filteredCardList = [...KOTOBA_38];
+      } else if (deckKey === 'b39') {
+        filteredCardList = [...KOTOBA_39];
+      } else if (deckKey === 'b40') {
+        filteredCardList = [...KOTOBA_40];
+      }
+
+      cardIndex = 0;
+      isCardFlipped = false;
+      renderCard();
+    }
+
+    function renderCard() {
+      if (filteredCardList.length === 0) return;
+      const item = filteredCardList[cardIndex];
+
+      const inner = document.getElementById('flashcard-inner');
+      if (isCardFlipped) {
+        inner.classList.add('rotate-y-180');
+      } else {
+        inner.classList.remove('rotate-y-180');
+      }
+
+      document.getElementById('card-curr').textContent = cardIndex + 1;
+      document.getElementById('card-total').textContent = filteredCardList.length;
+
+      let deckLabel = 'Semua (248)';
+      if (item.deck === 'b37') deckLabel = 'Bab 37 Minna';
+      else if (item.deck === 'b38') deckLabel = 'Bab 38 Minna';
+      else if (item.deck === 'b39') deckLabel = 'Bab 39 Minna';
+      else if (item.deck === 'b40') deckLabel = 'Bab 40 Minna';
+      else if (item.deck === 'kanji') deckLabel = 'Kanji Irodori';
+
+      document.getElementById('card-category-badge').textContent = deckLabel;
+      document.getElementById('card-front-tag').textContent = item.tag || 'KOTOBA';
+
+      document.getElementById('card-front-kanji').textContent = item.kanji;
+      document.getElementById('card-front-furigana').textContent = item.furigana;
+      document.getElementById('card-front-romaji').textContent = item.romaji;
+
+      document.getElementById('card-back-meaning').textContent = item.meaning;
+      document.getElementById('card-back-example-jp').textContent = item.exampleJp || '';
+      document.getElementById('card-back-example-id').textContent = item.exampleId || '';
+      document.getElementById('card-back-note').textContent = item.note ? `💡 ${item.note}` : 'Kosakata Standar Minna no Nihongo';
+
+      const starBtn = document.getElementById('btn-mastered');
+      if (masteredItemIds.has(item.id)) {
+        starBtn.className = "p-1 rounded bg-amber-500 text-zinc-950 font-black text-xs border border-amber-400";
+      } else {
+        starBtn.className = "p-1 rounded bg-zinc-900 text-zinc-400 hover:text-amber-400 text-xs border border-zinc-800";
+      }
+    }
+
+    function flipCard() {
+      isCardFlipped = !isCardFlipped;
+      playBeep(isCardFlipped ? 540 : 420, 'sine', 0.05);
+      renderCard();
+    }
+
+    function nextCard() {
+      if (filteredCardList.length === 0) return;
+      cardIndex = (cardIndex + 1) % filteredCardList.length;
+      isCardFlipped = false;
+      playWhooshSound();
+      renderCard();
+    }
+
+    function prevCard() {
+      if (filteredCardList.length === 0) return;
+      cardIndex = (cardIndex - 1 + filteredCardList.length) % filteredCardList.length;
+      isCardFlipped = false;
+      playWhooshSound();
+      renderCard();
+    }
+
+    function shuffleCurrentDeck() {
+      if (filteredCardList.length <= 1) return;
+      for (let i = filteredCardList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [filteredCardList[i], filteredCardList[j]] = [filteredCardList[j], filteredCardList[i]];
+      }
+      cardIndex = 0;
+      isCardFlipped = false;
+      playBeep(700, 'triangle', 0.12);
+      showToast("Deck flashcard berhasil diacak!");
+      renderCard();
+    }
+
+    function toggleMasterCurrent() {
+      if (filteredCardList.length === 0) return;
+      const item = filteredCardList[cardIndex];
+      if (masteredItemIds.has(item.id)) {
+        masteredItemIds.delete(item.id);
+        showToast("Batal ditandai dikuasai");
+      } else {
+        masteredItemIds.add(item.id);
+        playBeep(880, 'sine', 0.1);
+        showToast("⭐ Disimpan ke daftar Dikuasai!");
+      }
+      renderCard();
+      renderDrawerList();
+    }
+
+    /* ========================================================
+       SHUNSHIN TELEPORT MODE (AUTO-FLIP & AUTO-ADVANCE)
+       ======================================================== */
+    function toggleTeleportMode() {
+      isTeleportRunning = !isTeleportRunning;
+      const label = document.getElementById('teleport-label');
+      const btn = document.getElementById('btn-teleport-toggle');
+
+      if (isTeleportRunning) {
+        label.textContent = "Shunshin: ON";
+        btn.className = "px-2.5 py-1.5 rounded-xl border border-amber-400 bg-amber-500 text-zinc-950 text-xs font-black transition flex items-center gap-1 shadow-lg shadow-amber-500/20";
+        showToast(`⚡ Mode Shunshin Aktif (${teleportSpeedMs / 1000}s)`);
+        startTeleportLoop();
+      } else {
+        label.textContent = "Shunshin: OFF";
+        btn.className = "px-2.5 py-1.5 rounded-xl border border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-amber-400 text-xs font-bold transition flex items-center gap-1";
+        clearTimeout(teleportTimer);
+        showToast("Mode Shunshin Dinonaktifkan");
+      }
+    }
+
+    function setTeleportSpeed(ms) {
+      teleportSpeedMs = ms;
+      [800, 1200, 2000].forEach(s => {
+        const b = document.getElementById(`spd-btn-${s}`);
+        if (b) {
+          b.className = (s === ms) 
+            ? "px-2 py-0.5 rounded bg-amber-500 text-zinc-950 font-bold"
+            : "px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 hover:text-white";
+        }
+      });
+      showToast(`Tempo disetel ke ${ms / 1000}s`);
+      if (isTeleportRunning) {
+        clearTimeout(teleportTimer);
+        startTeleportLoop();
+      }
+    }
+
+    function startTeleportLoop() {
+      if (!isTeleportRunning || studyMode !== 'card') return;
+
+      teleportTimer = setTimeout(() => {
+        if (!isCardFlipped) {
+          flipCard();
+          startTeleportLoop();
+        } else {
+          nextCard();
+          startTeleportLoop();
+        }
+      }, teleportSpeedMs);
+    }
+
+    /* ========================================================
+       LOGIKA SIMULASI UJIAN (BUNPOU & KANJI)
+       ======================================================== */
+    function setQuizDeck(deckKey) {
+      currentQuizDeck = deckKey;
+      document.querySelectorAll('.quiz-deck-btn').forEach(b => {
+        b.className = "quiz-deck-btn py-1.5 rounded-lg text-zinc-400 hover:text-white transition text-center";
+      });
+      const activeBtn = document.getElementById(`quiz-deck-btn-${deckKey}`);
+      if (activeBtn) {
+        activeBtn.className = "quiz-deck-btn py-1.5 rounded-lg bg-emerald-600 text-white font-bold transition text-center shadow";
+      }
+      initQuiz();
+    }
+
+    function initQuiz() {
+      let pool = [];
+
+      if (currentQuizDeck === 'simulasi_all') {
+        pool = [...BUNPOU_EXAM_40];
+        document.getElementById('quiz-deck-badge').textContent = `Simulasi 4 Bab (${BUNPOU_EXAM_40.length})`;
+      } else if (currentQuizDeck === 'kanji_tricky') {
+        pool = [...KANJI_TRICKY_BANK];
+        document.getElementById('quiz-deck-badge').textContent = `Kanji Tricky (${KANJI_TRICKY_BANK.length})`;
+      } else {
+        pool = [...BUNPOU_EXAM_40, ...KANJI_TRICKY_BANK];
+        document.getElementById('quiz-deck-badge').textContent = `Mix Soal (${pool.length})`;
+      }
+
+      // Acak urutan soal silang bab (Fisher-Yates)
+      quizQueue = [...pool].sort(() => Math.random() - 0.5);
+      quizCurrent = 0;
+      quizStreak = 0;
+      quizTotal = quizQueue.length;
+      quizCorrect = 0;
+      isQuizLocked = false;
+
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      if (quizCurrent >= quizQueue.length) {
+        renderQuizFinished();
+        return;
+      }
+
+      isQuizLocked = false;
+      const q = quizQueue[quizCurrent];
+
+      document.getElementById('quiz-curr').textContent = quizCurrent + 1;
+      document.getElementById('quiz-total').textContent = quizQueue.length;
+      document.getElementById('quiz-streak').textContent = quizStreak;
+      document.getElementById('quiz-progress').style.width = `${((quizCurrent + 1) / quizQueue.length) * 100}%`;
+
+      const fb = document.getElementById('quiz-feedback-text');
+      fb.className = "h-4 text-[11px] font-semibold text-zinc-500 mt-2";
+      fb.textContent = "Pilih salah satu dari a, b, c, atau d";
+
+      const explainBox = document.getElementById('quiz-explanation-box');
+      explainBox.classList.add('hidden');
+      explainBox.innerHTML = '';
+
+      // Tampilkan Soal Bersih Autentik
+      document.getElementById('quiz-question-text').innerHTML = q.question;
+
+      // Acak posisi pilihan ganda a, b, c, d
+      const letters = ['a', 'b', 'c', 'd'];
+      activeQuizOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+      const optContainer = document.getElementById('quiz-options-container');
+      optContainer.innerHTML = '';
+
+      activeQuizOptions.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `quiz-opt-${idx}`;
+        btn.onclick = () => handleAnswerSelect(idx);
+        btn.className = "w-full py-4 px-5 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-left transition flex items-center justify-between group active:scale-98 shadow-sm";
+        
+        btn.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-zinc-800 text-zinc-300 font-mono font-bold text-sm flex items-center justify-center border border-zinc-700 group-hover:border-amber-400">
+              ${letters[idx]}
+            </span>
+            <span class="jp-font text-lg sm:text-xl font-bold text-white tracking-wide">
+              ${opt.text}
+            </span>
+          </div>
+          <span class="text-zinc-600 text-xs font-bold" id="opt-mark-${idx}"></span>
+        `;
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function handleAnswerSelect(index) {
+      if (isQuizLocked) return;
+      isQuizLocked = true;
+
+      const q = quizQueue[quizCurrent];
+      const selected = activeQuizOptions[index];
+      const isCorrect = selected.correct;
+
+      const letters = ['a', 'b', 'c', 'd'];
+      const fb = document.getElementById('quiz-feedback-text');
+      const explainBox = document.getElementById('quiz-explanation-box');
+
+      // Update Styling Option Buttons
+      activeQuizOptions.forEach((opt, idx) => {
+        const btn = document.getElementById(`quiz-opt-${idx}`);
+        const mark = document.getElementById(`opt-mark-${idx}`);
+        
+        if (opt.correct) {
+          btn.className = "w-full py-4 px-5 rounded-2xl bg-emerald-950/70 border-2 border-emerald-500 text-left flex items-center justify-between shadow-lg shadow-emerald-900/30";
+          mark.textContent = "✔ BENAR";
+          mark.className = "text-emerald-400 text-xs font-black";
+        } else if (idx === index && !isCorrect) {
+          btn.className = "w-full py-4 px-5 rounded-2xl bg-rose-950/70 border-2 border-rose-500 text-left flex items-center justify-between shadow-lg shadow-rose-900/30";
+          mark.textContent = "✕ SALAH";
+          mark.className = "text-rose-400 text-xs font-black";
+        } else {
+          btn.className = "w-full py-4 px-5 rounded-2xl bg-zinc-950/50 border border-zinc-850 opacity-40 text-left flex items-center justify-between";
+        }
+      });
+
+      if (isCorrect) {
+        quizStreak++;
+        quizCorrect++;
+        playBeep(880, 'sine', 0.1);
+        fb.textContent = "正解 (SEIKAI)! Jawaban Anda Tepat!";
+        fb.className = "h-4 text-[12px] font-black text-emerald-400 mt-2";
+      } else {
+        quizStreak = 0;
+        playBeep(220, 'sawtooth', 0.18);
+        fb.textContent = "不正解 (FUSEIKAI)! Pelajari pembahasannya di bawah:";
+        fb.className = "h-4 text-[12px] font-black text-rose-400 mt-2";
+      }
+
+      document.getElementById('quiz-streak').textContent = quizStreak;
+
+      // Render Pembahasan Gamblang & Sederhana
+      let reasonText = selected.reason || 'Pilihan ini tidak sesuai kaidah pola.';
+      let correctOpt = activeQuizOptions.find(o => o.correct);
+
+      explainBox.innerHTML = `
+        <div class="border-b border-zinc-800 pb-2 mb-2">
+          <span class="text-amber-400 font-bold text-xs">📖 PEMBAHASAN TATA BAHASA</span>
+        </div>
+        ${q.arti ? `<div class="text-zinc-300 font-medium">🇮🇩 <strong>Arti Kalimat:</strong> ${q.arti}</div>` : ''}
+        ${q.rumus ? `<div class="text-amber-300 font-medium">🔑 <strong>Rumus Cepat:</strong> ${q.rumus}</div>` : ''}
+        <div class="text-emerald-300 font-medium">💡 <strong>Kunci Jawaban:</strong> 「${correctOpt.text}」</div>
+        ${!isCorrect ? `<div class="text-rose-300 text-[11px] mt-1 bg-rose-950/40 p-2 rounded-xl border border-rose-900/50">⚠️ <strong>Kenapa pilihan Anda (${letters[index]}. ${selected.text}) salah?</strong><br>${reasonText}</div>` : ''}
+        <button onclick="nextQuizQuestion()" class="w-full mt-3 py-3 rounded-xl bg-amber-500 text-zinc-950 font-black text-xs hover:bg-amber-400 transition shadow flex items-center justify-center gap-1">
+          <span>Soal Berikutnya (Enter / Space)</span>
+          <span>▶</span>
+        </button>
+      `;
+      explainBox.classList.remove('hidden');
+    }
+
+    function nextQuizQuestion() {
+      quizCurrent++;
+      renderQuizQuestion();
+    }
+
+    function renderQuizFinished() {
+      const optContainer = document.getElementById('quiz-options-container');
+      const quizCard = document.getElementById('quiz-card');
+      const explainBox = document.getElementById('quiz-explanation-box');
+      explainBox.classList.add('hidden');
+
+      quizCard.innerHTML = `
+        <div class="py-4 text-center">
+          <div class="text-4xl mb-2">🏆</div>
+          <h2 class="text-lg font-black text-white mb-1">Simulasi Shiken Selesai!</h2>
+          <p class="text-xs text-zinc-400">Skor Anda: <strong class="text-emerald-400 font-black text-sm">${quizCorrect} / ${quizQueue.length}</strong> (${Math.round((quizCorrect / quizQueue.length) * 100)}%)</p>
+          <p class="text-[11px] text-amber-400 mt-2 font-medium">Siap hadapi ujian mingguan Bab 35-38!</p>
+        </div>
+      `;
+
+      optContainer.innerHTML = `
+        <button 
+          onclick="initQuiz()" 
+          class="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black text-sm transition shadow-lg flex items-center justify-center gap-2 active:scale-98">
+          <span>🔄</span>
+          <span>Ulangi Simulasi Shiken</span>
+        </button>
+      `;
+    }
+
+    function restartQuiz() {
+      initQuiz();
+    }
+
+    /* ========================================================
+       LOGIKA DRAWER DAFTAR LENGKAP 248 ITEM
+       ======================================================== */
+    function toggleListDrawer() {
+      const drawer = document.getElementById('list-drawer');
+      const isOpen = !drawer.classList.contains('translate-x-full');
+      if (isOpen) {
+        drawer.classList.add('translate-x-full');
+      } else {
+        drawer.classList.remove('translate-x-full');
+        renderDrawerList();
+      }
+    }
+
+    function filterDrawerCategory(category) {
+      drawerCurrentFilter = category;
+      document.querySelectorAll('.drawer-pill').forEach(pill => {
+        pill.className = "drawer-pill px-2.5 py-1 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white whitespace-nowrap text-[11px]";
+      });
+      const activePill = document.getElementById(`drawer-pill-${category}`);
+      if (activePill) {
+        activePill.className = "drawer-pill px-2.5 py-1 rounded-lg bg-amber-500 text-zinc-950 font-bold whitespace-nowrap text-[11px]";
+      }
+      renderDrawerList();
+    }
+
+    function handleDrawerSearch(keyword) {
+      renderDrawerList(keyword.trim().toLowerCase());
+    }
+
+    function renderDrawerList(query = '') {
+      const listContainer = document.getElementById('drawer-item-list');
+      let items = [...ALL_CARD_DATA];
+
+      if (drawerCurrentFilter === 'b37') {
+        items = items.filter(i => i.deck === 'b37');
+      } else if (drawerCurrentFilter === 'b38') {
+        items = items.filter(i => i.deck === 'b38');
+      } else if (drawerCurrentFilter === 'b39') {
+        items = items.filter(i => i.deck === 'b39');
+      } else if (drawerCurrentFilter === 'b40') {
+        items = items.filter(i => i.deck === 'b40');
+      } else if (drawerCurrentFilter === 'kanji') {
+        items = items.filter(i => i.deck === 'kanji');
+      } else if (drawerCurrentFilter === 'mastered') {
+        items = items.filter(i => masteredItemIds.has(i.id));
+      }
+
+      if (query) {
+        items = items.filter(i => 
+          i.kanji.toLowerCase().includes(query) ||
+          i.furigana.toLowerCase().includes(query) ||
+          i.meaning.toLowerCase().includes(query) ||
+          i.romaji.toLowerCase().includes(query)
+        );
+      }
+
+      listContainer.innerHTML = '';
+
+      if (items.length === 0) {
+        listContainer.innerHTML = `
+          <div class="py-12 text-center text-zinc-500 text-xs font-medium">
+            Tidak ada kosakata atau kanji yang cocok.
+          </div>
+        `;
+        return;
+      }
+
+      items.forEach(item => {
+        const cardEl = document.createElement('div');
+        cardEl.className = "p-3 rounded-xl bg-zinc-900/90 border border-zinc-850 hover:border-zinc-700 transition flex items-start justify-between gap-2";
+        
+        cardEl.innerHTML = `
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span class="jp-font font-black text-white text-base">${item.kanji}</span>
+              <span class="text-xs text-amber-400 font-bold">「${item.furigana}」</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700 font-mono">${item.deck.toUpperCase()}</span>
+            </div>
+            <div class="text-xs font-semibold text-zinc-200 mt-1">${item.meaning}</div>
+            <div class="text-[11px] text-zinc-500 mt-1 italic">${item.exampleJp || item.note || ''}</div>
+          </div>
+          <button 
+            onclick="speakJapanese('${item.kanji}')" 
+            class="p-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs shrink-0" 
+            title="Dengarkan Suara">
+            🔊
+          </button>
+        `;
+        listContainer.appendChild(cardEl);
+      });
+    }
+
+    /* ========================================================
+       TOGGLE FURIGANA & ROMAJI CONTROLLERS
+       ======================================================== */
+    function toggleFuriganaGlobal() {
+      showGlobalFurigana = !showGlobalFurigana;
+      const statusText = document.getElementById('furigana-status-text');
+      
+      if (showGlobalFurigana) {
+        document.body.classList.remove('hide-furigana');
+        statusText.textContent = 'ON';
+        statusText.className = 'text-[10px] text-amber-400';
+      } else {
+        document.body.classList.add('hide-furigana');
+        statusText.textContent = 'OFF';
+        statusText.className = 'text-[10px] text-zinc-500';
+      }
+
+      showToast(`Furigana: ${showGlobalFurigana ? 'Aktif' : 'Nonaktif'}`);
+    }
+
+    function toggleRomajiGlobal() {
+      showGlobalRomaji = !showGlobalRomaji;
+      const statusText = document.getElementById('romaji-status-text');
+      
+      if (showGlobalRomaji) {
+        document.body.classList.remove('hide-romaji');
+        statusText.textContent = 'ON';
+        statusText.className = 'text-[10px] text-amber-400';
+      } else {
+        document.body.classList.add('hide-romaji');
+        statusText.textContent = 'OFF';
+        statusText.className = 'text-[10px] text-zinc-500';
+      }
+
+      showToast(`Romaji: ${showGlobalRomaji ? 'Aktif' : 'Nonaktif'}`);
+    }
+
+    /* ========================================================
+       MODE SWITCHER & KEYBOARD EVENT LISTENERS
+       ======================================================== */
+    function switchStudyMode(mode) {
+      studyMode = mode;
+      const tabCard = document.getElementById('mode-tab-flashcard');
+      const tabQuiz = document.getElementById('mode-tab-quiz');
+      const viewCard = document.getElementById('view-flashcard');
+      const viewQuiz = document.getElementById('view-quiz');
+      const deckCard = document.getElementById('deck-selector-flashcard');
+      const deckQuiz = document.getElementById('deck-selector-quiz');
+
+      if (mode === 'card') {
+        tabCard.className = "py-2 rounded-lg bg-zinc-800 text-white shadow transition flex items-center justify-center gap-2";
+        tabQuiz.className = "py-2 rounded-lg text-zinc-400 hover:text-white transition flex items-center justify-center gap-2";
+        viewCard.classList.remove('hidden');
+        viewQuiz.classList.add('hidden');
+        deckCard.classList.remove('hidden');
+        deckQuiz.classList.add('hidden');
+        renderCard();
+      } else {
+        tabCard.className = "py-2 rounded-lg text-zinc-400 hover:text-white transition flex items-center justify-center gap-2";
+        tabQuiz.className = "py-2 rounded-lg bg-zinc-800 text-white shadow transition flex items-center justify-center gap-2";
+        viewCard.classList.add('hidden');
+        viewQuiz.classList.remove('hidden');
+        deckCard.classList.add('hidden');
+        deckQuiz.classList.remove('hidden');
+        if (isTeleportRunning) toggleTeleportMode();
+        initQuiz();
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast-box');
+      toast.textContent = msg;
+      toast.classList.remove('opacity-0');
+      toast.classList.add('opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0');
+      }, 1500);
+    }
+
+    // Keyboard Shortcuts Listener
+    window.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+      const key = e.key.toLowerCase();
+
+      // Toggle Furigana (F)
+      if (key === 'f') {
+        e.preventDefault();
+        toggleFuriganaGlobal();
+        return;
+      }
+
+      // Toggle Romaji (O)
+      if (key === 'o') {
+        e.preventDefault();
+        toggleRomajiGlobal();
+        return;
+      }
+
+      // Mode Flashcard Controls
+      if (studyMode === 'card') {
+        if (e.code === 'Space') {
+          e.preventDefault();
+          flipCard();
+        } else if (key === 'k' || e.code === 'ArrowRight') {
+          e.preventDefault();
+          nextCard();
+        } else if (key === 'j' || e.code === 'ArrowLeft') {
+          e.preventDefault();
+          prevCard();
+        } else if (key === 'r') {
+          e.preventDefault();
+          shuffleCurrentDeck();
+        } else if (key === 't') {
+          e.preventDefault();
+          toggleTeleportMode();
+        } else if (key === 'm') {
+          e.preventDefault();
+          toggleMasterCurrent();
+        } else if (key === 'a') {
+          e.preventDefault();
+          playCardAudio();
+        }
+      } 
+      // Mode Quiz Controls
+      else if (studyMode === 'quiz') {
+        if (['1', 'a'].includes(key)) {
+          e.preventDefault();
+          handleAnswerSelect(0);
+        } else if (['2', 'b'].includes(key)) {
+          e.preventDefault();
+          handleAnswerSelect(1);
+        } else if (['3', 'c'].includes(key)) {
+          e.preventDefault();
+          handleAnswerSelect(2);
+        } else if (['4', 'd'].includes(key)) {
+          e.preventDefault();
+          handleAnswerSelect(3);
+        } else if (e.code === 'Enter' || e.code === 'Space') {
+          if (isQuizLocked) {
+            e.preventDefault();
+            nextQuizQuestion();
+          }
+        } else if (key === 'a') {
+          e.preventDefault();
+          playQuizAudio();
+        }
+      }
+    });
+
+    window.onload = function() {
+      setCardDeck('b37');
+    };
+  </script>
+</body>
+</html>
