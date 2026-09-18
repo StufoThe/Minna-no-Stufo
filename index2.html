@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>God-Tier Kanji Master: Bab 41 & 42 (114 Kotoba 100% Lengkap)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+JP:wght@500;700;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            kanji: ['"Noto Sans JP"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            crimson: {
+              500: '#f43f5e',
+              600: '#e11d48',
+              700: '#be123c',
+              900: '#4c0519'
+            },
+            cyber: {
+              black: '#08080d',
+              dark: '#101017',
+              panel: '#171722',
+              border: '#262638',
+              cyan: '#06b6d4',
+              amber: '#f59e0b',
+              emerald: '#10b981',
+              violet: '#8b5cf6'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .kanji-shadow {
+      text-shadow: 0 0 25px rgba(255, 255, 255, 0.25);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #101017;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #262638;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #e11d48;
+    }
+  </style>
+</head>
+<body class="bg-cyber-black text-slate-100 min-h-screen font-sans selection:bg-crimson-600 selection:text-white flex flex-col justify-between">
+
+  <!-- TOP APP BAR -->
+  <header class="border-b border-cyber-border bg-cyber-dark/95 backdrop-blur-md sticky top-0 z-40 px-3 py-2.5">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Logo & Stats -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-crimson-600 via-rose-500 to-amber-500 flex items-center justify-center font-kanji font-black text-2xl text-white shadow-lg shadow-crimson-600/30">
+          瞬
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-sm sm:text-base font-black tracking-tight text-white">KANJI TELEPORT DRILL</h1>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 font-mono border border-emerald-700/50 font-bold">114 KOTOBA 100% LENGKAP</span>
+          </div>
+          <p class="text-[11px] text-slate-400">Minna no Nihongo Bab 41 & 42 • Sesuai 4 Lembar Foto Tanpa Terlewat</p>
+        </div>
+      </div>
+
+      <!-- Navigation Stages -->
+      <nav class="flex items-center gap-1 p-1 bg-cyber-panel rounded-2xl border border-cyber-border text-xs font-semibold overflow-x-auto max-w-full">
+        <button id="nav-learn" onclick="switchStage('learn')" class="px-3 py-1.5 rounded-xl bg-crimson-600 text-white shadow transition-all flex items-center gap-1.5 whitespace-nowrap">
+          <span>1. 🧠</span> <span>Tanam Pola</span>
+        </button>
+        <button id="nav-card" onclick="switchStage('card')" class="px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all flex items-center gap-1.5 whitespace-nowrap">
+          <span>2. 🃏</span> <span>Kartu Ingat</span>
+        </button>
+        <button id="nav-match" onclick="switchStage('match')" class="px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all flex items-center gap-1.5 whitespace-nowrap">
+          <span>3. 🧩</span> <span>Pasang Pola</span>
+        </button>
+        <button id="nav-reflex" onclick="switchStage('reflex')" class="px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all flex items-center gap-1.5 whitespace-nowrap">
+          <span>4. ⚡</span> <span>Uji Refleks</span>
+        </button>
+        <button id="nav-exam" onclick="switchStage('exam')" class="px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all flex items-center gap-1.5 whitespace-nowrap">
+          <span>5. 🎯</span> <span>Ujian Polos (50+ Soal)</span>
+        </button>
+      </nav>
+
+      <!-- Category & Batch Filter -->
+      <div class="flex items-center gap-2">
+        <select id="batchSelect" onchange="changeActiveBatch()" class="bg-cyber-panel border border-cyber-border text-xs rounded-xl px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-crimson-500 max-w-[220px] sm:max-w-none font-medium">
+          <optgroup label="⭐ KATEGORI KHUSUS">
+            <option value="kanji_only" selected>⚡ KHUSUS BERKANJI (68 KANJI UJIAN)</option>
+            <option value="kaiwa_all">💬 KHUSUS PERCAKAPAN (KAIWA BAB 41 & 42)</option>
+            <option value="yomi_taro">🐢 KHUSUS DONGENG (URASHIMA TARO BAB 41)</option>
+            <option value="penemu_all">🍜 KHUSUS PENEMU, MIE & TOKOH (BAB 42)</option>
+            <option value="all">🔥 SEMUA 114 KOTOBA LENGKAP (100%)</option>
+          </optgroup>
+          <optgroup label="📦 PAKET BELAJAR BERTAHAP">
+            <option value="b1">Paket 1: Bab 41 (Aksi Sopan & Sifat)</option>
+            <option value="b2">Paket 2: Bab 41 (Hadiah & Minat)</option>
+            <option value="b3">Paket 3: Bab 41 (Benda Rumah & Pakaian)</option>
+            <option value="b4">Paket 4: Bab 41 (Keluarga & Percakapan)</option>
+            <option value="b5">Paket 5: Bab 41 (Dongeng Urashima Taro)</option>
+            <option value="b6">Paket 6: Bab 42 (Aksi Dapur & Angka)</option>
+            <option value="b7">Paket 7: Bab 42 (Profesi & Sosial Politik)</option>
+            <option value="b8">Paket 8: Bab 42 (Alat & Perlengkapan)</option>
+            <option value="b9">Paket 9: Bab 42 (Mie Instan & Percakapan)</option>
+          </optgroup>
+        </select>
+        <button onclick="openWordSearchModal()" class="p-1.5 rounded-xl bg-cyber-panel border border-cyber-border text-xs text-cyan-400 hover:border-cyan-400 transition" title="Cari Kotoba Cepat">
+          🔍
+        </button>
+        <button id="soundToggleBtn" onclick="toggleSound()" class="p-1.5 rounded-xl bg-cyber-panel border border-cyber-border text-xs text-slate-300 hover:border-slate-400 transition" title="Suara On/Off">
+          <span id="soundIcon">🔊</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN VIEWPORT -->
+  <main class="max-w-5xl w-full mx-auto p-4 sm:p-6 flex-1 flex flex-col justify-center">
+
+    <!-- ==============================================================
+         STAGE 1: ENCODING (BEDAH LOGO & KUNCI MNEMONIK 3 DETIK)
+         ============================================================== -->
+    <section id="stage-learn" class="w-full flex flex-col items-center">
+      
+      <div class="w-full max-w-2xl mb-3 flex items-center justify-between text-xs">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-mono font-bold border border-amber-500/30">
+            TAHAP 1: TANAM POLA (ENCODING)
+          </span>
+          <span id="learnProgressCounter" class="text-slate-400 font-mono">1 / 68</span>
+        </div>
+        <div class="text-slate-400 font-mono text-[11px] truncate max-w-[240px]">
+          Fokus: <span id="currentBatchLabel" class="text-white font-bold">Khusus Berkanji</span>
+        </div>
+      </div>
+
+      <!-- Main Learning Card -->
+      <div class="w-full max-w-2xl bg-cyber-panel border border-cyber-border rounded-3xl p-6 sm:p-8 shadow-2xl relative flex flex-col justify-between">
+        
+        <!-- Header Tags -->
+        <div class="flex items-center justify-between pb-3 border-b border-cyber-border/70">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span id="learnBabTag" class="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold bg-crimson-900/60 text-crimson-400 border border-crimson-700/50">
+              BAB 41
+            </span>
+            <span id="learnCategoryBadge" class="text-[10px] px-2 py-0.5 rounded bg-violet-950/60 text-violet-300 border border-violet-700/50 font-mono font-bold">
+              KOSA KATA
+            </span>
+            <span id="learnTypeBadge" class="text-[10px] px-2 py-0.5 rounded bg-cyber-dark text-slate-400 border border-cyber-border font-mono">
+              VERBA
+            </span>
+          </div>
+          <button onclick="speakCurrentLearnWord()" class="px-3 py-1 rounded-xl bg-cyber-dark hover:bg-cyber-border text-xs font-mono flex items-center gap-1.5 text-cyan-400 transition">
+            <span>🔊 Suara Jepang</span>
+          </button>
+        </div>
+
+        <!-- Big Kanji Showcase with Toggleable Furigana -->
+        <div class="py-5 flex flex-col items-center justify-center text-center">
+          <div id="learnFurigana" class="text-base sm:text-lg font-mono text-amber-400 font-bold mb-1 tracking-widest min-h-[28px]">
+            だんぼう
+          </div>
+          <div id="learnKanji" class="font-kanji text-6xl sm:text-8xl font-black text-white tracking-wider kanji-shadow select-none my-1">
+            暖房
+          </div>
+          <div id="learnMeaning" class="text-lg sm:text-xl font-bold text-slate-100 mt-2">
+            alat pemanas ruangan (heater)
+          </div>
+        </div>
+
+        <!-- Neuro-Mnemonic Box -->
+        <div class="bg-cyber-dark rounded-2xl p-4 sm:p-5 border border-amber-500/30 mb-5">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="text-amber-400 font-bold text-xs sm:text-sm">💡 KUNCI INGAT 3 DETIK (LOGIKA RADIKAL):</span>
+          </div>
+          <p id="learnHookText" class="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+            Lihat radikal kiri 日 (Matahari). Kamar (房) yang hangat seperti diterpa sinar matahari!
+          </p>
+          <div id="learnAntiBlunder" class="mt-2.5 pt-2.5 border-t border-cyber-border/80 text-xs text-rose-300 font-mono flex items-start gap-1.5">
+            <span>⚠️ Jebakan Ujian:</span>
+            <span id="learnAntiBlunderText">Beda dengan 冷房 (AC) yang menggunakan radikal es batu 冫!</span>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex items-center justify-between gap-3 pt-1">
+          <button onclick="prevLearnCard()" id="btnPrevLearn" class="px-4 py-2.5 rounded-xl bg-cyber-dark hover:bg-cyber-border text-xs font-bold text-slate-300 transition">
+            ← Sebelumnya
+          </button>
+          
+          <button onclick="toggleLearnFuriganaVisibility()" id="btnToggleFurigana" class="px-3.5 py-2 rounded-xl bg-cyber-dark border border-cyber-border hover:border-slate-500 text-xs text-slate-400 font-mono">
+            Sembunyikan Furigana
+          </button>
+
+          <button onclick="nextLearnCard()" id="btnNextLearn" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-crimson-600 to-rose-600 hover:from-crimson-500 hover:to-rose-500 text-xs font-bold text-white shadow-lg shadow-crimson-600/30 transition">
+            Lanjut Paham →
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==============================================================
+         STAGE 2: ACTIVE RECALL FLASHCARD (SIMULASI POLOS TANPA FURIGANA)
+         ============================================================== -->
+    <section id="stage-card" class="hidden w-full flex flex-col items-center">
+      
+      <div class="w-full max-w-lg mb-3 flex items-center justify-between text-xs font-mono">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
+            TAHAP 2: KARTU INGAT POLOS
+          </span>
+        </div>
+        <div class="text-slate-400">
+          Antrean: <span id="srsRemaining" class="text-rose-400 font-bold">0</span> | Selesai: <span id="srsMastered" class="text-emerald-400 font-bold">0</span>
+        </div>
+      </div>
+
+      <!-- Flip Card Area -->
+      <div class="w-full max-w-lg bg-cyber-panel border border-cyber-border rounded-3xl p-6 sm:p-8 flex flex-col items-center shadow-2xl relative min-h-[400px] justify-between">
+        
+        <div class="w-full text-center my-auto">
+          <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block mb-2">
+            [ SIMULASI KERTAS UJIAN: BACA TANPA FURIGANA ]
+          </span>
+          
+          <div id="cardKanjiDisplay" class="font-kanji text-5xl sm:text-7xl font-black text-white tracking-wider kanji-shadow select-none py-3">
+            暖房
+          </div>
+
+          <!-- Answer Details -->
+          <div id="cardAnswerBox" class="opacity-0 transition-all duration-300 bg-cyber-dark rounded-2xl p-4 border border-cyber-border mt-3 text-center">
+            <div id="cardKanaDisplay" class="text-base sm:text-lg font-mono text-amber-400 font-bold">
+              だんぼう
+            </div>
+            <div id="cardMeaningDisplay" class="text-sm font-semibold text-slate-100 mt-1">
+              alat pemanas ruangan (heater)
+            </div>
+            <div id="cardHookDisplay" class="text-xs text-slate-400 mt-2 italic font-sans">
+              💡 Radikal 日 (Matahari) = Kamar hangat.
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div id="cardRevealBtnContainer" class="w-full mt-4">
+          <button onclick="revealSrsCard()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-sm font-bold text-white shadow-lg shadow-cyan-600/30 transition">
+            👁️ Buka Jawaban (Spasi)
+          </button>
+        </div>
+
+        <!-- Grade Buttons -->
+        <div id="cardGradeButtons" class="hidden w-full grid-cols-3 gap-2 mt-4">
+          <button onclick="gradeSrsCard('fail')" class="py-3 rounded-xl bg-rose-900/60 border border-rose-600 text-rose-200 hover:bg-rose-900 font-bold text-xs flex flex-col items-center">
+            <span>❌ Lupa / Blank</span>
+            <span class="text-[10px] font-normal text-rose-300">(Ulang Segera)</span>
+          </button>
+          
+          <button onclick="gradeSrsCard('hard')" class="py-3 rounded-xl bg-amber-900/60 border border-amber-600 text-amber-200 hover:bg-amber-900 font-bold text-xs flex flex-col items-center">
+            <span>⚠️ Masih Ragu</span>
+            <span class="text-[10px] font-normal text-amber-300">(Ulang Nanti)</span>
+          </button>
+
+          <button onclick="gradeSrsCard('good')" class="py-3 rounded-xl bg-emerald-900/60 border border-emerald-600 text-emerald-200 hover:bg-emerald-900 font-bold text-xs flex flex-col items-center">
+            <span>✅ Nempel Otak</span>
+            <span class="text-[10px] font-normal text-emerald-300">(Lolos)</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Completion Box -->
+      <div id="srsFinishCard" class="hidden w-full max-w-lg bg-cyber-panel border border-emerald-500/50 rounded-3xl p-8 text-center shadow-2xl flex-col items-center">
+        <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 text-3xl flex items-center justify-center mb-3">
+          🎉
+        </div>
+        <h3 class="text-xl font-bold text-white">Target Paket Ini Berhasil Dikuasai!</h3>
+        <p class="text-xs text-slate-300 mt-1 mb-5">Semua kotoba di paket ini sudah lulus penanaman memori awal.</p>
+        <div class="flex flex-col sm:flex-row gap-2.5 w-full">
+          <button onclick="restartActiveSrsBatch()" class="flex-1 py-2.5 rounded-xl bg-cyber-dark border border-cyber-border text-xs font-bold text-slate-300 hover:border-slate-400 transition">
+            Ulangi Paket Ini
+          </button>
+          <button onclick="switchStage('match')" class="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition">
+            Lanjut Tahap 3: Pasang Pola →
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==============================================================
+         STAGE 3: TILE MATCHING GAME (VISUAL CONNECTION)
+         ============================================================== -->
+    <section id="stage-match" class="hidden w-full flex flex-col items-center">
+      
+      <div class="w-full max-w-2xl mb-3 flex items-center justify-between text-xs">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono font-bold border border-emerald-500/30">
+            TAHAP 3: PASANG POLA VISUAL
+          </span>
+        </div>
+        <div class="text-slate-400 font-mono text-[11px]">
+          Hubungkan Kanji Langsung ke Makna
+        </div>
+      </div>
+
+      <div class="w-full max-w-2xl bg-cyber-panel border border-cyber-border rounded-3xl p-5 sm:p-6 shadow-2xl">
+        <div id="matchingGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div id="matchingSuccessMsg" class="hidden mt-6 p-4 rounded-2xl bg-emerald-900/60 border border-emerald-600 text-center text-xs font-bold text-emerald-200">
+          ⚡ Berhasil! Semua pasangan pola visual kanji sudah terhubung di otak.
+          <button onclick="switchStage('reflex')" class="block mx-auto mt-2 px-4 py-1.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-500 transition">
+            Lanjut Uji Refleks Teleportasi →
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==============================================================
+         STAGE 4: REFLEX SPEED DRILL (TELEPORTASI 0.8s - 4.0s)
+         ============================================================== -->
+    <section id="stage-reflex" class="hidden w-full flex flex-col items-center">
+      
+      <!-- Stats -->
+      <div class="w-full max-w-2xl flex items-center justify-between mb-3 px-2 text-xs font-mono text-slate-400">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+          <span>STREAK: <strong id="streakCount" class="text-amber-400 text-sm font-black">0</strong></span>
+        </div>
+        <div>
+          <span>SKOR: <strong id="scoreCount" class="text-white text-sm font-black">0</strong></span>
+        </div>
+        <div>
+          <span>TIMER: <strong id="currentSpeedLabel" class="text-cyan-400">2.5 detik</strong></span>
+        </div>
+      </div>
+
+      <!-- Reflex Box -->
+      <div class="w-full max-w-2xl bg-cyber-panel border border-cyber-border rounded-3xl p-6 sm:p-8 flex flex-col items-center shadow-2xl relative overflow-hidden">
+        <!-- Progress Bar -->
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-cyber-dark">
+          <div id="reflexTimerBar" class="h-full bg-gradient-to-r from-emerald-500 via-amber-500 to-crimson-600 w-full transition-all linear"></div>
+        </div>
+
+        <div class="flex items-center gap-2 mb-2">
+          <span id="reflexBadge" class="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold bg-crimson-900/60 text-crimson-300 border border-crimson-700/50">
+            BAB 41
+          </span>
+          <span class="text-xs text-slate-400 font-mono">Pindai Kanji Cepat (Shortcut: 1, 2, 3, 4):</span>
+        </div>
+
+        <!-- Big Kanji -->
+        <div class="my-3 sm:my-4 text-center min-h-[90px] flex items-center justify-center">
+          <div id="reflexKanjiDisplay" class="font-kanji text-5xl sm:text-7xl font-black text-white tracking-wider kanji-shadow select-none">
+            幼稚園
+          </div>
+        </div>
+
+        <!-- 4 Choices -->
+        <div id="reflexChoicesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full mt-2">
+          <!-- Injected dynamically -->
+        </div>
+
+        <!-- Feedback -->
+        <div id="reflexFeedback" class="w-full mt-4 p-2.5 rounded-2xl hidden text-center text-xs font-bold transition">
+        </div>
+      </div>
+
+      <!-- Speed Selector -->
+      <div class="w-full max-w-2xl mt-4 flex flex-wrap items-center justify-between text-xs text-slate-400 px-2 gap-2">
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span>Kecepatan:</span>
+          <button onclick="setReflexSpeed(4000, 'Santai 4.0s', this)" class="px-2.5 py-1 rounded-lg bg-cyber-dark border border-cyber-border hover:border-slate-500 font-mono">4.0s (Santai)</button>
+          <button onclick="setReflexSpeed(2500, 'Normal 2.5s', this)" class="px-2.5 py-1 rounded-lg bg-crimson-900/60 border border-crimson-600 text-crimson-200 font-mono">2.5s (Standar)</button>
+          <button onclick="setReflexSpeed(1200, 'Pro 1.2s', this)" class="px-2.5 py-1 rounded-lg bg-cyber-dark border border-cyber-border hover:border-slate-500 font-mono">1.2s (Pro)</button>
+          <button onclick="setReflexSpeed(800, 'God 0.8s', this)" class="px-2.5 py-1 rounded-lg bg-cyber-dark border border-cyber-border hover:border-slate-500 font-mono">0.8s (Teleportasi)</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==============================================================
+         STAGE 5: EXAM SIMULATION (50+ SOAL ASLI TANPA FURIGANA)
+         ============================================================== -->
+    <section id="stage-exam" class="hidden w-full flex flex-col items-center">
+      
+      <div class="w-full max-w-2xl bg-cyber-panel border border-cyber-border rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-cyber-border pb-3 mb-4">
+          <div>
+            <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+              <span>🎯 SIMULASI UJIAN KANJI POLOS</span>
+            </h3>
+            <p class="text-xs text-slate-400">Replikasi persis kalimat ujian Minna no Nihongo tanpa furigana.</p>
+          </div>
+          <div class="text-right">
+            <span class="text-[11px] font-mono text-slate-400">SOAL</span>
+            <div id="examCounter" class="font-mono text-sm font-bold text-amber-400">1 / 50</div>
+          </div>
+        </div>
+
+        <div id="examQuestionArea">
+          <!-- Question Prompt -->
+          <div class="bg-cyber-dark rounded-2xl p-5 border border-cyber-border mb-5">
+            <span class="text-[10px] font-mono text-rose-400 uppercase tracking-widest block mb-1">SOAL KALIMAT:</span>
+            <div id="examPrompt" class="text-lg sm:text-2xl font-kanji font-bold text-white leading-relaxed">
+              昨日、山田さんに [手袋] を いただきました。
+            </div>
+            <div class="text-xs text-slate-400 mt-2">Pilihlah bacaan kana dan makna kata dalam tanda kurung:</div>
+          </div>
+
+          <!-- Options -->
+          <div id="examChoicesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+
+        <!-- Result Evaluation Area -->
+        <div id="examResultArea" class="hidden flex-col items-center text-center py-4">
+          <div class="w-16 h-16 rounded-full bg-crimson-600/20 border border-crimson-500 flex items-center justify-center text-3xl mb-3">
+            🏆
+          </div>
+          <h4 class="text-xl font-black text-white">HASIL EVALUASI SIMULASI</h4>
+          <p id="examSummaryText" class="text-xs sm:text-sm text-slate-300 mt-1 mb-4">Nilai: 100/100</p>
+          
+          <div id="examMistakesContainer" class="w-full text-left bg-cyber-dark rounded-2xl p-4 border border-cyber-border mb-4 max-h-56 overflow-y-auto text-xs space-y-2">
+            <!-- Injected mistakes -->
+          </div>
+
+          <div class="flex flex-wrap gap-2 justify-center">
+            <button onclick="startExamSimulation('real_15')" class="px-4 py-2 rounded-xl bg-cyber-dark border border-cyber-border hover:border-slate-400 text-white text-xs font-bold transition">
+              Tes Cepat (15 Soal)
+            </button>
+            <button onclick="startExamSimulation('real_50')" class="px-4 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white text-xs font-bold transition">
+              Ujian Marathon (50 Kalimat Asli)
+            </button>
+            <button onclick="startExamSimulation('batch_full')" class="px-4 py-2 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white text-xs font-bold transition">
+              ⚡ Uji Kilat 100% Kategori Ini
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- QUICK SEARCH / GLOSSARY MODAL -->
+  <div id="searchModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-cyber-panel border border-cyber-border rounded-3xl max-w-xl w-full max-h-[85vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="p-4 border-b border-cyber-border flex items-center justify-between gap-3">
+        <input type="text" id="quickSearchInput" oninput="filterQuickGlossary()" placeholder="Ketik kanji, kana, atau arti Indonesia..." class="w-full bg-cyber-dark border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+        <button onclick="closeWordSearchModal()" class="px-3 py-1.5 rounded-xl bg-cyber-dark text-slate-400 hover:text-white text-xs font-bold">
+          Tutup ✕
+        </button>
+      </div>
+      <div id="glossaryListContainer" class="p-4 overflow-y-auto flex-1 space-y-2 text-xs">
+        <!-- Dynamically filled -->
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-cyber-border bg-cyber-dark/80 px-4 py-2 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-400 font-bold">💡 Rahasia Lulus Ujian:</span>
+        <span>Kuasai pembeda radikal di <strong>Tahap 1</strong> & <strong>Tahap 2</strong> sebelum mengetes kecepatan!</span>
+      </div>
+      <div class="font-mono text-[11px] text-slate-400">
+        Total 114 Kotoba Lengkap Bab 41 & 42
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==============================================================
+       DATABASE LENGKAP 114 KOSA KATA (BAB 41 & 42)
+       100% Sesuai 4 Lembar Foto Tanpa Ada yang Terlewat
+       ============================================================== -->
+  <script>
+    const MASTER_KOTOBA = [
+      // ==================== HALAMAN 1: BAB 41 (KOSA KATA UTAMA) ====================
+      {
+        id: "p41_1", batch: "b1", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Verba I",
+        kanji: "いただきます", kana: "いただきます", meaning: "menerima (kata merendahkan diri dari もらいます)",
+        hook: "Merendahkan diri saat menerima sesuatu dari atasan atau rezeki makan.",
+        antiBlunder: "Korelasinya: 私は部長に [お祝い] を いただきました (Saya menerima hadiah dari atasan)."
+      },
+      {
+        id: "p41_2", batch: "b1", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Verba I",
+        kanji: "くださいます", kana: "くださいます", meaning: "memberikan (kata hormat dari くれます)",
+        hook: "Atasan / orang yang lebih tinggi derajatnya berkenan memberikan ke kita.",
+        antiBlunder: "Korelasinya: 先生が [私に] 本を くださいます (Guru memberi saya buku)."
+      },
+      {
+        id: "p41_3", batch: "b1", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Verba I",
+        kanji: "やります", kana: "やります", meaning: "memberi (kpd bawahan, anak, hewan, tanaman)",
+        hook: "Memberi makan hewan atau menyiram tanaman: 犬に えさを やります.",
+        antiBlunder: "Haram hukumnya dipakai untuk atasan! Khusus bawahan/hewan/tanaman."
+      },
+      {
+        id: "p41_4", batch: "b1", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Verba II",
+        kanji: "上げます", kana: "あげます", meaning: "menaikkan (suhu / volume / tangan)",
+        hook: "Kanji 上 melambangkan garis patokan mengarah ke ATAS!",
+        antiBlunder: "Lawan kata mutlak dari 下げます (menurunkan)."
+      },
+      {
+        id: "p41_5", batch: "b1", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Verba II*",
+        kanji: "下げます", kana: "さげます", meaning: "menurunkan (suhu / volume / barang)",
+        hook: "Kanji 下 melambangkan garis patokan mengarah ke BAWAH!",
+        antiBlunder: "Lawan kata mutlak dari 上げます (menaikkan)."
+      },
+      {
+        id: "p41_6", batch: "b1", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Verba III",
+        kanji: "親切にします", kana: "しんせつにします", meaning: "berbaik hati / bersikap ramah",
+        hook: "親 (orang tua kandung) + 切 (dekat mendalam): kasih sayang orang tua yang tulus.",
+        antiBlunder: "Bentuk verba dari sifat-na 親切 [しんせつ]."
+      },
+      {
+        id: "p41_7", batch: "b1", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Sifat-i",
+        kanji: "かわいい", kana: "かわいい", meaning: "manis, imut, lucu",
+        hook: "Sifat manis/imut untuk bayi, anak kecil, boneka, atau kucing.",
+        antiBlunder: "Tertulis kana biasa di buku: かわいい."
+      },
+      {
+        id: "p41_8", batch: "b1", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Sifat-i",
+        kanji: "珍しい", kana: "めずらしい", meaning: "langka, jarang ditemukan",
+        hook: "Radikal kiri 王 (batu permata/giok langka): benda antik yang sangat langka!",
+        antiBlunder: "Bentuk kanji: 珍しい 鳥 (burung langka)."
+      },
+      {
+        id: "p41_9", batch: "b2", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "お祝い", kana: "おいわい", meaning: "perayaan, hadiah ucapan selamat",
+        hook: "Radikal 礻(altar doa berkah) + 兄 (orang): doa selamat atas kebahagiaan!",
+        antiBlunder: "Diberikan saat momen sukacita (pernikahan/kelulusan). Beda dengan お見舞い!"
+      },
+      {
+        id: "p41_10", batch: "b2", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "お年玉", kana: "おとしだま", meaning: "uang tahun baru (angpao anak-anak)",
+        hook: "年 (tahun baru) + 玉 (kelereng permata berharga): amplop uang saku tahun baru.",
+        antiBlunder: "Diberikan kpd anak-anak saat Oshougatsu (Tahun Baru Jepang)."
+      },
+      {
+        id: "p41_11", batch: "b2", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "[お]見舞い", kana: "[お]みまい", meaning: "pembesukan, barang bantuan/jengukan orang sakit",
+        hook: "見 (melihat dengan mata): datang menengok kerabat yang sedang sakit.",
+        antiBlunder: "JEBAKAN FATAL UJIAN: JANGAN TERTUKAR DENGAN お祝い (ucapan selamat)!"
+      },
+      {
+        id: "p41_12", batch: "b2", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "興味", kana: "きょうみ", meaning: "minat, ketertarikan",
+        hook: "興 (bergairah/bangkit) + 味 (rasa/selera): selera ketertarikan yang bangkit!",
+        antiBlunder: "Partikelnya: [コンピューターに] 興味があります (berminat pada komputer)."
+      },
+      {
+        id: "p41_13", batch: "b2", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "情報", kana: "じょうほう", meaning: "informasi, data berita",
+        hook: "情 (keadaan kenyataan) + 報 (laporan warta): laporan berita aktual.",
+        antiBlunder: "Dibaca: Jou-hou."
+      },
+      {
+        id: "p41_14", batch: "b2", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "文法", kana: "ぶんぽう", meaning: "tata bahasa (grammar)",
+        hook: "文 (tulisan kalimat) + 法 (aturan hukum): kaidah menyusun bahasa.",
+        antiBlunder: "Dibaca: Bun-pou."
+      },
+      {
+        id: "p41_15", batch: "b2", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "発音", kana: "はつおん", meaning: "ungkapan, pelafalan, bunyi ucapan",
+        hook: "発 (meletup/keluar) + 音 (suara bunyi): bunyi yang dilafalkan dari mulut.",
+        antiBlunder: "Dibaca: Hatsu-on."
+      },
+      {
+        id: "p41_16", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "猿", kana: "さる", meaning: "monyet, kera",
+        hook: "Radikal kiri 犭(hewan buas berkaki empat): kera/monyet.",
+        antiBlunder: "Soal langganan: 猿に えさを やります."
+      },
+      {
+        id: "p41_17", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "えさ", kana: "えさ", meaning: "makanan binatang / umpan",
+        hook: "Pakan khusus untuk hewan peliharaan atau umpan pancing.",
+        antiBlunder: "Beda dengan 料理 (makanan olahan manusia)."
+      },
+      {
+        id: "p41_18", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "おもちゃ", kana: "おもちゃ", meaning: "mainan anak-anak",
+        hook: "Benda mainan yang dibelikan untuk anak-anak: 子どもに おもちゃを やります.",
+        antiBlunder: "Kosa kata kana di buku: おもちゃ."
+      },
+      {
+        id: "p41_19", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "絵本", kana: "えほん", meaning: "buku bergambar (untuk anak)",
+        hook: "絵 (lukisan gambar) + 本 (buku): buku cerita dongeng bergambar.",
+        antiBlunder: "Beda dengan 絵はがき (kartu pos)."
+      },
+      {
+        id: "p41_20", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "絵はがき", kana: "えはがき", meaning: "kartu pos bergambar",
+        hook: "絵 (gambar foto) + はがき (kartu pos): kartu pos dengan pemandangan.",
+        antiBlunder: "Ingat ada akhiran kana はがき."
+      },
+      {
+        id: "p41_21", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "ドライバー", kana: "ドライバー", meaning: "obeng (screwdriver)",
+        hook: "Alat putar sekrup/baut pertukangan mekanik.",
+        antiBlunder: "Kata serapan katakana."
+      },
+      {
+        id: "p41_22", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "ハンカチ", kana: "ハンカチ", meaning: "sapu tangan (handkerchief)",
+        hook: "Kain katun penyeka keringat/tangan.",
+        antiBlunder: "Jangan tertukar dengan 手袋 (sarung tangan)."
+      },
+      {
+        id: "p41_23", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "靴下", kana: "くつした", meaning: "kaus kaki",
+        hook: "靴 (sepatu) + 下 (bawah/dalam): pakaian bagian bawah dalam sepatu!",
+        antiBlunder: "JEBAKAN BLUNDER: Ada kanji 下 (bawah). JANGAN TERTUKAR DENGAN 手袋!"
+      },
+      {
+        id: "p41_24", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "手袋", kana: "てぶくろ", meaning: "sarung tangan",
+        hook: "手 (tangan) + 袋 (kantung): kantung pembungkus jari tangan musim dingin!",
+        antiBlunder: "JEBAKAN BLUNDER: Ada kanji 手 (tangan). JANGAN TERTUKAR DENGAN 靴下!"
+      },
+      {
+        id: "p41_25", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "幼稚園", kana: "ようちえん", meaning: "TK (taman kanak-kanak)",
+        hook: "幼 (usia dini) + 稚 (bocah) + 園 (taman pagar keliling 囗).",
+        antiBlunder: "Akhiran 園 sama seperti 公園 (taman publik) dan 動物園 (kebun binatang)."
+      },
+      {
+        id: "p41_26", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "暖房", kana: "だんぼう", meaning: "alat pemanas ruangan (heater)",
+        hook: "Radikal kiri 日 (Matahari)! Kamar (房) yang disinari hangat bagai matahari.",
+        antiBlunder: "JEBAKAN BLUNDER NO.1 UJIAN: Pemanas = ada radikal matahari 日! Beda dengan 冷房!"
+      },
+      {
+        id: "p41_27", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "冷房", kana: "れいぼう", meaning: "pendingin ruangan (AC)",
+        hook: "Radikal kiri 冫 (Dua tetes es dingin beku)! Kamar (房) dingin sejuk.",
+        antiBlunder: "JEBAKAN BLUNDER NO.1 UJIAN: AC pendingin = ada radikal es 冫! Beda dengan 暖房!"
+      },
+      {
+        id: "p41_28", batch: "b3", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "温度", kana: "おんど", meaning: "suhu, temperatur",
+        hook: "温 (hangat: ada air 氵 dan matahari 日) + 度 (takaran derajat).",
+        antiBlunder: "Kolokasi: 温度を 上げます (menaikkan suhu) / 下げます (menurunkan suhu)."
+      },
+
+      // ==================== HALAMAN 2: BAB 41 (KELUARGA & KELANJUTAN) ====================
+      {
+        id: "p41_29", batch: "b4", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "祖父", kana: "そふ", meaning: "kakek (keluarga sendiri)",
+        hook: "祖 (leluhur garis keturunan) + 父 (ayah): kakek kandung saya.",
+        antiBlunder: "Untuk kakek orang lain: おじいさん."
+      },
+      {
+        id: "p41_30", batch: "b4", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "祖母", kana: "そぼ", meaning: "nenek (keluarga sendiri)",
+        hook: "祖 (leluhur garis keturunan) + 母 (ibu): nenek kandung saya.",
+        antiBlunder: "Untuk nenek orang lain: おばあさん."
+      },
+      {
+        id: "p41_31", batch: "b4", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "孫", kana: "まご", meaning: "cucu (keluarga sendiri)",
+        hook: "Kanji 孫: 子 (anak) + 系 (garis keturunan disambung): cucu kandung.",
+        antiBlunder: "Untuk cucu orang lain: お孫さん."
+      },
+      {
+        id: "p41_32", batch: "b4", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "お孫さん", kana: "おまごさん", meaning: "cucu (untuk orang lain)",
+        hook: "Memakai awalan hormat お- dan akhiran gelar -さん.",
+        antiBlunder: "Jangan panggil cucu sendiri dengan sebutan お孫さん."
+      },
+      {
+        id: "p41_33", batch: "b4", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "おじ", kana: "おじ", meaning: "om, paman (keluarga sendiri)",
+        hook: "Paman kandung sendiri, ditulis tanpa akhiran さん.",
+        antiBlunder: "Beda dengan paman orang lain: おじさん."
+      },
+      {
+        id: "p41_34", batch: "b4", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "おじさん", kana: "おじさん", meaning: "om, paman (orang lain)",
+        hook: "Paman orang lain yang dihormati berakhiran -さん.",
+        antiBlunder: "Beda dengan paman sendiri: おじ."
+      },
+      {
+        id: "p41_35", batch: "b4", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "おば", kana: "おば", meaning: "tante, bibi (keluarga sendiri)",
+        hook: "Bibi kandung sendiri, ditulis tanpa akhiran さん.",
+        antiBlunder: "Beda dengan bibi orang lain: おばさん."
+      },
+      {
+        id: "p41_36", batch: "b4", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "おばさん", kana: "おばさん", meaning: "tante, bibi (orang lain)",
+        hook: "Bibi orang lain yang dihormati berakhiran -さん.",
+        antiBlunder: "Beda dengan bibi sendiri: おば."
+      },
+      {
+        id: "p41_37", batch: "b4", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "管理人", kana: "かんりにん", meaning: "penjaga, pengelola (contoh: penjaga apartmen)",
+        hook: "管 (pipa fasilitas) + 理 (tata tertib) + 人 (orang): orang pengawas gedung.",
+        antiBlunder: "Sering disapa: 管理人さん."
+      },
+      {
+        id: "p41_38", batch: "b4", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: false, type: "Afiks",
+        kanji: "～さん", kana: "～さん", meaning: "Bapak ~, Ibu ~, Sdr. ~ (kehalusan nama pekerjaan/jawatan)",
+        hook: "Dibubuhkan di belakang profesi untuk menyatakan rasa hormat halus.",
+        antiBlunder: "Contoh: 管理人さん (Bapak pengelola gedung)."
+      },
+      {
+        id: "p41_39", batch: "b4", bab: 41, category: "vocab_41", catLabel: "KOSA KATA", isKanji: true, type: "Keterangan",
+        kanji: "この間", kana: "このあいだ", meaning: "beberapa saat lalu, baru-baru ini",
+        hook: "間 (jarak jeda hari): beberapa waktu lalu yang belum lama berselang.",
+        antiBlunder: "DIBACA: Kono Aida (Bukan Kono Kan!)."
+      },
+
+      // ==================== HALAMAN 2: BAB 41 <会話> (KAIWA / PERCAKAPAN) ====================
+      {
+        id: "p41_40", batch: "b4", bab: 41, category: "kaiwa_41", catLabel: "KAIWA (PERCAKAPAN)", isKanji: false, type: "Nomina",
+        kanji: "ひとこと", kana: "ひとこと", meaning: "sepatah kata",
+        hook: "Hito (satu) + Koto (tuturan kata): ucapan sepatah dua patah kata.",
+        antiBlunder: "Sering keluar di percakapan pidato pesta: ひとこと お礼を 言わせてください."
+      },
+      {
+        id: "p41_41", batch: "b4", bab: 41, category: "kaiwa_41", catLabel: "KAIWA (PERCAKAPAN)", isKanji: false, type: "Partikel",
+        kanji: "～ずつ", kana: "～ずつ", meaning: "setiap ~ (setiap sepatah kata, setiap 2 orang, setiap 3 lembar)",
+        hook: "Menyatakan pembagian porsi rata secara berulang.",
+        antiBlunder: "Contoh: 1人ずつ (masing-masing satu orang) / 2枚ずつ (masing-masing dua lembar)."
+      },
+      {
+        id: "p41_42", batch: "b4", bab: 41, category: "kaiwa_41", catLabel: "KAIWA (PERCAKAPAN)", isKanji: true, type: "Nomina",
+        kanji: "二人", kana: "ふたり", meaning: "dua orang, pasangan",
+        hook: "Kanji 二 (dua) + 人 (orang).",
+        antiBlunder: "BACAAN KHUSUS IRREGULAR: Futari (Bukan Ninin!)."
+      },
+      {
+        id: "p41_43", batch: "b4", bab: 41, category: "kaiwa_41", catLabel: "KAIWA (PERCAKAPAN)", isKanji: true, type: "Nomina",
+        kanji: "お宅", kana: "おたく", meaning: "rumah (Kata Hormat dari うち atau いえ)",
+        hook: "Ada atap rumah 宀 di kanji 宅! Menghormati rumah kediaman orang lain.",
+        antiBlunder: "Bentuk hormat: 部長のお宅へ 伺います."
+      },
+      {
+        id: "p41_44", batch: "b4", bab: 41, category: "kaiwa_41", catLabel: "KAIWA (PERCAKAPAN)", isKanji: true, type: "Ungkapan",
+        kanji: "どうぞお幸せに", kana: "どうぞおしあわせに", meaning: "Selamat berbahagia! (ucapan selamat pernikahan)",
+        hook: "Kanji 幸 (kebahagiaan rezeki): doa restu tulus ke pasangan pengantin.",
+        antiBlunder: "Ucapan khas saat menghadiri pesta pernikahan Jepang."
+      },
+
+      // ==================== HALAMAN 2: BAB 41 <読み物> (YOMIMONO / DONGENG URASHIMA TARO) ====================
+      {
+        id: "p41_45", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Nomina",
+        kanji: "昔話", kana: "むかしばなし", meaning: "cerita dongeng, legenda zaman dulu",
+        hook: "昔 (zaman kuno lampau) + 話 (tuturan kisah): dongeng rakyat kuno.",
+        antiBlunder: "Contoh dongeng: 浦島太郎 (Urashima Taro), 桃太郎 (Momotaro)."
+      },
+      {
+        id: "p41_46", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: false, type: "Keterangan",
+        kanji: "ある～", kana: "ある～", meaning: "suatu ~ (suatu hari, suatu desa, suatu tempat)",
+        hook: "Kata pembuka khas dongeng rakyat: ある 日 (suatu hari), ある 村 (suatu desa).",
+        antiBlunder: "Menandakan entitas tertentu yang tidak disebutkan spesifik."
+      },
+      {
+        id: "p41_47", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Nomina",
+        kanji: "男", kana: "おとこ", meaning: "laki-laki, pria",
+        hook: "田 (sawah) + 力 (tenaga otot): pria perkasa bekerja mengolah sawah!",
+        antiBlunder: "Cara baca tunggal: Otoko."
+      },
+      {
+        id: "p41_48", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Nomina",
+        kanji: "子どもたち", kana: "こどもたち", meaning: "anak-anak",
+        hook: "子 (anak) + どもたち (jamak sekumpulan bocah).",
+        antiBlunder: "Karakter yang membully kura-kura di tepi pantai."
+      },
+      {
+        id: "p41_49", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: false, type: "Verba II",
+        kanji: "いじめます", kana: "いじめます", meaning: "menyiksa, menganiaya, mem-bully",
+        hook: "Anak-anak nakal yang menyiksa kura-kura: かめを いじめます.",
+        antiBlunder: "Verba Golongan II: いじめます."
+      },
+      {
+        id: "p41_50", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: false, type: "Nomina",
+        kanji: "かめ", kana: "かめ", meaning: "kura-kura, penyu",
+        hook: "Penyu laut bercangkang yang ditolong Urashima Taro.",
+        antiBlunder: "Hewan bertempurung: かめを 助けます."
+      },
+      {
+        id: "p41_51", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Verba II",
+        kanji: "助けます", kana: "たすけます", meaning: "membantu, menolong, menyelamatkan nyawa",
+        hook: "Ada kanji 力 (tenaga) di 助: mengerahkan kekuatan menolong korban bahaya!",
+        antiBlunder: "Verba Golongan II: たすけます."
+      },
+      {
+        id: "p41_52", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Sifat-i",
+        kanji: "優しい", kana: "やさしい", meaning: "baik hati, ramah, lemah lembut budi pekerti",
+        hook: "Kanji 優 (keluhuran budi & keanggunan pekerti).",
+        antiBlunder: "Beda konteks dengan 易しい (mudah/gampang soal ujian)."
+      },
+      {
+        id: "p41_53", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Nomina",
+        kanji: "お姫様", kana: "おひめさま", meaning: "putri istana (princess)",
+        hook: "Ada radikal 女 (perempuan) di 姫! Tuan putri istana dasar laut (Otohime).",
+        antiBlunder: "Dibaca: O-hime-sama."
+      },
+      {
+        id: "p41_54", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Verba I",
+        kanji: "暮らします", kana: "くらします", meaning: "hidup, menghabiskan keseharian",
+        hook: "Ada radikal 日 (hari demi hari) di 暮: menjalani ritme hidup sehari-hari.",
+        antiBlunder: "Verba Golongan I: くらします."
+      },
+      {
+        id: "p41_55", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Nomina",
+        kanji: "陸", kana: "りく", meaning: "daratan",
+        hook: "Daratan kering berpasir tempat Taro kembali pulang.",
+        antiBlunder: "Lawan kata mutlak dari 海 (laut)."
+      },
+      {
+        id: "p41_56", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: false, type: "Konjungsi",
+        kanji: "すると", kana: "すると", meaning: "kemudian, lalu seketika itu juga",
+        hook: "Kata sambung pembawa peristiwa yang mendadak/mengejutkan.",
+        antiBlunder: "Membuka kotak, すると (seketika itu juga)... keluar asap!"
+      },
+      {
+        id: "p41_57", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Nomina",
+        kanji: "煙", kana: "けむり", meaning: "asap",
+        hook: "Radikal kiri 火 (Api)! Pembakaran menghasilkan gumpalan asap tebal (煙).",
+        antiBlunder: "Asap putih dari kotak tamatebako: 白い 煙."
+      },
+      {
+        id: "p41_58", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Sifat-na",
+        kanji: "真っ白[な]", kana: "まっしろ[な]", meaning: "putih bersih, putih kelabu (uban)",
+        hook: "真 (sejati murni) + 白 (putih): rambut berubah total menjadi putih uban!",
+        antiBlunder: "Bentuk penegas kuat dari kata sifat 白い."
+      },
+      {
+        id: "p41_59", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Nomina",
+        kanji: "中身", kana: "なかみ", meaning: "isi, muatan di dalam wadah",
+        hook: "中 (bagian dalam) + 身 (badan materi): benda yang mengisi ruang wadah.",
+        antiBlunder: "Contoh: 箱の 中身 (isi dalam kotak)."
+      },
+      {
+        id: "p41_60", batch: "b5", bab: 41, category: "yomi_41", catLabel: "DONGENG (YOMIMONO)", isKanji: true, type: "Tokoh",
+        kanji: "浦島太郎", kana: "うらしまたろう", meaning: "Urashima Taro (nama peran utama cerita dongeng)",
+        hook: "Nelayan pemuda legendaris yang menyelamatkan kura-kura.",
+        antiBlunder: "Nama tokoh utama di teks bacaan Bab 41."
+      },
+
+      // ==================== HALAMAN 3: BAB 42 (KOSA KATA UTAMA) ====================
+      {
+        id: "p42_61", batch: "b6", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Verba I",
+        kanji: "包みます", kana: "つつみます", meaning: "membungkus",
+        hook: "Kanji 包 melambangkan selimut kain yang melingkari bingkisan rapat.",
+        antiBlunder: "Kolokasi: ふろしきで 荷物を 包みます (membungkus bawaan dengan kain)."
+      },
+      {
+        id: "p42_62", batch: "b6", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Verba I",
+        kanji: "沸かします", kana: "わかします", meaning: "memasak / merebus (air hingga mendidih)",
+        hook: "Radikal kiri 氵 (Air)! Merebus air dalam ceret sampai bergolak mendidih.",
+        antiBlunder: "KHUSUS MENDIDIHKAN AIR: お湯を 沸かします."
+      },
+      {
+        id: "p42_63", batch: "b6", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Verba II",
+        kanji: "混ぜます", kana: "まぜます", meaning: "mencampur, mengaduk rata",
+        hook: "Radikal kiri 氵 (Cairan adonan): mengocok telur, tepung, dan air.",
+        antiBlunder: "Verba Golongan II: まぜます."
+      },
+      {
+        id: "p42_64", batch: "b6", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Verba III",
+        kanji: "計算します", kana: "けいさんします", meaning: "menghitung",
+        hook: "計 (mengukur) + 算 (ada sempoa bambu 竹 di atas): kalkulasi hitungan angka!",
+        antiBlunder: "Verba Golongan III: けいさんします."
+      },
+      {
+        id: "p42_65", batch: "b6", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Verba I",
+        kanji: "並びます", kana: "ならびます", meaning: "berbaris, berjejer mengantre",
+        hook: "Kanji 並 menggambarkan dua sosok yang berdiri tegak sejajar rapi.",
+        antiBlunder: "Contoh: 列に 並びます (berbaris dalam antrean)."
+      },
+      {
+        id: "p42_66", batch: "b6", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Sifat-na",
+        kanji: "丈夫[な]", kana: "じょうぶ[な]", meaning: "kuat, kokoh, tahan banting",
+        hook: "丈 (kokoh perkasa) + 夫 (sosok pria): struktur bangunan yang tahan banting!",
+        antiBlunder: "Sifat-na: 丈夫な アパート (apartemen yang kokoh kuat)."
+      },
+      {
+        id: "p42_67", batch: "b6", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "アパート", kana: "アパート", meaning: "apartmen",
+        hook: "Hunian bertingkat sewa (apartment).",
+        antiBlunder: "Kata serapan katakana."
+      },
+      {
+        id: "p42_68", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "弁護士", kana: "べんごし", meaning: "pengacara, advokat",
+        hook: "弁 (bicara sidang) + 護 (melindungi) + 士 (ahli profesional): pembela hukum!",
+        antiBlunder: "Akhiran 士 menandakan gelar profesional (seperti 博士 dokter/ahli)."
+      },
+      {
+        id: "p42_69", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "音楽家", kana: "おんがくか", meaning: "musisi, komponis lagu",
+        hook: "音楽 (musik) + 家 (ahli spesialis): pakar pencipta lagu/melodi.",
+        antiBlunder: "Contoh: ベートーベンは有名な音楽家です."
+      },
+      {
+        id: "p42_70", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "子どもたち", kana: "こどもたち", meaning: "anak-anak (Bab 42)",
+        hook: "Sekumpulan anak-anak kecil generasi penerus.",
+        antiBlunder: "Tercantum di daftar kosa kata Bab 42."
+      },
+      {
+        id: "p42_71", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "自然", kana: "しぜん", meaning: "alam, natural",
+        hook: "自 (diri sendiri) + 然 (keadaan murni): bentang alam yang asri apa adanya.",
+        antiBlunder: "Dibaca: Shi-zen."
+      },
+      {
+        id: "p42_72", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "教育", kana: "きょういく", meaning: "pendidikan",
+        hook: "教 (mengajar ilmu) + 育 (membina tumbuh kembang): pendidikan sekolah.",
+        antiBlunder: "Dibaca: Kyou-iku."
+      },
+      {
+        id: "p42_73", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "文化", kana: "ぶんか", meaning: "budaya, peradaban kebudayaan",
+        hook: "文 (karya susastra) + 化 (berubah/menjelma): kebudayaan masyarakat.",
+        antiBlunder: "Contoh: 日本の文化 (kebudayaan Jepang)."
+      },
+      {
+        id: "p42_74", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "社会", kana: "しゃかい", meaning: "sosial, masyarakat",
+        hook: "社 (perhimpunan) + 会 (berkumpul temu): kehidupan bermasyarakat.",
+        antiBlunder: "JEBAKAN URUTAN: KEBALIKAN DARI 会社 [かいしゃ] (perusahaan)!"
+      },
+      {
+        id: "p42_75", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "政治", kana: "せいじ", meaning: "politik, kepemerintahan",
+        hook: "政 (kebijakan administrasi) + 治 (tata kelola ketertiban negara).",
+        antiBlunder: "Dibaca: Sei-ji."
+      },
+      {
+        id: "p42_76", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "法律", kana: "ほうりつ", meaning: "hukum, undang-undang",
+        hook: "法 (asas tata cara) + 律 (patokan aturan tegas): undang-undang formal negara.",
+        antiBlunder: "Contoh: 法律を 守ります (mematuhi hukum undang-undang)."
+      },
+      {
+        id: "p42_77", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "戦争", kana: "せんそう", meaning: "perang, konflik militer",
+        hook: "戦 (bertempur senjata) + 争 (berebut kuasa): peperangan militer bersenjata.",
+        antiBlunder: "LAWAN KATA MUTLAK DARI 平和 (perdamaian)!"
+      },
+      {
+        id: "p42_78", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "平和", kana: "へいわ", meaning: "damai, perdamaian",
+        hook: "平 (rata tenteram) + 和 (harmoni kerukunan): hidup damai tanpa konflik.",
+        antiBlunder: "LAWAN KATA MUTLAK DARI 戦争 (perang)!"
+      },
+      {
+        id: "p42_79", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "目的", kana: "もくてき", meaning: "tujuan, target sasaran",
+        hook: "目 (mata yang membidik) + 的 (lingkaran sasaran panah): sasaran tujuan!",
+        antiBlunder: "Sering keluar di pola tujuan: 日本へ 来た 目的."
+      },
+      {
+        id: "p42_80", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "論文", kana: "ろんぶん", meaning: "tesis, skripsi, karya ilmiah",
+        hook: "論 (argumen teori ilmiah) + 文 (teks karangan): naskah skripsi akademik.",
+        antiBlunder: "Contoh: 大学で 論文を 書きます."
+      },
+      {
+        id: "p42_81", batch: "b7", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "楽しみ", kana: "たのしみ", meaning: "kesenangan, hal yang dinanti-nanti",
+        hook: "Kanji 楽 (musik/kegembiraan): hal menyenangkan yang ditunggu.",
+        antiBlunder: "Bentuk nomina: 旅行が 楽しみです."
+      },
+      {
+        id: "p42_82", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "ミキサー", kana: "ミキサー", meaning: "mixer, alat pencampur listrik (blender)",
+        hook: "Peralatan dapur listrik pengocok adonan atau penghalus buah.",
+        antiBlunder: "Kata serapan katakana."
+      },
+      {
+        id: "p42_83", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "やかん", kana: "やかん", meaning: "ceret, ketel air",
+        hook: "Wadah logam pemanas air di atas kompor: やかんで お湯を 沸かします.",
+        antiBlunder: "Kosa kata kana di buku: やかん."
+      },
+      {
+        id: "p42_84", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "ふた", kana: "ふた", meaning: "tutup (panci, botol, kotak)",
+        hook: "Penutup wadah: ふたを 開けます (buka tutup).",
+        antiBlunder: "Kosa kata kana di buku: ふた."
+      },
+      {
+        id: "p42_85", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "栓抜き", kana: "せんぬき", meaning: "pembuka botol (bottle opener)",
+        hook: "栓 (sumbat penyekat) + 抜き (mencabut lepas): alat pelepas tutup botol!",
+        antiBlunder: "JEBAKAN BLUNDER: JANGAN TERTUKAR DENGAN 缶切り (pembuka kaleng)!"
+      },
+      {
+        id: "p42_86", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "缶切り", kana: "かんきり", meaning: "pembuka kaleng (can opener)",
+        hook: "缶 (kaleng logam) + 切り (memotong belah): alat pemotong segel kaleng!",
+        antiBlunder: "JEBAKAN BLUNDER: JANGAN TERTUKAR DENGAN 栓抜き (pembuka botol)!"
+      },
+      {
+        id: "p42_87", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "缶詰", kana: "かんづめ", meaning: "makanan kaleng",
+        hook: "缶 (kaleng logam) + 詰 (disesaki isi rapat awet): makanan dalam kaleng.",
+        antiBlunder: "Dibaca: Kan-zume."
+      },
+      {
+        id: "p42_88", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "のし袋", kana: "のしぶくろ", meaning: "amplop khusus untuk mengisi uang hadiah",
+        hook: "Ada kanji 袋 (kantung amplop berhias tali pita mizuhiki).",
+        antiBlunder: "Amplop khusus uang hadiah pernikahan/duka."
+      },
+      {
+        id: "p42_89", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "ふろしき", kana: "ふろしき", meaning: "kain untuk membungkus barang (tradisional)",
+        hook: "Kain persegi tradisional Jepang untuk membungkus bawaan barang.",
+        antiBlunder: "Kolokasi: ふろしきで 包みます."
+      },
+      {
+        id: "p42_90", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: false, type: "Nomina",
+        kanji: "そろばん", kana: "そろばん", meaning: "sempoa, abakus hitung tradisional",
+        hook: "Alat hitung manik-manik kayu: そろばんで 計算します.",
+        antiBlunder: "Kosa kata kana di buku: そろばん."
+      },
+      {
+        id: "p42_91", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "体温計", kana: "たいおんけい", meaning: "termometer (pengukur suhu badan)",
+        hook: "体 (badan tubuh) + 温 (kehangatan suhu) + 計 (alat ukur hitung): termometer!",
+        antiBlunder: "Diakhiri kanji 計 (alat meteran ukur)."
+      },
+      {
+        id: "p42_92", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Nomina",
+        kanji: "材料", kana: "ざいりょう", meaning: "bahan, material mentah",
+        hook: "材 (sumber mentah) + 料 (takaran porsi): bahan-bahan resep masakan.",
+        antiBlunder: "Contoh: 料理の 材料 (bahan-bahan masakan)."
+      },
+      {
+        id: "p42_93", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: false, type: "Keterangan",
+        kanji: "ある～", kana: "ある～", meaning: "suatu ~ (Bab 42)",
+        hook: "Menunjukkan waktu atau benda tertentu yang belum spesifik.",
+        antiBlunder: "Tercantum di Bab 42."
+      },
+      {
+        id: "p42_94", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: true, type: "Keterangan",
+        kanji: "一生懸命", kana: "いっしょうけんめい", meaning: "sungguh-sungguh, sekuat tenaga",
+        hook: "一 (satu) + 生 (nyawa) + 懸 (menggantung) + 命 (taruhan): berjuang sekuat tenaga!",
+        antiBlunder: "SOAL LANGGANAN: 一生懸命 勉強します."
+      },
+      {
+        id: "p42_95", batch: "b8", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: false, type: "Tanya",
+        kanji: "なぜ", kana: "なぜ", meaning: "kenapa, mengapa (lebih formal dari どうして)",
+        hook: "Kata tanya formal menanyakan alasan penyebab.",
+        antiBlunder: "Sinonim formal dari どうして."
+      },
+
+      // ==================== HALAMAN 4: BAB 42 (LANJUTAN, TOKOH & KARYA) ====================
+      {
+        id: "p42_96", batch: "b9", bab: 42, category: "vocab_42", catLabel: "KOSA KATA", isKanji: false, type: "Tanya",
+        kanji: "どのくらい", kana: "どのくらい", meaning: "berapa banyak, berapa lama",
+        hook: "Menanyakan durasi waktu tempuh atau perkiraan jumlah kuantitas.",
+        antiBlunder: "Contoh: どのくらい 時間が かかりますか."
+      },
+      {
+        id: "p42_97", batch: "b9", bab: 42, category: "tokoh_42", catLabel: "ORGANISASI", isKanji: true, type: "Organisasi",
+        kanji: "国連", kana: "こくれん", meaning: "Perserikatan Bangsa-Bangsa (PBB)",
+        hook: "Singkatan dari 国際 (Internasional) + 連合 (Perserikatan) = 国連 [こくれん].",
+        antiBlunder: "Organisasi perdamaian antarbangsa dunia."
+      },
+      {
+        id: "p42_98", batch: "b9", bab: 42, category: "tokoh_42", catLabel: "MUSIK", isKanji: false, type: "Karya",
+        kanji: "エリーゼのために", kana: "エリーゼのために", meaning: "Kepada Elise (nama musik ciptaan Beethoven)",
+        hook: "Karya musik piano klasik populer ciptaan Ludwig van Beethoven.",
+        antiBlunder: "Judul gubahan musik Für Elise dalam bahasa Jepang."
+      },
+      {
+        id: "p42_99", batch: "b9", bab: 42, category: "tokoh_42", catLabel: "TOKOH", isKanji: false, type: "Tokoh",
+        kanji: "ベートーベン", kana: "ベートーベン", meaning: "Ludwig van Beethoven, musisi Jerman (1770-1827)",
+        hook: "Komponis musik legendaris dunia asal Jerman.",
+        antiBlunder: "Contoh profesi: 音楽家 (musisi komponis)."
+      },
+      {
+        id: "p42_100", batch: "b9", bab: 42, category: "tokoh_42", catLabel: "MEDIA", isKanji: false, type: "Nomina",
+        kanji: "こどもニュース", kana: "こどもニュース", meaning: "berita fiksi (siaran berita edukasi anak)",
+        hook: "Program siaran televisi berita yang disesuaikan untuk anak-anak.",
+        antiBlunder: "Sesuai cetakan buku Minna: こどもニュース (berita fiksi / berita anak)."
+      },
+
+      // ==================== HALAMAN 4: BAB 42 <会話> (KAIWA / PERCAKAPAN) ====================
+      {
+        id: "p42_101", batch: "b9", bab: 42, category: "kaiwa_42", catLabel: "KAIWA (PERCAKAPAN)", isKanji: true, type: "Verba II",
+        kanji: "出ます [ボーナスが～]", kana: "でます [ボーナスが～]", meaning: "diberi [bonus] / cair [bonus]",
+        hook: "Kanji 出 (keluar/cair): uang bonus kerja turun dibagikan.",
+        antiBlunder: "Kolokasi percakapan Bab 42: ボーナスが 出ます."
+      },
+      {
+        id: "p42_102", batch: "b9", bab: 42, category: "kaiwa_42", catLabel: "KAIWA (PERCAKAPAN)", isKanji: true, type: "Nomina",
+        kanji: "半分", kana: "はんぶん", meaning: "setengah, separuh (50%)",
+        hook: "半 (separuh) + 分 (bagian porsi pecahan): dibagi sama rata dua bagian.",
+        antiBlunder: "Contoh percakapan: 半分 貯金します (separuh ditabung)."
+      },
+      {
+        id: "p42_103", batch: "b9", bab: 42, category: "kaiwa_42", catLabel: "KAIWA (PERCAKAPAN)", isKanji: false, type: "Nomina",
+        kanji: "ローン", kana: "ローン", meaning: "kredit, pinjaman cicilan (loan)",
+        hook: "Cicilan kredit bank untuk rumah atau kendaraan.",
+        antiBlunder: "Contoh percakapan: 車の ローン (kredit cicilan mobil)."
+      },
+
+      // ==================== HALAMAN 4: BAB 42 <読み物> (YOMIMONO / PENEMU MIE INSTAN) ====================
+      {
+        id: "p42_104", batch: "b9", bab: 42, category: "yomi_42", catLabel: "PENEMU & MIE", isKanji: false, type: "Nomina",
+        kanji: "カップめん", kana: "カップめん", meaning: "mie instan (di dalam tempat sekali pakai seperti mangkuk plastik)",
+        hook: "Mie instan praktis dalam wadah cup yang cukup diseduh air panas.",
+        antiBlunder: "Inovasi cup noodles yang mendunia buatan Jepang."
+      },
+      {
+        id: "p42_105", batch: "b9", bab: 42, category: "yomi_42", catLabel: "PENEMU & MIE", isKanji: true, type: "Nomina",
+        kanji: "世界初", kana: "せかいはつ", meaning: "pertama kali di dunia (rekor perdana)",
+        hook: "世界 (seluruh dunia) + 初 (awal pertama): rekor terobosan perdana global!",
+        antiBlunder: "Predikat mie instan kemasan cup buatan Nissin."
+      },
+      {
+        id: "p42_106", batch: "b9", bab: 42, category: "yomi_42", catLabel: "PENEMU & MIE", isKanji: false, type: "Partikel",
+        kanji: "～によって", kana: "～によって", meaning: "oleh ~ (menandakan pelaku pencipta / penemu dalam pasif)",
+        hook: "Pola tata bahasa menandai penemu penemuan besar dalam kalimat pasif.",
+        antiBlunder: "Contoh: 安藤百福さんによって 発明されました (ditemukan oleh Ando Momofuku)."
+      },
+      {
+        id: "p42_107", batch: "b9", bab: 42, category: "yomi_42", catLabel: "PENEMU & MIE", isKanji: false, type: "Nomina",
+        kanji: "どんぶり", kana: "どんぶり", meaning: "mangkuk keramik tebal besar",
+        hook: "Wadah mangkuk saji tebal tradisional untuk mie ramen.",
+        antiBlunder: "Wadah sebelum terciptanya wadah cup sekali pakai."
+      },
+      {
+        id: "p42_108", batch: "b9", bab: 42, category: "yomi_42", catLabel: "PENEMU & MIE", isKanji: false, type: "Nomina",
+        kanji: "めん", kana: "めん", meaning: "mie",
+        hook: "Bahan panganan mie panjang.",
+        antiBlunder: "Bahan utama ramen, udon, dan soba."
+      },
+      {
+        id: "p42_109", batch: "b9", bab: 42, category: "yomi_42", catLabel: "PENEMU & MIE", isKanji: true, type: "Verba II",
+        kanji: "広めます", kana: "ひろめます", meaning: "menyebarluaskan, mempopulerkan",
+        hook: "Kanji 広 (luas lebar): membawa produk tersebar luas ke mancanegara!",
+        antiBlunder: "Verba transitif Golongan II: 世界へ 広めます."
+      },
+      {
+        id: "p42_110", batch: "b9", bab: 42, category: "yomi_42", catLabel: "PENEMU & MIE", isKanji: true, type: "Nomina",
+        kanji: "市場調査", kana: "しじょうちょうさ", meaning: "riset pemasaran, survei pasar konsumen",
+        hook: "市場 (pasar konsumen) + 調査 (riset investigasi data): survei selera pasar!",
+        antiBlunder: "KONTEKS BISNIS DIBACA: Shijou Chousa (Bukan Ichiba!)."
+      },
+      {
+        id: "p42_111", batch: "b9", bab: 42, category: "yomi_42", catLabel: "PENEMU & MIE", isKanji: true, type: "Verba I",
+        kanji: "割ります", kana: "わります", meaning: "membagi, memecahkan (telur / porsi)",
+        hook: "Radikal kanan 刂 (Pisau): membelah cangkang telur atau membagi porsi!",
+        antiBlunder: "Contoh: 卵を 割ります (memecahkan telur ke atas mie)."
+      },
+      {
+        id: "p42_112", batch: "b9", bab: 42, category: "yomi_42", catLabel: "PENEMU & MIE", isKanji: true, type: "Verba I",
+        kanji: "注ぎます", kana: "そそぎます", meaning: "menyiram, menuangkan (air panas / kuah)",
+        hook: "Radikal kiri 氵 (Air mengalir): menuangkan air mendidih ke dalam cup mie!",
+        antiBlunder: "Contoh: 熱い お湯を 注ぎます."
+      },
+      {
+        id: "p42_113", batch: "b9", bab: 42, category: "yomi_42", catLabel: "PENEMU & MIE", isKanji: false, type: "Produk",
+        kanji: "チキンラーメン", kana: "チキンラーメン", meaning: "Chicken Ramen (nama produk mie instan pertama)",
+        hook: "Mie instan kaldu ayam pertama di dunia yang diluncurkan tahun 1958.",
+        antiBlunder: "Produk pelopor ciptaan Ando Momofuku."
+      },
+      {
+        id: "p42_114", batch: "b9", bab: 42, category: "yomi_42", catLabel: "PENEMU & MIE", isKanji: true, type: "Tokoh",
+        kanji: "安藤百福", kana: "あんどうももふく", meaning: "Ando Momofuku (pengusaha Jepang, penemu mie instan 1910-2007)",
+        hook: "Pendiri Nissin Foods dan inovator yang mengubah budaya makan dunia.",
+        antiBlunder: "Nama penemu utama dalam teks bacaan Bab 42."
+      }
+    ];
+
+    // ==============================================================
+    // BANK SOAL UJIAN REALISTIS (50 SOAL KALIMAT KANJI POLOS ASLI)
+    // ==============================================================
+    const REAL_EXAM_BANK = [
+      { prompt: "部屋が 寒いですから、[暖房] を つけましょう。", targetKanji: "暖房", kana: "だんぼう", meaning: "alat pemanas ruangan" },
+      { prompt: "夏は とても 暑いですから、[冷房] が ないと 大変です。", targetKanji: "冷房", kana: "れいぼう", meaning: "pendingin ruangan (AC)" },
+      { prompt: "外は 雪が 降っていますから、[手袋] を はめます。", targetKanji: "手袋", kana: "てぶくろ", meaning: "sarung tangan" },
+      { prompt: "くつを はく 前に、[靴下] を はいて ください。", targetKanji: "靴下", kana: "くつした", meaning: "kaus kaki" },
+      { prompt: "私の [祖父] は 昔、高校の 先生でした。", targetKanji: "祖父", kana: "そふ", meaning: "kakek (keluarga sendiri)" },
+      { prompt: "私の [祖母] は 着物を 上手に 作ります。", targetKanji: "祖母", kana: "そぼ", meaning: "nenek (keluarga sendiri)" },
+      { prompt: "田中部長には かわいい [お孫さん] が 二人 います。", targetKanji: "お孫さん", kana: "おまごさん", meaning: "cucu (untuk orang lain)" },
+      { prompt: "太郎さんは 浜辺で かめを [助けます]。", targetKanji: "助けます", kana: "たすけます", meaning: "membantu, menolong" },
+      { prompt: "玉手箱を 開けると、中から 白い [煙] が 出てきました。", targetKanji: "煙", kana: "けむり", meaning: "asap" },
+      { prompt: "箱の [中身] は なんですか。", targetKanji: "中身", kana: "なかみ", meaning: "isi / muatan di dalam" },
+      { prompt: "お茶を 入れますから、やかんの お湯を [沸かします]。", targetKanji: "沸かします", kana: "わかします", meaning: "memasak / merebus air" },
+      { prompt: "ボウルに 卵と 牛乳を 入れて、よく [混ぜます]。", targetKanji: "混ぜます", kana: "まぜます", meaning: "mencampur, mengaduk" },
+      { prompt: "ワインを 飲みたいですが、[栓抜き] が どこにも ありません。", targetKanji: "栓抜き", kana: "せんぬき", meaning: "pembuka botol" },
+      { prompt: "缶詰を 開けるために、[缶切り] を 使います。", targetKanji: "缶切り", kana: "かんきり", meaning: "pembuka kaleng" },
+      { prompt: "スーパーで ツナの [缶詰] を 3つ 買いました。", targetKanji: "缶詰", kana: "かんづめ", meaning: "makanan kaleng" },
+      { prompt: "風邪を ひいたようですから、[体温計] で 熱を はかります。", targetKanji: "体温計", kana: "たいおんけい", meaning: "termometer tubuh" },
+      { prompt: "JLPTに 合格するために、毎晩 [一生懸命] 勉強しています。", targetKanji: "一生懸命", kana: "いっしょうけんめい", meaning: "sungguh-sungguh, sekuat tenaga" },
+      { prompt: "新しい 製品を 売る 前に、[市場調査] を 行いました。", targetKanji: "市場調査", kana: "しじょうちょうさ", meaning: "riset pemasaran / survei pasar" },
+      { prompt: "カップめんは [世界初] の インスタントラーメンです。", targetKanji: "世界初", kana: "せかいはつ", meaning: "pertama kali di dunia" },
+      { prompt: "インスタントラーメンを 世界へ [広めます]。", targetKanji: "広めます", kana: "ひろめます", meaning: "menyebarluaskan, mempopulerkan" },
+      { prompt: "卵を [割ります] から、お皿を ください。", targetKanji: "割ります", kana: "わります", meaning: "membagi / memecahkan" },
+      { prompt: "カップめんに 熱い お湯を [注ぎます]。", targetKanji: "注ぎます", kana: "そそぎます", meaning: "menyiram / menuangkan air" },
+      { prompt: "世界から 戦争を なくして、[平和] を 守りたいです。", targetKanji: "平和", kana: "へいわ", meaning: "damai, perdamaian" },
+      { prompt: "昔、大きな [戦争] が ありました。", targetKanji: "戦争", kana: "せんそう", meaning: "perang, konflik militer" },
+      { prompt: "法律の 問題が ありますから、[弁護士] に 相談します。", targetKanji: "弁護士", kana: "べんごし", meaning: "pengacara, advokat" },
+      { prompt: "ベートーベンは ドイツの 有名な [音楽家] です。", targetKanji: "音楽家", kana: "おんがくか", meaning: "musisi, komponis" },
+      { prompt: "大学を 卒業するために、長い [論文] を 書かなければなりません。", targetKanji: "論文", kana: "ろんぶん", meaning: "tesis, skripsi karya ilmiah" },
+      { prompt: "日本の 文化に とても [興味] が あります。", targetKanji: "興味", kana: "きょうみ", meaning: "minat, ketertarikan" },
+      { prompt: "友だちの 結婚式に [お祝い] を 持って 行きました。", targetKanji: "お祝い", kana: "おいわい", meaning: "perayaan, hadiah selamat" },
+      { prompt: "入院している 山田さんの [お見舞い] に 行きました。", targetKanji: "[お]見舞い", kana: "[お]みまい", meaning: "pembesukan orang sakit" },
+      { prompt: "お正月、子どもたちに [お年玉] を やりました。", targetKanji: "お年玉", kana: "おとしだま", meaning: "uang tahun baru (angpao)" },
+      { prompt: "エアコンの [温度] を 24度に 設定しました。", targetKanji: "温度", kana: "おんど", meaning: "suhu, temperatur" },
+      { prompt: "音量を 少し [上げます]。", targetKanji: "上げます", kana: "あげます", meaning: "menaikkan" },
+      { prompt: "音量を 少し [下げます]。", targetKanji: "下げます", kana: "さげます", meaning: "menurunkan" },
+      { prompt: "親切な [管理人] さんが 荷物を 預かってくれました。", targetKanji: "管理人", kana: "かんりにん", meaning: "penjaga, pengelola apartmen" },
+      { prompt: "山田先生の [お宅] は どちらですか。", targetKanji: "お宅", kana: "おたく", meaning: "rumah (kata hormat)" },
+      { prompt: "ご結婚おめでとうございます。[どうぞお幸せに]。", targetKanji: "どうぞお幸せに", kana: "どうぞおしあわせに", meaning: "Selamat berbahagia!" },
+      { prompt: "二人は 仲良く [二人] で 歩いて います。", targetKanji: "二人", kana: "ふたり", meaning: "dua orang, pasangan" },
+      { prompt: "日本の [昔話] を 読んだ ことが ありますか。", targetKanji: "昔話", kana: "むかしばなし", meaning: "cerita dongeng zaman dulu" },
+      { prompt: "川辺で 一人の [男] が 釣りを して いました。", targetKanji: "男", kana: "おとこ", meaning: "laki-laki, pria" },
+      { prompt: "田中部長のお母様は とても [優しい] 方です。", targetKanji: "優しい", kana: "やさしい", meaning: "baik hati, lemah lembut" },
+      { prompt: "竜宮城で [お姫様] に 会いました。", targetKanji: "お姫様", kana: "おひめさま", meaning: "putri istana" },
+      { prompt: "海から [陸] へ 上がりました。", targetKanji: "陸", kana: "りく", meaning: "daratan" },
+      { prompt: "太郎の 髪は [真っ白] に なって しまいました。", targetKanji: "真っ白[な]", kana: "まっしろ[な]", meaning: "putih bersih / uban" },
+      { prompt: "プレゼントを きれいな 紙で [包みます]。", targetKanji: "包みます", kana: "つつみます", meaning: "membungkus" },
+      { prompt: "電卓を 使って、今月の 費用を [計算します]。", targetKanji: "計算します", kana: "けいさんします", meaning: "menghitung" },
+      { prompt: "バスを 待つために、1列に [並びます]。", targetKanji: "並びます", kana: "ならびます", meaning: "berbaris, mengantre" },
+      { prompt: "この 建物の 骨組みは とても [丈夫] です。", targetKanji: "丈夫[な]", kana: "じょうぶ[な]", meaning: "kuat, kokoh tahan banting" },
+      { prompt: "国民は 国の [法律] を 守らなければなりません。", targetKanji: "法律", kana: "ほうりつ", meaning: "hukum, undang-undang" },
+      { prompt: "来週から 楽しい 冬休みですから、今から [楽しみ] です。", targetKanji: "楽しみ", kana: "たのしみ", meaning: "kesenangan / dinanti-nanti" },
+      { prompt: "お祝いの お金を [のし袋] に 入れます。", targetKanji: "のし袋", kana: "のしぶくろ", meaning: "amplop khusus uang hadiah" },
+      { prompt: "ケーキを [半分] に 切って、友だちと 分けました。", targetKanji: "半分", kana: "はんぶん", meaning: "setengah, separuh" },
+      { prompt: "12月に 会社から [ボーナスが出ます]。", targetKanji: "出ます [ボーナスが～]", kana: "でます [ボーナスが～]", meaning: "diberi [bonus] / cair" },
+      { prompt: "インスタントラーメンを 発明したのは [安藤百福] さんです。", targetKanji: "安藤百福", kana: "あんどうももふく", meaning: "Ando Momofuku (penemu mie instan)" },
+      { prompt: "世界平和のために [国連] が 活動しています。", targetKanji: "国連", kana: "こくれん", meaning: "Perserikatan Bangsa-Bangsa (PBB)" },
+      { prompt: "日本へ 来た [目的] は 工学の 研究です。", targetKanji: "目的", kana: "もくてき", meaning: "tujuan / target sasaran" }
+    ];
+  </script>
+
+  <!-- ==============================================================
+       AUDIO SYNTHESIZER & GLOBAL APP LOGIC
+       ============================================================== -->
+  <script>
+    let audioCtx = null;
+    let soundActive = true;
+
+    function initAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playBeep(freq, waveType, duration, gainLevel = 0.1) {
+      if (!soundActive) return;
+      try {
+        initAudioContext();
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.type = waveType;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(gainLevel, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.warn("Audio error", e);
+      }
+    }
+
+    function playSoundFx(type) {
+      if (!soundActive) return;
+      if (type === 'correct') {
+        playBeep(523.25, 'sine', 0.08);       // C5
+        setTimeout(() => playBeep(659.25, 'sine', 0.08), 70);  // E5
+        setTimeout(() => playBeep(783.99, 'sine', 0.16), 140); // G5
+      } else if (type === 'wrong') {
+        playBeep(220, 'sawtooth', 0.15, 0.15); // A3
+        setTimeout(() => playBeep(174.61, 'sawtooth', 0.22, 0.15), 90); // F3
+      } else if (type === 'flip') {
+        playBeep(440, 'triangle', 0.04, 0.04);
+      }
+    }
+
+    function toggleSound() {
+      soundActive = !soundActive;
+      document.getElementById('soundIcon').innerText = soundActive ? '🔊' : '🔇';
+    }
+
+    function speakJapanese(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const clean = text.replace(/\[.*?\]/g, '').trim();
+      const utterance = new SpeechSynthesisUtterance(clean);
+      utterance.lang = 'ja-JP';
+      utterance.rate = 0.95;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // App State Variables
+    let currentStage = 'learn';
+    let currentBatchKey = 'kanji_only';
+    let activeBatchWords = [];
+
+    // Stage 1
+    let learnIndex = 0;
+    let learnFuriganaVisible = true;
+
+    // Stage 2
+    let srsQueue = [];
+    let srsMasteredCount = 0;
+    let srsCurrentCard = null;
+    let isCardRevealed = false;
+
+    // Stage 3
+    let matchMatchedPairs = 0;
+    let matchSelected = [];
+
+    // Stage 4
+    let reflexCurrentWord = null;
+    let reflexStreak = 0;
+    let reflexScore = 0;
+    let reflexSpeedMs = 2500;
+    let reflexTimerId = null;
+
+    // Stage 5
+    let examQuestions = [];
+    let examCurrentIdx = 0;
+    let examCorrectCount = 0;
+    let examMistakes = [];
+  </script>
+
+  <script>
+    function switchStage(stage) {
+      currentStage = stage;
+      const stages = ['learn', 'card', 'match', 'reflex', 'exam'];
+      
+      stages.forEach(s => {
+        const btn = document.getElementById(`nav-${s}`);
+        const view = document.getElementById(`stage-${s}`);
+        if (s === stage) {
+          btn.className = 'px-3 py-1.5 rounded-xl bg-crimson-600 text-white shadow font-bold transition-all flex items-center gap-1.5 whitespace-nowrap';
+          view.classList.remove('hidden');
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition-all flex items-center gap-1.5 whitespace-nowrap';
+          view.classList.add('hidden');
+        }
+      });
+
+      if (stage !== 'reflex' && reflexTimerId) {
+        clearTimeout(reflexTimerId);
+      }
+
+      if (stage === 'learn') renderLearnCard();
+      else if (stage === 'card') initSrsBatch();
+      else if (stage === 'match') initMatchingGame();
+      else if (stage === 'reflex') loadNextReflexQuestion();
+      else if (stage === 'exam') startExamSimulation('real_15');
+    }
+
+    function changeActiveBatch() {
+      currentBatchKey = document.getElementById('batchSelect').value;
+      const labelMap = {
+        'kanji_only': '⚡ Khusus Berkanji (68 Kanji Ujian)',
+        'kaiwa_all': '💬 Khusus Percakapan (Kaiwa Bab 41 & 42)',
+        'yomi_taro': '🐢 Khusus Dongeng (Urashima Taro)',
+        'penemu_all': '🍜 Khusus Penemu, Mie & Musik',
+        'all': '🔥 Semua 114 Kotoba Lengkap (100%)',
+        'b1': 'Paket 1: Bab 41 (Aksi Sopan & Sifat)',
+        'b2': 'Paket 2: Bab 41 (Hadiah & Minat)',
+        'b3': 'Paket 3: Bab 41 (Benda Rumah & Pakaian)',
+        'b4': 'Paket 4: Bab 41 (Keluarga & Percakapan)',
+        'b5': 'Paket 5: Bab 41 (Dongeng Urashima Taro)',
+        'b6': 'Paket 6: Bab 42 (Aksi Dapur & Angka)',
+        'b7': 'Paket 7: Bab 42 (Profesi & Sosial Politik)',
+        'b8': 'Paket 8: Bab 42 (Alat & Perlengkapan)',
+        'b9': 'Paket 9: Bab 42 (Mie Instan & Percakapan)'
+      };
+
+      document.getElementById('currentBatchLabel').innerText = labelMap[currentBatchKey] || currentBatchKey;
+
+      if (currentBatchKey === 'kanji_only') {
+        activeBatchWords = MASTER_KOTOBA.filter(w => w.isKanji);
+      } else if (currentBatchKey === 'kaiwa_all') {
+        activeBatchWords = MASTER_KOTOBA.filter(w => w.category === 'kaiwa_41' || w.category === 'kaiwa_42');
+      } else if (currentBatchKey === 'yomi_taro') {
+        activeBatchWords = MASTER_KOTOBA.filter(w => w.category === 'yomi_41');
+      } else if (currentBatchKey === 'penemu_all') {
+        activeBatchWords = MASTER_KOTOBA.filter(w => w.category === 'yomi_42' || w.category === 'tokoh_42');
+      } else if (currentBatchKey === 'all') {
+        activeBatchWords = [...MASTER_KOTOBA];
+      } else {
+        activeBatchWords = MASTER_KOTOBA.filter(w => w.batch === currentBatchKey);
+      }
+
+      learnIndex = 0;
+      if (currentStage === 'learn') renderLearnCard();
+      if (currentStage === 'card') initSrsBatch();
+      if (currentStage === 'match') initMatchingGame();
+      if (currentStage === 'reflex') loadNextReflexQuestion();
+    }
+
+    // ==========================================
+    // STAGE 1: ENCODING & MEMORY ANCHORS
+    // ==========================================
+    function renderLearnCard() {
+      if (activeBatchWords.length === 0) changeActiveBatch();
+      const word = activeBatchWords[learnIndex];
+
+      document.getElementById('learnProgressCounter').innerText = `${learnIndex + 1} / ${activeBatchWords.length}`;
+      document.getElementById('learnBabTag').innerText = `BAB ${word.bab}`;
+      document.getElementById('learnCategoryBadge').innerText = word.catLabel;
+      document.getElementById('learnTypeBadge').innerText = word.type.toUpperCase();
+
+      const furiganaEl = document.getElementById('learnFurigana');
+      furiganaEl.innerText = word.kana;
+      furiganaEl.style.visibility = learnFuriganaVisible ? 'visible' : 'hidden';
+
+      document.getElementById('learnKanji').innerText = word.kanji;
+      document.getElementById('learnMeaning').innerText = word.meaning;
+      document.getElementById('learnHookText').innerHTML = word.hook;
+      document.getElementById('learnAntiBlunderText').innerText = word.antiBlunder;
+
+      document.getElementById('btnPrevLearn').disabled = (learnIndex === 0);
+      document.getElementById('btnPrevLearn').style.opacity = (learnIndex === 0) ? '0.4' : '1';
+
+      const nextBtn = document.getElementById('btnNextLearn');
+      if (learnIndex === activeBatchWords.length - 1) {
+        nextBtn.innerHTML = 'Kuasai di Kartu Ingat ➔';
+      } else {
+        nextBtn.innerHTML = 'Lanjut Paham →';
+      }
+
+      speakJapanese(word.kanji);
+    }
+
+    function prevLearnCard() {
+      if (learnIndex > 0) {
+        learnIndex--;
+        renderLearnCard();
+        playSoundFx('flip');
+      }
+    }
+
+    function nextLearnCard() {
+      if (learnIndex < activeBatchWords.length - 1) {
+        learnIndex++;
+        renderLearnCard();
+        playSoundFx('flip');
+      } else {
+        switchStage('card');
+      }
+    }
+
+    function toggleLearnFuriganaVisibility() {
+      learnFuriganaVisible = !learnFuriganaVisible;
+      const furiganaEl = document.getElementById('learnFurigana');
+      furiganaEl.style.visibility = learnFuriganaVisible ? 'visible' : 'hidden';
+      const btn = document.getElementById('btnToggleFurigana');
+      btn.innerText = learnFuriganaVisible ? 'Sembunyikan Furigana' : 'Tampilkan Furigana';
+    }
+
+    function speakCurrentLearnWord() {
+      if (activeBatchWords[learnIndex]) {
+        speakJapanese(activeBatchWords[learnIndex].kanji);
+      }
+    }
+
+    // ==========================================
+    // STAGE 2: ACTIVE RECALL (POLOS TANPA FURIGANA)
+    // ==========================================
+    function initSrsBatch() {
+      if (activeBatchWords.length === 0) changeActiveBatch();
+      srsQueue = [...activeBatchWords].sort(() => Math.random() - 0.5);
+      srsMasteredCount = 0;
+
+      document.getElementById('srsFinishCard').classList.add('hidden');
+      document.getElementById('stage-card').querySelector('.min-h-\\[400px\\]').classList.remove('hidden');
+
+      updateSrsStats();
+      loadNextSrsCard();
+    }
+
+    function updateSrsStats() {
+      document.getElementById('srsRemaining').innerText = srsQueue.length;
+      document.getElementById('srsMastered').innerText = srsMasteredCount;
+    }
+
+    function loadNextSrsCard() {
+      if (srsQueue.length === 0) {
+        document.getElementById('stage-card').querySelector('.min-h-\\[400px\\]').classList.add('hidden');
+        document.getElementById('srsFinishCard').classList.remove('hidden');
+        playSoundFx('correct');
+        return;
+      }
+
+      isCardRevealed = false;
+      srsCurrentCard = srsQueue[0];
+
+      document.getElementById('cardKanjiDisplay').innerText = srsCurrentCard.kanji;
+      
+      const ansBox = document.getElementById('cardAnswerBox');
+      ansBox.classList.add('opacity-0');
+      ansBox.classList.remove('opacity-100');
+
+      document.getElementById('cardRevealBtnContainer').classList.remove('hidden');
+      document.getElementById('cardGradeButtons').classList.add('hidden');
+      document.getElementById('cardGradeButtons').classList.remove('grid');
+    }
+
+    function revealSrsCard() {
+      if (isCardRevealed || !srsCurrentCard) return;
+      isCardRevealed = true;
+      playSoundFx('flip');
+
+      document.getElementById('cardKanaDisplay').innerText = srsCurrentCard.kana;
+      document.getElementById('cardMeaningDisplay').innerText = srsCurrentCard.meaning;
+      document.getElementById('cardHookDisplay').innerHTML = `💡 ${srsCurrentCard.hook}`;
+
+      const ansBox = document.getElementById('cardAnswerBox');
+      ansBox.classList.remove('opacity-0');
+      ansBox.classList.add('opacity-100');
+
+      document.getElementById('cardRevealBtnContainer').classList.add('hidden');
+      const gradeBtns = document.getElementById('cardGradeButtons');
+      gradeBtns.classList.remove('hidden');
+      gradeBtns.classList.add('grid');
+
+      speakJapanese(srsCurrentCard.kanji);
+    }
+
+    function gradeSrsCard(grade) {
+      if (!isCardRevealed) return;
+      const current = srsQueue.shift();
+
+      if (grade === 'fail') {
+        playSoundFx('wrong');
+        srsQueue.splice(Math.min(1, srsQueue.length), 0, current);
+      } else if (grade === 'hard') {
+        playSoundFx('flip');
+        srsQueue.push(current);
+      } else if (grade === 'good') {
+        playSoundFx('correct');
+        srsMasteredCount++;
+      }
+
+      updateSrsStats();
+      loadNextSrsCard();
+    }
+
+    function restartActiveSrsBatch() {
+      initSrsBatch();
+    }
+
+    // ==========================================
+    // STAGE 3: TILE MATCHING
+    // ==========================================
+    function initMatchingGame() {
+      if (activeBatchWords.length === 0) changeActiveBatch();
+      
+      const sampleWords = [...activeBatchWords].sort(() => Math.random() - 0.5).slice(0, 6);
+      matchMatchedPairs = 0;
+      matchSelected = [];
+
+      document.getElementById('matchingSuccessMsg').classList.add('hidden');
+
+      let tiles = [];
+      sampleWords.forEach(w => {
+        tiles.push({ id: w.id, text: w.kanji, type: 'kanji', data: w });
+        tiles.push({ id: w.id, text: w.meaning, type: 'meaning', data: w });
+      });
+
+      tiles.sort(() => Math.random() - 0.5);
+
+      const grid = document.getElementById('matchingGrid');
+      grid.innerHTML = '';
+
+      tiles.forEach((t, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `tile-${idx}`;
+        btn.className = `p-4 rounded-2xl bg-cyber-dark border border-cyber-border hover:border-slate-400 text-center transition flex items-center justify-center min-h-[85px] select-none`;
+        
+        if (t.type === 'kanji') {
+          btn.innerHTML = `<span class="font-kanji font-black text-xl sm:text-2xl text-white">${t.text}</span>`;
+        } else {
+          btn.innerHTML = `<span class="text-xs sm:text-sm font-semibold text-slate-200">${t.text}</span>`;
+        }
+
+        btn.onclick = () => handleTileClick(btn, t);
+        grid.appendChild(btn);
+      });
+    }
+
+    function handleTileClick(btn, tileData) {
+      if (btn.classList.contains('opacity-30') || matchSelected.some(s => s.btn === btn)) return;
+
+      btn.classList.add('border-cyan-500', 'bg-cyan-950/40');
+      matchSelected.push({ btn, tileData });
+      playSoundFx('flip');
+
+      if (tileData.type === 'kanji') {
+        speakJapanese(tileData.text);
+      }
+
+      if (matchSelected.length === 2) {
+        const [first, second] = matchSelected;
+
+        if (first.tileData.id === second.tileData.id && first.tileData.type !== second.tileData.type) {
+          playSoundFx('correct');
+          first.btn.className = 'p-4 rounded-2xl bg-emerald-950/60 border border-emerald-500 text-center opacity-30 cursor-not-allowed pointer-events-none transition';
+          second.btn.className = 'p-4 rounded-2xl bg-emerald-950/60 border border-emerald-500 text-center opacity-30 cursor-not-allowed pointer-events-none transition';
+          
+          matchMatchedPairs++;
+          matchSelected = [];
+
+          if (matchMatchedPairs === 6) {
+            document.getElementById('matchingSuccessMsg').classList.remove('hidden');
+          }
+        } else {
+          playSoundFx('wrong');
+          setTimeout(() => {
+            first.btn.classList.remove('border-cyan-500', 'bg-cyan-950/40');
+            second.btn.classList.remove('border-cyan-500', 'bg-cyan-950/40');
+            matchSelected = [];
+          }, 450);
+        }
+      }
+    }
+
+    // ==========================================
+    // STAGE 4: SPEED REFLEX DRILL
+    // ==========================================
+    function setReflexSpeed(ms, label, btn) {
+      reflexSpeedMs = ms;
+      document.getElementById('currentSpeedLabel').innerText = label;
+      
+      btn.parentElement.querySelectorAll('button').forEach(b => {
+        b.className = 'px-2.5 py-1 rounded-lg bg-cyber-dark border border-cyber-border hover:border-slate-500 font-mono';
+      });
+      btn.className = 'px-2.5 py-1 rounded-lg bg-crimson-900/60 border border-crimson-600 text-crimson-200 font-mono';
+
+      loadNextReflexQuestion();
+    }
+
+    function loadNextReflexQuestion() {
+      clearTimeout(reflexTimerId);
+      const pool = activeBatchWords.length > 0 ? activeBatchWords : MASTER_KOTOBA;
+      reflexCurrentWord = pool[Math.floor(Math.random() * pool.length)];
+
+      document.getElementById('reflexBadge').innerText = `BAB ${reflexCurrentWord.bab} • ${reflexCurrentWord.catLabel}`;
+      document.getElementById('reflexKanjiDisplay').innerText = reflexCurrentWord.kanji;
+      document.getElementById('reflexFeedback').classList.add('hidden');
+
+      speakJapanese(reflexCurrentWord.kanji);
+
+      // Generate 3 distractors
+      const distractors = [];
+      const used = new Set([reflexCurrentWord.meaning]);
+      while (distractors.length < 3) {
+        const rand = MASTER_KOTOBA[Math.floor(Math.random() * MASTER_KOTOBA.length)];
+        if (!used.has(rand.meaning)) {
+          used.add(rand.meaning);
+          distractors.push(rand);
+        }
+      }
+
+      const allChoices = [reflexCurrentWord, ...distractors].sort(() => Math.random() - 0.5);
+      const grid = document.getElementById('reflexChoicesGrid');
+      grid.innerHTML = '';
+
+      allChoices.forEach((choice, idx) => {
+        const b = document.createElement('button');
+        b.className = 'p-3.5 rounded-2xl bg-cyber-dark border border-cyber-border hover:border-slate-400 text-left flex items-start gap-3 transition';
+        b.onclick = () => submitReflexChoice(choice, b);
+        b.innerHTML = `
+          <div class="w-6 h-6 rounded-lg bg-cyber-border text-slate-300 text-xs font-mono font-bold flex items-center justify-center">
+            ${idx + 1}
+          </div>
+          <div class="flex-1">
+            <div class="text-xs sm:text-sm font-bold text-white">${choice.meaning}</div>
+            <div class="text-[11px] text-slate-400 font-mono">${choice.kana}</div>
+          </div>
+        `;
+        grid.appendChild(b);
+      });
+
+      const bar = document.getElementById('reflexTimerBar');
+      bar.style.width = '100%';
+      bar.style.transition = `width ${reflexSpeedMs}ms linear`;
+      setTimeout(() => { bar.style.width = '0%'; }, 20);
+
+      reflexTimerId = setTimeout(() => {
+        handleReflexTimeout();
+      }, reflexSpeedMs);
+    }
+
+    function handleReflexTimeout() {
+      playSoundFx('wrong');
+      reflexStreak = 0;
+      document.getElementById('streakCount').innerText = reflexStreak;
+
+      const fb = document.getElementById('reflexFeedback');
+      fb.className = 'w-full mt-4 p-2.5 rounded-2xl bg-rose-900/60 border border-rose-600 text-rose-200 text-center text-xs font-bold block';
+      fb.innerHTML = `⏱️ WAKTU HABIS! <span class="font-kanji font-bold">${reflexCurrentWord.kanji}</span> dibaca: <strong>${reflexCurrentWord.kana}</strong> (${reflexCurrentWord.meaning})`;
+
+      setTimeout(() => {
+        loadNextReflexQuestion();
+      }, 1600);
+    }
+
+    function submitReflexChoice(selected, btnEl) {
+      clearTimeout(reflexTimerId);
+      const isCorrect = (selected.meaning === reflexCurrentWord.meaning);
+      const fb = document.getElementById('reflexFeedback');
+
+      if (isCorrect) {
+        playSoundFx('correct');
+        reflexStreak++;
+        reflexScore += (100 * (reflexStreak >= 3 ? 2 : 1));
+        btnEl.classList.add('bg-emerald-900/80', 'border-emerald-500');
+
+        fb.className = 'w-full mt-4 p-2 rounded-2xl bg-emerald-900/60 border border-emerald-500 text-emerald-200 text-center text-xs font-bold block';
+        fb.innerHTML = `⚡ TEPAT! <span class="font-mono text-amber-300">${reflexCurrentWord.kana}</span> = ${reflexCurrentWord.meaning}`;
+
+        document.getElementById('streakCount').innerText = reflexStreak;
+        document.getElementById('scoreCount').innerText = reflexScore;
+
+        setTimeout(() => {
+          loadNextReflexQuestion();
+        }, 550);
+      } else {
+        playSoundFx('wrong');
+        reflexStreak = 0;
+        btnEl.classList.add('bg-rose-900/80', 'border-rose-500');
+
+        fb.className = 'w-full mt-4 p-2.5 rounded-2xl bg-rose-900/70 border border-rose-600 text-rose-200 text-center text-xs font-bold block';
+        fb.innerHTML = `❌ BLUNDER! <span class="font-kanji font-bold">${reflexCurrentWord.kanji}</span> adalah <strong>${reflexCurrentWord.kana}</strong> (${reflexCurrentWord.meaning})`;
+
+        document.getElementById('streakCount').innerText = reflexStreak;
+
+        setTimeout(() => {
+          loadNextReflexQuestion();
+        }, 1800);
+      }
+    }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (currentStage === 'card' && e.code === 'Space') {
+        e.preventDefault();
+        if (!isCardRevealed) revealSrsCard();
+      }
+      if (currentStage === 'reflex') {
+        const choices = document.getElementById('reflexChoicesGrid').children;
+        if (e.key === '1' && choices[0]) choices[0].click();
+        if (e.key === '2' && choices[1]) choices[1].click();
+        if (e.key === '3' && choices[2]) choices[2].click();
+        if (e.key === '4' && choices[3]) choices[3].click();
+      }
+    });
+
+    // ==========================================
+    // STAGE 5: EXAM SIMULATOR (50+ SOAL NYATA & MODE KILAT)
+    // ==========================================
+    function startExamSimulation(mode = 'real_15') {
+      if (mode === 'real_15') {
+        examQuestions = [...REAL_EXAM_BANK].sort(() => Math.random() - 0.5).slice(0, 15);
+      } else if (mode === 'real_50') {
+        examQuestions = [...REAL_EXAM_BANK].sort(() => Math.random() - 0.5).slice(0, 50);
+      } else if (mode === 'batch_full') {
+        // Test all items in currently active batch!
+        const pool = activeBatchWords.length > 0 ? activeBatchWords : MASTER_KOTOBA;
+        examQuestions = pool.map(w => ({
+          prompt: `Tentukan bacaan kana dan makna dari kata: [${w.kanji}]`,
+          targetKanji: w.kanji,
+          kana: w.kana,
+          meaning: w.meaning
+        })).sort(() => Math.random() - 0.5);
+      }
+
+      examCurrentIdx = 0;
+      examCorrectCount = 0;
+      examMistakes = [];
+
+      document.getElementById('examQuestionArea').classList.remove('hidden');
+      document.getElementById('examResultArea').classList.add('hidden');
+
+      renderExamQuestion();
+    }
+
+    function renderExamQuestion() {
+      const q = examQuestions[examCurrentIdx];
+      document.getElementById('examCounter').innerText = `${examCurrentIdx + 1} / ${examQuestions.length}`;
+
+      document.getElementById('examPrompt').innerHTML = q.prompt.replace(`[${q.targetKanji}]`, 
+        `<span class="text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-xl border border-amber-400/30 font-bold">${q.targetKanji}</span>`);
+
+      const distractors = [];
+      const used = new Set([q.meaning]);
+      while (distractors.length < 3) {
+        const rand = MASTER_KOTOBA[Math.floor(Math.random() * MASTER_KOTOBA.length)];
+        if (!used.has(rand.meaning)) {
+          used.add(rand.meaning);
+          distractors.push(rand);
+        }
+      }
+
+      const choices = [
+        { meaning: q.meaning, kana: q.kana },
+        ...distractors.map(d => ({ meaning: d.meaning, kana: d.kana }))
+      ].sort(() => Math.random() - 0.5);
+
+      const grid = document.getElementById('examChoicesGrid');
+      grid.innerHTML = '';
+
+      choices.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'p-4 rounded-2xl bg-cyber-dark border border-cyber-border hover:border-crimson-500 text-left transition flex flex-col justify-center';
+        btn.onclick = () => submitExamAnswer(c, q);
+        btn.innerHTML = `
+          <div class="text-xs sm:text-sm font-bold text-white">${c.meaning}</div>
+          <div class="text-xs font-mono text-cyan-400 mt-1">${c.kana}</div>
+        `;
+        grid.appendChild(btn);
+      });
+    }
+
+    function submitExamAnswer(selected, question) {
+      if (selected.meaning === question.meaning) {
+        playSoundFx('correct');
+        examCorrectCount++;
+      } else {
+        playSoundFx('wrong');
+        examMistakes.push({
+          kanji: question.targetKanji,
+          kana: question.kana,
+          meaning: question.meaning,
+          chosen: `${selected.kana} (${selected.meaning})`
+        });
+      }
+
+      examCurrentIdx++;
+      if (examCurrentIdx < examQuestions.length) {
+        renderExamQuestion();
+      } else {
+        finishExam();
+      }
+    }
+
+    function finishExam() {
+      document.getElementById('examQuestionArea').classList.add('hidden');
+      const res = document.getElementById('examResultArea');
+      res.classList.remove('hidden');
+
+      const pct = Math.round((examCorrectCount / examQuestions.length) * 100);
+      document.getElementById('examSummaryText').innerHTML = `
+        Skor: <strong class="text-amber-400 text-lg">${pct}/100</strong> (${examCorrectCount} Benar, ${examMistakes.length} Salah)
+      `;
+
+      const list = document.getElementById('examMistakesContainer');
+      if (examMistakes.length === 0) {
+        list.innerHTML = `<div class="p-4 text-emerald-400 text-center font-bold">🎉 Luar Biasa! Semua kanji polos berhasil dijawab sempurna tanpa furigana!</div>`;
+      } else {
+        list.innerHTML = `
+          <div class="text-rose-400 font-bold mb-2">Kanji Penyebab Blunder (Klik Suara untuk Mengingat):</div>
+          ${examMistakes.map(m => `
+            <div class="p-3 rounded-xl bg-cyber-panel border border-cyber-border flex items-center justify-between">
+              <div>
+                <span class="font-kanji text-base font-bold text-white">${m.kanji}</span>
+                <span class="text-xs font-mono text-amber-300 ml-2">[${m.kana}]</span>
+                <span class="text-xs text-slate-300 ml-1">→ ${m.meaning}</span>
+                <div class="text-[11px] text-rose-400 mt-0.5">Jawaban Anda: ${m.chosen}</div>
+              </div>
+              <button onclick="speakJapanese('${m.kanji}')" class="text-xs px-2.5 py-1.5 bg-cyber-dark hover:bg-cyber-border rounded-lg text-cyan-400">🔊</button>
+            </div>
+          `).join('')}
+        `;
+      }
+    }
+
+    // ==========================================
+    // QUICK GLOSSARY & SEARCH MODAL
+    // ==========================================
+    function openWordSearchModal() {
+      document.getElementById('searchModal').classList.remove('hidden');
+      document.getElementById('quickSearchInput').value = '';
+      filterQuickGlossary();
+    }
+
+    function closeWordSearchModal() {
+      document.getElementById('searchModal').classList.add('hidden');
+    }
+
+    function filterQuickGlossary() {
+      const q = document.getElementById('quickSearchInput').value.toLowerCase().trim();
+      const container = document.getElementById('glossaryListContainer');
+      
+      const filtered = MASTER_KOTOBA.filter(w => 
+        w.kanji.toLowerCase().includes(q) || 
+        w.kana.toLowerCase().includes(q) || 
+        w.meaning.toLowerCase().includes(q)
+      );
+
+      container.innerHTML = filtered.map(w => `
+        <div class="p-2.5 rounded-xl bg-cyber-dark border border-cyber-border flex items-center justify-between gap-2">
+          <div class="flex items-center gap-3">
+            <span class="font-kanji text-lg font-black text-white">${w.kanji}</span>
+            <div>
+              <div class="text-xs font-mono text-amber-300">${w.kana} <span class="text-[10px] text-slate-400 ml-1">(${w.catLabel})</span></div>
+              <div class="text-[11px] text-slate-300">${w.meaning}</div>
+            </div>
+          </div>
+          <button onclick="speakJapanese('${w.kanji}')" class="p-1.5 rounded-lg bg-cyber-panel text-cyan-400 hover:text-white text-xs">🔊</button>
+        </div>
+      `).join('');
+    }
+
+    // Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      changeActiveBatch();
+      switchStage('learn');
+    });
+  </script>
+</body>
+</html>
