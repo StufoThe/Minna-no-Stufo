@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>God Mode Shiken: Latihan Bunpou 43-44 & Kanji Irodori</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+JP:wght@500;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            jp: ['"Noto Sans JP"', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            bgDark: '#090d16',
+            cardDark: '#0f172a',
+            surfaceDark: '#1e293b',
+            neonCyan: '#06b6d4',
+            neonAmber: '#f59e0b',
+            neonRose: '#f43f5e',
+            neonEmerald: '#10b981',
+            neonPurple: '#a855f7',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: radial-gradient(circle at 50% 5%, #131f38 0%, #080d18 100%);
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    .kanji-glow {
+      text-shadow: 0 0 16px rgba(6, 182, 212, 0.45);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-neonCyan selection:text-black antialiased">
+
+  <!-- Header with Category Tabs -->
+  <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md px-3 py-2 sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <!-- Title -->
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-400 via-amber-400 to-rose-500 flex items-center justify-center font-jp font-black text-slate-950 text-base shadow-md">
+          試
+        </div>
+        <div>
+          <h1 class="text-xs sm:text-sm font-black tracking-tight text-white flex items-center gap-1.5">
+            GOD MODE SHIKEN ENGINE
+            <span class="px-1.5 py-0.2 rounded bg-amber-400/20 border border-amber-400/40 text-amber-300 text-[10px] font-mono">BAB 43-44 + IRODORI</span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- Main Mode Switcher -->
+      <nav class="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs overflow-x-auto max-w-full">
+        <button onclick="switchTab('bunpou')" id="tabBtn-bunpou" class="px-3 py-1.5 rounded-lg font-bold bg-neonCyan text-slate-950 transition whitespace-nowrap">
+          📝 Soal Bunpou (30 Soal)
+        </button>
+        <button onclick="switchTab('kotoba')" id="tabBtn-kotoba" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+          📖 Kotoba 43-44 (70+ Kata)
+        </button>
+        <button onclick="switchTab('irodori')" id="tabBtn-irodori" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+          ⭐ Kanji Irodori
+        </button>
+        <button onclick="switchTab('traps')" id="tabBtn-traps" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+          🎯 Radar 14 Jebakan
+        </button>
+      </nav>
+
+      <!-- Audio Toggle -->
+      <button onclick="toggleAudio()" id="audioBtn" class="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 flex items-center gap-1">
+        <span id="audioIcon">🔊</span> <span id="audioStatus" class="text-neonCyan">ON</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto w-full px-3 py-3 flex-grow flex flex-col justify-center">
+
+    <!-- ================================================================= -->
+    <!-- TAB 1: LATIHAN SOAL BUNPOU FORMAT SHIKEN (POLA KURUNG `（ ）`)    -->
+    <!-- Mengadopsi pola shiken nomor 18-37 + Jebakan Bab 43 & 44         -->
+    <!-- ================================================================= -->
+    <section id="section-bunpou" class="space-y-3">
+      
+      <!-- Top status & filter bar -->
+      <div class="flex flex-wrap items-center justify-between text-xs px-1 gap-2">
+        <div class="flex items-center gap-2">
+          <span id="bunpouTracker" class="font-mono font-bold text-neonCyan bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+            SOAL 1 / 30
+          </span>
+          <select id="bunpouFilterSelect" onchange="filterBunpouCategory()" class="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-xs text-amber-300 font-bold focus:outline-none">
+            <option value="all">Semua Soal (Bab 43, 44 & Shiken)</option>
+            <option value="ch43">Khusus Bab 43 (そう / てくる / てくれませんか)</option>
+            <option value="ch44">Khusus Bab 44 (すぎる / やすい / にくい / にする)</option>
+            <option value="shiken">Khusus Pola Jebakan Shiken Foto (18-37)</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400">Skor:</span>
+          <span id="bunpouScoreDisplay" class="font-mono font-black text-amber-400 text-sm">0 Benar</span>
+          <button onclick="resetBunpouQuiz()" class="text-[11px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-900 border border-slate-800">
+            🔄 Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Bunpou Card -->
+      <div class="bg-cardDark rounded-3xl p-4 sm:p-6 border border-slate-800 shadow-2xl space-y-4">
+        
+        <div>
+          <div class="flex justify-between items-center text-[11px] text-slate-400 font-mono mb-1">
+            <span id="bunpouSenseiWarning" class="text-rose-400 font-bold flex items-center gap-1">
+              ⚠️ AWAS JEBAKAN KEMIRIPAN
+            </span>
+            <button onclick="speakCurrentBunpou()" class="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 text-xs font-sans">
+              🔊 <span class="text-[11px]">Dengar</span>
+            </button>
+          </div>
+
+          <h2 id="bunpouQuestionText" class="font-jp text-base sm:text-lg md:text-xl font-bold text-white leading-relaxed">
+            --
+          </h2>
+        </div>
+
+        <!-- 4 Options (a, b, c, d) -->
+        <div id="bunpouOptionsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Analysis & Sensei Trap Deconstruction Box (Revealed after answer) -->
+        <div id="bunpouExplainBox" class="hidden p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs space-y-2 leading-relaxed">
+          <div class="flex items-center gap-1.5 text-amber-300 font-bold text-sm">
+            <span>⚡</span>
+            <span>BEDAH JEBAKAN SENSEI (TRIK 5 DETIK):</span>
+          </div>
+          <div id="bunpouTrapExplain" class="text-slate-200">
+            <!-- Explain content -->
+          </div>
+          <div id="bunpouRuleBox" class="bg-slate-900/90 p-2.5 rounded-xl border border-cyan-900/50 text-[11px] text-cyan-300 font-mono">
+            <!-- Formula snippet -->
+          </div>
+        </div>
+
+        <!-- Question Navigation -->
+        <div class="flex justify-between items-center pt-2 border-t border-slate-800/80">
+          <button onclick="prevBunpouQ()" id="btnPrevBunpou" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-300 transition">
+            ← Soal Sebelumnya
+          </button>
+          <button onclick="nextBunpouQ()" id="btnNextBunpou" class="px-5 py-2 rounded-xl bg-neonCyan text-slate-950 font-black text-xs hover:brightness-110 transition shadow-lg shadow-cyan-500/10">
+            Soal Berikutnya →
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 2: LATIHAN SOAL KOTOBA BAB 43 & 44 LENGKAP (70+ KOSAKATA)    -->
+    <!-- Termasuk Utama, Yomimono, Percakapan Salon                      -->
+    <!-- ================================================================= -->
+    <section id="section-kotoba" class="hidden space-y-3">
+      
+      <div class="flex flex-wrap items-center justify-between text-xs px-1 gap-2">
+        <div class="flex items-center gap-2">
+          <span id="kotobaTracker" class="font-mono font-bold text-neonCyan bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+            KOTOBA 1 / 70
+          </span>
+          <select id="kotobaFilterSelect" onchange="filterKotobaCategory()" class="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-xs text-amber-300 font-bold focus:outline-none">
+            <option value="all">Semua Kosakata (Bab 43 & 44)</option>
+            <option value="ch43_main">Bab 43 Pokok (20 Kata)</option>
+            <option value="ch43_yomi">Bab 43 Yomimono (5 Kata)</option>
+            <option value="ch44_main">Bab 44 Pokok (27 Kata)</option>
+            <option value="ch44_salon">Bab 44 Percakapan Salon (8 Kata)</option>
+            <option value="ch44_yomi">Bab 44 Yomimono (10 Kata)</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400">Skor:</span>
+          <span id="kotobaScoreDisplay" class="font-mono font-black text-emerald-400 text-sm">0 Benar</span>
+          <button onclick="resetKotobaQuiz()" class="text-[11px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-900 border border-slate-800">
+            🔄 Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Kotoba Practice Card -->
+      <div class="bg-cardDark rounded-3xl p-5 md:p-6 border border-slate-800 shadow-2xl space-y-4">
+        
+        <div class="text-center py-2">
+          <div class="flex items-center justify-center gap-2 mb-2">
+            <span id="kotobaCategoryBadge" class="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-300 bg-cyan-950/70 px-2.5 py-0.5 rounded-md border border-cyan-800">
+              Bab 43 Pokok
+            </span>
+            <span id="kotobaPartBadge" class="text-[10px] font-mono font-bold text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+              [輸出が～]
+            </span>
+          </div>
+
+          <!-- Kotoba Large Display -->
+          <div id="kotobaBigDisplay" class="font-jp text-4xl sm:text-5xl font-black kanji-glow text-white mt-1 mb-1">
+            増えます
+          </div>
+
+          <div id="kotobaReadingKana" class="font-jp text-slate-400 text-sm font-semibold">
+            ふえます
+          </div>
+        </div>
+
+        <p class="text-center text-xs text-slate-400">
+          Tentukan arti / padanan kata yang tepat untuk kosakata di atas:
+        </p>
+
+        <!-- 4 Option choices -->
+        <div id="kotobaOptionsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Mnemonic & Context Hint -->
+        <div id="kotobaTrickBox" class="hidden p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-xs space-y-1">
+          <div class="text-emerald-400 font-bold flex items-center gap-1.5">
+            <span>💡</span>
+            <span>Trik Memori Radikal & Konteks:</span>
+          </div>
+          <p id="kotobaMnemonicText" class="text-slate-300 leading-relaxed">
+            --
+          </p>
+        </div>
+
+        <!-- Kotoba Nav -->
+        <div class="flex justify-between items-center pt-2 border-t border-slate-800/80">
+          <button onclick="prevKotobaQ()" id="btnPrevKotoba" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-300 transition">
+            ← Sebelumnya
+          </button>
+          <button onclick="nextKotobaQ()" id="btnNextKotoba" class="px-5 py-2 rounded-xl bg-neonCyan text-slate-950 font-black text-xs hover:brightness-110 transition shadow-lg shadow-cyan-500/10">
+            Berikutnya →
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 3: KHUSUS KANJI IRODORI (9 KOTOBA DARI FOTO RESMI)            -->
+    <!-- 来年, 会場, 世界, 体験, 国際交流, 禁止, 紙, 始まる, 申し込む        -->
+    <!-- ================================================================= -->
+    <section id="section-irodori" class="hidden space-y-3">
+      
+      <div class="flex flex-wrap items-center justify-between text-xs px-1 gap-2">
+        <div class="flex items-center gap-2">
+          <span id="irodoriTracker" class="font-mono font-bold text-amber-300 bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+            IRODORI 1 / 9
+          </span>
+          <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-950/70 border border-amber-800/80 text-amber-300">
+            ⭐ Foto Buku Resmi Irodori
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400">Skor:</span>
+          <span id="irodoriScoreDisplay" class="font-mono font-black text-amber-400 text-sm">0 Benar</span>
+          <button onclick="resetIrodoriQuiz()" class="text-[11px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-900 border border-slate-800">
+            🔄 Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Irodori Card -->
+      <div class="bg-cardDark rounded-3xl p-5 md:p-6 border border-slate-800 shadow-2xl space-y-4">
+        
+        <div class="text-center py-2">
+          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300 bg-amber-950/80 px-2.5 py-1 rounded-md border border-amber-700">
+            ⭐ KANJI IRODORI RESMI
+          </span>
+
+          <!-- Kanji Large Display -->
+          <div id="irodoriBigDisplay" class="font-jp text-5xl sm:text-6xl font-black kanji-glow text-amber-200 mt-3 mb-1">
+            来年
+          </div>
+
+          <div id="irodoriReadingKana" class="font-jp text-slate-400 text-sm font-semibold">
+            らいねん
+          </div>
+        </div>
+
+        <p class="text-center text-xs text-slate-400">
+          Pilih arti / makna yang tepat untuk kanji Irodori di atas:
+        </p>
+
+        <!-- 4 Option choices -->
+        <div id="irodoriOptionsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Mnemonic Trick Breakdown -->
+        <div id="irodoriTrickBox" class="hidden p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-xs space-y-1">
+          <div class="text-amber-400 font-bold flex items-center gap-1.5">
+            <span>💡</span>
+            <span>Trik Memori Radikal Irodori 3 Detik:</span>
+          </div>
+          <p id="irodoriMnemonicText" class="text-slate-300 leading-relaxed">
+            --
+          </p>
+        </div>
+
+        <!-- Irodori Nav -->
+        <div class="flex justify-between items-center pt-2 border-t border-slate-800/80">
+          <button onclick="prevIrodoriQ()" id="btnPrevIrodori" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-300 transition">
+            ← Sebelumnya
+          </button>
+          <button onclick="nextIrodoriQ()" id="btnNextIrodori" class="px-5 py-2 rounded-xl bg-amber-400 text-slate-950 font-black text-xs hover:brightness-110 transition shadow-lg shadow-amber-500/10">
+            Berikutnya →
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 4: KAMUS RADAR BEDAH JEBAKAN KEMIRIPAN (14 JEBAKAN LENGKAP) -->
+    <!-- Meliputi Bab 43, 44, & Pola Soal Shiken 18-37                   -->
+    <!-- ================================================================= -->
+    <section id="section-traps" class="hidden space-y-3">
+      
+      <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 text-xs text-slate-300 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">🎯</span>
+          <span><strong>Kamus Radar 14 Jebakan:</strong> Rangkuman pasangan kembar yang paling sering mengecoh di shiken kelas!</span>
+        </div>
+        <input type="text" id="trapSearchInput" oninput="searchTrapList()" placeholder="🔍 Cari jebakan (misal: そう, にする, で)..." class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-cyan-300 focus:outline-none w-full sm:w-56" />
+      </div>
+
+      <!-- Trap Cards List -->
+      <div id="trapCardsContainer" class="space-y-3 custom-scroll max-h-[68vh] overflow-y-auto pr-1 text-xs">
+
+        <!-- Trap 1: SOUDESU DUGAN vs KABAR BURUNG -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-cyan-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">BAB 43 vs BAB 47</span>
+            <span class="text-cyan-400 font-mono">～そうです</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">1. Dugaan Visual Sendiri vs Kabar Burung Kata Orang</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-cyan-900/60">
+              <span class="text-neonCyan font-bold block mb-1">👁️ Visual Bab 43 (Dugaan Sekilas):</span>
+              <p class="text-slate-200">今にも雨が（ <strong class="text-emerald-400">降りそう</strong> ）です。<br>
+              <span class="text-slate-400 text-[11px]">Rumus: KK buang ます + そうです</span></p>
+              <span class="text-rose-400 font-bold block mt-1 text-[11px]">⚠️ Sinyal: 今にも, もうすぐ, これから</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">📢 Kabar Burung Bab 47 (Dengar Kata Orang):</span>
+              <p class="text-slate-200">天気予報によると、雨が（ <strong class="text-amber-300">降るそう</strong> ）です。<br>
+              <span class="text-slate-400 text-[11px]">Rumus: KK Bentuk Kamus/Biasa + そうです</span></p>
+              <span class="text-slate-400 block mt-1 text-[11px]">💡 Sinyal: Ada sumber 'によると' = Kamus!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 2: PENGECUALIAN II -> YOSA SOU -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-rose-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">BAB 43 MUTLAK</span>
+            <span class="text-rose-400 font-mono">いい → よさそう | ない → なさそう</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">2. Pengecualian Keramat Kata Sifat (Haram Opsi 'いいそう')</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-emerald-900/60">
+              <span class="text-emerald-400 font-bold block mb-1">✅ Wajib Berubah Menjadi:</span>
+              <p class="text-slate-200">彼女は頭が（ <strong class="text-emerald-400">よさそう</strong> ）です。<br>
+              お金が（ <strong class="text-emerald-400">なさそう</strong> ）です。</p>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-rose-900/60">
+              <span class="text-rose-400 font-bold block mb-1">❌ Jebakan Guru di Pilihan Ganda:</span>
+              <p class="text-rose-300 line-through">頭がいいそうです / よいそうです<br>
+              お金がないそうです</p>
+              <span class="text-slate-400 text-[10px]">Langsung coret pilihan 'いいそう' dalam 1 detik!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 3: TE KIMASU PARTIKEL TEMPAT -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-emerald-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">BAB 43 • SHIKEN TRAP</span>
+            <span class="text-emerald-400 font-mono">で vs から vs へ</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">3. Pola Pergi Lalu Kembali (<span class="text-emerald-400">～て来ます</span>)</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-emerald-400 font-bold block mb-1">🛒 Aktivitas Jual-Beli:</span>
+              <p class="text-slate-200">スーパー（ <strong class="text-emerald-400">で</strong> ）牛乳を買って来ます。</p>
+              <span class="text-slate-400 text-[10px] block mt-1">Beli barang di toko pakai <strong>で</strong>!</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-cyan-400 font-bold block mb-1">📦 Asal Barang Diambil:</span>
+              <p class="text-slate-200">台所（ <strong class="text-cyan-400">から</strong> ）コップを取って来ます。</p>
+              <span class="text-slate-400 text-[10px] block mt-1">Bawa keluar dari ruang pakai <strong>から</strong>!</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">📍 Arah Tujuan Murni:</span>
+              <p class="text-slate-200">郵便局（ <strong class="text-amber-300">へ</strong> ）行って来ます。</p>
+              <span class="text-slate-400 text-[10px] block mt-1">Pergi ke fasilitas umum pakai <strong>へ</strong>!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 4: HIERARKI PERMINTAAN TOLONG -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-purple-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">BAB 43 vs SHIKEN NO. 25</span>
+            <span class="text-purple-400 font-mono">くれませんか vs くださいませんか</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">4. Hierarki Meminta Tolong (Siapa Lawan Bicaranya?)</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-purple-400 font-bold block mb-1">🤝 Rekan Sebaya / Kawan (Bab 43):</span>
+              <p class="text-slate-200">お弁当を買って来て（ <strong class="text-emerald-400">くれませんか</strong> ）。</p>
+              <span class="text-slate-400 text-[10px] block mt-1">Lebih halus dari <em>てください</em>, cocok sesama teman.</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-cyan-400 font-bold block mb-1">🙇 Orang Luar / Atasan (Shiken No. 25):</span>
+              <p class="text-slate-200">すみません、レストランを紹介して（ <strong class="text-cyan-300">くださいませんか</strong> ）。</p>
+              <span class="text-slate-400 text-[10px] block mt-1">Tingkat hormat tinggi kepada orang asing/atasan!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 5: NONI vs NO TAMENI vs KB NI -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-amber-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">SHIKEN NO. 26, 27, 30</span>
+            <span class="text-amber-400 font-mono">のに vs のために vs に</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">5. Kegunaan Alat/Waktu vs Demi Seseorang/Cita-cita</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-amber-300 font-bold block mb-1">⏱️ Waktu / Alat:</span>
+              <p class="text-slate-200">宿題をする（ <strong class="text-emerald-400">のに</strong> ）1時間かかります。<br>
+              切る（ <strong class="text-emerald-400">のに</strong> ）使います。</p>
+              <span class="text-slate-400 text-[10px] block mt-1">KK Kamus + <strong>のに</strong> + 使います/かかります</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-rose-400 font-bold block mb-1">❤️ Demi Orang/Cita:</span>
+              <p class="text-slate-200">友達（ <strong class="text-emerald-400">のために</strong> ）、料理を作ります。<br>
+              合格する（ <strong class="text-emerald-400">ために</strong> ）勉強します。</p>
+              <span class="text-slate-400 text-[10px] block mt-1">KB の / KK Kamus + <strong>ために</strong></span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-cyan-400 font-bold block mb-1">🔪 Kata Benda + に:</span>
+              <p class="text-slate-200">このナイフは果物（ <strong class="text-cyan-300">に</strong> ）使います。</p>
+              <span class="text-rose-400 text-[10px] font-bold block mt-1">⚠️ AWAS: Kalau kata benda murni tanpa 'する', HANYA pakai 'に'!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 6: WO SHIMASU vs GA NARIMASU vs NI SHIMASU -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-rose-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">BAB 44 vs BAB 19 vs SHIKEN NO. 19</span>
+            <span class="text-rose-400 font-mono">をします vs にします vs なります</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">6. Sengaja Diubah vs Alami vs Keputusan Memilih</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-rose-400 font-bold block mb-1">🖐️ Sengaja Diubah (Bab 44):</span>
+              <p class="text-slate-200">音（ <strong class="text-emerald-400">を</strong> ）小さく（ <strong class="text-emerald-400">します</strong> ）。<br>
+              部屋（ <strong class="text-emerald-400">を</strong> ）きれいに（ <strong class="text-emerald-400">します</strong> ）。</p>
+              <span class="text-slate-400 text-[10px] block mt-1">Ada subjek manusia sengaja mengubah kondisi.</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-cyan-400 font-bold block mb-1">🍃 Alami Berubah (Bab 19):</span>
+              <p class="text-slate-200">夜になって、外（ <strong class="text-cyan-300">が</strong> ）暗く（ <strong class="text-cyan-300">なりました</strong> ）。</p>
+              <span class="text-slate-400 text-[10px] block mt-1">Berubah dengan sendirinya tanpa campur tangan.</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-amber-300 font-bold block mb-1">🏨 Menentukan Pilihan:</span>
+              <p class="text-slate-200">部屋はシングル（ <strong class="text-amber-300">に します</strong> ）。<br>
+              日本旅行に10万円（ <strong class="text-amber-300">に します</strong> ）。</p>
+              <span class="text-rose-400 text-[10px] font-bold block mt-1">⚠️ Shiken No. 19: Ada 'に' = 'します', bukan 'かかります'!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 7: YARIMASU vs KUDASAIMASHITA vs ITADAKIMASU -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-cyan-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">SHIKEN NO. 21, 28, 31, 36</span>
+            <span class="text-cyan-400 font-mono">Beri-Terima Status Sosial</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">7. Hirarki Memberi & Menerima (Kasta Lawan Bicara)</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-rose-400 font-bold block mb-1">🐶 やります (Ke Bawahan/Hewan):</span>
+              <p class="text-slate-200">（ <strong class="text-emerald-400">妹</strong> ）にお菓子をやりました。</p>
+              <span class="text-rose-400 text-[10px] block mt-1">❌ HARAM ke 先生 / 部長 / 先輩!</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-emerald-400 font-bold block mb-1">🎁 いただきました (Saya Menerima):</span>
+              <p class="text-slate-200">私（ <strong class="text-emerald-400">は</strong> ）先輩（ <strong class="text-emerald-400">に</strong> ）本をいただきました。</p>
+              <span class="text-slate-400 text-[10px] block mt-1">Pola: [Penerima] は [Pemberi] に いただく</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">👑 くださいました (Atasan Memberi):</span>
+              <p class="text-slate-200">医者（ <strong class="text-amber-300">が</strong> ）アドバイスをくださいました。</p>
+              <span class="text-slate-400 text-[10px] block mt-1">Pola: [Atasan/Dokter] が 私に くださる</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 8: KADOUKA vs KA EMBEDDED -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-purple-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">SHIKEN NO. 18, 24, 32</span>
+            <span class="text-purple-400 font-mono">かどうか vs か</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">8. Anak Kalimat Pertanyaan Tertanam (Ada Tanya vs Tanpa Tanya)</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-cyan-400 font-bold block mb-1">❓ Ada Kata Tanya (5W1H):</span>
+              <p class="text-slate-200">今晩<strong>どこで</strong>食べる（ <strong class="text-cyan-300">か</strong> ）相談しましょう。</p>
+              <span class="text-slate-400 text-[10px]">Ada kata tanya 'どこ/いつ/何' = Cukup pakai <strong>か</strong>!</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">⚖️ Tanpa Kata Tanya (Ya/Tidak):</span>
+              <p class="text-slate-200">このミルクはまだ飲める（ <strong class="text-amber-300">かどうか</strong> ）確認します。<br>
+              靴のサイズが合う（ <strong class="text-amber-300">かどうか</strong> ）履いてみます。</p>
+              <span class="text-slate-400 text-[10px]">Pilihan biner ya atau tidak = Pakai <strong>かどうか</strong>!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 9: SUGIRU KONJUGASI GOLONGAN II -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-rose-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">BAB 44 TATA BAHASA</span>
+            <span class="text-rose-400 font-mono">～すぎる (KK GOL II)</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">9. Perubahan Bentuk '～すぎる' Mengikuti Kata Kerja Golongan II</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-emerald-400 font-bold block mb-1">Alasan Sebab (Bentuk て):</span>
+              <p class="text-slate-200">飲み（ <strong class="text-emerald-400">すぎて</strong> ）、お腹が痛い。</p>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-cyan-400 font-bold block mb-1">Syarat Pengandaian (Bentuk と/たら):</span>
+              <p class="text-slate-200">飲み（ <strong class="text-cyan-300">すぎると</strong> ）、体に悪いです。</p>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">Kata Sifat な Peleburan:</span>
+              <p class="text-slate-200">操作が（ <strong class="text-amber-300">簡単</strong> ）すぎて。</p>
+              <span class="text-rose-400 text-[10px] block mt-1">❌ Haram: 簡単な / 簡単だ</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 10: YASUI & NIKUI 100% KATA SIFAT I -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-emerald-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">BAB 44 TATA BAHASA</span>
+            <span class="text-emerald-400 font-mono">～やすい / ～にくい</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">10. Konjugasi ～やすい / ～にくい Persis 100% Seperti Kata Sifat い</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-cyan-400 font-bold block mb-1">Menyambung Kalimat Setara (Bentuk くて):</span>
+              <p class="text-slate-200">このコップはプラスチックで割れ（ <strong class="text-cyan-300">にくくて</strong> ）、安全です。</p>
+              <span class="text-rose-400 text-[10px]">❌ Jebakan Opsi: 割れにくいで / 割れにくいな</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-emerald-400 font-bold block mb-1">Menjadi Mudah (Bertemu なります):</span>
+              <p class="text-slate-200">ハチミツを入れると飲み（ <strong class="text-emerald-400">やすく</strong> ）なります。</p>
+              <span class="text-rose-400 text-[10px]">❌ Jebakan Opsi: 飲みやすいく / 飲みやすいい</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 11: PENYEBAB BENCANA / ALASAN ALAMI -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-amber-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">SHIKEN NO. 20, 37</span>
+            <span class="text-amber-400 font-mono">KB で (Penyebab Musibah)</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">11. Musibah & Kejadian Alam Menggunakan Partikel 'で'</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <p class="text-slate-200">交通事故（ <strong class="text-amber-300">で</strong> ）、電車が遅れました。</p>
+              <span class="text-slate-400 text-[10px]">Kecelakaan lalu lintas adalah PENYEBAB terhambatnya kereta.</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <p class="text-slate-200">大雨（ <strong class="text-amber-300">で</strong> ）、ジャカルタの道で洪水がありました。</p>
+              <span class="text-slate-400 text-[10px]">Hujan deras adalah PENYEBAB banjir.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 12: PASANGAN KEMBAR KOTOBA BAB 43 -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-cyan-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">KOTOBA BAB 43</span>
+            <span class="text-cyan-400 font-mono">Lawan Kata Otomatis</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">12. Pasangan Lawan Kata & Partikel Tetap Bab 43</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-jp text-center">
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="text-emerald-400 font-bold block">輸出が 増えます</span>
+              <span class="text-slate-400">Ekspor bertambah</span>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="text-rose-400 font-bold block">輸出が 減ります</span>
+              <span class="text-slate-400">Ekspor berkurang</span>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="text-cyan-400 font-bold block">値段が 上がります</span>
+              <span class="text-slate-400">Harga meningkat</span>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block">値段が 下がります</span>
+              <span class="text-slate-400">Harga menurun</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 13: TRIO KERUSAKAN BARANG BAB 43 -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-purple-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">KOTOBA BAB 43</span>
+            <span class="text-purple-400 font-mono">Trio Rusak & Lepas</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">13. Trio Kerusakan Benda: Tali, Kancing, dan Barang Bawaan</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1 font-jp">
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-cyan-400 font-bold block mb-1">ひもが 切れます II</span>
+              <span class="text-slate-400 text-[10px]">Tali terputus / putus.</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-amber-400 font-bold block mb-1">ボタンが とれます II</span>
+              <span class="text-slate-400 text-[10px]">Kancing baju terlepas.</span>
+            </div>
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+              <span class="text-rose-400 font-bold block mb-1">荷物が 落ちます II</span>
+              <span class="text-slate-400 text-[10px]">Barang bawaan terjatuh.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trap 14: PASANGAN SIFAT BAB 44 -->
+        <div class="trap-card bg-cardDark p-4 rounded-2xl border border-slate-800 hover:border-rose-500/40 transition space-y-2">
+          <div class="flex justify-between items-center text-[10px] font-bold">
+            <span class="px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">KOTOBA BAB 44</span>
+            <span class="text-rose-400 font-mono">Tekstur, Rasa, & Bentuk</span>
+          </div>
+          <h3 class="text-sm font-bold text-white">14. Pasangan Kontras Tekstur, Ketebalan & Rasa Bab 44</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1 text-[11px] font-jp">
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="text-amber-300 font-bold block">濃い (Kental/Tua)</span>
+              <span class="text-slate-400">VS 薄い (Tawar/Tipis/Muda)</span>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="text-cyan-300 font-bold block">厚い (Tebal buku)</span>
+              <span class="text-slate-400">VS 薄い (Tipis kertas)</span>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="text-emerald-300 font-bold block">太い (Gemuk silinder)</span>
+              <span class="text-slate-400">VS 細い (Kurus silinder)</span>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="text-purple-300 font-bold block">泣きます (Menangis)</span>
+              <span class="text-slate-400">VS 笑います (Tertawa)</span>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="text-rose-300 font-bold block">乾きます (Mengering)</span>
+              <span class="text-slate-400">VS ぬれます (Basah kuyup)</span>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="text-blue-300 font-bold block">和食 (Makanan Jepang)</span>
+              <span class="text-slate-400">VS 洋食 (Makanan Barat)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer Quick Tips -->
+  <footer class="border-t border-slate-800/60 py-2 px-3 bg-slate-950/80 text-center text-[11px] text-slate-400">
+    <span>💡 <strong>Tips Shiken:</strong> Gunakan keyboard <strong>1 - 4</strong> untuk menjawab kilat tanpa mouse, dan panah <strong>← / →</strong> untuk navigasi soal!</span>
+  </footer>
+
+  <script>
+    // ==============================================================
+    // 1. AUDIO SYNTHESIS & TTS ENGINE
+    // ==============================================================
+    let audioContext = null;
+    let isAudioEnabled = true;
+
+    function initAudio() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function toggleAudio() {
+      isAudioEnabled = !isAudioEnabled;
+      document.getElementById('audioStatus').textContent = isAudioEnabled ? 'ON' : 'OFF';
+      document.getElementById('audioStatus').className = isAudioEnabled ? 'text-neonCyan' : 'text-slate-500';
+      document.getElementById('audioIcon').textContent = isAudioEnabled ? '🔊' : '🔇';
+      if (isAudioEnabled) playTone(580, 0.08);
+    }
+
+    function playTone(freq, dur) {
+      if (!isAudioEnabled) return;
+      try {
+        initAudio();
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.12, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + dur);
+        osc.start();
+        osc.stop(audioContext.currentTime + dur);
+      } catch (e) {}
+    }
+
+    function playSuccess() {
+      if (!isAudioEnabled) return;
+      try {
+        initAudio();
+        const now = audioContext.currentTime;
+        [523.25, 659.25, 783.99].forEach((f, i) => {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+          osc.frequency.value = f;
+          gain.gain.setValueAtTime(0.1, now + (i * 0.07));
+          gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.07) + 0.12);
+          osc.start(now + (i * 0.07));
+          osc.stop(now + (i * 0.07) + 0.12);
+        });
+      } catch (e) {}
+    }
+
+    function playFail() {
+      if (!isAudioEnabled) return;
+      try {
+        initAudio();
+        const now = audioContext.currentTime;
+        [220, 180].forEach((f, i) => {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.type = 'sawtooth';
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+          osc.frequency.value = f;
+          gain.gain.setValueAtTime(0.12, now + (i * 0.09));
+          gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.09) + 0.15);
+          osc.start(now + (i * 0.09));
+          osc.stop(now + (i * 0.09) + 0.15);
+        });
+      } catch (e) {}
+    }
+
+    function speakJapanese(text) {
+      if (!isAudioEnabled || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text.replace(/\[.*?\]/g, ''));
+      u.lang = 'ja-JP';
+      u.rate = 0.95;
+      window.speechSynthesis.speak(u);
+    }
+
+    // ==============================================================
+    // 2. 30 SOAL LATIHAN BUNPOU (BAB 43, 44, & SHIKEN 18-37)
+    // ==============================================================
+    const bunpouAllQuestions = [
+      {
+        q: "日本旅行の予算は10万円（　）。これ以上は使えません。",
+        cat: "ch44",
+        opts: ["a. に かかります", "b. に します", "c. に やります", "d. に みます"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 19: PARTIKEL に MENETAPKAN PILIHAN",
+        explain: "<strong>KENAPA 'に します'?</strong> Perhatikan partikel <strong>に</strong> sebelum kurung! Jika menghabiskan uang secara alami tanpa partikel に: <code>10万円かかります</code>. Karena ada partikel <strong>に</strong>, rumusnya adalah menetapkan pilihan/anggaran Bab 44: <strong>KB に します</strong>!",
+        rule: "Kata Benda ＋ に します ＝ Menetapkan Keputusan / Pilihan Anggaran"
+      },
+      {
+        q: "黒い雲がたくさん出てきました。今にも雨が（　）。",
+        cat: "ch43",
+        opts: ["a. 降るそうです", "b. 降りそうです", "c. 降ったそうです", "d. 降りますそうです"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN BAB 43: SOUDESU DUGAN vs KABAR BURUNG",
+        explain: "<strong>KENAPA '降りそうです'?</strong> Kuncinya ada pada kata keterangan waktu <strong>今にも</strong> (sebentar lagi mau terjadi). Wajib pakai pola dugaan visual Bab 43: KK buang ます + そうです (<code>降り ＋ そうです</code>). <em>降るそうです</em> adalah kabar burung Bab 47.",
+        rule: "今にも ＋ [KK buang ます] ＋ そうです (Gejala akan terjadi detik ini)"
+      },
+      {
+        q: "彼女はどんな難しい問題もすぐ解けます。本当に頭が（　）そうです。",
+        cat: "ch43",
+        opts: ["a. いい", "b. よく", "c. よさ", "d. いいな"],
+        ans: 2,
+        trapNotice: "⚠️ JEBAKAN MUTLAK: PENGECUALIAN KATA 'いい'",
+        explain: "<strong>KENAPA 'よさ'?</strong> Kata sifat <code>いい</code> <strong>HARAM</strong> menjadi <em>いいそう</em>. Wajib berubah secara mutlak menjadi <strong>よさそうです</strong>! Begitu juga <code>ない</code> menjadi <strong>なさそうです</strong>.",
+        rule: "Pengecualian Mutlak: いい → よさそう | ない → なさそう"
+      },
+      {
+        q: "この鋭いナイフは果物（　）使います。",
+        cat: "shiken",
+        opts: ["a. で", "b. のに", "c. に", "d. ので"],
+        ans: 2,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 30: KB に vs KK のに",
+        explain: "<strong>KENAPA 'に'?</strong> Perhatikan kata sebelum kurung: <code>果物</code> adalah KATA BENDA murni! Pola fungsi: jika kata kerja bentuk kamus memakai <em>切るのに使います</em>. Namun jika kata benda murni, HANYA memakai <strong>KB に 使います</strong>.",
+        rule: "Kata Benda ＋ に使います VS Kata Kerja Kamus ＋ のに使います"
+      },
+      {
+        q: "この宿題をする（　）1時間（　）。",
+        cat: "shiken",
+        opts: ["a. のために・に", "b. のに・かかります", "c. ので・かかります", "d. ために・やります"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 27: NONI KAKARIMASU",
+        explain: "<strong>KENAPA 'のに・かかります'?</strong> Menyatakan jumlah waktu/biaya yang diperlukan untuk suatu aktivitas memakai <strong>KK Kamus ＋ のに ＋ [Waktu/Biaya] ＋ かかります</strong>. Bukan <em>のために</em> (demi seseorang).",
+        rule: "[KK Kamus] のに ＋ [Waktu / Biaya] ＋ かかります"
+      },
+      {
+        q: "「ちょっとスーパー（　）牛乳を買って来ます。」",
+        cat: "ch43",
+        opts: ["a. に", "b. で", "c. から", "d. へ"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN BAB 43: PARTIKEL TEMPAT TRANSAKSI",
+        explain: "<strong>KENAPA 'で'?</strong> Tempat kita melakukan aktivitas jual beli ditandai partikel <strong>で</strong> (<code>スーパーで買って来ます</code>). Mengambil barang dari dalam ruangan barulah pakai <strong>から</strong> (<code>台所から取って来ます</code>).",
+        rule: "Tempat Transaksi: で 買って来ます VS Asal Ruang: から 取って来ます"
+      },
+      {
+        q: "昨日、庭のかわいい（　）に餌をやりました。",
+        cat: "shiken",
+        opts: ["a. 先生", "b. 先輩", "c. 犬", "d. 部長"],
+        ans: 2,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 28: KASTA YARIMASU",
+        explain: "<strong>KENAPA '犬'?</strong> Kata kerja <strong>やりました</strong> HANYA boleh ditujukan kepada bawahan, adik (妹), hewan peliharaan, atau tanaman! Kepada guru atau atasan wajib memakai <em>さしあげました</em>.",
+        rule: "やります ＝ Khusus Hewan / Tanaman / Adik / Bawahan"
+      },
+      {
+        q: "ゆうべ冷たいビールを飲み（　）、今朝からお腹が痛いです。",
+        cat: "ch44",
+        opts: ["a. すぎて", "b. すぎたら", "c. すぎるで", "d. すぎない"],
+        ans: 0,
+        trapNotice: "⚠️ JEBAKAN BAB 44: SUGIRU ADALAH KK GOLONGAN II",
+        explain: "<strong>KENAPA 'すぎて'?</strong> Kata kerja gabungan <code>～すぎる</code> berstatus sebagai <strong>Kata Kerja Golongan II</strong>. Mengungkapkan alasan akibat (karena terlalu banyak minum) menjadi bentuk て: <code>飲み ＋ すぎて</code>.",
+        rule: "～すぎる konjugasi persis seperti たべます (Gol II: すぎて / すぎた / すぎると)"
+      },
+      {
+        q: "最近のスマートフォンは操作が（　）すぎて、かえって使いにくい。",
+        cat: "ch44",
+        opts: ["a. 簡単な", "b. 簡単に", "c. 簡単", "d. 簡単だ"],
+        ans: 2,
+        trapNotice: "⚠️ JEBAKAN BAB 44: PELEBURAN KATA SIFAT な",
+        explain: "<strong>KENAPA '簡単'?</strong> Kata sifat な (<code>簡単[な]</code>) ketika digabung dengan <code>～すぎる</code> wajib membuang 'な' nya secara murni! JANGAN pernah menambah <em>だ</em> atau <em>に</em>. Cukup tempel: <strong>簡単 ＋ すぎて</strong>.",
+        rule: "KS な buang な ＋ すぎます (Contoh: 簡単すぎます / 静かすぎます)"
+      },
+      {
+        q: "このコップはプラスチックで割れ（　）、とても安全です。",
+        cat: "ch44",
+        opts: ["a. にくいで", "b. にくくて", "c. にくいな", "d. にくく"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN BAB 44: ～にくい ADALAH 100% KATA SIFAT い",
+        explain: "<strong>KENAPA 'にくくて'?</strong> Akhiran <code>～にくい</code> berubah 100% mengikuti aturan Kata Sifat い. Ketika menghubungkan dua sifat setara, akhiran 'い' diganti <strong>くて</strong>: <code>割れにくくて、安全です</code>!",
+        rule: "～にくい ＋ Sifat lain → ～にくくて (Bukan にくいで!)"
+      },
+      {
+        q: "赤ちゃんが寝ていますから、テレビの音（　）小さくしてください。",
+        cat: "ch44",
+        opts: ["a. が", "b. で", "c. を", "d. に"],
+        ans: 2,
+        trapNotice: "⚠️ JEBAKAN BAB 44: を します vs が なります",
+        explain: "<strong>KENAPA 'を'?</strong> Ini tindakan sengaja mengubah kondisi. Rumus: <strong>KB を ＋ KSい(buang い jadi く) ＋ します</strong>. Objek yang diubah WAJIB ditandai partikel <strong>を</strong> (<code>音を小さくします</code>).",
+        rule: "KB を ～く/にします (Sengaja) VS KB が ～く/になります (Alami)"
+      },
+      {
+        q: "すみません、駅までの道を教えて（　）。",
+        cat: "shiken",
+        opts: ["a. いただきますか", "b. やりませんか", "c. くださいませんか", "d. くれませんでした"],
+        ans: 2,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 25: PERMINTAAN SANTUN",
+        explain: "<strong>KENAPA 'くださいませんか'?</strong> Meminta tolong santun kepada orang luar/orang tak dikenal di jalan menggunakan <strong>KK て ＋ くださいませんか</strong>.",
+        rule: "Permintaan Sangat Sopan: ～て くださいませんか"
+      },
+      {
+        q: "この牛乳は古いかもしれません。まだ飲める（　）確認します。",
+        cat: "shiken",
+        opts: ["a. ので", "b. のに", "c. かどうか", "d. か"],
+        ans: 2,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 18: KADOUKA vs KA",
+        explain: "<strong>KENAPA 'かどうか'?</strong> Kalimat ini TIDAK memiliki kata tanya (5W1H). Artinya: 'Memastikan APAKAH masih bisa diminum ATAU TIDAK'. Gunakan <strong>KK Biasa ＋ かどうか</strong>.",
+        rule: "Tanpa Kata Tanya: ～かどうか VS Ada Kata Tanya: ～か"
+      },
+      {
+        q: "来週遊びに来る友達（　）、美味しい日本料理を作ります。",
+        cat: "shiken",
+        opts: ["a. ために", "b. に", "c. のために", "d. のに"],
+        ans: 2,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 26: のために DEMI SESEORANG",
+        explain: "<strong>KENAPA 'のために'?</strong> Melakukan suatu kebaikan demi orang lain: <strong>Kata Benda ＋ の ＋ ために</strong> (<code>友達のために</code>). Jangan hilangkan partikel <strong>の</strong>!",
+        rule: "Kata Benda ＋ のために ＝ Demi seseorang / Untuk kepentingan"
+      },
+      {
+        q: "この漢方薬は苦いですが、ハチミツを入れると飲み（　）なりますよ。",
+        cat: "ch44",
+        opts: ["a. やすいに", "b. やすく", "c. やすいで", "d. やすい"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN BAB 44: YASUI + NARIMASU",
+        explain: "<strong>KENAPA 'やすく'?</strong> Akhiran <code>～やすい</code> adalah Kata Sifat い. Ketika bertemu kata kerja <em>なります</em>, akhiran 'い' berubah menjadi <strong>く</strong>: <code>飲みやすくなります</code>.",
+        rule: "～やすい ＋ なります → ～やすくなります"
+      },
+      {
+        q: "交通事故（　）、電車が30分も遅れました。",
+        cat: "shiken",
+        opts: ["a. に", "b. で", "c. のために", "d. ので"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 20: PARTIKEL PENYEBAB MUSIBAH",
+        explain: "<strong>KENAPA 'で'?</strong> Menyatakan penyebab bencana alam atau musibah yang mengakibatkan dampak negatif menggunakan <strong>Kata Benda ＋ で</strong> (<code>交通事故で</code>, <code>大雨で</code>, <code>地震で</code>).",
+        rule: "[Musibah / Bencana] で ＝ Karena / Disebabkan oleh musibah"
+      },
+      {
+        q: "私（　）先輩（　）新しい小説をいただきました。",
+        cat: "shiken",
+        opts: ["a. に・は", "b. は・に", "c. は・が", "d. が・を"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 21: POLA いただく",
+        explain: "<strong>KENAPA 'は・に'?</strong> Pola menerima dengan santun dari atasan: <strong>[Penerima] は [Pemberi] に [Benda] を いただきます</strong>. Maka kalimatnya: <code>私は先輩に小説をいただきました</code>.",
+        rule: "Pola: [Saya] は [Atasan] に いただきます"
+      },
+      {
+        q: "このケーキは美味しそうだから、一口（　）みます。",
+        cat: "shiken",
+        opts: ["a. 食べる", "b. 食べて", "c. 食べ", "d. 飲んで"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 22: COBA MELAKUKAN TE MIMASU",
+        explain: "<strong>KENAPA '食べて'?</strong> Pola mencoba melakukan sesuatu untuk pertama kali adalah <strong>KK Bentuk て ＋ みます</strong> (<code>食べてみます</code>: coba makan).",
+        rule: "KK Bentuk て ＋ みます ＝ Mencoba melakukan aksi"
+      },
+      {
+        q: "雨が降っ（　）、サッカーの試合が中止になりました。",
+        cat: "shiken",
+        opts: ["a. て", "b. で", "c. ので", "d. ために"],
+        ans: 0,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 23: TE BENTUK ALASAN",
+        explain: "<strong>KENAPA 'て'?</strong> Bentuk て dari <code>降ります</code> adalah <code>降って</code>! Menghubungkan sebab musibah secara berurutan: <code>雨が降って、試合が中止になりました</code>.",
+        rule: "雨が降って (Bentuk て menghubungkan sebab yang tidak disengaja)"
+      },
+      {
+        q: "この靴のサイズが合う（　）履いてみます。",
+        cat: "shiken",
+        opts: ["a. かどうか", "b. ので", "c. か", "d. ために"],
+        ans: 0,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 24: KADOUKA HAKEMASU",
+        explain: "<strong>KENAPA 'かどうか'?</strong> 'Mencoba memakai untuk melihat pas ATAU tidaknya'. Karena tidak ada kata tanya (5W1H), wajib menggunakan <strong>かどうか</strong>.",
+        rule: "Tanpa kata tanya ＋ かどうか"
+      },
+      {
+        q: "まだ仕事が終わらない（　）、今夜の飲み会に遅くなります。",
+        cat: "shiken",
+        opts: ["a. かどうか", "b. ので", "c. か", "d. ために"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 29: KATA SAMBUNG ALASAN ので",
+        explain: "<strong>KENAPA 'ので'?</strong> Menyatakan alasan objektif dan sopan: KK Bentuk Biasa ＋ <strong>ので</strong> (<code>終わらないので</code>).",
+        rule: "[KK Biasa] ので ＝ Karena / Berhubung"
+      },
+      {
+        q: "親切な医者がわかりやすいアドバイスを（　）。",
+        cat: "shiken",
+        opts: ["a. くださいました", "b. やりました", "c. いただきました", "d. かかります"],
+        ans: 0,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 31: KUDASAIMASHITA SUBJEK ATASAN",
+        explain: "<strong>KENAPA 'くださいました'?</strong> Subjek yang melakukan tindakan adalah <code>医者が</code> (dokter yang memberi nasihat kepada saya). Ketika orang berkedudukan tinggi memberi sesuatu kepada saya: <strong>[Orang lain/Atasan] が くださる</strong>!",
+        rule: "[Atasan/Orang luar] が くださいます (Memberikan kepada saya)"
+      },
+      {
+        q: "今晩どこで食べる（　）みんなで相談しましょう。",
+        cat: "shiken",
+        opts: ["a. ので", "b. かどうか", "c. で", "d. か"],
+        ans: 3,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 32: ADA KATA TANYA どこで",
+        explain: "<strong>KENAPA HANYA 'か'?</strong> Perhatikan ada kata tanya <strong>どこで</strong> (di mana)! Jika ada kata tanya (5W1H), anak kalimat pertanyaan tertanam HANYA menggunakan <strong>か</strong> (bukan かどうか!).",
+        rule: "[Kata Tanya: どこ/何/いつ] ＋ KK Kamus ＋ か"
+      },
+      {
+        q: "憧れの大学に合格する（　）、毎日夜遅くまで勉強しています。",
+        cat: "shiken",
+        opts: ["a. かどうか", "b. のに", "c. か", "d. ために"],
+        ans: 3,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 33: CITA-CITA TUJUAN ために",
+        explain: "<strong>KENAPA 'ために'?</strong> Menyatakan tujuan atau cita-cita yang didorong oleh kemauan kuat: <strong>KK Bentuk Kamus ＋ ために</strong> (<code>合格するために勉強する</code>).",
+        rule: "[KK Kamus Cita-cita/Target] ために ＋ Tindakan aktif"
+      },
+      {
+        q: "夏休みに子供をディズニーランドに（　）やりました。",
+        cat: "shiken",
+        opts: ["a. 連れて来る", "b. 連れて来て", "c. 連れて行って", "d. 連れて行く"],
+        ans: 2,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 34: TE YARIMASU AJAK ANAK",
+        explain: "<strong>KENAPA '連れて行って'?</strong> Pola berbuat kebaikan kepada anak/hewan: <strong>KK Bentuk て ＋ やります</strong>. Mengajak pergi: <code>連れて行ってやりました</code>.",
+        rule: "KK Bentuk て ＋ やります (Melakukan perbuatan demi anak/hewan)"
+      },
+      {
+        q: "この仕事は難しそうだから、もう一度やって（　）。",
+        cat: "shiken",
+        opts: ["a. みます", "b. かかります", "c. いただきました", "d. くださいました"],
+        ans: 0,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 35: YATTE MIMASU",
+        explain: "<strong>KENAPA 'みます'?</strong> Mengungkapkan niat mencoba kembali: <code>やってみます</code> (mencoba melakukan).",
+        rule: "やって ＋ みます ＝ Akan coba lakukan"
+      },
+      {
+        q: "道に迷ったとき、親切な人に道を教えて（　）。",
+        cat: "shiken",
+        opts: ["a. くださいませんか", "b. いただきました", "c. くださいました", "d. やりました"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 36: TE ITADAKIMASHITA",
+        explain: "<strong>KENAPA 'いただきました'?</strong> Perhatikan partikel pendamping: <code>親切な人「に」</code>! Pola: [Orang] <strong>に</strong> ～て <strong>いただきます</strong> (Mendapat kebaikan ditunjukkan jalan oleh orang baik). Jika pakai <em>くださいました</em>, partikelnya harus <code>親切な人「が」</code>.",
+        rule: "[Orang] に ～ていただきました VS [Orang] が ～てくださいました"
+      },
+      {
+        q: "大雨（　）ジャカルタの道で洪水がありました。",
+        cat: "shiken",
+        opts: ["a. で", "b. に", "c. ので", "d. ために"],
+        ans: 0,
+        trapNotice: "⚠️ JEBAKAN SHIKEN NO. 37: DAAME DE",
+        explain: "<strong>KENAPA 'で'?</strong> <code>大雨</code> (hujan deras) adalah fenomena alam penyebab bencana. Menghubungkan sebab kejadian alam: <strong>KB Alam ＋ で</strong> (<code>大雨で洪水がありました</code>).",
+        rule: "大雨で / 地震で / 台風で ＝ Akibat fenomena alam"
+      },
+      {
+        q: "ホテルの部屋は静かなツイン（　）。",
+        cat: "ch44",
+        opts: ["a. に します", "b. を します", "c. で します", "d. に なります"],
+        ans: 0,
+        trapNotice: "⚠️ JEBAKAN BAB 44: MEMILIH TIPE KAMAR",
+        explain: "<strong>KENAPA 'に します'?</strong> Menentukan pilihan dari beberapa opsi (single atau twin) di hotel: <strong>KB に します</strong> (<code>ツインにします</code>).",
+        rule: "KB に します ＝ Menentukan Pilihan / Memesan"
+      },
+      {
+        q: "喉が渇いたので、台所（　）冷たいお茶を取って来ます。",
+        cat: "ch43",
+        opts: ["a. で", "b. から", "c. に", "d. へ"],
+        ans: 1,
+        trapNotice: "⚠️ JEBAKAN BAB 43: ASAL BARANG DI RUANGAN",
+        explain: "<strong>KENAPA 'から'?</strong> Mengambil barang dari sebuah ruangan untuk dibawa keluar ditandai partikel <strong>から</strong>: <code>台所から取って来ます</code>!",
+        rule: "[Ruangan Asal] から 取って来ます"
+      }
+    ];
+
+    // ==============================================================
+    // 3. DATABASE KOTOBA BAB 43 & 44 LENGKAP (70+ KOSAKATA)
+    // ==============================================================
+    const kotobaAllList = [
+      // BAB 43 POKOK (20 Kata)
+      { kanji: "増えます", kana: "ふえます", part: "[輸出が～] II", cat: "ch43_main", opts: ["a. Berkurang", "b. Bertambah [ekspor]", "c. Terputus", "d. Turun"], ans: 1, mnem: "土 (Tanah) + 曽 (Dulu): Menimbun tanah agar wilayah bertambah luas." },
+      { kanji: "減ります", kana: "へります", part: "[輸出が～] I", cat: "ch43_main", opts: ["a. Meningkat", "b. Berkurang [ekspor]", "c. Rusak", "d. Habis"], ans: 1, mnem: "氵 (Air) + 咸 (Kapak): Pasukan musuh kena tebasan air bah berkurang." },
+      { kanji: "上がります", kana: "あがります", part: "[値段が～] I", cat: "ch43_main", opts: ["a. Menurun", "b. Meningkat / Naik [harga]", "c. Melompat", "d. Selesai"], ans: 1, mnem: "Garis horisontal dengan tiang tegak menjulang ke ATAS!" },
+      { kanji: "下がります", kana: "さがります", part: "[値段が～] I", cat: "ch43_main", opts: ["a. Naik", "b. Menurun / Turun [harga]", "c. Berhenti", "d. Basah"], ans: 1, mnem: "Garis menggantung ke BAWAH menunjukkan penurunan harga." },
+      { kanji: "切れます", kana: "きれます", part: "[ひもが～] II", cat: "ch43_main", opts: ["a. Terlepas", "b. Terputus [tali]", "c. Jatuh", "d. Pecah"], ans: 1, mnem: "七 (Tujuh) + 刀 (Pedang): Menebas tali sampai putus total!" },
+      { kanji: "とれます", kana: "とれます", part: "[ボタンが～] II", cat: "ch43_main", opts: ["a. Terpasang", "b. Terlepas [kancing]", "c. Terbakar", "d. Menghilang"], ans: 1, mnem: "Kancing baju kendur lalu copot/terlepas dari jahitannya." },
+      { kanji: "落ちます", kana: "おちます", part: "[荷物が～] II", cat: "ch43_main", opts: ["a. Mengering", "b. Terjatuh [barang/paket]", "c. Tertinggal", "d. Hilang"], ans: 1, mnem: "艹 (Rumput) + 氵 (Air) + 各 (Tiap): Tetesan embun jatuh ke bawah." },
+      { kanji: "なくなります", kana: "なくなります", part: "[ガソリンが～] I", cat: "ch43_main", opts: ["a. Meluap", "b. Habis [bensin]", "c. Rusak", "d. Macet"], ans: 1, mnem: "Bensin tangki disedot terus sampai menjadi kosong (tiada)." },
+      { kanji: "変[な]", kana: "へん[な]", part: "Kata Sifat な", cat: "ch43_main", opts: ["a. Bagus", "b. Aneh / Ganjil", "c. Bahagia", "d. Ringan"], ans: 1, mnem: "Posisi jungkir balik kepala di bawah, sangat ANEH!" },
+      { kanji: "幸せ[な]", kana: "しあわせ[な]", part: "Kata Sifat な", cat: "ch43_main", opts: ["a. Bahagia", "b. Kasihan", "c. Bahaya", "d. Sulit"], ans: 0, mnem: "Lepas dari belenggu kurungan, merasakan bahagia." },
+      { kanji: "楽[な]", kana: "らく[な]", part: "Kata Sifat な", cat: "ch43_main", opts: ["a. Lelah", "b. Ringan / Santai / Nyaman", "c. Mahal", "d. Sempit"], ans: 1, mnem: "Mendengarkan alunan musik (音楽) membuat hati santai dan ringan!" },
+      { kanji: "うまい", kana: "うまい", part: "Kata Sifat い", cat: "ch43_main", opts: ["a. Hambar", "b. Enak / Lezat / Mahir", "c. Pedas", "d. Pahit"], ans: 1, mnem: "Masakan sedap luar biasa yang dinikmati dengan nikmat." },
+      { kanji: "まずい", kana: "まずい", part: "Kata Sifat い", cat: "ch43_main", opts: ["a. Enak", "b. Tidak enak / Tidak sedap", "c. Manis", "d. Dingin"], ans: 1, mnem: "Lawan kata mutlak dari うまい (rasa tidak sedap)." },
+      { kanji: "つまらない", kana: "つまらない", part: "Kata Sifat い", cat: "ch43_main", opts: ["a. Menarik", "b. Tidak menarik / Membosankan / Percuma", "c. Seru", "d. Lucu"], ans: 1, mnem: "Cerita basi yang membuat orang mengantuk dan bosan." },
+      { kanji: "優しい", kana: "やさしい", part: "Kata Sifat い", cat: "ch43_main", opts: ["a. Jahat", "b. Baik hati / Ramah", "c. Kasar", "d. Pelit"], ans: 1, mnem: "亻 (Orang) + 憂: Orang berhati mulia yang lembut dan baik hati." },
+      { kanji: "ガソリン", kana: "ガソリン", part: "Kata Benda", cat: "ch43_main", opts: ["a. Oli mesin", "b. Bensin", "c. Air aki", "d. Gas elpiji"], ans: 1, mnem: "Bahan bakar bensin untuk mobil dan motor." },
+      { kanji: "火", kana: "ひ", part: "Kata Benda", cat: "ch43_main", opts: ["a. Air", "b. Api", "c. Angin", "d. Tanah"], ans: 1, mnem: "Kobaran jilatan api unggun yang menyala." },
+      { kanji: "パンフレット", kana: "パンフレット", part: "Kata Benda", cat: "ch43_main", opts: ["a. Koran", "b. Pamflet / Brosur", "c. Tiket", "d. Buku catatan"], ans: 1, mnem: "Selebaran kertas pamflet informasi acara." },
+      { kanji: "今にも", kana: "いまにも", part: "Kata Keterangan", cat: "ch43_main", opts: ["a. Nanti sore", "b. Sekarang juga (gejala akan berubah)", "c. Kemarin dulu", "d. Selamanya"], ans: 1, mnem: "Sinyal mutlak Bab 43 untuk pola ～そうです (detik ini juga mau hujan)." },
+      { kanji: "わあ", kana: "わあ", part: "Seruan", cat: "ch43_main", opts: ["a. Aduh!", "b. Wah! (ungkapan kagum/kaget)", "c. Tidak!", "d. Diam!"], ans: 1, mnem: "Pekikan kaget atau takjub melihat sesuatu yang luar biasa." },
+
+      // BAB 43 YOMIMONO (5 Kata)
+      { kanji: "ばら", kana: "ばら", part: "Yomimono 43", cat: "ch43_yomi", opts: ["a. Melati", "b. Bunga mawar", "c. Sakura", "d. Matahari"], ans: 1, mnem: "Bunga mawar berduri yang harum semerbak." },
+      { kanji: "ドライブ", kana: "ドライブ", part: "Yomimono 43", cat: "ch43_yomi", opts: ["a. Balapan", "b. Jalan-jalan dengan mobil / Menyetir santai", "c. Naik kereta", "d. Servis mobil"], ans: 1, mnem: "Aktivitas berkendara mobil rekreasi bersama teman." },
+      { kanji: "理由", kana: "りゆう", part: "Yomimono 43", cat: "ch43_yomi", opts: ["a. Bukti", "b. Alasan", "c. Akibat", "d. Peraturan"], ans: 1, mnem: "理 (Logika) + 由 (Penyebab) = Alasan di balik suatu peristiwa." },
+      { kanji: "謝ります", kana: "あやまれます", part: "Yomimono 43 I", cat: "ch43_yomi", opts: ["a. Memarahi", "b. Memohon maaf / Minta maaf", "c. Berterima kasih", "d. Menuduh"], ans: 1, mnem: "言 (Kata) + 射 (Memanah): Melontarkan kata penyesalan mohon maaf." },
+      { kanji: "知り合います", kana: "しりあいます", part: "Yomimono 43 I", cat: "ch43_yomi", opts: ["a. Bertengkar", "b. Berkenalan / Saling mengenal", "c. Berpisah", "d. Menelpon"], ans: 1, mnem: "知 (Tahu) + 合 (Saling) = Saling mengenal satu sama lain." },
+
+      // BAB 44 POKOK (27 Kata)
+      { kanji: "泣きます", kana: "なきます", part: "Kata Kerja I", cat: "ch44_main", opts: ["a. Tertawa", "b. Menangis", "c. Berteriak", "d. Tidur"], ans: 1, mnem: "氵 (Air) + 立 (Berdiri): Berdiri berlinang air mata tersedu-sedu." },
+      { kanji: "笑います", kana: "わらいます", part: "Kata Kerja I", cat: "ch44_main", opts: ["a. Menangis", "b. Tertawa / Tersenyum", "c. Melamun", "d. Berlari"], ans: 1, mnem: "竹 (Bambu) + 夭: Lihat panda joget bawa bambu membuat tertawa riang." },
+      { kanji: "眠ります", kana: "ねむります", part: "Kata Kerja I", cat: "ch44_main", opts: ["a. Bangun", "b. Tidur [terlelap]", "c. Lupa", "d. Pingsan"], ans: 1, mnem: "目 (Mata) + 民: Mata terpejam tidur terlelap pulas." },
+      { kanji: "乾きます", kana: "かわきます", part: "[シャツが～] I", cat: "ch44_main", opts: ["a. Basah", "b. Mengering [kemeja]", "c. Robek", "d. Kotor"], ans: 1, mnem: "Kemeja dijemur di terik matahari langsung kering sempurna." },
+      { kanji: "ぬれます", kana: "ぬれます", part: "[シャツが～] II", cat: "ch44_main", opts: ["a. Mengering", "b. Kemeja basah kuyup", "c. Hilang", "d. Terlipat"], ans: 1, mnem: "Kena guyuran hujan lebat pakaian basah kuyup." },
+      { kanji: "滑ります", kana: "すべります", part: "Kata Kerja I", cat: "ch44_main", opts: ["a. Licin / Terpeleset", "b. Menabrak", "c. Terbang", "d. Menginjak"], ans: 0, mnem: "氵 (Air) + 骨 (Tulang): Lantai basah licin terpeleset sampai sakit tulang!" },
+      { kanji: "起きます", kana: "おきます", part: "[事故が～] II", cat: "ch44_main", opts: ["a. Menghindari", "b. Terjadi [kecelakaan]", "c. Selesai", "d. Berkurang"], ans: 1, mnem: "走 (Lari) + 己: Terjadi musibah tabrakan di persimpangan jalan." },
+      { kanji: "調節します", kana: "ちょうせつします", part: "Kata Kerja III", cat: "ch44_main", opts: ["a. Merusak", "b. Mengontrol / Menyetel / Menyesuaikan", "c. Mematikan", "d. Membeli"], ans: 1, mnem: "Menyetel suhu AC atau volume radio agar pas di telinga." },
+      { kanji: "安全[な]", kana: "あんぜん[な]", part: "Kata Sifat な", cat: "ch44_main", opts: ["a. Bahaya", "b. Aman", "c. Curam", "d. Licin"], ans: 1, mnem: "安 (Tenang) + 全 (Utuh): Kondisi yang aman tanpa ancaman bahaya." },
+      { kanji: "危険[な]", kana: "きけん[な]", part: "Kata Sifat な", cat: "ch44_main", opts: ["a. Santai", "b. Bahaya / Berbahaya", "c. Mudah", "d. Ramah"], ans: 1, mnem: "危 (Gawat) + 険 (Jurang): Berdiri di tepi jurang sangat berbahaya!" },
+      { kanji: "濃い", kana: "こい", part: "Kata Sifat い", cat: "ch44_main", opts: ["a. Tawar", "b. Kental [rasa] / Tua [warna]", "c. Encer", "d. Pahit"], ans: 1, mnem: "Kuah kari yang dimasak lama menjadi kental dan warnanya pekat tua." },
+      { kanji: "薄い", kana: "うすい", part: "Kata Sifat い", cat: "ch44_main", opts: ["a. Tebal", "b. Tawar [rasa] / Tipis / Muda [warna]", "c. Asin", "d. Kental"], ans: 1, mnem: "Sup kebanyakan air rasanya tawar encer, atau kertas tipis." },
+      { kanji: "厚い", kana: "あつい", part: "Kata Sifat い", cat: "ch44_main", opts: ["a. Tipis", "b. Tebal [buku/pakaian]", "c. Panas", "d. Manis"], ans: 1, mnem: "Buku kamus tebal ratusan halaman." },
+      { kanji: "太い", kana: "ふとい", part: "Kata Sifat い", cat: "ch44_main", opts: ["a. Kurus", "b. Gemuk / Tebal [silinder/batang/tali]", "c. Pendek", "d. Halus"], ans: 1, mnem: "Batang pohon yang besar dan gemuk lingkarannya." },
+      { kanji: "細い", kana: "ほそい", part: "Kata Sifat い", cat: "ch44_main", opts: ["a. Gemuk", "b. Kurus / Halus / Ramping", "c. Kasar", "d. Berat"], ans: 1, mnem: "糸 (Benang) + 田: Benang tipis kurus dan halus." },
+      { kanji: "空気", kana: "くうき", part: "Kata Benda", cat: "ch44_main", opts: ["a. Air minum", "b. Udara", "c. Debu", "d. Asap"], ans: 1, mnem: "空 (Langit) + 気 (Hawa) = Udara yang kita hirup sehari-hari." },
+      { kanji: "涙", kana: "なみだ", part: "Kata Benda", cat: "ch44_main", opts: ["a. Keringat", "b. Air mata", "c. Darah", "d. Ludah"], ans: 1, mnem: "氵 (Air) + 戻: Tetesan air mata yang mengalir di pipi." },
+      { kanji: "和食", kana: "わしょく", part: "Kata Benda", cat: "ch44_main", opts: ["a. Makanan Barat", "b. Makanan khas Jepang", "c. Makanan siap saji", "d. Roti"], ans: 1, mnem: "和 (Harmoni/Jepang) + 食 (Makan) = Kuliner tradisional Jepang (sushi, sashimi)." },
+      { kanji: "洋食", kana: "ようしょく", part: "Kata Benda", cat: "ch44_main", opts: ["a. Makanan Jepang", "b. Makanan Barat (western)", "c. Jamu", "d. Sup"], ans: 1, mnem: "洋 (Samudera/Barat) + 食 (Makan) = Kuliner hidangan barat (steak, spaghetti)." },
+      { kanji: "おかず", kana: "おかず", part: "Kata Benda", cat: "ch44_main", opts: ["a. Nasi putih", "b. Lauk-pauk", "c. Minuman", "d. Sendok"], ans: 1, mnem: "Hidangan lauk pendamping santapan nasi." },
+      { kanji: "量", kana: "りょう", part: "Kata Benda", cat: "ch44_main", opts: ["a. Kualitas", "b. Kuantitas / Jumlah / Takaran", "c. Harga", "d. Ukuran"], ans: 1, mnem: "Takaran volume timbangan suatu barang." },
+      { kanji: "一倍", kana: "いちばい", part: "Bilangan", cat: "ch44_main", opts: ["a. Dua kali", "b. Satu kali lipat", "c. Setengah", "d. Tiga kali"], ans: 1, mnem: "倍 adalah satuan kelipatan (-kali lipat)." },
+      { kanji: "シングル", kana: "シングル", part: "Kata Benda", cat: "ch44_main", opts: ["a. Kamar twin", "b. Kamar single (satu ranjang)", "c. Aula", "d. Dapur"], ans: 1, mnem: "Tipe kamar hotel satu tempat tidur tunggal." },
+      { kanji: "ツイン", kana: "ツイン", part: "Kata Benda", cat: "ch44_main", opts: ["a. Kamar single", "b. Kamar twin (dua ranjang terpisah)", "c. Kamar mandi", "d. Lobi"], ans: 1, mnem: "Tipe kamar hotel dengan dua tempat tidur." },
+      { kanji: "洗濯物", kana: "せんたくもの", part: "Kata Benda", cat: "ch44_main", opts: ["a. Sampah", "b. Pakaian cucian", "c. Piring kotor", "d. Baju baru"], ans: 1, mnem: "Pakaian kotor yang sedang atau sudah dicuci di mesin cuci." },
+      { kanji: "DVD", kana: "ディーブイディー", part: "Kata Benda", cat: "ch44_main", opts: ["a. Kaset tape", "b. DVD (kepingan cakram)", "c. Televisi", "d. Komputer"], ans: 1, mnem: "Cakram digital penyimpan film dan video." },
+      { kanji: "ホテルひろしま", kana: "ホテルひろしま", part: "Kata Benda", cat: "ch44_main", opts: ["a. Nama restoran", "b. Hotel fiksi Hiroshima (dalam contoh buku)", "c. Nama kapal", "d. Stasiun"], ans: 1, mnem: "Contoh nama hotel yang dipakai dalam latihan teks Bab 44." },
+
+      // BAB 44 KAIWA SALON (8 Kata)
+      { kanji: "どうなさいますか", kana: "どうなさいますか", part: "Kaiwa Salon", cat: "ch44_salon", opts: ["a. Mau beli apa?", "b. Modelnya mau bagaimana? (hormat)", "c. Berapa harganya?", "d. Siapa namanya?"], ans: 1, mnem: "Kalimat pembuka kapster salon menanyakan gaya rambut yang diinginkan." },
+      { kanji: "カット", kana: "カット", part: "Kaiwa Salon", cat: "ch44_salon", opts: ["a. Keramas", "b. Potong rambut", "c. Cat rambut", "d. Pijat"], ans: 1, mnem: "Istilah potong rambut di salon." },
+      { kanji: "シャンプー", kana: "シャンプー", part: "Kaiwa Salon", cat: "ch44_salon", opts: ["a. Cukur kumis", "b. Berkeramas / Cuci rambut (~をします)", "c. Keringkan", "d. Rapikan"], ans: 1, mnem: "Mencuci rambut kepala dengan sampo wangi." },
+      { kanji: "どういうふうになさいますか", kana: "どういうふうになさいますか", part: "Kaiwa Salon", cat: "ch44_salon", opts: ["a. Mau bayar pakai apa?", "b. Modelnya seperti bagaimana? (hormat)", "c. Kapan selesainya?", "d. Suka warna apa?"], ans: 1, mnem: "Bentuk hormat menanyakan detail potongan rambut." },
+      { kanji: "ショート", kana: "ショート", part: "Kaiwa Salon", cat: "ch44_salon", opts: ["a. Panjang", "b. Pendek [rambut]", "c. Keriting", "d. Ikal"], ans: 1, mnem: "Gaya rambut potong pendek." },
+      { kanji: "～みたいにしてください", kana: "～みたいにしてください", part: "Kaiwa Salon", cat: "ch44_salon", opts: ["a. Jangan dibuat seperti itu", "b. Tolong buat seperti ~ (contoh model/foto)", "c. Kurangi sedikit", "d. Potong habis"], ans: 1, mnem: "Menunjukkan foto majalah kepada penata rambut agar ditiru modelnya." },
+      { kanji: "これでよろしいでしょうか", kana: "これでよろしいでしょうか", part: "Kaiwa Salon", cat: "ch44_salon", opts: ["a. Apakah sudah bayar?", "b. Bagaimana kalau begini? (sopan konfirmasi)", "c. Bolehkah saya pergi?", "d. Di mana cerminnya?"], ans: 1, mnem: "Kapster memperlihatkan hasil guntingan rambut di kaca kepada tamu." },
+      { kanji: "[どうも]お疲れさまでした", kana: "おつかれさまでした", part: "Kaiwa Salon", cat: "ch44_salon", opts: ["a. Selamat datang", "b. Sudah selesai / Terima kasih atas kerjasamanya", "c. Hati-hati di jalan", "d. Maaf merepotkan"], ans: 1, mnem: "Ucapan penutup kepada pelanggan setelah potong rambut selesai." },
+
+      // BAB 44 YOMIMONO (10 Kata)
+      { kanji: "嫌がります", kana: "いやがります", part: "Yomimono 44 I", cat: "ch44_yomi", opts: ["a. Menyukai", "b. Tidak mau / Merasa tidak suka / Enggan", "c. Meminta", "d. Tersenyum"], ans: 1, mnem: "Menunjukkan gestur terang-terangan tidak mau atau enggan." },
+      { kanji: "また", kana: "また", part: "Yomimono 44", cat: "ch44_yomi", opts: ["a. Tetapi", "b. Dan / Lalu / Lagi", "c. Karena", "d. Meskipun"], ans: 1, mnem: "Kata sambung penggabung paragraf: 'lagipula / dan'." },
+      { kanji: "うまく", kana: "うまく", part: "Yomimono 44", cat: "ch44_yomi", opts: ["a. Kacau", "b. Pandai / Pintar / Berjalan lancar", "c. Lambat", "d. Gagal"], ans: 1, mnem: "Bentuk adverbial dari うまい: melakukan sesuatu secara mahir dan lancar." },
+      { kanji: "順序", kana: "じゅんじょ", part: "Yomimono 44", cat: "ch44_yomi", opts: ["a. Peraturan", "b. Urutan / Tata tertib tahapan", "c. Pilihan", "d. Nilai"], ans: 1, mnem: "Tahapan nomor satu, dua, dan tiga yang berurutan." },
+      { kanji: "安心[な]", kana: "あんしん[な]", part: "Yomimono 44", cat: "ch44_yomi", opts: ["a. Cemas", "b. Kelegaan / Tenang / Lega", "c. Bahaya", "d. Sakit"], ans: 1, mnem: "安 (Tenang) + 心 (Hati) = Hati yang lega bebas dari kekhawatiran." },
+      { kanji: "表現", kana: "ひょうげん", part: "Yomimono 44", cat: "ch44_yomi", opts: ["a. Perasaan", "b. Ungkapan / Ekspresi", "c. Gambaran", "d. Suara"], ans: 1, mnem: "Cara mengungkapkan kata-kata atau raut wajah." },
+      { kanji: "例えば", kana: "たとえば", part: "Yomimono 44", cat: "ch44_yomi", opts: ["a. Oleh karena itu", "b. Misalnya / Contohnya", "c. Akhirnya", "d. Tetapi"], ans: 1, mnem: "Kata pembuka saat memberikan sebuah perumpamaan atau contoh." },
+      { kanji: "別れます", kana: "わかれます", part: "Yomimono 44 II", cat: "ch44_yomi", opts: ["a. Bertemu", "b. Berpisah", "c. Berkelahi", "d. Bersatu"], ans: 1, mnem: "Dua orang yang pamit jalan ke arah yang berlawanan." },
+      { kanji: "これら", kana: "これら", part: "Yomimono 44", cat: "ch44_yomi", opts: ["a. Dia", "b. Hal-hal ini / Ini semua (jamak)", "c. Mereka", "d. Di sana"], ans: 1, mnem: "Kata ganti penunjuk jamak untuk benda-benda ini." },
+      { kanji: "縁起が悪い", kana: "えんぎがわるい", part: "Yomimono 44", cat: "ch44_yomi", opts: ["a. Bawa hoki", "b. Tidak menyenangkan / Pertanda sial", "c. Sangat gembira", "d. Murah rezeki"], ans: 1, mnem: "Kepercayaan mitos Jepang mengenai angka atau benda yang membawa sial." }
+    ];
+
+    // ==============================================================
+    // 4. DATABASE 9 KANJI IRODORI (DARI FOTO ASLI BUKU IRODORI)
+    // ==============================================================
+    const irodoriQuestions = [
+      {
+        kanji: "来年", kana: "らいねん",
+        opts: ["a. Tahun lalu", "b. Tahun depan", "c. Bulan depan", "d. Setiap tahun"],
+        ans: 1,
+        mnem: "来 (Datang) + 年 (Tahun) = Tahun yang akan DATANG yakni TAHUN DEPAN!"
+      },
+      {
+        kanji: "会場", kana: "かいじょう",
+        opts: ["a. Tempat pertemuan / Gedung acara", "b. Lapangan olahraga", "c. Tempat parkir", "d. Stasiun kereta"],
+        ans: 0,
+        mnem: "会 (Bertemu) + 場 (Tempat) = TEMPAT berkumpulnya orang-orang untuk ACARA/PERTEMUAN!"
+      },
+      {
+        kanji: "世界", kana: "せかい",
+        opts: ["a. Negara asing", "b. Seluruh dunia", "c. Masyarakat luas", "d. Kota metropolitan"],
+        ans: 1,
+        mnem: "世 (Generasi umat manusia) + 界 (Batas bumi) = Seluruh jagat DUNIA!"
+      },
+      {
+        kanji: "体験", kana: "たいけん",
+        opts: ["a. Ujian masuk", "b. Pengalaman langsung", "c. Olahraga fisik", "d. Pemeriksaan dokter"],
+        ans: 1,
+        mnem: "体 (Tubuh) + 験 (Menguji) = Merasakan langsung dengan TUBUH sendiri: PENGALAMAN!"
+      },
+      {
+        kanji: "国際交流", kana: "こくさいこうりゅう",
+        opts: ["a. Perdagangan internasional", "b. Pertukaran internasional / Budaya", "c. Hubungan diplomatik", "d. Festival belanja"],
+        ans: 1,
+        mnem: "国際 (Antar-negara) + 交流 (Berbaur) = PERTUKARAN BUDAYA / INTERAKSI INTERNASIONAL!"
+      },
+      {
+        kanji: "禁止", kana: "きんし",
+        opts: ["a. Izin resmi", "b. Bahaya", "c. Larangan / Dilarang mutlak", "d. Berhenti sejenak"],
+        ans: 2,
+        mnem: "禁 (Ketat) + 止 (Stop) = Perintah STOP mutlak dari pihak berwenang: DILARANG!"
+      },
+      {
+        kanji: "紙", kana: "かみ",
+        opts: ["a. Kain katun", "b. Benang rajut", "c. Kertas", "d. Kulit buku"],
+        ans: 2,
+        mnem: "Radikal 糸 (Serat sutra) + 氏 (Keluarga) = Lembaran tipis dari serat kayu: KERTAS!"
+      },
+      {
+        kanji: "始まる", kana: "はじまる",
+        opts: ["a. Selesai", "b. Dimulai / Mulai", "c. Berangkat", "d. Masuk"],
+        ans: 1,
+        mnem: "女 (Wanita) + 台 (Panggung) = Begitu diva naik ke panggung, pertunjukan DIMULAI!"
+      },
+      {
+        kanji: "申し込む", kana: "もうしこむ",
+        opts: ["a. Mengajukan permohonan / Mendaftar", "b. Membatalkan janji", "c. Menolak berkas", "d. Meminta maaf"],
+        ans: 0,
+        mnem: "申 (Menyatakan) + 込む (Masuk) = Memasukkan berkas pernyataan minat: MENDAFTAR!"
+      }
+    ];
+
+    // ==============================================================
+    // 5. QUIZ STATE & LOGIC CONTROLLERS
+    // ==============================================================
+    let currentTab = 'bunpou';
+
+    // Bunpou State
+    let activeBunpouList = [...bunpouAllQuestions];
+    let curBunpouIdx = 0;
+    let bunpouScore = 0;
+    let bunpouAnswered = {};
+
+    // Kotoba 43-44 State
+    let activeKotobaList = [...kotobaAllList];
+    let curKotobaIdx = 0;
+    let kotobaScore = 0;
+    let kotobaAnswered = {};
+
+    // Irodori State
+    let curIrodoriIdx = 0;
+    let irodoriScore = 0;
+    let irodoriAnswered = {};
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadBunpouQuestion();
+      loadKotobaQuestion();
+      loadIrodoriQuestion();
+
+      // Keyboard shortcuts
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+
+        if (e.key >= '1' && e.key <= '4') {
+          const optIdx = parseInt(e.key) - 1;
+          if (currentTab === 'bunpou') chooseBunpouOption(optIdx);
+          else if (currentTab === 'kotoba') chooseKotobaOption(optIdx);
+          else if (currentTab === 'irodori') chooseIrodoriOption(optIdx);
+        } else if (e.key === 'ArrowRight') {
+          if (currentTab === 'bunpou') nextBunpouQ();
+          else if (currentTab === 'kotoba') nextKotobaQ();
+          else if (currentTab === 'irodori') nextIrodoriQ();
+        } else if (e.key === 'ArrowLeft') {
+          if (currentTab === 'bunpou') prevBunpouQ();
+          else if (currentTab === 'kotoba') prevKotobaQ();
+          else if (currentTab === 'irodori') prevIrodoriQ();
+        }
+      });
+    });
+
+    // Tab switcher
+    function switchTab(tab) {
+      currentTab = tab;
+      ['bunpou', 'kotoba', 'irodori', 'traps'].forEach(t => {
+        document.getElementById(`section-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`tabBtn-${t}`);
+        btn.className = "px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap";
+      });
+
+      document.getElementById(`section-${tab}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tabBtn-${tab}`);
+      activeBtn.className = "px-3 py-1.5 rounded-lg font-bold bg-neonCyan text-slate-950 transition whitespace-nowrap";
+      playTone(520, 0.04);
+    }
+
+    // ==============================================================
+    // BUNPOU CONTROLLER
+    // ==============================================================
+    function filterBunpouCategory() {
+      const cat = document.getElementById('bunpouFilterSelect').value;
+      if (cat === 'all') {
+        activeBunpouList = [...bunpouAllQuestions];
+      } else {
+        activeBunpouList = bunpouAllQuestions.filter(q => q.cat === cat);
+      }
+      curBunpouIdx = 0;
+      bunpouScore = 0;
+      bunpouAnswered = {};
+      document.getElementById('bunpouScoreDisplay').textContent = `0 Benar`;
+      loadBunpouQuestion();
+    }
+
+    function loadBunpouQuestion() {
+      if (activeBunpouList.length === 0) return;
+      const q = activeBunpouList[curBunpouIdx];
+      const isDone = bunpouAnswered[curBunpouIdx] !== undefined;
+
+      document.getElementById('bunpouTracker').textContent = `SOAL ${curBunpouIdx + 1} / ${activeBunpouList.length}`;
+      document.getElementById('bunpouSenseiWarning').textContent = q.trapNotice;
+      document.getElementById('bunpouQuestionText').innerHTML = `${curBunpouIdx + 1}. ${q.q}`;
+
+      const grid = document.getElementById('bunpouOptionsGrid');
+      grid.innerHTML = '';
+
+      q.opts.forEach((optText, oIdx) => {
+        const btn = document.createElement('button');
+        btn.className = "p-3 rounded-2xl border text-left text-xs font-semibold transition flex items-center justify-between ";
+
+        if (!isDone) {
+          btn.className += "bg-slate-900 border-slate-800 hover:border-cyan-400 text-slate-200 cursor-pointer";
+          btn.onclick = () => chooseBunpouOption(oIdx);
+        } else {
+          btn.disabled = true;
+          if (oIdx === q.ans) {
+            btn.className += "bg-emerald-950/90 border-emerald-500 text-emerald-200 font-bold";
+          } else if (bunpouAnswered[curBunpouIdx] === oIdx) {
+            btn.className += "bg-rose-950/90 border-rose-500 text-rose-300";
+          } else {
+            btn.className += "bg-slate-900/40 border-slate-800 text-slate-500 opacity-40";
+          }
+        }
+
+        btn.innerHTML = `<span class="font-jp text-xs sm:text-sm">${optText}</span>`;
+        if (isDone && oIdx === q.ans) {
+          btn.innerHTML += `<span class="text-emerald-400 font-bold ml-1.5">✓ KUNCI</span>`;
+        } else if (isDone && bunpouAnswered[curBunpouIdx] === oIdx && oIdx !== q.ans) {
+          btn.innerHTML += `<span class="text-rose-400 font-bold ml-1.5">✕ JEBAKAN</span>`;
+        }
+
+        grid.appendChild(btn);
+      });
+
+      const expBox = document.getElementById('bunpouExplainBox');
+      if (isDone) {
+        expBox.classList.remove('hidden');
+        document.getElementById('bunpouTrapExplain').innerHTML = q.explain;
+        document.getElementById('bunpouRuleBox').textContent = q.rule;
+      } else {
+        expBox.classList.add('hidden');
+      }
+
+      document.getElementById('btnPrevBunpou').disabled = (curBunpouIdx === 0);
+    }
+
+    function chooseBunpouOption(oIdx) {
+      if (bunpouAnswered[curBunpouIdx] !== undefined) return;
+      const q = activeBunpouList[curBunpouIdx];
+      bunpouAnswered[curBunpouIdx] = oIdx;
+
+      if (oIdx === q.ans) {
+        bunpouScore++;
+        playSuccess();
+        document.getElementById('bunpouScoreDisplay').textContent = `${bunpouScore} Benar`;
+        speakJapanese("正解です");
+      } else {
+        playFail();
+      }
+      loadBunpouQuestion();
+    }
+
+    function nextBunpouQ() {
+      if (curBunpouIdx < activeBunpouList.length - 1) {
+        curBunpouIdx++;
+        loadBunpouQuestion();
+        playTone(480, 0.03);
+      }
+    }
+
+    function prevBunpouQ() {
+      if (curBunpouIdx > 0) {
+        curBunpouIdx--;
+        loadBunpouQuestion();
+        playTone(420, 0.03);
+      }
+    }
+
+    function resetBunpouQuiz() {
+      curBunpouIdx = 0;
+      bunpouScore = 0;
+      bunpouAnswered = {};
+      document.getElementById('bunpouScoreDisplay').textContent = `0 Benar`;
+      loadBunpouQuestion();
+      playTone(600, 0.06);
+    }
+
+    function speakCurrentBunpou() {
+      const q = activeBunpouList[curBunpouIdx];
+      speakJapanese(q.q.replace(/（.*?）/g, q.opts[q.ans].substring(3)));
+    }
+
+    // ==============================================================
+    // KOTOBA BAB 43 & 44 CONTROLLER
+    // ==============================================================
+    function filterKotobaCategory() {
+      const cat = document.getElementById('kotobaFilterSelect').value;
+      if (cat === 'all') {
+        activeKotobaList = [...kotobaAllList];
+      } else {
+        activeKotobaList = kotobaAllList.filter(k => k.cat === cat);
+      }
+      curKotobaIdx = 0;
+      kotobaScore = 0;
+      kotobaAnswered = {};
+      document.getElementById('kotobaScoreDisplay').textContent = `0 Benar`;
+      loadKotobaQuestion();
+    }
+
+    function loadKotobaQuestion() {
+      if (activeKotobaList.length === 0) return;
+      const k = activeKotobaList[curKotobaIdx];
+      const isDone = kotobaAnswered[curKotobaIdx] !== undefined;
+
+      document.getElementById('kotobaTracker').textContent = `KOTOBA ${curKotobaIdx + 1} / ${activeKotobaList.length}`;
+      document.getElementById('kotobaBigDisplay').textContent = k.kanji;
+      document.getElementById('kotobaReadingKana').textContent = k.kana;
+      document.getElementById('kotobaPartBadge').textContent = k.part;
+
+      const catBadge = document.getElementById('kotobaCategoryBadge');
+      if (k.cat.startsWith('ch43')) {
+        catBadge.textContent = k.cat === 'ch43_main' ? "BAB 43 POKOK" : "BAB 43 YOMIMONO";
+        catBadge.className = "text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-300 bg-cyan-950/70 px-2.5 py-0.5 rounded-md border border-cyan-800";
+      } else {
+        catBadge.textContent = k.cat === 'ch44_main' ? "BAB 44 POKOK" : (k.cat === 'ch44_salon' ? "BAB 44 SALON" : "BAB 44 YOMIMONO");
+        catBadge.className = "text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-300 bg-emerald-950/70 px-2.5 py-0.5 rounded-md border border-emerald-800";
+      }
+
+      const grid = document.getElementById('kotobaOptionsGrid');
+      grid.innerHTML = '';
+
+      k.opts.forEach((optText, oIdx) => {
+        const btn = document.createElement('button');
+        btn.className = "p-3 rounded-2xl border text-left text-xs font-semibold transition flex items-center justify-between ";
+
+        if (!isDone) {
+          btn.className += "bg-slate-900 border-slate-800 hover:border-cyan-400 text-slate-200 cursor-pointer";
+          btn.onclick = () => chooseKotobaOption(oIdx);
+        } else {
+          btn.disabled = true;
+          if (oIdx === k.ans) {
+            btn.className += "bg-emerald-950/90 border-emerald-500 text-emerald-200 font-bold";
+          } else if (kotobaAnswered[curKotobaIdx] === oIdx) {
+            btn.className += "bg-rose-950/90 border-rose-500 text-rose-300";
+          } else {
+            btn.className += "bg-slate-900/40 border-slate-800 text-slate-500 opacity-40";
+          }
+        }
+
+        btn.innerHTML = `<span>${optText}</span>`;
+        if (isDone && oIdx === k.ans) {
+          btn.innerHTML += `<span class="text-emerald-400 font-bold ml-1.5">✓ TEPAT</span>`;
+        }
+
+        grid.appendChild(btn);
+      });
+
+      const trickBox = document.getElementById('kotobaTrickBox');
+      if (isDone) {
+        trickBox.classList.remove('hidden');
+        document.getElementById('kotobaMnemonicText').textContent = k.mnem;
+      } else {
+        trickBox.classList.add('hidden');
+      }
+
+      document.getElementById('btnPrevKotoba').disabled = (curKotobaIdx === 0);
+    }
+
+    function chooseKotobaOption(oIdx) {
+      if (kotobaAnswered[curKotobaIdx] !== undefined) return;
+      const k = activeKotobaList[curKotobaIdx];
+      kotobaAnswered[curKotobaIdx] = oIdx;
+
+      if (oIdx === k.ans) {
+        kotobaScore++;
+        playSuccess();
+        document.getElementById('kotobaScoreDisplay').textContent = `${kotobaScore} Benar`;
+        speakJapanese(k.kanji);
+      } else {
+        playFail();
+      }
+      loadKotobaQuestion();
+    }
+
+    function nextKotobaQ() {
+      if (curKotobaIdx < activeKotobaList.length - 1) {
+        curKotobaIdx++;
+        loadKotobaQuestion();
+        playTone(480, 0.03);
+      }
+    }
+
+    function prevKotobaQ() {
+      if (curKotobaIdx > 0) {
+        curKotobaIdx--;
+        loadKotobaQuestion();
+        playTone(420, 0.03);
+      }
+    }
+
+    function resetKotobaQuiz() {
+      curKotobaIdx = 0;
+      kotobaScore = 0;
+      kotobaAnswered = {};
+      document.getElementById('kotobaScoreDisplay').textContent = `0 Benar`;
+      loadKotobaQuestion();
+      playTone(600, 0.06);
+    }
+
+    // ==============================================================
+    // KANJI IRODORI CONTROLLER
+    // ==============================================================
+    function loadIrodoriQuestion() {
+      const k = irodoriQuestions[curIrodoriIdx];
+      const isDone = irodoriAnswered[curIrodoriIdx] !== undefined;
+
+      document.getElementById('irodoriTracker').textContent = `IRODORI ${curIrodoriIdx + 1} / ${irodoriQuestions.length}`;
+      document.getElementById('irodoriBigDisplay').textContent = k.kanji;
+      document.getElementById('irodoriReadingKana').textContent = k.kana;
+
+      const grid = document.getElementById('irodoriOptionsGrid');
+      grid.innerHTML = '';
+
+      k.opts.forEach((optText, oIdx) => {
+        const btn = document.createElement('button');
+        btn.className = "p-3 rounded-2xl border text-left text-xs font-semibold transition flex items-center justify-between ";
+
+        if (!isDone) {
+          btn.className += "bg-slate-900 border-slate-800 hover:border-amber-400 text-slate-200 cursor-pointer";
+          btn.onclick = () => chooseIrodoriOption(oIdx);
+        } else {
+          btn.disabled = true;
+          if (oIdx === k.ans) {
+            btn.className += "bg-emerald-950/90 border-emerald-500 text-emerald-200 font-bold";
+          } else if (irodoriAnswered[curIrodoriIdx] === oIdx) {
+            btn.className += "bg-rose-950/90 border-rose-500 text-rose-300";
+          } else {
+            btn.className += "bg-slate-900/40 border-slate-800 text-slate-500 opacity-40";
+          }
+        }
+
+        btn.innerHTML = `<span>${optText}</span>`;
+        if (isDone && oIdx === k.ans) {
+          btn.innerHTML += `<span class="text-emerald-400 font-bold ml-1.5">✓ TEPAT</span>`;
+        }
+
+        grid.appendChild(btn);
+      });
+
+      const trickBox = document.getElementById('irodoriTrickBox');
+      if (isDone) {
+        trickBox.classList.remove('hidden');
+        document.getElementById('irodoriMnemonicText').textContent = k.mnem;
+      } else {
+        trickBox.classList.add('hidden');
+      }
+
+      document.getElementById('btnPrevIrodori').disabled = (curIrodoriIdx === 0);
+    }
+
+    function chooseIrodoriOption(oIdx) {
+      if (irodoriAnswered[curIrodoriIdx] !== undefined) return;
+      const k = irodoriQuestions[curIrodoriIdx];
+      irodoriAnswered[curIrodoriIdx] = oIdx;
+
+      if (oIdx === k.ans) {
+        irodoriScore++;
+        playSuccess();
+        document.getElementById('irodoriScoreDisplay').textContent = `${irodoriScore} Benar`;
+        speakJapanese(k.kanji);
+      } else {
+        playFail();
+      }
+      loadIrodoriQuestion();
+    }
+
+    function nextIrodoriQ() {
+      if (curIrodoriIdx < irodoriQuestions.length - 1) {
+        curIrodoriIdx++;
+        loadIrodoriQuestion();
+        playTone(480, 0.03);
+      }
+    }
+
+    function prevIrodoriQ() {
+      if (curIrodoriIdx > 0) {
+        curIrodoriIdx--;
+        loadIrodoriQuestion();
+        playTone(420, 0.03);
+      }
+    }
+
+    function resetIrodoriQuiz() {
+      curIrodoriIdx = 0;
+      irodoriScore = 0;
+      irodoriAnswered = {};
+      document.getElementById('irodoriScoreDisplay').textContent = `0 Benar`;
+      loadIrodoriQuestion();
+      playTone(600, 0.06);
+    }
+
+    // ==============================================================
+    // KAMUS RADAR SEARCH FILTER
+    // ==============================================================
+    function searchTrapList() {
+      const query = document.getElementById('trapSearchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.trap-card');
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(query)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
