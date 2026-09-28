@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>God Mode Japanese: Bab 45-46 & Irodori Mastery</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@500;700;900&display=swap');
+    .font-jp { font-family: 'Noto Sans JP', sans-serif; }
+    ruby rt {
+      font-size: 0.65em;
+      color: #38bdf8;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    ::-webkit-scrollbar {
+      height: 4px;
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    .tap-highlight-transparent {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            darkBg: '#090d16',
+            cardDark: '#0f172a',
+            neonCyan: '#06b6d4',
+            neonAmber: '#f59e0b',
+            neonRose: '#f43f5e',
+            neonEmerald: '#10b981',
+            neonPurple: '#a855f7'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-darkBg text-slate-100 min-h-screen font-sans selection:bg-rose-500 selection:text-white p-2 sm:p-4 pt-8 sm:pt-4 tap-highlight-transparent">
+
+  <!-- TOP APP BAR (PURE BAB 45-46 ONLY) -->
+  <header class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 mb-3">
+    <div class="flex items-center justify-between w-full md:w-auto">
+      <div class="flex items-center gap-2">
+        <h1 class="text-xs sm:text-sm font-black tracking-tight text-white flex items-center gap-1.5">
+          SHIKEN ENGINE 6.0
+          <span class="px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[10px] font-mono">
+            MURNI BAB 45–46 + 20 KANJI IRODORI
+          </span>
+        </h1>
+      </div>
+      <button onclick="toggleAudio()" id="audioBtn" class="md:hidden px-2 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-semibold text-slate-300 flex items-center gap-1">
+        🔊 <span id="audioStatusText">Suara: ON</span>
+      </button>
+    </div>
+
+    <!-- MAIN NAVIGATION TABS (BAB 45-46 EXCLUSIVE) -->
+    <nav class="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs overflow-x-auto max-w-full w-full md:w-auto">
+      <button onclick="switchTab('shiken-kanji')" id="tabBtn-shiken-kanji" class="px-3 py-1.5 rounded-lg font-bold bg-rose-500 text-white transition whitespace-nowrap shadow-md shadow-rose-500/20">
+        🎯 Kanji Irodori (20 Soal)
+      </button>
+      <button onclick="switchTab('shiken-bunpou')" id="tabBtn-shiken-bunpou" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+        📝 Shiken Bunpou (60 Soal)
+      </button>
+      <button onclick="switchTab('teleport')" id="tabBtn-teleport" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+        🧠 Tanam Pola & Kartu Polos
+      </button>
+      <button onclick="switchTab('shiken-kotoba')" id="tabBtn-shiken-kotoba" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+        🎴 Drill Kotoba (45 & 46)
+      </button>
+      <button onclick="switchTab('traps')" id="tabBtn-traps" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+        📡 Radar Jebakan
+      </button>
+    </nav>
+
+    <button onclick="toggleAudio()" id="audioBtnDesktop" class="hidden md:flex px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 items-center gap-1">
+      🔊 <span id="audioStatusTextDesktop">Suara: ON</span>
+    </button>
+  </header>
+
+  <main class="max-w-5xl mx-auto space-y-4">
+    <!-- SECTION 1: SHIKEN KANJI IRODORI (20 SOAL DARI FOTO 32 & 33) -->
+    <section id="shiken-kanji" class="space-y-4 block">
+      <div class="flex items-center justify-between text-xs bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+        <div class="flex items-center gap-2">
+          <span id="kanjiTracker" class="font-mono font-bold text-rose-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            SOAL 1 / 20
+          </span>
+          <span class="text-[10px] text-slate-400 hidden sm:inline">20 Kanji Irodori Murni (Foto 32 & 33)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="kanjiScoreDisplay" class="font-mono text-emerald-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            0 Benar
+          </span>
+        </div>
+      </div>
+
+      <div id="kanjiQuestionCard" class="bg-cardDark p-4 sm:p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4 min-h-[220px]">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 2: SHIKEN BUNPOU (60 SOAL: 3 BANKS @ 20 SOAL, FURIGANA SELEKTIF) -->
+    <section id="shiken-bunpou" class="space-y-4 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
+        <div class="flex items-center gap-2">
+          <label class="text-slate-400 font-bold whitespace-nowrap">Bank Soal:</label>
+          <select id="bunpouBankSelect" onchange="changeBunpouBank()" class="bg-slate-950 text-cyan-300 font-bold border border-slate-700 rounded-lg px-2.5 py-1 text-xs outline-none cursor-pointer">
+            <option value="b1">Bank 1: Bab 45 Murni [場合 & のに] (20 Soal)</option>
+            <option value="b2">Bank 2: Bab 46 Murni [ところ & はず] (20 Soal)</option>
+            <option value="b3">Bank 3: Jebakan Ekstrem 45 vs 46 Synthesis (20 Soal)</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-between sm:justify-end gap-2">
+          <span id="bunpouTracker" class="font-mono font-bold text-cyan-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            SOAL 1 / 20
+          </span>
+          <span id="bunpouScoreDisplay" class="font-mono text-emerald-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            0 Benar
+          </span>
+        </div>
+      </div>
+
+      <div id="bunpouQuestionCard" class="bg-cardDark p-4 sm:p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4 min-h-[220px]">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 3: TANAM POLA & KARTU POLOS INGAT (BAB 45, 46 & 20 KANJI IRODORI) -->
+    <section id="teleport" class="space-y-4 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
+        <div class="flex items-center gap-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800">
+          <button onclick="switchTanamStage('tanam')" id="stageBtn-tanam" class="px-2.5 py-1 rounded font-bold bg-cyan-600 text-white transition text-xs">
+            🧬 Tahap 1: Tanam Pola
+          </button>
+          <button onclick="switchTanamStage('strict')" id="stageBtn-strict" class="px-2.5 py-1 rounded font-bold text-slate-400 hover:text-slate-200 transition text-xs">
+            🥋 Tahap 2: Kartu Polos Ingat
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <select id="teleportCategorySelect" onchange="changePolaCategory()" class="bg-slate-950 text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1 text-xs outline-none">
+            <option value="all">Semua Materi (Bab 45, 46 & 20 Kanji Irodori)</option>
+            <option value="ch45">Bab 45 Saja</option>
+            <option value="ch46">Bab 46 Saja</option>
+            <option value="irodori">20 Kanji Irodori Saja</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- TAHAP 1: TANAM POLA CARD -->
+      <div id="stageCard-tanam" class="bg-cardDark p-4 sm:p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4">
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2">
+            <span id="tanamSourceBadge" class="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-300 bg-purple-950/80 px-2 py-0.5 rounded-md border border-purple-800">
+              BAB 45
+            </span>
+            <span id="tanamCollocationBadge" class="text-xs text-amber-300 font-bold bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40"></span>
+          </div>
+          <span id="tanamTrackerBadge" class="font-mono text-slate-400 text-xs">1 / 67</span>
+        </div>
+
+        <div class="text-center py-4 sm:py-6 bg-slate-950/60 rounded-xl border border-slate-800/80 relative">
+          <div id="tanamKanjiDisplay" class="font-jp text-4xl sm:text-5xl font-black tracking-tight text-white mb-2"></div>
+          <div id="tanamKanaDisplay" class="font-jp text-base sm:text-lg font-bold text-cyan-400 mb-1"></div>
+          <div id="tanamMeaningDisplay" class="text-sm sm:text-base font-semibold text-slate-200"></div>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+            <span class="text-[10px] font-bold text-rose-400 uppercase tracking-wider block">💀 Bedah Anatomi / Trik Ingat 2 Detik:</span>
+            <div id="tanamRadicalsContainer" class="flex flex-wrap gap-1.5 pt-0.5"></div>
+            <p id="tanamStoryDisplay" class="text-slate-300 text-xs leading-relaxed pt-1"></p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-2 pt-2">
+          <button onclick="prevTanamCard()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition flex items-center gap-1">
+            ← Mundur
+          </button>
+          <button onclick="pronounceTanamCurrent()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 text-xs font-bold transition flex items-center gap-1">
+            🔊 Ucapkan
+          </button>
+          <button onclick="nextTanamCard()" class="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition flex items-center gap-1 shadow-md shadow-cyan-600/30">
+            Lanjut →
+          </button>
+        </div>
+      </div>
+
+      <!-- TAHAP 2: KARTU POLOS INGAT (STRICT NO SKIP) -->
+      <div id="stageCard-strict" class="bg-cardDark p-4 sm:p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4 hidden">
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] font-mono font-bold text-rose-300 bg-rose-950/80 px-2 py-0.5 rounded border border-rose-800">
+              KARTU POLOS MURNI (NO SKIP)
+            </span>
+          </div>
+          <div class="flex items-center gap-3 font-mono text-xs">
+            <span class="text-emerald-400">⚡ Mastered: <span id="strictMasteredDisp">0</span></span>
+            <span class="text-rose-400">💀 Antrean: <span id="strictQueueDisp">0</span></span>
+          </div>
+        </div>
+
+        <div onclick="revealStrictAnswer()" class="text-center py-8 sm:py-12 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-slate-700 transition relative">
+          <div class="text-[10px] text-slate-500 absolute top-2 right-2">Klik kartu untuk buka jawaban</div>
+          <div id="strictKanjiDisplay" class="font-jp text-5xl sm:text-6xl font-black text-white tracking-wide"></div>
+
+          <div id="strictSecretBox" class="mt-4 pt-4 border-t border-slate-800/80 hidden space-y-1">
+            <div id="strictKanaDisplay" class="font-jp text-xl font-bold text-cyan-400"></div>
+            <div id="strictMeaningDisplay" class="text-sm font-semibold text-slate-200"></div>
+            <div id="strictPartDisplay" class="text-xs text-amber-300"></div>
+          </div>
+        </div>
+
+        <div id="strictControlBox" class="grid grid-cols-3 gap-2 pt-2">
+          <button onclick="handleStrictDecision('lupa')" class="py-2.5 px-2 rounded-xl bg-rose-950/60 hover:bg-rose-900/80 border border-rose-800/60 text-rose-300 text-xs font-bold transition flex flex-col items-center">
+            <span>💀 Lupa</span>
+            <span class="text-[9px] text-rose-400 font-normal mt-0.5">Langsung ulang!</span>
+          </button>
+          <button onclick="handleStrictDecision('ragu')" class="py-2.5 px-2 rounded-xl bg-amber-950/60 hover:bg-amber-900/80 border border-amber-800/60 text-amber-300 text-xs font-bold transition flex flex-col items-center">
+            <span>🤔 Ragu</span>
+            <span class="text-[9px] text-amber-400 font-normal mt-0.5">Ulas nanti</span>
+          </button>
+          <button onclick="handleStrictDecision('ingat')" class="py-2.5 px-2 rounded-xl bg-emerald-950/60 hover:bg-emerald-900/80 border border-emerald-800/60 text-emerald-300 text-xs font-bold transition flex flex-col items-center">
+            <span>⚡ Ingat</span>
+            <span class="text-[9px] text-emerald-400 font-normal mt-0.5">Lulus permanen</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: DRILL KOTOBA (BAB 45 & 46 MURNI - 48 QUESTIONS) -->
+    <section id="shiken-kotoba" class="space-y-4 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
+        <div class="flex items-center gap-2">
+          <label class="text-slate-400 font-bold whitespace-nowrap">Filter Bab:</label>
+          <select id="kotobaFilterSelect" onchange="filterKotobaCategory()" class="bg-slate-950 text-cyan-300 font-bold border border-slate-700 rounded-lg px-2.5 py-1 text-xs outline-none cursor-pointer">
+            <option value="all">Semua Bab (Bab 45 & 46 - 48 Soal)</option>
+            <option value="ch45">Bab 45 Saja (23 Soal)</option>
+            <option value="ch46">Bab 46 Saja (25 Soal)</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-between sm:justify-end gap-2">
+          <span id="kotobaTracker" class="font-mono font-bold text-cyan-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            SOAL 1 / 48
+          </span>
+          <span id="kotobaScoreDisplay" class="font-mono text-emerald-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            0 Benar
+          </span>
+        </div>
+      </div>
+
+      <div id="kotobaQuestionCard" class="bg-cardDark p-4 sm:p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4 min-h-[220px]">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 5: RADAR JEBAKAN BUNPOU & KOTOBA (BAB 45 & 46 MURNI) -->
+    <section id="traps" class="space-y-4 hidden">
+      <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+        <div>
+          <h2 class="text-sm font-black text-rose-400 flex items-center gap-1.5">
+            📡 RADAR JEBAKAN UJIAN SENSEI (BAB 45 & 46 MURNI)
+          </h2>
+          <p class="text-[11px] text-slate-400">Kunci beda 5 detik untuk membedah seluruh jebakan Bab 45 dan Bab 46.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+        <!-- TRAP 1 -->
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-purple-400 text-xs">JEBAKAN 1: ～場合は (KS-な な vs KB の)</span>
+            <span class="text-[10px] bg-purple-950/80 text-purple-300 px-1.5 py-0.5 rounded">BAB 45</span>
+          </div>
+          <p class="text-slate-300">
+            <strong>Kunci 5 Detik:</strong> Karena <code class="text-cyan-300">場合</code> adalah Kata Benda formal, maka Kata Sifat な wajib tetap memakai <strong>な</strong> (<code class="text-amber-300">必要な場合は</code>), dan Kata Benda wajib memakai partikel <strong>の</strong> (<code class="text-rose-400">火事の場合は</code>).
+          </p>
+          <div class="p-2 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300">
+            📝 必要な場合は (Benar) | 必要の場合は (SALAH)<br/>
+            🔥 火事の場合は (Benar) | 火事な場合は (SALAH)
+          </div>
+        </div>
+
+        <!-- TRAP 2 -->
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-purple-400 text-xs">JEBAKAN 2: ～のに (KS-な & KB Wajib "な")</span>
+            <span class="text-[10px] bg-purple-950/80 text-purple-300 px-1.5 py-0.5 rounded">BAB 45</span>
+          </div>
+          <p class="text-slate-300">
+            <strong>Kunci 5 Detik:</strong> Bertemu <code class="text-rose-400">～のに</code>, kata benda dan kata sifat な HARAM memakai <code class="text-slate-500">だ</code> atau <code class="text-slate-500">の</code>! Wajib memakai <strong>な</strong>!
+          </p>
+          <div class="p-2 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300">
+            📅 日曜日<span class="text-rose-400 font-bold">なのに</span> (Benar) | 日曜日のに (SALAH)<br/>
+            🌿 静か<span class="text-rose-400 font-bold">なのに</span> (Benar) | 静かだのに (SALAH)
+          </div>
+        </div>
+
+        <!-- TRAP 3 -->
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-purple-400 text-xs">JEBAKAN 3: ～のに vs ～が (Emosi vs Netral)</span>
+            <span class="text-[10px] bg-purple-950/80 text-purple-300 px-1.5 py-0.5 rounded">BAB 45</span>
+          </div>
+          <p class="text-slate-300">
+            <strong>Kunci 5 Detik:</strong> <code class="text-cyan-300">～が</code> hanya menyatakan 2 fakta bertentangan secara netral. <code class="text-rose-400">～のに</code> mengandung emosi kecewa / rasa tidak puas / merasa dikhianati atas kenyataan yang terjadi.
+          </p>
+        </div>
+
+        <!-- TRAP 4 -->
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-purple-400 text-xs">JEBAKAN 4: ～のに vs ～ても (Fakta vs Praduga)</span>
+            <span class="text-[10px] bg-purple-950/80 text-purple-300 px-1.5 py-0.5 rounded">BAB 45</span>
+          </div>
+          <p class="text-slate-300">
+            <strong>Kunci 5 Detik:</strong> <code class="text-rose-400">～のに</code> WAJIB fakta yang sudah terjadi di dunia nyata. TIDAK BISA untuk pengandaian masa depan (<code class="text-amber-300">× 明日雨が降るのに</code> $\rightarrow$ Wajib <code class="text-emerald-300">〇 明日雨が降っても</code>).
+          </p>
+        </div>
+
+        <!-- TRAP 5 -->
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-rose-400 text-xs">JEBAKAN 5: 3 Fase ～ところです</span>
+            <span class="text-[10px] bg-rose-950/80 text-rose-300 px-1.5 py-0.5 rounded">BAB 46</span>
+          </div>
+          <p class="text-slate-300">
+            <strong>Kunci 5 Detik:</strong><br/>
+            ⏰ <code class="text-cyan-300">KK Kamus + ところです</code>: Baru mau mulai (Sinyal: <code class="text-cyan-400">これから / 今から</code>).<br/>
+            🔄 <code class="text-amber-300">KK ている + ところです</code>: Sedang berlangsung (Sinyal: <code class="text-amber-400">今</code>).<br/>
+            🏁 <code class="text-rose-300">KK た + ところです</code>: Baru selesai detik ini (Sinyal: <code class="text-rose-400">たった今</code>).
+          </p>
+        </div>
+
+        <!-- TRAP 6 -->
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-rose-400 text-xs">JEBAKAN 6: ～たところ vs ～たばかり</span>
+            <span class="text-[10px] bg-rose-950/80 text-rose-300 px-1.5 py-0.5 rounded">BAB 46</span>
+          </div>
+          <p class="text-slate-300">
+            <strong>Kunci 5 Detik:</strong> <code class="text-cyan-300">たところ</code> mutlak baru saja selesai detik/menit itu juga (<code class="text-cyan-400">たった今</code>). <code class="text-emerald-400">たばかり</code> adalah perasaan subjektif si pembicara walau peristiwa sudah lewat berhari-hari atau sebulan lalu (<code class="text-emerald-300">先月入社したばかり</code>).
+          </p>
+        </div>
+
+        <!-- TRAP 7 -->
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-rose-400 text-xs">JEBAKAN 7: ～はずです (Kepastian Berdasar Bukti)</span>
+            <span class="text-[10px] bg-rose-950/80 text-rose-300 px-1.5 py-0.5 rounded">BAB 46</span>
+          </div>
+          <p class="text-slate-300">
+            <strong>Kunci 5 Detik:</strong> Pembicara yakin pasti karena ada <strong>bukti nyata</strong> (ada telepon, ada tiket, lihat cincin). Sambungan: KS-い <code class="text-cyan-300">おいしいはず</code>, KS-な <code class="text-amber-300">暇なはず</code>, KB <code class="text-rose-300">休みのはず</code>.
+          </p>
+        </div>
+
+        <!-- TRAP 8 -->
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-rose-400 text-xs">JEBAKAN 8: Partikel Bab 46 (大学に vs 大学を)</span>
+            <span class="text-[10px] bg-rose-950/80 text-rose-300 px-1.5 py-0.5 rounded">BAB 46</span>
+          </div>
+          <p class="text-slate-300">
+            <strong>Kunci 5 Detik:</strong><br/>
+            🏫 大学<strong>に</strong> 入学します (Masuk universitas = Titik tujuan `に`)<br/>
+            🎓 大学<strong>を</strong> 卒業します (Lulus universitas = Titik pelepasan/keluar `を`)
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let isAudioEnabled = true;
+
+    function toggleAudio() {
+      isAudioEnabled = !isAudioEnabled;
+      const t1 = document.getElementById('audioStatusText');
+      const t2 = document.getElementById('audioStatusTextDesktop');
+      const str = isAudioEnabled ? "Suara: ON" : "Suara: OFF";
+      if (t1) t1.textContent = str;
+      if (t2) t2.textContent = str;
+    }
+
+    function speakText(text) {
+      if (!isAudioEnabled || !('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const clean = text.replace(/<rt>.*?<\/rt>/g, '').replace(/<[^>]*>/g, '').trim();
+        const ut = new SpeechSynthesisUtterance(clean);
+        ut.lang = 'ja-JP';
+        ut.rate = 0.95;
+        window.speechSynthesis.speak(ut);
+      } catch (e) {
+        console.error("Audio error:", e);
+      }
+    }
+
+    // 20 KANJI IRODORI MURNI (FOTO 32 & 33)
+    const kanjiIrodoriBank = [
+      { num: 1, q: "新しい（　）を買いに行きました。", opts: ["a. 服", "b. 股", "c. 報", "d. 板"], ans: 0, explain: "Baju/pakaian = <strong>服</strong> (ふく). Radikal bulan 月 di kiri." },
+      { num: 2, q: "買い物用の（　）を持ってきましたか。", opts: ["a. 袋", "b. 貸", "c. 装", "d. 俵"], ans: 0, explain: "Kantong/tas belanja = <strong>袋</strong> (ふくろ). Ada radikal 衣 di bagian bawah." },
+      { num: 3, q: "<u>自分</u>のことは自分で決めます。", opts: ["a. じぶん", "b. じふん", "c. しぶん", "d. じぶんん"], ans: 0, explain: "自分 dibaca <strong>じぶん</strong> (diri sendiri)." },
+      { num: 4, q: "コンビニの<u>店長</u>に挨拶しました。", opts: ["a. てんちょう", "b. てんじょう", "c. みせちょう", "d. てんしゅ"], ans: 0, explain: "店長 dibaca <strong>てんちょう</strong> (manajer toko)." },
+      { num: 5, q: "会議にはメンバー<u>全員</u>が出席しました。", opts: ["a. ぜんいん", "b. ぜんにん", "c. まるいん", "d. すべていん"], ans: 0, explain: "全員 dibaca <strong>ぜんいん</strong> (semua orang, seluruh anggota)." },
+      { num: 6, q: "早起きは体にいい<u>習慣</u>です。", opts: ["a. しゅうかん", "b. しゅうがん", "c. ならわし", "d. じゅうかん"], ans: 0, explain: "習慣 dibaca <strong>しゅうかん</strong> (kebiasaan)." },
+      { num: 7, q: "この電車は各駅に止まる（　）電車です。", opts: ["a. 普通", "b. 普道", "c. 普追", "d. 昔通"], ans: 0, explain: "Biasa / normal = <strong>普通</strong> (ふつう)." },
+      { num: 8, q: "部屋が<u>暗い</u>ので電気をつけてください。", opts: ["a. くらい", "b. あかるい", "c. くろい", "d. ぬるい"], ans: 0, explain: "暗い dibaca <strong>くらい</strong> (gelap)." },
+      { num: 9, q: "約束を破って先生に<u>怒ら</u>れました。", opts: ["a. おこ", "b. いか", "c. なか", "d. わら"], ans: 0, explain: "怒る dibaca <strong>おこる</strong> (marah)." },
+      { num: 10, q: "病気で一週間<u>入院する</u>ことになりました。", opts: ["a. にゅういんする", "b. にゅうえんする", "c. はい院する", "d. にゅうかんする"], ans: 0, explain: "入院する dibaca <strong>にゅういんする</strong> (masuk rumah sakit, dirawat)." },
+      { num: 11, q: "好きな（　）は何ですか。", opts: ["a. 色", "b. 邑", "c. 巴", "d. 絶"], ans: 0, explain: "Warna = <strong>色</strong> (いろ)." },
+      { num: 12, q: "信号が（　）に変わりました。止まってください。", opts: ["a. 赤", "b. 亦", "c. 朱", "d. 丹"], ans: 0, explain: "Merah = <strong>赤</strong> (あか)." },
+      { num: 13, q: "空がとても（　）くてきれいです。", opts: ["a. 青", "b. 清", "c. 昔", "d. 静"], ans: 0, explain: "Biru = <strong>青</strong> (あお)." },
+      { num: 14, q: "面接のために（　）い靴を履いていきました。", opts: ["a. 黒", "b. 里", "c. 墨", "d. 黙"], ans: 0, explain: "Hitam = <strong>黒</strong> (くろ)." },
+      { num: 15, q: "雪のように（　）いシャツを着ています。", opts: ["a. 白", "b. 自", "c. 百", "d. 臼"], ans: 0, explain: "Putih = <strong>白</strong> (しろ)." },
+      { num: 16, q: "このトイレは<u>女性</u>専用です。", opts: ["a. じょせい", "b. だんせい", "c. おんなせい", "d. おんなひと"], ans: 0, explain: "女性 dibaca <strong>じょせい</strong> (wanita, perempuan)." },
+      { num: 17, q: "<u>男性</u>用のスーツ売り場は３階です。", opts: ["a. だんせい", "b. おとこせい", "c. じょせい", "d. なんせい"], ans: 0, explain: "男性 dibaca <strong>だんせい</strong> (pria, laki-laki)." },
+      { num: 18, q: "晴れていたのに<u>急に</u>雨が降ってきました。", opts: ["a. きゅうに", "b. とつぜん", "c. いそぎに", "d. すぐに"], ans: 0, explain: "急に dibaca <strong>きゅうに</strong> (mendadak, tiba-tiba)." },
+      { num: 19, q: "この店は夜10時まで<u>営業する</u>そうです。", opts: ["a. えいぎょうする", "b. けいえいする", "c. じゅぎょうする", "d. かいぎょうする"], ans: 0, explain: "営業する dibaca <strong>えいぎょうする</strong> (buka, beroperasi)." },
+      { num: 20, q: "外国人の観光客を市内へ<u>案内する</u>ボランティアです。", opts: ["a. あんないする", "b. かないする", "c. あんていする", "d. よていする"], ans: 0, explain: "案内する dibaca <strong>あんないする</strong> (memandu, mengantar)." }
+    ];
+
+    let curKanjiIdx = 0;
+    let kanjiScore = 0;
+    let kanjiAnswered = {};
+
+    // 60 SOAL BUNPOU MURNI BAB 45 & 46 (3 BANKS @ 20 SOAL, FURIGANA SELEKTIF)
+    const bunpouBanks = {
+      // BANK 1: BAB 45 MURNI [場合 & のに]
+      b1: [
+        { num: 1, q: "会議に <ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わない（　）、連絡して ください。", opts: ["a. 場合は", "b. のに", "c. ても", "d. ので"], ans: 0, explain: "Pengandaian situasi/kondisi $\\rightarrow$ KK ない + <strong>場合は</strong>." },
+        { num: 2, q: "時間に <ruby>遅<rt>おく</rt></ruby>れた（　）、<ruby>会場<rt>かいじょう</rt></ruby>に入れません。", opts: ["a. 場合は", "b. のに", "c. ても", "d. から"], ans: 0, explain: "Kondisi lampau $\\rightarrow$ KK た + <strong>場合は</strong>." },
+        { num: 3, q: "<ruby>領収書<rt>りょうしゅうしょ</rt></ruby>が <ruby>必要<rt>ひつよう</rt></ruby>（　）場合は、言って ください。", opts: ["a. な", "b. の", "c. だ", "d. ∅ (kosong)"], ans: 0, explain: "KS-な ketemu 場合は wajib membawa <strong>な</strong> (必要な場合は)." },
+        { num: 4, q: "<ruby>火事<rt>かじ</rt></ruby>や <ruby>地震<rt>じしん</rt></ruby>（　）場合は、エレベーターを使わないで ください。", opts: ["a. の", "b. な", "c. だ", "d. に"], ans: 0, explain: "KB ketemu 場合は wajib membawa partikel <strong>の</strong> (地震の場合は)." },
+        { num: 5, q: "パソコンの <ruby>調子<rt>ちょうし</rt></ruby>が 悪い（　）は、どうしたらいいですか。", opts: ["a. 場合", "b. のに", "c. ても", "d. から"], ans: 0, explain: "KS-い langsung + <strong>場合は</strong>." },
+        { num: 6, q: "<ruby>約束<rt>やくそく</rt></ruby>をした（　）、彼女は来ませんでした。", opts: ["a. のに", "b. 場合は", "c. ても", "d. ので"], ans: 0, explain: "Fakta berlawanan diiringi rasa kecewa $\\rightarrow$ <strong>のに</strong>." },
+        { num: 7, q: "きょうは 日曜日（　）のに、働かなければ なりません。", opts: ["a. な", "b. の", "c. だ", "d. ∅ (kosong)"], ans: 0, explain: "KB ketemu のに wajib memakai <strong>な</strong> (日曜日なのに)." },
+        { num: 8, q: "<ruby>一生懸命<rt>いっしょうけんめい</rt></ruby> 勉強した（　）、試験に落ちてしまいました。", opts: ["a. のに", "b. 場合は", "c. から", "d. ので"], ans: 0, explain: "Kekecewaan di luar dugaan $\\rightarrow$ <strong>のに</strong>." },
+        { num: 9, q: "あした 雨が（　）も、サッカーを します。", opts: ["a. 降って", "b. 降るのに", "c. 降る場合", "d. 降ると"], ans: 0, explain: "Pengandaian praduga masa depan $\\rightarrow$ 降って<strong>も</strong> (降るのに ×)." },
+        { num: 10, q: "体調が 悪い（　）、無理をして 仕事に行きました。", opts: ["a. のに", "b. 場合は", "c. ので", "d. から"], ans: 0, explain: "Padahal sakit tapi dipaksa $\\rightarrow$ <strong>のに</strong>." },
+        { num: 11, q: "<ruby>現金<rt>げんきん</rt></ruby>がない（　）、カードで 払えますか。", opts: ["a. 場合は", "b. のに", "c. ても", "d. から"], ans: 0, explain: "Pengandaian kondisi $\\rightarrow$ ない<strong>場合は</strong>." },
+        { num: 12, q: "<ruby>便利<rt>べんり</rt></ruby>（　）場合は、使って ください。", opts: ["a. な", "b. の", "c. だ", "d. に"], ans: 0, explain: "KS-な + <strong>な</strong> 場合は." },
+        { num: 13, q: "<ruby>静か<rt>しずか</rt></ruby>（　）のに、眠れませんでした。", opts: ["a. な", "b. の", "c. だ", "d. に"], ans: 0, explain: "KS-な + <strong>な</strong> のに (静かなのに)." },
+        { num: 14, q: "高かった（　）、すぐ壊れました。", opts: ["a. のに", "b. 場合は", "c. から", "d. ので"], ans: 0, explain: "Padahal mahal tapi cepat rusak $\\rightarrow$ <strong>のに</strong>." },
+        { num: 15, q: "<ruby>事故<rt>じこ</rt></ruby>の（　）は、110番に 電話します。", opts: ["a. 場合", "b. のに", "c. ても", "d. から"], ans: 0, explain: "KB + の + <strong>場合は</strong>." },
+        { num: 16, q: "たくさん 食べた（　）、まだお腹が空いています。", opts: ["a. のに", "b. 場合は", "c. ので", "d. ても"], ans: 0, explain: "Padahal sudah banyak makan $\\rightarrow$ <strong>のに</strong>." },
+        { num: 17, q: "雨が 降った（　）は、試合を 中止します。", opts: ["a. 場合", "b. のに", "c. ても", "d. から"], ans: 0, explain: "Kondisi pembatalan $\\rightarrow$ 降った<strong>場合は</strong>." },
+        { num: 18, q: "<ruby>元気<rt>げんき</rt></ruby>（　）のに、病院へ 行きました。", opts: ["a. な", "b. の", "c. だ", "d. に"], ans: 0, explain: "KS-な + <strong>な</strong> のに." },
+        { num: 19, q: "<ruby>故障<rt>こしょう</rt></ruby>の（　）は、サービスセンターへ 連絡して ください。", opts: ["a. 場合", "b. のに", "c. ても", "d. から"], ans: 0, explain: "KB + の + <strong>場合は</strong>." },
+        { num: 20, q: "薬を 飲んだ（　）、熱が 下がりません。", opts: ["a. のに", "b. 場合は", "c. から", "d. ので"], ans: 0, explain: "Padahal sudah minum obat $\\rightarrow$ <strong>のに</strong>." }
+      ],
+      // BANK 2: BAB 46 MURNI [ところ & はず]
+      b2: [
+        { num: 21, q: "昼ごはんは もう 食べましたか。……いいえ、これから（　）ところです。", opts: ["a. 食べる", "b. 食べている", "c. 食べた", "d. 食べ"], ans: 0, explain: "Baru mau mulai (これから) $\\rightarrow$ KK Kamus + <strong>ところです</strong>." },
+        { num: 22, q: "会議は もう 始まりましたか。……今から（　）ところです。", opts: ["a. 始まる", "b. 始まっている", "c. 始まった", "d. 始まり"], ans: 0, explain: "Baru akan mulai (今から) $\\rightarrow$ <strong>始まるところです</strong>." },
+        { num: 23, q: "<ruby>故障<rt>こしょう</rt></ruby>の 原因が わかりましたか。……今（　）ところです。", opts: ["a. 調べている", "b. 調べる", "c. 調べた", "d. 調べ"], ans: 0, explain: "Sedang dilakukan (今) $\\rightarrow$ <strong>調べているところです</strong>." },
+        { num: 24, q: "<ruby>渡辺<rt>わたなべ</rt></ruby>さんは いますか。……あ、たった今（　）ところです。", opts: ["a. 帰った", "b. 帰る", "c. 帰っている", "d. 帰り"], ans: 0, explain: "Baru saja selesai detik ini (たった今) $\\rightarrow$ <strong>帰ったところです</strong>." },
+        { num: 25, q: "たった今 バスが（　）ところです。", opts: ["a. 出た", "b. 出る", "c. 出ている", "d. 出"], ans: 0, explain: "Bus baru saja berangkat $\\rightarrow$ <strong>出たところです</strong>." },
+        { num: 26, q: "さっき 昼ごはんを（　）ばかりです。", opts: ["a. 食べた", "b. 食べる", "c. 食べている", "d. 食べ"], ans: 0, explain: "Baru saja selesai $\\rightarrow$ KK bentuk た + <strong>ばかりです</strong>." },
+        { num: 27, q: "<ruby>木村<rt>きむら</rt></ruby>さんは 先月 この会社に（　）ばかりです。", opts: ["a. 入った", "b. 入る", "c. 入っている", "d. 入ろう"], ans: 0, explain: "Baru masuk bulan lalu (subjektif pembicara belum lama) $\\rightarrow$ <strong>入ったばかりです</strong>." },
+        { num: 28, q: "このビデオは 先週 買ったばかり（　）、調子がおかしいです。", opts: ["a. なのに", "b. なので", "c. から", "d. のに"], ans: 0, explain: "～ばかり berfungsi sebagai kata benda $\\rightarrow$ 買ったばかり<strong>なのに</strong>." },
+        { num: 29, q: "ミラーさんは きょう 来るでしょうか。……来る（　）ですよ。きのう電話がありましたから。", opts: ["a. はず", "b. ところ", "c. ばかり", "d. そう"], ans: 0, explain: "Kepastian berdasar bukti nyata $\\rightarrow$ <strong>来るはずです</strong>." },
+        { num: 30, q: "田中さんは きょう 休み（　）はずです。旅行中ですから。", opts: ["a. の", "b. な", "c. だ", "d. ∅ (kosong)"], ans: 0, explain: "KB + <strong>の</strong> + はずです." },
+        { num: 31, q: "この料理は おいしい（　）はずです。有名な店ですから。", opts: ["a. ∅ (kosong)", "b. な", "c. の", "d. だ"], ans: 0, explain: "KS-い langsung + <strong>はずです</strong>." },
+        { num: 32, q: "彼は <ruby>独身<rt>どくしん</rt></ruby>の（　）です。<ruby>薬指<rt>くすりゆび</rt></ruby>に<ruby>指輪<rt>ゆびわ</rt></ruby>が ありません。", opts: ["a. はず", "b. ところ", "c. ばかり", "d. そう"], ans: 0, explain: "Kepastian ada bukti $\\rightarrow$ 独身の<strong>はずです</strong>." },
+        { num: 33, q: "今から 出かける（　）なんです。", opts: ["a. ところ", "b. ばかり", "c. はず", "d. そう"], ans: 0, explain: "Baru mau berangkat $\\rightarrow$ <strong>出かけるところ</strong>." },
+        { num: 34, q: "荷物は あした（　）はずです。", opts: ["a. 届く", "b. 届いた", "c. 届いて", "d. 届き"], ans: 0, explain: "Prakiraan pasti besok sampai $\\rightarrow$ <strong>届くはずです</strong>." },
+        { num: 35, q: "兄は 今年 大学を（　）はずです。", opts: ["a. 卒業する", "b. 卒業した", "c. 卒業して", "d. 卒業"], ans: 0, explain: "Harusnya lulus tahun ini $\\rightarrow$ <strong>卒業するはずです</strong>." },
+        { num: 36, q: "パンが 今（　）ところです。", opts: ["a. 焼けた", "b. 焼く", "c. 焼けている", "d. 焼き"], ans: 0, explain: "Baru selesai dibakar $\\rightarrow$ <strong>焼けたところです</strong>." },
+        { num: 37, q: "<ruby>留守<rt>るす</rt></ruby>の 間に 荷物が（　）ばかりです。", opts: ["a. 届いた", "b. 届く", "c. 届いている", "d. 届き"], ans: 0, explain: "Baru saja sampai $\\rightarrow$ <strong>届いたばかりです</strong>." },
+        { num: 38, q: "もしもし、今 いいですか。……今から（　）ところです。", opts: ["a. 食べる", "b. 食べた", "c. 食べている", "d. 食べ"], ans: 0, explain: "Baru mau makan $\\rightarrow$ <strong>食べるところです</strong>." },
+        { num: 39, q: "会議の 資料を 今（　）ところです。", opts: ["a. コピーしている", "b. コピーした", "c. コピーする", "d. コピー"], ans: 0, explain: "Sedang difotokopi $\\rightarrow$ <strong>コピーしているところです</strong>." },
+        { num: 40, q: "彼は <ruby>真面目<rt>まじめ</rt></ruby>ですから、時間に 遅れない（　）です。", opts: ["a. はず", "b. ところ", "c. ばかり", "d. そう"], ans: 0, explain: "Pasti tidak akan terlambat $\\rightarrow$ <strong>遅れないはずです</strong>." }
+      ],
+      // BANK 3: JEBAKAN EKSTREM 45 VS 46 SYNTHESIS
+      b3: [
+        { num: 41, q: "火事の（　）は、119番に 電話して ください。", opts: ["a. の場合は", "b. な場合は", "c. 場合は", "d. のに"], ans: 2, explain: "KB + の + <strong>場合は</strong> $\\rightarrow$ 火事の場合は." },
+        { num: 42, q: "彼女は 暇（　）はずです。きょうは 仕事が ありませんから。", opts: ["a. な", "b. の", "c. だ", "d. ∅ (kosong)"], ans: 0, explain: "KS-な + <strong>な</strong> + はずです $\\rightarrow$ 暇なはずです." },
+        { num: 43, q: "先月 <ruby>就職<rt>しゅうしょく</rt></ruby>した（　）なのに、会社を 辞めたいです。", opts: ["a. ばかり", "b. ところ", "c. はず", "d. そう"], ans: 0, explain: "Bulan lalu (subjektif belum lama) + なのに $\\rightarrow$ <strong>ばかりなのに</strong>." },
+        { num: 44, q: "たった今 会社から 帰って（　）ところです。", opts: ["a. 来た", "b. 来る", "c. 来ている", "d. 来"], ans: 0, explain: "Sinyal たった今: KK bentuk た + <strong>ところです</strong>." },
+        { num: 45, q: "一生懸命 <ruby>練習<rt>れんしゅう</rt></ruby>した（　）、試合に 負けました。", opts: ["a. のに", "b. 場合は", "c. から", "d. ので"], ans: 0, explain: "Kekecewaan hasil bertentangan $\\rightarrow$ <strong>のに</strong>." },
+        { num: 46, q: "弟は 来年 東京の 大学（　）入学する予定です。", opts: ["a. に", "b. を", "c. で", "d. から"], ans: 0, explain: "Titik tujuan masuk universitas memakai partikel <strong>に</strong>." },
+        { num: 47, q: "兄は 去年 京都の 大学（　）卒業しました。", opts: ["a. を", "b. に", "c. で", "d. へ"], ans: 0, explain: "Titik keluar/lulus dari universitas memakai partikel <strong>を</strong>." },
+        { num: 48, q: "あした 試験が（　）も、今夜は 早く 寝ます。", opts: ["a. あって", "b. あるのに", "c. ある場合", "d. あると"], ans: 0, explain: "Praduga masa depan memakai <strong>～ても</strong> (あるのに ×)." },
+        { num: 49, q: "今から ケーキを（　）ところです。", opts: ["a. 焼く", "b. 焼けた", "c. 焼いている", "d. 焼き"], ans: 0, explain: "Baru mau mulai (今から) $\\rightarrow$ <strong>焼くところです</strong>." },
+        { num: 50, q: "お肉が ちょうど 今（　）ところですよ。召し上がれ。", opts: ["a. 焼けた", "b. 焼く", "c. 焼いている", "d. 焼き"], ans: 0, explain: "Baru matang selesai $\\rightarrow$ <strong>焼けたところです</strong>." },
+        { num: 51, q: "パスポートを <ruby>紛失<rt>ふんしつ</rt></ruby>した（　）は、大使館へ 行って ください。", opts: ["a. 場合", "b. のに", "c. ても", "d. から"], ans: 0, explain: "Pengandaian kondisi $\\rightarrow$ 紛失した<strong>場合は</strong>." },
+        { num: 52, q: "この時計は きのう 直した（　）なのに、また 止まりました。", opts: ["a. ばかり", "b. ところ", "c. はず", "d. そう"], ans: 0, explain: "Baru diperbaiki kemarin + なのに $\\rightarrow$ <strong>ばかりなのに</strong>." },
+        { num: 53, q: "彼は お金持ち（　）はずです。高級車に 乗っていますから。", opts: ["a. の", "b. な", "c. だ", "d. ∅ (kosong)"], ans: 0, explain: "KB + <strong>の</strong> + はずです $\\rightarrow$ お金持ちのはずです." },
+        { num: 54, q: "雨が 降っている（　）、傘を ささずに 歩いています。", opts: ["a. のに", "b. 場合は", "c. から", "d. ので"], ans: 0, explain: "Padahal sedang hujan $\\rightarrow$ <strong>のに</strong>." },
+        { num: 55, q: "荷物は <ruby>宅配便<rt>たくはいびん</rt></ruby>で もう 送った（　）ですから、明日 着くでしょう。", opts: ["a. はず", "b. ところ", "c. ばかり", "d. そう"], ans: 0, explain: "Kepastian berdasar fakta pengiriman $\\rightarrow$ <strong>はずです</strong>." },
+        { num: 56, q: "今 レポートを（　）ところですから、後で 電話して ください。", opts: ["a. 書いている", "b. 書く", "c. 書いた", "d. 書き"], ans: 0, explain: "Sedang dilakukan detik ini $\\rightarrow$ <strong>書いているところです</strong>." },
+        { num: 57, q: "<ruby>留守<rt>るす</rt></ruby>（　）場合は、荷物を 玄関の 前に 置いて ください。", opts: ["a. の", "b. な", "c. だ", "d. に"], ans: 0, explain: "KB + <strong>の</strong> 場合は $\\rightarrow$ 留守の場合は." },
+        { num: 58, q: "子供（　）のに、こんな 難しい 漢字が 読めます。", opts: ["a. な", "b. の", "c. だ", "d. ∅ (kosong)"], ans: 0, explain: "KB + <strong>な</strong> のに $\\rightarrow$ 子供なのに." },
+        { num: 59, q: "バスが たった今（　）ばかりです。", opts: ["a. 出た", "b. 出る", "c. 出ている", "d. 出"], ans: 0, explain: "KK bentuk た + <strong>ばかりです</strong>." },
+        { num: 60, q: "合格通知が <ruby>届く<rt>とどく</rt></ruby>（　）です。きのう 発送されましたから。", opts: ["a. はず", "b. ところ", "c. ばかり", "d. そう"], ans: 0, explain: "Harusnya sampai (ada bukti) $\\rightarrow$ <strong>はずです</strong>." }
+      ]
+    };
+
+    let curBunpouBankKey = 'b1';
+    let curBunpouIdx = 0;
+    let bunpouScore = 0;
+    let bunpouAnswered = {};
+
+    // 100% PURE BAB 45, 46 & 20 KANJI IRODORI (NO BAB 43-44, NO KAIWA)
+    const tanamPolaMasterList = [
+      // BAB 45 POKOK (15 KATA)
+      { id: "45-1", cat: "ch45", kanji: "信じます", kana: "しんじます", meaning: "percaya", part: "[動II]", story: "Orang 亻 + Kata 言: Percaya pada perkataan orang.", radicals: [{char: "亻", pos: "kiri", name: "Orang", color: "text-cyan-400 bg-cyan-950/40"}, {char: "言", pos: "kanan", name: "Kata", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "45-2", cat: "ch45", kanji: "キャンセルします", kana: "キャンセルします", meaning: "membatalkan", part: "[動III]", story: "Katakana: cancel / membatalkan pesanan.", radicals: [{char: "カナ", pos: "Katakana", name: "Batal", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-3", cat: "ch45", kanji: "知らせます", kana: "しらせます", meaning: "memberitahukan", part: "[動II]", story: "Tahu 知: Mengabarkan/memberitahukan informasi.", radicals: [{char: "知", pos: "tunggal", name: "Tahu", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "45-4", cat: "ch45", kanji: "保証書", kana: "ほしょうしょ", meaning: "surat garansi", part: "[名]", story: "Jamin 保 + Bukti 証 + Dokumen 書: surat garansi barang.", radicals: [{char: "保", pos: "kiri", name: "Jamin", color: "text-cyan-400 bg-cyan-950/40"}, {char: "書", pos: "kanan", name: "Surat", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "45-5", cat: "ch45", kanji: "領収書", kana: "りょうしゅうしょ", meaning: "kuitansi", part: "[名]", story: "Terima 領 + Kumpul 収 + Dokumen 書: bukti kuitansi bayar.", radicals: [{char: "領", pos: "kiri", name: "Terima", color: "text-emerald-400 bg-emerald-950/40"}, {char: "収", pos: "tengah", name: "Simpan", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "45-6", cat: "ch45", kanji: "キャンプ", kana: "キャンプ", meaning: "kemah", part: "[名]", story: "Katakana: berkemah di alam terbuka.", radicals: [{char: "カナ", pos: "Katakana", name: "Aktivitas", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "45-7", cat: "ch45", kanji: "中止", kana: "ちゅうし", meaning: "pembatalan", part: "[名]", story: "Tengah 中 + Berhenti 止: pembatalan di tengah jalan.", radicals: [{char: "中", pos: "kiri", name: "Tengah", color: "text-amber-400 bg-amber-950/40"}, {char: "止", pos: "kanan", name: "Stop", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-8", cat: "ch45", kanji: "点", kana: "てん", meaning: "poin", part: "[名]", story: "Titik nilai hasil ujian: poin.", radicals: [{char: "占", pos: "atas", name: "Ramal", color: "text-cyan-400 bg-cyan-950/40"}, {char: "灬", pos: "bawah", name: "Titik", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "45-9", cat: "ch45", kanji: "梅", kana: "うめ", meaning: "bunga plum", part: "[名]", story: "Pohon 木 + Ibu 每: bunga plum musim semi.", radicals: [{char: "木", pos: "kiri", name: "Pohon", color: "text-amber-400 bg-amber-950/40"}, {char: "毎", pos: "kanan", name: "Ibu", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-10", cat: "ch45", kanji: "110番", kana: "ひゃくとおばん", meaning: "nomor telepon polisi untuk saat darurat", part: "[名]", story: "Panggil polisi darurat: 110.", radicals: [{char: "番", pos: "tunggal", name: "Nomor", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-11", cat: "ch45", kanji: "119番", kana: "ひゃくじゅうきゅうばん", meaning: "nomor telepon departmen pemadan kebakaran dan penanggulangan bencana untuk saat darurat", part: "[名]", story: "Panggil pemadam api darurat: 119.", radicals: [{char: "番", pos: "tunggal", name: "Nomor", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-12", cat: "ch45", kanji: "急に", kana: "きゅうに", meaning: "mendadak, tiba-tiba", part: "[副]", story: "Hati terburu-buru: mendadak seketika.", radicals: [{char: "急", pos: "tunggal", name: "Cepat", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "45-13", cat: "ch45", kanji: "無理に", kana: "むりに", meaning: "dengan paksa", part: "[副]", story: "Tiada 無 + Logika 理: memaksakan diri.", radicals: [{char: "無", pos: "kiri", name: "Nihil", color: "text-rose-400 bg-rose-950/40"}, {char: "理", pos: "kanan", name: "Logika", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "45-14", cat: "ch45", kanji: "楽しみに しています", kana: "たのしみに しています", meaning: "menikmati", part: "[連]", story: "Menanti dengan hati gembira: menikmati.", radicals: [{char: "楽", pos: "utama", name: "Nikmat", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "45-15", cat: "ch45", kanji: "以上です。", kana: "いじょうです。", meaning: "Sekian.", part: "[連]", story: "Penutup pembicaraan: Sekian.", radicals: [{char: "以", pos: "kiri", name: "Batas", color: "text-cyan-400 bg-cyan-950/40"}, {char: "上", pos: "kanan", name: "Atas", color: "text-amber-400 bg-amber-950/40"}] },
+
+      // BAB 45 YOMIMONO (8 KATA)
+      { id: "45-16", cat: "ch45", kanji: "悩み", kana: "なやみ", meaning: "masalah", part: "[名]", story: "Hati gundah memikirkan beban: masalah.", radicals: [{char: "忄", pos: "kiri", name: "Hati", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-17", cat: "ch45", kanji: "目覚まし[時計]", kana: "めざまし[どけい]", meaning: "weker", part: "[名]", story: "Mata 目 + Bangun 覚: jam weker.", radicals: [{char: "目", pos: "kiri", name: "Mata", color: "text-cyan-400 bg-cyan-950/40"}, {char: "覚", pos: "kanan", name: "Sadar", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "45-18", cat: "ch45", kanji: "目が 覚めます", kana: "めが さめます", meaning: "terbangun", part: "[動II]", story: "Mata membuka dari tidur: terbangun.", radicals: [{char: "覚", pos: "tunggal", name: "Sadar", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "45-19", cat: "ch45", kanji: "大学生", kana: "だいがくせい", meaning: "mahasiswa", part: "[名]", story: "Besar 大 + Belajar 学 + Lahir 生: mahasiswa.", radicals: [{char: "大", pos: "kiri", name: "Besar", color: "text-cyan-400 bg-cyan-950/40"}, {char: "学", pos: "tengah", name: "Belajar", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "45-20", cat: "ch45", kanji: "回答", kana: "かいとう", meaning: "jawaban (~します: menjawab)", part: "[名]", story: "Putar 回 + Jawab 答: respon jawaban.", radicals: [{char: "回", pos: "kiri", name: "Balik", color: "text-cyan-400 bg-cyan-950/40"}, {char: "答", pos: "kanan", name: "Jawab", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "45-21", cat: "ch45", kanji: "鳴ります", kana: "なります", meaning: "berbunyi", part: "[動I] [目覚まし時計が～]", story: "Mulut 口 + Burung 鳥: suara jam berbunyi nyaring.", radicals: [{char: "口", pos: "kiri", name: "Mulut", color: "text-rose-400 bg-rose-950/40"}, {char: "鳥", pos: "kanan", name: "Burung", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "45-22", cat: "ch45", kanji: "セットします", kana: "セットします", meaning: "memasang, mengatur", part: "[動III]", story: "Katakana: set alarm memasang, mengatur.", radicals: [{char: "カナ", pos: "Katakana", name: "Atur", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "45-23", cat: "ch45", kanji: "それでも", kana: "それでも", meaning: "masih", part: "[接]", story: "Meskipun begitu kondisinya: masih.", radicals: [{char: "Kana", pos: "Konjungsi", name: "Hubung", color: "text-purple-400 bg-purple-950/40"}] },
+
+      // BAB 46 POKOK (17 KATA)
+      { id: "46-1", cat: "ch46", kanji: "渡します", kana: "わたします", meaning: "menyerahkan", part: "[動I]", story: "Air 氵 + Derajat 度: Menyerahkan titipan menyeberang.", radicals: [{char: "氵", pos: "kiri", name: "Air", color: "text-cyan-400 bg-cyan-950/40"}, {char: "度", pos: "kanan", name: "Derajat", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-2", cat: "ch46", kanji: "帰って 来ます", kana: "かえって きます", meaning: "pulang", part: "[動III]", story: "Kembali 帰 lalu datang 来: pulang.", radicals: [{char: "帰", pos: "kiri", name: "Balik", color: "text-cyan-400 bg-cyan-950/40"}, {char: "来", pos: "kanan", name: "Datang", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "46-3", cat: "ch46", kanji: "出ます", kana: "でます", meaning: "[bus] berangkat", part: "[動II] [バスが～]", story: "Keluar garasi jalan: bus berangkat.", radicals: [{char: "出", pos: "tunggal", name: "Keluar", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-4", cat: "ch46", kanji: "届きます", kana: "とどきます", meaning: "[barang] sampai", part: "[動I] [荷物が～]", story: "Rumah 尸 + Tiba: paket sampai di tujuan.", radicals: [{char: "尸", pos: "luar", name: "Rumah", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-5", cat: "ch46", kanji: "入学します", kana: "にゅうがくします", meaning: "masuk [universitas]", part: "[動III] [大学に～]", story: "Masuk 入 + Belajar 学: masuk universitas.", radicals: [{char: "入", pos: "kiri", name: "Masuk", color: "text-emerald-400 bg-emerald-950/40"}, {char: "学", pos: "kanan", name: "Ilmu", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-6", cat: "ch46", kanji: "卒業します", kana: "そつぎょうします", meaning: "lulus/tamat [dari universitas]", part: "[動III] [大学を～]", story: "Lulus 卒 + Karya 業: tamat dari universitas.", radicals: [{char: "卒", pos: "kiri", name: "Lulus", color: "text-rose-400 bg-rose-950/40"}, {char: "業", pos: "kanan", name: "Karya", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-7", cat: "ch46", kanji: "焼きます", kana: "やきます", meaning: "membakar", part: "[動I]", story: "Api 火 + Tanah: memanggang/membakar roti.", radicals: [{char: "火", pos: "kiri", name: "Api", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "46-8", cat: "ch46", kanji: "焼けます", kana: "やけます", meaning: "[roti] dibakar, [daging] dibakar", part: "[動II] [パンが～, 肉が～]", story: "Intransitif matang: daging dibakar.", radicals: [{char: "火", pos: "kiri", name: "Api", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "46-9", cat: "ch46", kanji: "留守", kana: "るす", meaning: "ketidakadaan", part: "[名]", story: "Tinggal 留 + Lindung 守: orang tidak ada di rumah.", radicals: [{char: "留", pos: "kiri", name: "Diam", color: "text-amber-400 bg-amber-950/40"}, {char: "守", pos: "kanan", name: "Jaga", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-10", cat: "ch46", kanji: "宅配便", kana: "たくはいびん", meaning: "titipan kilat", part: "[名]", story: "Rumah 宅 + Kirim 配 + Pesan 便: titipan kilat kurir.", radicals: [{char: "宅", pos: "kiri", name: "Wisma", color: "text-cyan-400 bg-cyan-950/40"}, {char: "配", pos: "tengah", name: "Bagi", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-11", cat: "ch46", kanji: "原因", kana: "げんいん", meaning: "sebab", part: "[名]", story: "Asal 原 + Pangkal 因: akar sebab.", radicals: [{char: "原", pos: "kiri", name: "Asal", color: "text-cyan-400 bg-cyan-950/40"}, {char: "因", pos: "kanan", name: "Sebab", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "46-12", cat: "ch46", kanji: "こちら", kana: "こちら", meaning: "sini", part: "[代]", story: "Penunjuk arah/lokasi dekat: sini.", radicals: [{char: "Kana", pos: "Penunjuk", name: "Lokasi", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-13", cat: "ch46", kanji: "～の ところ", kana: "～の ところ", meaning: "tempat ～", part: "[名]", story: "Lokasi posisi: tempat ～.", radicals: [{char: "所", pos: "tunggal", name: "Tempat", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "46-14", cat: "ch46", kanji: "半年", kana: "はんとし", meaning: "setengah tahun", part: "[名]", story: "Separuh 半 + Tahun 年: setengah tahun.", radicals: [{char: "半", pos: "kiri", name: "Separuh", color: "text-cyan-400 bg-cyan-950/40"}, {char: "年", pos: "kanan", name: "Tahun", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-15", cat: "ch46", kanji: "ちょうど", kana: "ちょうど", meaning: "pas", part: "[副]", story: "Kuantitas atau waktu yang tepat pas.", radicals: [{char: "Kana", pos: "Keterangan", name: "Tepat", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "46-16", cat: "ch46", kanji: "たった今", kana: "たったいま", meaning: "baru saja (memakai bersama bentuk lampau, menyatakan hal yang sudah selesai dilakukan)", part: "[副]", story: "Sinyal mutlak KK bentuk た + ところです.", radicals: [{char: "今", pos: "utama", name: "Sekarang", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "46-17", cat: "ch46", kanji: "今 いいですか。", kana: "いま いいですか。", meaning: "Sekarang boleh mengganggu?", part: "[連]", story: "Ungkapan sopan memulai telepon: Sekarang boleh mengganggu?", radicals: [{char: "今", pos: "waktu", name: "Waktu", color: "text-cyan-400 bg-cyan-950/40"}] },
+
+      // BAB 46 YOMIMONO (8 KATA)
+      { id: "46-18", cat: "ch46", kanji: "ついて います", kana: "ついて います", meaning: "mujur, untung", part: "[動II]", story: "Nasib baik sedang menempel: mujur, untung.", radicals: [{char: "Kana", pos: "Keberuntungan", name: "Mujur", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "46-19", cat: "ch46", kanji: "床", kana: "ゆか", meaning: "lantai", part: "[名]", story: "Kayu alas ruangan rumah: lantai.", radicals: [{char: "床", pos: "tunggal", name: "Alas", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-20", cat: "ch46", kanji: "転びます", kana: "ころびます", meaning: "jatuh", part: "[動I]", story: "Mobil 車 + Khusus: Terpeleset jatuh terjungkal.", radicals: [{char: "車", pos: "kiri", name: "Roda", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-21", cat: "ch46", kanji: "ベル", kana: "ベル", meaning: "bel", part: "[名]", story: "Katakana: bel lonceng pintu / sekolah.", radicals: [{char: "カナ", pos: "Katakana", name: "Alat", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-22", cat: "ch46", kanji: "鳴ります", kana: "なります", meaning: "berbunyi", part: "[動I] [ベルが～]", story: "Mulut 口 + Burung 鳥: suara bel berbunyi nyaring.", radicals: [{char: "口", pos: "kiri", name: "Mulut", color: "text-rose-400 bg-rose-950/40"}, {char: "鳥", pos: "kanan", name: "Burung", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-23", cat: "ch46", kanji: "慌てて", kana: "あわてて", meaning: "tergesa-gesa", part: "[副]", story: "Hati 忄 bingung: tergesa-gesa buru-buru.", radicals: [{char: "忄", pos: "kiri", name: "Hati", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "46-24", cat: "ch46", kanji: "順番に", kana: "じゅんばんに", meaning: "sesuai dengan urutan", part: "[副]", story: "Tertib 順 + Nomor 番: sesuai dengan urutan antre.", radicals: [{char: "順", pos: "kiri", name: "Tertib", color: "text-cyan-400 bg-cyan-950/40"}, {char: "番", pos: "kanan", name: "Nomor", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-25", cat: "ch46", kanji: "出来事", kana: "できごと", meaning: "peristiwa", part: "[名]", story: "Keluar 出 + Datang 来 + Urusan 事: suatu peristiwa.", radicals: [{char: "出", pos: "kiri", name: "Keluar", color: "text-cyan-400 bg-cyan-950/40"}, {char: "事", pos: "kanan", name: "Hal", color: "text-emerald-400 bg-emerald-950/40"}] },
+
+      // 20 KANJI IRODORI MURNI (FOTO 32 & 33)
+      { id: "iro-1", cat: "irodori", kanji: "服", kana: "ふく", meaning: "pakaian, baju", part: "[名]", story: "Bulan 月 + Tekuk: kain baju penutup tubuh.", radicals: [{char: "月", pos: "kiri", name: "Bulan", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-2", cat: "irodori", kanji: "袋", kana: "ふくろ", meaning: "kantong, tas", part: "[名]", story: "Ganti 代 + Baju 衣: kantong kain pembungkus.", radicals: [{char: "代", pos: "atas", name: "Ganti", color: "text-amber-400 bg-amber-950/40"}, {char: "衣", pos: "bawah", name: "Baju", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-3", cat: "irodori", kanji: "自分", kana: "じぶん", meaning: "diri sendiri", part: "[名]", story: "Diri 自 + Bagian 分: pribadi diri sendiri.", radicals: [{char: "自", pos: "kiri", name: "Diri", color: "text-emerald-400 bg-emerald-950/40"}, {char: "分", pos: "kanan", name: "Bagi", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-4", cat: "irodori", kanji: "店長", kana: "てんちょう", meaning: "manajer toko, kepala toko", part: "[名]", story: "Toko 店 + Pimpinan 長: kepala manajer toko.", radicals: [{char: "店", pos: "kiri", name: "Toko", color: "text-amber-400 bg-amber-950/40"}, {char: "長", pos: "kanan", name: "Pimpinan", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-5", cat: "irodori", kanji: "全員", kana: "ぜんいん", meaning: "semua orang, seluruh anggota", part: "[名]", story: "Utuh 全 + Anggota 員: semua orang tanpa kecuali.", radicals: [{char: "全", pos: "kiri", name: "Semua", color: "text-cyan-400 bg-cyan-950/40"}, {char: "員", pos: "kanan", name: "Anggota", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "iro-6", cat: "irodori", kanji: "習慣", kana: "しゅうかん", meaning: "kebiasaan", part: "[名]", story: "Belajar 習 + Biasa 慣: kebiasaan turun-temurun.", radicals: [{char: "習", pos: "kiri", name: "Belajar", color: "text-cyan-400 bg-cyan-950/40"}, {char: "慣", pos: "kanan", name: "Biasa", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "iro-7", cat: "irodori", kanji: "普通", kana: "ふつう", meaning: "biasa, normal", part: "[名]", story: "Umum 普 + Lewat 通: keadaan normal biasa.", radicals: [{char: "普", pos: "kiri", name: "Umum", color: "text-emerald-400 bg-emerald-950/40"}, {char: "通", pos: "kanan", name: "Lewat", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-8", cat: "irodori", kanji: "暗い", kana: "くらい", meaning: "gelap", part: "[形]", story: "Matahari 日 tertutup Suara 音: suasana gelap.", radicals: [{char: "日", pos: "kiri", name: "Mentari", color: "text-rose-400 bg-rose-950/40"}, {char: "音", pos: "kanan", name: "Suara", color: "text-slate-400 bg-slate-800"}] },
+      { id: "iro-9", cat: "irodori", kanji: "怒る", kana: "おこる", meaning: "marah", part: "[動I]", story: "Budak 奴 + Hati 心: emosi mendidih marah.", radicals: [{char: "奴", pos: "atas", name: "Budak", color: "text-amber-400 bg-amber-950/40"}, {char: "心", pos: "bawah", name: "Hati", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-10", cat: "irodori", kanji: "入院する", kana: "にゅういんする", meaning: "masuk rumah sakit, dirawat", part: "[動III]", story: "Masuk 入 + Lembaga 院: menginap dirawat di rumah sakit.", radicals: [{char: "入", pos: "kiri", name: "Masuk", color: "text-emerald-400 bg-emerald-950/40"}, {char: "院", pos: "kanan", name: "Gedung", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-11", cat: "irodori", kanji: "色", kana: "いろ", meaning: "warna", part: "[名]", story: "Karakter rupa corak pigmen: warna.", radicals: [{char: "色", pos: "tunggal", name: "Warna", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "iro-12", cat: "irodori", kanji: "赤", kana: "あか", meaning: "merah", part: "[名]", story: "Tanah bakar membara: warna merah.", radicals: [{char: "赤", pos: "tunggal", name: "Merah", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-13", cat: "irodori", kanji: "青", kana: "あお", meaning: "biru", part: "[名]", story: "Tunas hijau di bawah sumur air: warna biru.", radicals: [{char: "青", pos: "tunggal", name: "Biru", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-14", cat: "irodori", kanji: "黒", kana: "くろ", meaning: "hitam", part: "[名]", story: "Jelaga asap di desa: warna hitam pekat.", radicals: [{char: "里", pos: "atas", name: "Desa", color: "text-slate-400 bg-slate-800"}, {char: "灬", pos: "bawah", name: "Api", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-15", cat: "irodori", kanji: "白", kana: "しろ", meaning: "putih", part: "[名]", story: "Sinar fajar merekah: warna putih bersih.", radicals: [{char: "白", pos: "tunggal", name: "Putih", color: "text-slate-200 bg-slate-800"}] },
+      { id: "iro-16", cat: "irodori", kanji: "女性", kana: "じょせい", meaning: "wanita, perempuan", part: "[名]", story: "Perempuan 女 + Sifat 性: kaum wanita.", radicals: [{char: "女", pos: "kiri", name: "Wanita", color: "text-rose-400 bg-rose-950/40"}, {char: "性", pos: "kanan", name: "Sifat", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-17", cat: "irodori", kanji: "男性", kana: "だんせい", meaning: "pria, laki-laki", part: "[名]", story: "Kekuatan sawah 男 + Sifat 性: kaum pria.", radicals: [{char: "男", pos: "kiri", name: "Pria", color: "text-cyan-400 bg-cyan-950/40"}, {char: "性", pos: "kanan", name: "Sifat", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "iro-18", cat: "irodori", kanji: "急に", kana: "きゅうに", meaning: "mendadak, tiba-tiba", part: "[副]", story: "Hati terburu-buru: mendadak seketika.", radicals: [{char: "急", pos: "tunggal", name: "Cepat", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "iro-19", cat: "irodori", kanji: "営業する", kana: "えいぎょうする", meaning: "buka, beroperasi", part: "[動III]", story: "Mengelola 営 + Pekerjaan 業: toko beroperasi.", radicals: [{char: "営", pos: "atas", name: "Kelola", color: "text-cyan-400 bg-cyan-950/40"}, {char: "業", pos: "bawah", name: "Karya", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "iro-20", cat: "irodori", kanji: "案内する", kana: "あんないする", meaning: "memandu, mengantar", part: "[動III]", story: "Rencana 案 + Dalam 内: memandu rute.", radicals: [{char: "案", pos: "kiri", name: "Rencana", color: "text-emerald-400 bg-emerald-950/40"}, {char: "内", pos: "kanan", name: "Dalam", color: "text-rose-400 bg-rose-950/40"}] }
+    ];
+
+    // 48 SOAL DRILL KOTOBA MURNI BAB 45 & 46
+    const kotobaQuizBank = [
+      // BAB 45 POKOK & YOMIMONO (23 SOAL)
+      { num: 1, cat: "ch45", q: "彼の言葉を心から（　）。", opts: ["a. 信じます", "b. 知らせます", "c. 渡します", "d. 鳴ります"], ans: 0, explain: "Percaya = <strong>信じます</strong>.", target: "信じます" },
+      { num: 2, cat: "ch45", q: "急用ができたので旅行を（　）。", opts: ["a. キャンセルします", "b. セットします", "c. 入学します", "d. 卒業します"], ans: 0, explain: "Membatalkan = <strong>キャンセルします</strong>.", target: "キャンセルします" },
+      { num: 3, cat: "ch45", q: "会議の時間をみんなに（　）。", opts: ["a. 知らせます", "b. 信じます", "c. 渡します", "d. 転びます"], ans: 0, explain: "Memberitahukan = <strong>知らせます</strong>.", target: "知らせます" },
+      { num: 4, cat: "ch45", q: "パソコンを買ったときに（　）をもらいました。", opts: ["a. 保証書", "b. 領収書", "c. 出来事", "d. 原因"], ans: 0, explain: "Surat garansi = <strong>保証書</strong>.", target: "保証書" },
+      { num: 5, cat: "ch45", q: "買い物のあとでお店の人に（　）をもらいました。", opts: ["a. 領収書", "b. 保証書", "c. 理由", "d. 順序"], ans: 0, explain: "Kuitansi = <strong>領収書</strong>.", target: "領収書" },
+      { num: 6, cat: "ch45", q: "夏休みに友達と山で（　）をしました。", opts: ["a. キャンプ", "b. ドライブ", "c. シングル", "d. ツイン"], ans: 0, explain: "Kemah = <strong>キャンプ</strong>.", target: "キャンプ" },
+      { num: 7, cat: "ch45", q: "雨がひどいので試合は（　）になりました。", opts: ["a. 中止", "b. 中断", "c. 禁止", "d. 停止"], ans: 0, explain: "Pembatalan = <strong>中止</strong>.", target: "中止" },
+      { num: 8, cat: "ch45", q: "テストで100（　）を取りました。", opts: ["a. 点", "b. 倍", "c. 式", "d. 量"], ans: 0, explain: "Poin nilai = <strong>点</strong>.", target: "点" },
+      { num: 9, cat: "ch45", q: "春になって庭の（　）の花が咲きました。", opts: ["a. 梅", "b. 米", "c. 紙", "d. 床"], ans: 0, explain: "Bunga plum = <strong>梅</strong>.", target: "梅" },
+      { num: 10, cat: "ch45", q: "泥棒を見たときは（　）に電話します。", opts: ["a. 110番", "b. 119番", "c. 100番", "d. 120番"], ans: 0, explain: "Polisi darurat = <strong>110番</strong>.", target: "110番" },
+      { num: 11, cat: "ch45", q: "火事のときは急いで（　）に電話してください。", opts: ["a. 119番", "b. 110番", "c. 108番", "d. 114番"], ans: 0, explain: "Pemadam darurat = <strong>119番</strong>.", target: "119番" },
+      { num: 12, cat: "ch45", q: "晴れていたのに（　）大雨が降ってきました。", opts: ["a. 急に", "b. 無理に", "c. ちょうど", "d. たった今"], ans: 0, explain: "Mendadak = <strong>急に</strong>.", target: "急に" },
+      { num: 13, cat: "ch45", q: "体調が悪いのに（　）働いてはいけません。", opts: ["a. 無理に", "b. 急に", "c. 慌てて", "d. 順番に"], ans: 0, explain: "Dengan paksa = <strong>無理に</strong>.", target: "無理に" },
+      { num: 14, cat: "ch45", q: "日本への旅行を（　）。", opts: ["a. 楽しみに しています", "b. 安心しています", "c. 嫌がっています", "d. 出来事です"], ans: 0, explain: "Menikmati / menanti gembira = <strong>楽しみに しています</strong>.", target: "楽しみに しています" },
+      { num: 15, cat: "ch45", q: "スピーチの最後に「（　）」と言いました。", opts: ["a. 以上です。", "b. これらです。", "c. それでもです。", "d. わあです。"], ans: 0, explain: "Sekian = <strong>以上です。</strong>.", target: "以上です。" },
+      { num: 16, cat: "ch45", q: "将来についてたくさんの（　）があります。", opts: ["a. 悩み", "b. 順序", "c. 表現", "d. 理由"], ans: 0, explain: "Masalah = <strong>悩み</strong>.", target: "悩み" },
+      { num: 17, cat: "ch45", q: "朝起きるために（　）を買いました。", opts: ["a. 目覚まし[時計]", "b. 領収書", "c. 保証書", "d. 出来事"], ans: 0, explain: "Weker = <strong>目覚まし[時計]</strong>.", target: "目覚まし[時計]" },
+      { num: 18, cat: "ch45", q: "朝6時に自然と（　）ました。", opts: ["a. 目が 覚め", "b. 眠り", "c. 泣き", "d. 落ち"], ans: 0, explain: "Terbangun = <strong>目が 覚めます</strong>.", target: "目が 覚めます" },
+      { num: 19, cat: "ch45", q: "大学で勉強している人を（　）と呼びます。", opts: ["a. 大学生", "b. 店長", "c. 全員", "d. 大人"], ans: 0, explain: "Mahasiswa = <strong>大学生</strong>.", target: "大学生" },
+      { num: 20, cat: "ch45", q: "アンケートの質問に（　）します。", opts: ["a. 回答", "b. 表現", "c. 順序", "d. 理由"], ans: 0, explain: "Jawaban / menjawab = <strong>回答</strong>.", target: "回答" },
+      { num: 21, cat: "ch45", q: "朝7時に目覚まし時計が（　）ました。", opts: ["a. 鳴り", "b. 落ち", "c. 切れ", "d. 焼け"], ans: 0, explain: "Berbunyi (weker) = <strong>鳴ります</strong>.", target: "鳴ります" },
+      { num: 22, cat: "ch45", q: "夜寝る前にアラームを（　）します。", opts: ["a. セット", "b. キャンセル", "c. キャンプ", "d. 中止"], ans: 0, explain: "Memasang / mengatur = <strong>セットします</strong>.", target: "セットします" },
+      { num: 23, cat: "ch45", q: "何度も注意されました。（　）彼はやめません。", opts: ["a. それでも", "b. また", "c. 例えば", "d. これら"], ans: 0, explain: "Masih = <strong>それでも</strong>.", target: "それでも" },
+
+      // BAB 46 POKOK & YOMIMONO (25 SOAL)
+      { num: 24, cat: "ch46", q: "先生に書類を（　）ました。", opts: ["a. 渡し", "b. 届き", "c. 出し", "d. 落ち"], ans: 0, explain: "Menyerahkan = <strong>渡します</strong>.", target: "渡します" },
+      { num: 25, cat: "ch46", q: "父は夜遅く会社から（　）ます。", opts: ["a. 帰って 来", "b. 走って 来", "c. 出かけて 来", "d. 買って 来"], ans: 0, explain: "Pulang = <strong>帰って 来ます</strong>.", target: "帰って 来ます" },
+      { num: 26, cat: "ch46", q: "バスがターミナルから（　）ました。", opts: ["a. 出", "b. 渡り", "c. 落ち", "d. 届き"], ans: 0, explain: "Berangkat (bus) = <strong>出ます</strong>.", target: "出ます" },
+      { num: 27, cat: "ch46", q: "注文した荷物が家に（　）ました。", opts: ["a. 届き", "b. 渡し", "c. 焼け", "d. 落ち"], ans: 0, explain: "Sampai (barang) = <strong>届きます</strong>.", target: "届きます" },
+      { num: 28, cat: "ch46", q: "４月に東京の大学に（　）します。", opts: ["a. 入学", "b. 卒業", "c. 入院", "d. 営業"], ans: 0, explain: "Masuk universitas = <strong>入学します</strong>.", target: "入学します" },
+      { num: 29, cat: "ch46", q: "来年３月に大学を（　）します。", opts: ["a. 卒業", "b. 入学", "c. 中止", "d. 案内"], ans: 0, explain: "Lulus/tamat dari universitas = <strong>卒業します</strong>.", target: "卒業します" },
+      { num: 30, cat: "ch46", q: "庭で魚を（　）ます。", opts: ["a. 焼き", "b. 乾かし", "c. 落ち", "d. 倒し"], ans: 0, explain: "Membakar = <strong>焼きます</strong>.", target: "焼きます" },
+      { num: 31, cat: "ch46", q: "オーブンでパンがおいしく（　）ました。", opts: ["a. 焼け", "b. 焼き", "c. 乾き", "d. 落ち"], ans: 0, explain: "Dibakar (roti) = <strong>焼けます</strong>.", target: "焼けます" },
+      { num: 32, cat: "ch46", q: "旅行で家を（　）にします。", opts: ["a. 留守", "b. 宅配便", "c. 原因", "d. 理由"], ans: 0, explain: "Ketidakadaan = <strong>留守</strong>.", target: "留守" },
+      { num: 33, cat: "ch46", q: "荷物を（　）で送りました。", opts: ["a. 宅配便", "b. 郵便局", "c. 領収書", "d. 保証書"], ans: 0, explain: "Titipan kilat = <strong>宅配便</strong>.", target: "宅配便" },
+      { num: 34, cat: "ch46", q: "火事の（　）を調べています。", opts: ["a. 原因", "b. 理由", "c. 順序", "d. 表現"], ans: 0, explain: "Sebab = <strong>原因</strong>.", target: "原因" },
+      { num: 35, cat: "ch46", q: "受付は（　）でございます。", opts: ["a. こちら", "b. これら", "c. また", "d. わあ"], ans: 0, explain: "Sini = <strong>こちら</strong>.", target: "こちら" },
+      { num: 36, cat: "ch46", q: "駅前の（　）で友達を待ちます。", opts: ["a. ところ", "b. 理由", "c. 悩み", "d. 床"], ans: 0, explain: "Tempat = <strong>～の ところ</strong>.", target: "～の ところ" },
+      { num: 37, cat: "ch46", q: "日本に来てから（　）が過ぎました。", opts: ["a. 半年", "b. 毎年", "c. 昨年", "d. 来年"], ans: 0, explain: "Setengah tahun = <strong>半年</strong>.", target: "半年" },
+      { num: 38, cat: "ch46", q: "時間は今（　）３時です。", opts: ["a. ちょうど", "b. たった今", "c. 急に", "d. 無理に"], ans: 0, explain: "Pas = <strong>ちょうど</strong>.", target: "ちょうど" },
+      { num: 39, cat: "ch46", q: "（　）仕事が終わったところです。", opts: ["a. たった今", "b. ちょうど", "c. 急に", "d. 無理に"], ans: 0, explain: "Baru saja = <strong>たった今</strong>.", target: "たった今" },
+      { num: 40, cat: "ch46", q: "もしもし、課長。（　）", opts: ["a. 今 いいですか。", "b. 以上です。", "c. わあ。", "d. どうですか。"], ans: 0, explain: "Sekarang boleh mengganggu? = <strong>今 いいですか。</strong>.", target: "今 いいですか。" },
+      { num: 41, cat: "ch46", q: "くじが当たって、きょうはとても（　）ね。", opts: ["a. ついて います", "b. 転んで います", "c. 鳴って います", "d. 焦って います"], ans: 0, explain: "Mujur, untung = <strong>ついて います</strong>.", target: "ついて います" },
+      { num: 42, cat: "ch46", q: "水をこぼして（　）がぬれました。", opts: ["a. 床", "b. ベル", "c. 梅", "d. 紙"], ans: 0, explain: "Lantai = <strong>床</strong>.", target: "床" },
+      { num: 43, cat: "ch46", q: "滑って（　）足を怪我しました。", opts: ["a. 転び", "b. 落ち", "c. 泣き", "d. 眠り"], ans: 0, explain: "Jatuh = <strong>転びます</strong>.", target: "転びます" },
+      { num: 44, cat: "ch46", q: "玄関の（　）を押しました。", opts: ["a. ベル", "b. 床", "c. 点", "d. 荷物"], ans: 0, explain: "Bel = <strong>ベル</strong>.", target: "ベル" },
+      { num: 45, cat: "ch46", q: "授業が終わる（　）が鳴りました。", opts: ["a. ベル", "b. 床", "c. 梅", "d. 理由"], ans: 0, explain: "Bel = <strong>ベル</strong>.", target: "ベル" },
+      { num: 46, cat: "ch46", q: "学校のベルが大きな音で（　）ます。", opts: ["a. 鳴り", "b. 落ち", "c. 切れ", "d. 焼け"], ans: 0, explain: "Berbunyi (bel) = <strong>鳴ります</strong>.", target: "鳴ります" },
+      { num: 47, cat: "ch46", q: "遅刻しそうだったので（　）家を出ました。", opts: ["a. 慌てて", "b. ちょうど", "c. たった今", "d. 無理に"], ans: 0, explain: "Tergesa-gesa = <strong>慌てて</strong>.", target: "慌てて" },
+      { num: 48, cat: "ch46", q: "並んで（　）部屋に入ってください。", opts: ["a. 順番に", "b. 慌てて", "c. 急に", "d. 無理に"], ans: 0, explain: "Sesuai dengan urutan = <strong>順番に</strong>.", target: "順番に" },
+      { num: 49, cat: "ch46", q: "きのう街で不思議な（　）がありました。", opts: ["a. 出来事", "b. 順序", "c. 理由", "d. 悩み"], ans: 0, explain: "Peristiwa = <strong>出来事</strong>.", target: "出来事" }
+    ];
+
+    let currentKotobaFilter = 'all';
+    let filteredKotobaList = [...kotobaQuizBank];
+    let curKotobaQuizIdx = 0;
+    let kotobaQuizScore = 0;
+    let kotobaAnswered = {};
+
+    let currentStage = 'tanam';
+    let currentPolaCategory = 'all';
+    let activeTanamDeck = [...tanamPolaMasterList];
+    let curTanamIdx = 0;
+
+    let strictBlankDeck = [];
+    let curStrictItem = null;
+    let strictMasteredCount = 0;
+    let isStrictRevealed = false;
+
+    function switchTab(tabId) {
+      const tabs = ['shiken-kanji', 'shiken-bunpou', 'teleport', 'shiken-kotoba', 'traps'];
+      tabs.forEach(t => {
+        const sec = document.getElementById(t);
+        const btn = document.getElementById(`tabBtn-${t}`);
+        if (sec) {
+          if (t === tabId) {
+            sec.classList.remove('hidden');
+            sec.style.display = 'block';
+          } else {
+            sec.classList.add('hidden');
+            sec.style.display = 'none';
+          }
+        }
+        if (btn) {
+          if (t === tabId) {
+            btn.className = "px-3 py-1.5 rounded-lg font-bold bg-rose-500 text-white transition whitespace-nowrap shadow-md shadow-rose-500/20";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap";
+          }
+        }
+      });
+    }
+
+    function loadKanjiQuestion() {
+      const q = kanjiIrodoriBank[curKanjiIdx];
+      const card = document.getElementById('kanjiQuestionCard');
+      const tracker = document.getElementById('kanjiTracker');
+      if (!q || !card) return;
+
+      if (tracker) tracker.textContent = `SOAL ${curKanjiIdx + 1} / ${kanjiIrodoriBank.length}`;
+      const isAnswered = kanjiAnswered.hasOwnProperty(curKanjiIdx);
+      const userAns = kanjiAnswered[curKanjiIdx];
+
+      let optsHtml = '';
+      q.opts.forEach((opt, idx) => {
+        let btnCls = "bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80";
+        if (isAnswered) {
+          if (idx === q.ans) {
+            btnCls = "bg-emerald-950 border-emerald-500 text-emerald-300 font-bold";
+          } else if (idx === userAns) {
+            btnCls = "bg-rose-950 border-rose-500 text-rose-300 line-through font-bold";
+          } else {
+            btnCls = "bg-slate-900/40 border-slate-800 text-slate-600 opacity-60";
+          }
+        }
+        optsHtml += `
+          <button onclick="handleKanjiAnswer(${idx})" ${isAnswered ? 'disabled' : ''} class="w-full text-left p-3 rounded-xl border text-xs sm:text-sm font-jp transition flex items-center justify-between ${btnCls}">
+            <span>${opt}</span>
+            ${isAnswered && idx === q.ans ? '<span class="text-emerald-400 font-bold">✓ BENAR</span>' : ''}
+            ${isAnswered && idx === userAns && userAns !== q.ans ? '<span class="text-rose-400 font-bold">✕ SALAH</span>' : ''}
+          </button>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono font-bold text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded border border-rose-800/60">
+            NOMOR ${q.num}
+          </span>
+          <button onclick="speakText('${q.q}')" class="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1">
+            🔊 Baca Soal
+          </button>
+        </div>
+
+        <div class="text-base sm:text-lg font-jp font-bold text-slate-100 leading-relaxed py-2">
+          ${q.q}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          ${optsHtml}
+        </div>
+
+        ${isAnswered ? `
+          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-1.5 animate-fadeIn">
+            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">⚡ Analisis Shiken:</span>
+            <p class="text-slate-300 leading-relaxed">${q.explain}</p>
+          </div>
+        ` : ''}
+
+        <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs">
+          <button onclick="prevKanjiQuestion()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition">
+            ← Sebelumnya
+          </button>
+          <button onclick="nextKanjiQuestion()" class="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold transition shadow-md shadow-rose-600/30">
+            Selanjutnya →
+          </button>
+        </div>
+      `;
+
+      if (isAudioEnabled && !isAnswered) {
+        speakText(q.q);
+      }
+    }
+
+    function handleKanjiAnswer(idx) {
+      if (kanjiAnswered.hasOwnProperty(curKanjiIdx)) return;
+      kanjiAnswered[curKanjiIdx] = idx;
+      const q = kanjiIrodoriBank[curKanjiIdx];
+      if (idx === q.ans) kanjiScore++;
+      const scoreDisp = document.getElementById('kanjiScoreDisplay');
+      if (scoreDisp) scoreDisp.textContent = `${kanjiScore} Benar`;
+      loadKanjiQuestion();
+    }
+
+    function nextKanjiQuestion() {
+      if (curKanjiIdx < kanjiIrodoriBank.length - 1) {
+        curKanjiIdx++;
+      } else {
+        curKanjiIdx = 0;
+      }
+      loadKanjiQuestion();
+    }
+
+    function prevKanjiQuestion() {
+      if (curKanjiIdx > 0) {
+        curKanjiIdx--;
+      } else {
+        curKanjiIdx = kanjiIrodoriBank.length - 1;
+      }
+      loadKanjiQuestion();
+    }
+
+    function changeBunpouBank() {
+      const select = document.getElementById('bunpouBankSelect');
+      if (select) {
+        curBunpouBankKey = select.value;
+      }
+      curBunpouIdx = 0;
+      bunpouScore = 0;
+      bunpouAnswered = {};
+      const scoreDisp = document.getElementById('bunpouScoreDisplay');
+      if (scoreDisp) scoreDisp.textContent = "0 Benar";
+      loadBunpouQuestion();
+    }
+
+    function loadBunpouQuestion() {
+      const bank = bunpouBanks[curBunpouBankKey] || bunpouBanks.b1;
+      const q = bank[curBunpouIdx];
+      const card = document.getElementById('bunpouQuestionCard');
+      const tracker = document.getElementById('bunpouTracker');
+      if (!q || !card) return;
+
+      if (tracker) tracker.textContent = `SOAL ${curBunpouIdx + 1} / ${bank.length}`;
+      const isAnswered = bunpouAnswered.hasOwnProperty(curBunpouIdx);
+      const userAns = bunpouAnswered[curBunpouIdx];
+
+      let optsHtml = '';
+      q.opts.forEach((opt, idx) => {
+        let btnCls = "bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80";
+        if (isAnswered) {
+          if (idx === q.ans) {
+            btnCls = "bg-emerald-950 border-emerald-500 text-emerald-300 font-bold";
+          } else if (idx === userAns) {
+            btnCls = "bg-rose-950 border-rose-500 text-rose-300 line-through font-bold";
+          } else {
+            btnCls = "bg-slate-900/40 border-slate-800 text-slate-600 opacity-60";
+          }
+        }
+        optsHtml += `
+          <button onclick="handleBunpouAnswer(${idx})" ${isAnswered ? 'disabled' : ''} class="w-full text-left p-3 rounded-xl border text-xs sm:text-sm font-jp transition flex items-center justify-between ${btnCls}">
+            <span>${opt}</span>
+            ${isAnswered && idx === q.ans ? '<span class="text-emerald-400 font-bold">✓ BENAR</span>' : ''}
+            ${isAnswered && idx === userAns && userAns !== q.ans ? '<span class="text-rose-400 font-bold">✕ SALAH</span>' : ''}
+          </button>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/60">
+            SOAL ${q.num}
+          </span>
+          <button onclick="speakText('${q.q}')" class="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1">
+            🔊 Baca Soal
+          </button>
+        </div>
+
+        <div class="text-base sm:text-lg font-jp font-bold text-slate-100 leading-relaxed py-2">
+          ${q.q}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          ${optsHtml}
+        </div>
+
+        ${isAnswered ? `
+          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-1.5 animate-fadeIn">
+            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">⚡ Analisis 5 Detik Sensei:</span>
+            <p class="text-slate-300 leading-relaxed">${q.explain}</p>
+          </div>
+        ` : ''}
+
+        <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs">
+          <button onclick="prevBunpouQuestion()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition">
+            ← Sebelumnya
+          </button>
+          <button onclick="nextBunpouQuestion()" class="px-4 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition shadow-md shadow-cyan-600/30">
+            Selanjutnya →
+          </button>
+        </div>
+      `;
+
+      if (isAudioEnabled && !isAnswered) {
+        speakText(q.q);
+      }
+    }
+
+    function handleBunpouAnswer(idx) {
+      if (bunpouAnswered.hasOwnProperty(curBunpouIdx)) return;
+      bunpouAnswered[curBunpouIdx] = idx;
+      const bank = bunpouBanks[curBunpouBankKey] || bunpouBanks.b1;
+      const q = bank[curBunpouIdx];
+      if (idx === q.ans) bunpouScore++;
+      const scoreDisp = document.getElementById('bunpouScoreDisplay');
+      if (scoreDisp) scoreDisp.textContent = `${bunpouScore} Benar`;
+      loadBunpouQuestion();
+    }
+
+    function nextBunpouQuestion() {
+      const bank = bunpouBanks[curBunpouBankKey] || bunpouBanks.b1;
+      if (curBunpouIdx < bank.length - 1) {
+        curBunpouIdx++;
+      } else {
+        curBunpouIdx = 0;
+      }
+      loadBunpouQuestion();
+    }
+
+    function prevBunpouQuestion() {
+      const bank = bunpouBanks[curBunpouBankKey] || bunpouBanks.b1;
+      if (curBunpouIdx > 0) {
+        curBunpouIdx--;
+      } else {
+        curBunpouIdx = bank.length - 1;
+      }
+      loadBunpouQuestion();
+    }
+
+    function resetStrictDeck() {
+      strictBlankDeck = [...activeTanamDeck];
+      strictMasteredCount = 0;
+      isStrictRevealed = false;
+      pickNextStrictCard();
+    }
+
+    function changePolaCategory() {
+      const catSelect = document.getElementById('teleportCategorySelect');
+      if (catSelect) {
+        currentPolaCategory = catSelect.value;
+      }
+      if (currentPolaCategory === 'all') {
+        activeTanamDeck = [...tanamPolaMasterList];
+      } else {
+        activeTanamDeck = tanamPolaMasterList.filter(item => item.cat === currentPolaCategory);
+      }
+      curTanamIdx = 0;
+      resetStrictDeck();
+      renderCurrentTanam();
+    }
+
+    function renderCurrentTanam() {
+      if (!activeTanamDeck || activeTanamDeck.length === 0) return;
+      if (curTanamIdx >= activeTanamDeck.length) curTanamIdx = 0;
+      const item = activeTanamDeck[curTanamIdx];
+      if (!item) return;
+
+      const tracker = document.getElementById('tanamTrackerBadge');
+      if (tracker) tracker.textContent = `${curTanamIdx + 1} / ${activeTanamDeck.length}`;
+
+      const srcBadge = document.getElementById('tanamSourceBadge');
+      if (srcBadge) {
+        if (item.cat === 'ch45') {
+          srcBadge.textContent = "BAB 45";
+          srcBadge.className = "text-[10px] font-mono font-bold uppercase tracking-wider text-purple-300 bg-purple-950/80 px-2 py-0.5 rounded-md border border-purple-800";
+        } else if (item.cat === 'ch46') {
+          srcBadge.textContent = "BAB 46";
+          srcBadge.className = "text-[10px] font-mono font-bold uppercase tracking-wider text-rose-300 bg-rose-950/80 px-2 py-0.5 rounded-md border border-rose-800";
+        } else {
+          srcBadge.textContent = "⭐ IRODORI (FOTO 32/33)";
+          srcBadge.className = "text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300 bg-amber-950/80 px-2 py-0.5 rounded-md border border-amber-800";
+        }
+      }
+
+      const collBadge = document.getElementById('tanamCollocationBadge');
+      if (collBadge) collBadge.textContent = item.part || '';
+      const kanjiDisp = document.getElementById('tanamKanjiDisplay');
+      if (kanjiDisp) kanjiDisp.textContent = item.kanji;
+      const kanaDisp = document.getElementById('tanamKanaDisplay');
+      if (kanaDisp) kanaDisp.textContent = item.kana;
+      const meanDisp = document.getElementById('tanamMeaningDisplay');
+      if (meanDisp) meanDisp.textContent = item.meaning;
+      const storyDisp = document.getElementById('tanamStoryDisplay');
+      if (storyDisp) storyDisp.textContent = item.story || '';
+
+      const radContainer = document.getElementById('tanamRadicalsContainer');
+      if (radContainer) {
+        radContainer.innerHTML = '';
+        if (item.radicals && item.radicals.length > 0) {
+          item.radicals.forEach(r => {
+            const span = document.createElement('span');
+            span.className = `px-2 py-0.5 rounded text-[11px] font-bold ${r.color || 'bg-slate-800 text-slate-300'}`;
+            span.textContent = `${r.char} (${r.pos}: ${r.name})`;
+            radContainer.appendChild(span);
+          });
+        }
+      }
+
+      if (isAudioEnabled) {
+        speakText(item.kana || item.kanji);
+      }
+    }
+
+    function nextTanamCard() {
+      if (curTanamIdx < activeTanamDeck.length - 1) {
+        curTanamIdx++;
+      } else {
+        curTanamIdx = 0;
+      }
+      renderCurrentTanam();
+    }
+
+    function prevTanamCard() {
+      if (curTanamIdx > 0) {
+        curTanamIdx--;
+      } else {
+        curTanamIdx = activeTanamDeck.length - 1;
+      }
+      renderCurrentTanam();
+    }
+
+    function pronounceTanamCurrent() {
+      if (!activeTanamDeck || activeTanamDeck.length === 0) return;
+      const item = activeTanamDeck[curTanamIdx];
+      if (item) speakText(item.kana || item.kanji);
+    }
+
+    function switchTanamStage(stage) {
+      currentStage = stage;
+      const cardTanam = document.getElementById('stageCard-tanam');
+      const cardStrict = document.getElementById('stageCard-strict');
+      const btnTanam = document.getElementById('stageBtn-tanam');
+      const btnStrict = document.getElementById('stageBtn-strict');
+
+      if (stage === 'tanam') {
+        if (cardTanam) cardTanam.classList.remove('hidden');
+        if (cardStrict) cardStrict.classList.add('hidden');
+        if (btnTanam) btnTanam.className = "px-2.5 py-1 rounded font-bold bg-cyan-600 text-white transition text-xs";
+        if (btnStrict) btnStrict.className = "px-2.5 py-1 rounded font-bold text-slate-400 hover:text-slate-200 transition text-xs";
+        renderCurrentTanam();
+      } else {
+        if (cardTanam) cardTanam.classList.add('hidden');
+        if (cardStrict) cardStrict.classList.remove('hidden');
+        if (btnTanam) btnTanam.className = "px-2.5 py-1 rounded font-bold text-slate-400 hover:text-slate-200 transition text-xs";
+        if (btnStrict) btnStrict.className = "px-2.5 py-1 rounded font-bold bg-rose-600 text-white transition text-xs";
+        resetStrictDeck();
+      }
+    }
+
+    function pickNextStrictCard() {
+      const qDisp = document.getElementById('strictQueueDisp');
+      const mDisp = document.getElementById('strictMasteredDisp');
+      if (qDisp) qDisp.textContent = strictBlankDeck.length;
+      if (mDisp) mDisp.textContent = strictMasteredCount;
+
+      if (strictBlankDeck.length === 0) {
+        const kDisp = document.getElementById('strictKanjiDisplay');
+        if (kDisp) kDisp.innerHTML = "<span class='text-2xl text-emerald-400'>🎉 SEMUA KARTU TUNTAS LULUS!</span>";
+        const secBox = document.getElementById('strictSecretBox');
+        if (secBox) secBox.classList.add('hidden');
+        return;
+      }
+
+      curStrictItem = strictBlankDeck[0];
+      isStrictRevealed = false;
+      const kDisp = document.getElementById('strictKanjiDisplay');
+      if (kDisp) kDisp.textContent = curStrictItem.kanji;
+      const secBox = document.getElementById('strictSecretBox');
+      if (secBox) secBox.classList.add('hidden');
+    }
+
+    function revealStrictAnswer() {
+      if (!curStrictItem) return;
+      isStrictRevealed = true;
+      const kanaDisp = document.getElementById('strictKanaDisplay');
+      if (kanaDisp) kanaDisp.textContent = curStrictItem.kana;
+      const meanDisp = document.getElementById('strictMeaningDisplay');
+      if (meanDisp) meanDisp.textContent = curStrictItem.meaning;
+      const partDisp = document.getElementById('strictPartDisplay');
+      if (partDisp) partDisp.textContent = curStrictItem.part || '';
+      const secBox = document.getElementById('strictSecretBox');
+      if (secBox) secBox.classList.remove('hidden');
+
+      if (isAudioEnabled) speakText(curStrictItem.kana || curStrictItem.kanji);
+    }
+
+    function handleStrictDecision(type) {
+      if (!curStrictItem || strictBlankDeck.length === 0) return;
+      if (!isStrictRevealed) revealStrictAnswer();
+
+      setTimeout(() => {
+        const item = strictBlankDeck.shift();
+        if (type === 'ingat') {
+          strictMasteredCount++;
+        } else if (type === 'lupa') {
+          strictBlankDeck.splice(Math.min(1, strictBlankDeck.length), 0, item);
+        } else {
+          strictBlankDeck.push(item);
+        }
+        pickNextStrictCard();
+      }, 350);
+    }
+
+    function filterKotobaCategory() {
+      const selectElem = document.getElementById('kotobaFilterSelect');
+      if (selectElem) {
+        currentKotobaFilter = selectElem.value;
+      }
+      if (currentKotobaFilter === 'all') {
+        filteredKotobaList = [...kotobaQuizBank];
+      } else {
+        filteredKotobaList = kotobaQuizBank.filter(q => q.cat === currentKotobaFilter);
+      }
+      curKotobaQuizIdx = 0;
+      kotobaQuizScore = 0;
+      kotobaAnswered = {};
+      const scoreDisp = document.getElementById('kotobaScoreDisplay');
+      if (scoreDisp) scoreDisp.textContent = "0 Benar";
+      loadKotobaQuestion();
+    }
+
+    function loadKotobaQuestion() {
+      const q = filteredKotobaList[curKotobaQuizIdx];
+      const card = document.getElementById('kotobaQuestionCard');
+      const tracker = document.getElementById('kotobaTracker');
+      if (!q || !card) return;
+
+      if (tracker) tracker.textContent = `SOAL ${curKotobaQuizIdx + 1} / ${filteredKotobaList.length}`;
+      const isAnswered = kotobaAnswered.hasOwnProperty(curKotobaQuizIdx);
+      const userAns = kotobaAnswered[curKotobaQuizIdx];
+
+      let optsHtml = '';
+      q.opts.forEach((opt, idx) => {
+        let btnCls = "bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80";
+        if (isAnswered) {
+          if (idx === q.ans) {
+            btnCls = "bg-emerald-950 border-emerald-500 text-emerald-300 font-bold";
+          } else if (idx === userAns) {
+            btnCls = "bg-rose-950 border-rose-500 text-rose-300 line-through font-bold";
+          } else {
+            btnCls = "bg-slate-900/40 border-slate-800 text-slate-600 opacity-60";
+          }
+        }
+        optsHtml += `
+          <button onclick="handleKotobaAnswer(${idx})" ${isAnswered ? 'disabled' : ''} class="w-full text-left p-3 rounded-xl border text-xs sm:text-sm font-jp transition flex items-center justify-between ${btnCls}">
+            <span>${opt}</span>
+            ${isAnswered && idx === q.ans ? '<span class="text-emerald-400 font-bold">✓ BENAR</span>' : ''}
+            ${isAnswered && idx === userAns && userAns !== q.ans ? '<span class="text-rose-400 font-bold">✕ SALAH</span>' : ''}
+          </button>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono font-bold text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/60 uppercase">
+            SOAL ${q.num} (${q.cat.toUpperCase()})
+          </span>
+          <button onclick="speakText('${q.q}')" class="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1">
+            🔊 Baca Soal
+          </button>
+        </div>
+
+        <div class="text-base sm:text-lg font-jp font-bold text-slate-100 leading-relaxed py-2">
+          ${q.q}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          ${optsHtml}
+        </div>
+
+        ${isAnswered ? `
+          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-1.5 animate-fadeIn">
+            <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider block">⚡ Analisis Kotoba:</span>
+            <p class="text-slate-300 leading-relaxed">${q.explain}</p>
+          </div>
+        ` : ''}
+
+        <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs">
+          <button onclick="prevKotobaQuestion()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition">
+            ← Sebelumnya
+          </button>
+          <button onclick="nextKotobaQuestion()" class="px-4 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition shadow-md shadow-cyan-600/30">
+            Selanjutnya →
+          </button>
+        </div>
+      `;
+
+      if (isAudioEnabled && !isAnswered) {
+        speakText(q.q);
+      }
+    }
+
+    function handleKotobaAnswer(idx) {
+      if (kotobaAnswered.hasOwnProperty(curKotobaQuizIdx)) return;
+      kotobaAnswered[curKotobaQuizIdx] = idx;
+      const q = filteredKotobaList[curKotobaQuizIdx];
+      if (idx === q.ans) kotobaQuizScore++;
+      const scoreDisp = document.getElementById('kotobaScoreDisplay');
+      if (scoreDisp) scoreDisp.textContent = `${kotobaQuizScore} Benar`;
+      loadKotobaQuestion();
+    }
+
+    function nextKotobaQuestion() {
+      if (curKotobaQuizIdx < filteredKotobaList.length - 1) {
+        curKotobaQuizIdx++;
+      } else {
+        curKotobaQuizIdx = 0;
+      }
+      loadKotobaQuestion();
+    }
+
+    function prevKotobaQuestion() {
+      if (curKotobaQuizIdx > 0) {
+        curKotobaQuizIdx--;
+      } else {
+        curKotobaQuizIdx = filteredKotobaList.length - 1;
+      }
+      loadKotobaQuestion();
+    }
+
+    function initApp() {
+      try { switchTab('shiken-kanji'); } catch (e) { console.error("Tab err:", e); }
+      try { loadKanjiQuestion(); } catch (e) { console.error("Kanji err:", e); }
+      try { loadBunpouQuestion(); } catch (e) { console.error("Bunpou err:", e); }
+      try { loadKotobaQuestion(); } catch (e) { console.error("Kotoba err:", e); }
+      try { resetStrictDeck(); } catch (e) { console.error("Strict err:", e); }
+      try { renderCurrentTanam(); } catch (e) { console.error("Tanam err:", e); }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+    window.addEventListener('load', initApp);
+  </script>
+</body>
+</html>
