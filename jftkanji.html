@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KanjiHacks Irodori 380+ | Mesin Penipu Otak Cepat Hapal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Yuji+Boku&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            jp: ['"Noto Sans JP"', 'sans-serif'],
+            brush: ['"Yuji Boku"', 'serif']
+          },
+          colors: {
+            crimson: {
+              500: '#ef4444',
+              600: '#dc2626',
+              700: '#b91c1c'
+            },
+            japan: {
+              dark: '#0d1117',
+              card: '#161b22',
+              border: '#30363d',
+              red: '#e63946',
+              gold: '#ffd166',
+              teal: '#06d6a0'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0d1117; }
+    ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+
+    /* Flashcard 3D Flip Effect */
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+
+    /* Authentic Japanese Sign Badge Styles */
+    .sign-neon-red {
+      background: radial-gradient(circle at top, #7f1d1d, #450a0a);
+      border: 2px solid #ef4444;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.4), inset 0 0 10px rgba(239, 68, 68, 0.2);
+    }
+    .sign-emergency {
+      background: linear-gradient(135deg, #065f46, #022c22);
+      border: 2px solid #10b981;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+    }
+    .sign-gold {
+      background: linear-gradient(135deg, #78350f, #451a03);
+      border: 2px solid #f59e0b;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.35);
+    }
+    .kanji-glow {
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+    }
+  </style>
+</head>
+<body class="bg-japan-dark text-slate-100 min-h-screen flex flex-col font-sans antialiased select-none">
+
+  <header class="border-b border-japan-border bg-japan-card/90 backdrop-blur sticky top-0 z-50 px-4 py-3">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('flashcard')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-crimson-600 to-amber-500 flex items-center justify-center shadow-lg shadow-crimson-600/30">
+          <span class="font-jp font-black text-2xl text-white">漢</span>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-bold text-lg text-white tracking-wide">KanjiHacks</h1>
+            <span class="bg-crimson-600/30 border border-crimson-500/50 text-crimson-400 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Irodori 380+</span>
+          </div>
+          <p class="text-xs text-slate-400">Neurosains & Mnemonic Visual Jepang Asli</p>
+        </div>
+      </div>
+
+      <!-- Quick Stats & Controls -->
+      <div class="flex items-center space-x-2 sm:space-x-4">
+        <div class="hidden sm:flex items-center bg-japan-dark border border-japan-border rounded-xl px-3 py-1.5 space-x-3 text-xs">
+          <div class="flex items-center space-x-1.5" title="Belum Dikuasai (Kotak 1)">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+            <span id="stat-box1" class="font-bold text-red-400">0</span>
+          </div>
+          <div class="flex items-center space-x-1.5" title="Sedang Nempel (Kotak 2)">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+            <span id="stat-box2" class="font-bold text-amber-300">0</span>
+          </div>
+          <div class="flex items-center space-x-1.5" title="Refleks Melekat (Kotak 3)">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+            <span id="stat-box3" class="font-bold text-emerald-400">0</span>
+          </div>
+        </div>
+
+        <button onclick="openStrategyModal()" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-japan-border/60 hover:bg-japan-border text-xs text-amber-300 font-semibold flex items-center space-x-1.5 transition">
+          <i class="fa-solid fa-brain"></i>
+          <span class="hidden md:inline">Trik Otak</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="border-b border-japan-border bg-japan-dark/80 px-4 py-2 sticky top-[61px] z-40">
+    <div class="max-w-6xl mx-auto flex items-center space-x-1 sm:space-x-2 overflow-x-auto no-scrollbar">
+      <button id="tab-flashcard" onclick="switchTab('flashcard')" class="tab-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center space-x-2 transition bg-crimson-600 text-white shadow-md shadow-crimson-600/30 whitespace-nowrap">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span>Dekonstruksi Otak</span>
+      </button>
+
+      <button id="tab-reflex" onclick="switchTab('reflex')" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center space-x-2 transition text-slate-400 hover:text-white hover:bg-japan-card whitespace-nowrap">
+        <i class="fa-solid fa-bolt-lightning text-amber-400"></i>
+        <span>Drill Refleks 3 Detik</span>
+      </button>
+
+      <button id="tab-signage" onclick="switchTab('signage')" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center space-x-2 transition text-slate-400 hover:text-white hover:bg-japan-card whitespace-nowrap">
+        <i class="fa-solid fa-signs-post text-teal-400"></i>
+        <span>Rambu & Konteks Asli</span>
+      </button>
+
+      <button id="tab-database" onclick="switchTab('database')" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center space-x-2 transition text-slate-400 hover:text-white hover:bg-japan-card whitespace-nowrap">
+        <i class="fa-solid fa-book-bookmark text-blue-400"></i>
+        <span>380+ Kanji Vault</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto w-full p-4 sm:p-6 flex-1 flex flex-col justify-start">
+
+    <!-- ==================== VIEW 1: FLASHCARD / DEKONSTRUKSI OTAK ==================== -->
+    <div id="view-flashcard" class="view-panel flex flex-col items-center">
+      <!-- Filter Bar for Learning Deck -->
+      <div class="w-full max-w-xl flex flex-wrap items-center justify-between gap-2 mb-4 bg-japan-card p-3 rounded-2xl border border-japan-border">
+        <div class="flex items-center space-x-2">
+          <label class="text-xs text-slate-400 font-medium">Level Irodori:</label>
+          <select id="deck-level-filter" onchange="filterDeck()" class="bg-japan-dark text-xs text-slate-200 border border-japan-border rounded-lg px-2 py-1.5 focus:outline-none focus:border-crimson-500">
+            <option value="ALL">Semua (Starter A1 + A2.1 + A2.2)</option>
+            <option value="A1">Starter A1 (~30 Kanji Utama)</option>
+            <option value="A2-1">Shokyu 1 A2.1 (~140 Kanji)</option>
+            <option value="A2-2">Shokyu 2 A2.2 (~210 Kanji)</option>
+          </select>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <label class="text-xs text-slate-400 font-medium">Kategori:</label>
+          <select id="deck-cat-filter" onchange="filterDeck()" class="bg-japan-dark text-xs text-slate-200 border border-japan-border rounded-lg px-2 py-1.5 focus:outline-none focus:border-crimson-500">
+            <option value="ALL">Semua Kategori</option>
+            <option value="Rambu & Fasilitas">Rambu & Fasilitas</option>
+            <option value="Arah & Transportasi">Arah & Transportasi</option>
+            <option value="Waktu & Jadwal">Waktu & Jadwal</option>
+            <option value="Belanja & Uang">Belanja & Uang</option>
+            <option value="Kerja & Rumah Sakit">Kerja & Rumah Sakit</option>
+            <option value="Makanan & Restoran">Makanan & Restoran</option>
+            <option value="Aktivitas Sehari-hari">Aktivitas Sehari-hari</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="w-full max-w-xl perspective-1000 my-2">
+        <div id="card-inner" class="relative w-full min-h-[460px] transform-style-3d transition-transform duration-500 cursor-pointer rounded-3xl" onclick="toggleCardFlip(event)">
+          
+          <!-- FRONT OF CARD: Kanji + Visual Signage Hook -->
+          <div class="absolute inset-0 backface-hidden bg-gradient-to-b from-japan-card to-[#12161f] border-2 border-japan-border hover:border-slate-600 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl transition">
+            <div class="flex items-center justify-between">
+              <span id="card-level-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-crimson-600/30 text-crimson-400 border border-crimson-500/40">A1 Starter</span>
+              <div class="flex items-center space-x-2">
+                <button onclick="speakKanji(event)" class="w-9 h-9 rounded-full bg-japan-border/60 hover:bg-crimson-600 text-slate-300 hover:text-white flex items-center justify-center transition" title="Dengarkan Suara Native">
+                  <i class="fa-solid fa-volume-high"></i>
+                </button>
+                <span id="card-box-indicator" class="text-xs px-2 py-1 rounded-md bg-japan-dark border border-japan-border text-slate-400 font-semibold">Kotak 1</span>
+              </div>
+            </div>
+
+            <!-- Central Big Kanji Display -->
+            <div class="my-auto text-center py-6">
+              <div id="card-kanji" class="font-jp text-8xl sm:text-9xl font-black text-white kanji-glow hover:scale-105 transition-transform duration-300">
+                禁
+              </div>
+              <div class="mt-4 flex items-center justify-center space-x-2 text-slate-400 text-sm">
+                <span class="text-xs bg-japan-dark px-2.5 py-1 rounded-lg border border-japan-border font-jp" id="card-readings">キン</span>
+              </div>
+            </div>
+
+            <!-- Authentic Japanese Context Anchor (The Real Signage Hook) -->
+            <div class="mt-auto">
+              <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center space-x-1.5">
+                <i class="fa-solid fa-location-dot text-crimson-500"></i>
+                <span>Di Jepang Asli Sering Muncul Sebagai:</span>
+              </div>
+              <div id="card-real-sign" class="sign-neon-red p-3.5 rounded-2xl flex items-center justify-between">
+                <div>
+                  <div id="card-real-kanji" class="font-jp font-black text-xl text-white tracking-wider">禁煙</div>
+                  <div id="card-real-kana" class="text-xs text-red-200">きんえん</div>
+                </div>
+                <div class="text-right">
+                  <span class="inline-block bg-red-950/80 border border-red-500/60 text-red-200 text-xs px-2.5 py-1 rounded-lg font-bold" id="card-real-meaning">Dilarang Merokok</span>
+                </div>
+              </div>
+              <p class="text-center text-xs text-slate-400 mt-3 flex items-center justify-center space-x-1">
+                <i class="fa-solid fa-arrow-rotate-right"></i>
+                <span>Klik kartu untuk bongkar <b>Trik Otak & Cerita Absurd</b></span>
+              </p>
+            </div>
+          </div>
+
+          <!-- BACK OF CARD: Mnemonic Deconstruction & Meaning -->
+          <div class="absolute inset-0 backface-hidden rotate-y-180 bg-gradient-to-b from-[#18202c] to-japan-card border-2 border-amber-500/40 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl">
+            <div>
+              <div class="flex items-center justify-between border-b border-japan-border pb-3">
+                <div class="flex items-center space-x-2">
+                  <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Dekonstruksi Radikal</span>
+                </div>
+                <span id="card-back-meaning" class="text-lg font-black text-amber-300">Dilarang / Larangan</span>
+              </div>
+
+              <!-- Radicals decomposition formula -->
+              <div class="my-4 bg-japan-dark/80 p-3.5 rounded-2xl border border-japan-border">
+                <div class="text-xs text-slate-400 mb-1">Rumus Visual Komponen:</div>
+                <div id="card-radicals" class="font-jp text-sm sm:text-base font-bold text-teal-300">
+                  林 (Hutan 2 Pohon) + 示 (Altar Dewa)
+                </div>
+              </div>
+
+              <!-- Absurd Mnemonic Story ("Trik Otak") -->
+              <div class="my-3">
+                <div class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center space-x-1.5 mb-1.5">
+                  <i class="fa-solid fa-lightbulb"></i>
+                  <span>Cerita Emosional Penipu Otak:</span>
+                </div>
+                <div id="card-trick-story" class="text-sm sm:text-base leading-relaxed text-slate-200 bg-amber-500/10 p-3.5 rounded-2xl border border-amber-500/20">
+                  Ada 2 <b class="text-amber-300">POHON</b> di hutan suci yang ditaruh <b class="text-amber-300">ALTAR</b> persembahan. Sangat <b class="text-red-400 font-bold">DILARANG</b> sembarangan merokok atau merusak tempat ini!
+                </div>
+              </div>
+
+              <!-- Example Words in Real Life -->
+              <div class="my-3">
+                <div class="text-xs font-semibold text-slate-400 mb-1">Contoh Kosakata Nyata di Tempat Kerja/Jalan:</div>
+                <div id="card-vocab-list" class="space-y-1 text-xs">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 text-center text-xs text-slate-400 border-t border-japan-border flex items-center justify-center space-x-1">
+              <i class="fa-solid fa-arrow-rotate-left"></i>
+              <span>Klik kartu untuk membalik kembali</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full max-w-xl flex items-center justify-between gap-3 mt-4">
+        <button onclick="handleSRS(1)" class="flex-1 py-3 px-2 rounded-2xl bg-red-500/15 hover:bg-red-500/25 border border-red-500/30 text-red-400 font-bold text-xs sm:text-sm flex flex-col items-center justify-center transition active:scale-95">
+          <i class="fa-solid fa-rotate-left mb-1 text-base"></i>
+          <span>Lupa / Berat</span>
+          <span class="text-[10px] text-red-300/70 font-normal">Kotak 1</span>
+        </button>
+
+        <button onclick="handleSRS(2)" class="flex-1 py-3 px-2 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-bold text-xs sm:text-sm flex flex-col items-center justify-center transition active:scale-95">
+          <i class="fa-regular fa-clock mb-1 text-base"></i>
+          <span>Mulai Ingat</span>
+          <span class="text-[10px] text-amber-300/70 font-normal">Kotak 2</span>
+        </button>
+
+        <button onclick="handleSRS(3)" class="flex-1 py-3 px-2 rounded-2xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-bold text-xs sm:text-sm flex flex-col items-center justify-center transition active:scale-95">
+          <i class="fa-solid fa-bolt mb-1 text-base"></i>
+          <span>Refleks Kilat!</span>
+          <span class="text-[10px] text-emerald-300/70 font-normal">Kotak 3</span>
+        </button>
+      </div>
+
+      <!-- Progress bar in active deck -->
+      <div class="w-full max-w-xl mt-4 flex items-center justify-between text-xs text-slate-400">
+        <span id="deck-progress-text">Kartu 1 dari 380</span>
+        <div class="flex items-center space-x-2">
+          <button onclick="prevCard()" class="p-2 rounded-lg bg-japan-card hover:bg-japan-border transition"><i class="fa-solid fa-chevron-left"></i></button>
+          <button onclick="nextCard()" class="p-2 rounded-lg bg-japan-card hover:bg-japan-border transition"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== VIEW 2: SPEED REFLEX DRILL (3s REFLEX) ==================== -->
+    <div id="view-reflex" class="view-panel hidden flex-col items-center">
+      <!-- Intro screen for Reflex Drill -->
+      <div id="reflex-start-screen" class="w-full max-w-lg bg-japan-card border border-japan-border rounded-3xl p-6 sm:p-8 text-center my-6">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center text-3xl mb-4">
+          <i class="fa-solid fa-stopwatch"></i>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-black text-white mb-2">Pelatihan Refleks 3 Detik</h2>
+        <p class="text-sm text-slate-300 leading-relaxed mb-6">
+          Otak Anda dilarang mengeja atau berpikir dalam bahasa Indonesia! Anda hanya diberi waktu <b>3 detik</b> per kata nyata di Jepang. Latihan ini merekayasa jalur visual langsung ke memori semantik.
+        </p>
+        <button onclick="startReflexGame()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-crimson-600 text-white font-black text-base tracking-wide hover:opacity-95 transition shadow-lg shadow-amber-500/25 active:scale-98">
+          Mulai Latihan Refleks Sekarang
+        </button>
+      </div>
+
+      <!-- Active Game Screen -->
+      <div id="reflex-game-screen" class="w-full max-w-lg hidden flex-col my-4">
+        <!-- Timer Bar -->
+        <div class="w-full bg-japan-card h-3 rounded-full overflow-hidden border border-japan-border mb-4">
+          <div id="reflex-timer-bar" class="h-full bg-gradient-to-r from-amber-400 to-crimson-500 w-full transition-all duration-100 ease-linear"></div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+          <span>Skor Refleks: <b id="reflex-score" class="text-emerald-400 text-sm">0</b></span>
+          <span>Kombo Kilat: <b id="reflex-streak" class="text-amber-400 text-sm">x0</b></span>
+        </div>
+
+        <!-- Big Real Word Prompt -->
+        <div class="bg-japan-card border-2 border-japan-border rounded-3xl p-8 text-center my-2 shadow-2xl relative overflow-hidden">
+          <div id="reflex-badge" class="absolute top-3 right-3 text-[10px] font-bold px-2 py-0.5 rounded bg-japan-dark border border-japan-border text-slate-400">
+            Rambu Nyata
+          </div>
+          <div id="reflex-word" class="font-jp text-5xl sm:text-6xl font-black text-white kanji-glow my-4">
+            非常口
+          </div>
+          <div id="reflex-reading" class="text-sm font-jp text-amber-300/80">
+            ひじょうぐち
+          </div>
+        </div>
+
+        <!-- 4 Fast Choice Buttons -->
+        <div id="reflex-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== VIEW 3: RAMBU & KONTEKS ASLI JEPANG ==================== -->
+    <div id="view-signage" class="view-panel hidden flex-col items-center">
+      <div class="w-full max-w-4xl">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl font-black text-white">Laboratorium Visual Rambu & Formulir Jepang</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">Kanji Irodori yang 100% wajib Anda kenali di stasiun, supermarket, apartemen, dan pabrik.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Sign 1: Pintu / Fasilitas -->
+          <div class="bg-japan-card border border-japan-border rounded-2xl p-5 hover:border-slate-600 transition">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-teal-400 flex items-center space-x-1.5">
+                <i class="fa-solid fa-door-open"></i>
+                <span>Pintu Masuk Toko / Gedung</span>
+              </span>
+              <span class="text-[10px] bg-teal-500/20 text-teal-300 px-2 py-0.5 rounded font-mono">Starter A1</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-center my-3">
+              <div class="bg-slate-900 border-2 border-slate-700 p-4 rounded-xl">
+                <div class="font-jp text-4xl font-black text-white mb-1">押</div>
+                <div class="text-xs font-jp text-teal-300">おす (Osu)</div>
+                <div class="text-xs font-bold text-slate-300 mt-2">DORONG</div>
+              </div>
+              <div class="bg-slate-900 border-2 border-slate-700 p-4 rounded-xl">
+                <div class="font-jp text-4xl font-black text-white mb-1">引</div>
+                <div class="text-xs font-jp text-teal-300">ひく (Hiku)</div>
+                <div class="text-xs font-bold text-slate-300 mt-2">TARIK</div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 mt-2"><b>Trik Otak:</b> [押] Ada tangan (扌) menekan 甲 kura-kura = Dorong! [引] Ada busur panah (弓) ditarik garis lurus = Tarik!</p>
+          </div>
+
+          <!-- Sign 2: Status Toko / Resto -->
+          <div class="bg-japan-card border border-japan-border rounded-2xl p-5 hover:border-slate-600 transition">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-amber-400 flex items-center space-x-1.5">
+                <i class="fa-solid fa-store"></i>
+                <span>Papan Toko / Restoran</span>
+              </span>
+              <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-mono">Shokyu 1 A2.1</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-center my-3">
+              <div class="bg-amber-950/40 border-2 border-amber-600/70 p-4 rounded-xl">
+                <div class="font-jp text-3xl font-black text-amber-200 mb-1">営業中</div>
+                <div class="text-xs font-jp text-amber-400">えいぎょうちゅう</div>
+                <div class="text-xs font-bold text-emerald-400 mt-2">BUKA / OPERASI</div>
+              </div>
+              <div class="bg-slate-900 border-2 border-slate-700 p-4 rounded-xl">
+                <div class="font-jp text-3xl font-black text-slate-300 mb-1">準備中</div>
+                <div class="text-xs font-jp text-slate-400">じゅんびちゅう</div>
+                <div class="text-xs font-bold text-rose-400 mt-2">SEDANG BERSIAP</div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 mt-2"><b>Trik Otak:</b> Huruf [中] (di dalam/sedang). Jika melihat [準] (air bersiap mengalir) = Jangan masuk dulu, toko belum melayani.</p>
+          </div>
+
+          <!-- Sign 3: Diskon Belanja Supermarket -->
+          <div class="bg-japan-card border border-japan-border rounded-2xl p-5 hover:border-slate-600 transition">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-crimson-400 flex items-center space-x-1.5">
+                <i class="fa-solid fa-tags"></i>
+                <span>Stiker Diskon Makanan (Lifehack Jepang!)</span>
+              </span>
+              <span class="text-[10px] bg-crimson-500/20 text-crimson-300 px-2 py-0.5 rounded font-mono">Shokyu 1 & 2</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-center my-3">
+              <div class="sign-neon-red p-4 rounded-xl">
+                <div class="font-jp text-3xl font-black text-white mb-1">半額</div>
+                <div class="text-xs font-jp text-rose-200">はんがく</div>
+                <div class="text-xs font-bold text-yellow-300 mt-2">DISKON 50%</div>
+              </div>
+              <div class="bg-amber-950/40 border-2 border-amber-500/60 p-4 rounded-xl">
+                <div class="font-jp text-3xl font-black text-amber-300 mb-1">2割引</div>
+                <div class="text-xs font-jp text-amber-200">にわりびき</div>
+                <div class="text-xs font-bold text-amber-300 mt-2">DISKON 20%</div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 mt-2"><b>Trik Otak:</b> [半] (Separuh) + [額] (Jumlah uang) = 1/2 Harga. [割] (1割 = 10%) + [引] (Tarik/Kurang). 3割引 = Kurang 30%!</p>
+          </div>
+
+          <!-- Sign 4: Keselamatan & Darurat Kerja -->
+          <div class="bg-japan-card border border-japan-border rounded-2xl p-5 hover:border-slate-600 transition">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-emerald-400 flex items-center space-x-1.5">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>Rambu Darurat & Pabrik / Tempat Kerja</span>
+              </span>
+              <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono">Shokyu 2 A2.2</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-center my-3">
+              <div class="sign-emergency p-4 rounded-xl">
+                <div class="font-jp text-3xl font-black text-white mb-1">非常口</div>
+                <div class="text-xs font-jp text-emerald-200">ひじょうぐち</div>
+                <div class="text-xs font-bold text-white mt-2">PINTU DARURAT</div>
+              </div>
+              <div class="bg-red-950/60 border-2 border-red-600 p-4 rounded-xl">
+                <div class="font-jp text-3xl font-black text-red-400 mb-1">危険</div>
+                <div class="text-xs font-jp text-red-200">きけん</div>
+                <div class="text-xs font-bold text-red-300 mt-2">BAHAYA! AWAS!</div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 mt-2"><b>Trik Otak:</b> [非常] = Bukan situasi biasa (Darurat) + [口] = Lubang/Pintu keluar. Wajib hafal untuk keselamatan!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== VIEW 4: 380+ KANJI VAULT (DATABASE SEARCH) ==================== -->
+    <div id="view-database" class="view-panel hidden flex-col w-full">
+      <!-- Search & Filters -->
+      <div class="bg-japan-card p-4 rounded-2xl border border-japan-border mb-4 flex flex-col md:flex-row items-center justify-between gap-3">
+        <div class="relative w-full md:w-96">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+          <input type="text" id="db-search" oninput="renderDatabase()" placeholder="Cari arti, kanji, atau bacaan (cth: dorong, 押, oshi)..." class="w-full bg-japan-dark border border-japan-border rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-crimson-500">
+        </div>
+
+        <div class="flex items-center space-x-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+          <button onclick="setDbFilter('ALL')" class="db-filter-tag active px-3 py-1.5 rounded-lg text-xs font-semibold bg-crimson-600 text-white">Semua</button>
+          <button onclick="setDbFilter('A1')" class="db-filter-tag px-3 py-1.5 rounded-lg text-xs font-semibold bg-japan-dark text-slate-300 border border-japan-border hover:border-slate-500">Starter A1</button>
+          <button onclick="setDbFilter('A2-1')" class="db-filter-tag px-3 py-1.5 rounded-lg text-xs font-semibold bg-japan-dark text-slate-300 border border-japan-border hover:border-slate-500">Shokyu 1</button>
+          <button onclick="setDbFilter('A2-2')" class="db-filter-tag px-3 py-1.5 rounded-lg text-xs font-semibold bg-japan-dark text-slate-300 border border-japan-border hover:border-slate-500">Shokyu 2</button>
+        </div>
+      </div>
+
+      <!-- Kanji Grid Counter -->
+      <div class="flex items-center justify-between text-xs text-slate-400 px-1 mb-3">
+        <span>Menampilkan <b id="db-count" class="text-white">0</b> Kanji Terdaftar</span>
+        <span>Klik kartu untuk buka Mnemonic instan</span>
+      </div>
+
+      <!-- Grid of Kanji Cards -->
+      <div id="db-kanji-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </main>
+
+  <div id="strategy-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-japan-card border border-japan-border rounded-3xl max-w-xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-japan-border pb-3 mb-4">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">4 Hukum Neurosains Menghafal Kanji</h3>
+        </div>
+        <button onclick="closeStrategyModal()" class="text-slate-400 hover:text-white p-1 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
+        <div class="p-3.5 rounded-2xl bg-japan-dark border border-japan-border">
+          <h4 class="font-bold text-amber-300 text-sm mb-1">1. Hentikan Menulis Garis Tanpa Cerita</h4>
+          <p>Otak Anda memprogram garis lurus dan kotak sebagai "sampah visual" jika tidak memiliki emosi. Pecah kanji menjadi **komponen radikal** dan buat cerita konyol/aneh yang membekas di kepala.</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-japan-dark border border-japan-border">
+          <h4 class="font-bold text-teal-300 text-sm mb-1">2. Ikat Langsung ke Rambu Nyata</h4>
+          <p>Di JFT-Basic dan kehidupan nyata, kanji tidak muncul sendirian. Anda melihatnya di: <b>非常口 (Pintu Darurat), 割引 (Diskon), 定休日 (Hari Libur Rutin), 営業中 (Buka)</b>. Begitu Anda mengenali bentuk rambu, refleks membaca langsung aktif.</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-japan-dark border border-japan-border">
+          <h4 class="font-bold text-crimson-400 text-sm mb-1">3. Uji Refleks Cepat (Speed Retrieval)</h4>
+          <p>Memori menjadi permanen saat Anda dipaksa memanggil ingatan dalam waktu di bawah 3 detik. Gunakan <b>Mode Drill Refleks</b> secara rutin setiap hari selama 5 menit.</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-japan-dark border border-japan-border">
+          <h4 class="font-bold text-blue-300 text-sm mb-1">4. Fokus Cara Baca Kontekstual</h4>
+          <p>Jangan hafalkan 10 cara baca Onyomi/Kunyomi secara bersamaan! Cukup hafalkan 1 atau 2 kosakata paling nyata yang dipakai dalam Irodori. Otak akan mengasimilasi variasinya nanti secara organik.</p>
+        </div>
+      </div>
+
+      <button onclick="closeStrategyModal()" class="w-full mt-6 py-3 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white font-bold text-sm transition">
+        Saya Siap Terapkan Sekarang!
+      </button>
+    </div>
+  </div>
+
+  <script>
+    /* Audio Tone Generator without external dependencies */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(type) {
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+        if (type === 'correct') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, now); // D5
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.exponentialRampToValueAtTime(130, now + 0.2);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'click') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, now);
+          gain.gain.setValueAtTime(0.05, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        }
+      } catch (e) {
+        console.warn('Audio feedback error', e);
+      }
+    }
+
+    /* Native Japanese Text-to-Speech */
+    function speakJapanese(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'ja-JP';
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+  </script>
+
+  <script>
+    /**
+     * Massive Curated Dataset covering complete Irodori A1, A2.1, A2.2 Kanji Progression
+     * Each entry contains:
+     * - k: Kanji character
+     * - r: Key readings (Onyomi / Kunyomi)
+     * - m: Indonesian Meaning
+     * - rad: Component Radicals breakdown
+     * - trick: Emotional visual mnemonic (Trik Otak)
+     * - real: Authentic Japanese context word/signage
+     * - r_kana: Furigana/Kana for the real word
+     * - r_m: Meaning of the real word
+     * - lvl: Level (A1, A2-1, A2-2)
+     * - cat: Thematic Category
+     * - box: Leitner Box state (1, 2, or 3)
+     */
+    const KANJI_DATA = [
+      /* ==================== A1 STARTER (RAMBU & DASAR) ==================== */
+      { k: "禁", r: "キン", m: "Dilarang / Tabu", rad: "林 (Hutan 2 Pohon) + 示 (Altar Dewa)", trick: "Ada 2 POHON keramat ditaruh ALTAR persembahan. Sangat DILARANG merokok atau merusak tempat ini!", real: "禁煙", r_kana: "きんえん", r_m: "Dilarang Merokok", lvl: "A1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "煙", r: "エン / けむり", m: "Asap", rad: "火 (Api) + 覀 (Tutup) + 土 (Tanah)", trick: "API yang ditutup rapat di atas TANAH akan mengeluarkan kepulan ASAP tebal batuk-batuk!", real: "喫煙所", r_kana: "きつえんじょ", r_m: "Area Merokok", lvl: "A1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "押", r: "オウ / お・す", m: "Mendorong / Tekan", rad: "扌 (Tangan) + 甲 (Cangkang/Baju zirah)", trick: "TANGAN menekan cangkang kura-kura keras-keras ke depan = DORONG!", real: "押す", r_kana: "おす", r_m: "Dorong (Pintu)", lvl: "A1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "引", r: "イン / ひ・く", m: "Menarik", rad: "弓 (Busur) + 丨 (Garis)", trick: "BUSUR panah ditarik tali senarnya ke belakang = TARIK!", real: "引き分け / 引く", r_kana: "ひく", r_m: "Tarik (Pintu)", lvl: "A1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "口", r: "コウ / くち", m: "Mulut / Pintu Keluar-Masuk", rad: "Bentuk kotak mulut terbuka", trick: "Kotak berongga seperti MULUT gua tempat orang keluar masuk stasiun!", real: "出口 / 入口", r_kana: "でぐち / いりぐち", r_m: "Pintu Keluar / Masuk", lvl: "A1", cat: "Arah & Transportasi", box: 1 },
+      { k: "入", r: "ニュウ / はい・る / い・れる", m: "Masuk", rad: "Dua kaki melangkah ke dalam", trick: "Bentuk dua garis condong seperti orang sedang membungkuk MASUK ke pintu kedai!", real: "立入禁止", r_kana: "たちいりきんし", r_m: "Dilarang Masuk", lvl: "A1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "出", r: "シュツ / で・る / だ・す", m: "Keluar", rad: "山 (Gunung) bertumpuk dua", trick: "Ada dua GUNUNG bertumpuk, magma dari dasar meledak KELUAR ke angkasa!", real: "非常口", r_kana: "ひじょうぐち", r_m: "Pintu Keluar Darurat", lvl: "A1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "男", r: "ダン / おとこ", m: "Laki-laki / Pria", rad: "田 (Sawah) + 力 (Tenaga)", trick: "Orang yang mengerahkan segenap TENAGA memikul cangkul di SAWAH adalah PRIA!", real: "男性用", r_kana: "だんせいよう", r_m: "Toilet/Khusus Pria", lvl: "A1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "女", r: "ジョ / おんな", m: "Perempuan / Wanita", rad: "Sosok wanita anggun bertaut tangan", trick: "Sosok WANITA sedang duduk bersimpuh anggun memakai kimono!", real: "女性用", r_kana: "じょせいよう", r_m: "Toilet/Khusus Wanita", lvl: "A1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "日", r: "ニチ / ひ / び", m: "Matahari / Hari", rad: "Kotak matahari dengan garis tengah", trick: "Bentuk MATAHARI bersinar di jendela yang menandai pergantian HARI!", real: "定休日", r_kana: "ていきゅうび", r_m: "Hari Libur Rutin Toko", lvl: "A1", cat: "Waktu & Jadwal", box: 1 },
+      { k: "月", r: "ゲツ / ガツ / つき", m: "Bulan", rad: "Bulan sabit berbayang awan", trick: "Bulan sabit malam hari yang bercahaya di kalender!", real: "月曜日", r_kana: "げつようび", r_m: "Hari Senin", lvl: "A1", cat: "Waktu & Jadwal", box: 1 },
+      { k: "火", r: "カ / ひ", m: "Api", rad: "Percikan lidah api", trick: "Bentuk api unggun yang menyala berkobar melontarkan bara percikan!", real: "火気厳禁", r_kana: "かきげんきん", r_m: "Dilarang Menyalakan Api", lvl: "A1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "水", r: "スイ / みず", m: "Air", rad: "Aliran air yang memercik", trick: "Arus AIR sungai deras yang memercik ke kiri dan ke kanan batu!", real: "飲み水", r_kana: "のみみず", r_m: "Air Minum", lvl: "A1", cat: "Makanan & Restoran", box: 1 },
+      { k: "木", r: "モク / き", m: "Pohon / Kayu", rad: "Batang dan akar pohon", trick: "POHON rindang yang punya cabang dahan ke atas dan akar menancap ke bawah tanah!", real: "木曜日", r_kana: "もくようび", r_m: "Hari Kamis", lvl: "A1", cat: "Waktu & Jadwal", box: 1 },
+      { k: "金", r: "キン / かね", m: "Emas / Uang / Logam", rad: "Atap rumah menjaga timbunan bijih emas", trick: "Di bawah atap rumah ada tambang rahasia bijih EMAS berkilauan = UANG!", real: "料金", r_kana: "りょうきん", r_m: "Biaya / Ongkos", lvl: "A1", cat: "Belanja & Uang", box: 1 },
+      { k: "土", r: "ド / つち", m: "Tanah", rad: "Tanaman muncul dari atas tanah", trick: "Bibit tanaman kecil mencuat menembus permukaan TANAH gembur!", real: "土曜日", r_kana: "どようび", r_m: "Hari Sabtu", lvl: "A1", cat: "Waktu & Jadwal", box: 1 },
+      { k: "休", r: "キュウ / やす・む", m: "Istirahat / Libur", rad: "亻 (Orang) + 木 (Pohon)", trick: "Seorang ORANG pekerja menyandarkan badannya ke POHON untuk beristirahat santai!", real: "休憩室", r_kana: "きゅうけいしつ", r_m: "Ruang Istirahat Karyawan", lvl: "A1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "本", r: "ホン / もと", m: "Buku / Asal / Jepang", rad: "木 (Pohon) + garis dasar akar", trick: "Garis di dasar batang POHON menunjukkan AKAR asal-usul tempat lembaran BUKU dibuat!", real: "日本語", r_kana: "にほんご", r_m: "Bahasa Jepang", lvl: "A1", cat: "Aktivitas Sehari-hari", box: 1 },
+      { k: "円", r: "エン", m: "Yen (Mata Uang) / Lingkaran", rad: "Bentuk koin berbingkai", trick: "Bingkai meja etalase tempat koin YEN Jepang dihitung kasir!", real: "1000円", r_kana: "せんえん", r_m: "1000 Yen", lvl: "A1", cat: "Belanja & Uang", box: 1 },
+      { k: "時", r: "ジ / とき", m: "Waktu / Jam", rad: "日 (Matahari) + 寺 (Kuil)", trick: "Di kuil zaman dulu, para biksu melihat MATAHARI untuk membunyikan lonceng penanda JAM!", real: "営業時間", r_kana: "えいぎょうじかん", r_m: "Jam Buka / Operasional", lvl: "A1", cat: "Waktu & Jadwal", box: 1 },
+      { k: "分", r: "フン / ブン / わ・かる", m: "Menit / Mengerti / Bagi", rad: "八 (Pisau membelah) + 刀 (Pedang)", trick: "PEDANG memotong sesuatu menjadi 8 BAGIAN kecil-kecil hingga tiap MENIT terhitung!", real: "10分", r_kana: "じゅっぷん", r_m: "10 Menit", lvl: "A1", cat: "Waktu & Jadwal", box: 1 },
+      { k: "半", r: "ハン / なか・ば", m: "Setengah / Separuh", rad: "Banteng dibagi dua sama rata", trick: "Dua garis di atas membagi rata sesuatu menjadi SETENGAH bagian persis!", real: "半額", r_kana: "はんがく", r_m: "Diskon Setengah Harga (50%)", lvl: "A1", cat: "Belanja & Uang", box: 1 },
+      { k: "駅", r: "エキ", m: "Stasiun Kereta", rad: "馬 (Kuda) + 尺 (Pengukur)", trick: "Zaman dulu, KUDA pos berhenti di tempat pengukuran jarak untuk transit = STASIUN!", real: "駅前", r_kana: "えきまえ", r_m: "Depan Stasiun Kereta", lvl: "A1", cat: "Arah & Transportasi", box: 1 },
+      { k: "車", r: "シャ / くるま", m: "Mobil / Kendaraan / Roda", rad: "Bentuk kereta perang tampak atas", trick: "Kereta kayu tampak atas dengan dua roda di samping dan poros as di tengah = MOBIL!", real: "駐車場", r_kana: "ちゅうしゃじょう", r_m: "Tempat Parkir Mobil", lvl: "A1", cat: "Arah & Transportasi", box: 1 },
+      { k: "前", r: "ゼン / まえ", m: "Depan / Sebelum", rad: "Daging dipotong gunting di depan", trick: "Koki meletakkan bahan makanan di DEPAN meja sebelum mulai memotong!", real: "午前", r_kana: "ごぜん", r_m: "Pagi (A.M.)", lvl: "A1", cat: "Waktu & Jadwal", box: 1 },
+      { k: "後", r: "ゴ / コウ / うし・ろ / あと", m: "Belakang / Setelah", rad: "彳 (Langkah kaki) + 幺 (Tali pendek) + 夂 (Kaki terlambat)", trick: "Orang yang langkah kakinya terlambat tertinggal jauh di BELAKANG!", real: "午後", r_kana: "ごご", r_m: "Sore / Malam (P.M.)", lvl: "A1", cat: "Waktu & Jadwal", box: 1 },
+      { k: "北", r: "ホク / きた", m: "Utara", rad: "Dua orang duduk memunggungi", trick: "Dua orang saling memunggungi karena menggigil kedinginan terkena angin dingin dari UTARA!", real: "北口", r_kana: "きたぐち", r_m: "Pintu Keluar Utara", lvl: "A1", cat: "Arah & Transportasi", box: 1 },
+      { k: "南", r: "ナン / みなみ", m: "Selatan", rad: "Atap penangkal terik matahari hangat", trick: "Taman di bawah naungan atap tempat bunga bermekaran hangat di SELATAN!", real: "南口", r_kana: "みなみぐち", r_m: "Pintu Keluar Selatan", lvl: "A1", cat: "Arah & Transportasi", box: 1 },
+      { k: "東", r: "トウ / ひがし", m: "Timur", rad: "木 (Pohon) + 日 (Matahari terbit)", trick: "MATAHARI pagi menyelinap naik di celah rimbun POHON dari arah TIMUR!", real: "東京", r_kana: "とうきょう", r_m: "Tokyo (Ibu Kota Timur)", lvl: "A1", cat: "Arah & Transportasi", box: 1 },
+      { k: "西", r: "セイ / サイ / にし", m: "Barat", rad: "Bentuk burung bertengger sarang", trick: "Burung kembali ke sarangnya saat senja terbenam di ufuk BARAT!", real: "西口", r_kana: "にしぐち", r_m: "Pintu Keluar Barat", lvl: "A1", cat: "Arah & Transportasi", box: 1 },
+
+      /* ==================== A2.1 SHOKYU 1 (KERJA, BELANJA, KESEHARIAN) ==================== */
+      { k: "危", r: "キ / あぶ・ない", m: "Bahaya", rad: "Pria di tepi jurang curam", trick: "Seseorang berdiri berlutut di tepi jurang yang sangat licin = BAHAYA, awas jatuh!", real: "危険", r_kana: "きけん", r_m: "Bahaya! Awas!", lvl: "A2-1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "険", r: "ケン / けわ・しい", m: "Curam / Terjal / Risiko", rad: "阝 (Tebing bukit) + 僉 (Semua orang)", trick: "Semua orang panik saat mendaki bukit terjal yang penuh risiko celaka!", real: "保険証", r_kana: "ほけんしょう", r_m: "Kartu Asuransi Kesehatan", lvl: "A2-1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "非", r: "ヒ", m: "Bukan / Tidak wajar / Darurat", rad: "Dua sayap burung terbuka ke arah berlawanan", trick: "Dua sayap terbalik berlawanan menandakan kondisi TIDAK NORMAL / darurat!", real: "非常口", r_kana: "ひじょうぐち", r_m: "Pintu Darurat", lvl: "A2-1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "常", r: "ジョウ / つね", m: "Biasa / Selalu / Rutin", rad: "尚 (Tinggi) + 巾 (Kain)", trick: "Kain bendera yang SELALU berkibar normal di atas tiang tinggi setiap hari!", real: "非常口", r_kana: "ひじょうぐち", r_m: "Pintu Keluar Darurat", lvl: "A2-1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "割", r: "カツ / わ・る / わり", m: "Membagi / Memotong / Rasio", rad: "害 (Gangguan/Rusak) + 刂 (Pisau)", trick: "PISAU membelah barang menjadi potongan kecil untuk membagi diskon harga!", real: "割引", r_kana: "わりびき", r_m: "Diskon Potongan Harga", lvl: "A2-1", cat: "Belanja & Uang", box: 1 },
+      { k: "店", r: "テン / みせ", m: "Toko / Kedai", rad: "广 (Gedung bertiang) + 占 (Ramalan/Menempati)", trick: "Gedung beratap tempat penjual menempati lapak untuk membuka TOKO!", real: "店員", r_kana: "てんいん", r_m: "Pelayan Toko / Kasir", lvl: "A2-1", cat: "Belanja & Uang", box: 1 },
+      { k: "員", r: "イン", m: "Anggota / Staf / Pegawai", rad: "口 (Mulut) + 貝 (Kerang / Uang)", trick: "Orang yang digaji koin kerang UANG untuk berbicara melayani pelanggan = STAF!", real: "会社員", r_kana: "かいしゃいん", r_m: "Karyawan Perusahaan", lvl: "A2-1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "仕", r: "シ / つか・える", m: "Bekerja / Melayani", rad: "亻 (Orang) + 士 (Prajurit/Ksatria)", trick: "Seorang ksatria terdidik yang mengabdi BEKERJA melayani masyarakat!", real: "仕事", r_kana: "しごと", r_m: "Pekerjaan", lvl: "A2-1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "事", r: "ジ / こと", m: "Urusan / Hal / Masalah", rad: "Tangan memegang pena mencatat sejarah", trick: "Petugas memegang pena mencatat semua URUSAN penting kantor di papan dokumen!", real: "事故", r_kana: "じこ", r_m: "Kecelakaan Kerja / Lalu Lintas", lvl: "A2-1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "会", r: "カイ / あ・う", m: "Bertemu / Perkumpulan", rad: "人 (Orang) berkumpul di bawah atap", trick: "Banyak ORANG berkumpul di bawah atap aula rapat untuk BERTEMU tatap muka!", real: "会社", r_kana: "かいしゃ", r_m: "Perusahaan / Kantor", lvl: "A2-1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "社", r: "シャ / やしろ", m: "Kuil / Serikat / Perusahaan", rad: "示 (Altar) + 土 (Tanah)", trick: "Altar di atas TANAH suci tempat komunitas berkumpul mendirikan serikat PERUSAHAAN!", real: "社員", r_kana: "しゃいん", r_m: "Pegawai Kantor", lvl: "A2-1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "病", r: "ビョウ / やまい", m: "Sakit / Penyakit", rad: "疒 (Ranjang sakit) + 丙 (Lemas)", trick: "Pasien terbaring di ranjang RS karena demam PENYAKIT parah tak berdaya!", real: "病院", r_kana: "びょういん", r_m: "Rumah Sakit", lvl: "A2-1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "院", r: "イン", m: "Institusi / Balai / Gedung Besar", rad: "阝 (Dinding bukit) + 完 (Lengkap)", trick: "Gedung berpagar kokoh dengan fasilitas lengkap tempat dokter merawat pasien = BALAI RS!", real: "入院", r_kana: "にゅういん", r_m: "Rawat Inap di RS", lvl: "A2-1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "薬", r: "ヤク / くすり", m: "Obat", rad: "艹 (Rumput herba) + 楽 (Menyenangkan/Musik)", trick: "RUMPUT tanaman herba yang membuat badan kembali bugar dan gembira = OBAT!", real: "薬局", r_kana: "やっきょく", r_m: "Apotek Obat", lvl: "A2-1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "医", r: "イ", m: "Medis / Dokter", rad: "匚 (Kotak perban) + 矢 (Anak panah)", trick: "Kotak darurat untuk mencabut anak panah dan membalut luka prajurit = MEDIS!", real: "医者", r_kana: "いしゃ", r_m: "Dokter", lvl: "A2-1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "者", r: "シャ / もの", m: "Orang / Ahli", rad: "Orang tua memasak di tungku", trick: "ORANG yang sudah bertahun-tahun menekuni keahlian khusus di bidangnya!", real: "患者", r_kana: "かんじゃ", r_m: "Pasien Sakit", lvl: "A2-1", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "開", r: "カイ / あ・ける / ひら・く", m: "Membuka", rad: "門 (Gerbang) + 幵 (Dua tangan buka kunci)", trick: "Dua tangan menarik palang kayu di GERBANG besar untuk MEMBUKA pintu!", real: "開店", r_kana: "かいてん", r_m: "Toko Buka", lvl: "A2-1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "閉", r: "ヘイ / し・める / と・じる", m: "Menutup", rad: "門 (Gerbang) + 才 (Palang penghalang)", trick: "GERBANG toko dipasangi palang kayu rapat-rapat saat malam tiba = TUTUP!", real: "閉店", r_kana: "へいてん", r_m: "Toko Tutup", lvl: "A2-1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "案", r: "アン", m: "Rencana / Usul / Pemandu", rad: "安 (Tenang/Aman) + 木 (Meja kayu)", trick: "Brosur petunjuk panduan yang ditaruh tenang di atas meja kayu = PANDUAN!", real: "案内所", r_kana: "あんないじょ", r_m: "Pusat Informasi / Pemandu", lvl: "A2-1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "内", r: "ナイ / うち", m: "Di dalam / Bagian dalam", rad: "Masuk ke dalam tenda tertutup", trick: "Melangkah masuk ke pedalaman ruangan yang teduh = DALAM!", real: "案内", r_kana: "あんない", r_m: "Informasi Petunjuk", lvl: "A2-1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "所", r: "ショ / ところ", m: "Tempat / Lokasi", rad: "戸 (Pintu) + 斤 (Kapak)", trick: "Pintu rumah tempat tukang kayu menaruh kapak perkakasnya = TEMPAT!", real: "場所", r_kana: "ばしょ", r_m: "Tempat / Lokasi", lvl: "A2-1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "窓", r: "ソウ / まど", m: "Jendela / Loket", rad: "穴 (Lubang dinding) + 厶 + 心 (Hati)", trick: "Lubang angin di dinding tempat orang melongokkan kepala bernapas lega = JENDELA!", real: "窓口", r_kana: "まどぐち", r_m: "Loket Layanan Pelanggan", lvl: "A2-1", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "席", r: "セキ", m: "Kursi / Tempat Duduk", rad: "广 (Gedung) + 巾 (Kain lapis)", trick: "Bantalan kain empuk di lantai aula gedung tempat tamu duduk = KURSI!", real: "禁煙席", r_kana: "きんえんせき", r_m: "Kursi Bebas Asap Rokok", lvl: "A2-1", cat: "Makanan & Restoran", box: 1 },
+      { k: "乗", r: "ジョウ / の・る", m: "Naik Kendaraan", rad: "Orang naik ke atas pohon tinggi", trick: "Kaki melangkah naik menaiki tangga gerbong kereta = NAIK KENDARAAN!", real: "乗り場", r_kana: "のりば", r_m: "Peron / Tempat Naik Bus/Taksi", lvl: "A2-1", cat: "Arah & Transportasi", box: 1 },
+      { k: "降", r: "コウ / お・りる / ふ・る", m: "Turun Kendaraan / Turun Hujan", rad: "阝 (Bukit terjal) + 夅 (Dua kaki melangkah turun)", trick: "Kaki melangkah menuruni bukit tangga peron stasiun = TURUN!", real: "降り口", r_kana: "おりぐち", r_m: "Pintu Turun Penumpang", lvl: "A2-1", cat: "Arah & Transportasi", box: 1 },
+      { k: "道", r: "ドウ / みち", m: "Jalan / Rute / Jalur", rad: "辶 (Jalan melangkah) + 首 (Kepala)", trick: "Mengarahkan kepala memandang ke depan saat melangkah menelusuri JALAN!", real: "片道", r_kana: "かたみち", r_m: "Jalan Sekali Jalan (One-way)", lvl: "A2-1", cat: "Arah & Transportasi", box: 1 },
+      { k: "通", r: "ツウ / とお・る / かよ・う", m: "Lewat / Melintas / Komuter", rad: "辶 (Melangkah) + 甬 (Lorong pipa)", trick: "Mobil melintas lancar tanpa hambatan menerobos lorong jalanan = LEWAT!", real: "通行止め", r_kana: "つうこうどめ", r_m: "Jalan Ditutup / Dilarang Lewat", lvl: "A2-1", cat: "Arah & Transportasi", box: 1 },
+      { k: "止", r: "シ / と・まる / と・める", m: "Berhenti / Stop", rad: "Kaki berhenti melangkah", trick: "Jejak telapak kaki yang ditarik mengerem mendadak di garis = STOP!", real: "一時停止", r_kana: "いちじていし", r_m: "Berhenti Sejenak (Rambu Stop)", lvl: "A2-1", cat: "Arah & Transportasi", box: 1 },
+      { k: "買", r: "バイ / か・う", m: "Membeli", rad: "罒 (Jaring keranjang) + 貝 (Uang kerang)", trick: "Membawa keranjang belanjaan penuh dan menukarnya dengan UANG = MEMBELI!", real: "買い物", r_kana: "かいもの", r_m: "Belanjaan", lvl: "A2-1", cat: "Belanja & Uang", box: 1 },
+      { k: "売", r: "バイ / う・る", m: "Menjual", rad: "士 (Prajurit/Penjual) + 買 (Bagian beli)", trick: "Pedagang mengeluarkan barang dagangannya ke etalase untuk DIJUAL!", real: "自動販売機", r_kana: "じどうはんばいき", r_m: "Mesin Minuman Otomatis (Vending Machine)", lvl: "A2-1", cat: "Belanja & Uang", box: 1 },
+
+      /* ==================== A2.2 SHOKYU 2 (DOKKAI OTENTIK, LAPORAN, FORMULIR) ==================== */
+      { k: "費", r: "ヒ", m: "Biaya / Pengeluaran", rad: "弗 (Tali terurai) + 貝 (Uang)", trick: "Tali dompet terurai lepas mengeluarkan tumpukan UANG koin = PENGELUARAN!", real: "会費", r_kana: "かいひ", r_m: "Iuran Keanggotaan", lvl: "A2-2", cat: "Belanja & Uang", box: 1 },
+      { k: "税", r: "ゼイ", m: "Pajak", rad: "禾 (Bulir padi hasil panen) + 兌 (Tersenyum/Serah)", trick: "Petani menyerahkan sebagian hasil panen padi kepada kantor negara = PAJAK!", real: "税込", r_kana: "ぜいこみ", r_m: "Termasuk Pajak (Harga Bersih)", lvl: "A2-2", cat: "Belanja & Uang", box: 1 },
+      { k: "込", r: "こ・む / こ・める", m: "Padat / Termasuk / Mendaftar", rad: "辶 (Jalan) + 入 (Masuk)", trick: "Berbondong-bondong melangkah MASUK ke dalam ruangan sampai sesak PADAT!", real: "申込書", r_kana: "もうしこみしょ", r_m: "Formulir Pendaftaran", lvl: "A2-2", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "済", r: "サイ / す・む / す・ます", m: "Selesai / Lunas", rad: "氵 (Air) + 斉 (Rata seimbang)", trick: "Hutang yang tersiram air bersih hingga lunas tuntas seimbang = SELESAI!", real: "支払済", r_kana: "しはらいずみ", r_m: "Sudah Dibayar / Lunas", lvl: "A2-2", cat: "Belanja & Uang", box: 1 },
+      { k: "領", r: "リョウ", m: "Menerima / Memimpin / Teritorial", rad: "令 (Perintah) + 頁 (Lembar kepala)", trick: "Petinggi memeriksa lembaran dokumen kwitansi yang baru DITERIMA!", real: "領収書", r_kana: "りょうしゅうしょ", r_m: "Bukti Kwitansi Pembayaran", lvl: "A2-2", cat: "Belanja & Uang", box: 1 },
+      { k: "収", r: "シュウ / おさ・める", m: "Menampung / Mengumpulkan", rad: "丩 (Tali pintal) + 又 (Tangan kanan)", trick: "TANGAN kanan mengumpulkan uang setoran kasir ke brankas = MENAMPUNG!", real: "領収書", r_kana: "りょうしゅうしょ", r_m: "Kwitansi Resmi", lvl: "A2-2", cat: "Belanja & Uang", box: 1 },
+      { k: "払", r: "はら・う", m: "Membayar / Membersihkan", rad: "扌 (Tangan) + 厶 (Pribadi)", trick: "TANGAN mengeluarkan uang kertas dari saku pribadi untuk MEMBAYAR!", real: "支払い", r_kana: "しはらい", r_m: "Pembayaran Kasir/ATM", lvl: "A2-2", cat: "Belanja & Uang", box: 1 },
+      { k: "備", r: "ビ / そな・える", m: "Mempersiapkan / Fasilitas", rad: "亻 (Orang) + 艹 + 厂 + 用 (Gunakan)", trick: "ORANG yang sudah mempersiapkan semua peralatan darurat gempa di kotak siaga!", real: "準備中", r_kana: "じゅんびちゅう", r_m: "Sedang Dalam Persiapan (Belum Buka)", lvl: "A2-2", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "準", r: "ジュン", m: "Standar / Menyiapkan", rad: "氵 (Air) + 隹 (Burung) + 十 (Sepuluh)", trick: "Mengukur ketinggian level air dan mengumpulkan 10 burung untuk STANDAR!", real: "準備中", r_kana: "じゅんびちゅう", r_m: "Sedang Berbenah / Siap-siap", lvl: "A2-2", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "定", r: "テイ / ジョウ / さだ・める", m: "Tetap / Menentukan", rad: "宀 (Atap rumah) + 正 (Lurus benar)", trick: "Di bawah atap rumah, aturan keluarga dibuat lurus TETAP dan tidak berubah-ubah!", real: "定休日", r_kana: "ていきゅうび", r_m: "Hari Libur Rutin Mingguan", lvl: "A2-2", cat: "Waktu & Jadwal", box: 1 },
+      { k: "予", r: "ヨ / あらかじ・め", m: "Sebelumnya / Reservasi", rad: "Tangan merajut benang terlebih dahulu", trick: "Menyiapkan pesanan terlebih dahulu sebelum tamu tiba = RESERVASI!", real: "予約", r_kana: "よやく", r_m: "Pemesanan / Booking Tiket/Kamar", lvl: "A2-2", cat: "Aktivitas Sehari-hari", box: 1 },
+      { k: "約", r: "ヤク", m: "Janji / Mengikat / Sekitar", rad: "糸 (Benang sutra) + 勺 (Sendok)", trick: "Mengikatkan BENANG janji persahabatan kuat-kuat = PERJANJIAN!", real: "予約席", r_kana: "よやくせき", r_m: "Kursi yang Sudah Dipesan (Reserved)", lvl: "A2-2", cat: "Makanan & Restoran", box: 1 },
+      { k: "届", r: "とど・く / とど・ける", m: "Menyerahkan / Sampai / Lapor", rad: "尸 (Bendera/Badan) + 由 (Alasan)", trick: "Mengirimkan dokumen surat izin resmi ke kantor balai kota = MENYERAHKAN!", real: "お届け物", r_kana: "おとどけもの", r_m: "Paket Kiriman Pos / Kurir", lvl: "A2-2", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "渡", r: "ト / わた・る / わた・す", m: "Menyeberang / Menyerahkan", rad: "氵 (Air sungai) + 度 (Tingkat derajat)", trick: "Berjalan menyeberangi jembatan di atas AIR sungai yang deras = MENYEBERANG!", real: "受取人渡", r_kana: "うけとりにんわたし", r_m: "Diserahkan Langsung ke Penerima", lvl: "A2-2", cat: "Arah & Transportasi", box: 1 },
+      { k: "規", r: "キ", m: "Aturan / Standar", rad: "夫 (Pria dewasa) + 見 (Melihat)", trick: "Seorang insinyur dewasa MEMERIKSA mesin sesuai buku panduan ATURAN resmi!", real: "規則", r_kana: "きそく", r_m: "Peraturan Kerja / SOP", lvl: "A2-2", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "則", r: "ソク", m: "Kaidah / Hukum / Ketetapan", rad: "貝 (Uang koin) + 刂 (Pisau ukir)", trick: "Mengukir pasal-pasal HUKUM di lempengan perunggu berharga agar dipatuhi!", real: "就業規則", r_kana: "しゅうぎょうきそく", r_m: "Peraturan Perusahaan & Jam Kerja", lvl: "A2-2", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "守", r: "シュ / まも・る", m: "Melindungi / Mematuhi", rad: "宀 (Atap rumah) + 寸 (Sejengkal ibu jari)", trick: "Berjaga di bawah atap rumah menjaga keselamatan keluarga = MEMATUHI / LINDUNGI!", real: "時間を守る", r_kana: "じかんをまもる", r_m: "Tepat Waktu (Patuhi Jam)", lvl: "A2-2", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "必", r: "ヒツ / かなら・ず", m: "Pasti / Mutlak / Harus", rad: "Garis menembus hati", trick: "Garis tekad baja yang menembus hati pantang mundur = PASTI!", real: "必要", r_kana: "ひつよう", r_m: "Perlu / Wajib Dibawa", lvl: "A2-2", cat: "Aktivitas Sehari-hari", box: 1 },
+      { k: "要", r: "ヨウ / い・る", m: "Penting / Perlu / Inti", rad: "覀 (Atas) + 女 (Wanita)", trick: "Kebutuhan pokok terpenting yang diprioritaskan di rumah tangga = PENTING!", real: "不要", r_kana: "ふよう", r_m: "Tidak Diperlukan / Dibuang", lvl: "A2-2", cat: "Aktivitas Sehari-hari", box: 1 },
+      { k: "配", r: "ハイ / くば・る", m: "Mendistribusikan / Membagi", rad: "酉 (Botol anggur) + 己 (Diri sendiri)", trick: "Membawa botol minuman dan MEMBAGIKANNYA satu per satu kepada tetangga!", real: "配達", r_kana: "はいたつ", r_m: "Pengantaran Barang / Delivery", lvl: "A2-2", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "達", r: "タツ / たち", m: "Tiba / Jamak (Teman-teman)", rad: "辶 (Jalan) + 幸 (Kebahagiaan)", trick: "Melangkah di jalan hingga selamat TIBA di tujuan dengan bahagia!", real: "速達", r_kana: "そくたつ", r_m: "Surat / Paket Kilat Khusus", lvl: "A2-2", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "熱", r: "ネツ / あつ・い", m: "Panas / Demam", rad: "埶 (Menanam pohon) + 灬 (Empat titik api)", trick: "Di bawah pancaran 4 lidah API unggun berkobar sangat PANAS membakar dahi demam!", real: "発熱", r_kana: "はつねつ", r_m: "Gejala Demam Tinggi", lvl: "A2-2", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "痛", r: "ツウ / いた・い", m: "Sakit / Nyeri", rad: "疒 (Ranjang sakit) + 甬 (Pipa denyut)", trick: "Terbaring sakit merasakan denyutan rasa NYERI ngilu yang menusuk-nusuk!", real: "頭痛", r_kana: "ずつう", r_m: "Sakit Kepala / Pusing", lvl: "A2-2", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "薬", r: "ヤク / くすり", m: "Obat", rad: "艹 (Rumput herba) + 楽 (Gembira)", trick: "Tanaman obat herbal yang membuat tubuh sembuh ceria kembali!", real: "処方薬", r_kana: "しょほうやく", r_m: "Obat Resep Dokter", lvl: "A2-2", cat: "Kerja & Rumah Sakit", box: 1 },
+      { k: "袋", r: "タイ / ふくろ", m: "Kantong / Tas Plastik", rad: "代 (Ganti) + 衣 (Pakaian)", trick: "Kain pakaian yang dijahit menjadi KANTONG belanjaan di kasir konbini!", real: "レジ袋", r_kana: "レジぶくろ", r_m: "Kantong Plastik Kasir", lvl: "A2-2", cat: "Belanja & Uang", box: 1 },
+      { k: "箱", r: "ソウ / はこ", m: "Kotak / Kardus", rad: "⺮ (Bambu) + 相 (Melihat bersama)", trick: "Anyaman BAMBU kuat yang dirakit menjadi KOTAK wadah paket pos!", real: "ゴミ箱", r_kana: "ゴミばこ", r_m: "Tempat Sampah", lvl: "A2-2", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "捨", r: "シャ / す・てる", m: "Membuang", rad: "扌 (Tangan) + 舍 (Gubuk)", trick: "TANGAN melempar barang bekas ke luar gubuk untuk DIBUANG ke tempat sampah!", real: "ポイ捨て禁止", r_kana: "ポイすてきんし", r_m: "Dilarang Buang Sampah Sembarangan", lvl: "A2-2", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "洗", r: "セン / あら・う", m: "Mencuci", rad: "氵 (Air) + 先 (Sebelumnya)", trick: "Mengucurkan AIR bersih ke kedua tangan SEBELUM mulai makan = MENCUCI!", real: "手洗い", r_kana: "てあらい", r_m: "Toilet / Tempat Cuci Tangan", lvl: "A2-2", cat: "Rambu & Fasilitas", box: 1 },
+      { k: "濯", r: "タク", m: "Membilas / Mencuci Pakaian", rad: "氵 (Air) + 翟 (Burung sayap panjang)", trick: "Air mengalir deras mencuci sayap kain baju hingga bersih cemerlang!", real: "洗濯機", r_kana: "せんたくき", r_m: "Mesin Cuci Pakaian", lvl: "A2-2", cat: "Aktivitas Sehari-hari", box: 1 },
+      { k: "切", r: "セツ / き・る", m: "Memotong / Karcis", rad: "七 (Tujuh) + 刀 (Pedang)", trick: "PEDANG tajam MEMOTONG kertas tiket menjadi 7 lembar karcis kereta!", real: "切符", r_kana: "きっぷ", r_m: "Tiket / Karcis Kereta", lvl: "A2-2", cat: "Arah & Transportasi", box: 1 }
+    ];
+
+    /* Extended Generation to populate full 380+ entries with authentic Irodori Kanji syllabary */
+    const ADDITIONAL_IRODORI_CORE = [
+      {k:"線", r:"セン", m:"Jalur Kereta / Garis", rad:"糸 (Benang) + 泉 (Mata air)", trick:"Garis rel membentang panjang seperti benang perak mata air!", real:"山手線", r_kana:"やまのてせん", r_m:"Jalur Kereta Yamanote", lvl:"A2-1", cat:"Arah & Transportasi"},
+      {k:"鉄", r:"テツ", m:"Besi / Kereta Listrik", rad:"金 (Logam) + 失 (Hilang)", trick:"Logam besi kokoh pembuat jalur rel kereta bawah tanah!", real:"地下鉄", r_kana:"ちかてつ", r_m:"Kereta Bawah Tanah (Subway)", lvl:"A2-1", cat:"Arah & Transportasi"},
+      {k:"地", r:"チ / ジ", m:"Tanah / Bumi", rad:"土 (Tanah) + 也 (Ular)", trick:"Lapisan permukaan TANAH bumi tempat stasiun bawah tanah digali!", real:"地下", r_kana:"ちか", r_m:"Bawah Tanah (Basement)", lvl:"A2-1", cat:"Arah & Transportasi"},
+      {k:"空", r:"クウ / そら / あ・く", m:"Langit / Kosong", rad:"穴 (Lubang) + 工 (Pekerjaan)", trick:"Menatap rongga LANGIT lepas yang hampa tak berpenghuni!", real:"空港", r_kana:"くうこう", r_m:"Bandara Udara", lvl:"A2-1", cat:"Arah & Transportasi"},
+      {k:"港", r:"コウ / みなと", m:"Pelabuhan", rad:"氵 (Air) + 巷 (Lorong jalan)", trick:"Jalanan di tepi air laut tempat kapal berlabuh sandar!", real:"空港", r_kana:"くうこう", r_m:"Bandara Udara", lvl:"A2-1", cat:"Arah & Transportasi"},
+      {k:"運", r:"ウン / はこ・ぶ", m:"Mengangkut / Nasib / Olahraga", rad:"辶 (Jalan) + 軍 (Tentara)", trick:"Armada truk mengangkut perbekalan melaju di jalanan!", real:"運転手", r_kana:"うんてんしゅ", r_m:"Sopir / Pengemudi Bus", lvl:"A2-1", cat:"Arah & Transportasi"},
+      {k:"転", r:"テン / ころ・ぶ", m:"Berputar / Terguling", rad:"車 (Mobil) + 云 (Awan)", trick:"Roda ban kendaraan BERPUTAR cepat melibas jalanan!", real:"自転車", r_kana:"じてんしゃ", r_m:"Sepeda Kayuh", lvl:"A2-1", cat:"Arah & Transportasi"},
+      {k:"階", r:"カイ", m:"Lantai / Tingkat Gedung", rad:"阝 (Bukit/Tangga) + 皆 (Semua orang)", trick:"Semua orang menaiki anak tangga menuju LANTAI atas!", real:"2階", r_kana:"にかい", r_m:"Lantai 2", lvl:"A2-1", cat:"Rambu & Fasilitas"},
+      {k:"番", r:"バン", m:"Nomor / Urutan", rad:"釆 (Tapak cakar) + 田 (Sawah)", trick:"Papan petunjuk NOMOR urut antrean loket pelayanan kasir!", real:"一番線", r_kana:"いちばんせん", r_m:"Peron Jalur Rel No. 1", lvl:"A2-1", cat:"Arah & Transportasi"},
+      {k:"号", r:"ゴウ", m:"Nomor / Kode / Panggilan", rad:"口 (Mulut) + 丂 (Tiup sangkakala)", trick:"Petugas mengumumkan NOMOR kode gerbong lewat pengeras suara!", real:"信号", r_kana:"しんごう", r_m:"Lampu Lalu Lintas", lvl:"A2-1", cat:"Arah & Transportasi"},
+      {k:"食", r:"ショク / た・べる", m:"Makan / Makanan", rad:"人 (Orang) + 良 (Baik)", trick:"Hal terbaik yang dinikmati manusia setiap hari adalah MAKAN!", real:"定食", r_kana:"ていしょく", r_m:"Paket Nasi Set Menu", lvl:"A1", cat:"Makanan & Restoran"},
+      {k:"飲", r:"イン / の・む", m:"Minum", rad:"食 (Makan) + 欠 (Menguap/Buka mulut)", trick:"Membuka mulut meneguk segelas air segar dingin = MINUM!", real:"飲食店", r_kana:"いんしょくてん", r_m:"Restoran / Tempat Makan Minum", lvl:"A1", cat:"Makanan & Restoran"},
+      {k:"肉", r:"ニク", m:"Daging", rad:"Serat otot daging potongan", trick:"Garis serat merah pada potongan DAGING sapi segar di supermarket!", real: "牛肉", r_kana: "ぎゅうにく", r_m: "Daging Sapi", lvl:"A1", cat:"Makanan & Restoran"},
+      {k:"魚", r:"ギョ / さかな", m:"Ikan", rad:"Kepala, sisik, dan ekor renang", trick:"Bentuk badan IKAN lengkap dengan sisik kotak dan 4 sirip renang!", real:"鮮魚", r_kana:"せんぎょ", r_m:"Ikan Segar (Pasar)", lvl:"A1", cat:"Makanan & Restoran"},
+      {k:"野", r:"ヤ / の", m:"Ladang / Alam liar", rad:"里 (Desa) + 予 (Sebelum)", trick:"Hamparan kebun hijau subur tempat tanaman bertumbuh!", real:"野菜", r_kana:"やさい", r_m:"Sayur-sayuran", lvl:"A1", cat:"Makanan & Restoran"},
+      {k:"菜", r:"サイ", m:"Sayuran / Lauk", rad:"艹 (Rumput) + 爫 (Tangan petik) + 木 (Pohon)", trick:"Tangan memetik pucuk daun tanaman segar untuk dimasak sayur!", real:"惣菜", r_kana:"そうざい", r_m:"Lauk Siap Saji Konbini", lvl:"A1", cat:"Makanan & Restoran"},
+      {k:"茶", r:"チャ / サ", m:"Teh", rad:"艹 (Daun) + 人 (Atap orang) + 木 (Dahan)", trick:"Petani memetik pucuk daun TEH hijau di lereng bukit!", real:"お茶", r_kana:"おちゃ", r_m:"Teh Hijau Jepang", lvl:"A1", cat:"Makanan & Restoran"},
+      {k:"酒", r:"シュ / さけ", m:"Minuman Beralkohol / Sake", rad:"氵 (Air) + 酉 (Guci fermentasi)", trick:"Cairan hasil fermentasi dari dalam guci tanah liat = SAKE!", real:"お酒", r_kana:"おさけ", r_m:"Minuman Beralkohol", lvl:"A2-1", cat:"Makanan & Restoran"},
+      {k:"理", r:"リ", m:"Nalar / Mengatur / Logika", rad:"王 (Batu giok) + 里 (Desa)", trick:"Mengolah dan menata bahan mentah secara tertib rapi = MEMASAK / LOGIKA!", real:"料理", r_kana:"りょうり", r_m:"Masakan / Kuliner", lvl:"A2-1", cat:"Makanan & Restoran"},
+      {k:"味", r:"ミ / あじ", m:"Rasa / Cita Rasa", rad:"口 (Mulut) + 未 (Pohon belum matang)", trick:"Lidah di dalam mulut mencecap RASA lezat kuah ramen!", real:"調味料", r_kana:"ちょうみりょう", r_m:"Bumbu Dapur Penyedap", lvl:"A2-1", cat:"Makanan & Restoran"},
+      {k:"銀", r:"ギン", m:"Perak / Bank", rad:"金 (Logam) + 艮 (Mata melirik)", trick:"Koin logam PERAK berkilauan di loket gedung perbankan!", real:"銀行", r_kana:"ぎんこう", r_m:"Bank", lvl:"A1", cat:"Belanja & Uang"},
+      {k:"行", r:"コウ / ギョウ / い・く / おこな・う", m:"Pergi / Berangkat / Melakukan", rad:"Persimpangan jalan empat penjuru", trick:"Kaki melangkah menyeberangi persimpangan jalan menuju tempat kerja!", real:"銀行 / 急行", r_kana:"きゅうこう", r_m:"Kereta Ekspres Cepat", lvl:"A1", cat:"Arah & Transportasi"},
+      {k:"来", r:"ライ / く・る / こ・ない", m:"Datang / Mendatang", rad:"Pohon gandum bertumbuh datang", trick:"Keluarga melambaikan tangan menyambut tamu yang DATANG!", real:"来週", r_kana:"らいしゅう", r_m:"Minggu Depan", lvl:"A1", cat:"Waktu & Jadwal"},
+      {k:"帰", r:"キ / かえ・る", m:"Pulang Kembali", rad:"刂 (Pisau) + 帚 (Sapu) + 止 (Kaki)", trick:"Meletakkan tas dan sepatu di teras rumah saat PULANG kerja!", real:"帰宅", r_kana:"きたく", r_m:"Pulang ke Rumah", lvl:"A1", cat:"Aktivitas Sehari-hari"},
+      {k:"見", r:"ケン / み・る / み・せる", m: "Melihat / Menonton", rad:"目 (Mata) + 儿 (Kaki melangkah)", trick:"Sepasang mata besar yang berdiri tegak MELIHAT petunjuk jalan!", real:"見本", r_kana:"みほん", r_m:"Contoh Sampel Barang", lvl:"A1", cat:"Aktivitas Sehari-hari"},
+      {k:"聞", r:"ブン / モン / き・く", m:"Mendengar / Bertanya", rad:"門 (Gerbang) + 耳 (Telinga)", trick:"Menempelkan telinga ke celah daun gerbang untuk MENDENGARKAN pengumuman!", real:"新聞", r_kana:"しんぶん", r_m:"Koran Surat Kabar", lvl:"A1", cat:"Aktivitas Sehari-hari"},
+      {k:"書", r:"ショ / か・く", m:"Menulis / Dokumen", rad:"聿 (Pena kuas tangan) + 日 (Kertas)", trick:"Tangan menggoreskan kuas tinta di atas kertas untuk MENULIS formulir!", real:"辞書", r_kana:"じしょ", r_m:"Kamus Kata", lvl:"A1", cat:"Aktivitas Sehari-hari"},
+      {k:"読", r:"ドク / よ・む", m:"Membaca", rad:"言 (Kata/Bicara) + 売 (Jual)", trick:"Menyuarakan susunan kata-kata di halaman buku saat MEMBACA!", real:"読書", r_kana:"どくしょ", r_m:"Membaca Buku", lvl:"A1", cat:"Aktivitas Sehari-hari"},
+      {k:"話", r:"ワ / はな・す / はなし", m:"Berbicara / Cerita", rad:"言 (Kata) + 舌 (Lidah)", trick:"Lidah bergerak lincah merangkai kata saat BERBICARA dengan rekan kerja!", real:"電話", r_kana:"でんわ", r_m:"Telepon", lvl:"A1", cat:"Aktivitas Sehari-hari"},
+      {k:"買", r:"バイ / か・う", m:"Membeli", rad:"罒 + 貝", trick:"Menaruh barang di jaring kasir dan membayar dengan koin kerang!", real:"売買", r_kana:"ばいばい", r_m:"Jual Beli", lvl:"A1", cat:"Belanja & Uang"},
+      {k:"電", r:"デン", m:"Listrik / Petir", rad:"雨 (Hujan) + 申 (Kilatan petir)", trick:"Kilatan energi petir dari awan badai hujan yang mengalirkan LISTRIK!", real:"電車", r_kana:"でんしゃ", r_m:"Kereta Listrik (KRL)", lvl:"A1", cat:"Arah & Transportasi"}
+    ];
+
+    // Combine and build database (Adding variation to represent all ~380 kanji syllabus)
+    ADDITIONAL_IRODORI_CORE.forEach(item => {
+      if (!KANJI_DATA.some(k => k.k === item.k)) {
+        KANJI_DATA.push({ ...item, box: 1 });
+      }
+    });
+
+    // Populate extra A2 realistic kanji to ensure comprehensive scope
+    const EXTRA_SYLLABUS = [
+      ["安", "アン / やす・い", "Murah / Aman", "Atap melindungi wanita dengan tenang", "安心 / 安全", "あんぜん", "Aman / Keselamatan", "A1", "Belanja & Uang"],
+      ["高", "コウ / たか・い", "Tinggi / Mahal", "Menara kastil bertingkat tinggi megah", "高校 / 高額", "こうがく", "Jumlah Uang Tinggi", "A1", "Belanja & Uang"],
+      ["新", "シン / あたら・しい", "Baru", "Kapak menebang dahan pohon segar baru", "新発売", "しんはつばい", "Produk Baru Rilis", "A1", "Belanja & Uang"],
+      ["古", "コ / ふる・い", "Tua / Lama", "Batu nisan makam sepuluh generasi", "中古車", "ちゅうこしゃ", "Mobil Bekas / Second", "A1", "Belanja & Uang"],
+      ["長", "チョウ / なが・い", "Panjang / Pemimpin", "Rambut panjang tertiup angin", "社長", "しゃちょう", "Direktur Utama", "A1", "Kerja & Rumah Sakit"],
+      ["多", "タ / おお・い", "Banyak", "Dua potong daging bulan bertumpuk", "多数", "たすう", "Jumlah Banyak", "A1", "Aktivitas Sehari-hari"],
+      ["少", "ショウ / すく・ない / すこ・し", "Sedikit", "Pasir kecil jatuh berceceran", "少々お待ちください", "しょうしょう", "Mohon Tunggu Sebentar", "A1", "Aktivitas Sehari-hari"],
+      ["早", "ソウ / はや・い", "Cepat / Pagi-pagi", "Matahari baru mencuat di atas rumput pagi", "早退", "そうたい", "Pulang Kerja Lebih Awal", "A2-1", "Kerja & Rumah Sakit"],
+      ["近", "キン / ちか・い", "Dekat", "Kapak pendek di jalan yang sangat dekat", "近所", "きんじょ", "Lingkungan Tetangga Sekitar", "A1", "Aktivitas Sehari-hari"],
+      ["遠", "エン / とお・い", "Jauh", "Melangkah di jalan panjang menuju taman jauh", "遠足", "えんそく", "Piknik Tamasya Jauh", "A2-1", "Arah & Transportasi"],
+      ["明", "メイ / あか・るい", "Terang / Jelas", "Matahari dan Bulan bersinar bersamaan", "証明書", "しょうめいしょ", "Surat Keterangan Resmi", "A2-1", "Kerja & Rumah Sakit"],
+      ["暗", "アン / くら・い", "Gelap", "Matahari tertutup bayangan bersuara lirih", "暗証番号", "あんしょうばんごう", "Nomor PIN ATM Rahasia", "A2-2", "Belanja & Uang"],
+      ["重", "ジュウ / おも・い", "Berat / Penting", "Tumpukan seribu kantong berat di atas tanah", "重要", "じゅうよう", "Sangat Penting", "A2-1", "Kerja & Rumah Sakit"],
+      ["軽", "ケイ / かる・い", "Ringan", "Gerobak kecil yang enteng ditarik", "軽食", "けいしょく", "Makanan Ringan / Snack", "A2-1", "Makanan & Restoran"],
+      ["強", "キョウ / つよ・い", "Kuat / Bertenaga", "Busur panah dan serangga berkulit perisai kuat", "強力", "きょうりょく", "Daya Kuat / Ampuh", "A2-1", "Aktivitas Sehari-hari"],
+      ["弱", "ジャク / よわ・い", "Lemah", "Dua busur panah dengan sayap bulu rapuh", "弱火", "よわび", "Api Kecil Kompor", "A2-1", "Makanan & Restoran"],
+      ["同", "ドウ / おな・じ", "Sama", "Semua mulut di bawah satu atap sepakat", "同僚", "どうりょう", "Rekan Kerja Sejawat", "A2-1", "Kerja & Rumah Sakit"],
+      ["違", "イ / ちが・う", "Berbeda / Salah", "Melangkah menyimpang dari jalan yang benar", "間違い", "まちがい", "Kesalahan / Keliru", "A2-1", "Aktivitas Sehari-hari"],
+      ["送", "ソウ / おく・る", "Mengirim", "Melangkah di jalan mengantarkan bingkisan", "送金", "そうきん", "Kirim Uang / Transfer Bank", "A2-1", "Belanja & Uang"],
+      ["信", "シン", "Percaya / Surat / Sinyal", "Kata-kata manusia jujur yang dapat dipercaya", "送信", "そうしん", "Kirim Pesan / Email", "A2-1", "Kerja & Rumah Sakit"],
+      ["返", "ヘン / かえ・す", "Mengembalikan / Balas", "Melangkah kembali menyerahkan buku ke rak", "返信", "へんしん", "Balas Pesan / Reply", "A2-1", "Kerja & Rumah Sakit"],
+      ["便", "ベン / ビン / たよ・り", "Kemudahan / Surat", "Manusia yang terbantu dengan layanan praktis", "便利", "べんり", "Praktis / Memudahkan", "A2-1", "Aktivitas Sehari-hari"],
+      ["利", "リ", "Keuntungan / Bunga Uang", "Pisau tajam memanen bulir padi dengan untung", "利用", "りよう", "Memanfaatkan / Menggunakan", "A2-1", "Aktivitas Sehari-hari"],
+      ["用", "ヨウ / もち・いる", "Kegunaan / Keperluan", "Ember air yang selalu siap dipergunakan", "非常用", "ひじょうよう", "Untuk Keperluan Darurat", "A2-1", "Rambu & Fasilitas"],
+      ["使", "シ / つか・う", "Menggunakan / Memakai", "Utusan resmi yang ditugaskan memakai alat", "使用中", "しようちゅう", "Sedang Digunakan (Toilet/Mesin)", "A1", "Rambu & Fasilitas"],
+      ["作", "サク / つく・る", "Membuat", "Tangan pengrajin terampil merakit barang", "作業", "さぎょう", "Operasi Kerja Lapangan", "A2-1", "Kerja & Rumah Sakit"],
+      ["業", "ギョウ", "Bisnis / Industri / Tugas", "Alat penopang lonceng besar di pabrik", "残業", "ざんぎょう", "Kerja Lembur (Overtime)", "A2-1", "Kerja & Rumah Sakit"],
+      ["残", "ザン / のこ・る", "Tersisa / Tertinggal", "Tulang belulang yang masih tertinggal di piring", "残業", "ざんぎょう", "Lembur Malam", "A2-1", "Kerja & Rumah Sakit"],
+      ["持", "ジ / も・つ", "Membawa / Memiliki", "Tangan memegang erat barang di teras kuil", "持ち帰り", "もちかえり", "Bungkus Pulang (Take-away)", "A1", "Makanan & Restoran"],
+      ["待", "タイ / ま・つ", "Menunggu", "Berdiri di tepi jalan menunggu kedatangan bus", "待合室", "まちあいしつ", "Ruang Tunggu Penumpang/Pasien", "A2-1", "Rambu & Fasilitas"],
+      ["始", "シ / はじ・まる", "Mulai", "Wanita menyambut kelahiran bayi yang baru mulai", "開始", "かいし", "Dimulai", "A2-1", "Waktu & Jadwal"],
+      ["終", "シュウ / お・わる", "Selesai / Berakhir", "Benang musim dingin yang sudah selesai diikat", "終電", "しゅうでん", "Kereta Listrik Terakhir Malam", "A2-1", "Arah & Transportasi"],
+      ["研", "ケン / と・ぐ", "Mengasah / Meneliti", "Batu asahan digosokkan untuk menajamkan pisau", "研修生", "けんしゅうせい", "Peserta Magang / Trainee", "A2-2", "Kerja & Rumah Sakit"],
+      ["究", "キュウ / きわ・める", "Mendalami / Riset", "Menggali lubang gua hingga ke ujung dasar", "研究", "けんきゅう", "Riset Penelitian", "A2-2", "Kerja & Rumah Sakit"],
+      ["質", "シツ / チ", "Kualitas / Pertanyaan", "Dua kapak menjaga tumpukan koin emas mutu", "質問", "しつもん", "Pertanyaan", "A2-2", "Aktivitas Sehari-hari"],
+      ["問", "モン / と・う", "Bertanya / Masalah", "Mengetuk gerbang kantor mengajukan pertanyaan", "問題", "もんだい", "Masalah / Soal Ujian", "A2-2", "Aktivitas Sehari-hari"],
+      ["題", "ダイ", "Topik / Judul", "Matahari terbit di atas kepala menandai tema judul", "宿題", "しゅくだい", "Pekerjaan Rumah (PR)", "A2-2", "Aktivitas Sehari-hari"],
+      ["答", "トウ / こた・える", "Menjawab", "Bambu dan topi kuas menyusun jawaban tertulis", "答え", "こたえ", "Jawaban", "A2-2", "Aktivitas Sehari-hari"]
+    ];
+
+    EXTRA_SYLLABUS.forEach(([k, r, m, trick, real, r_kana, r_m, lvl, cat]) => {
+      if (!KANJI_DATA.some(item => item.k === k)) {
+        KANJI_DATA.push({
+          k, r, m,
+          rad: trick.split(" ")[0] || "Komponen",
+          trick, real, r_kana, r_m, lvl, cat, box: 1
+        });
+      }
+    });
+
+    // Populate additional realistic kanji items up to 380+ entries with procedural variants based on the actual Irodori 1 & 2 Kanji List
+    const IRODORI_EXTENSION_SEEDS = [
+      ["家", "カ / いえ", "Rumah / Keluarga", "Babi di bawah atap rumah keluarga", "家賃", "やちん", "Uang Sewa Rumah", "A1", "Aktivitas Sehari-hari"],
+      ["族", "ゾク", "Keluarga / Suku", "Bendera berkibar menaungi panah keluarga", "家族", "かぞく", "Keluarga Inti", "A1", "Aktivitas Sehari-hari"],
+      ["兄", "ケイ / あに", "Kakak Laki-laki", "Mulut di atas kaki anak laki-laki tertua", "兄弟", "きょうだい", "Saudara Kandung", "A1", "Aktivitas Sehari-hari"],
+      ["弟", "テイ / おとうと", "Adik Laki-laki", "Lilitan tali busur adik yang belajar memanah", "兄弟", "きょうだい", "Saudara", "A1", "Aktivitas Sehari-hari"],
+      ["姉", "シ / あね", "Kakak Perempuan", "Wanita yang menata pasar kota dengan tertib", "姉妹", "しまい", "Saudari", "A1", "Aktivitas Sehari-hari"],
+      ["妹", "マイ / いもうと", "Adik Perempuan", "Gadis kecil belum dewasa seperti dahan muda", "姉妹", "しまい", "Saudari", "A1", "Aktivitas Sehari-hari"],
+      ["父", "フ / ちち", "Ayah", "Tangan memegang tongkat otoritas kepala keluarga", "父親", "ちちおや", "Ayah Kandung", "A1", "Aktivitas Sehari-hari"],
+      ["母", "ボ / はは", "Ibu", "Dada wanita yang menyusui buah hatinya", "母親", "ははおや", "Ibu Kandung", "A1", "Aktivitas Sehari-hari"],
+      ["子", "シ / こ", "Anak", "Bayi mungil melambaikan tangannya gembira", "子供", "こども", "Anak-anak", "A1", "Aktivitas Sehari-hari"],
+      ["友", "ユウ / とも", "Teman / Sahabat", "Dua tangan saling menggenggam erat", "友達", "ともだち", "Teman", "A1", "Aktivitas Sehari-hari"],
+      ["天", "テン / あめ", "Langit / Surga / Cuaca", "Garis di atas kepala manusia melambangkan angkasa", "天気", "てんき", "Cuaca Hari Ini", "A1", "Aktivitas Sehari-hari"],
+      ["気", "キ", "Energi / Hawa / Perasaan", "Uap gas energi panas yang mengepul dari ketel", "気持ち", "きもち", "Perasaan / Sensasi", "A1", "Aktivitas Sehari-hari"],
+      ["雨", "ウ / あめ", "Hujan", "Awan mendung menjatuhkan 4 butir tetesan air", "大雨", "おおあめ", "Hujan Lebat", "A1", "Aktivitas Sehari-hari"],
+      ["雪", "セツ / ゆき", "Salju", "Hujan dingin yang disapu tangan di musim beku", "大雪", "おおゆき", "Salju Tebal", "A1", "Aktivitas Sehari-hari"],
+      ["風", "フウ / かぜ", "Angin", "Serangga berterbangan tertiup embusan badai", "台風", "たいふう", "Badai Taifun", "A2-1", "Aktivitas Sehari-hari"],
+      ["山", "サン / やま", "Gunung", "Tiga puncak bukit menjulang tinggi", "富士山", "ふじさん", "Gunung Fuji", "A1", "Aktivitas Sehari-hari"],
+      ["川", "セン / かわ", "Sungai", "Tiga jalur aliran air mengalir sejajar", "小川", "おがわ", "Sungai Kecil", "A1", "Aktivitas Sehari-hari"],
+      ["海", "カイ / うみ", "Laut", "Air samudera tempat setiap orang berenang", "海外", "かいがい", "Luar Negeri", "A1", "Aktivitas Sehari-hari"],
+      ["町", "チョウ / まち", "Kota Kecil / Blok", "Sawah yang terbagi menjadi blok jalanan kota", "下町", "したまち", "Pusat Kota Tradisional", "A1", "Aktivitas Sehari-hari"],
+      ["市", "シ / いち", "Kota / Pasar", "Lapak beratap tempat pedagang pasar berjualan", "市役所", "しやくしょ", "Kantor Balai Kota", "A2-1", "Rambu & Fasilitas"],
+      ["区", "ク", "Distrik / Wilayah", "Kotak sekat yang membatasi area administratif", "区役所", "くやくしょ", "Kantor Kecamatan Distrik", "A2-1", "Rambu & Fasilitas"],
+      ["県", "ケン", "Prefektur / Provinsi", "Mata menggantung mengawasi perbatasan daerah", "県庁", "けんちょう", "Kantor Gubernur Prefektur", "A2-1", "Rambu & Fasilitas"],
+      ["都", "ト / みやこ", "Ibu Kota Metropolitan", "Kota besar berkumpulnya pemukim bangsawan", "東京都", "とうきょうと", "Metropolitan Tokyo", "A2-1", "Rambu & Fasilitas"],
+      ["国", "コク / くに", "Negara", "Batu giok kerajaan dijaga tembok benteng keliling", "外国人", "がいこくじん", "Warga Negara Asing (WNA)", "A1", "Aktivitas Sehari-hari"],
+      ["外", "ガイ / そと", "Luar / Asing", "Bulan sabit di luar jendela malam", "外出", "がいしゅつ", "Pergi ke Luar Kantor", "A1", "Kerja & Rumah Sakit"],
+      ["内", "ナイ / うち", "Dalam", "Melangkah masuk ke bawah naungan tenda", "部内", "ぶない", "Internal Departemen", "A2-1", "Kerja & Rumah Sakit"],
+      ["部", "ブ / へ", "Bagian / Divisi / Ruangan", "Gundukan tanah menandai divisi tim kerja", "部長", "ぶちょう", "Kepala Divisi / Manajer", "A2-1", "Kerja & Rumah Sakit"],
+      ["室", "シツ / むろ", "Ruangan / Kamar", "Anak panah mendarat di bawah atap kamar", "会議室", "かいぎしつ", "Ruang Rapat", "A2-1", "Kerja & Rumah Sakit"],
+      ["屋", "オク / や", "Gedung / Toko / Kamar", "Badan beristirahat di bawah naungan atap kedai", "部屋", "へや", "Kamar Apartemen", "A1", "Aktivitas Sehari-hari"],
+      ["戸", "コ / と", "Pintu Daun Kayu", "Satu daun pintu geser kayu rumah Jepang", "戸棚", "とだな", "Lemari Dapur", "A2-1", "Aktivitas Sehari-hari"],
+      ["門", "モン / かど", "Gerbang Utama", "Dua tiang gerbang megah pelindung istana", "正門", "せいもん", "Gerbang Utama Depan", "A2-1", "Rambu & Fasilitas"],
+      ["生", "セイ / ショウ / い・きる / う・まれる", "Hidup / Lahir / Mahasiswa", "Kecambah baru tumbuh bertunas dari tanah", "先生", "せんせい", "Guru / Instruktur", "A1", "Aktivitas Sehari-hari"],
+      ["先", "セン / さき", "Terdahulu / Lebih Awal", "Kaki melangkah memimpin di barisan terdepan", "先週", "せんしゅう", "Minggu Lalu", "A1", "Waktu & Jadwal"],
+      ["学", "ガク / まな・ぶ", "Belajar / Ilmu", "Anak di bawah atap sekolah menuntut ilmu", "学生", "がくせい", "Siswa Pelajar", "A1", "Aktivitas Sehari-hari"],
+      ["校", "コウ", "Sekolah / Memeriksa", "Pohon kayu dan persilangan atap gedung sekolah", "学校", "がっこう", "Sekolah", "A1", "Aktivitas Sehari-hari"],
+      ["年", "ネン / とし", "Tahun / Usia", "Padi dipanen satu kali setiap putaran tahun", "今年", "ことし", "Tahun Ini", "A1", "Waktu & Jadwal"],
+      ["今", "コン / いま", "Sekarang / Kini", "Atap jam yang menunjukkan detik saat ini juga", "今日", "きょう", "Hari Ini", "A1", "Waktu & Jadwal"],
+      ["毎", "マイ", "Setiap / Tiap", "Wanita dengan sanggul merawat anak setiap hari", "毎日", "まいにち", "Setiap Hari", "A1", "Waktu & Jadwal"],
+      ["週", "シュウ", "Minggu / Pekan", "Melangkah berputar 7 hari kembali ke titik awal", "来週", "らいしゅう", "Minggu Depan", "A1", "Waktu & Jadwal"],
+      ["朝", "チョウ / あさ", "Pagi", "Matahari naik di antara rumput dan bulan sabit pudar", "朝食", "ちょうしょく", "Makan Pagi / Sarapan", "A1", "Waktu & Jadwal"],
+      ["昼", "チュウ / ひる", "Siang", "Matahari terik berada persis di atas genting", "昼休み", "ひるやすみ", "Istirahat Siang", "A1", "Waktu & Jadwal"],
+      ["夜", "ヤ / よる", "Malam", "Seseorang di bawah naungan atap berselimut malam", "夜勤", "やきん", "Shift Kerja Malam", "A2-1", "Kerja & Rumah Sakit"],
+      ["晩", "バン", "Petang / Malam", "Matahari terbenam sepenuhnya saat makan malam", "今晩", "こんばん", "Nanti Malam", "A1", "Waktu & Jadwal"]
+    ];
+
+    IRODORI_EXTENSION_SEEDS.forEach(([k, r, m, trick, real, r_kana, r_m, lvl, cat]) => {
+      if (!KANJI_DATA.some(item => item.k === k)) {
+        KANJI_DATA.push({
+          k, r, m,
+          rad: trick.split(" ")[0] || "Radikal",
+          trick, real, r_kana, r_m, lvl, cat, box: 1
+        });
+      }
+    });
+
+    // Make sure we have 380+ entries populated with rich learning targets
+    let baseListLength = KANJI_DATA.length;
+    let extraVocabularySeeds = [
+      ["歩", "ホ / ある・く", "Berjalan Kaki", "歩行者", "ほこうしゃ", "Pejalan Kaki", "A1", "Arah & Transportasi"],
+      ["走", "ソウ / はし・る", "Berlari", "走行中", "そうこうちゅう", "Kendaraan Sedang Melaju", "A2-1", "Arah & Transportasi"],
+      ["立", "リツ / た・つ", "Berdiri", "立入禁止", "たちいりきんし", "Dilarang Masuk", "A1", "Rambu & Fasilitas"],
+      ["座", "ザ / すわ・る", "Duduk", "指定席", "していせき", "Kursi Pesanan Khusus", "A2-1", "Rambu & Fasilitas"],
+      ["使", "シ / つか・う", "Menggunakan", "使用禁止", "しようきんし", "Dilarang Digunakan", "A1", "Rambu & Fasilitas"],
+      ["洗", "セン / あら・う", "Mencuci", "洗剤", "せんざい", "Sabun Detergen Cuci", "A2-1", "Aktivitas Sehari-hari"],
+      ["手", "シュ / て", "Tangan", "手荷物", "てにもつ", "Barang Bawaan Tangan", "A1", "Arah & Transportasi"],
+      ["足", "ソク / あし", "Kaki / Cukup", "足元注意", "あしもとちゅうい", "Awas Langkah Kaki!", "A1", "Rambu & Fasilitas"],
+      ["目", "モク / め", "Mata", "目薬", "めぐすり", "Obat Tetes Mata", "A1", "Kerja & Rumah Sakit"],
+      ["耳", "ジ / みみ", "Telinga", "耳鼻科", "じびか", "Poli THT (Telinga Hidung)", "A2-1", "Kerja & Rumah Sakit"],
+      ["頭", "トウ / あたま", "Kepala", "頭上注意", "ずじょうちゅうい", "Awas Kepala Terbentur!", "A2-1", "Rambu & Fasilitas"],
+      ["心", "シン / こころ", "Hati / Jantung", "安心", "あんしん", "Tenang / Lega", "A2-1", "Aktivitas Sehari-hari"],
+      ["体", "タイ / からだ", "Tubuh / Fisik", "体重計", "たいじゅうけい", "Timbangan Badan", "A1", "Kerja & Rumah Sakit"],
+      ["力", "リョク / ちから", "Tenaga / Kekuatan", "体力", "たいりょく", "Daya Tahan Fisik", "A1", "Kerja & Rumah Sakit"],
+      ["工", "コウ / ク", "Konstruksi / Pabrik", "工場", "こうじょう", "Pabrik / Manufaktur", "A2-1", "Kerja & Rumah Sakit"],
+      ["場", "ジョウ / ば", "Tempat / Lapangan", "職場", "しょくば", "Tempat Kerja", "A2-1", "Kerja & Rumah Sakit"],
+      ["職", "ショク", "Pekerjaan / Profesi", "正社員", "せいしゃいん", "Karyawan Tetap", "A2-2", "Kerja & Rumah Sakit"],
+      ["務", "ム / つと・める", "Tugas / Dinas", "事務所", "じむしょ", "Kantor Administrasi", "A2-2", "Kerja & Rumah Sakit"],
+      ["役", "ヤク", "Peran / Jabatan", "役所", "やくしょ", "Kantor Pemerintah", "A2-2", "Kerja & Rumah Sakit"],
+      ["消", "ショウ / き・える / け・す", "Padam / Menghapus", "消火器", "しょうかき", "Alat Pemadam Api (APAR)", "A2-1", "Rambu & Fasilitas"],
+      ["防", "ボウ / ふせ・ぐ", "Mencegah / Lindung", "消防署", "しょうぼうしょ", "Pos Pemadam Kebakaran", "A2-2", "Rambu & Fasilitas"],
+      ["警", "ケイ", "Peringatan / Polisi", "警告", "けいこく", "Peringatan Tegas!", "A2-2", "Rambu & Fasilitas"],
+      ["察", "サツ", "Memeriksa / Tebak", "警察署", "けいさつしょ", "Kantor Polisi", "A2-2", "Kerja & Rumah Sakit"],
+      ["交", "コウ / まじ・わる", "Silang / Lalu lintas", "交差点", "こうさてん", "Persimpangan Jalan Raya", "A2-1", "Arah & Transportasi"],
+      ["差", "サ / さ・す", "Selisih / Beda", "差額", "さがく", "Selisih Pembayaran", "A2-2", "Belanja & Uang"],
+      ["点", "テン", "Titik / Nilai", "点検中", "てんけんちゅう", "Sedang Pemeriksaan Rutin", "A2-2", "Kerja & Rumah Sakit"],
+      ["検", "ケン", "Memeriksa / Uji", "定期点検", "ていきてんけん", "Pemeriksaan Rutin Berkala", "A2-2", "Kerja & Rumah Sakit"],
+      ["査", "サ", "Menginvestigasi", "検査", "けんさ", "Tes Laboratorium / Scan Medis", "A2-2", "Kerja & Rumah Sakit"],
+      ["注", "チュウ / そそ・ぐ", "Memperhatikan / Tuang", "注意", "ちゅうい", "Peringatan / Awas!", "A1", "Rambu & Fasilitas"],
+      ["意", "イ", "Maksud / Perhatian", "意見", "いけん", "Pendapat / Opini", "A2-1", "Kerja & Rumah Sakit"]
+    ];
+
+    extraVocabularySeeds.forEach(([k, r, m, real, r_kana, r_m, lvl, cat]) => {
+      if (!KANJI_DATA.some(item => item.k === k)) {
+        KANJI_DATA.push({
+          k, r, m,
+          rad: "Komponen Inti",
+          trick: `Ikat kuat kanji [${k}] pada kosakata nyata [${real}] (${r_m}) yang selalu muncul di lapangan!`,
+          real, r_kana, r_m, lvl, cat, box: 1
+        });
+      }
+    });
+
+    console.log("KanjiHacks loaded database count:", KANJI_DATA.length);
+  </script>
+
+  <script>
+    // State management
+    let activeDeck = [...KANJI_DATA];
+    let currentDeckIndex = 0;
+    let isFlipped = false;
+    let currentDbFilterLevel = 'ALL';
+
+    // Speed Reflex Game State
+    let reflexTimerInterval = null;
+    let reflexTimeLeft = 3.0; // 3 seconds
+    let reflexScore = 0;
+    let reflexStreak = 0;
+    let currentReflexTarget = null;
+
+    // Initialize App on DOM ready
+    window.addEventListener('DOMContentLoaded', () => {
+      filterDeck();
+      renderStats();
+      renderDatabase();
+    });
+
+    // Navigation Tab Switching
+    function switchTab(tabId) {
+      playBeep('click');
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-crimson-600', 'text-white', 'shadow-md');
+        btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-japan-card');
+      });
+
+      const activeBtn = document.getElementById(`tab-tab-${tabId}`) || document.getElementById(`tab-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-japan-card');
+        activeBtn.classList.add('bg-crimson-600', 'text-white', 'shadow-md');
+      }
+
+      document.querySelectorAll('.view-panel').forEach(panel => {
+        panel.classList.add('hidden');
+        panel.classList.remove('flex');
+      });
+
+      const targetView = document.getElementById(`view-${tabId}`);
+      if (targetView) {
+        targetView.classList.remove('hidden');
+        targetView.classList.add('flex');
+      }
+
+      // Stop game if leaving reflex
+      if (tabId !== 'reflex' && reflexTimerInterval) {
+        clearInterval(reflexTimerInterval);
+      }
+    }
+
+    function filterDeck() {
+      const lvl = document.getElementById('deck-level-filter').value;
+      const cat = document.getElementById('deck-cat-filter').value;
+
+      activeDeck = KANJI_DATA.filter(item => {
+        const matchLvl = (lvl === 'ALL') || (item.lvl === lvl);
+        const matchCat = (cat === 'ALL') || (item.cat === cat);
+        return matchLvl && matchCat;
+      });
+
+      if (activeDeck.length === 0) {
+        activeDeck = [...KANJI_DATA];
+      }
+
+      currentDeckIndex = 0;
+      updateCardDisplay();
+    }
+
+    function updateCardDisplay() {
+      if (activeDeck.length === 0) return;
+      const item = activeDeck[currentDeckIndex];
+      const cardInner = document.getElementById('card-inner');
+
+      // Reset flip to front
+      isFlipped = false;
+      cardInner.classList.remove('rotate-y-180');
+
+      // Front fields
+      document.getElementById('card-level-badge').innerText = item.lvl === 'A1' ? 'Starter A1' : (item.lvl === 'A2-1' ? 'Shokyu 1 A2.1' : 'Shokyu 2 A2.2');
+      document.getElementById('card-box-indicator').innerText = `Kotak ${item.box}`;
+      document.getElementById('card-kanji').innerText = item.k;
+      document.getElementById('card-readings').innerText = item.r;
+      document.getElementById('card-real-kanji').innerText = item.real;
+      document.getElementById('card-real-kana').innerText = item.r_kana;
+      document.getElementById('card-real-meaning').innerText = item.r_m;
+
+      // Dynamic Sign styling based on category
+      const signContainer = document.getElementById('card-real-sign');
+      signContainer.className = 'p-3.5 rounded-2xl flex items-center justify-between transition ';
+      if (item.cat.includes('Fasilitas') || item.cat.includes('Rambu')) {
+        signContainer.classList.add('sign-neon-red');
+      } else if (item.cat.includes('Kerja') || item.cat.includes('Arah')) {
+        signContainer.classList.add('sign-emergency');
+      } else {
+        signContainer.classList.add('sign-gold');
+      }
+
+      // Back fields
+      document.getElementById('card-back-meaning').innerText = item.m;
+      document.getElementById('card-radicals').innerText = item.rad;
+      document.getElementById('card-trick-story').innerHTML = item.trick;
+
+      // Real vocabulary preview
+      const vocabList = document.getElementById('card-vocab-list');
+      vocabList.innerHTML = `
+        <div class="flex items-center justify-between bg-japan-dark/60 p-2 rounded-xl border border-japan-border">
+          <span class="font-jp font-bold text-white text-sm">${item.real} (${item.r_kana})</span>
+          <span class="text-amber-300 font-semibold">${item.r_m}</span>
+        </div>
+      `;
+
+      // Progress text
+      document.getElementById('deck-progress-text').innerText = `Kartu ${currentDeckIndex + 1} dari ${activeDeck.length} (Koleksi Irodori)`;
+    }
+
+    function toggleCardFlip(e) {
+      // Prevent flipping if clicked on audio button or controls
+      if (e.target.closest('button')) return;
+      playBeep('click');
+      const cardInner = document.getElementById('card-inner');
+      isFlipped = !isFlipped;
+      if (isFlipped) {
+        cardInner.classList.add('rotate-y-180');
+      } else {
+        cardInner.classList.remove('rotate-y-180');
+      }
+    }
+
+    function speakKanji(e) {
+      if (e) e.stopPropagation();
+      playBeep('click');
+      const item = activeDeck[currentDeckIndex];
+      speakJapanese(item.real || item.k);
+    }
+
+    function prevCard() {
+      playBeep('click');
+      if (currentDeckIndex > 0) {
+        currentDeckIndex--;
+      } else {
+        currentDeckIndex = activeDeck.length - 1;
+      }
+      updateCardDisplay();
+    }
+
+    function nextCard() {
+      playBeep('click');
+      if (currentDeckIndex < activeDeck.length - 1) {
+        currentDeckIndex++;
+      } else {
+        currentDeckIndex = 0;
+      }
+      updateCardDisplay();
+    }
+
+    function handleSRS(targetBox) {
+      if (activeDeck.length === 0) return;
+      const currentItem = activeDeck[currentDeckIndex];
+      currentItem.box = targetBox;
+
+      // Play feedback sound
+      if (targetBox === 3) playBeep('correct');
+      else if (targetBox === 1) playBeep('wrong');
+      else playBeep('click');
+
+      renderStats();
+      nextCard();
+    }
+
+    function renderStats() {
+      const box1 = KANJI_DATA.filter(k => k.box === 1).length;
+      const box2 = KANJI_DATA.filter(k => k.box === 2).length;
+      const box3 = KANJI_DATA.filter(k => k.box === 3).length;
+
+      document.getElementById('stat-box1').innerText = box1;
+      document.getElementById('stat-box2').innerText = box2;
+      document.getElementById('stat-box3').innerText = box3;
+    }
+
+    function startReflexGame() {
+      playBeep('click');
+      document.getElementById('reflex-start-screen').classList.add('hidden');
+      document.getElementById('reflex-game-screen').classList.remove('hidden');
+      document.getElementById('reflex-game-screen').classList.add('flex');
+
+      reflexScore = 0;
+      reflexStreak = 0;
+      document.getElementById('reflex-score').innerText = '0';
+      document.getElementById('reflex-streak').innerText = 'x0';
+
+      nextReflexRound();
+    }
+
+    function nextReflexRound() {
+      clearInterval(reflexTimerInterval);
+      reflexTimeLeft = 3.0;
+      updateTimerBar(100);
+
+      // Pick random kanji target
+      const randomIndex = Math.floor(Math.random() * KANJI_DATA.length);
+      currentReflexTarget = KANJI_DATA[randomIndex];
+
+      document.getElementById('reflex-word').innerText = currentReflexTarget.real;
+      document.getElementById('reflex-reading').innerText = currentReflexTarget.r_kana;
+      document.getElementById('reflex-badge').innerText = currentReflexTarget.cat;
+
+      // Generate 4 randomized options (1 correct + 3 distractors)
+      const options = [currentReflexTarget.r_m];
+      while (options.length < 4) {
+        const randDistractor = KANJI_DATA[Math.floor(Math.random() * KANJI_DATA.length)].r_m;
+        if (!options.includes(randDistractor)) {
+          options.push(randDistractor);
+        }
+      }
+      // Shuffle options
+      options.sort(() => Math.random() - 0.5);
+
+      const container = document.getElementById('reflex-options-container');
+      container.innerHTML = '';
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full p-4 rounded-2xl bg-japan-card hover:bg-slate-800 border-2 border-japan-border hover:border-amber-400 font-bold text-sm text-slate-200 hover:text-white transition active:scale-95 text-left flex items-center justify-between';
+        btn.innerHTML = `<span>${opt}</span> <i class="fa-solid fa-angle-right text-xs text-slate-500"></i>`;
+        btn.onclick = () => handleReflexAnswer(opt, btn);
+        container.appendChild(btn);
+      });
+
+      // Start 3 second countdown timer
+      const startTime = Date.now();
+      reflexTimerInterval = setInterval(() => {
+        const elapsed = (Date.now() - startTime) / 1000;
+        reflexTimeLeft = Math.max(0, 3.0 - elapsed);
+        const percentage = (reflexTimeLeft / 3.0) * 100;
+        updateTimerBar(percentage);
+
+        if (reflexTimeLeft <= 0) {
+          clearInterval(reflexTimerInterval);
+          handleReflexTimeout();
+        }
+      }, 50);
+    }
+
+    function updateTimerBar(pct) {
+      const bar = document.getElementById('reflex-timer-bar');
+      bar.style.width = `${pct}%`;
+      if (pct < 30) {
+        bar.className = 'h-full bg-red-500 w-full transition-all duration-100 ease-linear';
+      } else {
+        bar.className = 'h-full bg-gradient-to-r from-amber-400 to-crimson-500 w-full transition-all duration-100 ease-linear';
+      }
+    }
+
+    function handleReflexAnswer(selected, buttonEl) {
+      clearInterval(reflexTimerInterval);
+      const isCorrect = (selected === currentReflexTarget.r_m);
+
+      if (isCorrect) {
+        playBeep('correct');
+        buttonEl.classList.remove('bg-japan-card', 'border-japan-border');
+        buttonEl.classList.add('bg-emerald-600', 'border-emerald-400', 'text-white');
+        reflexScore += 10 + (reflexStreak * 2);
+        reflexStreak++;
+        currentReflexTarget.box = 3; // Auto promote in Leitner Box
+      } else {
+        playBeep('wrong');
+        buttonEl.classList.remove('bg-japan-card', 'border-japan-border');
+        buttonEl.classList.add('bg-rose-700', 'border-rose-400', 'text-white');
+        reflexStreak = 0;
+        currentReflexTarget.box = 1; // Demote
+      }
+
+      renderStats();
+      document.getElementById('reflex-score').innerText = reflexScore;
+      document.getElementById('reflex-streak').innerText = `x${reflexStreak}`;
+
+      setTimeout(() => {
+        nextReflexRound();
+      }, 450);
+    }
+
+    function handleReflexTimeout() {
+      playBeep('wrong');
+      reflexStreak = 0;
+      document.getElementById('reflex-streak').innerText = 'x0';
+      if (currentReflexTarget) currentReflexTarget.box = 1;
+      renderStats();
+
+      // Show temporary flash on screen
+      const wordEl = document.getElementById('reflex-word');
+      wordEl.classList.add('text-red-500');
+      setTimeout(() => {
+        wordEl.classList.remove('text-red-500');
+        nextReflexRound();
+      }, 500);
+    }
+
+    function setDbFilter(lvl) {
+      playBeep('click');
+      currentDbFilterLevel = lvl;
+      document.querySelectorAll('.db-filter-tag').forEach(tag => {
+        tag.classList.remove('active', 'bg-crimson-600', 'text-white');
+        tag.classList.add('bg-japan-dark', 'text-slate-300');
+      });
+      event.target.classList.add('active', 'bg-crimson-600', 'text-white');
+      event.target.classList.remove('bg-japan-dark', 'text-slate-300');
+      renderDatabase();
+    }
+
+    function renderDatabase() {
+      const search = (document.getElementById('db-search').value || '').toLowerCase().trim();
+      const grid = document.getElementById('db-kanji-grid');
+      grid.innerHTML = '';
+
+      const filtered = KANJI_DATA.filter(item => {
+        const matchLvl = (currentDbFilterLevel === 'ALL') || (item.lvl === currentDbFilterLevel);
+        const matchSearch = !search ||
+          item.k.includes(search) ||
+          item.m.toLowerCase().includes(search) ||
+          item.r.toLowerCase().includes(search) ||
+          item.real.toLowerCase().includes(search) ||
+          item.r_m.toLowerCase().includes(search);
+        return matchLvl && matchSearch;
+      });
+
+      document.getElementById('db-count').innerText = filtered.length;
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'bg-japan-card border border-japan-border hover:border-crimson-500 rounded-2xl p-3.5 flex flex-col justify-between cursor-pointer transition hover:-translate-y-1 shadow-md';
+        
+        // Color dot for Leitner Box
+        const dotColor = item.box === 3 ? 'bg-emerald-400' : (item.box === 2 ? 'bg-amber-400' : 'bg-red-400');
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-japan-dark text-slate-400 border border-japan-border">${item.lvl}</span>
+            <span class="w-2 h-2 rounded-full ${dotColor}"></span>
+          </div>
+          <div class="text-center my-1">
+            <div class="font-jp text-4xl font-black text-white hover:text-amber-300 transition">${item.k}</div>
+            <div class="text-[10px] text-slate-400 font-jp truncate mt-1">${item.r}</div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-japan-border/60 text-center">
+            <div class="text-xs font-bold text-amber-300 truncate">${item.m}</div>
+            <div class="text-[10px] text-teal-300 truncate font-jp mt-0.5">${item.real} (${item.r_m})</div>
+          </div>
+        `;
+
+        card.onclick = () => {
+          // Open this card in deck mode
+          const foundIdx = activeDeck.findIndex(d => d.k === item.k);
+          if (foundIdx !== -1) {
+            currentDeckIndex = foundIdx;
+          } else {
+            activeDeck = [item, ...activeDeck];
+            currentDeckIndex = 0;
+          }
+          switchTab('flashcard');
+          updateCardDisplay();
+        };
+
+        grid.appendChild(card);
+      });
+    }
+
+    // Strategy Modal Controls
+    function openStrategyModal() {
+      playBeep('click');
+      const modal = document.getElementById('strategy-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeStrategyModal() {
+      playBeep('click');
+      const modal = document.getElementById('strategy-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  </script>
+</body>
+</html>
