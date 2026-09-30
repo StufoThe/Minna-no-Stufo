@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>God Mode Japanese: Kyoshushiken Engine Bab 43–46 & Irodori</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@500;700;900&display=swap');
+    .font-jp { font-family: 'Noto Sans JP', sans-serif; }
+    ruby rt {
+      font-size: 0.65em;
+      color: #38bdf8;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .hide-furigana ruby rt {
+      display: none !important;
+    }
+    ::-webkit-scrollbar {
+      height: 4px;
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    .tap-highlight-transparent {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            darkBg: '#090d16',
+            cardDark: '#0f172a',
+            neonCyan: '#06b6d4',
+            neonAmber: '#f59e0b',
+            neonRose: '#f43f5e',
+            neonEmerald: '#10b981',
+            neonPurple: '#a855f7'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-darkBg text-slate-100 min-h-screen font-sans selection:bg-rose-500 selection:text-white p-2 sm:p-4 pt-8 sm:pt-4 tap-highlight-transparent">
+
+  <!-- TOP APP BAR -->
+  <header class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 mb-3">
+    <div class="flex items-center justify-between w-full md:w-auto">
+      <div class="flex items-center gap-2">
+        <h1 class="text-xs sm:text-sm font-black tracking-tight text-white flex items-center gap-1.5">
+          KYOSHUSHIKEN ENGINE 8.0
+          <span class="px-2 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[10px] font-mono">
+            BAB 43–46 + IRODORI (FULL MASTER)
+          </span>
+        </h1>
+      </div>
+      <button onclick="toggleAudio()" id="audioBtn" class="md:hidden px-2 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-semibold text-slate-300 flex items-center gap-1">
+        🔊 <span id="audioStatusText">Suara: ON</span>
+      </button>
+    </div>
+
+    <!-- MAIN NAVIGATION TABS -->
+    <nav class="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs overflow-x-auto max-w-full w-full md:w-auto">
+      <button onclick="switchTab('shiken-bunpou')" id="tabBtn-shiken-bunpou" class="px-3 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition whitespace-nowrap shadow-md shadow-cyan-600/20">
+        📝 Bunpou (100 Soal)
+      </button>
+      <button onclick="switchTab('shiken-kanji')" id="tabBtn-shiken-kanji" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+        🎯 Kanji Irodori (40 Soal)
+      </button>
+      <button onclick="switchTab('teleport')" id="tabBtn-teleport" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+        🧠 Tanam Pola & Kartu Polos
+      </button>
+      <button onclick="switchTab('shiken-kotoba')" id="tabBtn-shiken-kotoba" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+        🎴 Drill Kotoba (110 Kata)
+      </button>
+      <button onclick="switchTab('traps')" id="tabBtn-traps" class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap">
+        📡 Radar Clue & Jebakan
+      </button>
+    </nav>
+
+    <button onclick="toggleAudio()" id="audioBtnDesktop" class="hidden md:flex px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 items-center gap-1">
+      🔊 <span id="audioStatusTextDesktop">Suara: ON</span>
+    </button>
+  </header>
+
+  <main class="max-w-5xl mx-auto space-y-4">
+
+    <!-- SECTION 1: SHIKEN BUNPOU (100 SOAL DIBAGI 5 BANK DENGAN FURIGANA TOGGLE) -->
+    <section id="shiken-bunpou" class="space-y-4 block">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
+        <div class="flex flex-wrap items-center gap-2">
+          <label class="text-slate-400 font-bold whitespace-nowrap">Bank Soal:</label>
+          <select id="bunpouBankSelect" onchange="changeBunpouBank()" class="bg-slate-950 text-cyan-300 font-bold border border-slate-700 rounded-lg px-2.5 py-1 text-xs outline-none cursor-pointer">
+            <option value="b1">Bank 1: Bab 43 [～そう, ～てくる, ～てくれませんか] (20 Soal)</option>
+            <option value="b2">Bank 2: Bab 44 [～すぎる, ～やすい/にくい, ～く/にします] (20 Soal)</option>
+            <option value="b3">Bank 3: Bab 45 [～場合は, ～のに, のに vs が vs ても] (20 Soal)</option>
+            <option value="b4">Bank 4: Bab 46 [～ところ, ～ばかり, ～はず, に/を] (20 Soal)</option>
+            <option value="b5">Bank 5: Kyoshushiken Super-Trap Synthesis 43–46 (20 Soal)</option>
+          </select>
+          <button onclick="toggleFurigana()" id="furiganaToggleBtn" class="px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 border border-cyan-800/60 text-cyan-400 font-bold text-xs flex items-center gap-1">
+            🔤 Furigana: <span id="furiganaStatusText">ON</span>
+          </button>
+        </div>
+        <div class="flex items-center justify-between sm:justify-end gap-2">
+          <span id="bunpouTracker" class="font-mono font-bold text-cyan-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            SOAL 1 / 20
+          </span>
+          <span id="bunpouScoreDisplay" class="font-mono text-emerald-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            0 Benar
+          </span>
+        </div>
+      </div>
+
+      <div id="bunpouQuestionCard" class="bg-cardDark p-4 sm:p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4 min-h-[240px]">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 2: SHIKEN KANJI IRODORI (40 SOAL FORMAT SHIKEN ASLI: POLA KEMBAR DAN EJAAN) -->
+    <section id="shiken-kanji" class="space-y-4 hidden">
+      <div class="flex items-center justify-between text-xs bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+        <div class="flex items-center gap-2">
+          <span id="kanjiTracker" class="font-mono font-bold text-rose-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            SOAL 1 / 40
+          </span>
+          <span class="text-[10px] text-slate-400 hidden sm:inline">Pola Kertas Shiken Asli (Kanji ↔ Hiragana Pengecoh Kembar)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="kanjiScoreDisplay" class="font-mono text-emerald-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            0 Benar
+          </span>
+        </div>
+      </div>
+
+      <div id="kanjiQuestionCard" class="bg-cardDark p-4 sm:p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4 min-h-[220px]">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 3: TANAM POLA & KARTU POLOS INGAT (110 KOTOBA LENGKAP + IRODORI) -->
+    <section id="teleport" class="space-y-4 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
+        <div class="flex items-center gap-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800">
+          <button onclick="switchTanamStage('tanam')" id="stageBtn-tanam" class="px-2.5 py-1 rounded font-bold bg-cyan-600 text-white transition text-xs">
+            🧬 Tahap 1: Tanam Pola & Analogi
+          </button>
+          <button onclick="switchTanamStage('strict')" id="stageBtn-strict" class="px-2.5 py-1 rounded font-bold text-slate-400 hover:text-slate-200 transition text-xs">
+            🥋 Tahap 2: Kartu Polos Ingat
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <select id="teleportCategorySelect" onchange="changePolaCategory()" class="bg-slate-950 text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1 text-xs outline-none">
+            <option value="all">Semua Materi (Bab 43, 44, 45, 46 & Irodori)</option>
+            <option value="ch43">Bab 43 Saja (30 Kata)</option>
+            <option value="ch44">Bab 44 Saja (32 Kata)</option>
+            <option value="ch45">Bab 45 Saja (23 Kata)</option>
+            <option value="ch46">Bab 46 Saja (25 Kata)</option>
+            <option value="irodori">Kanji Irodori Saja (39 Kata)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- TAHAP 1: TANAM POLA CARD -->
+      <div id="stageCard-tanam" class="bg-cardDark p-4 sm:p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4">
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2">
+            <span id="tanamSourceBadge" class="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-300 bg-purple-950/80 px-2 py-0.5 rounded-md border border-purple-800">
+              BAB 43
+            </span>
+            <span id="tanamCollocationBadge" class="text-xs text-amber-300 font-bold bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40"></span>
+          </div>
+          <span id="tanamTrackerBadge" class="font-mono text-slate-400 text-xs">1 / 149</span>
+        </div>
+
+        <div class="text-center py-4 sm:py-6 bg-slate-950/60 rounded-xl border border-slate-800/80 relative">
+          <div id="tanamKanjiDisplay" class="font-jp text-4xl sm:text-5xl font-black tracking-tight text-white mb-2"></div>
+          <div id="tanamKanaDisplay" class="font-jp text-base sm:text-lg font-bold text-cyan-400 mb-1"></div>
+          <div id="tanamMeaningDisplay" class="text-sm sm:text-base font-semibold text-slate-200"></div>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+            <span class="text-[10px] font-bold text-rose-400 uppercase tracking-wider block">⚡ Analogi & Trik Hapal 3 Detik:</span>
+            <div id="tanamRadicalsContainer" class="flex flex-wrap gap-1.5 pt-0.5"></div>
+            <p id="tanamStoryDisplay" class="text-slate-300 text-xs leading-relaxed pt-1 font-sans"></p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-2 pt-2">
+          <button onclick="prevTanamCard()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition flex items-center gap-1">
+            ← Mundur
+          </button>
+          <button onclick="pronounceTanamCurrent()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 text-xs font-bold transition flex items-center gap-1">
+            🔊 Ucapkan
+          </button>
+          <button onclick="nextTanamCard()" class="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition flex items-center gap-1 shadow-md shadow-cyan-600/30">
+            Lanjut →
+          </button>
+        </div>
+      </div>
+
+      <!-- TAHAP 2: KARTU POLOS INGAT (STRICT REPEAT ON LUPA) -->
+      <div id="stageCard-strict" class="bg-cardDark p-4 sm:p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4 hidden">
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] font-mono font-bold text-rose-300 bg-rose-950/80 px-2 py-0.5 rounded border border-rose-800">
+              KARTU POLOS MURNI (NO SKIP)
+            </span>
+          </div>
+          <div class="flex items-center gap-3 font-mono text-xs">
+            <span class="text-emerald-400">⚡ Lulus: <span id="strictMasteredDisp">0</span></span>
+            <span class="text-rose-400">💀 Antrean: <span id="strictQueueDisp">0</span></span>
+          </div>
+        </div>
+
+        <div onclick="revealStrictAnswer()" class="text-center py-8 sm:py-12 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-slate-700 transition relative">
+          <div class="text-[10px] text-slate-500 absolute top-2 right-2">Klik kartu / Tekan Spasi untuk buka jawaban</div>
+          <div id="strictKanjiDisplay" class="font-jp text-5xl sm:text-6xl font-black text-white tracking-wide"></div>
+
+          <div id="strictSecretBox" class="mt-4 pt-4 border-t border-slate-800/80 hidden space-y-1">
+            <div id="strictKanaDisplay" class="font-jp text-xl font-bold text-cyan-400"></div>
+            <div id="strictMeaningDisplay" class="text-sm font-semibold text-slate-200"></div>
+            <div id="strictPartDisplay" class="text-xs text-amber-300"></div>
+          </div>
+        </div>
+
+        <div id="strictControlBox" class="grid grid-cols-3 gap-2 pt-2">
+          <button onclick="handleStrictDecision('lupa')" class="py-2.5 px-2 rounded-xl bg-rose-950/60 hover:bg-rose-900/80 border border-rose-800/60 text-rose-300 text-xs font-bold transition flex flex-col items-center">
+            <span>💀 Lupa (1)</span>
+            <span class="text-[9px] text-rose-400 font-normal mt-0.5">Ulang langsung!</span>
+          </button>
+          <button onclick="handleStrictDecision('ragu')" class="py-2.5 px-2 rounded-xl bg-amber-950/60 hover:bg-amber-900/80 border border-amber-800/60 text-amber-300 text-xs font-bold transition flex flex-col items-center">
+            <span>🤔 Ragu (2)</span>
+            <span class="text-[9px] text-amber-400 font-normal mt-0.5">Ulas di belakang</span>
+          </button>
+          <button onclick="handleStrictDecision('ingat')" class="py-2.5 px-2 rounded-xl bg-emerald-950/60 hover:bg-emerald-900/80 border border-emerald-800/60 text-emerald-300 text-xs font-bold transition flex flex-col items-center">
+            <span>⚡ Ingat (3)</span>
+            <span class="text-[9px] text-emerald-400 font-normal mt-0.5">Lulus permanen</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: DRILL KOTOBA (BAB 43, 44, 45, 46 - 110 KATA LENGKAP NON-KAIWA) -->
+    <section id="shiken-kotoba" class="space-y-4 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs">
+        <div class="flex items-center gap-2">
+          <label class="text-slate-400 font-bold whitespace-nowrap">Filter Bab:</label>
+          <select id="kotobaFilterSelect" onchange="filterKotobaCategory()" class="bg-slate-950 text-cyan-300 font-bold border border-slate-700 rounded-lg px-2.5 py-1 text-xs outline-none cursor-pointer">
+            <option value="all">Semua Bab (Bab 43–46 Lengkap)</option>
+            <option value="ch43">Bab 43 Saja</option>
+            <option value="ch44">Bab 44 Saja</option>
+            <option value="ch45">Bab 45 Saja</option>
+            <option value="ch46">Bab 46 Saja</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-between sm:justify-end gap-2">
+          <span id="kotobaTracker" class="font-mono font-bold text-cyan-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            SOAL 1 / 40
+          </span>
+          <span id="kotobaScoreDisplay" class="font-mono text-emerald-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            0 Benar
+          </span>
+        </div>
+      </div>
+
+      <div id="kotobaQuestionCard" class="bg-cardDark p-4 sm:p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4 min-h-[220px]">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 5: RADAR CLUE DETEKTOR & RANGKUMAN JEBAKAN 43–46 -->
+    <section id="traps" class="space-y-4 hidden">
+      <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+        <div>
+          <h2 class="text-sm font-black text-rose-400 flex items-center gap-1.5">
+            📡 RADAR CLUE DETEKTOR 3 DETIK (KYOSHUSHIKEN BAB 43–46)
+          </h2>
+          <p class="text-[11px] text-slate-400">Peta kata sinyal (clue) otomatis untuk mengunci jawaban benar tanpa ragu!</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-cyan-400 text-xs">CLUE 1: ～そうです (Dugaan Visual / Akan Segera Terjadi)</span>
+            <span class="text-[10px] bg-cyan-950/80 text-cyan-300 px-1.5 py-0.5 rounded">BAB 43</span>
+          </div>
+          <p class="text-slate-300">
+            🔍 <strong>Tanda / Clue Pemicu:</strong> Bertemu kata <code class="text-amber-300 font-bold">今にも</code> atau <code class="text-amber-300 font-bold">もうすぐ</code> $\rightarrow$ <strong>Wajib KK bentuk ます buang ます + そうです</strong>.<br/>
+            ⚠️ <strong>Jebakan Paling Fatal:</strong> Kata <code class="text-rose-400 font-bold">いい</code> TIDAK BISA <code class="text-slate-500">×いいそう</code>! Wajib berubah jadi <code class="text-emerald-400 font-bold">〇よさそうです</code>! Kata <code class="text-rose-400 font-bold">ない</code> berubah jadi <code class="text-emerald-400 font-bold">〇なさそうです</code>!
+          </p>
+        </div>
+
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-cyan-400 text-xs">CLUE 2: ～て来ます (Pergi Melakukan Sesuatu Lalu Balik)</span>
+            <span class="text-[10px] bg-cyan-950/80 text-cyan-300 px-1.5 py-0.5 rounded">BAB 43</span>
+          </div>
+          <p class="text-slate-300">
+            🔍 <strong>Tanda / Clue Pemicu:</strong><br/>
+            🛒 Lokasi transaksi beli/ambil $\rightarrow$ Partikel <code class="text-amber-300 font-bold">で</code> (スーパー<strong>で</strong>牛乳を買って来ます).<br/>
+            🏠 Titik awal barang keluar $\rightarrow$ Partikel <code class="text-rose-400 font-bold">から</code> (台所<strong>から</strong>コップを取って来ます).<br/>
+            🚶 Tempat tujuan saja $\rightarrow$ Partikel <code class="text-cyan-300 font-bold">へ / に</code> (郵便局<strong>へ</strong>行って来ます).
+          </p>
+        </div>
+
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400 text-xs">CLUE 3: ～すぎます (Kelewatan / Berlebihan)</span>
+            <span class="text-[10px] bg-amber-950/80 text-amber-300 px-1.5 py-0.5 rounded">BAB 44</span>
+          </div>
+          <p class="text-slate-300">
+            🔍 <strong>Tanda / Clue Pemicu:</strong> Menggambarkan hal negatif/kondisi tidak menyenangkan.<br/>
+            Sambungan: KK buang ます (<code class="text-cyan-300">飲みすぎた</code>), KS-い buang い (<code class="text-amber-300">大きすぎる</code>), KS-な buang な (<code class="text-rose-300">簡単すぎて</code>).<br/>
+            ⚠️ <strong>Konjugasi:</strong> Berubah menjadi <strong>Kata Kerja Golongan II</strong> (<code class="text-emerald-400">～すぎない, ～すぎた, ～すぎて</code>).
+          </p>
+        </div>
+
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400 text-xs">CLUE 4: ～やすい vs ～にくい (Mudah vs Sulit)</span>
+            <span class="text-[10px] bg-amber-950/80 text-amber-300 px-1.5 py-0.5 rounded">BAB 44</span>
+          </div>
+          <p class="text-slate-300">
+            🔍 <strong>Tanda / Clue Pemicu:</strong> KK bentuk ます buang ます + やすい / にくい.<br/>
+            ⚠️ <strong>Jebakan Sambungan:</strong> Keduanya berkonjugasi <strong>100% seperti KATA SIFAT い</strong>!<br/>
+            Kenyambung kalimat: <code class="text-emerald-300">割れにく<strong>くて</strong></code> (bukan 割れにくで).<br/>
+            Perubahan kondisi: <code class="text-cyan-300">飲みやす<strong>くなります</strong></code>.
+          </p>
+        </div>
+
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400 text-xs">CLUE 5: ～くします / ～にします vs ～になります</span>
+            <span class="text-[10px] bg-amber-950/80 text-amber-300 px-1.5 py-0.5 rounded">BAB 44</span>
+          </div>
+          <p class="text-slate-300">
+            🔍 <strong>Tanda / Clue Pemicu:</strong><br/>
+            👤 Ada orang yang <strong>sengaja mengubah objek</strong> $\rightarrow$ Partikel <code class="text-rose-400 font-bold">を</code> + <code class="text-cyan-300">～く/にします</code> (音<strong>を</strong>大きくします, 部屋<strong>を</strong>きれいにします).<br/>
+            🍃 Berubah sendiri secara alami $\rightarrow$ Partikel <code class="text-emerald-400 font-bold">が</code> + <code class="text-emerald-300">～く/になります</code>.<br/>
+            📌 Keputusan/Pilihan $\rightarrow$ <code class="text-amber-300 font-bold">KB に します</code> (部屋はシングルに します).
+          </p>
+        </div>
+
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-purple-400 text-xs">CLUE 6: ～場合は (Pengandaian Syarat/Situasi)</span>
+            <span class="text-[10px] bg-purple-950/80 text-purple-300 px-1.5 py-0.5 rounded">BAB 45</span>
+          </div>
+          <p class="text-slate-300">
+            🔍 <strong>Tanda / Clue Pemicu:</strong> Karena `場合` adalah Kata Benda formal:<br/>
+            KS-な $\rightarrow$ Wajib bawa <code class="text-amber-300 font-bold">な</code> (<code class="text-amber-400">必要な場合は</code>, bukan 必要の場合は).<br/>
+            Kata Benda $\rightarrow$ Wajib bawa partikel <code class="text-rose-400 font-bold">の</code> (<code class="text-rose-300">火事の場合は</code>, bukan 火事な場合は).
+          </p>
+        </div>
+
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-purple-400 text-xs">CLUE 7: ～のに (Padahal: Emosi Kecewa & Syarat Mutlak)</span>
+            <span class="text-[10px] bg-purple-950/80 text-purple-300 px-1.5 py-0.5 rounded">BAB 45</span>
+          </div>
+          <p class="text-slate-300">
+            🔍 <strong>Tanda / Clue Pemicu:</strong><br/>
+            1. KB & KS-な bertemu `のに` <strong>wajib memakai な</strong> (日曜日<strong class="text-rose-400">なのに</strong>, bukan 日曜日のに!).<br/>
+            2. `のに` <strong>HARUS fakta nyata yang sudah terjadi</strong>! Jika masa depan praduga, wajib pakai <code class="text-emerald-400 font-bold">～ても</code> (<code class="text-slate-500">×明日雨が降るのに</code> $\rightarrow$ <code class="text-emerald-300">〇明日雨が降っても</code>).
+          </p>
+        </div>
+
+        <div class="bg-cardDark p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-rose-400 text-xs">CLUE 8: 3 Fase ～ところ vs ～ばかり vs ～はず</span>
+            <span class="text-[10px] bg-rose-950/80 text-rose-300 px-1.5 py-0.5 rounded">BAB 46</span>
+          </div>
+          <p class="text-slate-300">
+            ⏰ Ada kata <code class="text-cyan-300 font-bold">これから / 今から</code> $\rightarrow$ <strong>KK Kamus + ところです</strong>.<br/>
+            🔄 Ada kata <code class="text-amber-300 font-bold">今</code> $\rightarrow$ <strong>KK ている + ところです</strong>.<br/>
+            🏁 Ada kata <code class="text-rose-400 font-bold">たった今</code> $\rightarrow$ <strong>KK た + ところです</strong> (detik ini baru selesai).<br/>
+            ⏳ Ada kata <code class="text-emerald-400 font-bold">先週 / 先月</code> $\rightarrow$ <strong>KK た + ばかりです</strong> (subjektif pembicara).<br/>
+            📜 Ada <strong>BUKTI NYATA</strong> (ada telepon/tiket) $\rightarrow$ <strong>～はずです</strong> (Pasti harusnya begitu).
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let isAudioEnabled = true;
+    let isFuriganaEnabled = true;
+
+    function toggleAudio() {
+      isAudioEnabled = !isAudioEnabled;
+      const t1 = document.getElementById('audioStatusText');
+      const t2 = document.getElementById('audioStatusTextDesktop');
+      const str = isAudioEnabled ? "Suara: ON" : "Suara: OFF";
+      if (t1) t1.textContent = str;
+      if (t2) t2.textContent = str;
+    }
+
+    function toggleFurigana() {
+      isFuriganaEnabled = !isFuriganaEnabled;
+      const card = document.getElementById('bunpouQuestionCard');
+      const st = document.getElementById('furiganaStatusText');
+      if (st) st.textContent = isFuriganaEnabled ? 'ON' : 'OFF';
+      if (card) {
+        if (isFuriganaEnabled) {
+          card.classList.remove('hide-furigana');
+        } else {
+          card.classList.add('hide-furigana');
+        }
+      }
+    }
+
+    function speakText(text) {
+      if (!isAudioEnabled || !('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const clean = text.replace(/<rt>.*?<\/rt>/g, '').replace(/<[^>]*>/g, '').trim();
+        const ut = new SpeechSynthesisUtterance(clean);
+        ut.lang = 'ja-JP';
+        ut.rate = 0.95;
+        window.speechSynthesis.speak(ut);
+      } catch (e) {
+        console.error("Audio error:", e);
+      }
+    }
+
+    // 40 SOAL KANJI IRODORI MURNI FORMAT SHIKEN (SELEKSI FOTO 14, 18, 32, 33) - KUNCI JAWABAN TERACAK
+    const kanjiIrodoriBank = [
+      { num: 1, q: "新しい<u>ふく</u>を買いに行きました。", opts: ["a. 股", "b. 服", "c. 報", "d. 板"], ans: 1, explain: "Baju/pakaian = <strong>服</strong> (ふく). Radikal 月 (bulan) di sebelah kiri." },
+      { num: 2, q: "買い物用の<u>ふくろ</u>を持ってきましたか。", opts: ["a. 袋", "b. 貸", "c. 装", "d. 俵"], ans: 0, explain: "Kantong/tas = <strong>袋</strong> (ふくろ). Ada radikal 衣 (baju) di bawah." },
+      { num: 3, q: "<u>自分</u>のことは自分で決めます。", opts: ["a. じふん", "b. しぶん", "c. じぶん", "d. じぶんん"], ans: 2, explain: "自分 dibaca <strong>じぶん</strong> (diri sendiri)." },
+      { num: 4, q: "コンビニの<u>店長</u>に挨拶しました。", opts: ["a. てんじょう", "b. みせちょう", "c. てんしゅ", "d. てんちょう"], ans: 3, explain: "店長 dibaca <strong>てんちょう</strong> (manajer toko)." },
+      { num: 5, q: "会議にはメンバー<u>全員</u>が出席しました。", opts: ["a. ぜんいん", "b. ぜんにん", "c. まるいん", "d. すべていん"], ans: 0, explain: "全員 dibaca <strong>ぜんいん</strong> (semua orang, seluruh anggota)." },
+      { num: 6, q: "早起きは体にいい<u>習慣</u>です。", opts: ["a. しゅうがん", "b. しゅうかん", "c. ならわし", "d. じゅうかん"], ans: 1, explain: "習慣 dibaca <strong>しゅうかん</strong> (kebiasaan)." },
+      { num: 7, q: "この電車は各駅に止まる<u>ふつう</u>電車です。", opts: ["a. 普道", "b. 普追", "c. 普通", "d. 昔通"], ans: 2, explain: "Biasa / normal = <strong>普通</strong> (ふつう)." },
+      { num: 8, q: "部屋が<u>暗い</u>ので電気をつけてください。", opts: ["a. あかるい", "b. くろい", "c. ぬるい", "d. くらい"], ans: 3, explain: "暗い dibaca <strong>くらい</strong> (gelap)." },
+      { num: 9, q: "約束を破って先生に<u>怒ら</u>れました。", opts: ["a. おこ", "b. いか", "c. なか", "d. わら"], ans: 0, explain: "怒る dibaca <strong>おこる</strong> (marah)." },
+      { num: 10, q: "病気で一週間<u>入院する</u>ことになりました。", opts: ["a. にゅうえんする", "b. にゅういんする", "c. はい院する", "d. にゅうかんする"], ans: 1, explain: "入院する dibaca <strong>にゅういんする</strong> (masuk rumah sakit, dirawat)." },
+      { num: 11, q: "好きな<u>いろ</u>は何ですか。", opts: ["a. 邑", "b. 巴", "c. 色", "d. 絶"], ans: 2, explain: "Warna = <strong>色</strong> (いろ)." },
+      { num: 12, q: "信号が<u>あか</u>に変わりました。止まってください。", opts: ["a. 亦", "b. 朱", "c. 丹", "d. 赤"], ans: 3, explain: "Merah = <strong>赤</strong> (あか)." },
+      { num: 13, q: "空がとても<u>あお</u>くてきれいです。", opts: ["a. 青", "b. 清", "c. 昔", "d. 静"], ans: 0, explain: "Biru = <strong>青</strong> (あお)." },
+      { num: 14, q: "面接のために<u>くろ</u>い靴を履いていきました。", opts: ["a. 里", "b. 黒", "c. 墨", "d. 黙"], ans: 1, explain: "Hitam = <strong>黒</strong> (くろ)." },
+      { num: 15, q: "雪のように<u>しろ</u>いシャツを着ています。", opts: ["a. 自", "b. 百", "c. 白", "d. 臼"], ans: 2, explain: "Putih = <strong>白</strong> (しろ)." },
+      { num: 16, q: "このトイレは<u>女性</u>専用です。", opts: ["a. だんせい", "b. おんなせい", "c. おんなひと", "d. じょせい"], ans: 3, explain: "女性 dibaca <strong>じょせい</strong> (wanita, perempuan)." },
+      { num: 17, q: "<u>男性</u>用のスーツ売り場は３階です。", opts: ["a. だんせい", "b. おとこせい", "c. じょせい", "d. なんせい"], ans: 0, explain: "男性 dibaca <strong>だんせい</strong> (pria, laki-laki)." },
+      { num: 18, q: "晴れていたのに<u>急に</u>雨が降ってきました。", opts: ["a. とつぜん", "b. きゅうに", "c. いそぎに", "d. すぐに"], ans: 1, explain: "急に dibaca <strong>きゅうに</strong> (mendadak, tiba-tiba)." },
+      { num: 19, q: "この店は夜10時まで<u>営業する</u>そうです。", opts: ["a. けいえいする", "b. じゅぎょうする", "c. えいぎょうする", "d. かいぎょうする"], ans: 2, explain: "営業する dibaca <strong>えいぎょうする</strong> (buka, beroperasi)." },
+      { num: 20, q: "外国人の観光客を市内へ<u>案内する</u>ボランティアです。", opts: ["a. かないする", "b. あんていする", "c. よていする", "d. あんないする"], ans: 3, explain: "案内する dibaca <strong>あんないする</strong> (memandu, mengantar)." },
+      { num: 21, q: "<u>来年</u>日本へ留学する予定です。", opts: ["a. らいねん", "b. らいとし", "c. くねん", "d. さくねん"], ans: 0, explain: "来年 dibaca <strong>らいねん</strong> (tahun depan)." },
+      { num: 22, q: "試験の<u>会場</u>はどこですか。", opts: ["a. ばしょ", "b. かいじょう", "c. こうじょう", "d. えき"], ans: 1, explain: "会場 dibaca <strong>かいじょう</strong> (tempat acara / aula)." },
+      { num: 23, q: "日本でたくさんの文化を<u>たいけん</u>したいです。", opts: ["a. 危険", "b. 検査", "c. 体験", "d. 経験"], ans: 2, explain: "Pengalaman langsung = <strong>体験</strong> (たいけん). Beda dengan 経験 (pengalaman umum)." },
+      { num: 24, q: "ここでタバコを吸うことは<u>きんし</u>されています。", opts: ["a. 停止", "b. 中止", "c. 休止", "d. 禁止"], ans: 3, explain: "Dilarang = <strong>禁止</strong> (きんし)." },
+      { num: 25, q: "ボランティアに<u>もうしこんで</u>みました。", opts: ["a. 申し込んで", "b. 押し込んで", "c. 引っ込んで", "d. 呑み込んで"], ans: 0, explain: "Mendaftar = <strong>申し込む</strong> (もうしこむ)." },
+      { num: 26, q: "<u>ことし</u>の夏休みは北海道へ行きます。", opts: ["a. 今牛", "b. 今年", "c. 今午", "d. 令年"], ans: 1, explain: "Tahun ini = <strong>今年</strong> (ことし)." },
+      { num: 27, q: "<u>昨年</u>の冬はとても寒かったです。", opts: ["a. 昨牛", "b. 作年", "c. 昨年", "d. 昨手"], ans: 2, explain: "Tahun lalu = <strong>昨年</strong> (さくねん)." },
+      { num: 28, q: "私の家族は<u>毎年</u>旅行に行きます。", opts: ["a. まいにち", "b. まいげつ", "c. まいしゅう", "d. まいとし"], ans: 3, explain: "毎年 dibaca <strong>まいとし</strong> / まいねん (setiap tahun)." },
+      { num: 29, q: "日本の伝統的な<u>ぶんか</u>を学びたいです。", opts: ["a. 文化", "b. 文科", "c. 蚊化", "d. 文字"], ans: 0, explain: "Kebudayaan = <strong>文化</strong> (ぶんか)." },
+      { num: 30, q: "来週の日曜日に町で<u>まつり</u>があります。", opts: ["a. 察り", "b. 祭り", "c. 祭", "d. 蔡り"], ans: 1, explain: "Festival = <strong>祭り</strong> (まつり)." },
+      { num: 31, q: "日本では<u>正月</u>におせち料理を食べます。", opts: ["a. せいげつ", "b. ただつき", "c. しょうがつ", "d. しょうげつ"], ans: 2, explain: "正月 dibaca <strong>しょうがつ</strong> (tahun baru)." },
+      { num: 32, q: "明日は大学の入学<u>しき</u>に出席します。", opts: ["a. 武", "b. 弐", "c. 戒", "d. 式"], ans: 3, explain: "Upacara = <strong>式</strong> (しき)." },
+      { num: 33, q: "この映画は<u>おとな</u>向けの映画です。", opts: ["a. 大人", "b. 犬人", "c. 太人", "d. 夫人"], ans: 0, explain: "Dewasa = <strong>大人</strong> (おとな)." },
+      { num: 34, q: "日本人は主食として<u>こめ</u>を食べます。", opts: ["a. 木", "b. 米", "c. 来", "d. 未"], ans: 1, explain: "Beras = <strong>米</strong> (こめ)." },
+      { num: 35, q: "今日は妻の<u>特別</u>な誕生日です。", opts: ["a. どくべつ", "b. とくべっ", "c. 特別 (とくべつ)", "d. とくへつ"], ans: 2, explain: "Khusus = <strong>特別</strong> (とくべつ)." },
+      { num: 36, q: "メモをするために<u>かみ</u>とペンをください。", opts: ["a. 細", "b. 組", "c. 終", "d. 紙"], ans: 3, explain: "Kertas = <strong>紙</strong> (かみ)." },
+      { num: 37, q: "コンサートは午後６時に<u>はじまり</u>ます。", opts: ["a. 始", "b. 治", "c. 春", "d. 泊"], ans: 0, explain: "Mulai = <strong>始まる</strong> (はじまる)." },
+      { num: 38, q: "<u>世界</u>平和のためにできることを考えます。", opts: ["a. せっかい", "b. 世界 (せかい)", "c. よかい", "d. せつかい"], ans: 1, explain: "世界 dibaca <strong>せかい</strong> (dunia)." },
+      { num: 39, q: "大学の<u>こくさいこうりゅう</u>イベントに参加しました。", opts: ["a. 国内交流", "b. 国際校流", "c. 国際交流", "d. 国際郊流"], ans: 2, explain: "Pertukaran internasional = <strong>国際交流</strong> (こくさいこうりゅう)." },
+      { num: 40, q: "この商品は<u>きんし</u>薬物に指定されています。", opts: ["a. ぎんし", "b. ちゅうし", "c. きんじ", "d. 禁止 (きんし)"], ans: 3, explain: "禁止 dibaca <strong>きんし</strong> (dilarang)." }
+    ];
+
+    let curKanjiIdx = 0;
+    let kanjiScore = 0;
+    let kanjiAnswered = {};
+
+    // 100 SOAL BUNPOU KYOSHUSHIKEN (5 BANK @ 20 SOAL) DENGAN KUNCI JAWABAN TERACAK
+    const bunpouBanks = {
+      b1: [
+        { num: 1, q: "今にも 雨が（　）そうです。", opts: ["a. 降る", "b. 降り", "c. 降った", "d. 降って"], ans: 1, explain: "🔍 <strong>CLUE:</strong> <code class='text-amber-300'>今にも</code> $\\rightarrow$ KK buang ます + <strong>そうです</strong> (降りそうです)." },
+        { num: 2, q: "この 料理は とても（　）そうです。", opts: ["a. 美味しい", "b. 美味しく", "c. 美味し", "d. 美味しかった"], ans: 2, explain: "🔍 <strong>CLUE:</strong> KS-い buang い + そうです $\\rightarrow$ <strong>美味しそうです</strong>." },
+        { num: 3, q: "彼女は 頭が（　）そうです。", opts: ["a. いい", "b. よく", "c. いいだ", "d. よさ"], ans: 3, explain: "⚠️ <strong>JEBAKAN FATAL:</strong> Kata <code class='text-rose-400'>いい</code> WAJIB menjadi <code class='text-emerald-400'>よさそうです</code>." },
+        { num: 4, q: "ちょっと スーパー（　）牛乳を 買って 来ます。", opts: ["a. で", "b. から", "c. に", "d. を"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Tempat melakukan transaksi beli $\\rightarrow$ Partikel <strong>で</strong>." },
+        { num: 5, q: "台所（　）コップを 取って 来て ください。", opts: ["a. で", "b. から", "c. に", "d. へ"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Titik asal barang dikeluarkan $\\rightarrow$ Partikel <strong>から</strong>." },
+        { num: 6, q: "郵便局（　）行って 来ます。", opts: ["a. で", "b. から", "c. へ", "d. を"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Arah tempat tujuan $\\rightarrow$ Partikel <strong>へ / に</strong>." },
+        { num: 7, q: "すみません、日本語を（　）くれませんか。", opts: ["a. 教える", "b. 教えた", "c. 教えていて", "d. 教えて"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Permintaan santun $\\rightarrow$ KK bentuk て + <strong>くれませんか</strong>." },
+        { num: 8, q: "もうすぐ <ruby>桜<rt>さくら</rt></ruby>が（　）そうです。", opts: ["a. 咲き", "b. 咲く", "c. 咲いた", "d. 咲いて"], ans: 0, explain: "🔍 <strong>CLUE:</strong> <code class='text-amber-300'>もうすぐ</code> $\\rightarrow$ KK buang ます + そうです (咲きそうです)." },
+        { num: 9, q: "この 机は（　）そうです。", opts: ["a. 丈夫な", "b. 丈夫", "c. 丈夫だ", "d. 丈夫に"], ans: 1, explain: "🔍 <strong>CLUE:</strong> KS-な buang な + そうです $\\rightarrow$ <strong>丈夫そうです</strong>." },
+        { num: 10, q: "ポケットから 財布が（　）そうです。", opts: ["a. 落ちる", "b. 落ちた", "c. 落ち", "d. 落ちて"], ans: 2, explain: "🔍 <strong>CLUE:</strong> KK buang ます + そうです $\\rightarrow$ <strong>落ちそうです</strong>." },
+        { num: 11, q: "ちょっと たばこを（　）来ます。", opts: ["a. 買う", "b. 買った", "c. 買いたい", "d. 買って"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Pergi beli lalu kembali $\\rightarrow$ 買って<strong>来ます</strong>." },
+        { num: 12, q: "この ボタンが（　）そうです。", opts: ["a. とれ", "b. とれる", "c. とれた", "d. とれて"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Kancing mau lepas $\\rightarrow$ <strong>とれそうです</strong>." },
+        { num: 13, q: "荷物を 持つ のを（　）くれませんか。", opts: ["a. 手伝う", "b. 手伝って", "c. 手伝った", "d. 手伝い"], ans: 1, explain: "🔍 <strong>CLUE:</strong> KK bentuk て + <strong>くれませんか</strong>." },
+        { num: 14, q: "あしたは 寒く（　）そうです。", opts: ["a. なる", "b. なって", "c. なり", "d. なった"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Kelihatannya akan menjadi dingin $\\rightarrow$ 寒く<strong>なりそうです</strong>." },
+        { num: 15, q: "きょうは 仕事が 暇（　）そうですね。", opts: ["a. だ", "b. な", "c. に", "d. ∅ (kosong)"], ans: 3, explain: "🔍 <strong>CLUE:</strong> KS-な buang な langsung + そうです (暇そう)." },
+        { num: 16, q: "ガソリンが（　）そうです。", opts: ["a. なくなら", "b. なくなり", "c. なくなる", "d. なくなった"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Bensin mau habis $\\rightarrow$ <strong>なくなりそうです</strong>." },
+        { num: 17, q: "靴の ひもが（　）そうです。", opts: ["a. 切れる", "b. 切れた", "c. 切れ", "d. 切れて"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Tali sepatu mau putus $\\rightarrow$ <strong>切れそうです</strong>." },
+        { num: 18, q: "この 映画は（　）そうですね。", opts: ["a. つまらない", "b. つまらなく", "c. つまらん", "d. つまらな"], ans: 3, explain: "🔍 <strong>CLUE:</strong> つまらない (KS-い) buang い + そうです $\\rightarrow$ <strong>つまらなそうです</strong>." },
+        { num: 19, q: "図書館で 本を（　）来ます。", opts: ["a. 借りて", "b. 借りる", "c. 借りた", "d. 借りに"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Pinjam buku lalu kembali $\\rightarrow$ <strong>借りて来ます</strong>." },
+        { num: 20, q: "エアコンを つけて（　）か。", opts: ["a. いただきません", "b. くれません", "c. もらいません", "d. くださいません"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Permintaan santun setaraf $\\rightarrow$ ～て<strong>くれませんか</strong>." }
+      ],
+      b2: [
+        { num: 21, q: "ゆうべ お酒を（　）すぎました。", opts: ["a. 飲んだ", "b. 飲み", "c. 飲む", "d. 飲んで"], ans: 1, explain: "🔍 <strong>CLUE:</strong> KK buang ます + すぎます $\\rightarrow$ <strong>飲みすぎました</strong>." },
+        { num: 22, q: "この セーターは（　）すぎます。", opts: ["a. 大き", "b. 大きい", "c. 大きく", "d. 大きな"], ans: 0, explain: "🔍 <strong>CLUE:</strong> KS-い buang い + すぎます $\\rightarrow$ <strong>大きすぎます</strong>." },
+        { num: 23, q: "この パソコンは（　）やすいです。", opts: ["a. 使う", "b. 使って", "c. 使い", "d. 使った"], ans: 2, explain: "🔍 <strong>CLUE:</strong> KK buang ます + やすい $\\rightarrow$ <strong>使いやすい</strong>." },
+        { num: 24, q: "雨の 日は 洗濯物が（　）にくいです。", opts: ["a. 乾く", "b. 乾いて", "c. 乾いた", "d. 乾き"], ans: 3, explain: "🔍 <strong>CLUE:</strong> KK buang ます + にくい $\\rightarrow$ <strong>乾きにくい</strong>." },
+        { num: 25, q: "テレビの 音を（　）します。", opts: ["a. 大きく", "b. 大きい", "c. 大きな", "d. 大きに"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Sengaja mengubah objek (を) $\\rightarrow$ KS-い jadi く + します (<strong>大きくします</strong>)." },
+        { num: 26, q: "部屋を（　）に しました。", opts: ["a. きれい", "b. きれいく", "c. きれいに", "d. きれいな"], ans: 2, explain: "🔍 <strong>CLUE:</strong> KS-な ubah jadi に + します $\\rightarrow$ <strong>きれいに しました</strong>." },
+        { num: 27, q: "塩の 量を 半分（　）しました。", opts: ["a. を", "b. に", "c. で", "d. から"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Mengubah jumlah ke Kata Benda $\\rightarrow$ KB + <strong>に します</strong>." },
+        { num: 28, q: "ホテルは シングル（　）しますか、ツイン（　）しますか。", opts: ["a. を・を", "b. で・で", "c. に・に", "d. へ・へ"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Pilihan kamar $\\rightarrow$ KB + <strong>に します</strong>." },
+        { num: 29, q: "この コップは（　）くくて、安全ですよ。", opts: ["a. 割れ", "b. 割る", "c. 割れて", "d. 割った"], ans: 0, explain: "⚠️ <strong>CLUE:</strong> にくい adalah KS-い! Bentuk て: <strong>割れにくくて</strong>." },
+        { num: 30, q: "薬に 砂糖を 入れると、（　）やすくなります。", opts: ["a. 飲む", "b. 飲んで", "c. 飲み", "d. 飲んだ"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Menjadi mudah diminum $\\rightarrow$ <strong>飲みやすくなります</strong>." },
+        { num: 31, q: "最近の 車は 操作が（　）すぎて、運転が おもしろくないです。", opts: ["a. 簡単な", "b. 簡単に", "c. 簡単だ", "d. 簡単"], ans: 3, explain: "🔍 <strong>CLUE:</strong> KS-な buang な + すぎて $\\rightarrow$ <strong>簡単すぎて</strong>." },
+        { num: 32, q: "いくら 好きでも、食べ（　）と、体に 悪いですよ。", opts: ["a. すぎる", "b. すぎた", "c. すぎ", "d. すぎて"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Makan berlebihan $\\rightarrow$ 食べ<strong>すぎると</strong>." },
+        { num: 33, q: "東京は 物価が 高くて、（　）にくいです。", opts: ["a. 住む", "b. 住み", "c. 住んで", "d. 住んだ"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Sulit ditinggali $\\rightarrow$ <strong>住みにくいです</strong>." },
+        { num: 34, q: "白い シャツは（　）やすいです。", opts: ["a. 汚れ", "b. 汚す", "c. 汚れて", "d. 汚れた"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Kemeja putih mudah kotor $\\rightarrow$ <strong>汚れやすいです</strong>." },
+        { num: 35, q: "会議は 明日（　）します。", opts: ["a. を", "b. で", "c. に", "d. から"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Keputusan rapat $\\rightarrow$ 明日<strong>に します</strong>." },
+        { num: 36, q: "髪の毛を 短（　）して ください。", opts: ["a. い", "b. く", "c. な", "d. に"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Potong pendek $\\rightarrow$ 短<strong>く して</strong>." },
+        { num: 37, q: "Indomieを 食べ（　）て、お腹が 痛いです。", opts: ["a. すぎ", "b. すぎる", "c. すぎた", "d. すいで"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Terlalu banyak makan $\\rightarrow$ 食べ<strong>すぎて</strong>." },
+        { num: 38, q: "この 本は 字が 小さくて、（　）にくいです。", opts: ["a. 読む", "b. 読んだ", "c. 読み", "d. 読んで"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Huruf kecil sulit dibaca $\\rightarrow$ <strong>読みにくいです</strong>." },
+        { num: 39, q: "値段を 安（　）して くれませんか。", opts: ["a. く", "b. い", "c. な", "d. に"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Dibuat murah $\\rightarrow$ 安<strong>く して</strong>." },
+        { num: 40, q: "晩ご飯は すし（　）します。", opts: ["a. を", "b. が", "c. で", "d. に"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Memilih menu $\\rightarrow$ すし<strong>に します</strong>." }
+      ],
+      b3: [
+        { num: 41, q: "会議に 間に合わない（　）、連絡して ください。", opts: ["a. のに", "b. 場合は", "c. ても", "d. ので"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Pengandaian situasi darurat $\\rightarrow$ KK ない + <strong>場合は</strong>." },
+        { num: 42, q: "領収書が 必要（　）場合は、言って ください。", opts: ["a. な", "b. の", "c. だ", "d. ∅ (kosong)"], ans: 0, explain: "⚠️️ <strong>CLUE:</strong> KS-な ketemu 場合は <strong>wajib membawa な</strong> (必要な場合は)." },
+        { num: 43, q: "火事や 地震（　）場合は、エレベーターを 使わないで ください。", opts: ["a. な", "b. だ", "c. の", "d. に"], ans: 2, explain: "⚠️ <strong>CLUE:</strong> KB ketemu 場合は <strong>wajib membawa の</strong> (地震の場合は)." },
+        { num: 44, q: "約束を した（　）、彼女は 来ませんでした。", opts: ["a. 場合は", "b. ので", "c. から", "d. のに"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Padahal janji tapi tidak datang $\\rightarrow$ <strong>のに</strong>." },
+        { num: 45, q: "きょうは 日曜日（　）のに、働かなければ なりません。", opts: ["a. な", "b. の", "c. だ", "d. ∅ (kosong)"], ans: 0, explain: "⚠️ <strong>JEBAKAN:</strong> KB ketemu のに <strong>WAJIB membawa な</strong> (日曜日なのに)." },
+        { num: 46, q: "一生懸命 勉強した（　）、試験に 落ちてしまいました。", opts: ["a. 場合は", "b. のに", "c. ので", "d. から"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Padahal belajar keras tapi gagal $\\rightarrow$ <strong>のに</strong>." },
+        { num: 47, q: "あした 雨が（　）も、サッカーを します。", opts: ["a. 降るのに", "b. 降る場合", "c. 降って", "d. 降ると"], ans: 2, explain: "⚠️ <strong>JEBAKAN:</strong> Praduga masa depan HARAM pakai のに! Wajib <strong>降っても</strong>." },
+        { num: 48, q: "体調が 悪い（　）、無理を して 会社へ 行きました。", opts: ["a. 場合は", "b. ので", "c. から", "d. のに"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Padahal kondisi buruk tapi memaksakan diri $\\rightarrow$ <strong>のに</strong>." },
+        { num: 49, q: "現金が ない（　）は、カードで 払えますか。", opts: ["a. 場合", "b. のに", "c. ても", "d. から"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Kondisi tidak ada uang tunai $\\rightarrow$ ない<strong>場合は</strong>." },
+        { num: 50, q: "部屋が 静か（　）のに、眠れませんでした。", opts: ["a. の", "b. な", "c. だ", "d. に"], ans: 1, explain: "⚠️ <strong>CLUE:</strong> KS-な ketemu のに <strong>wajib な</strong> (静かなのに)." },
+        { num: 51, q: "高かった（　）、すぐ 壊れました。", opts: ["a. 場合は", "b. から", "c. のに", "d. ので"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Padahal mahal tapi cepat rusak $\\rightarrow$ <strong>のに</strong>." },
+        { num: 52, q: "事故の（　）は、110番に 電話します。", opts: ["a. のに", "b. から", "c. ても", "d. 場合"], ans: 3, explain: "🔍 <strong>CLUE:</strong> KB + の + <strong>場合は</strong>." },
+        { num: 53, q: "たくさん 食べた（　）、まだ お腹が 空いています。", opts: ["a. のに", "b. 場合は", "c. ので", "d. ても"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Padahal makan banyak $\\rightarrow$ <strong>のに</strong>." },
+        { num: 54, q: "雨が 降った（　）は、試合を 中止します。", opts: ["a. のに", "b. 場合", "c. ても", "d. から"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Kasus situasi terjadi $\\rightarrow$ 降った<strong>場合は</strong>." },
+        { num: 55, q: "元気（　）のに、病院へ 行きました。", opts: ["a. の", "b. だ", "c. な", "d. に"], ans: 2, explain: "🔍 <strong>CLUE:</strong> KS-な + <strong>な</strong> + のに (元気なのに)." },
+        { num: 56, q: "薬を 飲んだ（　）、熱が 下がりません。", opts: ["a. 場合は", "b. から", "c. ので", "d. のに"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Padahal minum obat panas tak turun $\\rightarrow$ <strong>のに</strong>." },
+        { num: 57, q: "パスポートを 紛失した（　）は、大使館へ 連絡して ください。", opts: ["a. 場合", "b. のに", "c. ても", "d. から"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Situasi kehilangan $\\rightarrow$ 紛失した<strong>場合は</strong>." },
+        { num: 58, q: "子供（　）のに、こんな 難しい 漢字が 読めます。", opts: ["a. の", "b. な", "c. だ", "d. ∅ (kosong)"], ans: 1, explain: "⚠️ <strong>CLUE:</strong> KB + <strong>な</strong> のに (子供なのに)." },
+        { num: 59, q: "故障の（　）は、サービスセンターへ お電話ください。", opts: ["a. のに", "b. ても", "c. 場合", "d. から"], ans: 2, explain: "🔍 <strong>CLUE:</strong> KB + の + <strong>場合は</strong>." },
+        { num: 60, q: "約束を しました（　）、彼は 来ませんでした。", opts: ["a. のに", "b. ても", "c. ので", "d. が"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Bentuk ます di depan $\\rightarrow$ Hubungan fakta netral memakai <strong>が</strong>." }
+      ],
+      b4: [
+        { num: 61, q: "これから 昼ごはんを（　）ところです。", opts: ["a. 食べる", "b. 食べている", "c. 食べた", "d. 食べ"], ans: 0, explain: "🔍 <strong>CLUE:</strong> <code class='text-cyan-300'>これから</code> $\\rightarrow$ KK Kamus + <strong>ところです</strong>." },
+        { num: 62, q: "今 資料を（　）ところです。", opts: ["a. 調べた", "b. 調べている", "c. 調べる", "d. 調べ"], ans: 1, explain: "🔍 <strong>CLUE:</strong> <code class='text-amber-300'>今</code> $\\rightarrow$ KK ている + <strong>ところです</strong>." },
+        { num: 63, q: "渡辺さんは たった今（　）ところです。", opts: ["a. 帰る", "b. 帰っている", "c. 帰った", "d. 帰り"], ans: 2, explain: "🔍 <strong>CLUE:</strong> <code class='text-rose-400'>たった今</code> $\\rightarrow$ KK た + <strong>ところです</strong>." },
+        { num: 64, q: "木村さんは 先月 この 会社に（　）ばかりです。", opts: ["a. 入る", "b. 入っている", "c. 入ろう", "d. 入った"], ans: 3, explain: "🔍 <strong>CLUE:</strong> <code class='text-emerald-300'>先月</code> (perasaan belum lama) $\\rightarrow$ KK た + <strong>ばかりです</strong>." },
+        { num: 65, q: "ミラーさんは きょう 来る（　）ですよ。昨日 電話が ありましたから。", opts: ["a. はず", "b. ところ", "c. ばかり", "d. そう"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Ada bukti nyata telepon $\\rightarrow$ <strong>来るはずです</strong>." },
+        { num: 66, q: "田中さんは きょう 休み（　）はずです。旅行中ですから。", opts: ["a. な", "b. の", "c. だ", "d. ∅ (kosong)"], ans: 1, explain: "⚠️ <strong>CLUE:</strong> KB ketemu はず wajib memakai <strong>の</strong> (休みの はずです)." },
+        { num: 67, q: "兄は 来年 大学（　）入学します。", opts: ["a. を", "b. で", "c. に", "d. から"], ans: 2, explain: "⚠️ <strong>CLUE:</strong> Titik tujuan MASUK universitas $\\rightarrow$ Partikel <strong>に</strong>." },
+        { num: 68, q: "姉は 去年 大学（　）卒業しました。", opts: ["a. に", "b. で", "c. へ", "d. を"], ans: 3, explain: "⚠️ <strong>CLUE:</strong> Titik pelepasan LULUS universitas $\\rightarrow$ Partikel <strong>を</strong>." },
+        { num: 69, q: "今から ケーキを（　）ところです。", opts: ["a. 焼く", "b. 焼いている", "c. 焼けた", "d. 焼き"], ans: 0, explain: "🔍 <strong>CLUE:</strong> <code class='text-cyan-300'>今から</code> $\\rightarrow$ KK Kamus + ところです." },
+        { num: 70, q: "パンが たった今（　）ところです。", opts: ["a. 焼く", "b. 焼けた", "c. 焼けている", "d. 焼き"], ans: 1, explain: "🔍 <strong>CLUE:</strong> <code class='text-rose-400'>たった今</code> $\\rightarrow$ KK た + ところです (焼けたところです)." },
+        { num: 71, q: "この カメラは 先週 買ったばかり（　）、壊れました。", opts: ["a. なので", "b. から", "c. なのに", "d. のに"], ans: 2, explain: "⚠️ <strong>CLUE:</strong> ～ばかり berfungsi sebagai KB $\\rightarrow$ 買ったばかり<strong>なのに</strong>." },
+        { num: 72, q: "荷物は あした（　）はずです。宅配便で 送りましたから。", opts: ["a. 届いた", "b. 届いて", "c. 届き", "d. 届く"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Prediksi bukti kirim $\\rightarrow$ <strong>届くはずです</strong>." },
+        { num: 73, q: "もしもし、今 いいですか。……今から（　）ところなんです。", opts: ["a. 出かける", "b. 出かけた", "c. 出かけている", "d. 出かけ"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Baru mau berangkat $\\rightarrow$ <strong>出かけるところ</strong>." },
+        { num: 74, q: "彼は 独身の（　）です。薬指に 指輪が ありません。", opts: ["a. ところ", "b. はず", "c. ばかり", "d. そう"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Bukti nyata cincin $\\rightarrow$ 独身の<strong>はずです</strong>." },
+        { num: 75, q: "バスが たった今（　）ところです。", opts: ["a. 出る", "b. 出ている", "c. 出た", "d. 出"], ans: 2, explain: "🔍 <strong>CLUE:</strong> <code class='text-rose-400'>たった今</code> $\\rightarrow$ <strong>出たところです</strong>." },
+        { num: 76, q: "彼女は 暇（　）はずです。きょうは 休みですから。", opts: ["a. の", "b. だ", "c. ∅ (kosong)", "d. な"], ans: 3, explain: "⚠️ <strong>CLUE:</strong> KS-な + <strong>な</strong> はずです (暇なはずです)." },
+        { num: 77, q: "さっき 昼ごはんを（　）ばかりですから、お腹がいっぱいです。", opts: ["a. 食べた", "b. 食べる", "c. 食べている", "d. 食べ"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Baru saja selesai makan $\\rightarrow$ <strong>食べたばかりです</strong>." },
+        { num: 78, q: "あの 店の 料理は おいしい（　）はずです。いつも 混んでいますから。", opts: ["a. な", "b. ∅ (kosong)", "c. の", "d. だ"], ans: 1, explain: "🔍 <strong>CLUE:</strong> KS-い langsung nempel ke はず $\\rightarrow$ <strong>おいしいはずです</strong>." },
+        { num: 79, q: "今 レポートを（　）ところですから、後で 来て ください。", opts: ["a. 書く", "b. 書いた", "c. 書いている", "d. 書き"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Sedang mengetik sekarang $\\rightarrow$ <strong>書いているところ</strong>." },
+        { num: 80, q: "留守（　）場合は、宅配ボックスに 入れて ください。", opts: ["a. な", "b. だ", "c. に", "d. の"], ans: 3, explain: "🔍 <strong>CLUE:</strong> KB + <strong>の</strong> 場合は $\\rightarrow$ 留守の場合は." }
+      ],
+      b5: [
+        { num: 81, q: "これから ガソリンが（　）そうです。", opts: ["a. 高くなり", "b. 高くなって", "c. 高くなる", "d. 高くなった"], ans: 0, explain: "🔍 <strong>CLUE:</strong> これから + そうです $\\rightarrow$ 高く<strong>なりそうです</strong>." },
+        { num: 82, q: "隣の 店で Bakso を（　）来ます。", opts: ["a. 買う", "b. 買って", "c. 買った", "d. 買いたい"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Pergi beli bakso lalu balik $\\rightarrow$ <strong>買って来ます</strong>." },
+        { num: 83, q: "この 服は ポリエステルだから（　）やすいです。", opts: ["a. 乾いた", "b. 乾いて", "c. 乾き", "d. 乾く"], ans: 2, explain: "🔍 <strong>CLUE:</strong> KK buang ます + やすい $\\rightarrow$ <strong>乾きやすいです</strong>." },
+        { num: 84, q: "泣き（　）て、目が 赤くなりました。", opts: ["a. やすい", "b. にくい", "c. そう", "d. すぎ"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Menangis berlebihan $\\rightarrow$ 泣き<strong>すぎて</strong>." },
+        { num: 85, q: "この 本は（　）そうです。", opts: ["a. 面白", "b. 面白い", "c. 面白かった", "d. 面白く"], ans: 0, explain: "🔍 <strong>CLUE:</strong> KS-い buang い + そうです $\\rightarrow$ <strong>面白そうです</strong>." },
+        { num: 86, q: "雨の 日、バイクに 乗ると、服が 濡れ（　）です。", opts: ["a. にくい", "b. やすい", "c. すぎ", "d. そう"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Mudah basah $\\rightarrow$ <strong>濡れやすいです</strong>." },
+        { num: 87, q: "この ケーキを 四つ（　）。", opts: ["a. して来ます", "b. そうです", "c. に します", "d. く します"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Keputusan potong kue $\\rightarrow$ 四つ<strong>に します</strong>." },
+        { num: 88, q: "先月 車を 買った（　）なのに、故障しました。", opts: ["a. ところ", "b. はず", "c. そう", "d. ばかり"], ans: 3, explain: "🔍 <strong>CLUE:</strong> 先月 + なのに $\\rightarrow$ <strong>ばかりなのに</strong>." },
+        { num: 89, q: "たった今 空港に（　）ところです。", opts: ["a. 着いた", "b. 着く", "c. 着いている", "d. 着き"], ans: 0, explain: "🔍 <strong>CLUE:</strong> たった今 $\\rightarrow$ <strong>着いたところです</strong>." },
+        { num: 90, q: "彼は 日本に 10年 住んでいますから、日本語が 上手（　）はずです。", opts: ["a. の", "b. な", "c. だ", "d. ∅ (kosong)"], ans: 1, explain: "🔍 <strong>CLUE:</strong> KS-な + <strong>な</strong> はずです $\\rightarrow$ 上手なはずです." },
+        { num: 91, q: "風邪を 引いた（　）は、無理を しないで ください。", opts: ["a. のに", "b. ても", "c. 場合", "d. から"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Situasi pengandaian $\\rightarrow$ 引いた<strong>場合は</strong>." },
+        { num: 92, q: "一生懸命 練習した（　）、試合に 負けました。", opts: ["a. 場合は", "b. ので", "c. から", "d. のに"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Kecewa di luar dugaan $\\rightarrow$ <strong>のに</strong>." },
+        { num: 93, q: "弟は 来年 東京の 大学（　）入学する 予定です。", opts: ["a. に", "b. を", "c. で", "d. から"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Masuk universitas $\\rightarrow$ 大学<strong>に</strong> 入学します." },
+        { num: 94, q: "兄は 去年 京都の 大学（　）卒業しました。", opts: ["a. に", "b. を", "c. で", "d. へ"], ans: 1, explain: "🔍 <strong>CLUE:</strong> Lulus universitas $\\rightarrow$ 大学<strong>を</strong> 卒業しました." },
+        { num: 95, q: "あした 忙しい（　）も、パーティーに 行きます。", opts: ["a. のに", "b. 場合", "c. くても", "d. から"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Praduga masa depan $\\rightarrow$ 忙し<strong>くても</strong>." },
+        { num: 96, q: "部屋を 明る（　）して ください。", opts: ["a. い", "b. な", "c. に", "d. く"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Sengaja menerangkan $\\rightarrow$ 明る<strong>く して</strong>." },
+        { num: 97, q: "この 魚は 骨が 多くて、（　）にくいです。", opts: ["a. 食べ", "b. 食べる", "c. 食べた", "d. 食べて"], ans: 0, explain: "🔍 <strong>CLUE:</strong> Sulit dimakan $\\rightarrow$ <strong>食べにくいです</strong>." },
+        { num: 98, q: "最近の 暑さは 異常（　）すぎます。", opts: ["a. な", "b. ∅ (kosong)", "c. だ", "d. に"], ans: 1, explain: "🔍 <strong>CLUE:</strong> KS-な buang な + すぎます $\\rightarrow$ <strong>異常すぎます</strong>." },
+        { num: 99, q: "合宿の 資料を 今（　）ところです。", opts: ["a. 作る", "b. 作った", "c. 作っている", "d. 作り"], ans: 2, explain: "🔍 <strong>CLUE:</strong> Sedang dikerjakan $\\rightarrow$ <strong>作っているところ</strong>." },
+        { num: 100, q: "合否の 通知は もう 届く（　）ですよ。昨日 投函されましたから。", opts: ["a. ところ", "b. ばかり", "c. そう", "d. はず"], ans: 3, explain: "🔍 <strong>CLUE:</strong> Bukti nyata kemarin $\\rightarrow$ <strong>届くはずです</strong>." }
+      ]
+    };
+
+    let curBunpouBankKey = 'b1';
+    let curBunpouIdx = 0;
+    let bunpouScore = 0;
+    let bunpouAnswered = {};
+
+    // 100% KOTOBA BAB 43-46 (110 KATA LENGKAP POKOK & YOMIMONO TANPA KAIWA) DITAMBAH 39 KANJI IRODORI
+    const tanamPolaMasterList = [
+      // BAB 43 POKOK (20) & YOMIMONO (10)
+      { id: "43-1", cat: "ch43", kanji: "増えます", kana: "ふえます", meaning: "[ekspor] bertambah", part: "[動II] [輸出が～]", story: "💡 ANALOGI 3 DETIK: Mirip 'Fuel' bensin yang diisi terus makin lama makin bertambah!", radicals: [{char: "土", pos: "kiri", name: "Tanah", color: "text-amber-400 bg-amber-950/40"}, {char: "曽", pos: "kanan", name: "Dulu", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "43-2", cat: "ch43", kanji: "減ります", kana: "へります", meaning: "[ekspor] berkurang", part: "[動I] [輸出が～]", story: "💡 ANALOGI 3 DETIK: 'Heli' turun dari langit ketinggiannya terus berkurang.", radicals: [{char: "氵", pos: "kiri", name: "Air", color: "text-cyan-400 bg-cyan-950/40"}, {char: "咸", pos: "kanan", name: "Kapak", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "43-3", cat: "ch43", kanji: "上がります", kana: "あがります", meaning: "[harga] meningkat", part: "[動I] [値段が～]", story: "💡 ANALOGI 3 DETIK: Kanji Atas (上) $\\rightarrow$ Harga melompat naik ke atas (Agari).", radicals: [{char: "上", pos: "tunggal", name: "Atas", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "43-4", cat: "ch43", kanji: "下がります", kana: "さがります", meaning: "[harga] menurun", part: "[動I] [値段が～]", story: "💡 ANALOGI 3 DETIK: Kanji Bawah (下) $\\rightarrow$ Harga meluncur turun ke bawah (Sagari).", radicals: [{char: "下", pos: "tunggal", name: "Bawah", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "43-5", cat: "ch43", kanji: "切れます", kana: "きれます", meaning: "[tali] terputus", part: "[動II] [ひもが～]", story: "💡 ANALOGI 3 DETIK: Pisau (刀) memotong tali sampai 'Kiris / Kere' terputus.", radicals: [{char: "七", pos: "kiri", name: "Tujuh", color: "text-cyan-400 bg-cyan-950/40"}, {char: "刀", pos: "kanan", name: "Pisau", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "43-6", cat: "ch43", kanji: "とれます", kana: "とれます", meaning: "[kancing] terlepas", part: "[動II] [ボタンが～]", story: "💡 ANALOGI 3 DETIK: Kancing copot diambil ('Tore' $\\approx$ lepas dari baju).", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Lepas", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "43-7", cat: "ch43", kanji: "落ちます", kana: "おちます", meaning: "[barang] terjatuh", part: "[動II] [荷物が～]", story: "💡 ANALOGI 3 DETIK: Daun (艹) kena air (氵) jatuh di atas tanah $\\rightarrow$ terjatuh.", radicals: [{char: "艹", pos: "atas", name: "Rumput", color: "text-emerald-400 bg-emerald-950/40"}, {char: "氵", pos: "kiri", name: "Air", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "43-8", cat: "ch43", kanji: "なくなります", kana: "なくなります", meaning: "[bensin] habis", part: "[動I] [ガソリンが～]", story: "💡 ANALOGI 3 DETIK: 'Naku' artinya tidak ada $\\rightarrow$ Bensin lenyap habis.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Habis", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "43-9", cat: "ch43", kanji: "変[な]", kana: "へん[な]", meaning: "aneh", part: "[形]", story: "💡 ANALOGI 3 DETIK: Orang bertingkah ganjil di jalanan $\\rightarrow$ Aneh (Hen).", radicals: [{char: "変", pos: "tunggal", name: "Aneh", color: "text-purple-400 bg-purple-950/40"}] },
+      { id: "43-10", cat: "ch43", kanji: "幸せ[な]", kana: "しあわせ[な]", meaning: "bahagia", part: "[形]", story: "💡 ANALOGI 3 DETIK: Hidup berkecukupan seperti raja $\\rightarrow$ Bahagia.", radicals: [{char: "幸", pos: "tunggal", name: "Mujur", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "43-11", cat: "ch43", kanji: "楽[な]", kana: "らく[な]", meaning: "ringan", part: "[形]", story: "💡 ANALOGI 3 DETIK: Beban kerja ringan bikin hati plong santai (Raku).", radicals: [{char: "白", pos: "atas", name: "Putih", color: "text-cyan-400 bg-cyan-950/40"}, {char: "木", pos: "bawah", name: "Pohon", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "43-12", cat: "ch43", kanji: "うまい", kana: "うまい", meaning: "enak, lezat", part: "[形]", story: "💡 ANALOGI 3 DETIK: Makanan sedap disantap langsung bilang 'Umm.. Enak!'", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Enak", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "43-13", cat: "ch43", kanji: "まずい", kana: "まずい", meaning: "tidak enak, tidak sedap", part: "[形]", story: "💡 ANALOGI 3 DETIK: Rasa masakan hambar keasinan $\\rightarrow$ 'Masa gitu rasanya? Tidak sedap!'", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Hambar", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "43-14", cat: "ch43", kanji: "つまらない", kana: "つまらない", meaning: "tidak menarik, tidak berguna, percuma", part: "[形]", story: "💡 ANALOGI 3 DETIK: Cerita garing menyumbat otak $\\rightarrow$ Tidak menarik / percuma.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Bosan", color: "text-slate-400 bg-slate-800"}] },
+      { id: "43-15", cat: "ch43", kanji: "優しい", kana: "やさしい", meaning: "baik hati", part: "[形]", story: "💡 ANALOGI 3 DETIK: Orang (亻) bertutur kata lembut penuh kasih $\\rightarrow$ Baik hati.", radicals: [{char: "亻", pos: "kiri", name: "Orang", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "43-16", cat: "ch43", kanji: "ガソリン", kana: "ガソリン", meaning: "bensin", part: "[名]", story: "💡 ANALOGI 3 DETIK: Kata serapan Gasoline $\\rightarrow$ Bahan bakar mobil bensin.", radicals: [{char: "カナ", pos: "Katakana", name: "Bahan", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "43-17", cat: "ch43", kanji: "火", kana: "ひ", meaning: "api", part: "[名]", story: "💡 ANALOGI 3 DETIK: Percikan api menjilat ke udara $\\rightarrow$ Kobaran api.", radicals: [{char: "火", pos: "tunggal", name: "Api", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "43-18", cat: "ch43", kanji: "パンフレット", kana: "パンフレット", meaning: "pamflet", part: "[名]", story: "💡 ANALOGI 3 DETIK: Selebaran informasi promosi $\\rightarrow$ Pamflet.", radicals: [{char: "カナ", pos: "Katakana", name: "Kertas", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "43-19", cat: "ch43", kanji: "今にも", kana: "いまにも", meaning: "sekarang juga (dipakai untuk menggambarkan kondisi persis akan terjadi perubahan)", part: "[副]", story: "💡 CLUE UTAMA: 'Ima' sekarang + 'mo' $\\rightarrow$ Sekarang juga mau hujan / berubah!", radicals: [{char: "今", pos: "kiri", name: "Sekarang", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "43-20", cat: "ch43", kanji: "わあ", kana: "わあ", meaning: "Wah!", part: "[感]", story: "💡 ANALOGI 3 DETIK: Seruan kagum saat melihat kejutan $\\rightarrow$ 'Waaah!'", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Kagum", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "43-21", cat: "ch43", kanji: "嫌がります", kana: "いやがります", meaning: "tidak mau", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Wanita (女) terpaksa (兼) menolak keras $\\rightarrow$ Menolak / tidak mau.", radicals: [{char: "嫌", pos: "tunggal", name: "Benci", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "43-22", cat: "ch43", kanji: "また", kana: "また", meaning: "dan, lalu", part: "[接]", story: "💡 ANALOGI 3 DETIK: Kata sambung melanjutkan pembicaraan $\\rightarrow$ Dan, lalu.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Lalu", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "43-23", cat: "ch43", kanji: "うまく", kana: "うまく", meaning: "pandai, pintar", part: "[副]", story: "💡 ANALOGI 3 DETIK: Dari kata 'umai' (mahir) diubah adverbia $\\rightarrow$ Dengan pintar/pandai.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Pandai", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "43-24", cat: "ch43", kanji: "順序", kana: "じゅんじょ", meaning: "urutan", part: "[名]", story: "💡 ANALOGI 3 DETIK: Aliran sungai teratur (順) di dalam rumah (序) $\\rightarrow$ Urutan langkah.", radicals: [{char: "順", pos: "kiri", name: "Tertib", color: "text-cyan-400 bg-cyan-950/40"}, {char: "序", pos: "kanan", name: "Urut", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "43-25", cat: "ch43", kanji: "安心[な]", kana: "あんしん[な]", meaning: "kelegaan", part: "[形]", story: "💡 ANALOGI 3 DETIK: Tenang (安) dalam hati (心) $\\rightarrow$ Perasaan lega / kelegaan.", radicals: [{char: "安", pos: "kiri", name: "Aman", color: "text-emerald-400 bg-emerald-950/40"}, {char: "心", pos: "kanan", name: "Hati", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "43-26", cat: "ch43", kanji: "表現", kana: "ひょうげん", meaning: "ungkapan, ekspresi", part: "[名]", story: "💡 ANALOGI 3 DETIK: Tampil di luar (表) secara nyata (現) $\\rightarrow$ Ekspresi / ungkapan.", radicals: [{char: "表", pos: "kiri", name: "Luar", color: "text-cyan-400 bg-cyan-950/40"}, {char: "現", pos: "kanan", name: "Nyata", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "43-27", cat: "ch43", kanji: "例えば", kana: "たとえば", meaning: "misalnya", part: "[副]", story: "💡 ANALOGI 3 DETIK: Memberikan contoh perumpamaan $\\rightarrow$ Misalnya.", radicals: [{char: "例", pos: "kiri", name: "Contoh", color: "text-purple-400 bg-purple-950/40"}] },
+      { id: "43-28", cat: "ch43", kanji: "別れます", kana: "わかれます", meaning: "berpisah", part: "[動II]", story: "💡 ANALOGI 3 DETIK: Pisau (刀) memotong dua bagian $\\rightarrow$ Berpisah jalan.", radicals: [{char: "別", pos: "tunggal", name: "Pisah", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "43-29", cat: "ch43", kanji: "これら", kana: "これら", meaning: "itu", part: "[連体]", story: "💡 ANALOGI 3 DETIK: Bentuk jamak menunjuk barang $\\rightarrow$ Benda-benda itu.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Itu", color: "text-slate-400 bg-slate-800"}] },
+      { id: "43-30", cat: "ch43", kanji: "縁起が 悪い", kana: "えんぎが わるい", meaning: "tidak menyenangkan", part: "[慣用]", story: "💡 ANALOGI 3 DETIK: Pertanda nasib (縁起) yang buruk (悪い) $\\rightarrow$ Tidak menyenangkan.", radicals: [{char: "縁", pos: "kiri", name: "Jodoh", color: "text-amber-400 bg-amber-950/40"}, {char: "悪", pos: "kanan", name: "Buruk", color: "text-rose-400 bg-rose-950/40"}] },
+
+      // BAB 44 POKOK (27) & YOMIMONO (5)
+      { id: "44-1", cat: "ch44", kanji: "泣きます", kana: "なきます", meaning: "menangis", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Air (氵) keluar dari mata sambil berdiri (立) $\\rightarrow$ Menangis.", radicals: [{char: "氵", pos: "kiri", name: "Air", color: "text-cyan-400 bg-cyan-950/40"}, {char: "立", pos: "kanan", name: "Tegak", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "44-2", cat: "ch44", kanji: "笑います", kana: "わらいます", meaning: "tertawa", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Bambu (竹) tertiup angin bergoyang gembira $\\rightarrow$ Tertawa.", radicals: [{char: "竹", pos: "atas", name: "Bambu", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "44-3", cat: "ch44", kanji: "眠ります", kana: "ねむります", meaning: "tidur", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Mata (目) terpejam pulas 'Nemu' bantal $\\rightarrow$ Tidur pulas.", radicals: [{char: "目", pos: "kiri", name: "Mata", color: "text-cyan-400 bg-cyan-950/40"}, {char: "民", pos: "kanan", name: "Rakyat", color: "text-purple-400 bg-purple-950/40"}] },
+      { id: "44-4", cat: "ch44", kanji: "乾きます", kana: "かわきます", meaning: "[kemeja] mengering", part: "[動I] [シャツが～]", story: "💡 ANALOGI 3 DETIK: Dijemur terik matahari airnya lenyap $\\rightarrow$ Kemeja mengering.", radicals: [{char: "乾", pos: "tunggal", name: "Kering", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "44-5", cat: "ch44", kanji: "ぬれます", kana: "ぬれます", meaning: "[kemeja] basah", part: "[動II] [シャツが～]", story: "💡 ANALOGI 3 DETIK: Kena hujan basah kuyup $\\rightarrow$ Basah.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Basah", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "44-6", cat: "ch44", kanji: "滑ります", kana: "すべります", meaning: "licin", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Air (氵) di atas lantai tulang (骨) $\\rightarrow$ Sangat licin bikin terpeleset.", radicals: [{char: "氵", pos: "kiri", name: "Air", color: "text-cyan-400 bg-cyan-950/40"}, {char: "骨", pos: "kanan", name: "Tulang", color: "text-slate-400 bg-slate-800"}] },
+      { id: "44-7", cat: "ch44", kanji: "起きます", kana: "おきます", meaning: "terjadi [kecelakaan]", part: "[動II] [事故が～]", story: "💡 ANALOGI 3 DETIK: Berlari (走) bangun $\\rightarrow$ Suatu kecelakaan tiba-tiba muncul terjadi.", radicals: [{char: "走", pos: "kiri", name: "Lari", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "44-8", cat: "ch44", kanji: "調節します", kana: "ちょうせつします", meaning: "mengontrol", part: "[動III]", story: "💡 ANALOGI 3 DETIK: Atur nada perkataan (言) di suhu ruangan $\\rightarrow$ Mengontrol / menyetel.", radicals: [{char: "調", pos: "kiri", name: "Atur", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "44-9", cat: "ch44", kanji: "安全[な]", kana: "あんぜん[な]", meaning: "aman", part: "[形]", story: "💡 ANALOGI 3 DETIK: Di bawah atap (安) secara utuh (全) $\\rightarrow$ Terlindungi aman.", radicals: [{char: "安", pos: "kiri", name: "Tenang", color: "text-emerald-400 bg-emerald-950/40"}, {char: "全", pos: "kanan", name: "Utuh", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "44-10", cat: "ch44", kanji: "危険[な]", kana: "きけん[な]", meaning: "bahaya", part: "[形]", story: "💡 ANALOGI 3 DETIK: Tebing curam terjal $\\rightarrow$ Tempat rawan bahaya.", radicals: [{char: "危", pos: "kiri", name: "Rawan", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "44-11", cat: "ch44", kanji: "濃い", kana: "こい", meaning: "kental (rasa makanan atau minuman), tua (warna)", part: "[形]", story: "💡 ANALOGI 3 DETIK: Ikan 'Koi' suka di kaldu kental yang warnanya tua.", radicals: [{char: "氵", pos: "kiri", name: "Air", color: "text-cyan-400 bg-cyan-950/40"}, {char: "農", pos: "kanan", name: "Tani", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "44-12", cat: "ch44", kanji: "薄い", kana: "うすい", meaning: "tawar (rasa makanan atau minuman), muda (warna), tipis (barang)", part: "[形]", story: "💡 ANALOGI 3 DETIK: Kuah kebanyakan air jadi tawar, kain tipis warnanya muda.", radicals: [{char: "艹", pos: "atas", name: "Rumput", color: "text-emerald-400 bg-emerald-950/40"}, {char: "氵", pos: "kiri", name: "Air", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "44-13", cat: "ch44", kanji: "厚い", kana: "あつい", meaning: "tebal", part: "[形]", story: "💡 ANALOGI 3 DETIK: Kamus setebal batu di atas tanah $\\rightarrow$ Tebal.", radicals: [{char: "厂", pos: "atap", name: "Tebing", color: "text-slate-400 bg-slate-800"}] },
+      { id: "44-14", cat: "ch44", kanji: "太い", kana: "ふとい", meaning: "gemuk", part: "[形]", story: "💡 ANALOGI 3 DETIK: Orang besar (大) nambah daging titik di perut $\\rightarrow$ Gemuk.", radicals: [{char: "太", pos: "tunggal", name: "Gemuk", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "44-15", cat: "ch44", kanji: "細い", kana: "ほそい", meaning: "kurus", part: "[形]", story: "💡 ANALOGI 3 DETIK: Benang (糸) di sawah sangat langsing $\\rightarrow$ Kurus / ramping.", radicals: [{char: "糸", pos: "kiri", name: "Benang", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "44-16", cat: "ch44", kanji: "空気", kana: "くうき", meaning: "udara", part: "[名]", story: "💡 ANALOGI 3 DETIK: Langit kosong (空) berhembus nafas energi (気) $\\rightarrow$ Udara.", radicals: [{char: "空", pos: "kiri", name: "Kosong", color: "text-cyan-400 bg-cyan-950/40"}, {char: "気", pos: "kanan", name: "Energi", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "44-17", cat: "ch44", kanji: "涙", kana: "なみだ", meaning: "air mata", part: "[名]", story: "💡 ANALOGI 3 DETIK: Tetesan air (氵) membasahi pipi $\\rightarrow$ Air mata.", radicals: [{char: "氵", pos: "kiri", name: "Air", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "44-18", cat: "ch44", kanji: "和食", kana: "わしょく", meaning: "makanan Jepang", part: "[名]", story: "💡 ANALOGI 3 DETIK: Harmoni Jepang (和) + Makanan (食) $\\rightarrow$ Makanan tradisional Jepang.", radicals: [{char: "和", pos: "kiri", name: "Jepang", color: "text-emerald-400 bg-emerald-950/40"}, {char: "食", pos: "kanan", name: "Makan", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "44-19", cat: "ch44", kanji: "洋食", kana: "ようしょく", meaning: "makanan Barat", part: "[名]", story: "💡 ANALOGI 3 DETIK: Samudra barat (洋) + Makanan (食) $\\rightarrow$ Makanan gaya barat.", radicals: [{char: "洋", pos: "kiri", name: "Samudra", color: "text-cyan-400 bg-cyan-950/40"}, {char: "食", pos: "kanan", name: "Makan", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "44-20", cat: "ch44", kanji: "おかず", kana: "おかず", meaning: "lauk-pauk", part: "[名]", story: "💡 ANALOGI 3 DETIK: Makanan pendamping nasi di piring $\\rightarrow$ Lauk-pauk.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Lauk", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "44-21", cat: "ch44", kanji: "量", kana: "りょう", meaning: "kuantitas", part: "[名]", story: "💡 ANALOGI 3 DETIK: Takaran berat dan isi benda $\\rightarrow$ Kuantitas / jumlah.", radicals: [{char: "量", pos: "tunggal", name: "Takar", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "44-22", cat: "ch44", kanji: "―倍", kana: "―ばい", meaning: "― kali", part: "[接尾]", story: "💡 ANALOGI 3 DETIK: Orang (亻) melipatgandakan hitungan $\\rightarrow$ ― kali lipat.", radicals: [{char: "亻", pos: "kiri", name: "Orang", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "44-23", cat: "ch44", kanji: "シングル", kana: "シングル", meaning: "single", part: "[名]", story: "💡 ANALOGI 3 DETIK: Kamar hotel untuk satu orang $\\rightarrow$ Single room.", radicals: [{char: "カナ", pos: "Katakana", name: "Satu", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "44-24", cat: "ch44", kanji: "ツイン", kana: "ツイン", meaning: "twin", part: "[名]", story: "💡 ANALOGI 3 DETIK: Kamar hotel dengan dua kasur kembar $\\rightarrow$ Twin room.", radicals: [{char: "カナ", pos: "Katakana", name: "Dua", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "44-25", cat: "ch44", kanji: "洗濯物", kana: "せんたくもの", meaning: "cucian", part: "[名]", story: "💡 ANALOGI 3 DETIK: Cuci pakaian kotor (洗濯) berupa barang (物) $\\rightarrow$ Pakaian cucian.", radicals: [{char: "洗", pos: "kiri", name: "Cuci", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "44-26", cat: "ch44", kanji: "DVD", kana: "DVD", meaning: "DVD", part: "[名]", story: "💡 ANALOGI 3 DETIK: Piringan cakram pemutar video $\\rightarrow$ DVD.", radicals: [{char: "Alfabet", pos: "Serapan", name: "Media", color: "text-slate-400 bg-slate-800"}] },
+      { id: "44-27", cat: "ch44", kanji: "ホテルひろしま", kana: "ホテルひろしま", meaning: "hotel fiksi", part: "[固名]", story: "💡 ANALOGI 3 DETIK: Nama tempat hotel fiksi di buku contoh $\\rightarrow$ Hotel Hiroshima.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Hotel", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "44-28", cat: "ch44", kanji: "ばら", kana: "ばら", meaning: "bunga mawar", part: "[名]", story: "💡 ANALOGI 3 DETIK: Bunga berduri harum merah merekah $\\rightarrow$ Bunga mawar.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Mawar", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "44-29", cat: "ch44", kanji: "ドライブ", kana: "ドライブ", meaning: "berjalan-jalan dengan mobil", part: "[名]", story: "💡 ANALOGI 3 DETIK: Katakana kata serapan 'Drive' jalan santai naik mobil.", radicals: [{char: "カナ", pos: "Katakana", name: "Mobil", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "44-30", cat: "ch44", kanji: "理由", kana: "りゆう", meaning: "alasan", part: "[名]", story: "💡 ANALOGI 3 DETIK: Logika kebenaran (理) yang mendasari (由) $\\rightarrow$ Alasan.", radicals: [{char: "理", pos: "kiri", name: "Logika", color: "text-cyan-400 bg-cyan-950/40"}, {char: "由", pos: "kanan", name: "Sebab", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "44-31", cat: "ch44", kanji: "謝ります", kana: "あやまります", meaning: "memohon maaf", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Kata-kata (言) yang menembak (射) rendah diri $\\rightarrow$ Memohon maaf.", radicals: [{char: "言", pos: "kiri", name: "Kata", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "44-32", cat: "ch44", kanji: "知り合います", kana: "しりあいます", meaning: "berkenalan", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Saling (合い) tahu (知り) nama orang $\\rightarrow$ Berkenalan.", radicals: [{char: "知", pos: "kiri", name: "Tahu", color: "text-emerald-400 bg-emerald-950/40"}, {char: "合", pos: "kanan", name: "Cocok", color: "text-cyan-400 bg-cyan-950/40"}] },
+
+      // BAB 45 POKOK (15) & YOMIMONO (8)
+      { id: "45-1", cat: "ch45", kanji: "信じます", kana: "しんじます", meaning: "percaya", part: "[動II]", story: "💡 ANALOGI 3 DETIK: Orang (亻) berkata perkataan (言) jujur $\\rightarrow$ Harus dipercaya.", radicals: [{char: "亻", pos: "kiri", name: "Orang", color: "text-cyan-400 bg-cyan-950/40"}, {char: "言", pos: "kanan", name: "Kata", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "45-2", cat: "ch45", kanji: "キャンセルします", kana: "キャンセルします", meaning: "membatalkan", part: "[動III]", story: "💡 ANALOGI 3 DETIK: Katakana kata serapan 'Cancel' $\\rightarrow$ Membatalkan pesanan.", radicals: [{char: "カナ", pos: "Katakana", name: "Batal", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-3", cat: "ch45", kanji: "知らせます", kana: "しらせます", meaning: "memberitahukan", part: "[動II]", story: "💡 ANALOGI 3 DETIK: Tahu (知) berita penting lalu disebarkan $\\rightarrow$ Memberitahukan.", radicals: [{char: "知", pos: "tunggal", name: "Tahu", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "45-4", cat: "ch45", kanji: "保証書", kana: "ほしょうしょ", meaning: "surat garansi", part: "[名]", story: "💡 ANALOGI 3 DETIK: Jamin (保) + Bukti (証) + Dokumen (書) $\\rightarrow$ Surat garansi resmi.", radicals: [{char: "保", pos: "kiri", name: "Jamin", color: "text-cyan-400 bg-cyan-950/40"}, {char: "書", pos: "kanan", name: "Surat", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "45-5", cat: "ch45", kanji: "領収書", kana: "りょうしゅうしょ", meaning: "kuitansi", part: "[名]", story: "💡 ANALOGI 3 DETIK: Terima uang (領) + Kumpul (収) + Lembar (書) $\\rightarrow$ Kuitansi kasir.", radicals: [{char: "領", pos: "kiri", name: "Terima", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "45-6", cat: "ch45", kanji: "キャンプ", kana: "キャンプ", meaning: "kemah", part: "[名]", story: "💡 ANALOGI 3 DETIK: Dirikan tenda di alam terbuka $\\rightarrow$ Berkemah / kemah.", radicals: [{char: "カナ", pos: "Katakana", name: "Tenda", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "45-7", cat: "ch45", kanji: "中止", kana: "ちゅうし", meaning: "pembatalan", part: "[名]", story: "💡 ANALOGI 3 DETIK: Berhenti (止) tepat di tengah (中) jalan $\\rightarrow$ Pembatalan acara.", radicals: [{char: "中", pos: "kiri", name: "Tengah", color: "text-amber-400 bg-amber-950/40"}, {char: "止", pos: "kanan", name: "Stop", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-8", cat: "ch45", kanji: "点", kana: "てん", meaning: "poin", part: "[名]", story: "💡 ANALOGI 3 DETIK: Angka nilai pada lembar ujian $\\rightarrow$ Poin nilai.", radicals: [{char: "灬", pos: "bawah", name: "Titik", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "45-9", cat: "ch45", kanji: "梅", kana: "うめ", meaning: "bunga plum", part: "[名]", story: "💡 ANALOGI 3 DETIK: Pohon (木) buah asam kesukaan Ibu (毎) $\\rightarrow$ Bunga plum.", radicals: [{char: "木", pos: "kiri", name: "Pohon", color: "text-amber-400 bg-amber-950/40"}, {char: "毎", pos: "kanan", name: "Tiap", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-10", cat: "ch45", kanji: "110番", kana: "ひゃくとおばん", meaning: "nomor telepon polisi untuk saat darurat", part: "[名]", story: "💡 CLUE: Tekan 110 saat bertemu maling atau kecelakaan lalu lintas.", radicals: [{char: "数", pos: "Angka", name: "Polisi", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-11", cat: "ch45", kanji: "119番", kana: "ひゃくじゅうきゅうばん", meaning: "nomor telepon departemen pemadam kebakaran dan penanggulangan bencana untuk saat darurat", part: "[名]", story: "💡 CLUE: Tekan 119 saat terjadi kebakaran atau ambulans darurat.", radicals: [{char: "数", pos: "Angka", name: "Damkar", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-12", cat: "ch45", kanji: "急に", kana: "きゅうに", meaning: "mendadak, tiba-tiba", part: "[副]", story: "💡 ANALOGI 3 DETIK: Hati (心) kaget terburu-buru $\\rightarrow$ Terjadi mendadak.", radicals: [{char: "心", pos: "bawah", name: "Hati", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-13", cat: "ch45", kanji: "無理に", kana: "むりに", meaning: "dengan paksa", part: "[副]", story: "💡 ANALOGI 3 DETIK: Tanpa (無) ada alasan logika (理) $\\rightarrow$ Dengan paksa.", radicals: [{char: "無", pos: "kiri", name: "Tiada", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-14", cat: "ch45", kanji: "楽しみに しています", kana: "たのしみに しています", meaning: "menikmati", part: "[慣用]", story: "💡 ANALOGI 3 DETIK: Menantikan acara seru dengan gembira $\\rightarrow$ Menikmati / menantikan.", radicals: [{char: "楽", pos: "kiri", name: "Senang", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "45-15", cat: "ch45", kanji: "以上です", kana: "いじょうです", meaning: "Sekian.", part: "[連語]", story: "💡 ANALOGI 3 DETIK: Diucapkan saat pidato/presentasi berakhir $\\rightarrow$ 'Sekian terima kasih'.", radicals: [{char: "以", pos: "kiri", name: "Batas", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "45-16", cat: "ch45", kanji: "悩み", kana: "なやみ", meaning: "masalah", part: "[名]", story: "💡 ANALOGI 3 DETIK: Hati (忄) pusing menanggung beban pikiran berat $\\rightarrow$ Masalah.", radicals: [{char: "忄", pos: "kiri", name: "Hati", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "45-17", cat: "ch45", kanji: "目覚まし[時計]", kana: "めざまし[どけい]", meaning: "weker", part: "[名]", story: "💡 ANALOGI 3 DETIK: Bikin mata (目) terbuka bangun (覚まし) $\\rightarrow$ Jam weker.", radicals: [{char: "目", pos: "kiri", name: "Mata", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "45-18", cat: "ch45", kanji: "目が 覚めます", kana: "めが さめます", meaning: "terbangun", part: "[動II]", story: "💡 ANALOGI 3 DETIK: Mata terbuka sadar dari tidur $\\rightarrow$ Terbangun.", radicals: [{char: "目", pos: "kiri", name: "Mata", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "45-19", cat: "ch45", kanji: "大学生", kana: "だいがくせい", meaning: "mahasiswa", part: "[名]", story: "💡 ANALOGI 3 DETIK: Murid (生) yang belajar di kampus besar (大学) $\\rightarrow$ Mahasiswa.", radicals: [{char: "大", pos: "kiri", name: "Besar", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "45-20", cat: "ch45", kanji: "回答", kana: "かいとう", meaning: "jawaban (~します: menjawab)", part: "[名]", story: "💡 ANALOGI 3 DETIK: Membalas (回) pertanyaan (答) $\\rightarrow$ Lembar jawaban.", radicals: [{char: "回", pos: "kiri", name: "Putar", color: "text-cyan-400 bg-cyan-950/40"}, {char: "答", pos: "kanan", name: "Jawab", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "45-21", cat: "ch45", kanji: "鳴ります", kana: "なります", meaning: "berbunyi [weker ~]", part: "[動I] [目覚まし時計が～]", story: "💡 ANALOGI 3 DETIK: Mulut (口) burung (鳥) berkicau keras $\\rightarrow$ Jam weker berbunyi!", radicals: [{char: "口", pos: "kiri", name: "Mulut", color: "text-rose-400 bg-rose-950/40"}, {char: "鳥", pos: "kanan", name: "Burung", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "45-22", cat: "ch45", kanji: "セットします", kana: "セットします", meaning: "memasang, mengatur", part: "[動III]", story: "💡 ANALOGI 3 DETIK: Menyetel jarum alarm jam $\\rightarrow$ Memasang, mengatur.", radicals: [{char: "カナ", pos: "Katakana", name: "Set", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "45-23", cat: "ch45", kanji: "それでも", kana: "それでも", meaning: "masih", part: "[接]", story: "💡 ANALOGI 3 DETIK: Meskipun sudah terjadi demikian $\\rightarrow$ Masih / kendati begitu.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Masih", color: "text-amber-400 bg-amber-950/40"}] },
+
+      // BAB 46 POKOK (17) & YOMIMONO (8)
+      { id: "46-1", cat: "ch46", kanji: "渡します", kana: "わたします", meaning: "menyerahkan", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Kata 'Watashi' menyerahkan titipan barang ke teman $\\rightarrow$ Menyerahkan.", radicals: [{char: "氵", pos: "kiri", name: "Air", color: "text-cyan-400 bg-cyan-950/40"}, {char: "度", pos: "kanan", name: "Derajat", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-2", cat: "ch46", kanji: "帰って 来ます", kana: "かえって きます", meaning: "pulang", part: "[動III]", story: "💡 ANALOGI 3 DETIK: Kembali (帰) lalu datang (来) ke rumah $\\rightarrow$ Pulang.", radicals: [{char: "帰", pos: "kiri", name: "Balik", color: "text-cyan-400 bg-cyan-950/40"}, {char: "来", pos: "kanan", name: "Datang", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "46-3", cat: "ch46", kanji: "出ます", kana: "でます", meaning: "[bus] berangkat", part: "[動II] [バスが～]", story: "💡 ANALOGI 3 DETIK: Bus keluar (出) terminal melaju ke jalan $\\rightarrow$ Berangkat.", radicals: [{char: "出", pos: "tunggal", name: "Keluar", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-4", cat: "ch46", kanji: "届きます", kana: "とどきます", meaning: "[barang] sampai", part: "[動I] [荷物が～]", story: "💡 ANALOGI 3 DETIK: Kurir kirim paket tepat tiba di pintu rumah $\\rightarrow$ Paket sampai.", radicals: [{char: "尸", pos: "luar", name: "Rumah", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-5", cat: "ch46", kanji: "入学します", kana: "にゅうがくします", meaning: "masuk [universitas]", part: "[動III] [大学に～]", story: "💡 ANALOGI 3 DETIK: Masuk (入) ke tempat belajar (学) $\\rightarrow$ Masuk kampus (Partikel に).", radicals: [{char: "入", pos: "kiri", name: "Masuk", color: "text-emerald-400 bg-emerald-950/40"}, {char: "学", pos: "kanan", name: "Ilmu", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-6", cat: "ch46", kanji: "卒業します", kana: "そつぎょうします", meaning: "lulus/tamat [dari universitas]", part: "[動III] [大学を～]", story: "💡 ANALOGI 3 DETIK: Lulus tamat (卒) dari karya studi (業) $\\rightarrow$ Lulus keluar (Partikel を).", radicals: [{char: "卒", pos: "kiri", name: "Lulus", color: "text-rose-400 bg-rose-950/40"}, {char: "業", pos: "kanan", name: "Karya", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-7", cat: "ch46", kanji: "焼きます", kana: "やきます", meaning: "membakar", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Menyalakan api (火) untuk memanggang roti $\\rightarrow$ Membakar.", radicals: [{char: "火", pos: "kiri", name: "Api", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "46-8", cat: "ch46", kanji: "焼けます", kana: "やけます", meaning: "[roti] dibakar, [daging] dibakar", part: "[動II] [パンが～, 肉が～]", story: "💡 ANALOGI 3 DETIK: Roti dan daging matang terpanggang api $\\rightarrow$ Dibakar.", radicals: [{char: "火", pos: "kiri", name: "Api", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "46-9", cat: "ch46", kanji: "留守", kana: "るす", meaning: "ketidakadaan", part: "[名]", story: "💡 ANALOGI 3 DETIK: Orang rumah kabur lari seperti 'Rusa' $\\rightarrow$ Rumah kosong / ketidakadaan.", radicals: [{char: "留", pos: "kiri", name: "Diam", color: "text-amber-400 bg-amber-950/40"}, {char: "守", pos: "kanan", name: "Jaga", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-10", cat: "ch46", kanji: "宅配便", kana: "たくはいびん", meaning: "titipan kilat", part: "[名]", story: "💡 ANALOGI 3 DETIK: Kurir antar ke rumah (宅) membagikan paket (配) $\\rightarrow$ Titipan kilat.", radicals: [{char: "宅", pos: "kiri", name: "Wisma", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-11", cat: "ch46", kanji: "原因", kana: "げんいん", meaning: "sebab", part: "[名]", story: "💡 ANALOGI 3 DETIK: Asal mula (原) yang terkurung di dalam benak (因) $\\rightarrow$ Akar penyebab.", radicals: [{char: "原", pos: "kiri", name: "Asal", color: "text-cyan-400 bg-cyan-950/40"}, {char: "因", pos: "kanan", name: "Sebab", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "46-12", cat: "ch46", kanji: "こちら", kana: "こちら", meaning: "sini", part: "[代]", story: "💡 ANALOGI 3 DETIK: Menunjuk arah pembicara secara santun $\\rightarrow$ Sebelah sini.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Sini", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-13", cat: "ch46", kanji: "～の 所", kana: "～の ところ", meaning: "tempat ~", part: "[名]", story: "💡 ANALOGI 3 DETIK: Lokasi kediaman atau tempat urusan $\\rightarrow$ Tempat ~.", radicals: [{char: "所", pos: "tunggal", name: "Tempat", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-14", cat: "ch46", kanji: "半年", kana: "はんとし", meaning: "setengah tahun", part: "[名]", story: "💡 ANALOGI 3 DETIK: Separuh bagian (半) dari kalender tahun (年) $\\rightarrow$ Setengah tahun.", radicals: [{char: "半", pos: "kiri", name: "Setengah", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "46-15", cat: "ch46", kanji: "ちょうど", kana: "ちょうど", meaning: "pas", part: "[副]", story: "💡 ANALOGI 3 DETIK: Jarum jam dan timbangan tepat di angka yang pas $\\rightarrow$ Sangat pas.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Pas", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "46-16", cat: "ch46", kanji: "たった今", kana: "たったいま", meaning: "baru saja (memakai bersama bentuk lampau, menyatakan hal yang sudah selesai dilakukan)", part: "[副]", story: "💡 CLUE WAJIB: Ada 'tatta-ima' langsung kunci KK lampau た + ところです!", radicals: [{char: "今", pos: "utama", name: "Sekarang", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "46-17", cat: "ch46", kanji: "今 いいですか", kana: "いま いいですか", meaning: "Sekarang boleh mengganggu?", part: "[連語]", story: "💡 ANALOGI 3 DETIK: Salam permisi sebelum memulai telepon/obrolan penting.", radicals: [{char: "今", pos: "utama", name: "Sekarang", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-18", cat: "ch46", kanji: "ついて います", kana: "ついて います", meaning: "mujur, untung", part: "[動II]", story: "💡 ANALOGI 3 DETIK: Dewi keberuntungan sedang menempel di sisi kita $\\rightarrow$ Mujur, untung.", radicals: [{char: "Kana", pos: "Non-Kanji", name: "Mujur", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-19", cat: "ch46", kanji: "床", kana: "ゆか", meaning: "lantai", part: "[名]", story: "💡 ANALOGI 3 DETIK: Di bawah atap rumah tempat tidur dan berjalan $\\rightarrow$ Permukaan lantai.", radicals: [{char: "床", pos: "tunggal", name: "Alas", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-20", cat: "ch46", kanji: "転びます", kana: "ころびます", meaning: "jatuh", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Roda mobil (車) slip terpeleset $\\rightarrow$ Tergelincir jatuh.", radicals: [{char: "車", pos: "kiri", name: "Roda", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-21", cat: "ch46", kanji: "ベル", kana: "ベル", meaning: "bel", part: "[名]", story: "💡 ANALOGI 3 DETIK: Bel pintu atau bel sekolah berbunyi $\\rightarrow$ Bel.", radicals: [{char: "カナ", pos: "Katakana", name: "Bel", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "46-22", cat: "ch46", kanji: "鳴ります", kana: "なります", meaning: "berbunyi [bel ~]", part: "[動I] [ベルが～]", story: "💡 ANALOGI 3 DETIK: Mulut (口) burung (鳥) nyaring $\\rightarrow$ Bel berbunyi!", radicals: [{char: "口", pos: "kiri", name: "Mulut", color: "text-rose-400 bg-rose-950/40"}, {char: "鳥", pos: "kanan", name: "Burung", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-23", cat: "ch46", kanji: "慌てて", kana: "あわてて", meaning: "tergesa-gesa", part: "[副]", story: "💡 ANALOGI 3 DETIK: Suara teriak panik orang buru-buru $\\rightarrow$ Tergesa-gesa.", radicals: [{char: "忄", pos: "kiri", name: "Hati", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "46-24", cat: "ch46", kanji: "順番に", kana: "じゅんばんに", meaning: "sesuai dengan urutan", part: "[副]", story: "💡 ANALOGI 3 DETIK: Tertib urut (順) bergiliran nomor (番) $\\rightarrow$ Sesuai urutan.", radicals: [{char: "順", pos: "kiri", name: "Urut", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "46-25", cat: "ch46", kanji: "出来事", kana: "できごと", meaning: "peristiwa", part: "[名]", story: "💡 ANALOGI 3 DETIK: Perkara nyata (事) yang keluar terjadi $\\rightarrow$ Peristiwa.", radicals: [{char: "出", pos: "kiri", name: "Keluar", color: "text-cyan-400 bg-cyan-950/40"}, {char: "事", pos: "kanan", name: "Hal", color: "text-amber-400 bg-amber-950/40"}] },
+
+      // KANJI IRODORI (39 KATA LENGKAP DARI SELURUH FOTO)
+      { id: "iro-1", cat: "irodori", kanji: "服", kana: "ふく", meaning: "pakaian, baju", part: "[名]", story: "💡 ANALOGI 3 DETIK: Kain penutup badan bulan (月) $\\rightarrow$ Pakaian baju.", radicals: [{char: "月", pos: "kiri", name: "Bulan", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-2", cat: "irodori", kanji: "袋", kana: "ふくろ", meaning: "kantong, tas", part: "[名]", story: "💡 ANALOGI 3 DETIK: Baju (衣) di bawah yang bisa dilipat jadi tas belanja $\\rightarrow$ Kantong tas.", radicals: [{char: "衣", pos: "bawah", name: "Baju", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-3", cat: "irodori", kanji: "自分", kana: "じぶん", meaning: "diri sendiri", part: "[名]", story: "💡 ANALOGI 3 DETIK: Hidung diri sendiri (自) dibagi (分) $\\rightarrow$ Diri sendiri.", radicals: [{char: "自", pos: "kiri", name: "Diri", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "iro-4", cat: "irodori", kanji: "店長", kana: "てんちょう", meaning: "manajer toko", part: "[名]", story: "💡 ANALOGI 3 DETIK: Toko (店) + Pemimpin/Ketua (長) $\\rightarrow$ Kepala manajer toko.", radicals: [{char: "店", pos: "kiri", name: "Toko", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "iro-5", cat: "irodori", kanji: "全員", kana: "ぜんいん", meaning: "semua orang", part: "[名]", story: "💡 ANALOGI 3 DETIK: Utuh semua (全) anggota staf (員) $\\rightarrow$ Seluruh orang.", radicals: [{char: "全", pos: "kiri", name: "Semua", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-6", cat: "irodori", kanji: "習慣", kana: "しゅうかん", meaning: "kebiasaan", part: "[名]", story: "💡 ANALOGI 3 DETIK: Latihan (習) sampai terbiasa (慣) $\\rightarrow$ Kebiasaan.", radicals: [{char: "習", pos: "kiri", name: "Belajar", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-7", cat: "irodori", kanji: "普通", kana: "ふつう", meaning: "biasa, normal", part: "[名]", story: "💡 ANALOGI 3 DETIK: Umum merata (普) melintas lewat (通) $\\rightarrow$ Biasa, normal.", radicals: [{char: "普", pos: "kiri", name: "Umum", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "iro-8", cat: "irodori", kanji: "暗い", kana: "くらい", meaning: "gelap", part: "[形]", story: "💡 ANALOGI 3 DETIK: Matahari (日) tertutup suara mendung $\\rightarrow$ Ruangan gelap.", radicals: [{char: "日", pos: "kiri", name: "Mentari", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-9", cat: "irodori", kanji: "怒る", kana: "おこる", meaning: "marah", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Menahan hati (心) mendidih $\\rightarrow$ Meledak marah!", radicals: [{char: "心", pos: "bawah", name: "Hati", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-10", cat: "irodori", kanji: "入院する", kana: "にゅういんする", meaning: "dirawat di RS", part: "[動III]", story: "💡 ANALOGI 3 DETIK: Masuk (入) ke gedung rumah sakit (院) $\\rightarrow$ Dirawat di RS.", radicals: [{char: "入", pos: "kiri", name: "Masuk", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "iro-11", cat: "irodori", kanji: "色", kana: "いろ", meaning: "warna", part: "[名]", story: "💡 ANALOGI 3 DETIK: Berbagai corak rona dunia $\\rightarrow$ Warna.", radicals: [{char: "色", pos: "tunggal", name: "Warna", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-12", cat: "irodori", kanji: "赤", kana: "あか", meaning: "merah", part: "[名]", story: "💡 ANALOGI 3 DETIK: Tanah disinari api merah membara $\\rightarrow$ Merah.", radicals: [{char: "赤", pos: "tunggal", name: "Merah", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-13", cat: "irodori", kanji: "青", kana: "あお", meaning: "biru", part: "[名]", story: "💡 ANALOGI 3 DETIK: Langit cerah musim semi tanpa awan $\\rightarrow$ Biru.", radicals: [{char: "青", pos: "tunggal", name: "Biru", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-14", cat: "irodori", kanji: "黒", kana: "くろ", meaning: "hitam", part: "[名]", story: "💡 ANALOGI 3 DETIK: Titik arang terbakar jelaga $\\rightarrow$ Hitam pekat.", radicals: [{char: "里", pos: "atas", name: "Desa", color: "text-slate-400 bg-slate-800"}] },
+      { id: "iro-15", cat: "irodori", kanji: "白", kana: "しろ", meaning: "putih", part: "[名]", story: "💡 ANALOGI 3 DETIK: Sebersih butiran salju musim dingin $\\rightarrow$ Putih.", radicals: [{char: "白", pos: "tunggal", name: "Putih", color: "text-slate-300 bg-slate-800"}] },
+      { id: "iro-16", cat: "irodori", kanji: "女性", kana: "じょせい", meaning: "wanita, perempuan", part: "[名]", story: "💡 ANALOGI 3 DETIK: Wanita (女) dengan sifat aslinya (性) $\\rightarrow$ Kaum wanita.", radicals: [{char: "女", pos: "kiri", name: "Wanita", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-17", cat: "irodori", kanji: "男性", kana: "だんせい", meaning: "pria, laki-laki", part: "[名]", story: "💡 ANALOGI 3 DETIK: Pria perkasa di sawah (男) dengan kodratnya (性) $\\rightarrow$ Kaum pria.", radicals: [{char: "男", pos: "kiri", name: "Pria", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-18", cat: "irodori", kanji: "営業する", kana: "えいぎょうする", meaning: "buka, beroperasi", part: "[動III]", story: "💡 ANALOGI 3 DETIK: Menjalankan bisnis (営) tugas usaha (業) $\\rightarrow$ Beroperasi / buka.", radicals: [{char: "営", pos: "kiri", name: "Kelola", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "iro-19", cat: "irodori", kanji: "案内する", kana: "あんないする", meaning: "memandu, mengantar", part: "[動III]", story: "💡 ANALOGI 3 DETIK: Memberi ketenangan (案) di dalam gedung (内) $\\rightarrow$ Memandu jalan.", radicals: [{char: "案", pos: "kiri", name: "Rencana", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "iro-20", cat: "irodori", kanji: "来年", kana: "らいねん", meaning: "tahun depan", part: "[名]", story: "💡 ANALOGI 3 DETIK: Tahun (年) yang akan datang (来) $\\rightarrow$ Tahun depan.", radicals: [{char: "来", pos: "kiri", name: "Datang", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-21", cat: "irodori", kanji: "会場", kana: "かいじょう", meaning: "tempat acara, aula", part: "[名]", story: "💡 ANALOGI 3 DETIK: Tempat (場) bertemu berkumpul (会) $\\rightarrow$ Gedung aula.", radicals: [{char: "会", pos: "kiri", name: "Temu", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "iro-22", cat: "irodori", kanji: "世界", kana: "せかい", meaning: "dunia", part: "[名]", story: "💡 ANALOGI 3 DETIK: Generasi manusia (世) di batas bumi (界) $\\rightarrow$ Seluruh dunia.", radicals: [{char: "世", pos: "kiri", name: "Generasi", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "iro-23", cat: "irodori", kanji: "体験", kana: "たいけん", meaning: "pengalaman langsung", part: "[名]", story: "💡 ANALOGI 3 DETIK: Tubuh badan (体) menguji rasa nyata (験) $\\rightarrow$ Pengalaman langsung.", radicals: [{char: "体", pos: "kiri", name: "Badan", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-24", cat: "irodori", kanji: "国際交流", kana: "こくさいこうりゅう", meaning: "pertukaran internasional", part: "[名]", story: "💡 ANALOGI 3 DETIK: Batas antar bangsa (国際) saling bergaul (交流) $\\rightarrow$ Pertukaran internasional.", radicals: [{char: "国", pos: "kiri", name: "Negara", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-25", cat: "irodori", kanji: "禁止", kana: "きんし", meaning: "dilarang", part: "[名]", story: "💡 ANALOGI 3 DETIK: Memperingatkan (禁) untuk berhenti (止) $\\rightarrow$ Dilarang keras!", radicals: [{char: "禁", pos: "kiri", name: "Peringatan", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-26", cat: "irodori", kanji: "紙", kana: "かみ", meaning: "kertas", part: "[名]", story: "💡 ANALOGI 3 DETIK: Serat benang tipis (糸) yang dicetak rata $\\rightarrow$ Lembaran kertas.", radicals: [{char: "糸", pos: "kiri", name: "Benang", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "iro-27", cat: "irodori", kanji: "始まる", kana: "はじまる", meaning: "mulai", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Wanita (女) membuka acara pertama kali $\\rightarrow$ Mulai.", radicals: [{char: "女", pos: "kiri", name: "Wanita", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "iro-28", cat: "irodori", kanji: "申し込む", kana: "もうしこむ", meaning: "mendaftar", part: "[動I]", story: "💡 ANALOGI 3 DETIK: Menyampaikan niat (申) masuk ke daftar (込) $\\rightarrow$ Mendaftar formulir.", radicals: [{char: "申", pos: "kiri", name: "Sampaikan", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-29", cat: "irodori", kanji: "今年", kana: "ことし", meaning: "tahun ini", part: "[名]", story: "💡 ANALOGI 3 DETIK: Tahun (年) sekarang ini (今) $\\rightarrow$ Tahun ini.", radicals: [{char: "今", pos: "kiri", name: "Sekarang", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-30", cat: "irodori", kanji: "昨年", kana: "さくねん", meaning: "tahun lalu", part: "[名]", story: "💡 ANALOGI 3 DETIK: Masa lampau kemarin (昨) di tahun lalu (年) $\\rightarrow$ Tahun lalu.", radicals: [{char: "昨", pos: "kiri", name: "Kemarin", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "iro-31", cat: "irodori", kanji: "毎年", kana: "まいとし", meaning: "setiap tahun", part: "[名]", story: "💡 ANALOGI 3 DETIK: Setiap (毎) pergantian tahun (年) $\\rightarrow$ Setiap tahun.", radicals: [{char: "毎", pos: "kiri", name: "Tiap", color: "text-emerald-400 bg-emerald-950/40"}] },
+      { id: "iro-32", cat: "irodori", kanji: "文化", kana: "ぶんか", meaning: "kebudayaan", part: "[名]", story: "💡 ANALOGI 3 DETIK: Tulisan sastra (文) yang mengubah peradaban (化) $\\rightarrow$ Kebudayaan.", radicals: [{char: "文", pos: "kiri", name: "Tulisan", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-33", cat: "irodori", kanji: "祭り", kana: "まつり", meaning: "festival", part: "[名]", story: "💡 ANALOGI 3 DETIK: Persembahan daging di meja altar dewa $\\rightarrow$ Festival pesta rakyat.", radicals: [{char: "祭", pos: "tunggal", name: "Festival", color: "text-rose-400 bg-rose-950/40"}] },
+      { id: "iro-34", cat: "irodori", kanji: "正月", kana: "しょうがつ", meaning: "tahun baru", part: "[名]", story: "💡 ANALOGI 3 DETIK: Bulan (月) lurus pertama di awal tahun (正) $\\rightarrow$ Tahun baru.", radicals: [{char: "正", pos: "kiri", name: "Lurus", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "iro-35", cat: "irodori", kanji: "式", kana: "しき", meaning: "upacara/tipe", part: "[名]", story: "💡 ANALOGI 3 DETIK: Panah upacara tradisi formal $\\rightarrow$ Upacara resmi.", radicals: [{char: "式", pos: "tunggal", name: "Upacara", color: "text-purple-400 bg-purple-950/40"}] },
+      { id: "iro-36", cat: "irodori", kanji: "大人", kana: "おとな", meaning: "dewasa", part: "[名]", story: "💡 ANALOGI 3 DETIK: Manusia (人) yang berjiwa besar bertanggung jawab (大) $\\rightarrow$ Orang dewasa.", radicals: [{char: "大", pos: "kiri", name: "Besar", color: "text-cyan-400 bg-cyan-950/40"}] },
+      { id: "iro-37", cat: "irodori", kanji: "米", kana: "こめ", meaning: "beras", part: "[名]", story: "💡 ANALOGI 3 DETIK: Bulir padi mekar ke delapan penjuru mata angin $\\rightarrow$ Beras.", radicals: [{char: "米", pos: "tunggal", name: "Beras", color: "text-amber-400 bg-amber-950/40"}] },
+      { id: "iro-38", cat: "irodori", kanji: "特別[な]", kana: "とくべつ[な]", meaning: "khusus", part: "[形]", story: "💡 ANALOGI 3 DETIK: Sapi pilihan istimewa (特) yang dipisahkan (別) $\\rightarrow$ Sangat khusus.", radicals: [{char: "特", pos: "kiri", name: "Istimewa", color: "text-rose-400 bg-rose-950/40"}] }
+    ];
+
+    // 40 SOAL DRILL KOTOBA 43-46 LENGKAP POKOK & YOMIMONO
+    const kotobaQuizBank = [
+      { num: 1, cat: "ch43", q: "車の 輸出が（　）ました。", opts: ["a. 下がり", "b. 増え", "c. 落ち", "d. 切れ"], ans: 1, explain: "Ekspor bertambah $\\rightarrow$ <strong>増えました</strong>." },
+      { num: 2, cat: "ch43", q: "最近 ガソリンの 値段が（　）ました。", opts: ["a. 上がり", "b. とれ", "c. 減り", "d. 落ち"], ans: 0, explain: "Harga meningkat $\\rightarrow$ <strong>上がりました</strong>." },
+      { num: 3, cat: "ch43", q: "ポケットに 入れた 鍵が（　）ました。", opts: ["a. 切れ", "b. 落ち", "c. 増え", "d. 下がり"], ans: 1, explain: "Barang terjatuh $\\rightarrow$ <strong>落ちました</strong>." },
+      { num: 4, cat: "ch43", q: "シャツの ボタンが（　）しまいました。", opts: ["a. 切れ", "b. 落ち", "c. とれて", "d. 減って"], ans: 2, explain: "Kancing terlepas $\\rightarrow$ <strong>とれて</strong> しまいました." },
+      { num: 5, cat: "ch43", q: "この 料理は とても（　）ですね。シェフの腕がいいです。", opts: ["a. うまい", "b. まずい", "c. つまらない", "d. 変な"], ans: 0, explain: "Enak, lezat = <strong>うまい</strong>." },
+      { num: 6, cat: "ch43", q: "この 番組は 全然 面白くなくて、（　）です。", opts: ["a. 優しい", "b. うまい", "c. つまらない", "d. 楽な"], ans: 2, explain: "Tidak menarik, percuma = <strong>つまらない</strong>." },
+      { num: 7, cat: "ch43", q: "説明書を 読んで、（　）通りに 組み立ててください。", opts: ["a. 表現", "b. 順序", "c. 安心", "d. 理由"], ans: 1, explain: "Sesuai urutan = <strong>順序</strong> (じゅんじょ)." },
+      { num: 8, cat: "ch43", q: "鏡が 割れるのは（　）が 悪いと 言われています。", opts: ["a. 表現", "b. 順序", "c. 縁起", "d. 理由"], ans: 2, explain: "Tidak menyenangkan / sial = <strong>縁起が 悪い</strong>." },
+      { num: 9, cat: "ch44", q: "赤ちゃんが 大きな 声で（　）います。", opts: ["a. 泣いて", "b. 笑って", "c. 乾いて", "d. 眠って"], ans: 0, explain: "Menangis = <strong>泣いています</strong>." },
+      { num: 10, cat: "ch44", q: "雪の 道は とても（　）やすいですから、注意して ください。", opts: ["a. 乾き", "b. 濡れ", "c. 滑り", "d. 眠り"], ans: 2, explain: "Licin = <strong>滑りやすい</strong>." },
+      { num: 11, cat: "ch44", q: "この スープは 味が とても（　）です。", opts: ["a. 濃い", "b. 薄い", "c. 太い", "d. 細い"], ans: 0, explain: "Kental rasa = <strong>濃い</strong>." },
+      { num: 12, cat: "ch44", q: "エアコンの 温度を（　）します。", opts: ["a. 調節", "b. 中止", "c. 案内", "d. 入学"], ans: 0, explain: "Mengontrol suhu = <strong>調節します</strong>." },
+      { num: 13, cat: "ch44", q: "雨の 日は 洗濯物が（　）にくいです。", opts: ["a. 乾き", "b. 泣き", "c. 滑り", "d. 起き"], ans: 0, explain: "Cucian mengering = <strong>乾きます</strong>." },
+      { num: 14, cat: "ch44", q: "冬は（　）セーターを 着て 出かけます。", opts: ["a. 太い", "b. 厚い", "c. 濃い", "d. 薄い"], ans: 1, explain: "Tebal barang = <strong>厚い</strong> (あつい)." },
+      { num: 15, cat: "ch44", q: "遅刻した ことを 先生に（　）ました。", opts: ["a. 謝り", "b. 知り合い", "c. 調節し", "d. 起き"], ans: 0, explain: "Memohon maaf = <strong>謝りました</strong>." },
+      { num: 16, cat: "ch45", q: "彼の 言った ことを 心から（　）います。", opts: ["a. 知らせて", "b. 渡して", "c. 信じて", "d. 鳴って"], ans: 2, explain: "Percaya = <strong>信じています</strong>." },
+      { num: 17, cat: "ch45", q: "雨で 今日の 試合は（　）に なりました。", opts: ["a. 中止", "b. 禁止", "c. 停止", "d. 解決"], ans: 0, explain: "Pembatalan acara = <strong>中止</strong>." },
+      { num: 18, cat: "ch45", q: "朝 7時に 目覚まし時計が（　）ました。", opts: ["a. 落ち", "b. 切れ", "c. 鳴り", "d. 焼け"], ans: 2, explain: "Weker berbunyi = <strong>鳴りました</strong>." },
+      { num: 19, cat: "ch45", q: "買い物の あとで レジで（　）を もらいました。", opts: ["a. 保証書", "b. 領収書", "c. 原因", "d. 出来事"], ans: 1, explain: "Kuitansi kasir = <strong>領収書</strong>." },
+      { num: 20, cat: "ch45", q: "火事の ときは（　）に 電話を かけます。", opts: ["a. 110番", "b. 119番", "c. 104番", "d. 117番"], ans: 1, explain: "Kebakaran / damkar = <strong>119番</strong>." },
+      { num: 21, cat: "ch45", q: "最近 仕事の（　）が 多くて、夜 眠れません。", opts: ["a. 点", "b. 梅", "c. 悩み", "d. 回答"], ans: 2, explain: "Masalah pikiran = <strong>悩み</strong>." },
+      { num: 22, cat: "ch45", q: "来週の 旅行を とても（　）。", opts: ["a. 楽しみに して います", "b. 中止に して います", "c. 無理に して います", "d. 点に して います"], ans: 0, explain: "Menikmati / menantikan = <strong>楽しみに して います</strong>." },
+      { num: 23, cat: "ch46", q: "先生に レポートを（　）ました。", opts: ["a. 渡して", "b. 届いて", "c. 出て", "d. 渡り"], ans: 0, explain: "Menyerahkan = <strong>渡しました</strong>." },
+      { num: 24, cat: "ch46", q: "バスが ターミナルから（　）ました。", opts: ["a. 届き", "b. 出", "c. 落ち", "d. 焼け"], ans: 1, explain: "Bus berangkat = <strong>出ました</strong>." },
+      { num: 25, cat: "ch46", q: "オーブンで パンが おいしく（　）ました。", opts: ["a. 焼き", "b. 乾き", "c. 焼け", "d. 落ち"], ans: 2, explain: "Roti dibakar matang = <strong>焼けます</strong>." },
+      { num: 26, cat: "ch46", q: "旅行で 3日間 家を（　）に します。", opts: ["a. 留守", "b. 宅配便", "c. 原因", "d. 出来事"], ans: 0, explain: "Ketidakadaan orang = <strong>留守</strong>." },
+      { num: 27, cat: "ch46", q: "学校の ベルが（　）ました。", opts: ["a. 落ち", "b. 鳴り", "c. 切れ", "d. 焼け"], ans: 1, explain: "Bel berbunyi = <strong>鳴りました</strong>." },
+      { num: 28, cat: "ch46", q: "滑って（　）足を 怪我しました。", opts: ["a. 慌てて", "b. 転んで", "c. 鳴って", "d. 焼けて"], ans: 1, explain: "Jatuh terpeleset = <strong>転んで</strong>." },
+      { num: 29, cat: "ch46", q: "ネットで 注文した 荷物が（　）ました。", opts: ["a. 渡し", "b. 届き", "c. 転び", "d. 出"], ans: 1, explain: "Barang sampai = <strong>届きました</strong>." },
+      { num: 30, cat: "ch46", q: "昨日 街で 不思議な（　）が ありました。", opts: ["a. 出来事", "b. 原因", "c. 宅配便", "d. 留守"], ans: 0, explain: "Peristiwa = <strong>出来事</strong>." }
+    ];
+
+    let currentKotobaFilter = 'all';
+    let filteredKotobaList = [...kotobaQuizBank];
+    let curKotobaQuizIdx = 0;
+    let kotobaQuizScore = 0;
+    let kotobaAnswered = {};
+
+    let currentStage = 'tanam';
+    let currentPolaCategory = 'all';
+    let activeTanamDeck = [...tanamPolaMasterList];
+    let curTanamIdx = 0;
+
+    let strictBlankDeck = [];
+    let curStrictItem = null;
+    let strictMasteredCount = 0;
+    let isStrictRevealed = false;
+
+    function switchTab(tabId) {
+      const tabs = ['shiken-bunpou', 'shiken-kanji', 'teleport', 'shiken-kotoba', 'traps'];
+      tabs.forEach(t => {
+        const sec = document.getElementById(t);
+        const btn = document.getElementById(`tabBtn-${t}`);
+        if (sec) {
+          if (t === tabId) {
+            sec.classList.remove('hidden');
+            sec.style.display = 'block';
+          } else {
+            sec.classList.add('hidden');
+            sec.style.display = 'none';
+          }
+        }
+        if (btn) {
+          if (t === tabId) {
+            btn.className = "px-3 py-1.5 rounded-lg font-bold bg-cyan-600 text-white transition whitespace-nowrap shadow-md shadow-cyan-600/20";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition whitespace-nowrap";
+          }
+        }
+      });
+    }
+
+    function changeBunpouBank() {
+      const select = document.getElementById('bunpouBankSelect');
+      if (select) curBunpouBankKey = select.value;
+      curBunpouIdx = 0;
+      bunpouScore = 0;
+      bunpouAnswered = {};
+      const scoreDisp = document.getElementById('bunpouScoreDisplay');
+      if (scoreDisp) scoreDisp.textContent = "0 Benar";
+      loadBunpouQuestion();
+    }
+
+    function loadBunpouQuestion() {
+      const bank = bunpouBanks[curBunpouBankKey] || bunpouBanks.b1;
+      const q = bank[curBunpouIdx];
+      const card = document.getElementById('bunpouQuestionCard');
+      const tracker = document.getElementById('bunpouTracker');
+      if (!q || !card) return;
+
+      if (tracker) tracker.textContent = `SOAL ${curBunpouIdx + 1} / ${bank.length}`;
+      const isAnswered = bunpouAnswered.hasOwnProperty(curBunpouIdx);
+      const userAns = bunpouAnswered[curBunpouIdx];
+
+      let optsHtml = '';
+      q.opts.forEach((opt, idx) => {
+        let btnCls = "bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80";
+        if (isAnswered) {
+          if (idx === q.ans) {
+            btnCls = "bg-emerald-950 border-emerald-500 text-emerald-300 font-bold";
+          } else if (idx === userAns) {
+            btnCls = "bg-rose-950 border-rose-500 text-rose-300 line-through font-bold";
+          } else {
+            btnCls = "bg-slate-900/40 border-slate-800 text-slate-600 opacity-60";
+          }
+        }
+        optsHtml += `
+          <button onclick="handleBunpouAnswer(${idx})" ${isAnswered ? 'disabled' : ''} class="w-full text-left p-3 rounded-xl border text-xs sm:text-sm font-jp transition flex items-center justify-between ${btnCls}">
+            <span>${opt}</span>
+            ${isAnswered && idx === q.ans ? '<span class="text-emerald-400 font-bold">✓ BENAR</span>' : ''}
+            ${isAnswered && idx === userAns && userAns !== q.ans ? '<span class="text-rose-400 font-bold">✕ SALAH</span>' : ''}
+          </button>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/60">
+            SOAL ${q.num}
+          </span>
+          <button onclick="speakText('${q.q}')" class="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1">
+            🔊 Baca Soal
+          </button>
+        </div>
+
+        <div class="text-base sm:text-lg font-jp font-bold text-slate-100 leading-relaxed py-2">
+          ${q.q}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          ${optsHtml}
+        </div>
+
+        ${isAnswered ? `
+          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-1.5 animate-fadeIn">
+            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">⚡ Analisis Clue & Trik Detektor:</span>
+            <p class="text-slate-300 leading-relaxed">${q.explain}</p>
+          </div>
+        ` : ''}
+
+        <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs">
+          <button onclick="prevBunpouQuestion()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition">
+            ← Sebelumnya
+          </button>
+          <button onclick="nextBunpouQuestion()" class="px-4 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition shadow-md shadow-cyan-600/30">
+            Selanjutnya →
+          </button>
+        </div>
+      `;
+
+      if (isAudioEnabled && !isAnswered) {
+        speakText(q.q);
+      }
+    }
+
+    function handleBunpouAnswer(idx) {
+      if (bunpouAnswered.hasOwnProperty(curBunpouIdx)) return;
+      bunpouAnswered[curBunpouIdx] = idx;
+      const bank = bunpouBanks[curBunpouBankKey] || bunpouBanks.b1;
+      const q = bank[curBunpouIdx];
+      if (idx === q.ans) bunpouScore++;
+      const scoreDisp = document.getElementById('bunpouScoreDisplay');
+      if (scoreDisp) scoreDisp.textContent = `${bunpouScore} Benar`;
+      loadBunpouQuestion();
+    }
+
+    function nextBunpouQuestion() {
+      const bank = bunpouBanks[curBunpouBankKey] || bunpouBanks.b1;
+      if (curBunpouIdx < bank.length - 1) curBunpouIdx++;
+      else curBunpouIdx = 0;
+      loadBunpouQuestion();
+    }
+
+    function prevBunpouQuestion() {
+      const bank = bunpouBanks[curBunpouBankKey] || bunpouBanks.b1;
+      if (curBunpouIdx > 0) curBunpouIdx--;
+      else curBunpouIdx = bank.length - 1;
+      loadBunpouQuestion();
+    }
+
+    function loadKanjiQuestion() {
+      const q = kanjiIrodoriBank[curKanjiIdx];
+      const card = document.getElementById('kanjiQuestionCard');
+      const tracker = document.getElementById('kanjiTracker');
+      if (!q || !card) return;
+
+      if (tracker) tracker.textContent = `SOAL ${curKanjiIdx + 1} / ${kanjiIrodoriBank.length}`;
+      const isAnswered = kanjiAnswered.hasOwnProperty(curKanjiIdx);
+      const userAns = kanjiAnswered[curKanjiIdx];
+
+      let optsHtml = '';
+      q.opts.forEach((opt, idx) => {
+        let btnCls = "bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80";
+        if (isAnswered) {
+          if (idx === q.ans) {
+            btnCls = "bg-emerald-950 border-emerald-500 text-emerald-300 font-bold";
+          } else if (idx === userAns) {
+            btnCls = "bg-rose-950 border-rose-500 text-rose-300 line-through font-bold";
+          } else {
+            btnCls = "bg-slate-900/40 border-slate-800 text-slate-600 opacity-60";
+          }
+        }
+        optsHtml += `
+          <button onclick="handleKanjiAnswer(${idx})" ${isAnswered ? 'disabled' : ''} class="w-full text-left p-3 rounded-xl border text-xs sm:text-sm font-jp transition flex items-center justify-between ${btnCls}">
+            <span>${opt}</span>
+            ${isAnswered && idx === q.ans ? '<span class="text-emerald-400 font-bold">✓ BENAR</span>' : ''}
+            ${isAnswered && idx === userAns && userAns !== q.ans ? '<span class="text-rose-400 font-bold">✕ SALAH</span>' : ''}
+          </button>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono font-bold text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded border border-rose-800/60">
+            NOMOR ${q.num}
+          </span>
+          <button onclick="speakText('${q.q}')" class="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1">
+            🔊 Baca Soal
+          </button>
+        </div>
+
+        <div class="text-base sm:text-lg font-jp font-bold text-slate-100 leading-relaxed py-2">
+          ${q.q}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          ${optsHtml}
+        </div>
+
+        ${isAnswered ? `
+          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-1.5 animate-fadeIn">
+            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">⚡ Analisis Shiken:</span>
+            <p class="text-slate-300 leading-relaxed">${q.explain}</p>
+          </div>
+        ` : ''}
+
+        <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs">
+          <button onclick="prevKanjiQuestion()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition">
+            ← Sebelumnya
+          </button>
+          <button onclick="nextKanjiQuestion()" class="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold transition shadow-md shadow-rose-600/30">
+            Selanjutnya →
+          </button>
+        </div>
+      `;
+
+      if (isAudioEnabled && !isAnswered) {
+        speakText(q.q);
+      }
+    }
+
+    function handleKanjiAnswer(idx) {
+      if (kanjiAnswered.hasOwnProperty(curKanjiIdx)) return;
+      kanjiAnswered[curKanjiIdx] = idx;
+      const q = kanjiIrodoriBank[curKanjiIdx];
+      if (idx === q.ans) kanjiScore++;
+      const scoreDisp = document.getElementById('kanjiScoreDisplay');
+      if (scoreDisp) scoreDisp.textContent = `${kanjiScore} Benar`;
+      loadKanjiQuestion();
+    }
+
+    function nextKanjiQuestion() {
+      if (curKanjiIdx < kanjiIrodoriBank.length - 1) curKanjiIdx++;
+      else curKanjiIdx = 0;
+      loadKanjiQuestion();
+    }
+
+    function prevKanjiQuestion() {
+      if (curKanjiIdx > 0) curKanjiIdx--;
+      else curKanjiIdx = kanjiIrodoriBank.length - 1;
+      loadKanjiQuestion();
+    }
+
+    function changePolaCategory() {
+      const catSelect = document.getElementById('teleportCategorySelect');
+      if (catSelect) currentPolaCategory = catSelect.value;
+      if (currentPolaCategory === 'all') {
+        activeTanamDeck = [...tanamPolaMasterList];
+      } else {
+        activeTanamDeck = tanamPolaMasterList.filter(item => item.cat === currentPolaCategory);
+      }
+      curTanamIdx = 0;
+      resetStrictDeck();
+      renderCurrentTanam();
+    }
+
+    function renderCurrentTanam() {
+      if (!activeTanamDeck || activeTanamDeck.length === 0) return;
+      if (curTanamIdx >= activeTanamDeck.length) curTanamIdx = 0;
+      const item = activeTanamDeck[curTanamIdx];
+      if (!item) return;
+
+      const tracker = document.getElementById('tanamTrackerBadge');
+      if (tracker) tracker.textContent = `${curTanamIdx + 1} / ${activeTanamDeck.length}`;
+
+      const srcBadge = document.getElementById('tanamSourceBadge');
+      if (srcBadge) {
+        srcBadge.textContent = item.cat.toUpperCase();
+        if (item.cat === 'ch43') srcBadge.className = "text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-300 bg-cyan-950/80 px-2 py-0.5 rounded-md border border-cyan-800";
+        else if (item.cat === 'ch44') srcBadge.className = "text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300 bg-amber-950/80 px-2 py-0.5 rounded-md border border-amber-800";
+        else if (item.cat === 'ch45') srcBadge.className = "text-[10px] font-mono font-bold uppercase tracking-wider text-purple-300 bg-purple-950/80 px-2 py-0.5 rounded-md border border-purple-800";
+        else if (item.cat === 'ch46') srcBadge.className = "text-[10px] font-mono font-bold uppercase tracking-wider text-rose-300 bg-rose-950/80 px-2 py-0.5 rounded-md border border-rose-800";
+        else srcBadge.className = "text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800";
+      }
+
+      const collBadge = document.getElementById('tanamCollocationBadge');
+      if (collBadge) collBadge.textContent = item.part || '';
+      const kanjiDisp = document.getElementById('tanamKanjiDisplay');
+      if (kanjiDisp) kanjiDisp.textContent = item.kanji;
+      const kanaDisp = document.getElementById('tanamKanaDisplay');
+      if (kanaDisp) kanaDisp.textContent = item.kana;
+      const meanDisp = document.getElementById('tanamMeaningDisplay');
+      if (meanDisp) meanDisp.textContent = item.meaning;
+      const storyDisp = document.getElementById('tanamStoryDisplay');
+      if (storyDisp) storyDisp.textContent = item.story || '';
+
+      const radContainer = document.getElementById('tanamRadicalsContainer');
+      if (radContainer) {
+        radContainer.innerHTML = '';
+        if (item.radicals && item.radicals.length > 0) {
+          item.radicals.forEach(r => {
+            const span = document.createElement('span');
+            span.className = `px-2 py-0.5 rounded text-[11px] font-bold ${r.color || 'bg-slate-800 text-slate-300'}`;
+            span.textContent = `${r.char} (${r.pos}: ${r.name})`;
+            radContainer.appendChild(span);
+          });
+        }
+      }
+
+      if (isAudioEnabled) {
+        speakText(item.kana || item.kanji);
+      }
+    }
+
+    function nextTanamCard() {
+      if (curTanamIdx < activeTanamDeck.length - 1) curTanamIdx++;
+      else curTanamIdx = 0;
+      renderCurrentTanam();
+    }
+
+    function prevTanamCard() {
+      if (curTanamIdx > 0) curTanamIdx--;
+      else curTanamIdx = activeTanamDeck.length - 1;
+      renderCurrentTanam();
+    }
+
+    function pronounceTanamCurrent() {
+      if (!activeTanamDeck || activeTanamDeck.length === 0) return;
+      const item = activeTanamDeck[curTanamIdx];
+      if (item) speakText(item.kana || item.kanji);
+    }
+
+    function switchTanamStage(stage) {
+      currentStage = stage;
+      const cardTanam = document.getElementById('stageCard-tanam');
+      const cardStrict = document.getElementById('stageCard-strict');
+      const btnTanam = document.getElementById('stageBtn-tanam');
+      const btnStrict = document.getElementById('stageBtn-strict');
+
+      if (stage === 'tanam') {
+        if (cardTanam) cardTanam.classList.remove('hidden');
+        if (cardStrict) cardStrict.classList.add('hidden');
+        if (btnTanam) btnTanam.className = "px-2.5 py-1 rounded font-bold bg-cyan-600 text-white transition text-xs";
+        if (btnStrict) btnStrict.className = "px-2.5 py-1 rounded font-bold text-slate-400 hover:text-slate-200 transition text-xs";
+        renderCurrentTanam();
+      } else {
+        if (cardTanam) cardTanam.classList.add('hidden');
+        if (cardStrict) cardStrict.classList.remove('hidden');
+        if (btnTanam) btnTanam.className = "px-2.5 py-1 rounded font-bold text-slate-400 hover:text-slate-200 transition text-xs";
+        if (btnStrict) btnStrict.className = "px-2.5 py-1 rounded font-bold bg-rose-600 text-white transition text-xs";
+        resetStrictDeck();
+      }
+    }
+
+    function resetStrictDeck() {
+      strictBlankDeck = [...activeTanamDeck];
+      strictMasteredCount = 0;
+      isStrictRevealed = false;
+      pickNextStrictCard();
+    }
+
+    function pickNextStrictCard() {
+      const qDisp = document.getElementById('strictQueueDisp');
+      const mDisp = document.getElementById('strictMasteredDisp');
+      if (qDisp) qDisp.textContent = strictBlankDeck.length;
+      if (mDisp) mDisp.textContent = strictMasteredCount;
+
+      if (strictBlankDeck.length === 0) {
+        const kDisp = document.getElementById('strictKanjiDisplay');
+        if (kDisp) kDisp.innerHTML = "<span class='text-2xl text-emerald-400'>🎉 SEMUA KARTU TUNTAS LULUS!</span>";
+        const secBox = document.getElementById('strictSecretBox');
+        if (secBox) secBox.classList.add('hidden');
+        return;
+      }
+
+      curStrictItem = strictBlankDeck[0];
+      isStrictRevealed = false;
+      const kDisp = document.getElementById('strictKanjiDisplay');
+      if (kDisp) kDisp.textContent = curStrictItem.kanji;
+      const secBox = document.getElementById('strictSecretBox');
+      if (secBox) secBox.classList.add('hidden');
+    }
+
+    function revealStrictAnswer() {
+      if (!curStrictItem) return;
+      isStrictRevealed = true;
+      const kanaDisp = document.getElementById('strictKanaDisplay');
+      if (kanaDisp) kanaDisp.textContent = curStrictItem.kana;
+      const meanDisp = document.getElementById('strictMeaningDisplay');
+      if (meanDisp) meanDisp.textContent = curStrictItem.meaning;
+      const partDisp = document.getElementById('strictPartDisplay');
+      if (partDisp) partDisp.textContent = curStrictItem.part || '';
+      const secBox = document.getElementById('strictSecretBox');
+      if (secBox) secBox.classList.remove('hidden');
+
+      if (isAudioEnabled) speakText(curStrictItem.kana || curStrictItem.kanji);
+    }
+
+    function handleStrictDecision(type) {
+      if (!curStrictItem || strictBlankDeck.length === 0) return;
+      if (!isStrictRevealed) revealStrictAnswer();
+
+      setTimeout(() => {
+        const item = strictBlankDeck.shift();
+        if (type === 'ingat') {
+          strictMasteredCount++;
+        } else if (type === 'lupa') {
+          strictBlankDeck.splice(Math.min(1, strictBlankDeck.length), 0, item);
+        } else {
+          strictBlankDeck.push(item);
+        }
+        pickNextStrictCard();
+      }, 350);
+    }
+
+    // Keyboard support for Kartu Polos: Space = Buka, 1 = Lupa, 2 = Ragu, 3 = Ingat
+    window.addEventListener('keydown', (e) => {
+      if (currentStage !== 'strict' || document.getElementById('teleport').classList.contains('hidden')) return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        revealStrictAnswer();
+      } else if (e.key === '1') {
+        handleStrictDecision('lupa');
+      } else if (e.key === '2') {
+        handleStrictDecision('ragu');
+      } else if (e.key === '3') {
+        handleStrictDecision('ingat');
+      }
+    });
+
+    function filterKotobaCategory() {
+      const selectElem = document.getElementById('kotobaFilterSelect');
+      if (selectElem) currentKotobaFilter = selectElem.value;
+      if (currentKotobaFilter === 'all') {
+        filteredKotobaList = [...kotobaQuizBank];
+      } else {
+        filteredKotobaList = kotobaQuizBank.filter(q => q.cat === currentKotobaFilter);
+      }
+      curKotobaQuizIdx = 0;
+      kotobaQuizScore = 0;
+      kotobaAnswered = {};
+      const scoreDisp = document.getElementById('kotobaScoreDisplay');
+      if (scoreDisp) scoreDisp.textContent = "0 Benar";
+      loadKotobaQuestion();
+    }
+
+    function loadKotobaQuestion() {
+      const q = filteredKotobaList[curKotobaQuizIdx];
+      const card = document.getElementById('kotobaQuestionCard');
+      const tracker = document.getElementById('kotobaTracker');
+      if (!q || !card) return;
+
+      if (tracker) tracker.textContent = `SOAL ${curKotobaQuizIdx + 1} / ${filteredKotobaList.length}`;
+      const isAnswered = kotobaAnswered.hasOwnProperty(curKotobaQuizIdx);
+      const userAns = kotobaAnswered[curKotobaQuizIdx];
+
+      let optsHtml = '';
+      q.opts.forEach((opt, idx) => {
+        let btnCls = "bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-700/80";
+        if (isAnswered) {
+          if (idx === q.ans) {
+            btnCls = "bg-emerald-950 border-emerald-500 text-emerald-300 font-bold";
+          } else if (idx === userAns) {
+            btnCls = "bg-rose-950 border-rose-500 text-rose-300 line-through font-bold";
+          } else {
+            btnCls = "bg-slate-900/40 border-slate-800 text-slate-600 opacity-60";
+          }
+        }
+        optsHtml += `
+          <button onclick="handleKotobaAnswer(${idx})" ${isAnswered ? 'disabled' : ''} class="w-full text-left p-3 rounded-xl border text-xs sm:text-sm font-jp transition flex items-center justify-between ${btnCls}">
+            <span>${opt}</span>
+            ${isAnswered && idx === q.ans ? '<span class="text-emerald-400 font-bold">✓ BENAR</span>' : ''}
+            ${isAnswered && idx === userAns && userAns !== q.ans ? '<span class="text-rose-400 font-bold">✕ SALAH</span>' : ''}
+          </button>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono font-bold text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/60 uppercase">
+            SOAL ${q.num} (${q.cat.toUpperCase()})
+          </span>
+          <button onclick="speakText('${q.q}')" class="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1">
+            🔊 Baca Soal
+          </button>
+        </div>
+
+        <div class="text-base sm:text-lg font-jp font-bold text-slate-100 leading-relaxed py-2">
+          ${q.q}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          ${optsHtml}
+        </div>
+
+        ${isAnswered ? `
+          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-1.5 animate-fadeIn">
+            <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider block">⚡ Analisis Kotoba:</span>
+            <p class="text-slate-300 leading-relaxed">${q.explain}</p>
+          </div>
+        ` : ''}
+
+        <div class="flex items-center justify-between pt-3 border-t border-slate-800 text-xs">
+          <button onclick="prevKotobaQuestion()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition">
+            ← Sebelumnya
+          </button>
+          <button onclick="nextKotobaQuestion()" class="px-4 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition shadow-md shadow-cyan-600/30">
+            Selanjutnya →
+          </button>
+        </div>
+      `;
+
+      if (isAudioEnabled && !isAnswered) {
+        speakText(q.q);
+      }
+    }
+
+    function handleKotobaAnswer(idx) {
+      if (kotobaAnswered.hasOwnProperty(curKotobaQuizIdx)) return;
+      kotobaAnswered[curKotobaQuizIdx] = idx;
+      const q = filteredKotobaList[curKotobaQuizIdx];
+      if (idx === q.ans) kotobaQuizScore++;
+      const scoreDisp = document.getElementById('kotobaScoreDisplay');
+      if (scoreDisp) scoreDisp.textContent = `${kotobaQuizScore} Benar`;
+      loadKotobaQuestion();
+    }
+
+    function nextKotobaQuestion() {
+      if (curKotobaQuizIdx < filteredKotobaList.length - 1) curKotobaQuizIdx++;
+      else curKotobaQuizIdx = 0;
+      loadKotobaQuestion();
+    }
+
+    function prevKotobaQuestion() {
+      if (curKotobaQuizIdx > 0) curKotobaQuizIdx--;
+      else curKotobaQuizIdx = filteredKotobaList.length - 1;
+      loadKotobaQuestion();
+    }
+
+    function initApp() {
+      try { switchTab('shiken-bunpou'); } catch (e) { console.error("Tab err:", e); }
+      try { loadBunpouQuestion(); } catch (e) { console.error("Bunpou err:", e); }
+      try { loadKanjiQuestion(); } catch (e) { console.error("Kanji err:", e); }
+      try { loadKotobaQuestion(); } catch (e) { console.error("Kotoba err:", e); }
+      try { resetStrictDeck(); } catch (e) { console.error("Strict err:", e); }
+      try { renderCurrentTanam(); } catch (e) { console.error("Tanam err:", e); }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+    window.addEventListener('load', initApp);
+  </script>
+</body>
+</html>
