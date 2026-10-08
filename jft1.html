@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>JFT-Basic A2 Neuro-Trainer 250 | Target Skor Sempurna</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Noto+Sans+JP:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            jp: ['"Noto Sans JP"', 'sans-serif']
+          },
+          colors: {
+            tactical: {
+              700: '#334155',
+              800: '#1e293b',
+              850: '#151f32',
+              900: '#0f172a',
+              950: '#070c18'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #070c18;
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+    .perspective { perspective: 1200px; }
+    .card-preserve {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
+
+  <header class="sticky top-0 z-50 bg-tactical-950/95 backdrop-blur border-b border-tactical-800 shadow-xl">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center text-black font-black text-2xl shadow-lg shadow-cyan-500/20 flex-shrink-0">
+          250
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-black text-white leading-tight">
+              JFT-A2 Neuro Trainer
+            </h1>
+            <span class="bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 text-[10px] font-black px-2 py-0.5 rounded-full uppercase">
+              Target 250
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 font-medium">
+            385 Database Irodori & N4 • Leitner SRS Aktif
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="soundToggleBtn" onclick="toggleAudioEngine()" class="px-3.5 py-2 rounded-xl border border-tactical-700 bg-tactical-850 hover:bg-tactical-800 text-slate-200 transition flex items-center gap-1.5 text-xs font-bold">
+          <span id="soundIcon">🔊</span>
+          <span class="hidden sm:inline">Audio</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Navigation Tabs -->
+    <div class="max-w-4xl mx-auto px-3 flex space-x-2 border-t border-tactical-800/80 overflow-x-auto py-2 custom-scrollbar">
+      <button onclick="switchAppTab('kanji')" id="nav-btn-kanji" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition whitespace-nowrap bg-cyan-500 text-black shadow-md flex items-center gap-1.5">
+        <span>🎴 Flashcard SRS (385)</span>
+      </button>
+      <button onclick="switchAppTab('hyougen')" id="nav-btn-hyougen" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition whitespace-nowrap text-slate-400 hover:bg-tactical-800 hover:text-white flex items-center gap-1.5">
+        <span>🎎 25+ Hyougen Budaya</span>
+      </button>
+      <button onclick="switchAppTab('choukai')" id="nav-btn-choukai" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition whitespace-nowrap text-slate-400 hover:bg-tactical-800 hover:text-white flex items-center gap-1.5">
+        <span>🗺️ Choukai Denah & Arah</span>
+      </button>
+      <button onclick="switchAppTab('rasa')" id="nav-btn-rasa" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition whitespace-nowrap text-slate-400 hover:bg-tactical-800 hover:text-white flex items-center gap-1.5">
+        <span>🍋 Rasa & 4 Musim</span>
+      </button>
+      <button onclick="switchAppTab('simulator')" id="nav-btn-simulator" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition whitespace-nowrap text-slate-400 hover:bg-tactical-800 hover:text-white flex items-center gap-1.5">
+        <span>🎯 Grand Simulator</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-4 space-y-4">
+
+    <!-- ======================================================== -->
+    <!-- TAB 1: KANJI FLASHCARD SRS (LEITNER BOX AKTIF)           -->
+    <!-- ======================================================== -->
+    <section id="tab-content-kanji" class="tab-pane space-y-4">
+      
+      <!-- Batch Selector & Leitner Stats -->
+      <div class="bg-tactical-900 border border-tactical-800 rounded-3xl p-4 sm:p-5 shadow-xl space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-bold uppercase">
+                SRS Memory Engine
+              </span>
+              <span class="text-xs text-slate-400">• Bebas Overload</span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-black text-white mt-1">
+              385 Kanji Resmi Irodori (A1/A2) & N4
+            </h2>
+          </div>
+
+          <!-- Leitner Filter Buttons -->
+          <div class="flex items-center gap-1.5 bg-tactical-950 p-1.5 rounded-2xl border border-tactical-800 flex-wrap">
+            <button onclick="filterByLeitner('all')" id="flt-srs-all" class="px-3 py-1.5 rounded-xl bg-cyan-500 text-black text-xs font-black transition">
+              Antrean: <span id="statQueueCount">0</span>
+            </button>
+            <button onclick="filterByLeitner(1)" id="flt-srs-1" class="px-3 py-1.5 rounded-xl bg-tactical-900 text-amber-400 border border-tactical-800 hover:border-amber-400 text-xs font-bold transition">
+              🔴 Lupa: <span id="statBox1Count">0</span>
+            </button>
+            <button onclick="filterByLeitner(2)" id="flt-srs-2" class="px-3 py-1.5 rounded-xl bg-tactical-900 text-cyan-400 border border-tactical-800 hover:border-cyan-400 text-xs font-bold transition">
+              🟡 Ingat: <span id="statBox2Count">0</span>
+            </button>
+            <button onclick="filterByLeitner(3)" id="flt-srs-3" class="px-3 py-1.5 rounded-xl bg-tactical-900 text-emerald-400 border border-tactical-800 hover:border-emerald-400 text-xs font-bold transition">
+              🟢 Refleks: <span id="statBox3Count">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex gap-1.5 overflow-x-auto pb-1 pt-2 border-t border-tactical-800 custom-scrollbar">
+          <button onclick="changeKanjiBatch('all')" id="btn-batch-all" class="batch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-cyan-500 text-black whitespace-nowrap transition">
+            Semua (385)
+          </button>
+          <button onclick="changeKanjiBatch('batch1')" id="btn-batch-batch1" class="batch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-tactical-850 text-slate-300 hover:bg-tactical-800 whitespace-nowrap transition">
+            Batch 1 (1–100: Rambu & Pabrik)
+          </button>
+          <button onclick="changeKanjiBatch('batch2')" id="btn-batch-batch2" class="batch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-tactical-850 text-slate-300 hover:bg-tactical-800 whitespace-nowrap transition">
+            Batch 2 (101–200: Makanan & Apartemen)
+          </button>
+          <button onclick="changeKanjiBatch('batch3')" id="btn-batch-batch3" class="batch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-tactical-850 text-slate-300 hover:bg-tactical-800 whitespace-nowrap transition">
+            Batch 3 (201–300: Verba & Adjektiva)
+          </button>
+          <button onclick="changeKanjiBatch('batch4')" id="btn-batch-batch4" class="batch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-tactical-850 text-slate-300 hover:bg-tactical-800 whitespace-nowrap transition">
+            Batch 4 (301–385: Medis, Denah & Admin)
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-tactical-900 border border-tactical-800 rounded-3xl p-4 sm:p-6 shadow-xl flex flex-col items-center">
+        
+        <div class="w-full max-w-xl flex items-center justify-between text-xs text-slate-400 mb-2 font-medium">
+          <span>👆 Tekan kartu untuk membuka arti & audio native</span>
+          <span id="kanjiCardCounter" class="bg-tactical-950 px-3 py-1 rounded-full border border-tactical-800 text-cyan-400 font-mono font-bold">
+            1 / 385
+          </span>
+        </div>
+
+        <!-- 3D Card Box -->
+        <div id="flashcardBox3D" onclick="flipCurrentCard()" class="w-full max-w-xl min-h-[360px] cursor-pointer select-none perspective group">
+          <div id="flashcardInnerTarget" class="card-preserve relative w-full h-full min-h-[360px] rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-tactical-850 via-tactical-900 to-tactical-950 text-white border-2 border-tactical-700 hover:border-cyan-500/70 transition shadow-2xl flex flex-col justify-between">
+            
+            <!-- Front Face: Kartu Polos Murni Blind-Guess (TANPA FURIGANA/ROMAJI) -->
+            <div id="cardFaceFront" class="flex flex-col items-center justify-center flex-1 space-y-4 py-6 text-center">
+              <div class="flex items-center gap-2">
+                <span id="cardBadgeSector" class="text-xs uppercase font-mono font-bold px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                  Kategori
+                </span>
+                <span id="cardBatchIndicator" class="text-xs font-mono px-2.5 py-1 rounded-full bg-tactical-950 text-slate-400 border border-tactical-800">
+                  Batch 1
+                </span>
+                <span id="cardSrsStatusBadge" class="text-xs font-mono px-2.5 py-1 rounded-full bg-tactical-950 text-slate-400 border border-tactical-800">
+                  Antrean Aktif
+                </span>
+              </div>
+              
+              <!-- Ukuran Teks Kanji Sangat Besar & Nyaman Dibaca -->
+              <div id="cardFrontKanjiDisplay" class="text-7xl sm:text-8xl font-black font-jp tracking-wider text-amber-300 my-3 drop-shadow-md select-none">
+                準備中
+              </div>
+
+              <div class="text-xs text-cyan-300 flex items-center gap-1.5 bg-tactical-950 px-4 py-2 rounded-full border border-tactical-800 font-mono animate-pulse">
+                <span>🧠</span> Tebak cara baca & arti di pikiran! Sentuh untuk cek!
+              </div>
+            </div>
+
+            <!-- Back Face: Furigana, Romaji, Arti, Radikal 3 Detik, dan Konteks Ujian JFT -->
+            <div id="cardFaceBack" class="hidden flex-col justify-between h-full space-y-3.5 text-left py-1">
+              <div>
+                <div class="flex items-start justify-between border-b border-tactical-800 pb-2">
+                  <div>
+                    <div id="cardBackFuriTitle" class="text-sm font-jp font-bold text-cyan-400">じゅんびちゅう</div>
+                    <div id="cardBackKanjiTitle" class="text-3xl sm:text-4xl font-black font-jp text-amber-300 leading-tight">準備中</div>
+                  </div>
+                  <span id="cardBackRomajiTag" class="text-xs text-slate-400 font-mono bg-tactical-950 px-2.5 py-1 rounded-lg border border-tactical-800">
+                    Junbichuu
+                  </span>
+                </div>
+
+                <div class="mt-3">
+                  <div class="text-xs uppercase font-mono font-bold text-slate-400">Arti Utama:</div>
+                  <div id="cardBackArtiMeaning" class="text-lg sm:text-xl font-bold text-white leading-snug mt-0.5">
+                    Sedang persiapan / Toko belum buka
+                  </div>
+                </div>
+              </div>
+
+              <!-- Radikal Hack Box -->
+              <div class="bg-tactical-950 border border-cyan-500/20 p-3 rounded-2xl text-xs space-y-1">
+                <div class="text-cyan-400 font-bold flex items-center gap-1">
+                  <span>🧩</span> Radikal Garis Hack 3 Detik:
+                </div>
+                <p id="cardBackRadikalText" class="text-slate-300 leading-relaxed font-sans"></p>
+              </div>
+
+              <!-- JFT Context -->
+              <div class="bg-tactical-950 border border-tactical-800 p-3 rounded-2xl text-xs space-y-1">
+                <div class="text-amber-400 font-bold flex items-center gap-1">
+                  <span>🎯</span> Pasti Keluar di JFT:
+                </div>
+                <p id="cardBackExamContext" class="text-slate-300 leading-relaxed font-sans"></p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="w-full max-w-xl grid grid-cols-3 gap-2 sm:gap-3 mt-4">
+          <button onclick="handleLeitnerVote(1)" class="min-h-[52px] px-3 py-2.5 rounded-2xl bg-amber-500/15 border-2 border-amber-500/40 hover:bg-amber-500/25 active:scale-95 text-amber-300 font-bold text-xs sm:text-sm flex flex-col items-center justify-center transition shadow-lg">
+            <span>🔴 Box 1 (Lupa)</span>
+            <span class="text-[10px] text-amber-400/80 font-normal">Ulangi 3 Kartu Lagi</span>
+          </button>
+
+          <button onclick="handleLeitnerVote(2)" class="min-h-[52px] px-3 py-2.5 rounded-2xl bg-cyan-500/15 border-2 border-cyan-500/40 hover:bg-cyan-500/25 active:scale-95 text-cyan-300 font-bold text-xs sm:text-sm flex flex-col items-center justify-center transition shadow-lg">
+            <span>🟡 Box 2 (Ingat)</span>
+            <span class="text-[10px] text-cyan-400/80 font-normal">Pindah ke Akhir</span>
+          </button>
+
+          <button onclick="handleLeitnerVote(3)" class="min-h-[52px] px-3 py-2.5 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/40 hover:bg-emerald-500/25 active:scale-95 text-emerald-300 font-bold text-xs sm:text-sm flex flex-col items-center justify-center transition shadow-lg">
+            <span>🟢 Refleks (Box 3)</span>
+            <span class="text-[10px] text-emerald-400/80 font-normal">Selesai & Keluar!</span>
+          </button>
+        </div>
+
+        <!-- Quick Nav Row -->
+        <div class="w-full max-w-xl flex items-center justify-between mt-3 text-xs">
+          <button onclick="stepPrevCard()" class="px-3 py-2 rounded-xl border border-tactical-800 bg-tactical-850 hover:bg-tactical-800 text-slate-300 font-bold transition flex items-center gap-1">
+            <span>⬅️</span> Sebelumnya
+          </button>
+          <button onclick="speakKanjiSpeech()" class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-black transition flex items-center gap-1.5 shadow-md">
+            <span>🔊 Putar Audio</span>
+          </button>
+          <button onclick="stepNextCard()" class="px-3 py-2 rounded-xl border border-tactical-800 bg-tactical-850 hover:bg-tactical-800 text-slate-300 font-bold transition flex items-center gap-1">
+            Berikutnya <span>➡️</span>
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TAB 2: HYOUGEN & BUDAYA SOSIAL JFT (25+ RUMUS)          -->
+    <!-- ======================================================== -->
+    <section id="tab-content-hyougen" class="tab-pane hidden space-y-4">
+      <div class="bg-tactical-900 border border-tactical-800 rounded-3xl p-5 shadow-xl space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold uppercase">
+              Kaiwa & Hyougen
+            </span>
+            <h2 class="text-lg sm:text-xl font-black text-white mt-1">
+              Rumus Baku Budaya & Percakapan JFT
+            </h2>
+          </div>
+          <span class="text-xs text-slate-400 font-mono">100 Poin Penuh</span>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+          Di JFT, orang Jepang <strong>tidak pernah berkata "tidak" secara lugas</strong>, selalu pamit sopan saat pulang lebih dulu, dan merendah saat dipuji.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="hyougenCardsList">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TAB 3: CHOUKAI RADAR & DENAH PETA                       -->
+    <!-- ======================================================== -->
+    <section id="tab-content-choukai" class="tab-pane hidden space-y-4">
+      <div class="bg-tactical-900 border border-tactical-800 rounded-3xl p-5 shadow-xl space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold uppercase">
+              Choukai Navigasi
+            </span>
+            <h2 class="text-lg sm:text-xl font-black text-white mt-1">
+              Bongkar Jebakan Choukai Denah & Arah
+            </h2>
+          </div>
+          <span class="text-xs text-amber-400 font-bold">Waspada: 手前 vs 奥</span>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+          Ingat hukum emas: <strong>手前 (temae) = sebelum gedung</strong>, <strong>奥 (oku) = setelah / di balik gedung</strong>, dan selalu waspada revisi di detik-detik akhir dialog!
+        </p>
+
+        <!-- Audio Player Simulation -->
+        <div class="flex items-center justify-between bg-tactical-950 p-4 rounded-2xl border border-tactical-800">
+          <div class="flex items-center gap-3">
+            <button onclick="playChoukaiSimulation()" class="w-12 h-12 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-black font-black text-xl flex items-center justify-center transition shadow-lg">
+              ▶️
+            </button>
+            <div>
+              <div class="text-xs sm:text-sm font-bold text-white">Audio Percakapan: Menanyakan Letak Konbini</div>
+              <div class="text-xs text-slate-400">Putar audio native dan tebak gedung yang dimaksud pada denah.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Map -->
+        <div class="bg-tactical-950 p-4 rounded-3xl border border-tactical-800 text-center font-jp">
+          <div class="text-xs text-slate-400 mb-3 font-sans">Titik Awal: ⭐ Stasiun (駅) di bagian bawah</div>
+          <div class="grid grid-cols-3 gap-2.5 max-w-md mx-auto text-xs font-bold">
+            <button onclick="guessMapBuilding('A')" id="btn-map-A" class="p-3 rounded-2xl bg-tactical-900 border-2 border-tactical-800 hover:border-cyan-400 transition flex flex-col items-center justify-center min-h-[85px]">
+              <span class="text-slate-400 text-[10px]">[A]</span>
+              <span class="text-white text-base">郵便局</span>
+              <span class="text-slate-400 text-[10px] font-sans font-normal">(Kantor Pos)</span>
+            </button>
+            <div class="p-3 rounded-2xl bg-tactical-900/50 border border-dashed border-tactical-800 flex items-center justify-center text-slate-500 text-xs font-sans">
+              ⬆️ Jalan Lurus
+            </div>
+            <button onclick="guessMapBuilding('B')" id="btn-map-B" class="p-3 rounded-2xl bg-tactical-900 border-2 border-tactical-800 hover:border-cyan-400 transition flex flex-col items-center justify-center min-h-[85px]">
+              <span class="text-slate-400 text-[10px]">[B]</span>
+              <span class="text-white text-base">銀行</span>
+              <span class="text-slate-400 text-[10px] font-sans font-normal">(Bank)</span>
+            </button>
+
+            <!-- Perempatan -->
+            <div class="col-span-3 py-2 bg-tactical-850 rounded-xl border border-tactical-800 text-slate-400 text-[11px] font-sans font-semibold">
+              ⬅️ Belok Kiri • 【交差点 (Perempatan)】 • Belok Kanan ➡️
+            </div>
+
+            <button onclick="guessMapBuilding('C')" id="btn-map-C" class="p-3 rounded-2xl bg-tactical-900 border-2 border-tactical-800 hover:border-cyan-400 transition flex flex-col items-center justify-center min-h-[85px]">
+              <span class="text-slate-400 text-[10px]">[C]</span>
+              <span class="text-white text-base">コンビニ</span>
+              <span class="text-slate-400 text-[10px] font-sans font-normal">(Konbini)</span>
+            </button>
+            <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-sans flex flex-col items-center justify-center">
+              <span class="text-lg">⭐</span>
+              <span class="font-bold text-xs font-jp">駅 (Stasiun)</span>
+            </div>
+            <button onclick="guessMapBuilding('D')" id="btn-map-D" class="p-3 rounded-2xl bg-tactical-900 border-2 border-tactical-800 hover:border-cyan-400 transition flex flex-col items-center justify-center min-h-[85px]">
+              <span class="text-slate-400 text-[10px]">[D]</span>
+              <span class="text-white text-base">薬局</span>
+              <span class="text-slate-400 text-[10px] font-sans font-normal">(Apotek)</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="mapFeedbackBox" class="hidden p-4 rounded-2xl text-xs sm:text-sm font-sans leading-relaxed"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TAB 4: RASA MAKANAN & 4 MUSIM / CUACA                    -->
+    <!-- ======================================================== -->
+    <section id="tab-content-rasa" class="tab-pane hidden space-y-4">
+      <div class="bg-tactical-900 border border-tactical-800 rounded-3xl p-5 shadow-xl space-y-3">
+        <h2 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+          <span>🍋</span> Spektrum Rasa (味) & 4 Musim (季節)
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+          Jangan tertukar: <strong>すっぱい (asam lemon)</strong> vs <strong>まずい (tidak enak opini)</strong>! Dan kanji <strong>季節</strong> dibaca murni <code>きせつ (kisetsu)</code> tanpa tenten dan tanpa huruf kecil!
+        </p>
+
+        <!-- Taste Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-3" id="tasteListContainer">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Season Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-4 border-t border-tactical-800" id="seasonsListContainer">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TAB 5: GRAND SIMULATOR DRILL (TARGET 250)               -->
+    <!-- ======================================================== -->
+    <section id="tab-content-simulator" class="tab-pane hidden space-y-4">
+      <div class="bg-tactical-900 border border-tactical-800 rounded-3xl p-5 shadow-xl space-y-4">
+        <div class="flex items-center justify-between border-b border-tactical-800 pb-3">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-bold uppercase">
+              Simulasi Ujian Realistis
+            </span>
+            <h2 class="text-lg sm:text-xl font-black text-white mt-1">
+              Grand Drill Target 250 Poin
+            </h2>
+          </div>
+          <div class="text-right">
+            <div class="text-xs text-slate-400">Skor Simulator</div>
+            <div class="text-xl font-black text-cyan-400 font-mono" id="simScoreDisplay">0 / 250</div>
+          </div>
+        </div>
+
+        <div id="simQuizCard" class="space-y-4">
+          <!-- Populated by JS -->
+        </div>
+
+        <div id="simFeedbackCard" class="hidden p-4 rounded-2xl text-xs sm:text-sm leading-relaxed font-sans">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="flex justify-between items-center pt-3 border-t border-tactical-800">
+          <button onclick="resetSimQuiz()" class="text-xs text-slate-400 hover:text-white font-bold transition">
+            🔄 Ulangi Dari Awal
+          </button>
+          <button id="btnSimNext" onclick="nextSimQuizQuestion()" class="hidden px-5 py-2.5 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-black font-black text-xs sm:text-sm transition shadow-lg">
+            Soal Berikutnya ➔
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="systemToast" class="fixed bottom-6 right-6 max-w-sm bg-tactical-900 border border-tactical-700 text-white px-4 py-3 rounded-2xl shadow-2xl transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none z-50 flex items-center gap-3 text-xs sm:text-sm">
+    <span id="toastIcon" class="text-xl">💡</span>
+    <span id="toastText" class="font-medium">Pemberitahuan sistem</span>
+  </div>
+
+  <footer class="bg-tactical-950 border-t border-tactical-800 py-4 text-center text-xs text-slate-500 mt-auto">
+    <p class="font-medium">JFT-Basic A2 Neuro-Trainer • Format Kurikulum Irodori Seikatsu no Nihongo & N4.</p>
+  </footer>
+
+  <script>
+    let audioEngineEnabled = true;
+
+    function toggleAudioEngine() {
+      audioEngineEnabled = !audioEngineEnabled;
+      const icon = document.getElementById('soundIcon');
+      if (audioEngineEnabled) {
+        icon.innerText = '🔊';
+        showToast('Audio Pelafalan Aktif', '🔊');
+      } else {
+        icon.innerText = '🔇';
+        showToast('Audio Dinonaktifkan', '🔇');
+      }
+    }
+
+    function speakText(text) {
+      if (!audioEngineEnabled || !('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'ja-JP';
+        utter.rate = 0.88;
+        window.speechSynthesis.speak(utter);
+      } catch (err) {
+        console.warn('Speech err:', err);
+      }
+    }
+
+    function showToast(msg, icon = '💡') {
+      const toast = document.getElementById('systemToast');
+      document.getElementById('toastIcon').innerText = icon;
+      document.getElementById('toastText').innerText = msg;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 2400);
+    }
+
+    function switchAppTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById('tab-content-' + tabId);
+      if (target) target.classList.remove('hidden');
+
+      const tabs = ['kanji', 'hyougen', 'choukai', 'rasa', 'simulator'];
+      tabs.forEach(t => {
+        const btn = document.getElementById('nav-btn-' + t);
+        if (btn) {
+          if (t === tabId) {
+            btn.className = 'px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition whitespace-nowrap bg-cyan-500 text-black shadow-md flex items-center gap-1.5';
+          } else {
+            btn.className = 'px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition whitespace-nowrap text-slate-400 hover:bg-tactical-800 hover:text-white flex items-center gap-1.5';
+          }
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    const masterKanjiData = [
+      // ========================================================
+      // BATCH 1: RAMBU, KESELAMATAN & PABRIK (Item 1 – 100)
+      // ========================================================
+      { kanji: '準備中', furi: 'じゅんびちゅう', romaji: 'Junbichuu', arti: 'Sedang persiapan (Toko belum buka)', batch: 'batch1', sectorLabel: '🚫 Rambu', radikal: 'Radikal 氵(air) + 備(siap) + 中(tengah).', context: 'Dilarang masuk sebelum jam operasional.' },
+      { kanji: '営業中', furi: 'えいぎょうちゅう', romaji: 'Eigyouchuu', arti: 'Sedang beroperasi / Buka melayani', batch: 'batch1', sectorLabel: '🚫 Rambu', radikal: '営(kelola toko) + 業(usaha).', context: 'Toko melayani pelanggan. Boleh masuk.' },
+      { kanji: '使用禁止', furi: 'しようきんし', romaji: 'Shiyou kinshi', arti: 'Dilarang menggunakan (Alat rusak/servis)', batch: 'batch1', sectorLabel: '🚫 Rambu', radikal: '使(pakai) + 用(guna) + 禁(larang) + 止(stop).', context: 'Ditempel di toilet atau mesin rusak.' },
+      { kanji: '非常口', furi: 'ひじょうぐち', romaji: 'Hijouguchi', arti: 'Pintu Darurat Evakuasi', batch: 'batch1', sectorLabel: '🚫 Rambu', radikal: '非(darurat) + 常(biasa) + 口(pintu).', context: 'Rambu orang hijau lari. Jangan halangi.' },
+      { kanji: '土足厳禁', furi: 'どそくげんきん', romaji: 'Dosoku genkin', arti: 'Dilarang masuk dengan sepatu luar!', batch: 'batch1', sectorLabel: '🚫 Rambu', radikal: '土(tanah) + 足(kaki) = sepatu kotor.', context: 'Wajib lepas sepatu di genkan.' },
+      { kanji: '故障中', furi: 'こしょうちゅう', romaji: 'Koshouchuu', arti: 'Sedang rusak / Macet', batch: 'batch1', sectorLabel: '🚫 Rambu', radikal: '故(alasan) + 障(halangan) + 中.', context: 'Mesin minuman atau lift mati.' },
+      { kanji: '点検中', furi: 'てんけんちゅう', romaji: 'Tenkenchuu', arti: 'Sedang pemeriksaan berkala / Servis', batch: 'batch1', sectorLabel: '🚫 Rambu', radikal: '点(titik) + 検(inspeksi).', context: 'Lift apartemen tidak bisa dipakai.' },
+      { kanji: '立入禁止', furi: 'たちいりきんし', romaji: 'Tachiiri kinshi', arti: 'Dilarang masuk (Area terlarang)', batch: 'batch1', sectorLabel: '🚫 Rambu', radikal: '立(berdiri) + 入(masuk) + 禁止.', context: 'Area pabrik/konstruksi berbahaya.' },
+      { kanji: '受付', furi: 'うけつけ', romaji: 'Uketsuke', arti: 'Meja Resepsionis / Pendaftaran', batch: 'batch1', sectorLabel: '🏢 Fasilitas', radikal: '受(terima) + 付(nempel).', context: 'Tempat pertama di rumah sakit/balai kota.' },
+      { kanji: '案内所', furi: 'あんないじょ', romaji: 'Annaijo', arti: 'Pusat Informasi Pengunjung', batch: 'batch1', sectorLabel: '🏢 Fasilitas', radikal: '案(rencana) + 内(dalam) + 所(tempat).', context: 'Tempat tanya denah di stasiun.' },
+      { kanji: '満室', furi: 'まんしつ', romaji: 'Manshitsu', arti: 'Kamar Penuh', batch: 'batch1', sectorLabel: '🏢 Fasilitas', radikal: '満(penuh) + 室(kamar).', context: 'Hotel/asrama tidak ada kamar kosong.' },
+      { kanji: '空室', furi: 'くうしつ', romaji: 'Kuushitsu', arti: 'Kamar Kosong / Tersedia', batch: 'batch1', sectorLabel: '🏢 Fasilitas', radikal: '空(kosong) + 室(kamar).', context: 'Kamar sewa siap ditempati.' },
+      { kanji: '禁煙', furi: 'きんえん', romaji: 'Kin\'en', arti: 'Dilarang Merokok', batch: 'batch1', sectorLabel: '🚫 Rambu', radikal: '禁(larang) + 煙(asap rokok).', context: 'Hanya boleh merokok di 喫煙所.' },
+      { kanji: '喫煙所', furi: 'きつえんじょ', romaji: 'Kitsuenjo', arti: 'Area Khusus Merokok', batch: 'batch1', sectorLabel: '🏢 Fasilitas', radikal: '喫(hisap) + 煙(asap) + 所(tempat).', context: 'Tempat legal untuk merokok.' },
+      { kanji: '危険', furi: 'きけん', romaji: 'Kiken', arti: 'Bahaya!', batch: 'batch1', sectorLabel: '⚠️ Keselamatan', radikal: '危(bahaya) + 険(curam).', context: 'Waspada tegangan listrik/mesin berputar.' },
+      { kanji: '注意', furi: 'ちゅうい', romaji: 'Chuui', arti: 'Peringatan / Hati-hati', batch: 'batch1', sectorLabel: '⚠️ Keselamatan', radikal: '注(tuang) + 意(pikiran).', context: '足元注意 = awas kaki terpeleset.' },
+      { kanji: '安全第一', furi: 'あんぜんだいいち', romaji: 'Anzen daiichi', arti: 'Utamakan Keselamatan Kerja', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '安(aman) + 全 + 第 + 一(pertama).', context: 'Slogan keselamatan mutlak di pabrik.' },
+      { kanji: '出勤', furi: 'しゅっきん', romaji: 'Shukkin', arti: 'Masuk kerja / Absen datang', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '出(keluar) + 勤(bekerja).', context: 'Jam tap kartu absen pagi.' },
+      { kanji: '退勤', furi: 'たいきん', romaji: 'Taikin', arti: 'Pulang kerja / Selesai dinas', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '退(selesai) + 勤(bekerja).', context: 'Shift kerja harian berakhir.' },
+      { kanji: '残業', furi: 'ざんぎょう', romaji: 'Zangyou', arti: 'Lembur di luar jam reguler', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '残(sisa) + 業(pekerjaan).', context: 'Lembur 1-2 jam di pabrik.' },
+      { kanji: '夜勤', furi: 'やきん', romaji: 'Yakin', arti: 'Shift malam', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '夜(malam) + 勤(kerja).', context: 'Bekerja pukul 22:00 sampai pagi.' },
+      { kanji: '日勤', furi: 'にっきん', romaji: 'Nikkin', arti: 'Shift siang reguler', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '日(siang) + 勤(kerja).', context: 'Bekerja pukul 08:00 - 17:00.' },
+      { kanji: '有給休暇', furi: 'ゆうきゅうきゅうか', romaji: 'Yuukyuu kyuuka', arti: 'Cuti tahunan berbayar (Yukyu)', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '有(ada) + 給(gaji) + 休暇(libur).', context: 'Libur hak pekerja tetap digaji.' },
+      { kanji: '報連相', furi: 'ほうれんそう', romaji: 'Hourensou', arti: 'Lapor, Kontak, Diskusi', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '報告 + 連絡 + 相談.', context: 'Wajib dilakukan saat ada kendala mesin.' },
+      { kanji: '指差し確認', furi: 'ゆびさしかくにん', romaji: 'Yubisashi kakunin', arti: 'Pemeriksaan menunjuk dengan jari', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '指(jari) + 差(tunjuk) + 確認(cek).', context: 'Menunjuk saklar sebelum menyalakan mesin.' },
+      { kanji: '作業服', furi: 'さぎょうふく', romaji: 'Sagyoufuku', arti: 'Baju seragam kerja pabrik', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '作(buat) + 業(kerja) + 服(pakaian).', context: 'Wajib dipakai di area produksi.' },
+      { kanji: '安全靴', furi: 'あんぜんぐつ', romaji: 'Anzengutsu', arti: 'Sepatu keselamatan kerja baja', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '安全(aman) + 靴(sepatu).', context: 'Melindungi kaki dari benda berat jatuh.' },
+      { kanji: '保護具', furi: 'ほごぐ', romaji: 'Hogogu', arti: 'Alat Pelindung Diri (APD)', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '保(jaga) + 護(lindungi) + 具(alat).', context: 'Kacamata pelindung, helm, sarung tangan.' },
+      { kanji: '工場', furi: 'こうじょう', romaji: 'Koujou', arti: 'Pabrik manufaktur', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '工(teknik) + 場(tempat).', context: 'Lokasi utama kerja Tokutei Ginou.' },
+      { kanji: '担当', furi: 'たんとう', romaji: 'Tantou', arti: 'Penanggung jawab / Bagian tugas', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '担(pikul) + 当(tepat).', context: '今日の担当は梱包です (Tugas hari ini packing).' },
+      { kanji: '倉庫', furi: 'そうこ', romaji: 'Souko', arti: 'Gudang penyimpanan barang', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '倉(gudang lumbung) + 庫(garasi).', context: 'Tempat menaruh stok produk.' },
+      { kanji: '機械', furi: 'きかい', romaji: 'Kikai', arti: 'Mesin operasional', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '木(kayu) + 幾 + 械(alat).', context: '機械を動かす (Menjalankan mesin).' },
+      { kanji: '道具', furi: 'どうぐ', romaji: 'Dougu', arti: 'Alat perkakas kerja', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '道(jalan) + 具(alat).', context: '道具を片付ける (Merapikan perkakas).' },
+      { kanji: '点検', furi: 'てんけん', romaji: 'Tenken', arti: 'Inspeksi berkala', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '点(titik) + 検(periksa).', context: 'Pemeriksaan rutin setiap pagi.' },
+      { kanji: '修理', furi: 'しゅうり', romaji: 'Shuuri', arti: 'Reparasi / Perbaikan alat', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '修(benahi) + 理(logika).', context: 'Memperbaiki bagian yang aus.' },
+      { kanji: '部品', furi: 'ぶひん', romaji: 'Buhin', arti: 'Suku cadang / Komponen', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '部(bagian) + 品(barang).', context: 'Komponen mesin yang diganti.' },
+      { kanji: '製品', furi: 'せいひん', romaji: 'Seihin', arti: 'Produk jadi / Barang hasil produksi', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '製(buat) + 品(barang).', context: 'Hasil akhir lini produksi siap kirim.' },
+      { kanji: '材料', furi: 'ざいりょう', romaji: 'Zairyou', arti: 'Bahan baku mentah', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '材(bahan) + 料(ongkos/isi).', context: 'Bahan mentah sebelum diproses.' },
+      { kanji: '運搬', furi: 'うんぱん', romaji: 'Unpan', arti: 'Pengangkutan logistik barang', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '運(bawa) + 搬(angkut).', context: 'Memindahkan barang dengan forklift/handlift.' },
+      { kanji: '荷物', furi: 'にもつ', romaji: 'Nimotsu', arti: 'Barang bawaan / Muatan', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '荷(beban pikul) + 物(barang).', context: '荷物を運ぶ (Mengangkut muatan).' },
+      { kanji: '積載', furi: 'せきさい', romaji: 'Sekisai', arti: 'Pemuatan kapasitas beban', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '積(tumpuk) + 載(muat).', context: 'Batas muatan maksimum rak/truk.' },
+      { kanji: '梱包', furi: 'こんぽう', romaji: 'Konpou', arti: 'Pengepakan / Packing barang', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '梱(ikat) + 包(bungkus).', context: 'Membungkus barang ke kardus.' },
+      { kanji: '段ボール', furi: 'だんぼーる', romaji: 'Danbooru', arti: 'Kardus karton tebal', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: 'Istilah wajib kemasan industri.', context: 'Wadah pengepakan standar.' },
+      { kanji: '整理整頓', furi: 'せいりせいとん', romaji: 'Seiri seiton', arti: 'Ringkas & Rapi (Prinsip 5S)', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '整理(buang sampah) + 整頓(atur rapi).', context: 'Aturan mutlak area kerja Jepang.' },
+      { kanji: '清掃', furi: 'せいそう', romaji: 'Seisou', arti: 'Pembersihan area kerja', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '清(bersih) + 掃(sapu).', context: 'Menyapu dan mengepel lantai kerja.' },
+      { kanji: '清潔', furi: 'せいけつ', romaji: 'Seiketsu', arti: 'Menjaga kebersihan & higienis', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '清(bersih) + 潔(murni).', context: 'Standar higienitas pabrik makanan.' },
+      { kanji: '習慣', furi: 'しゅうかん', romaji: 'Shuukan', arti: 'Kebiasaan disiplin (Shitsuke)', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '習(latih) + 慣(biasa).', context: 'Pilar ke-5 budaya pabrik 5S.' },
+      { kanji: '始業', furi: 'しぎょう', romaji: 'Shigyou', arti: 'Mulai jam kerja', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '始(mulai) + 業(kerja).', context: 'Bel pembuka jam kerja pagi.' },
+      { kanji: '終業', furi: 'しゅうぎょう', romaji: 'Shuugyou', arti: 'Selesai jam kerja', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '終(akhir) + 業(kerja).', context: 'Bel tanda jam shift berakhir.' },
+      { kanji: '休憩', furi: 'きゅうけい', romaji: 'Kyuukei', arti: 'Istirahat jeda jam kerja', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '休(istirahat) + 憩(napas lega).', context: 'Istirahat 10 menit di kantin.' },
+      { kanji: '交代', furi: 'こうたい', romaji: 'Koutai', arti: 'Pergantian tim / Shift', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '交(tukar) + 代(ganti).', context: 'Pergantian shift siang ke malam.' },
+      { kanji: '早退', furi: 'そうたい', romaji: 'Soutai', arti: 'Pulang cepat izin sakit', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '早(pagi/awal) + 退(mundur).', context: 'Izin pulang lebih awal karena demam.' },
+      { kanji: '欠勤', furi: 'けっきん', romaji: 'Kekkin', arti: 'Absen tidak masuk kerja', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '欠(kurang/absen) + 勤(kerja).', context: 'Tidak hadir tanpa kabar.' },
+      { kanji: '遅刻', furi: 'ちこく', romaji: 'Chikoku', arti: 'Terlambat datang masuk kerja', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '遅(lambat) + 刻(waktu).', context: 'Terlambat 15 menit karena kereta.' },
+      { kanji: '連絡網', furi: 'れんらくもう', romaji: 'Renrakumou', arti: 'Bagan kontak rantai darurat', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '連絡(kontak) + 網(jaring).', context: 'Daftar nomor darurat karyawan.' },
+      { kanji: '会議室', furi: 'かいぎしつ', romaji: 'Kaigishitsu', arti: 'Ruang rapat pertemuan', batch: 'batch1', sectorLabel: '🏢 Fasilitas', radikal: '会(temu) + 議(runding) + 室(ruang).', context: 'Lokasi briefing harian (chourei).' },
+      { kanji: '事務所', furi: 'じむしょ', romaji: 'Jimusho', arti: 'Kantor administrasi kantor', batch: 'batch1', sectorLabel: '🏢 Fasilitas', radikal: '事(urusan) + 務(tugas) + 所(tempat).', context: 'Meja administrasi atasan.' },
+      { kanji: '社長', furi: 'しゃちょう', romaji: 'Shachou', arti: 'Presiden direktur perusahaan', batch: 'batch1', sectorLabel: '💼 Hierarki', radikal: '社(kantor) + 長(paling atas).', context: 'Pimpinan tertinggi perusahaan.' },
+      { kanji: '部長', furi: 'ぶちょう', romaji: 'Buchou', arti: 'Kepala divisi departemen', batch: 'batch1', sectorLabel: '💼 Hierarki', radikal: '部(divisi) + 長(ketua).', context: 'Atasan tingkat menengah.' },
+      { kanji: '課長', furi: 'かちょう', romaji: 'Kachou', arti: 'Kepala seksi seksi kerja', batch: 'batch1', sectorLabel: '💼 Hierarki', radikal: '課(seksi) + 長(ketua).', context: 'Atasan langsung yang mengawasi harian.' },
+      { kanji: '同僚', furi: 'どうりょう', romaji: 'Douryou', arti: 'Rekan kerja seangkatan', batch: 'batch1', sectorLabel: '💼 Hierarki', radikal: '同(sama) + 僚(kawan dinas).', context: 'Teman satu shift kerja.' },
+      { kanji: '先輩', furi: 'せんぱい', romaji: 'Senpai', arti: 'Senior yang lebih dulu masuk', batch: 'batch1', sectorLabel: '💼 Hierarki', radikal: '先(dahulu) + 輩(kolega).', context: 'Orang yang mengajari instruksi teknis.' },
+      { kanji: '後輩', furi: 'こうはい', romaji: 'Kouhai', arti: 'Junior yang baru masuk', batch: 'batch1', sectorLabel: '💼 Hierarki', radikal: '後(belakangan) + 輩.', context: 'Pekerja baru di tempat kerja.' },
+      { kanji: '手袋', furi: 'てぶくろ', romaji: 'Tebukuro', arti: 'Sarung tangan pelindung kerja', batch: 'batch1', sectorLabel: '💼 APD', radikal: '手(tangan) + 袋(kantong).', context: 'Sarung tangan anti-potong.' },
+      { kanji: '防塵', furi: 'ぼうじん', romaji: 'Boujin', arti: 'Anti debu / Masker filter', batch: 'batch1', sectorLabel: '💼 APD', radikal: '防(cegah) + 塵(debu halus).', context: 'Masker saat mengamplas/las.' },
+      { kanji: '静電気', furi: 'せいでんき', romaji: 'Seidenki', arti: 'Listrik statis gesekan', batch: 'batch1', sectorLabel: '⚠️ Bahaya', radikal: '静(diam) + 電気(listrik).', context: 'Wajib pakai gelang anti statis di pabrik IC.' },
+      { kanji: '高電圧', furi: 'こうでんあつ', romaji: 'Kouden\'atsu', arti: 'Tegangan listrik tinggi', batch: 'batch1', sectorLabel: '⚠️ Bahaya', radikal: '高(tinggi) + 電圧(voltase).', context: 'Papan larangan sentuh kabel tegangan.' },
+      { kanji: '感電', furi: 'かんでん', romaji: 'Kanden', arti: 'Sengatan tersetrum listrik', batch: 'batch1', sectorLabel: '⚠️ Bahaya', radikal: '感(rasa) + 電(listrik).', context: 'Bahaya menyentuh air dekat panel kabel.' },
+      { kanji: '落下', furi: 'らっか', romaji: 'Rakka', arti: 'Jatuh dari ketinggian', batch: 'batch1', sectorLabel: '⚠️ Bahaya', radikal: '落(jatuh) + 下(bawah).', context: 'Bahaya di perancah konstruksi.' },
+      { kanji: '転倒', furi: 'てんとう', romaji: 'Tentou', arti: 'Terpeleset jatuh terbalik', batch: 'batch1', sectorLabel: '⚠️ Bahaya', radikal: '転(berguling) + 倒(roboh).', context: 'Terpeleset karena lantai berminyak.' },
+      { kanji: '挟まれ', furi: 'はさまれ', romaji: 'Hasamare', arti: 'Terjepit roll / Mesin pres', batch: 'batch1', sectorLabel: '⚠️ Bahaya', radikal: 'Bentuk pasif 挟む (menjepit).', context: 'Kecelakaan terjepit ban berjalan.' },
+      { kanji: '火気厳禁', furi: 'かきげんきん', romaji: 'Kaki genkin', arti: 'Dilarang keras menyalakan api!', batch: 'batch1', sectorLabel: '⚠️ Bahaya', radikal: '火気(hawa api) + 厳禁(larang keras).', context: 'Ditempel di dekat tangki tiner/gas.' },
+      { kanji: '消火器', furi: 'しょうかき', romaji: 'Shoukaki', arti: 'Tabung APAR pemadam api', batch: 'batch1', sectorLabel: '⚠️ Bahaya', radikal: '消(padam) + 火(api) + 器(wadah).', context: 'Alat pemadam api merah di sudut lorong.' },
+      { kanji: '避難所', furi: 'ひなんじょ', romaji: 'Hinanjo', arti: 'Tempat evakuasi bencana', batch: 'batch1', sectorLabel: '⚠️ Bahaya', radikal: '避(hindar) + 難(bencana) + 所.', context: 'Lapangan/gedung olahraga saat gempa.' },
+      { kanji: '誘導灯', furi: 'ゆうどうとう', romaji: 'Yuudoutou', arti: 'Lampu hijau penunjuk pintu darurat', batch: 'batch1', sectorLabel: '⚠️ Bahaya', radikal: '誘導(bimbing) + 灯(lampu).', context: 'Lampu exit yang menyala saat mati listrik.' },
+      { kanji: '警報機', furi: 'けいほうき', romaji: 'Keihouki', arti: 'Alat sirene / Alarm peringatan', batch: 'batch1', sectorLabel: '⚠️ Bahaya', radikal: '警報(alarm siaga) + 機(alat).', context: 'Sirene bahaya kebocoran gas.' },
+      { kanji: '通行止', furi: 'つうこうどめ', romaji: 'Tsuukoudome', arti: 'Jalan ditutup untuk umum', batch: 'batch1', sectorLabel: '🚫 Rambu', radikal: '通行(lewat) + 止(stop).', context: 'Jalan tidak bisa dilewati kendaraan.' },
+      { kanji: '工事中', furi: 'こうじちゅう', romaji: 'Koujichuu', arti: 'Sedang ada proyek konstruksi jalan', batch: 'batch1', sectorLabel: '🚫 Rambu', radikal: '工事(konstruksi) + 中(proses).', context: 'Harus memutar jalan lain.' },
+      { kanji: '段差注意', furi: 'だんさちゅうい', romaji: 'Dansa chuui', arti: 'Hati-hati beda ketinggian lantai', batch: 'batch1', sectorLabel: '⚠️ Keselamatan', radikal: '段差(undakan) + 注意.', context: 'Awas tersandung di depan pintu.' },
+      { kanji: '頭上注意', furi: 'ずじょうちゅうい', romaji: 'Zujou chuui', arti: 'Hati-hati kepala terbentur!', batch: 'batch1', sectorLabel: '⚠️ Keselamatan', radikal: '頭上(atas kepala) + 注意.', context: 'Plafon rendah pipa pabrik.' },
+      { kanji: '足元注意', furi: 'あしもとちゅうい', romaji: 'Ashimoto chuui', arti: 'Hati-hati pijakan kaki licin', batch: 'batch1', sectorLabel: '⚠️ Keselamatan', radikal: '足元(bawah kaki) + 注意.', context: 'Lantai basah setelah dipel.' },
+      { kanji: '開閉注意', furi: 'かいへいちゅうい', romaji: 'Kaihei chuui', arti: 'Hati-hati saat buka tutup pintu', batch: 'batch1', sectorLabel: '⚠️ Keselamatan', radikal: '開(buka) + 閉(tutup) + 注意.', context: 'Pintu geser otomatis pabrik.' },
+      { kanji: '手指消毒', furi: 'てゆびしょうどく', romaji: 'Teyubi shoudoku', arti: 'Disinfeksi alkohol tangan & jari', batch: 'batch1', sectorLabel: '⚠️ Higienis', radikal: '手指(jari tangan) + 消毒(steril).', context: 'Wajib semprot alkohol sebelum masuk pabrik.' },
+      { kanji: 'マスク着用', furi: 'ますくちゃくよう', romaji: 'Masuku chakuyou', arti: 'Wajib memakai masker wajah', batch: 'batch1', sectorLabel: '⚠️ Higienis', radikal: 'マスク + 着用(kenakan).', context: 'Area steril pengolahan makanan.' },
+      { kanji: '検温', furi: 'けんおん', romaji: 'Ken\'on', arti: 'Pengecekan suhu tubuh badan', batch: 'batch1', sectorLabel: '⚠️ Higienis', radikal: '検(periksa) + 温(suhu).', context: 'Cek suhu termometer pagi.' },
+      { kanji: '入室', furi: 'にゅうしつ', romaji: 'Nyuushitsu', arti: 'Masuk ke dalam ruangan', batch: 'batch1', sectorLabel: '🏢 Fasilitas', radikal: '入(masuk) + 室(ruang).', context: 'Aturan saat masuk ruang bersih.' },
+      { kanji: '退出', furi: 'たいしつ', romaji: 'Taishitsu', arti: 'Keluar dari ruangan', batch: 'batch1', sectorLabel: '🏢 Fasilitas', radikal: '退(keluar) + 室(ruang).', context: 'Merapikan alat saat meninggalkan ruang.' },
+      { kanji: '施錠', furi: 'せじょう', romaji: 'Sejou', arti: 'Mengunci pintu gembok', batch: 'batch1', sectorLabel: '🏢 Fasilitas', radikal: '施(lakukan) + 錠(gembok).', context: 'Karyawan terakhir wajib mengunci kantor.' },
+      { kanji: '開錠', furi: 'かいじょう', romaji: 'Kaijou', arti: 'Membuka kunci gembok pintu', batch: 'batch1', sectorLabel: '🏢 Fasilitas', radikal: '開(buka) + 錠(kunci).', context: 'Membuka gembok pagar pagi.' },
+      { kanji: '電源', furi: 'でんげん', romaji: 'Dengen', arti: 'Sumber aliran arus listrik', batch: 'batch1', sectorLabel: '⚙️ Mesin', radikal: '電(listrik) + 源(sumber).', context: '電源を切る (Matikan saklar daya).' },
+      { kanji: '切替', furi: 'きりかえ', romaji: 'Kirikae', arti: 'Tombol pergantian mode mesin', batch: 'batch1', sectorLabel: '⚙️ Mesin', radikal: '切(potong) + 替(ganti).', context: 'Ganti mode manual ke otomatis.' },
+      { kanji: '停止', furi: 'ていし', romaji: 'Teishi', arti: 'Menghentikan putaran mesin', batch: 'batch1', sectorLabel: '⚙️ Mesin', radikal: '停(jeda) + 止(stop).', context: 'Tombol stop kuning mesin.' },
+      { kanji: '起動', furi: 'きどう', romaji: 'Kidou', arti: 'Menjalankan / Menyalakan mesin', batch: 'batch1', sectorLabel: '⚙️ Mesin', radikal: '起(bangkit) + 動(gerak).', context: 'Menekan tombol start hijau.' },
+      { kanji: '非常停止', furi: 'ひじょうていし', romaji: 'Hijou teishi', arti: 'Tombol stop darurat merah (E-Stop)', batch: 'batch1', sectorLabel: '⚙️ Mesin', radikal: '非常(darurat) + 停止(stop).', context: 'Tombol jamur merah dipukul saat darurat.' },
+      { kanji: '調整', furi: 'ちょうせい', romaji: 'Chousei', arti: 'Menyetel / Mengkalibrasi ukuran', batch: 'batch1', sectorLabel: '⚙️ Mesin', radikal: '調(atur) + 整(rapi).', context: 'Menyetel kecepatan ban berjalan.' },
+      { kanji: '測定', furi: 'そくてい', romaji: 'Sokutei', arti: 'Pengukuran presisi millimeter', batch: 'batch1', sectorLabel: '⚙️ Mesin', radikal: '測(ukur) + 定(pasti).', context: 'Mengukur ketebalan dengan jangka sorong.' },
+      { kanji: '記録', furi: 'きろく', romaji: 'Kiroku', arti: 'Mencatat data log operasional', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '記(tulis) + 録(catat).', context: 'Mencatat suhu mesin tiap 2 jam.' },
+      { kanji: '提出', furi: 'ていしゅつ', romaji: 'Teishutsu', arti: 'Menyerahkan dokumen ke atasan', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '提(tenteng) + 出(keluar).', context: 'Menyerahkan lembar laporan harian.' },
+      { kanji: '報告書', furi: 'ほうこくしょ', romaji: 'Houkokusho', arti: 'Lembar dokumen laporan kerja', batch: 'batch1', sectorLabel: '💼 Pabrik', radikal: '報告(lapor) + 書(lembar).', context: 'Laporan hasil produksi harian.' },
+      { kanji: 'ヘルメット', furi: 'へるめっと', romaji: 'Herumetto', arti: 'Helm pelindung kepala kerja', batch: 'batch1', sectorLabel: '💼 APD', radikal: 'Katakana wajib keselamatan kerja.', context: 'Tali dagu wajib dikunci rapat.' },
+
+      // ========================================================
+      // BATCH 2: MAKANAN, BELANJA, APARTEMEN & SAMPAH (Item 101 – 200)
+      // ========================================================
+      { kanji: '賞味期限', furi: 'しょうみきげん', romaji: 'Shoumikigen', arti: 'Batas kualitas rasa terbaik (Best Before)', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '賞(nikmat) + 味(rasa) + 期限(batas).', context: 'Lewat tanggal ini masih boleh dimakan.' },
+      { kanji: '消費期限', furi: 'しょうひきげん', romaji: 'Shouhikigen', arti: 'Batas aman konsumsi / Basi (Use By)', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '消(padam) + 費(konsumsi) + 期限.', context: 'Pada daging/sushi mentah. Lewat ini bahaya!' },
+      { kanji: '半額', furi: 'はんがく', romaji: 'Hangaku', arti: 'Diskon 50% / Setengah Harga', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '半(setengah) + 額(jumlah uang).', context: 'Stiker diskon makanan supermarket malam hari.' },
+      { kanji: '割引', furi: 'わりびき', romaji: 'Waribiki', arti: 'Potongan Harga / Diskon', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '割(bagi) + 引(tarik).', context: '2割引 = diskon 20%.' },
+      { kanji: '税込', furi: 'ぜいこみ', romaji: 'Zeikomi', arti: 'Harga sudah termasuk pajak', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '税(pajak) + 込(masuk dalam).', context: 'Nominal total yang harus dibayar di kasir.' },
+      { kanji: '税抜', furi: 'ぜいぬき', romaji: 'Zeinuki', arti: 'Harga belum termasuk pajak', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '税(pajak) + 抜(cabut/keluar).', context: 'Harga mentah di rak supermarket.' },
+      { kanji: '食券', furi: 'しょっけん', romaji: 'Shokken', arti: 'Kupon Makan Mesin', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '食(makan) + 券(tiket).', context: 'Beli di mesin sebelum duduk di kedai ramen.' },
+      { kanji: '定休日', furi: 'ていきゅうび', romaji: 'Teikyuubi', arti: 'Hari libur rutin toko', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '定(tetap) + 休(libur) + 日(hari).', context: 'Misal: 定休日 水曜日 (Toko tutup tiap Rabu).' },
+      { kanji: '大盛', furi: 'おおもり', romaji: 'Oomori', arti: 'Porsi Besar / Jumbo', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '大(besar) + 盛(tumpukan mangkuk).', context: 'Pilihan porsi mangkuk nasi/mie.' },
+      { kanji: '替玉', furi: 'かえだま', romaji: 'Kaedama', arti: 'Tambah porsi mie ramen saja', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '替(ganti/tambah) + 玉(bola mie).', context: 'Saat kuah ramen masih ada di mangkuk.' },
+      { kanji: '会計', furi: 'かいけい', romaji: 'Kaikei', arti: 'Pembayaran Kasir / Bill', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '会(temu) + 計(hitung angka).', context: 'お会計お願いします = Minta tagihan.' },
+      { kanji: '注文', furi: 'ちゅうもん', romaji: 'Chuumon', arti: 'Pesanan makanan/barang', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '注(tuang) + 文(surat/kata).', context: 'ご注文はお決まりですか？' },
+      { kanji: '燃えるゴミ', furi: 'もえるごみ', romaji: 'Moeru gomi', arti: 'Sampah yang bisa dibakar (dapur, kertas)', batch: 'batch2', sectorLabel: '🗑️ Sampah', radikal: '火(api) + 然 = 燃(bakar).', context: 'Dibuang Selasa & Jumat pagi.' },
+      { kanji: '燃えないゴミ', furi: 'もえないごみ', romaji: 'Moenai gomi', arti: 'Sampah tidak bisa dibakar (kaca, logam)', batch: 'batch2', sectorLabel: '🗑️ Sampah', radikal: 'Bentuk negatif dari 燃える.', context: 'Piring pecah, kaleng spray, bohlam.' },
+      { kanji: '資源ゴミ', furi: 'しげんごみ', romaji: 'Shigen gomi', arti: 'Sampah daur ulang (botol PET, kaleng)', batch: 'batch2', sectorLabel: '🗑️ Sampah', radikal: '資(sumber) + 源(mata air).', context: 'Tutup & label botol PET wajib dilepas.' },
+      { kanji: '粗大ゴミ', furi: 'そだいごみ', romaji: 'Sodai gomi', arti: 'Sampah besar (kasur, sepeda, meja)', batch: 'batch2', sectorLabel: '🗑️ Sampah', radikal: '粗(kasar) + 大(besar).', context: 'Wajib beli stiker kupon di konbini.' },
+      { kanji: '分別', furi: 'ぶんべつ', romaji: 'Bunbetsu', arti: 'Pemilahan jenis sampah', batch: 'batch2', sectorLabel: '🗑️ Sampah', radikal: '分(bagi) + 別(pisah).', context: 'Aturan wajib di apartemen Jepang.' },
+      { kanji: '管理人', furi: 'かんりにん', romaji: 'Kanrinin', arti: 'Pengelola / Penjaga Gedung Apartemen', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '管(atur) + 理(logika) + 人(orang).', context: 'Orang yang dihubungi jika kunci hilang.' },
+      { kanji: '家賃', furi: 'やちん', romaji: 'Yachin', arti: 'Uang sewa kamar per bulan', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '家(rumah) + 賃(biaya/upah).', context: 'Dibayar akhir bulan via transfer bank.' },
+      { kanji: '水道', furi: 'すいどう', romaji: 'Suidou', arti: 'Saluran air bersih', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '水(air) + 道(jalan).', context: 'Tagihan air PDAM bulanan.' },
+      { kanji: '電気代', furi: 'でんきだい', romaji: 'Denkidai', arti: 'Biaya tagihan listrik bulanan', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '電気(listrik) + 代(ongkos).', context: 'Dibayar via debit atau konbini.' },
+      { kanji: 'ガス代', furi: 'がすだい', romaji: 'Gasudai', arti: 'Biaya tagihan gas dapur/mandi', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: 'ガス + 代(ongkos).', context: 'Tagihan gas bulanan.' },
+      { kanji: '領収書', furi: 'りょうしゅうしょ', romaji: 'Ryoushuusho', arti: 'Kuitansi resmi cap toko', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '領(terima) + 収(kumpul) + 書(lembar).', context: 'Bukti pembayaran resmi untuk kantor.' },
+      { kanji: 'レシート', furi: 'れしーと', romaji: 'Reshiito', arti: 'Struk bukti kasir belanja', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: 'Serapan receipt.', context: 'Struk belanjaan supermarket harian.' },
+      { kanji: '現金', furi: 'げんきん', romaji: 'Genkin', arti: 'Uang tunai fisik kertas/koin', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '現(nyata) + 金(uang).', context: 'Bayar kasir dengan uang tunai.' },
+      { kanji: 'おつり', furi: 'おつり', romaji: 'Otsuri', arti: 'Uang kembalian belanja', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '釣(kembalian).', context: 'Kembalian dari kasir.' },
+      { kanji: '小銭', furi: 'こぜに', romaji: 'Kozeni', arti: 'Uang receh pecahan koin', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '小(kecil) + 銭(uang koin).', context: 'Uang koin 10, 50, 100 yen.' },
+      { kanji: 'お札', furi: 'おさつ', romaji: 'Osatsu', arti: 'Uang kertas lembaran 1000/10000', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '札(lembar slip).', context: 'Uang kertas di mesin tiket.' },
+      { kanji: '袋', furi: 'ふくろ', romaji: 'Fukuro', arti: 'Kantong kresek belanjaan', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '衣(kain) + 包(bungkus).', context: '袋は大丈夫です (Tidak butuh kresek).' },
+      { kanji: '箸', furi: 'はし', romaji: 'Hashi', arti: 'Sumpit makan kayu', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '竹(bambu) + 者.', context: 'お箸は何膳ですか？ (Berapa pasang sumpit?).' },
+      { kanji: '温め', furi: 'あたため', romaji: 'Atatame', arti: 'Menghangatkan makanan bento', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '温(hangat).', context: 'お弁当温めますか？ (Mau dihangatkan?).' },
+      { kanji: '弁当', furi: 'べんとう', romaji: 'Bentou', arti: 'Kotak makan bento siap saji', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '弁 + 当(tepat).', context: 'Menu makan siang konbini.' },
+      { kanji: '惣菜', furi: 'そうざい', romaji: 'Souzai', arti: 'Lauk pauk matang kemasan', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '惣 + 菜(sayur/lauk).', context: 'Gorengan/lauk di supermarket.' },
+      { kanji: '調味料', furi: 'ちょうみりょう', romaji: 'Choumiryou', arti: 'Bumbu penyedap masakan', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '調(atur) + 味(rasa) + 料.', context: 'Kecap, saus, bumbu dapur.' },
+      { kanji: '油', furi: 'あぶら', romaji: 'Abura', arti: 'Minyak goreng masak', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '氵(cair) + 由.', context: 'Minyak goreng dapur.' },
+      { kanji: '醤油', furi: 'しょうゆ', romaji: 'Shouyu', arti: 'Kecap asin shoyu khas jepang', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '醤 + 油(minyak cair).', context: 'Kecap kedelai hitam jepang.' },
+      { kanji: '砂糖', furi: 'さとう', romaji: 'Satou', arti: 'Gula pasir manis', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '砂(butir pasir) + 糖(gula).', context: 'Pemberi rasa manis masakan.' },
+      { kanji: '塩', furi: 'しお', romaji: 'Shio', arti: 'Garam dapur asin', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '土 + 卤(kristal garam).', context: 'Garam pembumbui makanan.' },
+      { kanji: '酢', furi: 'す', romaji: 'Su', arti: 'Cuka makan asam', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '酉(wadah fermentasi) + 乍.', context: 'Cuka nasi sushi asam.' },
+      { kanji: '味噌', furi: 'みそ', romaji: 'Miso', arti: 'Pasta kedelai fermentasi miso', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '味(rasa) + 噌.', context: 'Bahan utama sup miso hangat.' },
+      { kanji: '野菜', furi: 'やさい', romaji: 'Yasai', arti: 'Sayur mayur hijau', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '野(ladang) + 菜(sayur).', context: 'Sayuran segar di pasar.' },
+      { kanji: '果物', furi: 'くだもの', romaji: 'Kudamono', arti: 'Buah buahan segar', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '果(buah) + 物(benda).', context: 'Apel, pisang, jeruk.' },
+      { kanji: '牛肉', furi: 'ぎゅうにく', romaji: 'Gyuuniku', arti: 'Daging sapi', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '牛(sapi) + 肉(daging).', context: 'Daging sapi di kulkas supermarket.' },
+      { kanji: '豚肉', furi: 'ぶたにく', romaji: 'Butaniku', arti: 'Daging babi', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '豚(babi) + 肉(daging).', context: 'Wajib diidentifikasi bagi yang halal.' },
+      { kanji: '鶏肉', furi: 'とりにく', romaji: 'Toriniku', arti: 'Daging ayam unggas', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '鳥(unggas) + 肉(daging).', context: 'Daging ayam olahan karage.' },
+      { kanji: '魚介', furi: 'ぎょかい', romaji: 'Gyokai', arti: 'Hasil laut / Boga bahari', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '魚(ikan) + 介(cangkang kerang).', context: 'Ikan, udang, cumi seafood.' },
+      { kanji: '卵', furi: 'たまご', romaji: 'Tamago', arti: 'Telur ayam konsumsi', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: 'Pictograf bentuk dua butir telur.', context: 'Satu pack telur isi 10 butir.' },
+      { kanji: '牛乳', furi: 'ぎゅうにゅう', romaji: 'Gyuunyuu', arti: 'Susu sapi cair segar', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '牛(sapi) + 乳(air susu).', context: 'Karton susu 1 liter di chiller.' },
+      { kanji: '冷凍食品', furi: 'れいとうしょくひん', romaji: 'Reitoushokuhin', arti: 'Makanan beku (Frozen food)', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '冷(dingin) + 凍(beku) + 食品.', context: 'Gyoza, udon beku di freezer.' },
+      { kanji: '商品', furi: 'しょうひん', romaji: 'Shouhin', arti: 'Barang komoditas dagangan', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '商(dagang) + 品(barang).', context: 'Produk yang dijual di toko.' },
+      { kanji: '売り場', furi: 'うりば', romaji: 'Uriba', arti: 'Area lorong stan jualan', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '売(jual) + 場(lokasi).', context: 'Rak lantai belanja supermarket.' },
+      { kanji: '特売', furi: 'とくばい', romaji: 'Tokubai', arti: 'Obral diskon khusus spesial', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '特(khusus) + 売(jual).', context: 'Harga promosi hari itu saja.' },
+      { kanji: '限定', furi: 'げんてい', romaji: 'Gentei', arti: 'Terbatas kuota / Edisi tertentu', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '限(batas) + 定(tetap).', context: '本日限定 = Hanya untuk hari ini.' },
+      { kanji: '無料', furi: 'むりょう', romaji: 'Muryou', arti: 'Gratis tanpa biaya', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '無(tanpa) + 料(ongkos).', context: 'Gratis ongkos kirim/masuk.' },
+      { kanji: '有料', furi: 'ゆうりょう', romaji: 'Yuuryou', arti: 'Berbayar bertarif', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '有(ada) + 料(ongkos).', context: 'Kantong kresek berbayar 5 yen.' },
+      { kanji: '返品', furi: 'へんぴん', romaji: 'Henpin', arti: 'Retur / Pengembalian barang', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '返(kembali) + 品(barang).', context: 'Mengembalikan barang cacat.' },
+      { kanji: '交換', furi: 'こうかん', romaji: 'Koukan', arti: 'Tukar guling barang cacat', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '交(tukar) + 換(ganti).', context: 'Tukar ukuran baju di kasir.' },
+      { kanji: '閉店', furi: 'へいてん', romaji: 'Heiten', arti: 'Toko tutup selesai jam hari', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '閉(tutup) + 店(toko).', context: 'Jam operasional berakhir malam.' },
+      { kanji: '開店', furi: 'かいてん', romaji: 'Kaiten', arti: 'Toko buka mulai pelayanan', batch: 'batch2', sectorLabel: '🏷️ Belanja', radikal: '開(buka) + 店(toko).', context: 'Pintu gerbang dibuka jam 09:00.' },
+      { kanji: '居酒屋', furi: 'いざかや', romaji: 'Izakaya', arti: 'Kedai makan minum santai jepang', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '居(duduk) + 酒(arak) + 屋(kedai).', context: 'Tempat kumpul minum tim kerja.' },
+      { kanji: '定食', furi: 'ていしょく', romaji: 'Teishoku', arti: 'Paket menu set nasi lauk sup', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '定(tetap) + 食(makan).', context: 'Menu set makan siang lengkap.' },
+      { kanji: '喫茶店', furi: 'きっさてん', romaji: 'Kissaten', arti: 'Kafe kedai kopi klasik', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '喫(hisap) + 茶(teh) + 店(toko).', context: 'Tempat ngopi santai santap roti.' },
+      { kanji: '禁煙席', furi: 'きんえんせき', romaji: 'Kin\'enseki', arti: 'Kursi bebas asap rokok', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '禁煙(tanpa rokok) + 席(kursi).', context: 'Memilih area meja di resto.' },
+      { kanji: '喫煙席', furi: 'きつえんせき', romaji: 'Kitsuenseki', arti: 'Kursi khusus perokok', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '喫煙(merokok) + 席(kursi).', context: 'Area meja boleh rokok.' },
+      { kanji: 'お冷', furi: 'おひや', romaji: 'Ohiya', arti: 'Air es putih gratis di restoran', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '冷(dingin segar).', context: 'お冷をお願いします (Minta air es).' },
+      { kanji: 'お代わり', furi: 'おかわり', romaji: 'Okawari', arti: 'Tambah porsi nasi / sup lagi', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '代(ganti/tambah).', context: 'ご飯のお代わり自由 (Bebas nambah nasi).' },
+      { kanji: '持ち帰り', furi: 'もちかえり', romaji: 'Mochikaeri', arti: 'Bungkus bawa pulang (Take away)', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '持(bawa) + 帰(pulang).', context: 'Di kasir: 持ち帰りで (Untuk dibungkus).' },
+      { kanji: '店内', furi: 'てんない', romaji: 'Tennai', arti: 'Makan di tempat resto (Dine in)', batch: 'batch2', sectorLabel: '🍱 Makanan', radikal: '店(toko) + 内(dalam).', context: 'Pajak makan di tempat 10%.' },
+      { kanji: '湯沸かし器', furi: 'ゆわかしき', romaji: 'Yuwakashiki', arti: 'Mesin pemanas air shower gas', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '湯(air panas) + 沸(mendidih) + 器.', context: 'Nyalakan sebelum mandi air panas.' },
+      { kanji: '洗濯機', furi: 'せんたくき', romaji: 'Sentakuki', arti: 'Mesin cuci baju otomatis', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '洗濯(cuci pakaian) + 機(mesin).', context: 'Fasilitas di kamar mandi asrama.' },
+      { kanji: '冷蔵庫', furi: 'れいぞうこ', romaji: 'Reizouko', arti: 'Lemari es / Kulkas pendingin', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '冷(dingin) + 蔵(simpan) + 庫.', context: 'Menyimpan makanan beku/sayur.' },
+      { kanji: '電子レンジ', furi: 'でんしれんじ', romaji: 'Denshirenji', arti: 'Oven microwave pemanas makanan', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '電子(elektron) + レンジ.', context: 'Menghangatkan bento di kamar.' },
+      { kanji: '掃除機', furi: 'そうじき', romaji: 'Soujiki', arti: 'Mesin pengisap debu vacuum', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '掃除(bersih-bersih) + 機.', context: 'Membersihkan karpet tatami.' },
+      { kanji: '換気扇', furi: 'かんきせん', romaji: 'Kankisen', arti: 'Kipas exhaust ventilasi udara', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '換気(ganti udara) + 扇(kipas).', context: 'Wajib dinyalakan saat masak gorengan.' },
+      { kanji: '郵便受け', furi: 'ゆうびんうけ', romaji: 'Yuubin\'uke', arti: 'Kotak pos surat di lobi', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '郵便(pos) + 受(terima).', context: 'Tempat masuknya surat tagihan.' },
+      { kanji: '宅配便', furi: 'たくはいびん', romaji: 'Takuhaibin', arti: 'Layanan kurir paket antar rumah', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '宅(rumah) + 配(antar) + 便.', context: 'Paket kurir belanja online.' },
+      { kanji: '不在票', furi: 'ふざいひょう', romaji: 'Fuzaihyou', arti: 'Surat kurir saat penghuni tak di rumah', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '不在(tidak ada di tempat) + 票(slip).', context: 'Diselipkan di kotak pos saat kurir gagal antar.' },
+      { kanji: '再配達', furi: 'さいはいたつ', romaji: 'Saihaitatsu', arti: 'Permintaan antar ulang kurir', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '再(ulang) + 配達(antar).', context: 'Scan QR di kertas untuk minta kirim ulang.' },
+      { kanji: '玄関', furi: 'げんかん', romaji: 'Genkan', arti: 'Area pintu masuk buka sepatu', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '玄 + 関(gerbang).', context: 'Wajib lepas sepatu di area ini.' },
+      { kanji: '廊下', furi: 'ろうか', romaji: 'Rouka', arti: 'Lorong koridor lantai kamar', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '廊(lorong) + 下.', context: 'Dilarang menaruh barang di lorong.' },
+      { kanji: '階段', furi: 'かいだん', romaji: 'Kaidan', arti: 'Anak tangga darurat gedung', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '階(tingkat) + 段(undakan).', context: 'Gunakan tangga saat lift diservis.' },
+      { kanji: '駐輪場', furi: 'ちゅうりんじょう', romaji: 'Chuurinjou', arti: 'Tempat parkir sepeda ontel', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '駐(parkir) + 輪(roda dua) + 場.', context: 'Wajib tempel stiker apartemen di sepeda.' },
+      { kanji: '駐車場', furi: 'ちゅうしゃじょう', romaji: 'Chuushajou', arti: 'Tempat area parkir mobil', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '駐(parkir) + 車(mobil) + 場.', context: 'Parkir mobil bernomor sewa.' },
+      { kanji: '敷金', furi: 'しききん', romaji: 'Shikikin', arti: 'Uang deposit jaminan awal sewa', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '敷(hampar) + 金(uang).', context: 'Dikembalikan saat pindah jika kamar bersih.' },
+      { kanji: '礼金', furi: 'れいきん', romaji: 'Reikin', arti: 'Uang terima kasih ke pemilik rumah', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '礼(sopan/terima kasih) + 金.', context: 'Uang hangus untuk pemilik gedung.' },
+      { kanji: '契約', furi: 'けいやく', romaji: 'Keiyaku', arti: 'Surat perjanjian kontrak resmi', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '契(ikat) + 約(janji).', context: 'Kontrak sewa apartemen 2 tahun.' },
+      { kanji: '更新', furi: 'こうしん', romaji: 'Koushin', arti: 'Perpanjangan masa kontrak', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '更(ubah) + 新(baru).', context: 'Biaya perpanjangan kontrak kamar.' },
+      { kanji: '解約', furi: 'かいやく', romaji: 'Kaiyaku', arti: 'Pemutusan / Pembatalan sewa', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '解(urai) + 約(janji).', context: 'Wajib lapor 1 bulan sebelum pindah.' },
+      { kanji: '引越し', furi: 'ひっこし', romaji: 'Hikkoshi', arti: 'Pindah hunian / Angkat koper', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '引(tarik) + 越(lewati).', context: 'Pindah ke apartemen baru.' },
+      { kanji: '騒音', furi: 'そうおん', romaji: 'Souon', arti: 'Suara bising mengganggu tetangga', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '騒(ribut) + 音(suara).', context: 'Dilarang bising di atas jam 21:00.' },
+      { kanji: '苦情', furi: 'くじょう', romaji: 'Kujou', arti: 'Keluhan komplain ketidaknyamanan', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '苦(pahit) + 情(perasaan).', context: 'Komplain dari tetangga sebelah kamar.' },
+      { kanji: '共同', furi: 'きょうどう', romaji: 'Kyoudou', arti: 'Penggunaan bersama penghuni', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '共(bersama) + 同(sama).', context: 'Fasilitas dapur bersama di asrama.' },
+      { kanji: '洗面所', furi: 'せんめんじょ', romaji: 'Senmenjo', arti: 'Wastafel cuci muka & sikat gigi', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '洗(cuci) + 面(muka) + 所.', context: 'Area wastafel cermin kamar mandi.' },
+      { kanji: '浴槽', furi: 'よくそう', romaji: 'Yokusou', arti: 'Bak mandi rendam air panas (Ofuro)', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '浴(mandi) + 槽(bak air).', context: 'Bak rendam air hangat jepang.' },
+      { kanji: '便座', furi: 'べんざ', romaji: 'Benza', arti: 'Dudukan toilet kloset duduk', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '便(kotoran) + 座(dudukan).', context: 'Pemanas dudukan kloset otomatis.' },
+      { kanji: '水漏れ', furi: 'みずもれ', romaji: 'Mizumore', arti: 'Kebocoran rembesan pipa air', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '水(air) + 漏(bocor).', context: 'Pipa bocor merembes ke lantai bawah.' },
+      { kanji: '排水口', furi: 'はいすいこう', romaji: 'Haisuikou', arti: 'Lubang pembuangan saringan air', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '排(buang) + 水(air) + 口.', context: 'Bersihkan rambut di lubang saringan.' },
+      { kanji: '詰まり', furi: 'つまり', romaji: 'Tsumari', arti: 'Pipa saluran mampet tersumbat', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: 'Bentuk kata benda 詰まる (mampet).', context: 'Toilet mampet harus segera lapor.' },
+      { kanji: '臭い', furi: 'におい', romaji: 'Nioi', arti: 'Bau aroma tidak sedap', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '自(hidung) + 犬(anjing).', context: 'Bau sampah jika tidak diikat rapat.' },
+      { kanji: '清掃日', furi: 'せいそうび', romaji: 'Seisoubi', arti: 'Hari jadwal kerja bakti warga', batch: 'batch2', sectorLabel: '🏢 Apartemen', radikal: '清掃(bersih-bersih) + 日(hari).', context: 'Hari pembersihan bersama lobi apartemen.' },
+
+      // ========================================================
+      // BATCH 3: VERBA & ADJEKTIVA N4 / A2 (Item 201 – 300)
+      // ========================================================
+      { kanji: '確認する', furi: 'かくにんする', romaji: 'Kakunin suru', arti: 'Memeriksa / Memverifikasi kebenaran', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '確(pasti) + 認(akui).', context: '書類を確認してください.' },
+      { kanji: '連絡する', furi: 'れんらくする', romaji: 'Renraku suru', arti: 'Menghubungi / Mengontak via telepon', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '連(hubung) + 絡(lilit).', context: '後で先生に連絡します.' },
+      { kanji: '相談する', furi: 'そうだんする', romaji: 'Soudan suru', arti: 'Berkonsultasi / Meminta masukan', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '相(saling) + 談(bicara).', context: '上司に相談してください.' },
+      { kanji: '案内する', furi: 'あんないする', romaji: 'Annai suru', arti: 'Memandu / Menunjukkan jalan', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '案(rencana) + 内(dalam).', context: '私が工場をご案内します.' },
+      { kanji: '説明する', furi: 'せつめいする', romaji: 'Setsumei suru', arti: 'Menjelaskan / Menerangkan cara', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '言(kata) + 明(jelas).', context: '使い方を説明します.' },
+      { kanji: '利用する', furi: 'りようする', romaji: 'Riyou suru', arti: 'Memanfaatkan fasilitas / Jasa', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '利(manfaat) + 用(pakai).', context: 'バスを利用して通勤する.' },
+      { kanji: '参加する', furi: 'さんかする', romaji: 'Sanka suru', arti: 'Ikut serta / Berpartisipasi acara', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '参(hadir) + 加(tambah).', context: '地域の祭りに参加する.' },
+      { kanji: '手伝う', furi: 'てつだう', romaji: 'Tetsudau', arti: 'Membantu meringankan beban orang', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '手(tangan) + 伝(sampaikan).', context: '荷物を運ぶのを手伝う.' },
+      { kanji: '片付ける', furi: 'かたづける', romaji: 'Katadzukeru', arti: 'Merapikan / Membereskan barang berserakan', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '片(sebelah) + 付(atur).', context: '机の上を片付けてください.' },
+      { kanji: '運ぶ', furi: 'はこぶ', romaji: 'Hakobu', arti: 'Mengangkat / Membawa muatan beban', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '車(gerobak) + 辶(jalan).', context: '段ボールを車に運ぶ.' },
+      { kanji: '渡す', furi: 'わたす', romaji: 'Watasu', arti: 'Menyerahkan langsung ke tangan orang', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '氵(air) + 度(seberang).', context: '受付で書類を渡す.' },
+      { kanji: '届く', furi: 'とどく', romaji: 'Todoku', arti: 'Paket kiriman tiba sampai tujuan', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '尸 + 由(asal muasal).', context: '荷物が家に届きました.' },
+      { kanji: '届ける', furi: 'とどける', romaji: 'Todokeru', arti: 'Mengantarkan / Melaporkan dokumen', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: 'Bentuk transitif dari 届く.', context: '交番に財布を届ける.' },
+      { kanji: '払う', furi: 'はらう', romaji: 'Harau', arti: 'Membayar uang kasir / Tagihan', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '扌(tangan) + 厶.', context: '家賃を銀行で払う.' },
+      { kanji: '困る', furi: 'こまる', romaji: 'Komaru', arti: 'Kesusahan / Menemui jalan buntu', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '囗(terkurung) + 木(pohon).', context: '道に迷って困りました.' },
+      { kanji: '故障する', furi: 'こしょうする', romaji: 'Koshou suru', arti: 'Mengalami kerusakan mekanis', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '故(rusak) + 障(halang).', context: 'エアコンが故障した.' },
+      { kanji: '修理する', furi: 'しゅうりする', romaji: 'Shuuri suru', arti: 'Memperbaiki barang yang rusak', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '修(benahi) + 理(logika).', context: '自転車のパンクを修理する.' },
+      { kanji: '複雑な', furi: 'ふくざつな', romaji: 'Fukuzatsu na', arti: 'Rumit / Berbelit-belit mekanismenya', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '複(rangkap) + 雑(campur).', context: '操作が複雑で分からない.' },
+      { kanji: '簡単な', furi: 'かんたんな', romaji: 'Kantan na', arti: 'Sederhana / Sangat mudah dipahami', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '竹(bambu) + 間 + 単.', context: '簡単な日本語で話して.' },
+      { kanji: '必要な', furi: 'ひつような', romaji: 'Hitsuyou na', arti: 'Perlu / Mutlak dibutuhkan keberadaannya', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '必(pasti) + 要(perlu).', context: 'パスポートのコピーが必要.' },
+      { kanji: '大切な', furi: 'たいせつな', romaji: 'Taisetsu na', arti: 'Berharga / Sangat penting dijaga', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '大(besar) + 切(potong).', context: '大切な書類を保管する.' },
+      { kanji: '危険な', furi: 'きけんな', romaji: 'Kiken na', arti: 'Berbahaya / Mengancam keselamatan', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '危(bahaya) + 険(curam).', context: '危険な場所に入らない.' },
+      { kanji: '安全な', furi: 'あんぜんな', romaji: 'Anzen na', arti: 'Aman / Terlindung dari risiko celaka', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '安(tenang) + 全(lengkap).', context: '安全な作業手順を守る.' },
+      { kanji: '便利な', furi: 'べんりな', romaji: 'Benri na', arti: 'Praktis / Memudahkan urusan', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '便(kemudahan) + 利(manfaat).', context: '駅の近くは便利です.' },
+      { kanji: '不便な', furi: 'ふべんな', romaji: 'Fuben na', arti: 'Merepotkan / Sulit diakses', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '不(tidak) + 便利.', context: 'バスがなくて不便です.' },
+      { kanji: '静かな', furi: 'しずかな', romaji: 'Shizuka na', arti: 'Tenang / Sunyi tidak ada kebisingan', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '青(biru jernih) + 争.', context: '夜はとても静かです.' },
+      { kanji: '賑やかな', furi: 'にぎやかな', romaji: 'Nigiyaka na', arti: 'Ramai meriah / Penuh orang lalu lalang', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: 'Kanji khusus suasana ramai.', context: '祭りで通りが賑やかです.' },
+      { kanji: '親切な', furi: 'しんせつな', romaji: 'Shinsetsu na', arti: 'Ramah tamah / Suka menolong orang', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '親(dekat orang tua) + 切.', context: '大家さんはとても親切です.' },
+      { kanji: '熱心な', furi: 'ねっしんな', romaji: 'Nesshin na', arti: 'Tekun bersungguh-sungguh / Antusias', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '熱(panas mendidih) + 心(hati).', context: '熱心に仕事を覚える.' },
+      { kanji: '真面目な', furi: 'まじめな', romaji: 'Majime na', arti: 'Serius / Berdisiplin jujur', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '真(benar) + 面(wajah) + 目(mata).', context: '彼は真面目に働きます.' },
+      { kanji: '忙しい', furi: 'いそがしい', romaji: 'Isogashii', arti: 'Sibuk / Banyak pekerjaan bertumpuk', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '忄(hati) + 亡(hilang).', context: '今週は残業が多くて忙しい.' },
+      { kanji: '嬉しい', furi: 'うれしい', romaji: 'Ureshii', arti: 'Gembira / Merasa sangat senang hati', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '女(wanita) + 喜(senang).', context: '試験に合格して嬉しい.' },
+      { kanji: '悲しい', furi: 'かなしい', romaji: 'Kanashii', arti: 'Sedih / Nestapa mengiris hati', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '非(patah) + 心(hati).', context: '友達が国へ帰って悲しい.' },
+      { kanji: '寂しい', furi: 'さびしい', romaji: 'Sabishii', arti: 'Kesepian / Rindu kampung halaman', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '宀(atap) + 叔.', context: '一人暮らしは少し寂しい.' },
+      { kanji: '痛い', furi: 'いたい', romaji: 'Itai', arti: 'Terasa sakit / Nyeri fisik', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '疒(penyakit) + 甬.', context: '頭が痛くて熱があります.' },
+      { kanji: '重い', furi: 'おもい', romaji: 'Omoi', arti: 'Berat bobot timbangannya', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '車 + 里 = 重(beban berat).', context: '荷物が重くて運べない.' },
+      { kanji: '軽い', furi: 'かるい', romaji: 'Karui', arti: 'Ringan enteng mudah diangkat', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '車(gerobak) + 圣.', context: 'この段ボールは軽いです.' },
+      { kanji: '深い', furi: 'ふかい', romaji: 'Fukai', arti: 'Dalam jurang / Dasar kolam air', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '氵(air) + 木 + 穴.', context: 'プールが深くて足がつかない.' },
+      { kanji: '浅い', furi: 'あさい', romaji: 'Asai', arti: 'Dangkal cetek permukaannya', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '氵(air) + 戔.', context: '川が浅いので歩いて渡れる.' },
+      { kanji: '広い', furi: 'ひろい', romaji: 'Hiroi', arti: 'Luas lapang luas lantainya', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '广(atap rumah) + ム.', context: '部屋が広くて住みやすい.' },
+      { kanji: '狭い', furi: 'せまい', romaji: 'Semai', arti: 'Sempit sesak terbatas ruangnya', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '犭(hewan) + 夹.', context: '廊下が狭いので気をつけて.' },
+      { kanji: '強い', furi: 'つよい', romaji: 'Tsuyoi', arti: 'Kuat tenaga / Hembusan angin kencang', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '弓(busur) + 虫(serangga).', context: '昨日は風が強かった.' },
+      { kanji: '弱い', furi: 'よわい', romaji: 'Yowai', arti: 'Lemah daya / Kurang bertenaga', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '弓 + 冫(titik es).', context: '体の力が弱くなっています.' },
+      { kanji: '暗い', furi: 'くらい', romaji: 'Kurai', arti: 'Gelap redup temaram', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '日(matahari) + 音.', context: '夜の道は暗くて危険です.' },
+      { kanji: '明るい', furi: 'あかるい', romaji: 'Akarui', arti: 'Terang benderang jelas terlihat', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '日(matahari) + 月(bulan).', context: '部屋が明るくて気持ちいい.' },
+      { kanji: '暑い', furi: 'あつい', romaji: 'Atsui', arti: 'Panas terik hawa cuaca musim', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '日(matahari) + 者.', context: '日本の夏は蒸し暑いです.' },
+      { kanji: '寒い', furi: 'さむい', romaji: 'Samui', arti: 'Dingin menusuk hawa musim salju', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '宀 + 冫(es beku).', context: '冬の朝はとても寒いです.' },
+      { kanji: '暖かい', furi: 'あたたかい', romaji: 'Atatakai', arti: 'Hangat nyaman hawa musim semi', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '日(matahari) + 爰.', context: '春になって暖かくなった.' },
+      { kanji: '涼しい', furi: 'すずしい', romaji: 'Suzushii', arti: 'Sejuk semilir hawa musim gugur', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '氵(air embun) + 京.', context: '秋の風は涼しくて過ごしやすい.' },
+      { kanji: '眠い', furi: 'ねむい', romaji: 'Nemui', arti: 'Mengantuk letih mata', batch: 'batch3', sectorLabel: '⚡ Adjektiva N4', radikal: '目(mata) + 民.', context: '夜勤の後はとても眠いです.' },
+      { kanji: '探す', furi: 'さがす', romaji: 'Sagasu', arti: 'Mencari barang yang hilang / Kunci', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '扌(tangan) + 罙.', context: '失くした財布を探しています.' },
+      { kanji: '見つける', furi: 'みつける', romaji: 'Mitsukeru', arti: 'Menemukan barang yang dicari', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '見(melihat) + 付(nempel).', context: '鍵をやっと見つけました.' },
+      { kanji: '拾う', furi: 'ひろう', romaji: 'Hirou', arti: 'Memungut mengambil dari lantai', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '扌(tangan) + 合(kumpul).', context: 'ゴミを拾って捨てる.' },
+      { kanji: '落とす', furi: 'おとす', romaji: 'Otosu', arti: 'Menjatuhkan barang tanpa sengaja', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '氵(air) + 各.', context: '道で定期券を落としました.' },
+      { kanji: '忘れる', furi: 'わすれる', romaji: 'Wasureru', arti: 'Lupa meninggalkan sesuatu hal', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '亡(hilang) + 心(hati ingatan).', context: '傘を電車に忘れました.' },
+      { kanji: '覚える', furi: 'おぼえる', romaji: 'Oboeru', arti: 'Menghafal mengingat dalam kepala', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '学(belajar) + 見.', context: '仕事の手順を早く覚える.' },
+      { kanji: '調べる', furi: 'しらべる', romaji: 'Shiraberu', arti: 'Menyelidiki mencari tahu informasi', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '言(kata) + 周.', context: '電車の時間を調べる.' },
+      { kanji: '考える', furi: 'かんがえる', romaji: 'Kangaeru', arti: 'Memikirkan merenungkan opsi', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '考(pikir nalar).', context: '少し考えさせてください.' },
+      { kanji: '決める', furi: 'きめる', romaji: 'Kimeru', arti: 'Menentukan menetapkan keputusan', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '氵(air) + 夬.', context: '待ち合わせの時間を決める.' },
+      { kanji: '変わる', furi: 'かわる', romaji: 'Kawaru', arti: 'Berubah wujud sifat keadaannya', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '変(berubah alih).', context: '予定が急に変わりました.' },
+      { kanji: '変える', furi: 'かえる', romaji: 'Kaeru', arti: 'Mengubah mengganti setelan', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: 'Bentuk transitif dari 変わる.', context: '設定の温度を変えてください.' },
+      { kanji: '直す', furi: 'なおす', romaji: 'Naosu', arti: 'Membetulkan merevisi yang keliru', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '十 + 目 + 乚 = 直(lurus).', context: '間違えた書類を直します.' },
+      { kanji: '治る', furi: 'なおる', romaji: 'Naoru', arti: 'Sembuh pulih dari penyakit fisik', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '氵(air) + 台.', context: '風邪がすっかり治りました.' },
+      { kanji: '壊れる', furi: 'こわれる', romaji: 'Kowareru', arti: 'Rusak patah mekanis mesinnya', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '土(tanah) + 襄.', context: '時計が壊れて動かない.' },
+      { kanji: '壊す', furi: 'こわす', romaji: 'Kowasu', arti: 'Merusakkan mematahkan barang', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: 'Bentuk transitif dari 壊れる.', context: '無理に引いて取っ手を壊した.' },
+      { kanji: '落ちる', furi: 'おちる', romaji: 'Ochiru', arti: 'Jatuh tergelincir ke bawah', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '艹 + 氵 + 各.', context: '棚から荷物が落ちた.' },
+      { kanji: '倒れる', furi: 'たおれる', romaji: 'Taoreru', arti: 'Tumbang roboh jatuh pingsan', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '亻(orang) + 到.', context: '地震でタンスが倒れた.' },
+      { kanji: '止まる', furi: 'とまる', romaji: 'Tomaru', arti: 'Berhenti berputar mesin/mobilnya', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '止(stop berhenti).', context: '事故で電車が止まりました.' },
+      { kanji: '止める', furi: 'とめる', romaji: 'Tomeru', arti: 'Menghentikan memarkir kendaraan', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: 'Bentuk transitif dari 止まる.', context: 'ここに車を止めないで.' },
+      { kanji: '動く', furi: 'うごく', romaji: 'Ugoku', arti: 'Bergerak berputar mesinnya', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '重(berat) + 力(tenaga).', context: 'スマホが動かないんです.' },
+      { kanji: '動かす', furi: 'うごかす', romaji: 'Ugokasu', arti: 'Menggerakkan mengoperasikan tuas', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: 'Bentuk transitif dari 動く.', context: 'レバーを引いて機械を動かす.' },
+      { kanji: '開く', furi: 'あく', romaji: 'Aku', arti: 'Terbuka sendiri daun pintunya', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '門(pintu) + 开.', context: '自動ドアが開きます.' },
+      { kanji: '開ける', furi: 'あける', romaji: 'Akeru', arti: 'Membuka pintu jendela oleh orang', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: 'Bentuk transitif dari 開く.', context: '窓を開けて換気してください.' },
+      { kanji: '閉まる', furi: 'しまる', romaji: 'Shimaru', arti: 'Tertutup rapat daun pintunya', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '門(pintu) + 才.', context: 'ドアが閉まりますので注意.' },
+      { kanji: '閉める', furi: 'しめる', romaji: 'Shimeru', arti: 'Menutup pintu rapat oleh orang', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: 'Bentuk transitif dari 閉まる.', context: '部屋を出るときドアを閉める.' },
+      { kanji: 'つく', furi: 'つく', romaji: 'Tsuku', arti: 'Menyala terang lampunya', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: 'Kanji verba menyala (点く).', context: '停電が終わって電気がついた.' },
+      { kanji: 'つける', furi: 'つける', romaji: 'Tsukeru', arti: 'Menyalakan saklar api lampu', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: 'Bentuk transitif dari 点く.', context: '部屋の明かりをつける.' },
+      { kanji: '消える', furi: 'きえる', romaji: 'Kieru', arti: 'Padam mati sendiri apinya', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '氵(air) + 肖.', context: '火が消えました.' },
+      { kanji: '消す', furi: 'けす', romaji: 'Kesu', arti: 'Mematikan saklar memadamkan api', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: 'Bentuk transitif dari 消える.', context: 'エアコンを消してください.' },
+      { kanji: '集まる', furi: 'あつまる', romaji: 'Atsumaru', arti: 'Berkumpul orang-orang di aula', batch: 'batch3', sectorLabel: '⚡ Verba N4', radikal: '隹(burung) + 木.', context: '朝礼のために広場に集まる.' },
+
+      // ========================================================
+      // BATCH 4: MEDIS, DENAH, CUACA & DOKUMEN (Item 301 – 385)
+      // ========================================================
+      { kanji: '処方箋', furi: 'しょほうせん', romaji: 'Shohousen', arti: 'Resep resmi dokter klinik', batch: 'batch4', sectorLabel: '💊 Medis', radikal: '処(tindakan) + 方(cara) + 箋(slip).', context: 'Ditebus di apotek tebus obat (薬局).' },
+      { kanji: '保険証', furi: 'ほけんしょう', romaji: 'Hokenshou', arti: 'Kartu Asuransi Kesehatan Jepang', batch: 'batch4', sectorLabel: '💊 Medis', radikal: '保(lindung) + 険(bahaya) + 証(kartu).', context: 'Diserahkan saat pendaftaran (bayar 30%).' },
+      { kanji: '食後服用', furi: 'しょくごふくよう', romaji: 'Shokugo fukuyou', arti: 'Diminum dalam 30 menit setelah makan', batch: 'batch4', sectorLabel: '💊 Medis', radikal: '食(makan) + 後(setelah) + 服用(minum).', context: 'Aturan minum obat paling umum di kantong.' },
+      { kanji: '食前服用', furi: 'しょくぜんふくよう', romaji: 'Shokuzen fukuyou', arti: 'Diminum 30 menit sebelum sarapan', batch: 'batch4', sectorLabel: '💊 Medis', radikal: '食(makan) + 前(sebelum) + 服用.', context: 'Obat maag diminum perut kosong.' },
+      { kanji: '薬局', furi: 'やっきょく', romaji: 'Yakkyoku', arti: 'Apotek tempat menebus obat', batch: 'batch4', sectorLabel: '💊 Medis', radikal: '薬(obat) + 局(bagian).', context: 'Menyerahkan resep dokter untuk ditebus.' },
+      { kanji: '湿布', furi: 'しっぷ', romaji: 'Shippu', arti: 'Koyo pereda nyeri otot pegal', batch: 'batch4', sectorLabel: '💊 Medis', radikal: '湿(lembab basah) + 布(kain).', context: 'Ditempel di pinggang yang sakit.' },
+      { kanji: '診察券', furi: 'しんさつけん', romaji: 'Shinsatsuken', arti: 'Kartu nomor pasien rekam medis', batch: 'batch4', sectorLabel: '💊 Medis', radikal: '診(periksa) + 察(amati) + 券(kartu).', context: 'Diserahkan saat kontrol ke klinik lagi.' },
+      { kanji: '内科', furi: 'ないか', romaji: 'Naika', arti: 'Poli Penyakit Dalam (flu, batuk, demam)', batch: 'batch4', sectorLabel: '💊 Medis', radikal: '内(dalam) + 科(divisi medis).', context: 'Tempat periksa saat badan panas meriang.' },
+      { kanji: '外科', furi: 'げか', romaji: 'Geka', arti: 'Poli Bedah Luar (luka robek, tulang)', batch: 'batch4', sectorLabel: '💊 Medis', radikal: '外(luar) + 科(divisi medis).', context: 'Tempat periksa terkilir atau robek di pabrik.' },
+      { kanji: '眼科', furi: 'がんか', romaji: 'Ganka', arti: 'Poli Mata (mata merah, kelilipan)', batch: 'batch4', sectorLabel: '💊 Medis', radikal: '眼(bola mata) + 科.', context: 'Periksa saat mata perih terkena percikan.' },
+      { kanji: '歯科', furi: 'しか', romaji: 'Shika', arti: 'Poli Gigi / Dokter gigi klinik', batch: 'batch4', sectorLabel: '💊 Medis', radikal: '歯(gigi) + 科.', context: 'Tambal gigi atau cabut gigi geraham.' },
+      { kanji: '手前', furi: 'てまえ', romaji: 'Temae', arti: 'Sebelah sini / Sebelum gedung patokan', batch: 'batch4', sectorLabel: '🚉 Arah Denah', radikal: '手(tangan) + 前(depan).', context: 'Jebakan maut! 郵便局の手前 = Sebelum kantor pos.' },
+      { kanji: '奥', furi: 'おく', romaji: 'Oku', arti: 'Sebelah dalam / Di balik gedung patokan', batch: 'batch4', sectorLabel: '🚉 Arah Denah', radikal: '奥(bagian dalam).', context: 'Lawan kata dari 手前. Menunjuk lebih jauh.' },
+      { kanji: '突き当たり', furi: 'つきあたり', romaji: 'Tsukiatari', arti: 'Ujung jalan mentok (T-junction)', batch: 'batch4', sectorLabel: '🚉 Arah Denah', radikal: '突(tusuk) + 当(bentur).', context: 'Jalan lurus sampai mentok lalu belok.' },
+      { kanji: '交差点', furi: 'こうさてん', romaji: 'Kousaten', arti: 'Perempatan jalan raya berlampu', batch: 'batch4', sectorLabel: '🚉 Arah Denah', radikal: '交(silang) + 差 + 点(titik).', context: 'Patokan utama dalam audio choukai peta.' },
+      { kanji: '信号', furi: 'しんごう', romaji: 'Shingou', arti: 'Lampu lalu lintas tiga warna', batch: 'batch4', sectorLabel: '🚉 Arah Denah', radikal: '信(percaya/tanda) + 号(nomor).', context: '最初の信号を右に曲がる (Belok di lampu merah 1).' },
+      { kanji: '角', furi: 'かど', romaji: 'Kado', arti: 'Sudut belokan tikungan jalan', batch: 'batch4', sectorLabel: '🚉 Arah Denah', radikal: '角(tanduk pojok).', context: '2つ目の角を左折する (Belok di pojokan ke-2).' },
+      { kanji: '横断歩道', furi: 'おうだんほどう', romaji: 'Oudanhodou', arti: 'Zebra cross garis penyeberangan jalan', batch: 'batch4', sectorLabel: '🚉 Arah Denah', radikal: '横断(menyeberang) + 歩道(trotoar).', context: 'Seberangi jalan di zebra cross.' },
+      { kanji: '歩道橋', furi: 'ほどうきょう', romaji: 'Hodoukyou', arti: 'Jembatan penyeberangan orang (JPO)', batch: 'batch4', sectorLabel: '🚉 Arah Denah', radikal: '歩道(trotoar) + 橋(jembatan).', context: 'Naik jembatan penyeberangan jalan.' },
+      { kanji: '直進', furi: 'ちょくしん', romaji: 'Chokushin', arti: 'Jalan lurus terus ke depan', batch: 'batch4', sectorLabel: '🚉 Arah Denah', radikal: '直(lurus) + 進(maju).', context: 'Jalan lurus tanpa belok.' },
+      { kanji: '右折', furi: 'うせつ', romaji: 'Usetsu', arti: 'Belok ke arah kanan jalan', batch: 'batch4', sectorLabel: '🚉 Arah Denah', radikal: '右(kanan) + 折(lipat/belok).', context: 'Arah belokan kanan.' },
+      { kanji: '左折', furi: 'させつ', romaji: 'Sasetsu', arti: 'Belok ke arah kiri jalan', batch: 'batch4', sectorLabel: '🚉 Arah Denah', radikal: '左(kiri) + 折(belok).', context: 'Arah belokan kiri.' },
+      { kanji: '改札口', furi: 'かいさつぐち', romaji: 'Kaisatsuguchi', arti: 'Pintu gerbang tap kartu tiket stasiun', batch: 'batch4', sectorLabel: '🚉 Stasiun', radikal: '改(periksa) + 札(karcis) + 口.', context: 'Tap kartu Suica sebelum ke peron.' },
+      { kanji: '乗り場', furi: 'のりば', romaji: 'Noriba', arti: 'Peron halte titik naik kendaraan', batch: 'batch4', sectorLabel: '🚉 Stasiun', radikal: '乗(naik) + 場(lokasi).', context: '3番乗り場 (Peron stasiun nomor 3).' },
+      { kanji: '踏切', furi: 'ふみきり', romaji: 'Fumikiri', arti: 'Perlintasan rel kereta api berpalang', batch: 'batch4', sectorLabel: '🚉 Stasiun', radikal: '踏(injak) + 切(potong).', context: 'Tunggu palang kereta terbuka.' },
+      { kanji: '精算機', furi: 'せいさんき', romaji: 'Seisanki', arti: 'Mesin penyesuaian tarif kurang saldo', batch: 'batch4', sectorLabel: '🚉 Stasiun', radikal: '精(detail) + 算(hitung) + 機.', context: 'Dipakai saat saldo kartu IC tidak cukup.' },
+      { kanji: '各駅停車', furi: 'かくえきていしゃ', romaji: 'Kakueki teisha', arti: 'Kereta lokal (Berhenti di tiap stasiun)', batch: 'batch4', sectorLabel: '🚉 Stasiun', radikal: '各(setiap) + 駅(stasiun) + 停車.', context: 'Kereta yang berhenti di semua stasiun.' },
+      { kanji: '快速', furi: 'かいそく', romaji: 'Kaisoku', arti: 'Kereta semi cepat (Lompati halte kecil)', batch: 'batch4', sectorLabel: '🚉 Stasiun', radikal: '快(nyaman) + 速(kecepatan).', context: 'Lebih cepat daripada kereta lokal.' },
+      { kanji: '特急', furi: 'とっきゅう', romaji: 'Tokkyuu', arti: 'Kereta ekspres khusus bertarif ekstra', batch: 'batch4', sectorLabel: '🚉 Stasiun', radikal: '特(khusus) + 急(cepat).', context: 'Wajib beli tiket khusus ekspres.' },
+      { kanji: '時刻表', furi: 'じこくひょう', romaji: 'Jikokuhyou', arti: 'Tabel jadwal jam keberangkatan', batch: 'batch4', sectorLabel: '🚉 Stasiun', radikal: '時刻(jam) + 表(tabel).', context: 'Jadwal jam kereta di dinding stasiun.' },
+      { kanji: '行先', furi: 'ゆきさき', romaji: 'Yukisaki', arti: 'Kota / Stasiun tujuan akhir rute', batch: 'batch4', sectorLabel: '🚉 Stasiun', radikal: '行(pergi) + 先(depan tujuan).', context: 'Tujuan akhir kereta terpampang di layar.' },
+      { kanji: '運賃', furi: 'うんちん', romaji: 'Unchin', arti: 'Tarif ongkos karcis transportasi', batch: 'batch4', sectorLabel: '🚉 Stasiun', radikal: '運(bawa) + 賃(ongkos biaya).', context: 'Besaran uang karcis kereta/bus.' },
+      { kanji: '定期券', furi: 'ていきけん', romaji: 'Teikiken', arti: 'Kartu pas langganan rute bulanan', batch: 'batch4', sectorLabel: '🚉 Stasiun', radikal: '定期(rutin periode) + 券(tiket).', context: 'Langganan rute rumah ke pabrik.' },
+      { kanji: '季節', furi: 'きせつ', romaji: 'Kisetsu', arti: 'Musim tahunan (Murni tanpa tenten)', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '季 + 節(bambu beruas).', context: 'Dibaca きせつ tanpa tenten dan tanpa kecil!' },
+      { kanji: '梅雨', furi: 'つゆ', romaji: 'Tsuyu', arti: 'Musim hujan lebat Jepang (Juni-Juli)', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '梅(buah plum) + 雨(hujan).', context: 'Cara baca khusus yang wajib dihafal: つゆ.' },
+      { kanji: '気温', furi: 'きおん', romaji: 'Kion', arti: 'Suhu derajat hawa udara', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '気(hawa) + 温(derajat suhu).', context: '今日の最高気温は30度.' },
+      { kanji: '湿度', furi: 'しつど', romaji: 'Shitsudo', arti: 'Tingkat persentase kelembapan udara', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '湿(lembab basah) + 度(derajat).', context: 'Musim panas di Jepang sangat lembap.' },
+      { kanji: '台風', furi: 'たいふう', romaji: 'Taifuu', arti: 'Badai topan angin dahsyat musim panas', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '台(panggung) + 風(angin kencang).', context: 'Kereta berhenti karena angin topan.' },
+      { kanji: '降水確率', furi: 'こうすいかくりつ', romaji: 'Kousui kakuritsu', arti: 'Persentase kemungkinan turun hujan', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '降(turun) + 水(air) + 確率(peluang).', context: 'Jika 80%, wajib siapkan payung lipat.' },
+      { kanji: '晴れ', furi: 'はれ', romaji: 'Hare', arti: 'Cuaca cerah benderang tanpa awan', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '日(matahari) + 青(biru langit).', context: '明日は晴れのち曇りです.' },
+      { kanji: '曇り', furi: 'くもり', romaji: 'Kumori', arti: 'Cuaca mendung teduh berawan tebal', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '日(matahari) + 雲(awan mendung).', context: 'Langit abu-abu berawan.' },
+      { kanji: '大雨', furi: 'おおあめ', romaji: 'Ooame', arti: 'Hujan deras mengguyur sangat lebat', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '大(besar) + 雨(hujan lebat).', context: 'Peringatan waspada banjir di jalan.' },
+      { kanji: '洪水', furi: 'こうずい', romaji: 'Kouzui', arti: 'Bencana luapan banjir sungai', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '氵(air) + 共 + 氵 + 水.', context: 'Evakuasi ke tempat tinggi saat banjir.' },
+      { kanji: '地震', furi: 'じしん', romaji: 'Jishin', arti: 'Bencana gempa bumi berguncang', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '地(tanah bumi) + 震(guncang).', context: 'Berlindung di bawah meja saat gempa.' },
+      { kanji: '警報', furi: 'けいほう', romaji: 'Keihou', arti: 'Peringatan darurat resmi BMKG', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '警(siaga awas) + 報(lapor).', context: 'Tingkat bahaya di atas注意報.' },
+      { kanji: '注意報', furi: 'ちゅういほう', romaji: 'Chuuihou', arti: 'Peringatan awal waspada cuaca', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '注意(hati-hati) + 報(kabar).', context: 'Waspada angin kencang atau salju.' },
+      { kanji: '震度', furi: 'しんど', romaji: 'Shindo', arti: 'Skala intensitas goncangan gempa', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '震(guncang) + 度(derajat skala).', context: 'Skala gempa jepang (Shindo 1 sampai 7).' },
+      { kanji: '津波', furi: 'つなみ', romaji: 'Tsunami', arti: 'Gelombang pasang tsunami laut', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '津(pelabuhan) + 波(ombak air).', context: 'Segera lari ke tempat tinggi.' },
+      { kanji: '春', furi: 'はる', romaji: 'Haru', arti: 'Musim semi bunga sakura mekar', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '三 + 人 + 日 = 春.', context: 'Bulan Maret sampai Mei (Hangat).' },
+      { kanji: '夏', furi: 'なつ', romaji: 'Natsu', arti: 'Musim panas festival kembang api', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '頁(kepala gerah) + 夂.', context: 'Bulan Juni sampai Agustus (Panas).' },
+      { kanji: '秋', furi: 'あき', romaji: 'Aki', arti: 'Musim gugur daun merah momiji', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '禾(padi panen) + 火.', context: 'Bulan September sampai November (Sejuk).' },
+      { kanji: '冬', furi: 'ふゆ', romaji: 'Fuyu', arti: 'Musim dingin salju membeku', batch: 'batch4', sectorLabel: '🌦️ Cuaca', radikal: '夂 + 冫(es beku).', context: 'Bulan Desember sampai Februari (Dingin).' },
+      { kanji: '市役所', furi: 'しやくしょ', romaji: 'Shiyakusho', arti: 'Kantor Balai Kota (City Hall)', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '市(kota) + 役(tugas) + 所(tempat).', context: 'Daftar Zairyu Card dan asuransi.' },
+      { kanji: '区役所', furi: 'くやくしょ', romaji: 'Kuyakusho', arti: 'Kantor Distrik Kecamatan Kota', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '区(distrik kota) + 役所.', context: 'Pusat layanan warga di wilayah Tokyo.' },
+      { kanji: '住民票', furi: 'じゅうみんひょう', romaji: 'Juuminhyou', arti: 'Surat Domisili Kependudukan Warga', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '住民(warga) + 票(lembar slip).', context: 'Syarat wajib membuka rekening bank.' },
+      { kanji: '口座', furi: 'こうざ', romaji: 'Kouza', arti: 'Nomor Buku Rekening Bank Resmi', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '口 + 座(posisi resmi).', context: '口座を作りたいんですが.' },
+      { kanji: '振込', furi: 'ふりこみ', romaji: 'Furikomi', arti: 'Transfer kirim uang melalui ATM', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '振(tujukan) + 込(masuk).', context: 'Membayar sewa kamar via transfer.' },
+      { kanji: '印鑑', furi: 'いんかん', romaji: 'Inkan', arti: 'Stempel batu cap nama pribadi (Hanko)', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '印(stempel) + 鑑(cermin logam).', context: 'Wajib saat tanda tangan kontrak sewa rumah.' },
+      { kanji: '暗証番号', furi: 'あんしょうばんごう', romaji: 'Anshou bangou', arti: 'PIN rahasia 4 digit kartu debit bank', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '暗(rahasia) + 証(bukti) + 番号(nomor).', context: 'Ditekan di mesin ATM saat tarik uang.' },
+      { kanji: '在留カード', furi: 'ざいりゅうかーど', romaji: 'Zairyuu kaado', arti: 'Kartu Izin Tinggal Warga Asing Resmi', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '在留(tinggal berdomisili) + カード.', context: 'Wajib selalu dibawa di dalam dompet.' },
+      { kanji: 'パスポート', furi: 'ぱすぽーと', romaji: 'Pasupooto', arti: 'Buku paspor perjalanan dinas luar negeri', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: 'Serapan passport internasional.', context: 'Dokumen identitas resmi negara asal.' },
+      { kanji: '身分証明書', furi: 'みぶんしょうめいしょ', romaji: 'Mibun shoumeisho', arti: 'Kartu Tanda Pengenal Diri (KTP)', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '身分(status diri) + 証明(bukti) + 書.', context: 'Diserahkan saat pendaftaran resmi.' },
+      { kanji: '署名', furi: 'しょめい', romaji: 'Shomei', arti: 'Tanda tangan resmi tinta tangan', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '署(tulis kantor) + 名(nama).', context: 'Tanda tangan di kolom formulir.' },
+      { kanji: '押印', furi: 'おういん', romaji: 'Ouin', arti: 'Membubuhkan cap stempel nama hanko', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '押(tekan) + 印(cap stempel).', context: 'Menekan stempel merah di kontrak.' },
+      { kanji: '窓口', furi: 'まどぐち', romaji: 'Madoguchi', arti: 'Loket antrean pelayanan dinas balai kota', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '窓(jendela) + 口(pintu buka).', context: '3番窓口へお越しください.' },
+      { kanji: '番号札', furi: 'ばんごうふだ', romaji: 'Bangoufuda', arti: 'Kertas nomor tiket antrean giliran', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '番号(nomor) + 札(lembar slip).', context: 'Ambil nomor antrean sebelum duduk.' },
+      { kanji: '申請書', furi: 'しんせいしょ', romaji: 'Shinseisho', arti: 'Lembar formulir permohonan dinas', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '申請(mengajukan) + 書(lembar).', context: 'Formulir perpanjangan izin tinggal.' },
+      { kanji: '記入', furi: 'きにゅう', romaji: 'Kinyuu', arti: 'Mengisi kolom data formulir dengan pena', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '記(catat) + 入(masuk).', context: '太枠の中に記入してください.' },
+      { kanji: '手続き', furi: 'てつづき', romaji: 'Tetsudzuki', arti: 'Prosedur birokrasi langkah resmi', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '手(tangan) + 続(sambung langkah).', context: 'Mengurus prosedur domisili balai kota.' },
+      { kanji: '手数料', furi: 'てすうりょう', romaji: 'Tesuuryou', arti: 'Biaya jasa administrasi loket resmi', batch: 'batch4', sectorLabel: '🏢 Dokumen', radikal: '手数(upaya dinas) + 料(ongkos).', context: 'Biaya cetak sertifikat 300 yen.' },
+      { kanji: '税金', furi: 'ぜいきん', romaji: 'Zeikin', arti: 'Uang pungutan pajak wajib negara', batch: 'batch4', sectorLabel: '🏢 Keuangan', radikal: '税(pajak negara) + 金(uang).', context: 'Pajak penghasilan warga kota.' },
+      { kanji: '年金', furi: 'ねんきん', romaji: 'Nenkin', arti: 'Uang iuran jaminan pensiun bulanan', batch: 'batch4', sectorLabel: '🏢 Keuangan', radikal: '年(tahun masa) + 金(uang).', context: 'Iuran pensiun nasional wajib dipotong.' },
+      { kanji: '給料', furi: 'きゅうりょう', romaji: 'Kyuuryou', arti: 'Gaji bulanan hasil kerja dinas', batch: 'batch4', sectorLabel: '🏢 Keuangan', radikal: '給(beri) + 料(ongkos upah).', context: 'Ditransfer setiap tanggal 25.' },
+      { kanji: '明細書', furi: 'めいさいしょ', romaji: 'Meisaisho', arti: 'Lembar slip rincian potongan gaji', batch: 'batch4', sectorLabel: '🏢 Keuangan', radikal: '明細(rincian jelas) + 書.', context: 'Slip gaji melihat jam lembur.' },
+      { kanji: '控除', furi: 'こうじょ', romaji: 'Koujo', arti: 'Potongan iuran dari gaji kotor', batch: 'batch4', sectorLabel: '🏢 Keuangan', radikal: '控(tahan) + 除(keluarkan).', context: 'Potongan pajak dan asuransi dari gaji.' },
+      { kanji: '交通費', furi: 'こうつうひ', romaji: 'Koutsuuhi', arti: 'Tunjangan uang transportasi kerja', batch: 'batch4', sectorLabel: '🏢 Keuangan', radikal: '交通(lalu lintas) + 費(biaya).', context: 'Biaya transport diganti perusahaan.' },
+      { kanji: '基本給', furi: 'きほんきゅう', romaji: 'Kihonkyuu', arti: 'Gaji pokok dasar sebelum lembur', batch: 'batch4', sectorLabel: '🏢 Keuangan', radikal: '基本(standar pokok) + 給(upah).', context: 'Gaji dasar tercantum di kontrak.' },
+      { kanji: '手当', furi: 'てあて', romaji: 'Teate', arti: 'Tunjangan shift malam / Tambahan lembur', batch: 'batch4', sectorLabel: '🏢 Keuangan', radikal: '手(tangan bantuan) + 当(jatah).', context: '残業手当 (Tunjangan jam lembur).' },
+      { kanji: '源泉徴収票', furi: 'げんせんちょうしゅうひょう', romaji: 'Gensen choushuuhyou', arti: 'Bukti potong pajak tahunan resmi', batch: 'batch4', sectorLabel: '🏢 Keuangan', radikal: '源泉(sumber) + 徴収(pungut) + 票.', context: 'Diberikan akhir tahun untuk lapor pajak.' },
+      { kanji: '警察署', furi: 'けいさつしょ', romaji: 'Keisatsusho', arti: 'Kantor markas polisi wilayah', batch: 'batch4', sectorLabel: '🏢 Layanan', radikal: '警察(polisi) + 署(kantor).', context: 'Membuat surat izin mengemudi SIM.' },
+      { kanji: '交番', furi: 'こうばん', romaji: 'Kouban', arti: 'Pos polisi kecil di pinggir jalan', batch: 'batch4', sectorLabel: '🏢 Layanan', radikal: '交(saling) + 番(giliran jaga).', context: 'Tempat lapor barang dompet hilang.' },
+      { kanji: '消防署', furi: 'しょうぼうしょ', romaji: 'Shoubousho', arti: 'Kantor dinas pemadam kebakaran', batch: 'batch4', sectorLabel: '🏢 Layanan', radikal: '消防(padamkan bahaya) + 署.', context: 'Nomor darurat darurat 119.' },
+      { kanji: '救急車', furi: 'きゅうきゅうしゃ', romaji: 'Kyuukyuusha', arti: 'Mobil ambulans sirine darurat 119', batch: 'batch4', sectorLabel: '🏢 Layanan', radikal: '救(tolong) + 急(cepat) + 車.', context: 'Dipanggil saat ada kecelakaan parah.' },
+      { kanji: '郵便局', furi: 'ゆうびんきょく', romaji: 'Yuubinkyoku', arti: 'Kantor pos layanan kirim paket / Tabungan', batch: 'batch4', sectorLabel: '🏢 Layanan', radikal: '郵便(pos) + 局(dinas).', context: 'Mengirim paket ke Indonesia.' },
+      { kanji: '図書館', furi: 'としょかん', romaji: 'Toshokan', arti: 'Gedung perpustakaan umum buku', batch: 'batch4', sectorLabel: '🏢 Layanan', radikal: '図(peta) + 書(buku) + 館(gedung).', context: 'Meminjam buku bahasa jepang gratis.' }
+    ];
+
+    let currentActiveBatch = 'all';
+    let currentSrsFilter = 'all'; // 'all', 1, 2, 3
+    let currentCardIndex = 0;
+    let cardFlipped = false;
+    let activeQueue = [...masterKanjiData];
+    let leitnerBoxes = {
+      box1: new Set(),
+      box2: new Set(),
+      box3: new Set()
+    };
+
+    function initKanjiVault() {
+      refreshKanjiQueue();
+      updateLeitnerStats();
+      renderHyougenCards();
+      renderTasteSpectrum();
+      renderSimQuiz();
+    }
+
+    function refreshKanjiQueue() {
+      let base = (currentActiveBatch === 'all')
+        ? [...masterKanjiData]
+        : masterKanjiData.filter(k => k.batch === currentActiveBatch);
+
+      if (currentSrsFilter === 'all') {
+        const remaining = base.filter(k => !leitnerBoxes.box3.has(k.kanji));
+        activeQueue = remaining.length > 0 ? remaining : base;
+      } else if (currentSrsFilter === 1) {
+        activeQueue = base.filter(k => leitnerBoxes.box1.has(k.kanji));
+      } else if (currentSrsFilter === 2) {
+        activeQueue = base.filter(k => leitnerBoxes.box2.has(k.kanji));
+      } else if (currentSrsFilter === 3) {
+        activeQueue = base.filter(k => leitnerBoxes.box3.has(k.kanji));
+      }
+
+      currentCardIndex = 0;
+      displayCurrentCard();
+      updateLeitnerStats();
+    }
+
+    function changeKanjiBatch(batchId) {
+      currentActiveBatch = batchId;
+      document.querySelectorAll('.batch-tab-btn').forEach(btn => {
+        btn.className = 'batch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-tactical-850 text-slate-300 hover:bg-tactical-800 whitespace-nowrap transition';
+      });
+      const activeBtn = document.getElementById('btn-batch-' + batchId);
+      if (activeBtn) {
+        activeBtn.className = 'batch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-cyan-500 text-black whitespace-nowrap transition';
+      }
+
+      refreshKanjiQueue();
+      showToast(`Memuat ${batchId.toUpperCase()} (${activeQueue.length} Kanji)`, '🎴');
+    }
+
+    function filterByLeitner(box) {
+      currentSrsFilter = box;
+      const bAll = document.getElementById('flt-srs-all');
+      const b1 = document.getElementById('flt-srs-1');
+      const b2 = document.getElementById('flt-srs-2');
+      const b3 = document.getElementById('flt-srs-3');
+
+      [bAll, b1, b2, b3].forEach(b => {
+        b.className = 'px-3 py-1.5 rounded-xl bg-tactical-900 border border-tactical-800 text-xs font-bold text-slate-400 transition';
+      });
+
+      if (box === 'all') {
+        bAll.className = 'px-3 py-1.5 rounded-xl bg-cyan-500 text-black text-xs font-black transition';
+        showToast('Menampilkan semua antrean aktif', '🃏');
+      } else if (box === 1) {
+        b1.className = 'px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500 text-xs font-black transition';
+        showToast(`Drill Box 1: ${leitnerBoxes.box1.size} Kanji yang Anda LUPA!`, '🔴');
+      } else if (box === 2) {
+        b2.className = 'px-3 py-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500 text-xs font-black transition';
+        showToast(`Review Box 2: ${leitnerBoxes.box2.size} Kanji dalam proses ingat`, '🟡');
+      } else if (box === 3) {
+        b3.className = 'px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500 text-xs font-black transition';
+        showToast(`Mastery Box 3: ${leitnerBoxes.box3.size} Kanji Refleks Otomatis`, '🟢');
+      }
+
+      refreshKanjiQueue();
+    }
+
+    function updateLeitnerStats() {
+      document.getElementById('statBox1Count').innerText = leitnerBoxes.box1.size;
+      document.getElementById('statBox2Count').innerText = leitnerBoxes.box2.size;
+      document.getElementById('statBox3Count').innerText = leitnerBoxes.box3.size;
+      document.getElementById('statQueueCount').innerText = activeQueue.length;
+    }
+
+    function displayCurrentCard() {
+      const srsBadge = document.getElementById('cardSrsStatusBadge');
+      if (activeQueue.length === 0) {
+        document.getElementById('cardFrontKanjiDisplay').innerText = '🎉 TUNTAS';
+        document.getElementById('kanjiCardCounter').innerText = '0 / 0';
+        if (srsBadge) {
+          srsBadge.className = 'text-xs font-mono px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40';
+          srsBadge.innerText = 'Antrean Bersih';
+        }
+        return;
+      }
+
+      const item = activeQueue[currentCardIndex];
+      cardFlipped = false;
+
+      document.getElementById('cardFaceFront').classList.remove('hidden');
+      document.getElementById('cardFaceBack').classList.add('hidden');
+
+      document.getElementById('cardBadgeSector').innerText = item.sectorLabel;
+      document.getElementById('cardBatchIndicator').innerText = item.batch ? item.batch.toUpperCase() : 'BATCH';
+      document.getElementById('cardFrontKanjiDisplay').innerText = item.kanji;
+
+      if (srsBadge) {
+        if (leitnerBoxes.box3.has(item.kanji)) {
+          srsBadge.className = 'text-xs font-mono px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/40';
+          srsBadge.innerText = '🟢 Box 3 (Refleks)';
+        } else if (leitnerBoxes.box2.has(item.kanji)) {
+          srsBadge.className = 'text-xs font-mono px-2.5 py-1 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40';
+          srsBadge.innerText = '🟡 Box 2 (Ingat)';
+        } else if (leitnerBoxes.box1.has(item.kanji)) {
+          srsBadge.className = 'text-xs font-mono px-2.5 py-1 rounded-full bg-amber-950 text-amber-300 border border-amber-500/40';
+          srsBadge.innerText = '🔴 Box 1 (Wajib Diulang)';
+        } else {
+          srsBadge.className = 'text-xs font-mono px-2.5 py-1 rounded-full bg-tactical-950 text-slate-400 border border-tactical-800';
+          srsBadge.innerText = '⚪ Belum Dinilai';
+        }
+      }
+
+      document.getElementById('cardBackKanjiTitle').innerText = item.kanji;
+      document.getElementById('cardBackFuriTitle').innerText = item.furi;
+      document.getElementById('cardBackRomajiTag').innerText = item.romaji;
+      document.getElementById('cardBackArtiMeaning').innerText = item.arti;
+      document.getElementById('cardBackRadikalText').innerText = item.radikal;
+      document.getElementById('cardBackExamContext').innerText = item.context;
+
+      document.getElementById('kanjiCardCounter').innerText = `${currentCardIndex + 1} / ${activeQueue.length}`;
+    }
+
+    function flipCurrentCard() {
+      if (activeQueue.length === 0) return;
+      const front = document.getElementById('cardFaceFront');
+      const back = document.getElementById('cardFaceBack');
+      const item = activeQueue[currentCardIndex];
+
+      if (!cardFlipped) {
+        cardFlipped = true;
+        front.classList.add('hidden');
+        back.classList.remove('hidden');
+        back.classList.add('flex');
+        speakText(item.kanji);
+      } else {
+        cardFlipped = false;
+        back.classList.add('hidden');
+        back.classList.remove('flex');
+        front.classList.remove('hidden');
+      }
+    }
+
+    function speakKanjiSpeech() {
+      if (activeQueue.length === 0) return;
+      const item = activeQueue[currentCardIndex];
+      speakText(item.kanji);
+    }
+
+    function stepNextCard() {
+      if (activeQueue.length === 0) return;
+      currentCardIndex = (currentCardIndex < activeQueue.length - 1) ? currentCardIndex + 1 : 0;
+      displayCurrentCard();
+    }
+
+    function stepPrevCard() {
+      if (activeQueue.length === 0) return;
+      currentCardIndex = (currentCardIndex > 0) ? currentCardIndex - 1 : activeQueue.length - 1;
+      displayCurrentCard();
+    }
+
+    function handleLeitnerVote(boxLevel) {
+      if (activeQueue.length === 0) return;
+      const currentItem = activeQueue[currentCardIndex];
+
+      leitnerBoxes.box1.delete(currentItem.kanji);
+      leitnerBoxes.box2.delete(currentItem.kanji);
+      leitnerBoxes.box3.delete(currentItem.kanji);
+
+      if (boxLevel === 1) {
+        // BOX 1 (LUPA): SUNTIK ULANG 3 KARTU KE DEPAN
+        leitnerBoxes.box1.add(currentItem.kanji);
+        const insertPos = Math.min(currentCardIndex + 4, activeQueue.length);
+        activeQueue.splice(insertPos, 0, currentItem);
+        showToast(`🔴 ${currentItem.kanji}: Dijadwalkan ulang! Muncul 3 kartu lagi!`, '🔁');
+        stepNextCard();
+      } else if (boxLevel === 2) {
+        // BOX 2 (INGAT): PINDAH KE AKHIR
+        leitnerBoxes.box2.add(currentItem.kanji);
+        activeQueue.push(currentItem);
+        showToast(`🟡 ${currentItem.kanji}: Disimpan ke Box 2.`, '👍');
+        stepNextCard();
+      } else if (boxLevel === 3) {
+        // BOX 3 (REFLEKS): HAPUS DARI ANTREAN AKTIF
+        leitnerBoxes.box3.add(currentItem.kanji);
+        showToast(`⚡ REFLEKS TERCAPAI! ${currentItem.kanji} dikeluarkan!`, '🎯');
+        activeQueue.splice(currentCardIndex, 1);
+
+        if (activeQueue.length === 0) {
+          refreshKanjiQueue();
+        } else {
+          if (currentCardIndex >= activeQueue.length) {
+            currentCardIndex = 0;
+          }
+          displayCurrentCard();
+        }
+      }
+
+      updateLeitnerStats();
+    }
+
+    const hyougenData = [
+      { id: 1, title: "Menolak Ajakan Tanpa Pernah 'Iie'", formula: "「ちょっと都合が悪くて…」", desc: "Orang Jepang menganggap 'iie' kasar. Selalu gantung kalimat dengan 'chotto...' (agak sedikit...)." },
+      { id: 2, title: "Kata Bantal Sopan Meminta Bantuan", formula: "「恐れ入りますが…」「すみませんが…」", desc: "Wajib diawali bantal kata pembuka sebelum meminta tolong atau menyuruh orang lain." },
+      { id: 3, title: "Pamit Pulang Mendahului Rekan Kerja", formula: "「お先に失礼します」 (Respon: お疲れ様でした)", desc: "Jika shift selesai duluan, wajib ucapkan ini. Jangan pernah berkata sayounara di tempat kerja!" },
+      { id: 4, title: "Lapor Keterlambatan Kereta ke Atasan", formula: "「電車が遅れていて、15分ほど遅れそうです」", desc: "Sebutkan penyebab pasti + perkiraan menit tiba + permohonan maaf tulus." },
+      { id: 5, title: "Menolak Kantong Kresek di Kasir Konbini", formula: "「そのままで大丈夫です」 / 「袋は結構です」", desc: "Jawaban paling natural saat kasir menawarkan plastik belanjaan berbayar." },
+      { id: 6, title: "Merespon Pujian Orang Jepang (Wajib Rendah Hati)", formula: "「いえいえ、まだまだです」", desc: "Wajib merendah dengan sopan, dilarang langsung menjawab 'arigatou' karena dinilai sombong." },
+      { id: 7, title: "Merespon Rekan Kerja yang Sakit / Izin Pulang", formula: "「お大事に（してください）」", desc: "Dilarang menyemangati dengan ganbatte untuk orang yang sakit/lemah fisik!" },
+      { id: 8, title: "Menyetujui 100% Opini Lawan Bicara (Aizuchi)", formula: "「確かに（そうですね）」", desc: "Aizuchi sakti saat sangat sepakat dengan pengamatan lawan bicara ('Memang benar begitu')." },
+      { id: 9, title: "Menyarankan Tindakan Awal Darurat", formula: "「とりあえず、〜してみてください」", desc: "Kata kunci penanganan awal saat ada trouble atau error mesin/HP." },
+      { id: 10, title: "Menyambung Dua Hal Berlawanan (Kontras)", formula: "「有名ではないけど、とてもいい国です」", desc: "Sisi negatif bertemu positif (atau sebaliknya) SELALU wajib disambung dengan 〜けど." },
+      { id: 11, title: "Memilih Opsi Kursi atau Ukuran di Restoran", formula: "「カウンターでお願いします」「Lサイズで」", desc: "Menentukan pilihan dari opsi pelayan SELALU berpasangan dengan partikel で." },
+      { id: 12, title: "Konfirmasi Halus Dugaan / Keraguan Sendiri", formula: "「わさび、入ってますよね。苦手なんですが…」", desc: "Pola 〜よね digunakan untuk meminta konfirmasi halus atas kecurigaan sendiri." },
+      { id: 13, title: "Menawarkan Usulan Tempat / Waktu Janji Temu", formula: "「待ち合わせ、食堂はどうですか？」", desc: "Pola paling sopan dan santun untuk mengusulkan ide tempat ke rekan." },
+      { id: 14, title: "Menghangatkan Bento di Kasir Minimarket", formula: "「温めお願いします」 / 「温めてください」", desc: "Kasir bertanya: お弁当温めますか？ Jawab dengan lugas dan ramah." },
+      { id: 15, title: "Meminta Masakan Tanpa Bahan Tertentu", formula: "「〜抜きでお願いします」 (Wasabi nuki / Butaniku nuki)", desc: "Kata 抜き (nuki) berarti dikeluarkan / tanpa bahan tersebut." },
+      { id: 16, title: "Izin Tidak Masuk Kerja karena Sakit", formula: "「熱があるので、今日休ませていただきたいんですが…」", desc: "Gunakan pola permohonan izin sopan 〜させていただけませんか / 〜たいんですが." },
+      { id: 17, title: "Mengakui Kesalahan Kerja di Pabrik", formula: "「私の確認不足でした。大変申し訳ありません！」", desc: "Jangan membela diri! Akui secara tegas dan tawarkan perbaikan segera." },
+      { id: 18, title: "Meminta Arahan Instruksi Tugas Selanjutnya", formula: "「次は何をすればよろしいでしょうか？」", desc: "Ketika tugas selesai, jangan diam! Segera lapor ke atasan untuk minta arahan." },
+      { id: 19, title: "Menawarkan Bantuan Tenaga ke Rekan Kerja", formula: "「何か手伝いましょうか？」「持ちましょうか？」", desc: "Bentuk 〜ましょうか digunakan saat berinisiatif menawarkan pertolongan." },
+      { id: 20, title: "Memberikan Nasihat Kesehatan Pola Hidup", formula: "「お風呂には入らないほうがいいですよ」", desc: "Pola bentuk lampau 〜たほうがいい / negatif 〜ないほうがいい untuk nasihat medis." },
+      { id: 21, title: "Mengonfirmasi Ulang Instruksi Tugas Kerja", formula: "「〜ということですね？確認いたしました」", desc: "Mengulang kembali poin perintah atasan agar tidak terjadi salah paham produksi." },
+      { id: 22, title: "Menyampaikan Masalah Fasilitas ke Pengelola", formula: "「お湯が出ないんですが、見てもらえますか？」", desc: "Awali dengan penjelasan situasi diakhiri 〜んですが sebelum meminta tolong." },
+      { id: 23, title: "Menunda Keputusan Belanja / Penawaran Sales", formula: "「少し考えさせてください」", desc: "Cara menolak tawaran belanja secara halus tanpa menyakiti perasaan penjual." },
+      { id: 24, title: "Bertanya Aturan Pemilahan Sampah", formula: "「これは何ゴミに捨てればいいですか？」", desc: "Kunci komunikasi apartemen untuk memastikan kategori pemilahan sampah." },
+      { id: 25, title: "Izin Meninggalkan Tempat Sementara Waktu", formula: "「少し席を外します」「すぐ戻ります」", desc: "Diucapkan saat izin ke toilet di tengah jam kerja atau rapat." },
+      { id: 26, title: "Salam Hari Pertama Mulai Bekerja", formula: "「本日からお世話になります。よろしくお願いします」", desc: "Kalimat perkenalan mutlak saat pertama kali masuk ke lingkungan kerja baru." },
+      { id: 27, title: "Mengucapkan Terima Kasih atas Bantuan Rekan", formula: "「助かりました！ありがとうございます」", desc: "Sangat natural saat rekan kerja membantu menyelesaikan tugas berat." },
+      { id: 28, title: "Meminta Orang Mengulang Penjelasan yang Kurang Jelas", formula: "「恐れ入りますが、もう一度お願いできますか？」", desc: "Jangan bilang 'hah?'; gunakan bantal kata dan minta pengulangan santun." },
+      { id: 29, title: "Menyapa Tetangga Baru Pindah Rumah", formula: "「隣に引っ越してきた〜です。よろしくお願いします」", desc: "Etika aisatsu pindah hunian apartemen membawa bingkisan kecil ke tetangga." },
+      { id: 30, title: "Menebus Obat di Loket Apotek", formula: "「処方箋をお願いします」「お薬手帳はあります」", desc: "Dialog standar saat menyerahkan kertas resep dokter ke meja apoteker." }
+    ];
+
+    function renderHyougenCards() {
+      const container = document.getElementById('hyougenCardsList');
+      if (!container) return;
+      container.innerHTML = hyougenData.map(h => `
+        <div class="bg-tactical-900 border border-tactical-800 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>Rumus #${h.id}</span>
+            <span class="text-cyan-400 font-bold">Wajib JFT</span>
+          </div>
+          <h4 class="text-sm font-bold text-white">${h.title}</h4>
+          <div class="text-sm font-jp font-black text-amber-300 p-2.5 bg-tactical-950 rounded-xl border border-tactical-800">
+            ${h.formula}
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed font-sans">${h.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderTasteSpectrum() {
+      const tasteContainer = document.getElementById('tasteListContainer');
+      const seasonsContainer = document.getElementById('seasonsListContainer');
+      if (!tasteContainer || !seasonsContainer) return;
+
+      const tastes = [
+        { name: 'すっぱい', emoji: '🍋', arti: 'Asam / Kecut (Lemon)' },
+        { name: 'しょっぱい', emoji: '🧂', arti: 'Asin Pekat (Garam)' },
+        { name: 'あまい', emoji: '🍰', arti: 'Manis (Gula/Kue)' },
+        { name: 'からい', emoji: '🌶️', arti: 'Pedas (Cabai)' },
+        { name: 'にがい', emoji: '☕', arti: 'Pahit (Kopi/Obat)' },
+        { name: 'あぶらっこい', emoji: '🍤', arti: 'Berminyak (Gorengan)' },
+        { name: 'さっぱり', emoji: '🥗', arti: 'Segar / Ringan (Salad)' },
+        { name: 'まずい', emoji: '🤢', arti: 'Gak enak (Opini umum)' }
+      ];
+
+      tasteContainer.innerHTML = tastes.map(t => `
+        <div onclick="speakText('${t.name}')" class="p-3 bg-tactical-950 border border-tactical-800 rounded-2xl cursor-pointer hover:border-cyan-400 transition">
+          <div class="text-2xl">${t.emoji}</div>
+          <div class="font-jp font-bold text-amber-300 text-sm mt-1">${t.name}</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">${t.arti}</div>
+        </div>
+      `).join('');
+
+      const seasons = [
+        { name: '春 (はる)', emoji: '🌸', arti: 'Semi (Maret-Mei)' },
+        { name: '夏 (なつ)', emoji: '☀️', arti: 'Panas (Juni-Agustus)' },
+        { name: '秋 (あき)', emoji: '🍁', arti: 'Gugur (Sept-Nov)' },
+        { name: '冬 (ふゆ)', emoji: '❄️', arti: 'Dingin (Des-Feb)' }
+      ];
+
+      seasonsContainer.innerHTML = seasons.map(s => `
+        <div onclick="speakText('${s.name}')" class="p-3 bg-tactical-950 border border-tactical-800 rounded-2xl cursor-pointer hover:border-cyan-400 transition">
+          <div class="text-2xl">${s.emoji}</div>
+          <div class="font-jp font-bold text-cyan-300 text-sm mt-1">${s.name}</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">${s.arti}</div>
+        </div>
+      `).join('');
+    }
+
+    function playChoukaiSimulation() {
+      const audioScript = "すみません、コンビニはどこにありますか？ コンビニですね。駅を出て、まっすぐ行くと交差点があります。そこを右に曲がってください。あ、すみません！右じゃなくて、左に曲がってください。郵便局の手前にある建物ですよ。";
+      speakText(audioScript);
+      showToast('Memutar audio percakapan denah...', '🎧');
+    }
+
+    function guessMapBuilding(letter) {
+      const fb = document.getElementById('mapFeedbackBox');
+      fb.classList.remove('hidden');
+
+      ['A', 'B', 'C', 'D'].forEach(l => {
+        const btn = document.getElementById('btn-map-' + l);
+        if (btn) btn.className = 'p-3 rounded-2xl bg-tactical-900 border-2 border-tactical-800 text-white min-h-[85px]';
+      });
+
+      const selectedBtn = document.getElementById('btn-map-' + letter);
+      if (letter === 'C') {
+        if (selectedBtn) selectedBtn.className = 'p-3 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500 text-emerald-300 min-h-[85px]';
+        fb.className = 'p-4 rounded-2xl text-xs sm:text-sm font-sans leading-relaxed bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 mt-3';
+        fb.innerHTML = '<strong>🎉 BENAR 100%! Jawaban: [C] コンビニ</strong><br>Pembicara merevisi ke kiri (左), lalu menyebutkan patokan jarak: <em>郵便局の手前</em> (sebelum kantor pos [A]).';
+      } else {
+        if (selectedBtn) selectedBtn.className = 'p-3 rounded-2xl bg-rose-500/20 border-2 border-rose-500 text-rose-300 min-h-[85px]';
+        fb.className = 'p-4 rounded-2xl text-xs sm:text-sm font-sans leading-relaxed bg-rose-500/15 border border-rose-500/30 text-rose-300 mt-3';
+        fb.innerHTML = '<strong>❌ Terjebak! Jawaban Benar adalah [C] コンビニ</strong><br>Waspadai kata <em>手前 (temae = sebelum)</em> dan revisi arah dari kanan ke kiri!';
+      }
+    }
+
+    const simQuestions = [
+      {
+        kategori: "Rasa Makanan",
+        soal: "Gambar potongan buah lemon (Rasa buah lemon):",
+        options: ["まずい", "すっぱい", "しょっぱい", "あまい"],
+        correct: 1,
+        exp: "Lemon berasa asam/kecut, yaitu **すっぱい (suppai)**. Bukan まずい (opini gak enak)."
+      },
+      {
+        kategori: "Kosakata Musim",
+        soal: "バチカさんの国には、どんな季節（________）がありますか？",
+        options: ["きさつ", "ぎっせつ", "きせつ", "ぎせつ"],
+        correct: 2,
+        exp: "Kanji 季節 dibaca murni **きせつ (kisetsu)** tanpa tenten (ぎ) dan tanpa huruf kecil (っ)."
+      },
+      {
+        kategori: "Tata Bahasa Kontras",
+        soal: "私の国は有名ではない________、とてもいい国です。",
+        options: ["なくて", "から", "けど", "ので"],
+        correct: 2,
+        exp: "Pola kontras negatif ke positif: wajib pakai **〜けど** (tetapi)."
+      },
+      {
+        kategori: "Partikel Restoran",
+        soal: "店員: 「カウンターとテーブルがございますが…」\n客: 「カウンター________お願いします。」",
+        options: ["が", "は", "で", "を"],
+        correct: 2,
+        exp: "Memilih opsi kursi/ukuran SELALU berpasangan dengan partikel **で**."
+      },
+      {
+        kategori: "Aizuchi Sakti",
+        soal: "A: 「この町は、電車が多くて、便利でいいですね。」\nB: 「ああ、________。」",
+        options: ["なんとか", "嫌になりますね", "確かに", "どうですか"],
+        correct: 2,
+        exp: "Menyetujui 100% opini lawan bicara: **確かに (Tashika ni)**."
+      }
+    ];
+
+    let currentSimIdx = 0;
+    let simScore = 0;
+    let simAnswered = false;
+
+    function renderSimQuiz() {
+      const q = simQuestions[currentSimIdx];
+      const card = document.getElementById('simQuizCard');
+      const feedback = document.getElementById('simFeedbackCard');
+      const nextBtn = document.getElementById('btnSimNext');
+      if (!card || !feedback || !nextBtn) return;
+
+      simAnswered = false;
+      feedback.classList.add('hidden');
+      nextBtn.classList.add('hidden');
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-tactical-950 text-cyan-400 border border-tactical-800">
+            ${q.kategori} • Soal ${currentSimIdx + 1} / ${simQuestions.length}
+          </span>
+        </div>
+        <div class="text-base sm:text-lg font-bold text-white font-jp whitespace-pre-line leading-relaxed mt-1">
+          ${q.soal}
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
+          ${q.options.map((opt, i) => `
+            <button onclick="checkSimAnswer(${i})" id="btn-sim-opt-${i}" class="p-3.5 bg-tactical-950 border border-tactical-800 hover:border-cyan-400 rounded-2xl text-left text-xs sm:text-sm font-jp transition shadow-sm">
+              ${i + 1}. ${opt}
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function checkSimAnswer(chosen) {
+      if (simAnswered) return;
+      simAnswered = true;
+
+      const q = simQuestions[currentSimIdx];
+      const feedback = document.getElementById('simFeedbackCard');
+      const nextBtn = document.getElementById('btnSimNext');
+
+      for (let i = 0; i < q.options.length; i++) {
+        const btn = document.getElementById('btn-sim-opt-' + i);
+        if (!btn) continue;
+        btn.disabled = true;
+        if (i === q.correct) {
+          btn.className = 'p-3.5 bg-emerald-500/20 border-2 border-emerald-500 text-emerald-300 rounded-2xl text-left text-xs sm:text-sm font-jp font-bold';
+        } else if (i === chosen) {
+          btn.className = 'p-3.5 bg-rose-500/20 border-2 border-rose-500 text-rose-300 rounded-2xl text-left text-xs sm:text-sm font-jp';
+        } else {
+          btn.classList.add('opacity-40');
+        }
+      }
+
+      feedback.classList.remove('hidden');
+
+      const point = Math.round(250 / simQuestions.length);
+      if (chosen === q.correct) {
+        simScore += point;
+        feedback.className = 'mt-3 p-4 rounded-2xl text-xs sm:text-sm font-sans leading-relaxed bg-emerald-500/15 border border-emerald-500/30 text-emerald-300';
+        feedback.innerHTML = `<strong>🎉 Jawaban Benar (+${point} Poin)!</strong><br>${q.exp}`;
+      } else {
+        feedback.className = 'mt-3 p-4 rounded-2xl text-xs sm:text-sm font-sans leading-relaxed bg-rose-500/15 border border-rose-500/30 text-rose-300';
+        feedback.innerHTML = `<strong>❌ Terjebak! Jawaban Benar: No. ${q.correct + 1}</strong><br>${q.exp}`;
+      }
+
+      document.getElementById('simScoreDisplay').innerText = `${simScore} / 250`;
+      nextBtn.classList.remove('hidden');
+    }
+
+    function nextSimQuizQuestion() {
+      if (currentSimIdx < simQuestions.length - 1) {
+        currentSimIdx++;
+        renderSimQuiz();
+      } else {
+        const card = document.getElementById('simQuizCard');
+        document.getElementById('btnSimNext').classList.add('hidden');
+        card.innerHTML = `
+          <div class="text-center py-8 space-y-3 font-sans">
+            <span class="text-5xl">🏆</span>
+            <h3 class="text-xl font-black text-white">Simulasi Selesai!</h3>
+            <div class="text-3xl font-black text-cyan-400 font-mono">${simScore} / 250</div>
+            <p class="text-xs text-slate-400 max-w-sm mx-auto">
+              ${simScore >= 200 ? '🎉 Selamat! Skor Anda sudah melampaui standar kelulusan resmi 200 poin!' : 'Terus latih Kanji SRS dan Hyougen sampai refleks Anda terbentuk!'}
+            </p>
+          </div>
+        `;
+      }
+    }
+
+    function resetSimQuiz() {
+      currentSimIdx = 0;
+      simScore = 0;
+      renderSimQuiz();
+      document.getElementById('simScoreDisplay').innerText = '0 / 250';
+    }
+
+    // Keyboard Shortcuts for active recall drill
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        flipCurrentCard();
+      } else if (e.code === 'ArrowRight') {
+        stepNextCard();
+      } else if (e.code === 'ArrowLeft') {
+        stepPrevCard();
+      }
+    });
+
+    window.onload = function() {
+      initKanjiVault();
+    };
+  </script>
+</body>
+</html>
