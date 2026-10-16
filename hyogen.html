@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JFT-Basic & Hyougen — Sistem Latihan Soal & Trik Otak 1 Hari</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            jp: ['"Noto Sans JP"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-jp { font-family: 'Noto Sans JP', sans-serif; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.4); }
+    ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.5); border-radius: 9999px; }
+
+    ruby.jft-ruby {
+      ruby-align: center;
+      position: relative;
+      padding: 0 1px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+    }
+    ruby.jft-ruby rt {
+      font-size: 0.62em;
+      font-weight: 700;
+      color: #38bdf8;
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+      user-select: none;
+      transition: opacity 0.15s ease;
+    }
+    /* Mode 2: Simulasi JFT (Sembunyikan Furigana sampai di-hover/sentuh) */
+    body.furigana-hover ruby.jft-ruby {
+      border-bottom: 1.5px dashed rgba(56, 189, 248, 0.45);
+      cursor: pointer;
+    }
+    body.furigana-hover ruby.jft-ruby rt {
+      opacity: 0;
+    }
+    body.furigana-hover ruby.jft-ruby:hover rt,
+    body.furigana-hover ruby.jft-ruby:active rt,
+    body.furigana-hover .answered-reveal ruby.jft-ruby rt {
+      opacity: 1;
+    }
+    /* Mode 3: Furigana OFF di Soal (Muncul hanya di pembahasan) */
+    body.furigana-off #qMainText ruby.jft-ruby rt,
+    body.furigana-off #qOptionsContainer ruby.jft-ruby rt {
+      display: none;
+    }
+    /* Mode Blind Kanji Test: Sembunyikan furigana pada teks target yang diuji */
+    ruby.kanji-test-blind rt {
+      display: none !important;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-indigo-500 selection:text-white">
+
+  <!-- ==========================================
+       HEADER SEDERHANA & FOKUS PROGRES
+       ========================================== -->
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-slate-900/90 border-b border-slate-800">
+    <div class="max-w-4xl mx-auto px-4 py-3 space-y-3">
+      
+      <!-- Top Row: Title + Progress + Quick Settings -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center font-jp font-black text-lg text-white shadow-md shadow-indigo-600/30">
+            勝
+          </div>
+          <div>
+            <h1 class="font-extrabold text-base sm:text-lg text-white leading-tight">
+              JFT & Hyougen — Smart Drill & Anti-Buta Kanji
+            </h1>
+            <p class="text-[11px] text-slate-400">
+              Full 256 Materi PDF • Dilengkapi Furigana Interaktif & Bedah Kanji JFT
+            </p>
+          </div>
+        </div>
+
+        <!-- Simple Mastery Pill & Controls -->
+        <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <div class="px-2.5 py-1.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-1.5 text-xs">
+            <span class="text-slate-400 hidden sm:inline">Dikuasai:</span>
+            <span id="masteredCountText" class="font-extrabold text-emerald-400">0 / 256</span>
+            <span id="progressPercentText" class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold text-[11px]">0%</span>
+          </div>
+
+          <button onclick="cycleFuriganaMode()" id="furiganaToggleBtn" class="px-2.5 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-xs font-extrabold text-sky-300 border border-sky-500/40 transition" title="Atur Tampilan Furigana (Cara Baca di Atas Kanji)">
+            ふ Furigana: ON
+          </button>
+
+          <button onclick="toggleRomajiGlobal()" id="romajiToggleBtn" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-indigo-300 border border-slate-700 transition" title="Tampilkan/Sembunyikan Bantuan Cara Baca Romaji">
+            🔤 Romaji: ON
+          </button>
+
+          <button onclick="openResetModal()" class="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 text-xs" title="Pengaturan & Reset">
+            ⚙️
+          </button>
+        </div>
+      </div>
+
+      <!-- Thin Progress Bar -->
+      <div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden flex">
+        <div id="masteredBar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
+        <div id="reviewBar" class="bg-rose-500 h-full transition-all duration-300" style="width: 0%"></div>
+      </div>
+
+      <!-- 3 Clean Navigation Tabs -->
+      <nav class="grid grid-cols-3 gap-1.5 pt-0.5">
+        <button onclick="switchTab('drill')" id="tab-drill" class="py-2 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition flex items-center justify-center gap-1.5 bg-indigo-600 text-white shadow-lg shadow-indigo-600/25">
+          <span>🎯</span> <span>Latihan Soal & Kanji</span>
+        </button>
+        <button onclick="switchTab('tricks')" id="tab-tricks" class="py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 bg-slate-800/80 text-slate-300 hover:bg-slate-800">
+          <span>⚡</span> <span>Rumus 1 Detik & Kanji</span>
+        </button>
+        <button onclick="switchTab('list')" id="tab-list" class="py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 bg-slate-800/80 text-slate-300 hover:bg-slate-800">
+          <span>📚</span> <span>Kamus 256 PDF (Furigana)</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       MAIN CONTAINER (CLEAN & FOCUSED)
+       ========================================== -->
+  <main class="max-w-4xl mx-auto px-4 py-5">
+
+    <!-- ==========================================
+         MODE 1 (UTAMA): SMART JFT DRILL & PEMBAHASAN MENDALAM
+         ========================================== -->
+    <section id="view-drill" class="space-y-4">
+
+      <!-- Control Bar: Pilih Bab & Mode Soal -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1">
+          <div class="flex-1">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">1. Pilih Paket Soal (Semua 256 Materi Tersedia):</label>
+            <select id="drillDeckSelect" onchange="initDrillSession()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs sm:text-sm text-white font-bold focus:outline-none focus:border-indigo-500">
+              <option value="SMART_MIX">🔥 Campuran Pintar: Soal JFT Asli + Kanji + 256 Materi</option>
+              <option value="KANJI_SPECIAL">漢 Khusus Latihan Baca Kanji Hyougen & Bunpou (Anti-Buta Huruf!)</option>
+              <option value="JFT_SIMULATION">🎯 Khusus Soal Simulasi JFT & Jebakan Pola Kembar (40 Soal Inti)</option>
+              <option value="REMEDIAL" id="remedialOption">♻️ Remedial: Ulangi Soal yang Tadi Dijawab Salah (0)</option>
+              <option value="SPRINT_1">🗣️ Paket 1: Hyougen Hal. 1–2 (Salam, Maaf, Toko - 47 Soal)</option>
+              <option value="SPRINT_2">🗣️ Paket 2: Hyougen Hal. 3–4 (Frekuensi, Tanya, Respon - 69 Soal)</option>
+              <option value="SPRINT_3">🗣️ Paket 3: Hyougen Hal. 5–6 (Restoran, Onomatope, Gaul - 64 Soal)</option>
+              <option value="SPRINT_4">📘 Paket 4: Bunpou JFT Hal. 2–10 (Vる, Vない, Vた, Vて Dasar - 35 Soal)</option>
+              <option value="SPRINT_5">📘 Paket 5: Bunpou JFT Hal. 11–20 (Vて Lanjut & Vます - 17 Soal)</option>
+              <option value="SPRINT_6">📘 Paket 6: Bunpou JFT Hal. 21–31 (Bentuk Biasa, ところ, Pasif - 24 Soal)</option>
+            </select>
+          </div>
+
+          <div class="sm:w-60">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">2. Gaya Pertanyaan:</label>
+            <select id="drillStyleSelect" onchange="initDrillSession()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs sm:text-sm text-indigo-300 font-bold focus:outline-none focus:border-indigo-500">
+              <option value="EXAM_CONTEXT">📝 Konteks Ujian + Kanji Mix</option>
+              <option value="KANJI_READ">漢 Tebak Bacaan Kanji (Tanpa Furigana)</option>
+              <option value="ID_TO_JP">🇮🇩 ➔ 🇯🇵 Cari Bahasa Jepangnya</option>
+              <option value="JP_TO_ID">🇯🇵 ➔ 🇮🇩 Tebak Arti & Situasi</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Score & Streak Counter -->
+        <div class="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800 text-xs font-bold">
+          <div class="text-slate-400">
+            No: <span id="drillCounterText" class="text-white">1 / 40</span>
+          </div>
+          <div class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+            ✓ <span id="scoreCorrect">0</span>
+          </div>
+          <div class="px-2.5 py-1 rounded-lg bg-rose-500/15 text-rose-300 border border-rose-500/30">
+            ✗ <span id="scoreWrong">0</span>
+          </div>
+          <div class="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30">
+            🔥 <span id="scoreStreak">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN QUESTION CARD -->
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-5">
+        
+        <!-- Card Top Meta: Source Badge + Audio + Hint Button -->
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span id="qBadge" class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold">
+              JFT-Basic • Hal. 19
+            </span>
+            <span id="qMasteryBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-800 text-slate-400">
+              Belum Dikuasai
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="toggleHintBox()" class="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold transition">
+              💡 Trik & Intip Kanji
+            </button>
+            <button onclick="speakCurrentQuestion()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1">
+              <span>🔊</span> <span>Suara</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Question Scenario / Prompt -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/90 border border-slate-800/90 space-y-2.5">
+          <div id="qInstruction" class="text-xs font-bold uppercase tracking-wider text-indigo-400">
+            Pilih ungkapan/pola kalimat yang paling tepat:
+          </div>
+          <div id="qMainText" class="text-xl sm:text-2xl font-black font-jp text-white leading-loose whitespace-pre-line">
+            Loading...
+          </div>
+          <div id="qSubText" class="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed"></div>
+        </div>
+
+        <!-- Instant 1-Second Brain Trick Hint (Collapsible before answering) -->
+        <div id="qHintBox" class="hidden p-3.5 rounded-2xl bg-amber-950/30 border border-amber-500/40 text-xs text-amber-200 space-y-2">
+          <div class="font-extrabold text-amber-400">⚡ Kata Kunci Pengingat Otak & Bantuan Kanji:</div>
+          <div id="qHintText" class="leading-relaxed"></div>
+          <div id="qHintKanjiList" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1"></div>
+        </div>
+
+        <!-- 4 Answer Choices -->
+        <div id="qOptionsContainer" class="grid grid-cols-1 gap-2.5">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- ==========================================
+             PEMBAHASAN LENGKAP + BEDAH KANJI + BEDAH 4 OPSI
+             ========================================== -->
+        <div id="qExplanationPanel" class="hidden rounded-2xl border-2 p-5 space-y-4 transition-all answered-reveal">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+            <div>
+              <div id="expHeaderTitle" class="text-base sm:text-lg font-extrabold"></div>
+              <div id="expSubTitle" class="text-xs text-slate-400"></div>
+            </div>
+            <button onclick="nextDrillQuestion()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-1.5 shrink-0">
+              <span>Lanjut Soal Berikutnya</span> <span>➡️</span>
+            </button>
+          </div>
+
+          <!-- 1. Jembatan Keledai / Penjelasan Inti -->
+          <div class="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800 space-y-1.5">
+            <div class="text-xs font-extrabold text-amber-400 uppercase tracking-wider">
+              🧠 Mengapa Jawaban Ini Tepat & Cara Cepat Menghafalnya:
+            </div>
+            <div id="expCoreReason" class="text-xs sm:text-sm text-slate-200 leading-relaxed"></div>
+            <div id="expExampleBox" class="pt-2 mt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
+              <div id="expExampleText" class="text-sm text-indigo-200 font-jp leading-loose"></div>
+              <button onclick="speakCurrentQuestion()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-indigo-300 shrink-0">
+                🔊 Putar Kalimat
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. BEDAH KANJI ANTI-BUTA HURUF (Otomatis mendeteksi Kanji di soal & opsi) -->
+          <div id="expKanjiSection" class="p-3.5 rounded-xl bg-sky-950/25 border border-sky-500/30 space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="text-xs font-extrabold text-sky-300 uppercase tracking-wider">
+                漢 Bedah Kanji di Soal Ini (Agar Tidak Buta Huruf Saat Ujian JFT):
+              </div>
+              <span class="text-[10px] text-sky-400 font-semibold">Klik kartu untuk dengar suara</span>
+            </div>
+            <div id="expKanjiGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- 3. Bedah ke-4 Opsi (1 Soal = Langsung Belajar 4 Materi!) -->
+          <div class="space-y-2">
+            <div class="text-xs font-extrabold text-slate-300 uppercase tracking-wider">
+              🔍 Bedah Ke-4 Pilihan Jawaban (Lengkap dengan Furigana & Arti):
+            </div>
+            <div id="expOptionsBreakdown" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs text-slate-400">
+          <button onclick="prevDrillQuestion()" class="px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 font-bold text-slate-300">
+            ⬅️ Soal Sebelumnya
+          </button>
+          <span class="hidden sm:inline text-[11px] text-slate-500">
+            Shortcut: Tekan <kbd class="px-1.5 py-0.5 bg-slate-800 text-slate-300 rounded">1</kbd>-<kbd class="px-1.5 py-0.5 bg-slate-800 text-slate-300 rounded">4</kbd> untuk jawab, <kbd class="px-1.5 py-0.5 bg-slate-800 text-slate-300 rounded">Spasi</kbd> lanjut, <kbd class="px-1.5 py-0.5 bg-slate-800 text-slate-300 rounded">F</kbd> ganti mode Furigana
+          </span>
+          <button onclick="nextDrillQuestion()" class="px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 font-bold text-slate-300">
+            Lewati / Lanjut ➡️
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         MODE 2: RUMUS 1 DETIK (MENGAKALI OTAK UNTUK POLA KEMBAR)
+         ========================================== -->
+    <section id="view-tricks" class="hidden space-y-5">
+      <div class="bg-gradient-to-r from-indigo-950/80 to-purple-950/80 border border-indigo-500/30 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <h2 class="text-lg sm:text-xl font-extrabold text-white">
+            ⚡ Cheatsheet "Trik 1 Detik" — Penakluk Soal Jebakan JFT
+          </h2>
+          <p class="text-xs text-slate-300">
+            Jangan hafalkan kalimat panjang! Cukup lihat <strong>kata kunci pengait</strong> di bawah ini, Anda bisa menebak jawaban benar dalam 1 detik.
+          </p>
+        </div>
+        <button onclick="startSimulationFromTricks()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shrink-0 shadow-lg transition">
+          🎯 Latih Soal Jebakan Ini Sekarang
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <!-- 1. SOUDESU -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2.5">
+          <div class="flex justify-between items-center">
+            <span class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-bold">Jebakan #1 • Hal. 19 vs 28</span>
+            <span class="text-amber-400 font-bold">〜そうです</span>
+          </div>
+          <h3 class="text-sm font-extrabold text-white">Kelihatannya (Mata) vs Katanya (Telinga)</h3>
+          <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-emerald-400 font-bold">👀 Kelihatannya (Hal. 19) = Huruf い / ます HILANG!</div>
+            <p class="text-slate-300">Jika sebelum <span class="font-jp">そうです</span> tidak ada <span class="font-jp">い</span> atau <span class="font-jp">だ</span>: <span class="font-jp text-white">おいしそう</span> (Kelihatannya enak), <span class="font-jp text-white">ふりそう</span> (Kelihatannya akan turun hujan). Khusus <span class="font-jp">いい ➔ よさそう</span>.</p>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-sky-400 font-bold">👂 Katanya / Kabarnya (Hal. 28) = Bentuk Biasa UTUH (Ada い / だ)!</div>
+            <p class="text-slate-300">Jika masih ada <span class="font-jp">い / だ / Vる / Vた</span>: <span class="font-jp text-white">おいしいそうです</span> (Katanya enak), <span class="font-jp text-white">せんせいだそうです</span> (Katanya guru).</p>
+          </div>
+        </div>
+
+        <!-- 2. TOKORO DESU -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2.5">
+          <div class="flex justify-between items-center">
+            <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold">Jebakan #2 • Hal. 28–29</span>
+            <span class="text-amber-400 font-bold">〜ところです</span>
+          </div>
+          <h3 class="text-sm font-extrabold text-white">Trik Pasangan Waktu "Baru Mau / Sedang / Barusan"</h3>
+          <div class="space-y-1.5">
+            <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+              <strong class="text-indigo-300">1. Ada kata <span class="font-jp">いまから / これから</span> (Mulai sekarang)</strong> ➔ Pasti <strong class="text-white font-jp">Vる + ところです</strong> (Baru mau).
+            </div>
+            <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+              <strong class="text-emerald-300">2. Ada kata <span class="font-jp">いま</span> (Sekarang)</strong> ➔ Pasti <strong class="text-white font-jp">Vている + ところです</strong> (Sedang berlangsung).
+            </div>
+            <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+              <strong class="text-rose-300">3. Ada kata <span class="font-jp">さっき / たったいま</span> (Barusan)</strong> ➔ Pasti <strong class="text-white font-jp">Vた + ところです</strong> (Baru saja selesai detik itu juga).
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. AGEMASU / MORAIMASU / KUREMASU -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2.5">
+          <div class="flex justify-between items-center">
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">Jebakan #3 • Hal. 9</span>
+            <span class="text-amber-400 font-bold">Bantuan Vて</span>
+          </div>
+          <h3 class="text-sm font-extrabold text-white">Lihat Siapa di Depan Partikel は dan に!</h3>
+          <div class="space-y-1.5">
+            <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+              <strong class="text-emerald-400 font-jp">Vてあげます</strong>: <strong>Saya (わたしは)</strong> berbuat baik untuk orang lain.
+            </div>
+            <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+              <strong class="text-sky-400 font-jp">Vてもらいます</strong>: <strong>Saya (わたしは)</strong> menerima bantuan dari orang lain (<span class="font-jp">〜てもらえませんか</span> = Tolong bantu saya).
+            </div>
+            <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+              <strong class="text-purple-400 font-jp">Vてくれます</strong>: <strong>Orang lain (〜さんは)</strong> berbuat baik kepada saya (<span class="font-jp">わたしに</span>).
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 4 JENIS JIKA + SARAN -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2.5">
+          <div class="flex justify-between items-center">
+            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">Jebakan #4 • Hal. 2, 5, 6, 30</span>
+            <span class="text-amber-400 font-bold">Pengandaian & Saran</span>
+          </div>
+          <h3 class="text-sm font-extrabold text-white">4 "Kalau/Jika" & Jebakan Saran (ほうがいい)</h3>
+          <div class="space-y-1.5">
+            <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+              • Mesin/Tombol/Pasti ➔ <strong class="text-amber-300 font-jp">Vると</strong> (Hal 2)<br>
+              • Pengandaian Bebas/Niat ➔ <strong class="text-emerald-300 font-jp">Vたら</strong> (Hal 6)<br>
+              • Syarat agar berhasil ➔ <strong class="text-sky-300 font-jp">Vえば / KSければ</strong> (Hal 30)<br>
+              • Merespon Topik Lawan Bicara ➔ <strong class="text-purple-300 font-jp">KB/Vる + なら</strong> (Hal 30)
+            </div>
+            <div class="p-2 rounded-xl bg-rose-950/30 border border-rose-500/30">
+              <strong class="text-rose-300">Jebakan Saran:</strong> Saran Positif wajib pakai Lampau (<strong class="font-jp text-white">Vた + ほうがいい</strong>), sedangkan Saran Negatif pakai (<strong class="font-jp text-white">Vない + ほうがいい</strong>)!
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. HYOUGEN KEMBAR & FREKUENSI -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2.5">
+          <div class="flex justify-between items-center">
+            <span class="px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 font-bold">Jebakan #5 • Hyougen Hal. 3–4</span>
+            <span class="text-amber-400 font-bold">Frekuensi & Tanya</span>
+          </div>
+          <h3 class="text-sm font-extrabold text-white">Pasangan Wajib Negatif & Tanya Harga vs Waktu</h3>
+          <div class="space-y-1.5">
+            <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+              <strong class="text-rose-400">3 Kata Wajib Diikuti Negatif (〜ません):</strong><br>
+              1. <span class="font-jp text-white">あまり</span> (Jarang / Tidak begitu)<br>
+              2. <span class="font-jp text-white">なかなか</span> (Tak kunjung / Susah untuk)<br>
+              3. <span class="font-jp text-white">ぜんぜん</span> (Sama sekali tidak)
+            </div>
+            <div class="p-2 rounded-xl bg-slate-950 border border-slate-800">
+              <strong class="text-indigo-300">Hyougen Hal. 4:</strong> <span class="font-jp text-white">どのぐらい</span> = Berapa banyak (Kisaran <strong>Harga</strong>) vs <span class="font-jp text-white">どれぐらい</span> = Berapa lama (<strong>Waktu</strong>).
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. ONOMATOPE HYOUGEN HAL 6 -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2.5">
+          <div class="flex justify-between items-center">
+            <span class="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 font-bold">Jebakan #6 • Hyougen Hal. 6</span>
+            <span class="text-amber-400 font-bold">Kata Kembar (Onomatope)</span>
+          </div>
+          <h3 class="text-sm font-extrabold text-white">Jembatan Keledai Kata Kembar Hal. 6</h3>
+          <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+            <div class="p-1.5 rounded bg-slate-950 border border-slate-800"><strong class="font-jp text-amber-300">ペコペコ</strong>: Lapar (Perut)</div>
+            <div class="p-1.5 rounded bg-slate-950 border border-slate-800"><strong class="font-jp text-amber-300">カラカラ</strong>: Haus (Kering)</div>
+            <div class="p-1.5 rounded bg-slate-950 border border-slate-800"><strong class="font-jp text-amber-300">ドキドキ</strong>: Deg-degan</div>
+            <div class="p-1.5 rounded bg-slate-950 border border-slate-800"><strong class="font-jp text-amber-300">ワクワク</strong>: Antusias senang</div>
+            <div class="p-1.5 rounded bg-slate-950 border border-slate-800"><strong class="font-jp text-amber-300">イライラ</strong>: Kesal / Emosi</div>
+            <div class="p-1.5 rounded bg-slate-950 border border-slate-800"><strong class="font-jp text-amber-300">ギリギリ</strong>: Mepet waktu</div>
+            <div class="p-1.5 rounded bg-slate-950 border border-slate-800"><strong class="font-jp text-amber-300">ピカピカ</strong>: Kinclong/Berkilau</div>
+            <div class="p-1.5 rounded bg-slate-950 border border-slate-800"><strong class="font-jp text-amber-300">ボロボロ</strong>: Rusak usang</div>
+            <div class="p-1.5 rounded bg-slate-950 border border-slate-800"><strong class="font-jp text-amber-300">ガラガラ</strong>: Sepi kosong</div>
+            <div class="p-1.5 rounded bg-slate-950 border border-slate-800"><strong class="font-jp text-amber-300">ペラペラ</strong>: Fasih bicara</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. DAFTAR KANJI WAJIB HYOUGEN & BUNPOU JFT (ANTI-BUTA HURUF) -->
+      <div class="bg-slate-900 border border-sky-500/30 rounded-2xl p-5 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="px-2.5 py-0.5 rounded bg-sky-500/20 text-sky-300 text-xs font-bold">漢 Kamus Visual Kanji Hyougen & JFT</span>
+            <h3 class="text-base sm:text-lg font-extrabold text-white mt-1">
+              Daftar Kanji yang Sering Muncul Tanpa Furigana di JFT-Basic
+            </h3>
+            <p class="text-xs text-slate-400">
+              Di PDF banyak kata ditulis dengan Hiragana, tetapi di ujian JFT asli ditulis dalam <strong>Kanji</strong>. Hafalkan bentuk visual & jembatan keledainya di bawah ini (klik untuk suara):
+            </p>
+          </div>
+          <button onclick="startKanjiDrillFromTricks()" class="px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold text-xs shrink-0 shadow-lg transition">
+            漢 Latih Tebak Bacaan Kanji Sekarang
+          </button>
+        </div>
+
+        <div id="tricksKanjiGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 text-xs">
+          <!-- Populated automatically from KANJI_MASTER_DB -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         MODE 3: KAMUS CEPAT 256 MATERI PDF & AUDIO LOOP
+         ========================================== -->
+    <section id="view-list" class="hidden space-y-4">
+      <!-- Filter & Quick Hide Meaning Toggle -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+          <div class="sm:col-span-5">
+            <input
+              type="text"
+              id="listSearchInput"
+              oninput="renderDatabaseList()"
+              placeholder="Cari kata Jepang, Romaji, Arti, atau Hal..."
+              class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+            />
+          </div>
+          <div class="sm:col-span-4">
+            <select id="listFilterSelect" onchange="renderDatabaseList()" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs sm:text-sm text-white font-semibold">
+              <option value="ALL">📚 Semua 256 Materi (Hyougen + JFT)</option>
+              <option value="HYOUGEN">🗣️ HYOUGEN-1.pdf (180 Ungkapan)</option>
+              <option value="JFT">📘 Pola Kalimat JFT-1.pdf (76 Pola)</option>
+              <option value="UNMASTERED">⚡ Hanya yang Belum Hafal</option>
+            </select>
+          </div>
+          <div class="sm:col-span-3 flex gap-1.5">
+            <button onclick="toggleBlindMode()" id="blindModeBtn" class="flex-1 py-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-amber-300 border border-slate-700 transition">
+              🙈 Tutup Arti: OFF
+            </button>
+            <button onclick="toggleAutoAudioLoop()" id="autoAudioBtn" class="py-2 px-3 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition" title="Putar Suara Berurutan Otomatis">
+              ▶️ Auto
+            </button>
+          </div>
+        </div>
+        <div class="flex items-center justify-between text-[11px] text-slate-400">
+          <span>Menampilkan <strong id="listCountText" class="text-white">256</strong> materi. Klik kartu untuk mendengar suara atau melihat arti saat mode Tutup Arti aktif.</span>
+        </div>
+      </div>
+
+      <!-- Compact Clean List -->
+      <div id="databaseListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL PENGATURAN & RESET -->
+  <div id="resetModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+      <h3 class="text-base font-extrabold text-white">⚙️ Pengaturan & Reset Progres</h3>
+      <p class="text-xs text-slate-400 leading-relaxed">
+        Setiap soal yang Anda jawab benar otomatis ditandai <strong>Dikuasai</strong>, dan soal yang salah otomatis masuk ke <strong>Paket Remedial</strong>.
+      </p>
+      <div class="space-y-2">
+        <button onclick="toggleSpeechSpeed()" id="speedModalBtn" class="w-full py-2.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-bold transition">
+          🔊 Kecepatan Suara Jepang: 1.0x (Normal)
+        </button>
+        <button onclick="resetAllProgress()" class="w-full py-2.5 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 text-xs font-bold transition">
+          🗑️ Reset Semua Progres Hafalan ke 0%
+        </button>
+        <button onclick="closeResetModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       COMPLETE 256 ITEMS + REAL JFT SIMULATION ENGINE
+       ========================================== -->
+  <script>
+    /**
+     * 1. DATABASE 100% LENGKAP DARI KEDUA PDF (256 MATERI TANPA TERLEWAT)
+     */
+    const HYOUGEN_DATA = [
+      // === PAGE 1 ===
+      { id: "H001", pdf: "HYOUGEN", page: "Hal. 1", cat: "Salam & Terima Kasih", jp: "本当にありがとうございます / ありがとうございます", romaji: "Hontou ni arigatou gozaimasu / Arigatou gozaimasu", meaning: "Ungkapan terima kasih (Sopan / Sangat berterima kasih)", note: "Digunakan kepada atasan, orang yang lebih tua, atau situasi formal." },
+      { id: "H002", pdf: "HYOUGEN", page: "Hal. 1", cat: "Salam & Terima Kasih", jp: "ありがとう", romaji: "Arigatou", meaning: "Ungkapan terima kasih (Biasa / Kasual)", note: "Digunakan kepada teman sebaya atau keluarga akrab." },
+      { id: "H003", pdf: "HYOUGEN", page: "Hal. 1", cat: "Salam & Terima Kasih", jp: "さんきゅう", romaji: "Sankyuu", meaning: "Ungkapan terima kasih (Serapan 'Thank you' / Gaul)", note: "Percakapan santai antar teman dekat." },
+      { id: "H004", pdf: "HYOUGEN", page: "Hal. 1", cat: "Salam & Terima Kasih", jp: "どういたしまして / こちらこそ / どうも", romaji: "Dou itashimashite / Kochirakoso / Doumo", meaning: "Balasan untuk ucapan terima kasih (Sama-sama / Terima kasih kembali)", note: "こちらこそ = 'Justru saya yang berterima kasih'." },
+      { id: "H005", pdf: "HYOUGEN", page: "Hal. 1", cat: "Salam & Kerja", jp: "ごくろうさまです / お疲れ様でした", romaji: "Gokurousama desu / Otsukaresama deshita", meaning: "Terima kasih atas kerjasama / kerja kerasnya", note: "お疲れ様でした adalah ucapan standar sesama rekan kerja saat selesai tugas/pulang." },
+      { id: "H006", pdf: "HYOUGEN", page: "Hal. 1", cat: "Makan & Syukur", jp: "いただきます", romaji: "Itadakimasu", meaning: "Saya terima / Mari makan (Diucapkan sebelum makan)", note: "Ungkapan syukur sebelum menyantap hidangan." },
+      { id: "H007", pdf: "HYOUGEN", page: "Hal. 1", cat: "Makan & Syukur", jp: "ごちそうさまでした", romaji: "Gochisousama deshita", meaning: "Terima kasih atas hidangan/makanannya (Diucapkan selesai makan)", note: "Pasangan penutup setelah selesai makan." },
+      { id: "H008", pdf: "HYOUGEN", page: "Hal. 1", cat: "Salam & Terima Kasih", jp: "おかげで", romaji: "Okage de", meaning: "Berkat kamu / Kabar baik", note: "Menyatakan hasil baik berkat bantuan seseorang." },
+      { id: "H009", pdf: "HYOUGEN", page: "Hal. 1", cat: "Salam & Terima Kasih", jp: "おかげさまです (おかげさまで)", romaji: "Okagesama desu", meaning: "Terima kasih kembali / Sama-sama (Berkat doa Anda kabar baik)", note: "Sering dipakai saat menjawab kabar 'Ogenki desu ka?'." },
+      { id: "H010", pdf: "HYOUGEN", page: "Hal. 1", cat: "Permisi & Bertamu", jp: "おじゃまします / しつれいします / ごめんください", romaji: "Ojamashimasu / Shitsureishimasu / Gomen kudasai", meaning: "Ungkapan untuk masuk ke dalam rumah/ruangan orang lain bermakna 'PERMISI'", note: "ごめんください = di depan pintu; おじゃまします = saat melangkah masuk rumah orang; しつれいします = masuk ruangan kerja." },
+      { id: "H011", pdf: "HYOUGEN", page: "Hal. 1", cat: "Salam & Pertemuan", jp: "お久しぶりです", romaji: "Ohisashiburi desu", meaning: "Lama tak berjumpa", note: "Diucapkan saat bertemu kembali setelah sekian lama." },
+      { id: "H012", pdf: "HYOUGEN", page: "Hal. 1", cat: "Tempat & Arah", jp: "どのへんですか", romaji: "Dono hen desu ka", meaning: "Di mana tempatnya / Di sebelah mana / Sekitar mana?", note: "Menanyakan area atau lokasi perkiraan." },
+      { id: "H013", pdf: "HYOUGEN", page: "Hal. 1", cat: "Permintaan Maaf", jp: "申し訳ございません / すみません", romaji: "Moushiwake gozaimasen / Sumimasen", meaning: "Ungkapan untuk meminta maaf (Sangat sopan & Sopan)", note: "申し訳ございません digunakan untuk permintaan maaf formal/pelayanan." },
+      { id: "H014", pdf: "HYOUGEN", page: "Hal. 1", cat: "Permintaan Maaf", jp: "ごめんなさい / ごめん / すまん", romaji: "Gomennasai / Gomen / Suman", meaning: "Ungkapan untuk meminta maaf (Biasa / Kasual / Akrab)", note: "ごめん dan すまん digunakan antar teman dekat." },
+      { id: "H015", pdf: "HYOUGEN", page: "Hal. 1", cat: "Rumah & Keluarga", jp: "ただいま", romaji: "Tadaima", meaning: "Saya pulang (Diucapkan saat tiba kembali di rumah)", note: "Dijawab dengan おかえりなさい." },
+      { id: "H016", pdf: "HYOUGEN", page: "Hal. 1", cat: "Rumah & Keluarga", jp: "おかえりなさい", romaji: "Okaerinasai", meaning: "Selamat datang kembali (Balasan ketika ada yang pulang ke rumah)", note: "Balasan dari ただいま." },
+      { id: "H017", pdf: "HYOUGEN", page: "Hal. 1", cat: "Rumah & Keluarga", jp: "いってきます", romaji: "Ittekimasu", meaning: "Saya berangkat (Diucapkan saat keluar rumah)", note: "Dijawab dengan いってらっしゃい." },
+      { id: "H018", pdf: "HYOUGEN", page: "Hal. 1", cat: "Rumah & Keluarga", jp: "いってらっしゃい", romaji: "Itterasshai", meaning: "Selamat jalan / Hati-hati di jalan (Balasan untuk yang berangkat)", note: "Balasan dari いってきます." },
+      { id: "H019", pdf: "HYOUGEN", page: "Hal. 1", cat: "Sambutan", jp: "ようこそ (よこそ)", romaji: "Youkoso", meaning: "Selamat datang (Menyambut tamu/kunjungan ke suatu tempat)", note: "Contoh: 日本へようこそ (Selamat datang di Jepang)." },
+
+      // === PAGE 2 ===
+      { id: "H020", pdf: "HYOUGEN", page: "Hal. 2", cat: "Pelayanan & Toko", jp: "いらっしゃいませ", romaji: "Irasshaimase", meaning: "Selamat datang (Diucapkan pelayan toko/restoran kepada pelanggan)", note: "Pelanggan tidak perlu membalas ucapan ini." },
+      { id: "H021", pdf: "HYOUGEN", page: "Hal. 2", cat: "Pelayanan & Toko", jp: "おまたせしました", romaji: "Omatase shimashita", meaning: "Maaf telah membuat Anda menunggu", note: "Sering diucapkan pelayan saat mengantarkan pesanan." },
+      { id: "H022", pdf: "HYOUGEN", page: "Hal. 2", cat: "Pelayanan & Toko", jp: "少々おまちください", romaji: "Shoushou omachi kudasai", meaning: "Mohon tunggu sebentar (Sangat sopan)", note: "Bentuk sopan pelayanan dari ちょっとまってください." },
+      { id: "H023", pdf: "HYOUGEN", page: "Hal. 2", cat: "Perhatian & Salam", jp: "きをつけてください", romaji: "Ki wo tsukete kudasai", meaning: "Tolong berhati-hati", note: "Digunakan untuk mengingatkan keselamatan." },
+      { id: "H024", pdf: "HYOUGEN", page: "Hal. 2", cat: "Permohonan", jp: "おねがいします", romaji: "Onegaishimasu", meaning: "Saya mohon / Tolong", note: "Digunakan saat meminta bantuan atau memesan sesuatu." },
+      { id: "H025", pdf: "HYOUGEN", page: "Hal. 2", cat: "Salam & Kerja", jp: "おさきにしつれいします", romaji: "Osaki ni shitsureishimasu", meaning: "Saya permisi pulang duluan (Diucapkan saat pulang kerja lebih dulu)", note: "Biasanya dijawab dengan お疲れ様でした." },
+      { id: "H026", pdf: "HYOUGEN", page: "Hal. 2", cat: "Salam Harian", jp: "おやすみなさい", romaji: "Oyasuminasai", meaning: "Selamat tidur / Selamat istirahat malam", note: "Diucapkan sebelum tidur." },
+      { id: "H027", pdf: "HYOUGEN", page: "Hal. 2", cat: "Ucapan Selamat", jp: "おめでとうございます", romaji: "Omedetou gozaimasu", meaning: "Selamat! (Atas pernikahan, kelulusan, ulang tahun, dll.)", note: "Bentuk kasualnya: おめでとう." },
+      { id: "H028", pdf: "HYOUGEN", page: "Hal. 2", cat: "Ucapan Selamat", jp: "あけましておめでとうございます", romaji: "Akemashite omedetou gozaimasu", meaning: "Selamat Tahun Baru (Diucapkan mulai 1 Januari)", note: "Singkatan gaulnya: あけおめ." },
+      { id: "H029", pdf: "HYOUGEN", page: "Hal. 2", cat: "Takaran & Instruksi", jp: "もう少し", romaji: "Mou sukoshi", meaning: "Sedikit lagi", note: "Contoh: もう少しゆっくり話してください (Tolong bicara sedikit lebih pelan lagi)." },
+      { id: "H030", pdf: "HYOUGEN", page: "Hal. 2", cat: "Takaran & Instruksi", jp: "ゆっくり", romaji: "Yukkuri", meaning: "Pelan-pelan / Dengan santai", note: "Bisa untuk kecepatan bicara atau istirahat santai." },
+      { id: "H031", pdf: "HYOUGEN", page: "Hal. 2", cat: "Takaran & Instruksi", jp: "もう一度", romaji: "Mou ichido", meaning: "Sekali lagi", note: "Contoh: もう一度おねがいします (Tolong ulangi sekali lagi)." },
+      { id: "H032", pdf: "HYOUGEN", page: "Hal. 2", cat: "Respon & Pemahaman", jp: "わかります", romaji: "Wakarimasu", meaning: "Mengerti / Paham", note: "Jika sudah paham atas instruksi: わかりました." },
+      { id: "H033", pdf: "HYOUGEN", page: "Hal. 2", cat: "Respon & Pelayanan", jp: "かしこまりました", romaji: "Kashikomarimashita", meaning: "Baik, saya mengerti (Bentuk sangat sopan dari わかりました)", note: "Diucapkan pelayan toko/restoran atau bawahan kepada atasan." },
+      { id: "H034", pdf: "HYOUGEN", page: "Hal. 2", cat: "Salam & Kerja", jp: "よろしくお願いします", romaji: "Yoroshiku onegaishimasu", meaning: "Mohon kerjasamanya / Mohon bantuannya", note: "Diucapkan di akhir perkenalan atau saat menyerahkan tugas." },
+      { id: "H035", pdf: "HYOUGEN", page: "Hal. 2", cat: "Tawaran", jp: "どうぞ", romaji: "Douzo", meaning: "Silakan", note: "Saat mempersilakan orang lain duduk, masuk, atau mengambil sesuatu." },
+      { id: "H036", pdf: "HYOUGEN", page: "Hal. 2", cat: "Respon Percakapan", jp: "えーと", romaji: "Eeto", meaning: "Emmm... (Ungkapan saat sedang berpikir/mengingat jawaban)", note: "Jeda berpikir sebelum menjawab." },
+      { id: "H037", pdf: "HYOUGEN", page: "Hal. 2", cat: "Respon Percakapan", jp: "そうですか / ヘー", romaji: "Sou desu ka / Hee", meaning: "Oh begitu / Wahh (Menerima informasi baru / kagum)", note: "ヘー menunjukkan ketertarikan pada cerita lawan bicara." },
+      { id: "H038", pdf: "HYOUGEN", page: "Hal. 2", cat: "Respon Percakapan", jp: "すごい", romaji: "Sugoi", meaning: "Hebatnya! / Luar biasa!", note: "Ungkapan kagum." },
+      { id: "H039", pdf: "HYOUGEN", page: "Hal. 2", cat: "Penolakan Halus", jp: "私はちょっと...", romaji: "Watashi wa chotto...", meaning: "Saya kurang suka / Saya tidak bisa... (Menolak secara halus)", note: "Kata ちょっと di akhir kalimat berfungsi menolak dengan sopan." },
+      { id: "H040", pdf: "HYOUGEN", page: "Hal. 2", cat: "Perhatian & Konfirmasi", jp: "大丈夫ですか", romaji: "Daijoubu desu ka", meaning: "Tidak masalahkah? / Apakah Anda baik-baik saja?", note: "Menanyakan kondisi atau kepastian." },
+      { id: "H041", pdf: "HYOUGEN", page: "Hal. 2", cat: "Penolakan & Penerimaan", jp: "いえ、けっこうです", romaji: "Ie, kekkou desu", meaning: "Tidak, sudah cukup terima kasih (Menolak tawaran dengan sopan)", note: "Sering dipakai menolak tambahan makan/minum atau kantong plastik." },
+      { id: "H042", pdf: "HYOUGEN", page: "Hal. 2", cat: "Penolakan & Penerimaan", jp: "はい、おねがいします。", romaji: "Hai, onegaishimasu.", meaning: "Ya, saya mau / Ya, tolong.", note: "Menerima tawaran dari lawan bicara." },
+      { id: "H043", pdf: "HYOUGEN", page: "Hal. 2", cat: "Pelayanan & Toko", jp: "〜ください", romaji: "~ kudasai", meaning: "Tolong berikan ~ / Saya pesan ~", note: "Contoh: みずをください (Tolong berikan air)." },
+      { id: "H044", pdf: "HYOUGEN", page: "Hal. 2", cat: "Respon Percakapan", jp: "うーん", romaji: "Uun", meaning: "Tidak (kasual) / Hmm... (ragu-ragu)", note: "Digunakan dalam percakapan santai." },
+      { id: "H045", pdf: "HYOUGEN", page: "Hal. 2", cat: "Menanyakan Pendapat", jp: "どうですか", romaji: "Dou desu ka", meaning: "Bagaimana? (Menanyakan kesan/pendapat)", note: "Contoh: にほんのせいかつはどうですか." },
+      { id: "H046", pdf: "HYOUGEN", page: "Hal. 2", cat: "Menanyakan Pendapat", jp: "いかがですか", romaji: "Ikaga desu ka", meaning: "Bagaimana? (Bentuk sopan dari どうですか)", note: "Sering dipakai saat menawarkan makanan/minuman ke tamu." },
+      { id: "H047", pdf: "HYOUGEN", page: "Hal. 2", cat: "Salam & Kerja", jp: "お世話になりました", romaji: "Osewa ni narimashita", meaning: "Terima kasih atas segala bantuan yang diberikan selama bekerja di sini", note: "Diucapkan saat perpisahan kerja atau selesai dibantu." },
+
+      // === PAGE 3 ===
+      { id: "H048", pdf: "HYOUGEN", page: "Hal. 3", cat: "Persetujuan", jp: "いいですね", romaji: "Ii desu ne", meaning: "Baiklah / Bagus ya (Menyetujui ajakan/ide)", note: "Respon positif saat diajak." },
+      { id: "H049", pdf: "HYOUGEN", page: "Hal. 3", cat: "Respon Percakapan", jp: "ふーん", romaji: "Fuun", meaning: "Hmmm / Oh gitu (Respon menyimak)", note: "Aizuchi tanda mendengarkan." },
+      { id: "H050", pdf: "HYOUGEN", page: "Hal. 3", cat: "Kepastian & Dugaan", jp: "たぶん", romaji: "Tabun", meaning: "Mungkin", note: "Biasanya diikuti 〜でしょう atau 〜とおもいます." },
+      { id: "H051", pdf: "HYOUGEN", page: "Hal. 3", cat: "Persetujuan", jp: "ええ", romaji: "Ee", meaning: "Ya (Bentuk percakapan dari はい)", note: "Sering dipakai dalam dialog JFT." },
+      { id: "H052", pdf: "HYOUGEN", page: "Hal. 3", cat: "Frekuensi & Kuantitas", jp: "だいたい", romaji: "Daitai", meaning: "Umumnya / Kira-kira / Sebagian besar", note: "Contoh: だいたいわかりました (Garis besarnya paham)." },
+      { id: "H053", pdf: "HYOUGEN", page: "Hal. 3", cat: "Frekuensi & Waktu", jp: "ときどき", romaji: "Tokidoki", meaning: "Kadang-kadang", note: "Frekuensi sekitar 50%." },
+      { id: "H054", pdf: "HYOUGEN", page: "Hal. 3", cat: "Frekuensi & Waktu", jp: "よく", romaji: "Yoku", meaning: "Seringnya / Dengan baik", note: "Frekuensi sering (70–80%)." },
+      { id: "H055", pdf: "HYOUGEN", page: "Hal. 3", cat: "Frekuensi & Waktu", jp: "たいてい", romaji: "Taitei", meaning: "Paling sering / Biasanya", note: "Frekuensi hampir selalu (85–90%)." },
+      { id: "H056", pdf: "HYOUGEN", page: "Hal. 3", cat: "Frekuensi & Waktu", jp: "いつも", romaji: "Itsumo", meaning: "Selalu", note: "Frekuensi 100% setiap kali." },
+      { id: "H057", pdf: "HYOUGEN", page: "Hal. 3", cat: "Frekuensi & Waktu", jp: "ずっと", romaji: "Zutto", meaning: "Selalu (Selamanya / Terus-menerus tanpa henti)", note: "Menunjukkan durasi terus-menerus." },
+      { id: "H058", pdf: "HYOUGEN", page: "Hal. 3", cat: "Frekuensi Negatif", jp: "あまり", romaji: "Amari", meaning: "Tidak terlalu sering / Tidak begitu ~ (Wajib + Negatif)", note: "Contoh: あまりたべません." },
+      { id: "H059", pdf: "HYOUGEN", page: "Hal. 3", cat: "Frekuensi Negatif", jp: "なかなか", romaji: "Nakanaka", meaning: "Tidak pernah / Tak kunjung ~ (Wajib + Negatif)", note: "Contoh: なかなかバスがきません (Busnya tak kunjung datang)." },
+      { id: "H060", pdf: "HYOUGEN", page: "Hal. 3", cat: "Frekuensi Negatif", jp: "ぜんぜん", romaji: "Zenzen", meaning: "Tidak pernah sama sekali / Sama sekali tidak ~ (Wajib + Negatif)", note: "Contoh: ぜんぜんわかりません." },
+      { id: "H061", pdf: "HYOUGEN", page: "Hal. 3", cat: "Kepastian", jp: "もちろん", romaji: "Mochiron", meaning: "Tentu / Tentu saja", note: "Menjawab dengan sangat yakin." },
+      { id: "H062", pdf: "HYOUGEN", page: "Hal. 3", cat: "Persetujuan", jp: "そうですね", romaji: "Sou desu ne", meaning: "Ya begitu / Benar juga ya", note: "Menyetujui pendapat lawan bicara." },
+      { id: "H063", pdf: "HYOUGEN", page: "Hal. 3", cat: "Simpati & Perasaan", jp: "残念ですね", romaji: "Zannen desu ne", meaning: "Sayang sekali / Sangat disayangkan", note: "Saat mendengar kabar gagal atau tidak bisa ikut." },
+      { id: "H064", pdf: "HYOUGEN", page: "Hal. 3", cat: "Perpisahan & Janji", jp: "またこんど", romaji: "Mata kondo", meaning: "Sampai jumpa di lain waktu / Lain kali saja", note: "Digunakan saat menunda ajakan ke lain waktu." },
+      { id: "H065", pdf: "HYOUGEN", page: "Hal. 3", cat: "Persetujuan", jp: "いいね", romaji: "Ii ne", meaning: "Boleh / Bagus! (Bentuk nonformal dari いいですね)", note: "Antar teman akrab." },
+      { id: "H066", pdf: "HYOUGEN", page: "Hal. 3", cat: "Respon & Pemahaman", jp: "了解 (りょうかい)", romaji: "Ryoukai", meaning: "Dimengerti / Siap! (Bentuk nonformal dari わかります)", note: "Sering dipakai di chat." },
+      { id: "H067", pdf: "HYOUGEN", page: "Hal. 3", cat: "Kepastian & Persetujuan", jp: "たしかに", romaji: "Tashika ni", meaning: "Tentunya / Pastinya / Memang benar", note: "Mengakui kebenaran pendapat lawan bicara." },
+      { id: "H068", pdf: "HYOUGEN", page: "Hal. 3", cat: "Ekspresi Suara", jp: "ぐすん", romaji: "Gusun", meaning: "Hiks (Tiruan suara isak tangis / sedih)", note: "Muncul di pesan chat atau komik." },
+      { id: "H069", pdf: "HYOUGEN", page: "Hal. 3", cat: "Respon Percakapan", jp: "そうですねえ", romaji: "Sou desu nee", meaning: "Ya begitulah... / Hmm bagaimana ya...", note: "Vokal panjang menandakan sedang merenung." },
+      { id: "H070", pdf: "HYOUGEN", page: "Hal. 3", cat: "Transportasi & Pengumuman", jp: "おおりください (お降りください)", romaji: "Oori kudasai", meaning: "Silakan turun (dari kendaraan/kereta/bus)", note: "Pengumuman di dalam transportasi umum." },
+      { id: "H071", pdf: "HYOUGEN", page: "Hal. 3", cat: "Kata Hubung", jp: "さらに", romaji: "Sara ni", meaning: "Selain itu / Lebih lanjut lagi", note: "Menambahkan informasi." },
+      { id: "H072", pdf: "HYOUGEN", page: "Hal. 3", cat: "Aktivitas", jp: "ゆっくりします", romaji: "Yukkuri shimasu", meaning: "Bersantai / Beristirahat dengan tenang", note: "Contoh: 家でゆっくりします." },
+      { id: "H073", pdf: "HYOUGEN", page: "Hal. 3", cat: "Penilaian", jp: "まあまあ", romaji: "Maamaa", meaning: "Lumayan / Biasa saja", note: "Penilaian sedang-sedang saja." },
+      { id: "H074", pdf: "HYOUGEN", page: "Hal. 3", cat: "Tempat", jp: "どこにも", romaji: "Doko ni mo", meaning: "Di manapun / Ke manapun (+ negatif = Tidak ke mana-mana)", note: "Contoh: どこにも行きません." },
+      { id: "H075", pdf: "HYOUGEN", page: "Hal. 3", cat: "Simpati & Perasaan", jp: "よかった", romaji: "Yokatta", meaning: "Bagus / Syukurlah!", note: "Ungkapan lega." },
+      { id: "H076", pdf: "HYOUGEN", page: "Hal. 3", cat: "Kemampuan & Merendah", jp: "まだまだ", romaji: "Madamada", meaning: "Masih jauh... / Belum mahir", note: "Dipakai saat merendah ketika dipuji." },
+      { id: "H077", pdf: "HYOUGEN", page: "Hal. 3", cat: "Waktu", jp: "いつでも", romaji: "Itsudemo", meaning: "Kapanpun", note: "Contoh: いつでも来てください." },
+      { id: "H078", pdf: "HYOUGEN", page: "Hal. 3", cat: "Waktu & Pengulangan", jp: "また", romaji: "Mata", meaning: "Lagi", note: "Contoh: またあした (Sampai jumpa lagi besok)." },
+      { id: "H079", pdf: "HYOUGEN", page: "Hal. 3", cat: "Waktu", jp: "もうすぐ", romaji: "Mou sugu", meaning: "Sebentar lagi", note: "Menunjukkan waktu yang sudah dekat." },
+      { id: "H080", pdf: "HYOUGEN", page: "Hal. 3", cat: "Tempat", jp: "どこか", romaji: "Dokoka", meaning: "Ke suatu tempat / Suatu tempat", note: "Contoh: どこかへ行きたい." },
+      { id: "H081", pdf: "HYOUGEN", page: "Hal. 3", cat: "Kata Hubung", jp: "それに", romaji: "Sore ni", meaning: "Selain itu / Ditambah lagi", note: "Menambahkan alasan sejenis." },
+
+      // === PAGE 4 ===
+      { id: "H082", pdf: "HYOUGEN", page: "Hal. 4", cat: "Kata Hubung", jp: "それから", romaji: "Sore kara", meaning: "Kemudian / Setelah itu", note: "Urutan kegiatan selanjutnya." },
+      { id: "H083", pdf: "HYOUGEN", page: "Hal. 4", cat: "Keterangan", jp: "なんとか", romaji: "Nantoka", meaning: "Terkadang / Entah bagaimana berhasil", note: "Di PDF diartikan: Terkadang." },
+      { id: "H084", pdf: "HYOUGEN", page: "Hal. 4", cat: "Takaran", jp: "ちょうど", romaji: "Choudo", meaning: "Cukup / Pas / Tepat", note: "Contoh: ちょうどいいです." },
+      { id: "H085", pdf: "HYOUGEN", page: "Hal. 4", cat: "Kuantitas", jp: "ぜんぶ", romaji: "Zenbu", meaning: "Semuanya", note: "Contoh: ぜんぶでいくらですか." },
+      { id: "H086", pdf: "HYOUGEN", page: "Hal. 4", cat: "Kuantitas", jp: "いろいろ", romaji: "Iroiro", meaning: "Macam-macam / Berbagai macam", note: "Kata sifat な." },
+      { id: "H087", pdf: "HYOUGEN", page: "Hal. 4", cat: "Tanya Harga vs Waktu", jp: "どのぐらい", romaji: "Dono gurai", meaning: "Berapa banyak? (Di PDF khusus menanyakan kisaran HARGA)", note: "Ingat: どのぐらい = Harga, どれぐらい = Waktu." },
+      { id: "H088", pdf: "HYOUGEN", page: "Hal. 4", cat: "Tanya Harga vs Waktu", jp: "どれぐらい", romaji: "Dore gurai", meaning: "Berapa lama? (Di PDF khusus menanyakan durasi WAKTU)", note: "Contoh: どれぐらいかかりますか." },
+      { id: "H089", pdf: "HYOUGEN", page: "Hal. 4", cat: "Respon & Kabar", jp: "へえ、よかったですね", romaji: "Hee, yokatta desu ne", meaning: "Wahh, syukurlah kalau begitu / Wah, bagus ya", note: "Ikut senang atas kabar baik lawan bicara." },
+      { id: "H090", pdf: "HYOUGEN", page: "Hal. 4", cat: "Perhatian & Kesehatan", jp: "おだいじに", romaji: "Odaiji ni", meaning: "Semoga lekas sembuh", note: "Diucapkan kepada orang yang sedang sakit." },
+      { id: "H091", pdf: "HYOUGEN", page: "Hal. 4", cat: "Waktu", jp: "さっき", romaji: "Sakki", meaning: "Tadi / Baru saja", note: "Pasangan dari 〜たところです." },
+      { id: "H092", pdf: "HYOUGEN", page: "Hal. 4", cat: "Keterangan", jp: "じつは", romaji: "Jitsu wa", meaning: "Sebenarnya... / Sejujurnya...", note: "Mengawali pengakuan atau alasan sebenarnya." },
+      { id: "H093", pdf: "HYOUGEN", page: "Hal. 4", cat: "Kesungguhan", jp: "いっしょうけんめい", romaji: "Isshoukenmei", meaning: "Bersungguh-sungguh / Dengan sekuat tenaga", note: "Contoh: いっしょうけんめい勉強します." },
+      { id: "H094", pdf: "HYOUGEN", page: "Hal. 4", cat: "Takaran & Jumlah", jp: "すこしだけ", romaji: "Sukoshi dake", meaning: "Hanya sedikit", note: "だけ = Hanya." },
+      { id: "H095", pdf: "HYOUGEN", page: "Hal. 4", cat: "Waktu", jp: "さいきん", romaji: "Saikin", meaning: "Akhir-akhir ini / Belakangan ini", note: "Menanyakan kabar terbaru." },
+      { id: "H096", pdf: "HYOUGEN", page: "Hal. 4", cat: "Keterangan", jp: "みんなで", romaji: "Minna de", meaning: "Bersama semuanya / Ramai-ramai", note: "Melakukan bersama kelompok." },
+      { id: "H097", pdf: "HYOUGEN", page: "Hal. 4", cat: "Keterangan", jp: "ぜんぜんちがいます", romaji: "Zenzen chigaimasu", meaning: "Sama sekali berbeda / Salah besar", note: "ちがいます = berbeda/bukan." },
+      { id: "H098", pdf: "HYOUGEN", page: "Hal. 4", cat: "Perasaan", jp: "びっくりしました", romaji: "Bikkuri shimashita", meaning: "Terkejut / Kaget", note: "Reaksi atas kejadian mengejutkan." },
+      { id: "H099", pdf: "HYOUGEN", page: "Hal. 4", cat: "Keterangan", jp: "やっと", romaji: "Yatto", meaning: "Akhirnya! (Setelah menunggu lama atau berusaha keras)", note: "Menunjukkan kelegaan setelah penantian." },
+      { id: "H100", pdf: "HYOUGEN", page: "Hal. 4", cat: "Keterangan", jp: "ぜひ", romaji: "Zehi", meaning: "Pastikan / Tentu saja / Sangat ingin", note: "Menunjukkan harapan/ajakan yang sangat tulus." },
+      { id: "H101", pdf: "HYOUGEN", page: "Hal. 4", cat: "Keadaan", jp: "ぴったり", romaji: "Pittari", meaning: "Pas / Cocok sekali (Ukuran pakaian, waktu)", note: "Contoh: サイズがぴったりです." },
+      { id: "H102", pdf: "HYOUGEN", page: "Hal. 4", cat: "Harapan & Doa", jp: "〜といいですね", romaji: "~ to ii desu ne", meaning: "Semoga ~ (Mendoakan lawan bicara)", note: "Sama dengan Pola Kalimat JFT Hal. 2." },
+      { id: "H103", pdf: "HYOUGEN", page: "Hal. 4", cat: "Respon Percakapan", jp: "ほんとうですか", romaji: "Hontou desu ka", meaning: "Benarkah? / Masa sih?", note: "Memastikan kebenaran cerita." },
+      { id: "H104", pdf: "HYOUGEN", page: "Hal. 4", cat: "Respon Percakapan", jp: "そうですね (Mengiyakan)", romaji: "Sou desu ne (Mengiyakan)", meaning: "Mengiyakan ucapan lawan bicara / Setuju", note: "Intonasi turun dengan mantap." },
+      { id: "H105", pdf: "HYOUGEN", page: "Hal. 4", cat: "Respon Percakapan", jp: "そうですね (Berpikir)", romaji: "Sou desu ne (Berpikir)", meaning: "Digunakan saat sedang berpikir sebelum menjawab", note: "Intonasi agak dipanjangkan." },
+      { id: "H106", pdf: "HYOUGEN", page: "Hal. 4", cat: "Respon Percakapan", jp: "そうなんですか", romaji: "Sou nan desu ka", meaning: "Oh begitu ya (Merespon informasi baru dengan antusias)", note: "Lebih ekspresif daripada そうですか." },
+      { id: "H107", pdf: "HYOUGEN", page: "Hal. 4", cat: "Respon & Keraguan", jp: "さあ...", romaji: "Saa...", meaning: "Digunakan ketika tidak yakin dalam menjawab / Kurang tahu ya...", note: "Contoh: さあ、わかりません." },
+      { id: "H108", pdf: "HYOUGEN", page: "Hal. 4", cat: "Penolakan & Koreksi", jp: "いいえ、ちがいます", romaji: "Iie, chigaimasu", meaning: "Bukan / Tidak, bukan begitu", note: "Menyangkal tebakan yang keliru." },
+      { id: "H109", pdf: "HYOUGEN", page: "Hal. 4", cat: "Perhatian & Peringatan", jp: "きをつけて", romaji: "Ki wo tsukete", meaning: "Berhati-hatilah! (Kasual)", note: "Bentuk singkat dari きをつけてください." },
+      { id: "H110", pdf: "HYOUGEN", page: "Hal. 4", cat: "Simpati & Perasaan", jp: "たいへんですね", romaji: "Taihen desu ne", meaning: "Berat ya / Pasti repot ya", note: "Ungkapan simpati atas kerepotan lawan bicara." },
+      { id: "H111", pdf: "HYOUGEN", page: "Hal. 4", cat: "Kemampuan", jp: "まだまだです", romaji: "Madamada desu", meaning: "Masih belum mahir / Masih jauh dari sempurna", note: "Jawaban merendah saat dipuji." },
+      { id: "H112", pdf: "HYOUGEN", page: "Hal. 4", cat: "Saran & Pengandaian", jp: "よかったら", romaji: "Yokattara", meaning: "Kalau berkenan / Kalau tidak keberatan", note: "Contoh: よかったら、どうぞ." },
+      { id: "H113", pdf: "HYOUGEN", page: "Hal. 4", cat: "Tawaran Bantuan", jp: "〜ましょうか", romaji: "~ mashou ka", meaning: "Bagaimana kalau saya bantu ~?", note: "Menawarkan bantuan." },
+      { id: "H114", pdf: "HYOUGEN", page: "Hal. 4", cat: "Makan & Pujian", jp: "おいしそうですね", romaji: "Oishisou desu ne", meaning: "Kelihatannya enak ya!", note: "Melihat makanan yang tampak lezat." },
+      { id: "H115", pdf: "HYOUGEN", page: "Hal. 4", cat: "Kesehatan", jp: "ぐあいがわるい", romaji: "Guai ga warui", meaning: "Kondisi badan tidak enak / Tidak sehat (Manusia) / Rusak (Mesin)", note: "Sering keluar pada soal izin sakit." },
+      { id: "H116", pdf: "HYOUGEN", page: "Hal. 4", cat: "Perasaan", jp: "たのしみです", romaji: "Tanoshimi desu", meaning: "Tidak sabar menantikannya / Sangat menantikan", note: "Menunggu hari libur atau acara menyenangkan." },
+
+      // === PAGE 5 ===
+      { id: "H117", pdf: "HYOUGEN", page: "Hal. 5", cat: "Penyelesaian", jp: "いじょうです", romaji: "Ijou desu", meaning: "Sekian / Cukup itu saja", note: "Mengakhiri pesanan atau penjelasan." },
+      { id: "H118", pdf: "HYOUGEN", page: "Hal. 5", cat: "Pelayanan & Restoran", jp: "ごちゅうもんは？", romaji: "Gochuumon wa?", meaning: "Pesanannya apa? (Ditanyakan pelayan restoran)", note: "ちゅうもん = Pesanan." },
+      { id: "H119", pdf: "HYOUGEN", page: "Hal. 5", cat: "Pelayanan & Restoran", jp: "お会計おねがいします (おかいけいおねがいします)", romaji: "Okaikei onegaishimasu", meaning: "Tolong hitung bill/bon-nya (Minta bayar di restoran)", note: "Diucapkan kepada pelayan saat selesai makan." },
+      { id: "H120", pdf: "HYOUGEN", page: "Hal. 5", cat: "Pelayanan & Pembayaran", jp: "べつべつにおねがいします", romaji: "Betsubetsu ni onegaishimasu", meaning: "Tolong pisah bayarnya (Bayar masing-masing)", note: "べつべつ = Terpisah." },
+      { id: "H121", pdf: "HYOUGEN", page: "Hal. 5", cat: "Permintaan", jp: "おねがいがあります", romaji: "Onegai ga arimasu", meaning: "Saya punya permohonan / Ada yang ingin saya minta tolong", note: "Kalimat pembuka sebelum meminta bantuan." },
+      { id: "H122", pdf: "HYOUGEN", page: "Hal. 5", cat: "Pelayanan & Toko", jp: "かしこまりました (Pelayanan)", romaji: "Kashikomarimashita", meaning: "Baik (Bentuk formal dari わかりました)", note: "Respon staf kepada pelanggan." },
+      { id: "H123", pdf: "HYOUGEN", page: "Hal. 5", cat: "Makan & Minum", jp: "かんぱい", romaji: "Kanpai", meaning: "Bersulang! / Cheers!", note: "Diucapkan saat mengangkat gelas bersama." },
+      { id: "H124", pdf: "HYOUGEN", page: "Hal. 5", cat: "Makan & Perut", jp: "おなかがいっぱいです", romaji: "Onaka ga ippai desu", meaning: "Perut sudah kenyang", note: "Kebalikan dari おなかがすきました (Lapar)." },
+      { id: "H125", pdf: "HYOUGEN", page: "Hal. 5", cat: "Saran & Peringatan", jp: "むりをしないでください", romaji: "Muri wo shinaide kudasai", meaning: "Jangan memaksakan diri", note: "Perhatian kepada orang yang sakit/kelelahan." },
+      { id: "H126", pdf: "HYOUGEN", page: "Hal. 5", cat: "Respon Percakapan", jp: "うそ", romaji: "Uso", meaning: "Bohong! / Masa sih?! (Ungkapan tidak percaya/kaget)", note: "Respon kasual saat kaget." },
+      { id: "H127", pdf: "HYOUGEN", page: "Hal. 5", cat: "Kondisi & Masalah", jp: "こまったな", romaji: "Komatta na", meaning: "Gawat ya... / Bingung nih / Susah nih", note: "Mengeluh saat ada masalah." },
+      { id: "H128", pdf: "HYOUGEN", page: "Hal. 5", cat: "Keterangan", jp: "じぶんで", romaji: "Jibun de", meaning: "Melakukan sendiri", note: "Contoh: じぶんでつくります." },
+      { id: "H129", pdf: "HYOUGEN", page: "Hal. 5", cat: "Perasaan", jp: "なつかしい", romaji: "Natsukashii", meaning: "Rindu / Kangen / Membawa kenangan lama (Nostalgia)", note: "Saat melihat barang/foto kenangan masa lalu." },
+      { id: "H130", pdf: "HYOUGEN", page: "Hal. 5", cat: "Respon & Ingatan", jp: "そういえば", romaji: "Sou ieba", meaning: "Ngomong-ngomong... / Oh iya, kalau dipikir-pikir...", note: "Saat teringat topik terkait." },
+      { id: "H131", pdf: "HYOUGEN", page: "Hal. 5", cat: "Urutan", jp: "まず", romaji: "Mazu", meaning: "Pertama-tama", note: "Langkah pertama." },
+      { id: "H132", pdf: "HYOUGEN", page: "Hal. 5", cat: "Urutan", jp: "つぎに", romaji: "Tsugi ni", meaning: "Selanjutnya / Berikutnya", note: "Langkah setelah まず." },
+      { id: "H133", pdf: "HYOUGEN", page: "Hal. 5", cat: "Waktu", jp: "さっき (Barusan)", romaji: "Sakki", meaning: "Tadi / Barusan", note: "Waktu lampau yang baru saja lewat." },
+      { id: "H134", pdf: "HYOUGEN", page: "Hal. 5", cat: "Waktu", jp: "いまから", romaji: "Ima kara", meaning: "Mulai dari sekarang", note: "Pasangan Vるところです." },
+      { id: "H135", pdf: "HYOUGEN", page: "Hal. 5", cat: "Waktu", jp: "これから", romaji: "Kore kara", meaning: "Mulai saat ini / Setelah ini", note: "Pasangan Vるところです." },
+      { id: "H136", pdf: "HYOUGEN", page: "Hal. 5", cat: "Waktu & Masa Depan", jp: "これからずっと", romaji: "Kore kara zutto", meaning: "Mulai saat ini dan seterusnya / Selamanya mulai sekarang", note: "Gabungan これから + ずっと." },
+      { id: "H137", pdf: "HYOUGEN", page: "Hal. 5", cat: "Keadaan", jp: "このまま", romaji: "Kono mama", meaning: "Tetap seperti ini / Langsung begini saja tanpa diubah", note: "Contoh: このまま食べられます." },
+      { id: "H138", pdf: "HYOUGEN", page: "Hal. 5", cat: "Kepastian", jp: "かならず", romaji: "Kanarazu", meaning: "Pasti / Wajib (100% harus dilakukan)", note: "Contoh: かならず来てください." },
+      { id: "H139", pdf: "HYOUGEN", page: "Hal. 5", cat: "Harapan & Dugaan", jp: "きっと", romaji: "Kitto", meaning: "Pasti (Dugaan kuat / Harapan yakin)", note: "Pasangan 〜とおもいます / 〜でしょう." },
+      { id: "H140", pdf: "HYOUGEN", page: "Hal. 5", cat: "Saran & Pertimbangan", jp: "やっぱり / やはり", romaji: "Yappari / Yahari", meaning: "Ternyata / Seperti yang kuduga / Pada akhirnya tetap memilih ~", note: "やっぱり adalah bentuk lisan dari やはり." },
+      { id: "H141", pdf: "HYOUGEN", page: "Hal. 5", cat: "Takaran & Usaha", jp: "なるべく", romaji: "Narubeku", meaning: "Sebisa mungkin", note: "Sinonim dengan できるだけ." },
+      { id: "H142", pdf: "HYOUGEN", page: "Hal. 5", cat: "Takaran & Usaha", jp: "できるだけ", romaji: "Dekiru dake", meaning: "Sebisa mungkin / Semaksimal mungkin", note: "Contoh: できるだけ早く." },
+      { id: "H143", pdf: "HYOUGEN", page: "Hal. 5", cat: "Fokus", jp: "とくに", romaji: "Toku ni", meaning: "Khususnya / Terutama", note: "とくにありません = Tidak ada yang khusus." },
+      { id: "H144", pdf: "HYOUGEN", page: "Hal. 5", cat: "Waktu Mendadak", jp: "きゅうに", romaji: "Kyuu ni", meaning: "Tiba-tiba / Mendadak", note: "Contoh: きゅうに雨が降ってきました." },
+      { id: "H145", pdf: "HYOUGEN", page: "Hal. 5", cat: "Kesegeraan", jp: "すぐに", romaji: "Sugu ni", meaning: "Dengan segera / Langsung", note: "Tanpa menunda." },
+      { id: "H146", pdf: "HYOUGEN", page: "Hal. 5", cat: "Perubahan Bertahap", jp: "だんだん", romaji: "Dandan", meaning: "Berangsur-angsur / Lama-kelamaan", note: "Pasangan dari 〜なります (Menjadi)." },
+      { id: "H147", pdf: "HYOUGEN", page: "Hal. 5", cat: "Pilihan & Prioritas", jp: "とりあえず", romaji: "Toriaezu", meaning: "Untuk sementara ini / Pertama-tama (sebelum yang lain)", note: "Contoh: とりあえずビール." },
+      { id: "H148", pdf: "HYOUGEN", page: "Hal. 5", cat: "Perasaan", jp: "ほっとしました", romaji: "Hotto shimashita", meaning: "Merasa lega", note: "Lega setelah masalah selesai." },
+      { id: "H149", pdf: "HYOUGEN", page: "Hal. 5", cat: "Keterangan", jp: "べつに", romaji: "Betsu ni", meaning: "Tidak juga / Biasa aja (+ Negatif)", note: "Contoh: べつに難しくないです." },
+      { id: "H150", pdf: "HYOUGEN", page: "Hal. 5", cat: "Semangat", jp: "がんばります", romaji: "Ganbarimasu", meaning: "Saya akan berusaha keras / Semangat!", note: "Menyemangati orang lain: がんばってください." },
+      { id: "H151", pdf: "HYOUGEN", page: "Hal. 5", cat: "Takaran", jp: "ずいぶん", romaji: "Zuibun", meaning: "Sangat / Cukup banyak (Melebihi perkiraan)", note: "Contoh: ずいぶんにぎやかですね." },
+
+      // === PAGE 6 ===
+      { id: "H152", pdf: "HYOUGEN", page: "Hal. 6", cat: "Kuantitas", jp: "いっぱい", romaji: "Ippai", meaning: "Banyak / Penuh", note: "Sinonim percakapan dari たくさん." },
+      { id: "H153", pdf: "HYOUGEN", page: "Hal. 6", cat: "Kuantitas", jp: "たくさん", romaji: "Takusan", meaning: "Banyak", note: "Untuk jumlah barang atau aktivitas." },
+      { id: "H154", pdf: "HYOUGEN", page: "Hal. 6", cat: "Ketelitian", jp: "ちゃんと", romaji: "Chanto", meaning: "Dengan benar / Dengan rapi / Dengan patuh", note: "Contoh: ちゃんと薬を飲んでください." },
+      { id: "H155", pdf: "HYOUGEN", page: "Hal. 6", cat: "Ketelitian", jp: "しっかり", romaji: "Shikkari", meaning: "Dengan kuat / Dengan mantap / Dengan sungguh-sungguh", note: "Contoh: しっかり勉強してください." },
+      { id: "H156", pdf: "HYOUGEN", page: "Hal. 6", cat: "Perasaan", jp: "がっかりしました", romaji: "Gakkari shimashita", meaning: "Merasa kecewa", note: "Lawan dari ほっとしました (lega)." },
+      { id: "H157", pdf: "HYOUGEN", page: "Hal. 6", cat: "Perasaan", jp: "ドキドキします", romaji: "Dokidoki shimasu", meaning: "Deg-degan / Berdebar-debar", note: "Karena gugup atau tegang." },
+      { id: "H158", pdf: "HYOUGEN", page: "Hal. 6", cat: "Perasaan", jp: "イライラします", romaji: "Iraira shimasu", meaning: "Merasa kesal / Jengkel / Emosi", note: "Saat macet atau menunggu lama." },
+      { id: "H159", pdf: "HYOUGEN", page: "Hal. 6", cat: "Perasaan", jp: "ワクワクします", romaji: "Wakuwaku shimasu", meaning: "Berdebar-debar senang / Sangat antusias (Excited)", note: "Menantikan hal menyenangkan." },
+      { id: "H160", pdf: "HYOUGEN", page: "Hal. 6", cat: "Keadaan", jp: "ペコペコ", romaji: "Pekopeko", meaning: "Sangat lapar / Perut keroncongan", note: "Pasangan: おなかがペコペコです." },
+      { id: "H161", pdf: "HYOUGEN", page: "Hal. 6", cat: "Keadaan", jp: "カラカラ", romaji: "Karakara", meaning: "Sangat haus / Tenggorokan kering", note: "Pasangan: のどがカラカラです." },
+      { id: "H162", pdf: "HYOUGEN", page: "Hal. 6", cat: "Keadaan", jp: "ギリギリ", romaji: "Girigiri", meaning: "Mepet / Nyaris terlambat / Pas-pasan di batas akhir", note: "Contoh: 時間にギリギリ間に合いました." },
+      { id: "H163", pdf: "HYOUGEN", page: "Hal. 6", cat: "Keadaan", jp: "バラバラ", romaji: "Barabara", meaning: "Berantakan / Terpisah-pisah / Sendiri-sendiri", note: "Barang tercecer atau tidak kompak." },
+      { id: "H164", pdf: "HYOUGEN", page: "Hal. 6", cat: "Keadaan", jp: "ボロボロ", romaji: "Boroboro", meaning: "Compang-camping / Rusak parah / Usang", note: "Sepatu/baju/buku yang sudah rusak." },
+      { id: "H165", pdf: "HYOUGEN", page: "Hal. 6", cat: "Keadaan", jp: "ピカピカ", romaji: "Pikapika", meaning: "Berkilau / Kinclong / Sangat bersih mengkilap", note: "Setelah dibersihkan atau masih baru." },
+      { id: "H166", pdf: "HYOUGEN", page: "Hal. 6", cat: "Keadaan", jp: "ツルツル", romaji: "Tsurutsuru", meaning: "Licin / Halus mulus", note: "Jalanan licin atau permukaan halus." },
+      { id: "H167", pdf: "HYOUGEN", page: "Hal. 6", cat: "Keadaan", jp: "ガラガラ", romaji: "Garagara", meaning: "Sepi / Kosong melompong (Untuk kereta, restoran, jalan)", note: "Tidak ada penumpang/pengunjung." },
+      { id: "H168", pdf: "HYOUGEN", page: "Hal. 6", cat: "Keadaan", jp: "ペラペラ", romaji: "Perapera", meaning: "Fasih / Lancar berbicara bahasa asing", note: "Contoh: 日本語がペラペラですね." },
+      { id: "H169", pdf: "HYOUGEN", page: "Hal. 6", cat: "Waktu", jp: "そろそろ", romaji: "Sorosoro", meaning: "Sebentar lagi sudah waktunya ~ / Saatnya pamit", note: "Contoh: そろそろ失礼します." },
+      { id: "H170", pdf: "HYOUGEN", page: "Hal. 6", cat: "Bahasa Gaul / Slang", jp: "マジで？", romaji: "Maji de?", meaning: "Seriusan? / Beneran? (Gaul dari ほんとうですか)", note: "Percakapan akrab anak muda." },
+      { id: "H171", pdf: "HYOUGEN", page: "Hal. 6", cat: "Bahasa Gaul / Slang", jp: "やばい", romaji: "Yabai", meaning: "Gawat! / Keren banget! / Enak banget! (Slang multiguna)", note: "Bisa positif atau negatif tergantung konteks." },
+      { id: "H172", pdf: "HYOUGEN", page: "Hal. 6", cat: "Bahasa Gaul / Slang", jp: "むかつく", romaji: "Mukatsuku", meaning: "Menyebalkan / Bikin emosi", note: "Saat kesal." },
+      { id: "H173", pdf: "HYOUGEN", page: "Hal. 6", cat: "Bahasa Gaul / Slang", jp: "うざい", romaji: "Uzai", meaning: "Berisik / Mengganggu / Nyebelin", note: "Bahasa gaul." },
+      { id: "H174", pdf: "HYOUGEN", page: "Hal. 6", cat: "Bahasa Gaul / Slang", jp: "キモい", romaji: "Kimoi", meaning: "Menjijikkan / Aneh (Singkatan 気持ち悪い)", note: "Bahasa gaul." },
+      { id: "H175", pdf: "HYOUGEN", page: "Hal. 6", cat: "Bahasa Gaul / Slang", jp: "ダサい", romaji: "Dasai", meaning: "Norak / Kampungan / Tidak keren", note: "Lawan dari かっこいい." },
+      { id: "H176", pdf: "HYOUGEN", page: "Hal. 6", cat: "Bahasa Gaul / Slang", jp: "めっちゃ / ちょう", romaji: "Meccha / Chou", meaning: "Sangat / Banget (Gaul dari とても)", note: "Contoh: めっちゃおいしい." },
+      { id: "H177", pdf: "HYOUGEN", page: "Hal. 6", cat: "Singkatan Gaul", jp: "あけおめ", romaji: "Akeome", meaning: "Selamat Tahun Baru (Singkatan あけましておめでとう)", note: "Dipakai di chat." },
+      { id: "H178", pdf: "HYOUGEN", page: "Hal. 6", cat: "Singkatan Gaul", jp: "ことよろ", romaji: "Kotoyoro", meaning: "Mohon bantuannya tahun ini (Singkatan 今年もよろしく)", note: "Pasangan あけおめ." },
+      { id: "H179", pdf: "HYOUGEN", page: "Hal. 6", cat: "Singkatan Gaul", jp: "おつかれ", romaji: "Otsukare", meaning: "Terima kasih kerja kerasnya (Kasual dari お疲れ様でした)", note: "Sapaan santai antar teman." },
+      { id: "H180", pdf: "HYOUGEN", page: "Hal. 6", cat: "Singkatan Gaul", jp: "り (りょうかい)", romaji: "Ri (Ryoukai)", meaning: "Oke / Siap / Dimengerti (Singkatan chat dari りょうかい)", note: "Singkatan chat populer." }
+    ];
+
+    const JFT_DATA = [
+      // === BAB 1: Vる (BENTUK KAMUS) — HAL 2–3 ===
+      { id: "J01", pdf: "JFT", page: "Hal. 2", cat: "Bab 1: Vる (Bentuk Kamus)", jp: "Vる + ことができます", romaji: "V-ru + koto ga dekimasu", meaning: "Bisa melakukan V (Menyatakan kemampuan/kebisaan)", exJP: "わたしは インドネシアりょうりを つくることができます。", exRomaji: "Watashi wa Indoneshia ryouri wo tsukuru koto ga dekimasu.", exID: "Saya bisa membuat masakan Indonesia.", note: "Di depan ことができます wajib Kata Kerja Bentuk Kamus (Vる)." },
+      { id: "J02", pdf: "JFT", page: "Hal. 2", cat: "Bab 1: Vる (Bentuk Kamus)", jp: "しゅみは + Vる + ことです", romaji: "Shumi wa + V-ru + koto desu", meaning: "Hobi saya adalah melakukan V", exJP: "わたしのしゅみは おんがくを きくことです。", exRomaji: "Watashi no shumi wa ongaku wo kiku koto desu.", exID: "Hobi saya adalah mendengarkan musik.", note: "こと mengubah kata kerja Vる menjadi kata benda." },
+      { id: "J03", pdf: "JFT", page: "Hal. 2", cat: "Bab 1: Vる (Bentuk Kamus)", jp: "Vる / Vない / KBの + まえに、〜", romaji: "V-ru / V-nai / KB no + mae ni, ~", meaning: "Sebelum melakukan V, ~", exJP: "ねるまえに、はを みがきます。", exRomaji: "Neru mae ni, ha wo migakimasu.", exID: "Sebelum tidur, menggosok gigi.", note: "Di depan まえに wajib Vる (Bentuk Kamus) atau KB + の." },
+      { id: "J04", pdf: "JFT", page: "Hal. 2", cat: "Bab 1: Vる (Bentuk Kamus)", jp: "Vる + と、〜", romaji: "V-ru + to, ~", meaning: "Kalau / Jika V, maka pasti ~ (Sebab akibat konstan / mesin / petunjuk jalan)", exJP: "このボタンを おすと、おつりが でます。", exRomaji: "Kono botan wo osu to, otsuri ga demasu.", exID: "Kalau menekan tombol ini, uang kembaliannya keluar.", note: "Kalimat belakang と adalah hasil otomatis (tidak boleh ajakan/keinginan)." },
+      { id: "J05", pdf: "JFT", page: "Hal. 2", cat: "Bab 1: Vる (Bentuk Kamus)", jp: "Vる + といいですね", romaji: "V-ru + to ii desu ne", meaning: "Semoga ~ (Mendoakan harapan baik untuk orang lain)", exJP: "あした はれるといいですね。", exRomaji: "Ashita hareru to ii desu ne.", exID: "Semoga besok cuaca cerah ya.", note: "Digunakan saat mendoakan lawan bicara." },
+      { id: "J06", pdf: "JFT", page: "Hal. 3", cat: "Bab 1: Vる (Bentuk Kamus)", jp: "Vる + とき、〜", romaji: "V-ru + toki, ~", meaning: "Ketika / Saat (akan/belum selesai) melakukan V, ~", exJP: "くにへ かえるとき、かぞくに おみやげを かいます。", exRomaji: "Kuni e kaeru toki, kazoku ni omiyage wo kaimasu.", exID: "Ketika akan pulang ke negara asal, membeli oleh-oleh.", note: "Vるとき = aksi belum selesai (masih di perjalanan)." },
+      { id: "J07", pdf: "JFT", page: "Hal. 3", cat: "Bab 1: Vる (Bentuk Kamus)", jp: "Vる + つもりです", romaji: "V-ru + tsumori desu", meaning: "Berencana untuk melakukan V", exJP: "らいねん にほんへ いくつもりです。", exRomaji: "Rainen Nihon e iku tsumori desu.", exID: "Tahun depan saya berencana pergi ke Jepang.", note: "Menyatakan niat/rencana masa depan." },
+      { id: "J08", pdf: "JFT", page: "Hal. 3", cat: "Bab 1: Vる (Bentuk Kamus)", jp: "Vる + ために、〜", romaji: "V-ru + tame ni, ~", meaning: "Demi / Untuk mencapai tujuan V, ~", exJP: "いえを かうために、おかねを ためています。", exRomaji: "Ie wo kau tame ni, okane wo tamete imasu.", exID: "Demi membeli rumah, saya sedang menabung uang.", note: "Menyatakan tujuan besar." },
+      { id: "J09", pdf: "JFT", page: "Hal. 3", cat: "Bab 1: Vる (Bentuk Kamus)", jp: "Vる + のが すき / じょうず / へた です", romaji: "V-ru + no ga suki / jouzu / heta desu", meaning: "Suka / Pintar / Tidak pintar dalam melakukan V", exJP: "わたしは えを かくのが すきです。", exRomaji: "Watashi wa e wo kaku no ga suki desu.", exID: "Saya suka menggambar.", note: "のが mengubah kata kerja menjadi objek yang disukai/dikuasai." },
+      { id: "J10", pdf: "JFT", page: "Hal. 3", cat: "Bab 1: Vる (Bentuk Kamus)", jp: "Vる + ようになります", romaji: "V-ru + you ni narimasu", meaning: "Menjadi bisa melakukan V (Perubahan dari tidak bisa menjadi bisa)", exJP: "にほんごが はなせるように なりました。", exRomaji: "Nihongo ga hanaseru you ni narimashita.", exID: "Saya sudah menjadi bisa berbicara bahasa Jepang.", note: "Menunjukkan perkembangan kemampuan." },
+
+      // === BAB 2: Vない (BENTUK NEGATIF BIASA) — HAL 4–5 ===
+      { id: "J11", pdf: "JFT", page: "Hal. 4", cat: "Bab 2: Vない (Bentuk Negatif)", jp: "Vないでください", romaji: "V-naide kudasai", meaning: "Tolong jangan melakukan V (Larangan sopan)", exJP: "ここで しゃしんを とらないでください。", exRomaji: "Koko de shashin wo toranaide kudasai.", exID: "Tolong jangan mengambil foto di sini.", note: "Meminta orang lain tidak melakukan sesuatu." },
+      { id: "J12", pdf: "JFT", page: "Hal. 4", cat: "Bab 2: Vない (Bentuk Negatif)", jp: "Vなければなりません", romaji: "V-nakereba narimasen", meaning: "Harus / Wajib melakukan V", exJP: "まいにち くすりを のまなければなりません。", exRomaji: "Mainichi kusuri wo nomanakereba narimasen.", exID: "Setiap hari harus minum obat.", note: "Menyatakan kewajiban." },
+      { id: "J13", pdf: "JFT", page: "Hal. 4", cat: "Bab 2: Vない (Bentuk Negatif)", jp: "Vなくてもいいです", romaji: "V-nakutemo ii desu", meaning: "Tidak usah / Tidak perlu melakukan V", exJP: "あしたは こなくてもいいです。", exRomaji: "Ashita wa konakutemo ii desu.", exID: "Besok tidak usah datang tidak apa-apa.", note: "Lawan dari Vなければなりません." },
+      { id: "J14", pdf: "JFT", page: "Hal. 4", cat: "Bab 2: Vない (Bentuk Negatif)", jp: "なかなか + Vない", romaji: "Nakanaka + V-nai", meaning: "Tak kunjung ~ / Susah untuk ~ (Diikuti bentuk negatif)", exJP: "なかなか バスが きませんね。", exRomaji: "Nakanaka basu ga kimasen ne.", exID: "Busnya tak kunjung datang ya.", note: "なかなか wajib bertemu kalimat negatif." },
+      { id: "J15", pdf: "JFT", page: "Hal. 5", cat: "Bab 2: Vない (Bentuk Negatif)", jp: "Vないで、〜", romaji: "V-naide, ~", meaning: "Tanpa melakukan V, (melakukan hal lain)", exJP: "あさごはんを たべないで、がっこうへ いきました。", exRomaji: "Asagohan wo tabenaide, gakkou e ikimashita.", exID: "Pergi ke sekolah tanpa makan pagi.", note: "Melakukan aksi kedua tanpa melakukan aksi pertama." },
+      { id: "J16", pdf: "JFT", page: "Hal. 5", cat: "Bab 2: Vない (Bentuk Negatif)", jp: "Vない + ほうがいいです", romaji: "V-nai + hou ga ii desu", meaning: "Sebaiknya jangan melakukan V (Saran negatif)", exJP: "おさけを のまないほうがいいです。", exRomaji: "Osake wo nomanai hou ga ii desu.", exID: "Sebaiknya tidak minum alkohol.", note: "Saran negatif memakai Vない, sedangkan saran positif memakai Vた." },
+      { id: "J17", pdf: "JFT", page: "Hal. 5", cat: "Bab 2: Vない (Bentuk Negatif)", jp: "Vなくては いけません / Vないと (いけない)", romaji: "V-nakute wa ikemasen / V-naito", meaning: "Harus melakukan V (Bentuk percakapan dari Vなければなりません)", exJP: "もう かえらないと。", exRomaji: "Mou kaeranaito.", exID: "Saya harus segera pulang sekarang.", note: "Vないと sangat sering muncul di percakapan JFT." },
+
+      // === BAB 3: Vた (BENTUK LAMPAU BIASA) — HAL 6–7 ===
+      { id: "J18", pdf: "JFT", page: "Hal. 6", cat: "Bab 3: Vた (Bentuk Lampau)", jp: "Vた + ことがあります", romaji: "V-ta + koto ga arimasu", meaning: "Pernah melakukan V (Pengalaman masa lalu)", exJP: "わたしは ふじさんに のぼったことがあります。", exRomaji: "Watashi wa Fujisan ni nobotta koto ga arimasu.", exID: "Saya pernah mendaki Gunung Fuji.", note: "Menyatakan pengalaman hidup." },
+      { id: "J19", pdf: "JFT", page: "Hal. 6", cat: "Bab 3: Vた (Bentuk Lampau)", jp: "Vたり、Vたり します", romaji: "V-tari, V-tari shimasu", meaning: "Melakukan kegiatan seperti V1, V2, dan lain-lain", exJP: "やすみのひは そうじを したり、せんたくを したり します。", exRomaji: "Yasumi no hi wa souji wo shitari, sentaku wo shitari shimasu.", exID: "Pada hari libur saya bersih-bersih, mencuci pakaian, dll.", note: "Menyebutkan beberapa contoh kegiatan." },
+      { id: "J20", pdf: "JFT", page: "Hal. 6", cat: "Bab 3: Vた (Bentuk Lampau)", jp: "Vた + ほうがいいです", romaji: "V-ta + hou ga ii desu", meaning: "Sebaiknya melakukan V (Saran positif)", exJP: "びょういんへ いったほうがいいですよ。", exRomaji: "Byouin e itta hou ga ii desu yo.", exID: "Sebaiknya pergi ke rumah sakit lho.", note: "Walaupun untuk masa depan/sekarang, saran positif wajib pakai Vた!" },
+      { id: "J21", pdf: "JFT", page: "Hal. 6", cat: "Bab 3: Vた (Bentuk Lampau)", jp: "Vたら、〜", romaji: "V-tara, ~", meaning: "Kalau / Jika / Setelah V, maka ~ (Pengandaian umum)", exJP: "とうきょうへ いったら、おかしを かいたいです。", exRomaji: "Toukyou e ittara, okashi wo kaitai desu.", exID: "Kalau pergi ke Tokyo, saya ingin membeli cemilan.", note: "Bisa diikuti kalimat keinginan, ajakan, atau perintah." },
+      { id: "J22", pdf: "JFT", page: "Hal. 7", cat: "Bab 3: Vた (Bentuk Lampau)", jp: "Vた + あとで、〜", romaji: "V-ta + ato de, ~", meaning: "Setelah selesai melakukan V, ~", exJP: "しごとが おわったあとで、のみに いきます。", exRomaji: "Shigoto ga owatta ato de, nomi ni ikimasu.", exID: "Setelah pekerjaan selesai, pergi minum.", note: "Di depan あとで wajib Vた atau KB + の." },
+      { id: "J23", pdf: "JFT", page: "Hal. 7", cat: "Bab 3: Vた (Bentuk Lampau)", jp: "Vた + とき、〜", romaji: "V-ta + toki, ~", meaning: "Ketika sudah melakukan / Saat telah tiba di V, ~", exJP: "にほんへ きたとき、にほんごが わかりませんでした。", exRomaji: "Nihon e kita toki, Nihongo ga wakarimasen deshita.", exID: "Ketika (sudah) datang di Jepang, waktu itu belum paham bahasa Jepang.", note: "Vたとき = aksi pertama sudah selesai dilakukan." },
+      { id: "J24", pdf: "JFT", page: "Hal. 7", cat: "Bab 3: Vた (Bentuk Lampau)", jp: "Vた + ばかりです", romaji: "V-ta + bakari desu", meaning: "Baru saja melakukan V (Menurut perasaan pembicara, meski sudah lewat berminggu/bulan)", exJP: "せんげつ にほんへ きたばかりです。", exRomaji: "Sengetsu Nihon e kita bakari desu.", exID: "Bulan lalu saya baru saja datang ke Jepang.", note: "Bisa dipakai untuk waktu seperti 'bulan lalu' (せんげつ) jika dirasa masih baru." },
+      { id: "J25", pdf: "JFT", page: "Hal. 7", cat: "Bab 3: Vた (Bentuk Lampau)", jp: "Vた + まま、〜", romaji: "V-ta + mama, ~", meaning: "Tetap dalam keadaan V (tanpa diubah), melakukan ~", exJP: "テレビを つけたまま、ねてしまいました。", exRomaji: "Terebi wo tsuketa mama, nete shimaimashita.", exID: "Ketiduran dalam keadaan TV masih menyala.", note: "Kondisi dibiarkan tetap menyala/terbuka." },
+
+      // === BAB 4: Vて (BENTUK TE) — HAL 8–17 ===
+      { id: "J26", pdf: "JFT", page: "Hal. 8", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + ください", romaji: "V-te + kudasai", meaning: "Tolong lakukan V (Permintaan sopan)", exJP: "ここに なまえを かいてください。", exRomaji: "Koko ni namae wo kaite kudasai.", exID: "Tolong tulis nama di sini.", note: "Pola permintaan sopan paling dasar." },
+      { id: "J27", pdf: "JFT", page: "Hal. 8", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + います", romaji: "V-te + imasu", meaning: "Sedang melakukan V / Keadaan yang masih berlangsung", exJP: "いま あめが ふっています。", exRomaji: "Ima ame ga futte imasu.", exID: "Sekarang sedang turun hujan.", note: "Menyatakan aktivitas sedang berlangsung atau status." },
+      { id: "J28", pdf: "JFT", page: "Hal. 8", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + もいいです (か)", romaji: "V-te + mo ii desu (ka)", meaning: "Boleh melakukan V (Meminta / Memberi izin)", exJP: "ここに すわってもいいですか。", exRomaji: "Koko ni suwatte mo ii desu ka.", exID: "Bolehkah saya duduk di sini?", note: "Digunakan untuk meminta izin." },
+      { id: "J29", pdf: "JFT", page: "Hal. 8", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + は いけません", romaji: "V-te + wa ikemasen", meaning: "Tidak boleh melakukan V (Larangan aturan)", exJP: "ここで タバコを すっては いけません。", exRomaji: "Koko de tabako wo sutte wa ikemasen.", exID: "Di sini tidak boleh merokok.", note: "Larangan tegas/peraturan." },
+      { id: "J30", pdf: "JFT", page: "Hal. 8", cat: "Bab 4: Vて (Bentuk Te)", jp: "V1て、V2て、〜", romaji: "V1-te, V2-te, ~", meaning: "Melakukan V1, lalu V2, kemudian ~ (Urutan kegiatan)", exJP: "あさ おきて、あさごはんを たべて、がっこうへ いきます。", exRomaji: "Asa okite, asagohan wo tabete, gakkou e ikimasu.", exID: "Pagi bangun, sarapan, lalu pergi ke sekolah.", note: "Menyambung beberapa aktivitas berurutan." },
+      { id: "J31", pdf: "JFT", page: "Hal. 9", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + から、〜", romaji: "V-te + kara, ~", meaning: "Setelah selesai melakukan V, baru melakukan ~", exJP: "てを あらってから、ごはんを たべます。", exRomaji: "Te wo aratte kara, gohan wo tabemasu.", exID: "Setelah mencuci tangan, makan nasi.", note: "Menekankan aksi pertama diselesaikan dulu." },
+      { id: "J32", pdf: "JFT", page: "Hal. 9", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + あげます", romaji: "V-te + agemasu", meaning: "Saya melakukan V untuk orang lain (Memberi bantuan)", exJP: "わたしは さとうさんに ほんを かしてあげます。", exRomaji: "Watashi wa Satou-san ni hon wo kashite agemasu.", exID: "Saya meminjamkan buku kepada Sdr. Sato.", note: "Subjek pelaku adalah Saya." },
+      { id: "J33", pdf: "JFT", page: "Hal. 9", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + もらいます / Vてもらえませんか", romaji: "V-te + moraimasu / V-te moraemasen ka", meaning: "Saya menerima bantuan V dari orang lain / Sudikah membantu saya?", exJP: "わたしは さとうさんに にほんごを おしえてもらいます。", exRomaji: "Watashi wa Satou-san ni Nihongo wo oshiete moraimasu.", exID: "Saya diajari bahasa Jepang oleh Sdr. Sato.", note: "Vてもらえませんか dipakai untuk meminta bantuan dengan sopan." },
+      { id: "J34", pdf: "JFT", page: "Hal. 9", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + くれます / Vてくれませんか", romaji: "V-te + kuremasu / V-te kuremasen ka", meaning: "Orang lain melakukan V untuk saya", exJP: "さとうさんは わたしに ほんを かしてくれます。", exRomaji: "Satou-san wa watashi ni hon wo kashite kuremasu.", exID: "Sdr. Sato meminjamkan buku kepada saya.", note: "Subjek kalimat adalah orang lain yang membantu saya." },
+      { id: "J35", pdf: "JFT", page: "Hal. 10", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + みます", romaji: "V-te + mimasu", meaning: "Mencoba melakukan V", exJP: "このくつを はいてみても いいですか。", exRomaji: "Kono kutsu wo haite mite mo ii desu ka.", exID: "Bolehkah saya mencoba memakai sepatu ini?", note: "Mencoba melakukan sesuatu." },
+      { id: "J36", pdf: "JFT", page: "Hal. 11", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + しまいます / Vてしまいました", romaji: "V-te + shimaimasu", meaning: "1. Selesai tuntas; 2. Tidak sengaja melakukan / Penyesalan", exJP: "パスポートを なくしてしまいました。", exRomaji: "Pasupooto wo nakushite shimaimashita.", exID: "Saya tidak sengaja menghilangkan paspor (penyesalan).", note: "Bentuk percakapannya: 〜ちゃいました / 〜じゃいました." },
+      { id: "J37", pdf: "JFT", page: "Hal. 12", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + おきます", romaji: "V-te + okimasu", meaning: "Melakukan V terlebih dahulu sebagai persiapan", exJP: "りょこうの まえに、きっぷを かっておきます。", exRomaji: "Ryokou no mae ni, kippu wo katte okimasu.", exID: "Sebelum wisata, membeli tiket terlebih dahulu (persiapan).", note: "Persiapan sebelum acara." },
+      { id: "J38", pdf: "JFT", page: "Hal. 13", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + きます", romaji: "V-te + kimasu", meaning: "Pergi melakukan V lalu kembali lagi ke tempat semula", exJP: "ちょっと ぎんこうへ いってきます。", exRomaji: "Chotto ginkou e itte kimasu.", exID: "Saya pergi ke bank sebentar (lalu balik ke sini).", note: "Aksi pergi sebentar lalu kembali." },
+      { id: "J39", pdf: "JFT", page: "Hal. 14", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + いきます", romaji: "V-te + ikimasu", meaning: "Terus melakukan V mulai sekarang ke masa depan", exJP: "これからも にほんごを べんきょうして いきます。", exRomaji: "Kore kara mo Nihongo wo benkyou shite ikimasu.", exID: "Mulai sekarang pun saya akan terus belajar bahasa Jepang.", note: "Berlanjut menuju masa depan." },
+      { id: "J40", pdf: "JFT", page: "Hal. 15", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて + あります", romaji: "V-te + arimasu", meaning: "Sudah dalam keadaan ter-V (Ada hasil perbuatan sengaja seseorang)", exJP: "まどが あけてあります。", exRomaji: "Mado ga akete arimasu.", exID: "Jendelanya sudah dibuka (sengaja dibuka seseorang).", note: "Partikel objek を berubah menjadi が." },
+      { id: "J41", pdf: "JFT", page: "Hal. 16", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vて / KSくて / KSで + 〜 (Sebab / Alasan)", romaji: "V-te / KS-kute / KS-de + ~", meaning: "Karena V/KS, maka ~ (Menyatakan sebab perasaan/kondisi)", exJP: "ニュースを きいて、びっくりしました。", exRomaji: "Nyuusu wo kiite, bikkuri shimashita.", exID: "Karena mendengar berita, saya terkejut.", note: "Diikuti perasaan (senang, kaget, sedih) atau kondisi." },
+      { id: "J42", pdf: "JFT", page: "Hal. 17", cat: "Bab 4: Vて (Bentuk Te)", jp: "Vても / KSくても / KSでも、〜", romaji: "V-temo / KS-kutemo / KS-demo, ~", meaning: "Walaupun / Meskipun V/KS, tetap ~", exJP: "あめが ふっても、いきます。", exRomaji: "Ame ga futtemo, ikimasu.", exID: "Walaupun turun hujan, tetap pergi.", note: "Pengandaian pertentangan." },
+
+      // === BAB 5: Vます (STEM / MASU-KEI) — HAL 18–20 ===
+      { id: "J43", pdf: "JFT", page: "Hal. 18", cat: "Bab 5: Vます (Bentuk Masu)", jp: "V(ます) + たいです", romaji: "V(masu-stem) + tai desu", meaning: "Ingin melakukan V (Keinginan melakukan aksi)", exJP: "にほんへ いきたいです。", exRomaji: "Nihon e ikitai desu.", exID: "Saya ingin pergi ke Jepang.", note: "Negatif: Vたくないです." },
+      { id: "J44", pdf: "JFT", page: "Hal. 18", cat: "Bab 5: Vます (Bentuk Masu)", jp: "V(ます) + ませんか", romaji: "V(masu-stem) + masen ka", meaning: "Maukah melakukan V bersama? (Mengajak dengan sopan)", exJP: "いっしょに えいがを みませんか。", exRomaji: "Issho ni eiga wo mimasen ka.", exID: "Maukah menonton film bersama-sama?", note: "Ajakan sopan kepada lawan bicara." },
+      { id: "J45", pdf: "JFT", page: "Hal. 18", cat: "Bab 5: Vます (Bentuk Masu)", jp: "V(ます) + ましょう", romaji: "V(masu-stem) + mashou", meaning: "Mari / Ayo kita melakukan V!", exJP: "ちょっと やすみましょう。", exRomaji: "Chotto yasumimashou.", exID: "Mari kita istirahat sebentar.", note: "Ajakan langsung." },
+      { id: "J46", pdf: "JFT", page: "Hal. 18", cat: "Bab 5: Vます (Bentuk Masu)", jp: "V(ます) + ましょうか", romaji: "V(masu-stem) + mashou ka", meaning: "Bagaimana kalau saya bantu melakukan V? (Menawarkan bantuan)", exJP: "にもつを もちましょうか。", exRomaji: "Nimotsu wo mochimashou ka.", exID: "Bagaimana kalau saya bawakan barangnya?", note: "Menawarkan bantuan sukarela." },
+      { id: "J47", pdf: "JFT", page: "Hal. 18", cat: "Bab 5: Vます (Bentuk Masu)", jp: "V(ます) / KB + に いきます・きます・かえります", romaji: "V(masu-stem) / KB + ni ikimasu", meaning: "Pergi / Datang / Pulang untuk tujuan melakukan V", exJP: "デパートへ くつを かいに いきます。", exRomaji: "Depaato e kutsu wo kai ni ikimasu.", exID: "Pergi ke department store untuk membeli sepatu.", note: "Menyatakan tujuan kepergian." },
+      { id: "J48", pdf: "JFT", page: "Hal. 19", cat: "Bab 5: Vます (Bentuk Masu)", jp: "V(ます) + ながら、〜", romaji: "V(masu-stem) + nagara, ~", meaning: "Sambil melakukan V1, melakukan V2", exJP: "おんがくを ききながら、べんきょうします。", exRomaji: "Ongaku wo kikinagara, benkyou shimasu.", exID: "Belajar sambil mendengarkan musik.", note: "Dua aksi dilakukan bersamaan oleh 1 orang." },
+      { id: "J49", pdf: "JFT", page: "Hal. 19", cat: "Bab 5: Vます (Bentuk Masu)", jp: "V(ます) / KS(hilang い/な) + すぎます", romaji: "V(masu-stem) / KS + sugimasu", meaning: "Terlalu V / Terlalu KS (Berlebihan)", exJP: "きのう おさけを のみすぎました。", exRomaji: "Kinou osake wo nomisugimashita.", exID: "Kemarin saya terlalu banyak minum alkohol.", note: "Menyatakan sesuatu yang melewati batas." },
+      { id: "J50", pdf: "JFT", page: "Hal. 19", cat: "Bab 5: Vます (Bentuk Masu)", jp: "V(ます) + やすいです / にくいです", romaji: "V(masu-stem) + yasui desu / nikui desu", meaning: "Mudah untuk di-V (やすい) / Sulit untuk di-V (にくい)", exJP: "このペンは かきやすいです。", exRomaji: "Kono pen wa kakiyasui desu.", exID: "Pulpen ini mudah dipakai menulis.", note: "やすい = Mudah; にくい = Sulit." },
+      { id: "J51", pdf: "JFT", page: "Hal. 19", cat: "Bab 5: Vます (Bentuk Masu)", jp: "V(ます) / KS(hilang い/な) + そうです (Kelihatannya)", romaji: "V(masu-stem) / KS + sou desu", meaning: "Kelihatannya akan V / Kelihatannya KS (Melihat langsung)", exJP: "いまにも あめが ふりそうですね。", exRomaji: "Ima ni mo ame ga furisou desu ne.", exID: "Kelihatannya sebentar lagi akan turun hujan ya.", note: "Huruf ます atau い dihilangkan sebelum そうです." },
+      { id: "J52", pdf: "JFT", page: "Hal. 20", cat: "Bab 5: Vます (Bentuk Masu)", jp: "V(ます) + かた (方)", romaji: "V(masu-stem) + kata", meaning: "Cara melakukan V", exJP: "このきかいの つかいかたを おしえてください。", exRomaji: "Kono kikai no tsukaikata wo oshiete kudasai.", exID: "Tolong ajari saya cara menggunakan mesin ini.", note: "つかいかた = cara pakai; かきかた = cara tulis." },
+
+      // === BAB 6: FUTSUU-KEI (BENTUK BIASA) & POLA LANJUTAN — HAL 21–31 ===
+      { id: "J53", pdf: "JFT", page: "Hal. 21", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Biasa + と おもいます", romaji: "Futsuu-kei + to omoimasu", meaning: "Menurut saya ~ / Saya rasa ~ / Saya pikir ~", exJP: "あしたは あめが ふると おもいます。", exRomaji: "Ashita wa ame ga furu to omoimasu.", exID: "Saya rasa besok akan turun hujan.", note: "Menyampaikan pendapat/perkiraan." },
+      { id: "J54", pdf: "JFT", page: "Hal. 21", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Biasa + と いいました", romaji: "Futsuu-kei + to iimashita", meaning: "Berkata bahwa ~ (Mengutip ucapan)", exJP: "たなかさんは あした やすむと いいました。", exRomaji: "Tanaka-san wa ashita yasumu to iimashita.", exID: "Sdr. Tanaka berkata bahwa besok ia libur.", note: "Mengutip perkataan seseorang." },
+      { id: "J55", pdf: "JFT", page: "Hal. 22", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Biasa (KSな/KB tanpa だ) + でしょう？", romaji: "Futsuu-kei + deshou?", meaning: "1. ~ kan? (Konfirmasi); 2. Mungkin ~ (Dugaan)", exJP: "あした いくでしょう？", exRomaji: "Ashita iku deshou?", exID: "Besok kamu pergi kan?", note: "Memastikan sesuatu kepada lawan bicara." },
+      { id: "J56", pdf: "JFT", page: "Hal. 22", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Biasa (KSな/KB tanpa だ) + かもしれません", romaji: "Futsuu-kei + kamoshiremasen", meaning: "Mungkin saja ~ / Bisa jadi ~ (Kemungkinan 50%)", exJP: "やくそくの じかんに まにあわないかもしれません。", exRomaji: "Yakusoku no jikan ni maniawanai kamoshiremasen.", exID: "Mungkin tidak akan keburu tepat waktu janji.", note: "Menyatakan kemungkinan yang belum pasti." },
+      { id: "J57", pdf: "JFT", page: "Hal. 23", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Modifikasi Kata Benda (Anak Kalimat + KB)", romaji: "Futsuu-kei + Kata Benda", meaning: "KB yang ~ (Menerangkan kata benda dengan klausa bentuk biasa)", exJP: "これは きのう かった ほんです。", exRomaji: "Kore wa kinou katta hon desu.", exID: "Ini adalah buku yang saya beli kemarin.", note: "Kalimat di depan kata benda wajib Bentuk Biasa." },
+      { id: "J58", pdf: "JFT", page: "Hal. 24", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Biasa (KSな+な) + んです / のです", romaji: "Futsuu-kei + n desu / no desu", meaning: "Menjelaskan alasan/keadaan atau meminta penjelasan", exJP: "どうして おくれたんですか。— バスが こなかったんです。", exRomaji: "Doushite okuretan desu ka. — Basu ga konakattan desu.", exID: "Kenapa terlambat? — Karena busnya tidak datang.", note: "Memberikan penekanan alasan." },
+      { id: "J59", pdf: "JFT", page: "Hal. 25", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Biasa + から / ので (Alasan)", romaji: "Futsuu-kei + kara / node", meaning: "Karena ~, maka ~ (ので lebih sopan dari から)", exJP: "おなかが いたいので、びょういんへ いきます。", exRomaji: "Onaka ga itai node, byouin e ikimasu.", exID: "Karena sakit perut, saya pergi ke rumah sakit.", note: "KSな/KB + な + ので." },
+      { id: "J60", pdf: "JFT", page: "Hal. 26", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Biasa + のに、〜", romaji: "Futsuu-kei + noni, ~", meaning: "Padahal ~, tetapi ~ (Hasil mengecewakan di luar dugaan)", exJP: "いっしょうけんめい べんきょうしたのに、ごうかくできませんでした。", exRomaji: "Isshoukenmei benkyou shita noni, goukaku dekimasen deshita.", exID: "Padahal sudah belajar sungguh-sungguh, tetapi tidak lulus.", note: "Menunjukkan rasa kecewa/heran." },
+      { id: "J61", pdf: "JFT", page: "Hal. 27", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Kata Tanya + か (Kalimat Tanya di dalam Kalimat)", romaji: "Kata Tanya + Futsuu-kei + ka", meaning: "Mengerti / Beritahu apa/kapan/di mana/berapa ~", exJP: "どこで かうか、おしえてください。", exRomaji: "Doko de kau ka, oshiete kudasai.", exID: "Tolong beritahu di mana membelinya.", note: "Menggabungkan kata tanya ke dalam kalimat." },
+      { id: "J62", pdf: "JFT", page: "Hal. 27", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Biasa + かどうか", romaji: "Futsuu-kei + ka dou ka", meaning: "Apakah ~ atau tidak (Pertanyaan tanpa kata tanya)", exJP: "あした いくかどうか、まだ わかりません。", exRomaji: "Ashita iku ka dou ka, mada wakarimasen.", exID: "Apakah besok pergi atau tidak, saya masih belum tahu.", note: "Digunakan jika tidak ada kata tanya." },
+      { id: "J63", pdf: "JFT", page: "Hal. 28", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Biasa + そうです (Katanya / Kabarnya)", romaji: "Futsuu-kei + sou desu (Denbun)", meaning: "Katanya ~ / Kabarnya ~ (Mendengar informasi)", exJP: "チャチャさんは せんせいだそうです。", exRomaji: "Chacha-san wa sensei da sou desu.", exID: "Katanya Chacha adalah seorang guru.", note: "Bentuk biasa utuh (ada い/だ) + そうです." },
+      { id: "J64", pdf: "JFT", page: "Hal. 28", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Vる + ところです", romaji: "V-ru + tokoro desu", meaning: "Baru mau / Hendak melakukan V sekarang", exJP: "いまから ひるごはんを たべるところです。", exRomaji: "Ima kara hirugohan wo taberu tokoro desu.", exID: "Mulai sekarang saya baru mau makan siang.", note: "Pasangan: いまから / これから." },
+      { id: "J65", pdf: "JFT", page: "Hal. 28", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Vている + ところです", romaji: "V-te iru + tokoro desu", meaning: "Sedang tepat melakukan V saat ini", exJP: "いま しゅくだいを しているところです。", exRomaji: "Ima shukudai wo shite iru tokoro desu.", exID: "Sekarang sedang mengerjakan PR.", note: "Pasangan: いま." },
+      { id: "J66", pdf: "JFT", page: "Hal. 29", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Vた + ところです", romaji: "V-ta + tokoro desu", meaning: "Baru saja selesai melakukan V (Hitungan detik/menit lalu)", exJP: "たったいま かえったところです。", exRomaji: "Tatta ima kaetta tokoro desu.", exID: "Barusan saja saya tiba kembali di rumah.", note: "Pasangan: さっき / たったいま." },
+      { id: "J67", pdf: "JFT", page: "Hal. 29", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Biasa + みたいです / ようです", romaji: "Futsuu-kei + mitai desu / you desu", meaning: "Sepertinya ~ / Tampaknya ~ (Dugaan dari bukti situasi)", exJP: "へやが くらいですから、だれも いないみたいです。", exRomaji: "Heya ga kurai desu kara, daremo inai mitai desu.", exID: "Karena kamarnya gelap, sepertinya tidak ada siapa-siapa.", note: "Dugaan setelah melihat bukti tidak langsung." },
+      { id: "J68", pdf: "JFT", page: "Hal. 29", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Biasa (KSな+な / KB+の) + はずです", romaji: "Futsuu-kei + hazu desu", meaning: "Seharusnya / Pastilah ~ (Keyakinan logis)", exJP: "たなかさんは きょう くるはずです。", exRomaji: "Tanaka-san wa kyou kuru hazu desu.", exID: "Sdr. Tanaka seharusnya datang hari ini.", note: "Keyakinan berdasarkan jadwal/alasan logis." },
+      { id: "J69", pdf: "JFT", page: "Hal. 30", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Bentuk Syarat 〜ば (Vえば / KSければ)", romaji: "V-eba / KS-kereba", meaning: "Kalau / Asalkan ~, maka ~ (Syarat pengandaian)", exJP: "がんばれば、きっと できますよ。", exRomaji: "Ganbareba, kitto dekimasu yo.", exID: "Kalau berusaha keras, pasti bisa kok.", note: "Ubah vokal u menjadi e + ば." },
+      { id: "J70", pdf: "JFT", page: "Hal. 30", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "〜なら (Pengandaian Topik)", romaji: "KB / Futsuu-kei + nara", meaning: "Kalau (membicarakan tentang) ~ / Jika memang ingin ~", exJP: "ジャカルタへ いくなら、でんしゃが べんりですよ。", exRomaji: "Jakaruta e iku nara, densha ga benri desu yo.", exID: "Kalau pergi ke Jakarta, naik kereta praktis lho.", note: "Memberi saran atas topik lawan bicara." },
+      { id: "J71", pdf: "JFT", page: "Hal. 30", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Kata Kerja Potensial — V(e)ます", romaji: "V-emasu (Kanou-kei)", meaning: "Bisa melakukan V (Kata kerja kebisaan)", exJP: "わたしは かんじが よめます。", exRomaji: "Watashi wa kanji ga yomemasu.", exID: "Saya bisa membaca Kanji.", note: "Objek menggunakan partikel が." },
+      { id: "J72", pdf: "JFT", page: "Hal. 30", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Kata Kerja Pasif (Ukemi) — V(a)れます", romaji: "V-aremasu (Ukemi-kei)", meaning: "Di-V oleh seseorang (Kalimat Pasif)", exJP: "わたしは せんせいに ほめられました。", exRomaji: "Watashi wa sensei ni homeraremashita.", exID: "Saya dipuji oleh guru.", note: "Pelaku ditandai dengan partikel に." },
+      { id: "J73", pdf: "JFT", page: "Hal. 31", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "Kata Kerja Ajakan Biasa (Volisional) — V(o)う", romaji: "V-ou / V-you (Ikou-kei)", meaning: "Ayo ~ (Bentuk biasa dari 〜ましょう)", exJP: "いっしょに がんばろう！", exRomaji: "Issho ni ganbarou!", exID: "Ayo berjuang bersama-sama!", note: "Jika + とおもっています = Berencana." },
+      { id: "J74", pdf: "JFT", page: "Hal. 31", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "KSい(く) / KSな(に) / KB(に) + なります", romaji: "KS-ku / KS-ni / KB-ni + narimasu", meaning: "Menjadi ~ (Perubahan keadaan alami)", exJP: "だんだん あたたかく なりましたね。", exRomaji: "Dandan atatakaku narimashita ne.", exID: "Lama-kelamaan sudah menjadi hangat ya.", note: "KSい (い➔く) + なります; KSな/KB + に + なります." },
+      { id: "J75", pdf: "JFT", page: "Hal. 31", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "KSい(く) / KSな(に) / KB(に) + します", romaji: "KS-ku / KS-ni / KB-ni + shimasu", meaning: "Membuat menjadi ~ / Memutuskan memilih ~ (KBにします)", exJP: "へやを きれいに します。 / コーヒーに します。", exRomaji: "Heya wo kirei ni shimasu. / Koohii ni shimasu.", exID: "Membuat kamar menjadi bersih. / Saya pesan kopi.", note: "KB + にします = Memilih menu." },
+      { id: "J76", pdf: "JFT", page: "Hal. 31", cat: "Bab 6: Bentuk Biasa & Lanjutan", jp: "ほしいです vs V(ます)たいです", romaji: "KB ga hoshii desu / V-tai desu", meaning: "Ingin memiliki benda (ほしいです) vs Ingin melakukan aksi (〜たいです)", exJP: "わたしは あたらしい くるまが ほしいです。", exRomaji: "Watashi wa atarashii kuruma ga hoshii desu.", exID: "Saya ingin (memiliki) mobil baru.", note: "KB + が + ほしいです." }
+    ];
+
+    /**
+     * 1B. DATABASE KANJI WAJIB HYOUGEN & BUNPOU JFT + FURIGANA + TRIK VISUAL (ANTI-BUTA HURUF)
+     * Berfungsi ganda:
+     * 1) Memberikan Furigana <ruby> otomatis di atas setiap Kanji.
+     * 2) Mengupgrade kata di PDF yang semula hanya tertulis Hiragana agar juga menampilkan bentuk Kanji JFT aslinya.
+     * 3) Menampilkan kartu "Bedah Kanji & Jembatan Keledai Bentuk Huruf" di setiap pembahasan soal.
+     */
+    const KANJI_MASTER_DB = [
+      // === KANJI HYOUGEN UTAMA (SAPAAN, TOKO, RESTORAN, KERJA, PERASAAN) ===
+      { kanji: "本当", kana: "ほんとう", romaji: "hontou", meaning: "Benar / Sungguh", trick: "本 (Akar/Asli) + 当 (Tepat) = Sungguh-sungguh benar", aliases: ["ほんとう"] },
+      { kanji: "お疲れ様", kana: "おつかれさま", romaji: "otsukaresama", meaning: "Terima kasih atas kerja kerasnya", trick: "疲 (Ada atap sakit 疒 + kulit 皮 = Lelah) + 様 (Tuan)", aliases: ["おつかれさま"] },
+      { kanji: "ご苦労様", kana: "ごくろうさま", romaji: "gokurousama", meaning: "Terima kasih atas kerja kerasnya", trick: "苦 (Pahit/Susah) + 労 (Tenaga kerja)", aliases: ["ごくろうさま"] },
+      { kanji: "お邪魔", kana: "おじゃま", romaji: "ojama", meaning: "Permisi bertamu / Mengganggu", trick: "お邪魔します = Permisi masuk ke rumah orang", aliases: ["おじゃま"] },
+      { kanji: "失礼", kana: "しつれい", romaji: "shitsurei", meaning: "Permisi / Kurang sopan", trick: "失 (Hilang/Lupa) + 礼 (Sopan santun) = Permisi", aliases: ["しつれい"] },
+      { kanji: "お先に", kana: "おさきに", romaji: "osaki ni", meaning: "Duluan (Pulang duluan)", trick: "先 = Di depan / Lebih dulu (お先に失礼します)", aliases: ["おさきに"] },
+      { kanji: "お久しぶり", kana: "おひさしぶり", romaji: "ohisashiburi", meaning: "Lama tak berjumpa", trick: "久 = Bentuk orang merentangkan kaki waktu lama", aliases: ["おひさしぶり"] },
+      { kanji: "申し訳", kana: "もうしわけ", romaji: "moushiwake", meaning: "Maaf (Sangat sopan)", trick: "申 (Berkata sopan) + 訳 (Alasan) = 申し訳ございません", aliases: ["もうしわけ"] },
+      { kanji: "お帰りなさい", kana: "おかえりなさい", romaji: "okaerinasai", meaning: "Selamat datang kembali (Di rumah)", trick: "帰 = Pulang kembali ke rumah", aliases: ["おかえりなさい"] },
+      { kanji: "行ってきます", kana: "いってきます", romaji: "ittekimasu", meaning: "Saya berangkat (Keluar rumah)", trick: "行 (Pergi) + きます (Datang balik nanti)", aliases: ["いってきます"] },
+      { kanji: "行ってらっしゃい", kana: "いってらっしゃい", romaji: "itterasshai", meaning: "Selamat jalan / Hati-hati", trick: "Balasan untuk 行ってきます yang punya Kanji 行 (Pergi)", aliases: ["いってらっしゃい"] },
+      { kanji: "お待たせ", kana: "おまたせ", romaji: "omatase", meaning: "Membuat menunggu", trick: "待 = Berdiri di jalan 彳 dekat kuil 寺 (Menunggu)", aliases: ["おまたせ"] },
+      { kanji: "少々", kana: "しょうしょう", romaji: "shoushou", meaning: "Sebentar / Sedikit (Sopan)", trick: "少 (Sedikit) ditulis kembar dua = 少々お待ちください", aliases: ["しょうしょう"] },
+      { kanji: "お待ち", kana: "おまち", romaji: "omachi", meaning: "Tunggu (Bentuk sopan)", trick: "待 = Tunggu (少々お待ちください = Mohon tunggu sebentar)", aliases: ["おまち"] },
+      { kanji: "気をつけて", kana: "きをつけて", romaji: "ki wo tsukete", meaning: "Berhati-hati", trick: "気 = Udara/Energi/Perhatian (Pasang perhatian = Hati-hati)", aliases: ["きをつけて"] },
+      { kanji: "お願い", kana: "おねがい", romaji: "onegai", meaning: "Tolong / Permohonan", trick: "願 = Asal 原 + Kepala 頁 (Menundukkan kepala memohon)", aliases: ["おねがい"] },
+      { kanji: "お休みなさい", kana: "おやすみなさい", romaji: "oyasuminasai", meaning: "Selamat tidur / Istirahat", trick: "休 = Orang 亻 bersandar di pohon 木 (Istirahat)", aliases: ["おやすみなさい"] },
+      { kanji: "もう少し", kana: "もうすこし", romaji: "mou sukoshi", meaning: "Sedikit lagi", trick: "少 = Kecil 小 diberi coretan miring (Sedikit)", aliases: ["もうすこし"] },
+      { kanji: "もう一度", kana: "もういちど", romaji: "mou ichido", meaning: "Sekali lagi", trick: "一 (Satu) + 度 (Kali/Frekuensi) = Satu kali lagi", aliases: ["もういちど"] },
+      { kanji: "分かります", kana: "わかります", romaji: "wakarimasu", meaning: "Mengerti / Paham", trick: "分 = Membagi delapan 八 dengan pisau 刀 sampai paham", aliases: ["わかります", "わかりました", "わかりません"] },
+      { kanji: "私", kana: "わたし", romaji: "watashi", meaning: "Saya", trick: "私 = Padi 禾 milik pribadi ム (Saya)", aliases: ["わたし"] },
+      { kanji: "大丈夫", kana: "だいじょうぶ", romaji: "daijoubu", meaning: "Tidak apa-apa / Aman", trick: "大 (Besar) + 丈 (Kuat) + 夫 (Pria) = Pria tangguh yang aman!", aliases: ["だいじょうぶ"] },
+      { kanji: "お世話", kana: "おせわ", romaji: "osewa", meaning: "Bantuan / Perhatian selama ini", trick: "世 (Dunia) + 話 (Bicara/Urus) = お世話になりました", aliases: ["おせわ"] },
+      { kanji: "残念", kana: "ざんねん", romaji: "zannen", meaning: "Sayang sekali / Kecewa", trick: "残 (Tersisa) + 念 (Pikiran di hati 心) = Menyisakan sesal", aliases: ["ざんねん"] },
+      { kanji: "了解", kana: "りょうかい", romaji: "ryoukai", meaning: "Paham / Siap dilaksanakan", trick: "了 (Selesai) + 解 (Mengurai sampai paham)", aliases: ["りょうかい"] },
+      { kanji: "お降り", kana: "おおり", romaji: "oori", meaning: "Turun (dari kereta/bus)", trick: "降 = Melangkah turun dari bukit 阝 (お降りください)", aliases: ["おおり"] },
+      { kanji: "お大事に", kana: "おだいじに", romaji: "odaiji ni", meaning: "Semoga lekas sembuh", trick: "大 (Besar) + 事 (Hal) = Jaga hal penting (kesehatan) Anda", aliases: ["おだいじに"] },
+      { kanji: "実は", kana: "じつは", romaji: "jitsu wa", meaning: "Sebenarnya / Sejujurnya", trick: "実 = Buah/Kenyataan di bawah atap 宀", aliases: ["じつは"] },
+      { kanji: "一生懸命", kana: "いっしょうけんめい", romaji: "isshoukenmei", meaning: "Bersungguh-sungguh sekuat tenaga", trick: "一生 (Seumur hidup) + 懸命 (Mempertaruhkan nyawa 命)", aliases: ["いっしょうけんめい"] },
+      { kanji: "最近", kana: "さいきん", romaji: "saikin", meaning: "Akhir-akhir ini", trick: "最 (Paling) + 近 (Dekat) = Waktu yang paling dekat", aliases: ["さいきん"] },
+      { kanji: "全部", kana: "ぜんぶ", romaji: "zenbu", meaning: "Semuanya", trick: "全 (Seluruh) + 部 (Bagian) = Semua bagian", aliases: ["ぜんぶ"] },
+      { kanji: "違います", kana: "ちがいます", romaji: "chigaimasu", meaning: "Berbeda / Bukan / Salah", trick: "違 = Jalan 辶 yang berlawanan arah", aliases: ["ちがいます"] },
+      { kanji: "大変", kana: "たいへん", romaji: "taihen", meaning: "Berat / Repot / Sangat", trick: "大 (Besar) + 変 (Perubahan/Masalah) = Repot besar!", aliases: ["たいへん"] },
+      { kanji: "具合が悪い", kana: "ぐあいがわるい", romaji: "guai ga warui", meaning: "Kondisi badan tidak enak / Rusak", trick: "具合 (Kondisi) + 悪い (Buruk di hati 心)", aliases: ["ぐあいがわるい"] },
+      { kanji: "楽しみ", kana: "たのしみ", romaji: "tanoshimi", meaning: "Sangat menantikan / Senang", trick: "楽 = Musik/Kesenangan di atas panggung kayu 木", aliases: ["たのしみ"] },
+      { kanji: "以上", kana: "いじょう", romaji: "ijou", meaning: "Sekian / Cukup itu saja", trick: "以 (Batas) + 上 (Atas) = Sampai di atas ini saja (Sekian)", aliases: ["いじょう"] },
+      { kanji: "ご注文", kana: "ごちゅうもん", romaji: "gochuumon", meaning: "Pesanan (Menu restoran)", trick: "注 (Fokus/Tuang) + 文 (Catatan menu) = Pesanan", aliases: ["ごちゅうもん"] },
+      { kanji: "お会計", kana: "おかいけい", romaji: "okaikei", meaning: "Pembayaran / Hitung bon kasir", trick: "会 (Kumpul) + 計 (Hitung jumlah 十) = Minta bon bayar!", aliases: ["おかいけい"] },
+      { kanji: "別々", kana: "べつべつ", romaji: "betsubetsu", meaning: "Terpisah / Bayar masing-masing", trick: "別 = Membagi dengan pisau 刂 (別々にお願いします)", aliases: ["べつべつ"] },
+      { kanji: "乾杯", kana: "かんぱい", romaji: "kanpai", meaning: "Bersulang / Cheers!", trick: "乾 (Keringkan) + 杯 (Gelas cawan) = Angkat gelas sampai habis!", aliases: ["かんぱい"] },
+      { kanji: "無理", kana: "むり", romaji: "muri", meaning: "Memaksakan diri / Mustahil", trick: "無 (Tidak ada) + 理 (Logika/Kemampuan)", aliases: ["むり"] },
+      { kanji: "困った", kana: "こまった", romaji: "komatta", meaning: "Gawat / Bingung / Susah", trick: "困 = Pohon 木 terkurung rapat di dalam kotak 口 (Mentok/Susah!)", aliases: ["こまった"] },
+      { kanji: "自分で", kana: "じぶんで", romaji: "jibun de", meaning: "Melakukan sendiri", trick: "自 (Diri sendiri) + 分 (Bagian)", aliases: ["じぶんで"] },
+      { kanji: "懐かしい", kana: "なつかしい", romaji: "natsukashii", meaning: "Rindu / Nostalgia masa lalu", trick: "懐 = Menyimpan kenangan di dalam hati 忄", aliases: ["なつかしい"] },
+      { kanji: "次に", kana: "つぎに", romaji: "tsugi ni", meaning: "Selanjutnya / Berikutnya", trick: "次 = Urutan kedua setelah まず (Pertama)", aliases: ["つぎに"] },
+      { kanji: "今から", kana: "いまから", romaji: "ima kara", meaning: "Mulai dari sekarang", trick: "今 (Sekarang) + から (Dari) = Pasangan Vるところです!", aliases: ["いまから"] },
+      { kanji: "必ず", kana: "かならず", romaji: "kanarazu", meaning: "Pasti / Wajib 100%", trick: "必 = Hati 心 yang ditancapkan tombak miring = Wajib pasti!", aliases: ["かならず"] },
+      { kanji: "特に", kana: "とくに", romaji: "toku ni", meaning: "Khususnya / Terutama", trick: "特 = Sapi pilihan 牛 di kuil 寺 (Spesial/Khusus)", aliases: ["とくに"] },
+      { kanji: "急に", kana: "きゅうに", romaji: "kyuu ni", meaning: "Tiba-tiba / Mendadak", trick: "急 = Hati 心 yang terburu-buru / mendadak", aliases: ["きゅうに"] },
+      { kanji: "頑張って", kana: "がんばって", romaji: "ganbatte", meaning: "Semangat / Berusaha keras", trick: "頑 (Tangguh) + 張 (Merentangkan busur 弓)", aliases: ["がんばって", "がんばります"] },
+      { kanji: "気持ち悪い", kana: "きもちわるい", romaji: "kimochi warui", meaning: "Menjijikkan / Mual (Asal kata キモい)", trick: "気持ち (Perasaan) + 悪い (Buruk)", aliases: ["きもちわるい"] },
+
+      // === KANJI BUNPOU & KALIMAT JFT YANG SERING KELUAR TANPA FURIGANA ===
+      { kanji: "趣味", kana: "しゅみ", romaji: "shumi", meaning: "Hobi", trick: "趣 (Arah minat) + 味 (Rasa kesukaan) = Hobi", aliases: ["しゅみ"] },
+      { kanji: "音楽", kana: "おんがく", romaji: "ongaku", meaning: "Musik", trick: "音 (Bunyi) + 楽 (Menyenangkan) = Musik", aliases: ["おんがく"] },
+      { kanji: "料理", kana: "りょうり", romaji: "ryouri", meaning: "Masakan", trick: "料 (Bahan beras 米) + 理 (Mengolah) = Masakan", aliases: ["りょうり"] },
+      { kanji: "前に", kana: "まえに", romaji: "mae ni", meaning: "Sebelum ~ (Rumus: Vる / KBの + 前に)", trick: "前 = Di depan / Sebelum", aliases: ["まえに"] },
+      { kanji: "後で", kana: "あとで", romaji: "ato de", meaning: "Setelah ~ (Rumus: Vた / KBの + 後で)", trick: "後 = Di belakang / Setelah selesai", aliases: ["あとで"] },
+      { kanji: "明日", kana: "あした", romaji: "ashita", meaning: "Besok", trick: "明 (Terang: Matahari 日 + Bulan 月) + 日 (Hari) = Hari esok", aliases: ["あした"] },
+      { kanji: "昨日", kana: "きのう", romaji: "kinou", meaning: "Kemarin", trick: "昨 (Masa lalu) + 日 (Hari) = Kemarin", aliases: ["きのう"] },
+      { kanji: "今日", kana: "きょう", romaji: "kyou", meaning: "Hari ini", trick: "今 (Sekarang) + 日 (Hari) = Hari ini", aliases: ["きょう"] },
+      { kanji: "毎日", kana: "まいにち", romaji: "mainichi", meaning: "Setiap hari", trick: "毎 (Setiap) + 日 (Hari)", aliases: ["まいにち"] },
+      { kanji: "先月", kana: "せんげつ", romaji: "sengetsu", meaning: "Bulan lalu (Pasangan Vたばかり)", trick: "先 (Sebelumnya) + 月 (Bulan) = Bulan lalu", aliases: ["せんげつ"] },
+      { kanji: "来週", kana: "らいしゅう", romaji: "raishuu", meaning: "Minggu depan", trick: "来 (Datang) + 週 (Minggu) = Minggu yang akan datang", aliases: ["らいしゅう"] },
+      { kanji: "来年", kana: "らいねん", romaji: "rainen", meaning: "Tahun depan", trick: "来 (Datang) + 年 (Tahun) = Tahun depan", aliases: ["らいねん"] },
+      { kanji: "家族", kana: "かぞく", romaji: "kazoku", meaning: "Keluarga", trick: "家 (Rumah) + 族 (Rombongan kerabat)", aliases: ["かぞく"] },
+      { kanji: "日本語", kana: "にほんご", romaji: "nihongo", meaning: "Bahasa Jepang", trick: "日本 (Jepang) + 語 (Bahasa/Kata 言)", aliases: ["にほんご"] },
+      { kanji: "日本", kana: "にほん", romaji: "nihon", meaning: "Jepang", trick: "日 (Matahari) + 本 (Asal/Terbit)", aliases: ["にほん"] },
+      { kanji: "お金", kana: "おかね", romaji: "okane", meaning: "Uang", trick: "金 = Logam emas / Uang", aliases: ["おかね"] },
+      { kanji: "好き", kana: "すき", romaji: "suki", meaning: "Suka / Gemar", trick: "好 = Wanita 女 + Anak 子 (Kasih sayang / Suka)", aliases: ["すき"] },
+      { kanji: "上手", kana: "じょうず", romaji: "jouzu", meaning: "Pintar / Mahir", trick: "上 (Atas) + 手 (Tangan) = Kemampuan tangan tingkat atas!", aliases: ["じょうず"] },
+      { kanji: "下手", kana: "へた", romaji: "heta", meaning: "Tidak pintar / Kurang mahir", trick: "下 (Bawah) + 手 (Tangan) = Kebalikan dari 上手", aliases: ["へた"] },
+      { kanji: "写真", kana: "しゃしん", romaji: "shashin", meaning: "Foto", trick: "写 (Menyalin) + 真 (Wujud asli) = Foto", aliases: ["しゃしん"] },
+      { kanji: "薬", kana: "くすり", romaji: "kusuri", meaning: "Obat", trick: "薬 = Rumput/herbal 艹 di atas 楽 (Membuat badan nyaman)", aliases: ["くすり"] },
+      { kanji: "学校", kana: "がっこう", romaji: "gakkou", meaning: "Sekolah", trick: "学 (Belajar) + 校 (Gedung)", aliases: ["がっこう"] },
+      { kanji: "病院", kana: "びょういん", romaji: "byouin", meaning: "Rumah sakit", trick: "病 (Atap sakit 疒) + 院 (Gedung perawatan)", aliases: ["びょういん"] },
+      { kanji: "仕事", kana: "しごと", romaji: "shigoto", meaning: "Pekerjaan", trick: "仕 (Melayani) + 事 (Urusan/Tugas)", aliases: ["しごと"] },
+      { kanji: "掃除", kana: "そうじ", romaji: "souji", meaning: "Bersih-bersih", trick: "掃 = Tangan 扌 memegang sapu", aliases: ["そうじ"] },
+      { kanji: "洗濯", kana: "せんたく", romaji: "sentaku", meaning: "Mencuci pakaian", trick: "洗 (Air 氵 mencuci) + 濯 (Membilas dengan air 氵)", aliases: ["せんたく"] },
+      { kanji: "名前", kana: "なまえ", romaji: "namae", meaning: "Nama", trick: "名 (Nama) + 前 (Depan)", aliases: ["なまえ"] },
+      { kanji: "雨", kana: "あめ", romaji: "ame", meaning: "Hujan", trick: "雨 = Gambar 4 titik air hujan turun dari awan", aliases: ["あめ"] },
+      { kanji: "旅行", kana: "りょこう", romaji: "ryokou", meaning: "Wisata / Traveling", trick: "旅 (Perjalanan) + 行 (Pergi)", aliases: ["りょこう"] },
+      { kanji: "切符", kana: "きっぷ", romaji: "kippu", meaning: "Tiket / Karcis", trick: "切 (Potong) + 符 (Kupon/Karcis)", aliases: ["きっぷ"] },
+      { kanji: "銀行", kana: "ぎんこう", romaji: "ginkou", meaning: "Bank", trick: "銀 (Perak/Uang) + 行 (Lembaga usaha)", aliases: ["ぎんこう"] },
+      { kanji: "勉強", kana: "べんきょう", romaji: "benkyou", meaning: "Belajar", trick: "勉 (Berusaha) + 強 (Kuat)", aliases: ["べんきょう"] },
+      { kanji: "映画", kana: "えいが", romaji: "eiga", meaning: "Film / Bioskop", trick: "映 (Proyeksi layar) + 画 (Gambar bergerak)", aliases: ["えいが"] },
+      { kanji: "荷物", kana: "にもつ", romaji: "nimotsu", meaning: "Barang bawaan / Paket", trick: "荷 (Beban pikulan) + 物 (Benda)", aliases: ["にもつ"] },
+      { kanji: "機械", kana: "きかい", romaji: "kikai", meaning: "Mesin / Alat", trick: "機 + 械 = Keduanya punya radikal peralatan kayu 木", aliases: ["きかい"] },
+      { kanji: "使い方", kana: "つかいかた", romaji: "tsukaikata", meaning: "Cara menggunakan (Rumus: Vます + 方)", trick: "使 (Pakai) + 方 (Cara/Metode = かた)", aliases: ["つかいかた"] },
+      { kanji: "約束", kana: "やくそく", romaji: "yakusoku", meaning: "Janji", trick: "約 (Ikatan benang 糸) + 束 (Mengikat janji)", aliases: ["やくそく"] },
+      { kanji: "時間", kana: "じかん", romaji: "jikan", meaning: "Waktu / Jam", trick: "時 (Waktu matahari 日) + 間 (Rentang)", aliases: ["じかん"] },
+      { kanji: "先生", kana: "せんせい", romaji: "sensei", meaning: "Guru / Dokter", trick: "先 (Lahir lebih dulu) + 生 (Kehidupan)", aliases: ["せんせい"] },
+      { kanji: "宿題", kana: "しゅくだい", romaji: "shukudai", meaning: "PR / Tugas rumah", trick: "宿 (Rumah/Penginapan) + 題 (Soal latihan)", aliases: ["しゅくだい"] },
+      { kanji: "部屋", kana: "へや", romaji: "heya", meaning: "Kamar / Ruangan", trick: "部 (Bagian) + 屋 (Ruangan beratap)", aliases: ["へや"] },
+      { kanji: "電車", kana: "でんしゃ", romaji: "densha", meaning: "Kereta listrik", trick: "電 (Listrik/Petir) + 車 (Gerbong roda)", aliases: ["でんしゃ"] },
+      { kanji: "便利", kana: "べんり", romaji: "benri", meaning: "Praktis / Nyaman", trick: "便 (Mudah) + 利 (Menguntungkan)", aliases: ["べんり"] },
+      { kanji: "漢字", kana: "かんじ", romaji: "kanji", meaning: "Huruf Kanji", trick: "漢 (Dinasti Han) + 字 (Huruf)", aliases: ["かんじ"] },
+      { kanji: "新しい", kana: "あたらしい", romaji: "atarashii", meaning: "Baru", trick: "新 = Memotong pohon menjadi barang baru", aliases: ["あたらしい"] },
+      { kanji: "車", kana: "くるま", romaji: "kuruma", meaning: "Mobil / Kendaraan", trick: "車 = Gambar roda dan badan mobil dilihat dari atas", aliases: ["くるま"] }
+    ];
+
+    // Urutkan dari frasa terpanjang ke terpendek agar penggantian token Furigana 100% akurat
+    const SORTED_KANJI_LEXICON = [...KANJI_MASTER_DB].sort((a, b) => b.kanji.length - a.kanji.length);
+
+    /**
+     * Fungsi Pintar: Mengubah teks Jepang menjadi ber-Furigana (<ruby>) sekaligus
+     * mengupgrade kosakata JFT yang tadinya hanya Hiragana di PDF menjadi Kanji+Furigana!
+     */
+    function formatJPWithFurigana(rawText, options = {}) {
+      if (!rawText) return "";
+      const { upgradeHiraganaToKanji = true, blindKanjiMode = false } = options;
+      let text = String(rawText);
+      const tokens = [];
+
+      // Tahap 1: Deteksi Kanji yang sudah ada di teks
+      SORTED_KANJI_LEXICON.forEach((entry) => {
+        if (text.includes(entry.kanji)) {
+          const tokenKey = `\uE000${tokens.length}\uE001`;
+          tokens.push(entry);
+          text = text.split(entry.kanji).join(tokenKey);
+        }
+      });
+
+      // Tahap 2: Upgrade kosakata penting yang tertulis Hiragana di PDF menjadi Kanji + Furigana
+      if (upgradeHiraganaToKanji) {
+        SORTED_KANJI_LEXICON.forEach((entry) => {
+          if (!entry.aliases) return;
+          entry.aliases.forEach((alias) => {
+            if (alias.length >= 2 && text.includes(alias)) {
+              const tokenKey = `\uE000${tokens.length}\uE001`;
+              tokens.push(entry);
+              text = text.split(alias).join(tokenKey);
+            }
+          });
+        });
+      }
+
+      // Tahap 3: Kembalikan token menjadi elemen HTML <ruby>
+      return text.replace(/\uE000(\d+)\uE001/g, (_, idxStr) => {
+        const entry = tokens[parseInt(idxStr, 10)];
+        if (!entry) return "";
+        const blindClass = blindKanjiMode ? "kanji-test-blind" : "";
+        return `<ruby class="jft-ruby ${blindClass}" title="${entry.kanji} (${entry.kana}) = ${entry.meaning}">${entry.kanji}<rt>${entry.kana}</rt></ruby>`;
+      });
+    }
+
+    /**
+     * Ekstrak semua Kanji yang muncul pada soal + pilihan jawaban saat ini
+     * untuk ditampilkan pada panel "漢 Bedah Kanji di Soal Ini"
+     */
+    function extractKanjiEntriesFromText(combinedText) {
+      if (!combinedText) return [];
+      const found = [];
+      const seen = new Set();
+      SORTED_KANJI_LEXICON.forEach((entry) => {
+        if (seen.has(entry.kanji)) return;
+        const matchKanji = combinedText.includes(entry.kanji);
+        const matchAlias = entry.aliases && entry.aliases.some(a => a.length >= 2 && combinedText.includes(a));
+        if (matchKanji || matchAlias) {
+          seen.add(entry.kanji);
+          found.push(entry);
+        }
+      });
+      return found.slice(0, 6);
+    }
+
+    const ALL_DATA = [...HYOUGEN_DATA, ...JFT_DATA];
+    const ITEM_MAP = {};
+    ALL_DATA.forEach(item => { ITEM_MAP[item.id] = item; });
+
+    /**
+     * 2. BANK SOAL SIMULASI JFT ASLI & JEBAKAN TINGKAT TINGGI (CURATED EXAM DRILLS)
+     * Dirancang persis seperti soal ujian JFT-Basic (Dialog A-B & Kalimat Rumpang)
+     */
+    const CURATED_JFT_SIMULATIONS = [
+      {
+        targetId: "J51",
+        badge: "Simulasi JFT • Jebakan そうです (Hal. 19 vs 28)",
+        instruction: "Pilih kalimat yang tepat untuk situasi berikut:",
+        mainText: "【Situasi】 Anda melihat langit sangat mendung dan gelap dengan mata kepala sendiri.\n「いまにも あめが （　　　）ですね。」",
+        subText: "Ima ni mo ame ga ( ... ) desu ne. — Kelihatannya sebentar lagi akan turun hujan ya.",
+        hint: "Karena melihat langsung dengan mata ('Kelihatannya'), gunakan Vます (hilang ます) + そうです!",
+        correctOption: { jp: "ふりそう", romaji: "furisou", meaning: "Kelihatannya akan turun (Vます hilang ます + そう)" },
+        distractors: [
+          { jp: "ふるそう", romaji: "furusou", meaning: "Katanya akan turun (Bentuk kamus Vる + そう = Kabar/Denbun Hal. 28)" },
+          { jp: "ふったそう", romaji: "futtasou", meaning: "Katanya sudah turun (Bentuk lampau Vた + そう = Kabar Hal. 28)" },
+          { jp: "ふりながら", romaji: "furinagara", meaning: "Sambil turun (Vます + ながら = Sambil Hal. 19)" }
+        ],
+        explanation: "TRIK 1 DETIK: Melihat mendung secara langsung = 'Kelihatannya' (Hal. 19) ➔ いきます/ふります buang ます jadi ふりそう! Kalau ふるそう (ada る) itu artinya 'Katanya akan hujan' (mendengar berita cuaca, Hal. 28)."
+      },
+      {
+        targetId: "J63",
+        badge: "Simulasi JFT • Jebakan そうです (Hal. 28)",
+        instruction: "Lengkapi percakapan berikut sesuai tata bahasa JFT:",
+        mainText: "A: 「あたらしい チャチャさんは どんな ひとですか。」\nB: 「まだ あっていませんが、うわさでは せんせい（　　　）。」",
+        subText: "B: Saya belum bertemu, tapi menurut kabar, katanya beliau adalah seorang guru.",
+        hint: "Menyampaikan kabar ('Katanya...') untuk Kata Benda wajib menggunakan だ + そうです!",
+        correctOption: { jp: "だそうです", romaji: "da sou desu", meaning: "Katanya adalah ~ (KB + だ + そうです — Hal. 28)" },
+        distractors: [
+          { jp: "そうです", romaji: "sou desu", meaning: "Tanpa だ (Salah rumus untuk mendengar kabar Kata Benda)" },
+          { jp: "なそうです", romaji: "na sou desu", meaning: "Bentuk salah (そうです tidak pernah didahului な)" },
+          { jp: "のようです", romaji: "no you desu", meaning: "Sepertinya ~ (Dugaan dari pengamatan, bukan kabar)" }
+        ],
+        explanation: "TRIK 1 DETIK: Ada kata 'menurut kabar' = 'Katanya' (Hal. 28). Rumusnya Bentuk Biasa UTUH + そうです. Karena 'sensei' adalah Kata Benda, wajib pakai だ ➔ せんせいだそうです!"
+      },
+      {
+        targetId: "J64",
+        badge: "Simulasi JFT • Trio ところです (Hal. 28)",
+        instruction: "Perhatikan kata kunci waktu di awal kalimat, lalu isi ( ... ):",
+        mainText: "A: 「もう ひるごはんを たべましたか。」\nB: 「いいえ、いまから （　　　）です。」",
+        subText: "A: Apakah sudah makan siang?\nB: Belum, mulai sekarang saya baru mau makan.",
+        hint: "Lihat kata kunci いまから (Mulai dari sekarang) = Baru mau melakukan (Vる + ところです)!",
+        correctOption: { jp: "たべるところ", romaji: "taberu tokoro", meaning: "Baru mau makan (Vる + ところです)" },
+        distractors: [
+          { jp: "たべているところ", romaji: "tabete iru tokoro", meaning: "Sedang makan sekarang (Pasangannya: いま)" },
+          { jp: "たべたところ", romaji: "tabeta tokoro", meaning: "Barusan selesai makan (Pasangannya: さっき / たったいま)" },
+          { jp: "たべたばかり", romaji: "tabeta bakari", meaning: "Baru saja makan (Perasaan lampau)" }
+        ],
+        explanation: "TRIK 1 DETIK: Lihat kata いまから / これから (mulai sekarang) = belum makan, baru mau mulai ➔ wajib Vる (Bentuk Kamus) + ところです!"
+      },
+      {
+        targetId: "J66",
+        badge: "Simulasi JFT • Trio ところです (Hal. 29)",
+        instruction: "Pilih jawaban yang paling tepat untuk kata kunci たったいま:",
+        mainText: "「すみません、たったいま うちに （　　　）です。」",
+        subText: "Maaf, barusan saja (detik ini) saya tiba di rumah.",
+        hint: "Kata kunci たったいま / さっき (Barusan) = Baru saja selesai ➔ Vた + ところです!",
+        correctOption: { jp: "かえったところ", romaji: "kaetta tokoro", meaning: "Barusan saja pulang (Vた + ところです)" },
+        distractors: [
+          { jp: "かえるところ", romaji: "kaeru tokoro", meaning: "Baru mau pulang (Vる + ところです)" },
+          { jp: "かえっているところ", romaji: "kaette iru tokoro", meaning: "Sedang di jalan pulang (Vている + ところです)" },
+          { jp: "かえりそう", romaji: "kaerisou", meaning: "Kelihatannya akan pulang (Vます + そうです)" }
+        ],
+        explanation: "TRIK 1 DETIK: Ada kata たったいま (barusan banget) atau さっき (tadi) ➔ Kejadian baru saja selesai beberapa detik/menit lalu ➔ Wajib Vた + ところです!"
+      },
+      {
+        targetId: "J24",
+        badge: "Simulasi JFT • Jebakan ばかり vs ところ (Hal. 7 vs 29)",
+        instruction: "Perhatikan keterangan waktu せんげつ (Bulan lalu):",
+        mainText: "「わたしは せんげつ にほんへ （　　　）です。」",
+        subText: "Saya baru saja datang ke Jepang bulan lalu.",
+        hint: "Jika waktunya sudah lewat cukup lama (kemarin/minggu lalu/bulan lalu) tapi menurut perasaan masih terasa baru, tidak boleh pakai ところです!",
+        correctOption: { jp: "きたばかり", romaji: "kita bakari", meaning: "Baru saja datang (Bisa untuk bulan lalu karena berdasarkan perasaan)" },
+        distractors: [
+          { jp: "きたところ", romaji: "kita tokoro", meaning: "Barusan tiba detik ini (Tidak bisa dipakai untuk 'bulan lalu'!)" },
+          { jp: "くるところ", romaji: "kuru tokoro", meaning: "Baru mau datang" },
+          { jp: "きたまま", romaji: "kita mama", meaning: "Tetap dalam keadaan datang" }
+        ],
+        explanation: "TRIK 1 DETIK: Ada kata せんげつ (Bulan lalu)! Vたところです hanya untuk hitungan detik/menit. Kalau sudah minggu/bulan lalu tapi terasa baru, wajib pakai Vた + ばかりです (Hal. 7)!"
+      },
+      {
+        targetId: "J34",
+        badge: "Simulasi JFT • Arah Bantuan (Hal. 9)",
+        instruction: "Lihat subjek kalimat (さとうさんは) dan penerima (わたしに):",
+        mainText: "「さとうさんは わたしに にほんごの ほんを （　　　）。」",
+        subText: "Sdr. Sato meminjamkan buku bahasa Jepang kepada saya.",
+        hint: "Subjeknya adalah Orang Lain (Sato-san wa) yang berbuat baik kepada Saya (watashi ni)!",
+        correctOption: { jp: "かしてくれました", romaji: "kashite kuremashita", meaning: "Meminjamkan untuk saya (Orang lain ➔ Saya)" },
+        distractors: [
+          { jp: "かしてあげました", romaji: "kashite agemashita", meaning: "Saya meminjamkan untuk orang lain (Salah arah subjek)" },
+          { jp: "かしてもらいました", romaji: "kashite moraimashita", meaning: "Saya menerima pinjaman (Subjek は harusnya わたし)" },
+          { jp: "かしておきました", romaji: "kashite okimashita", meaning: "Meminjamkan terlebih dahulu sebagai persiapan" }
+        ],
+        explanation: "TRIK 1 DETIK: Jika kalimat diawali 『Orang lain は + わたしに』, 100% jawabannya pasti 〜てくれます / 〜てくれました (Orang itu berbuat baik ke saya)!"
+      },
+      {
+        targetId: "J33",
+        badge: "Simulasi JFT • Meminta Tolong Sopan (Hal. 9)",
+        instruction: "Anda ingin meminta tolong rekan kerja mengajari cara pakai mesin dengan sopan:",
+        mainText: "「すみません、このきかいの つかいかたを （　　　）。」",
+        subText: "Permisi, sudikah Anda mengajari saya cara menggunakan mesin ini?",
+        hint: "Meminta orang lain melakukan sesuatu untuk kita (Saya menerima bantuan): Vてもらえませんか.",
+        correctOption: { jp: "おしえてもらえませんか", romaji: "oshiete moraemasen ka", meaning: "Sudikah Anda mengajari saya? (Sangat sopan)" },
+        distractors: [
+          { jp: "おしえてあげませんか", romaji: "oshiete agemasen ka", meaning: "Maukah saya ajari Anda? (Terbalik)" },
+          { jp: "おしえてみませんか", romaji: "oshiete mimasen ka", meaning: "Maukah mencoba mengajari?" },
+          { jp: "おしえましょうか", romaji: "oshiemashou ka", meaning: "Bagaimana kalau saya ajari? (Menawarkan bantuan)" }
+        ],
+        explanation: "TRIK 1 DETIK: Saat meminta bantuan kepada orang lain dengan sopan di tempat kerja, gunakan Vてもらえませんか atau Vてくれませんか (Hal. 9). Jangan pakai あげます atau ましょうか karena itu artinya KITA yang mau mengajari dia!"
+      },
+      {
+        targetId: "J20",
+        badge: "Simulasi JFT • Jebakan Memberi Saran (Hal. 5 vs Hal. 6)",
+        instruction: "Teman Anda demam tinggi. Pilih kalimat saran yang tata bahasanya BENAR:",
+        mainText: "A: 「きのうから ねつが あるんです。」\nB: 「たいへん！ すぐに びょういんへ （　　　）よ。」",
+        subText: "B: Gawat! Sebaiknya segera pergi ke rumah sakit lho.",
+        hint: "Walaupun menyarankan untuk pergi sekarang, rumus Saran Positif WAJIB memakai Bentuk Lampau (Vた)!",
+        correctOption: { jp: "いったほうがいいです", romaji: "itta hou ga ii desu", meaning: "Sebaiknya pergi (Vた + ほうがいいです — Hal. 6)" },
+        distractors: [
+          { jp: "いくほうがいいです", romaji: "iku hou ga ii desu", meaning: "Pengecoh! Dalam JFT, saran positif pakai Vた, bukan Vる" },
+          { jp: "いかないほうがいいです", romaji: "ikanai hou ga ii desu", meaning: "Sebaiknya JANGAN pergi (Vない + ほうがいい)" },
+          { jp: "いってもいいです", romaji: "ittemo ii desu", meaning: "Boleh pergi (Memberi izin, bukan saran)" }
+        ],
+        explanation: "TRIK 1 DETIK: Banyak peserta terjebak memilih いくほうがいい karena belum pergi. Ingat rumus mutlak PDF Hal. 6: Saran Positif = Vた + ほうがいいです (いったほうがいいです)!"
+      },
+      {
+        targetId: "J04",
+        badge: "Simulasi JFT • 4 Jenis 'Kalau/Jika' (Hal. 2)",
+        instruction: "Pilih kata hubung 'Kalau' untuk mesin/tombol otomatis:",
+        mainText: "「このみどりの ボタンを （　　　）、きっぷが でます。」",
+        subText: "Kalau menekan tombol hijau ini, tiketnya akan keluar.",
+        hint: "Untuk mesin, tombol, lampu, atau petunjuk jalan yang hasilnya pasti otomatis, gunakan Vる + と!",
+        correctOption: { jp: "おすと", romaji: "osu to", meaning: "Kalau menekan (Sebab-akibat pasti/mesin — Vると Hal. 2)" },
+        distractors: [
+          { jp: "おすなら", romaji: "osu nara", meaning: "Kalau memang ingin menekan (Respon topik — Hal. 30)" },
+          { jp: "おしたり", romaji: "oshitari", meaning: "Menekan dan sebagainya (Vたり — Hal. 6)" },
+          { jp: "おしそうに", romaji: "oshisou ni", meaning: "Kelihatannya akan menekan" }
+        ],
+        explanation: "TRIK 1 DETIK: Setiap kali melihat soal tentang Tombol (ボタン), Mesin, Belok Kanan/Kiri, atau Cuaca Alam yang hasilnya otomatis ➔ Langsung pilih Vる + と (おすと)!"
+      },
+      {
+        targetId: "J70",
+        badge: "Simulasi JFT • Pengandaian Topik なら (Hal. 30)",
+        instruction: "Lawan bicara baru saja menyebut ingin pergi ke Jakarta. Anda memberi saran:",
+        mainText: "A: 「らいしゅう、ジャカルタへ いきます。」\nB: 「ジャカルタへ （　　　）、でんしゃが べんりですよ。」",
+        subText: "B: Kalau pergi ke Jakarta, naik kereta praktis lho.",
+        hint: "Mengulang topik yang baru diucapkan lawan bicara lalu memberi saran/rekomendasi = 〜なら!",
+        correctOption: { jp: "いくなら", romaji: "iku nara", meaning: "Kalau pergi ke ~ (Merespon topik lawan bicara — Hal. 30)" },
+        distractors: [
+          { jp: "いくと", romaji: "iku to", meaning: "Salah! Di belakang と tidak boleh ada saran/pendapat" },
+          { jp: "いっても", romaji: "ittemo", meaning: "Walaupun pergi (Hal. 17)" },
+          { jp: "いくのに", romaji: "iku noni", meaning: "Padahal pergi (Hal. 26)" }
+        ],
+        explanation: "TRIK 1 DETIK: Jika si A berkata 'Saya mau ke X', lalu si B menyahut 'Kalau ke X, sebaiknya naik Y', itu adalah pengandaian topik ➔ Wajib pakai 〜なら (いくなら)!"
+      },
+      {
+        targetId: "H087",
+        badge: "Simulasi JFT • Hyougen Hal. 4 (どのぐらい vs どれぐらい)",
+        instruction: "Pilih kata tanya yang tepat sesuai pembedaan di PDF HYOUGEN Hal. 4:",
+        mainText: "【Sesuai PDF Hyougen Hal. 4】\nUntuk menanyakan kisaran HARGA/BIAYA (Berapa banyak?) digunakan （ ① ）, sedangkan untuk menanyakan durasi WAKTU (Berapa lama?) digunakan （ ② ）.",
+        subText: "Jangan sampai tertukar antara どのぐらい dan どれぐらい!",
+        hint: "Di PDF Hal. 4: どのぐらい = Berapa banyak (Harga) | どれぐらい = Berapa lama (Waktu).",
+        correctOption: { jp: "① どのぐらい ／ ② どれぐらい", romaji: "① Dono gurai / ② Dore gurai", meaning: "どのぐらい (Harga) & どれぐらい (Waktu) — Sesuai PDF Hal. 4" },
+        distractors: [
+          { jp: "① どれぐらい ／ ② どのぐらい", romaji: "① Dore gurai / ② Dono gurai", meaning: "Terbalik!" },
+          { jp: "① どのへん ／ ② どこにも", romaji: "① Dono hen / ② Doko ni mo", meaning: "Di sebelah mana & Ke manapun" },
+          { jp: "① いつでも ／ ② どこか", romaji: "① Itsudemo / ② Dokoka", meaning: "Kapanpun & Suatu tempat" }
+        ],
+        explanation: "TRIK 1 DETIK: Hafalkan jembatan keledai PDF Hal. 4: 『NO (どNOぐらい) = NOmor/Nominal Harga』, 『RE (どREぐらい) = REntang Waktu (Berapa lama)』!"
+      },
+      {
+        targetId: "H041",
+        badge: "Simulasi JFT • Dialog Restoran/Toko (Hyougen Hal. 2)",
+        instruction: "Pilih respon penolakan yang paling sopan saat ditawari tambah minum:",
+        mainText: "Pelayan: 「おみずの おかわりは いかがですか。」 (Bagaimana kalau tambah air minumnya?)\nAnda (Sudah cukup/tidak mau tambah): 「（　　　）。」",
+        subText: "Bagaimana cara menolak tawaran dengan sopan dalam bahasa Jepang?",
+        hint: "Gunakan ungkapan 'Tidak, sudah cukup terima kasih' di Hyougen Hal. 2!",
+        correctOption: { jp: "いえ、けっこうです", romaji: "Ie, kekkou desu", meaning: "Tidak, sudah cukup, terima kasih (Menolak halus)" },
+        distractors: [
+          { jp: "はい、おねがいします", romaji: "Hai, onegaishimasu", meaning: "Ya, tolong (Artinya malah minta tambah)" },
+          { jp: "かしこまりました", romaji: "Kashikomarimashita", meaning: "Baik, saya mengerti (Ucapan pelayan ke tamu)" },
+          { jp: "おまたせしました", romaji: "Omatase shimashita", meaning: "Maaf membuat Anda menunggu" }
+        ],
+        explanation: "TRIK 1 DETIK: Saat ditawari sesuatu (tambah makan/minum/kantong plastik) dan Anda ingin menolak secara sopan, jawabannya selalu: 『いいえ、けっこうです』 (Tidak, sudah cukup)!"
+      },
+      {
+        targetId: "H039",
+        badge: "Simulasi JFT • Menolak Ajakan Secara Halus (Hyougen Hal. 2)",
+        instruction: "Rekan kerja mengajak makan makanan yang tidak Anda sukai / tidak bisa Anda makan:",
+        mainText: "A: 「こんや、いっしょに おさけを のみに いきませんか。」\nB: 「すみません、おさけは （　　　）...」",
+        subText: "B: Maaf, kalau alkohol saya kurang bisa / tidak suka...",
+        hint: "Orang Jepang menolak secara halus dengan menggantung kata 'sedikit...' di akhir kalimat.",
+        correctOption: { jp: "ちょっと", romaji: "chotto...", meaning: "Saya kurang suka / tidak bisa... (Penolakan halus Hal. 2)" },
+        distractors: [
+          { jp: "ちょうど", romaji: "choudo", meaning: "Pas / Tepat (Hal. 4)" },
+          { jp: "ちゃんと", romaji: "chanto", meaning: "Dengan benar / patuh (Hal. 6)" },
+          { jp: "ずっと", romaji: "zutto", meaning: "Selalu / Terus-menerus (Hal. 3)" }
+        ],
+        explanation: "TRIK 1 DETIK: Kalau di akhir kalimat ada titik-titik 『〜は ちょっと...』, itu bukan berarti 'sedikit', melainkan cara sopan orang Jepang untuk mengatakan 'Maaf, saya tidak suka / tidak bisa'!"
+      },
+      {
+        targetId: "J14",
+        badge: "Simulasi JFT • Pasangan Wajib Negatif (JFT Hal. 4 & Hyougen Hal. 3)",
+        instruction: "Pilih kata keterangan yang tepat untuk melengkapi keluhan berikut:",
+        mainText: "「３０ぷんも まっていますが、（　　　） バスが きませんね。」",
+        subText: "Sudah menunggu 30 menit, tapi busnya tak kunjung datang ya.",
+        hint: "Menunggu lama tapi sesuatu 'tak kunjung' terjadi (+ kalimat negatif きません).",
+        correctOption: { jp: "なかなか", romaji: "nakanaka", meaning: "Tak kunjung ~ (Wajib diikuti bentuk negatif — Hal. 4)" },
+        distractors: [
+          { jp: "だんだん", romaji: "dandan", meaning: "Berangsur-angsur / Lama-kelamaan (+ なります)" },
+          { jp: "かならず", romaji: "kanarazu", meaning: "Pasti / Wajib (+ kalimat positif)" },
+          { jp: "そろそろ", romaji: "sorosoro", meaning: "Sebentar lagi sudah waktunya ~" }
+        ],
+        explanation: "TRIK 1 DETIK: Kalimat diakhiri bentuk negatif 『きません』 (tidak datang) setelah menunggu lama ➔ Pilih 『なかなか』 (Tak kunjung datang)!"
+      },
+      {
+        targetId: "J60",
+        badge: "Simulasi JFT • Pertentangan & Kecewa (JFT Hal. 26 vs Hal. 17)",
+        instruction: "Pilih penghubung yang menyatakan rasa KECEWA karena hasil tidak sesuai usaha:",
+        mainText: "「いっしょうけんめい べんきょうした（　　　）、しけんに ごうかくできませんでした。」",
+        subText: "Padahal sudah belajar sungguh-sungguh, tetapi tidak bisa lulus ujian.",
+        hint: "Untuk fakta yang sudah terjadi dan hasilnya mengecewakan ('Padahal..., tapi...'), gunakan のに!",
+        correctOption: { jp: "のに", romaji: "noni", meaning: "Padahal ~, tetapi ~ (Menyatakan kekecewaan — Hal. 26)" },
+        distractors: [
+          { jp: "ので", romaji: "node", meaning: "Karena ~ (Sebab akibat wajar — Hal. 25)" },
+          { jp: "ために", romaji: "tame ni", meaning: "Demi / Untuk tujuan ~ (Hal. 3)" },
+          { jp: "から", romaji: "kara", meaning: "Karena ~ (Hal. 25)" }
+        ],
+        explanation: "TRIK 1 DETIK: Kalimat depan 'Belajar keras' (positif) vs Kalimat belakang 'Tidak lulus' (negatif/kecewa). Jika berlawanan dan mengecewakan, wajib pakai 『のに』 (Padahal)!"
+      },
+      {
+        targetId: "J36",
+        badge: "Simulasi JFT • Ketidaksengajaan / Penyesalan (JFT Hal. 11)",
+        instruction: "Pilih pola kalimat saat Anda TIDAK SENGAJA melakukan kesalahan/kehilangan:",
+        mainText: "「たいへんです！ パスポートを （　　　）。」",
+        subText: "Gawat! Saya tidak sengaja telah menghilangkan paspor!",
+        hint: "Menyatakan ketidaksengajaan atau penyesalan menggunakan Vて + しまいました!",
+        correctOption: { jp: "なくしてしまいました", romaji: "nakushite shimaimashita", meaning: "Tidak sengaja menghilangkan (Penyesalan — Vてしまいます)" },
+        distractors: [
+          { jp: "なくしておきました", romaji: "nakushite okimashita", meaning: "Menghilangkan terlebih dahulu sebagai persiapan (Tidak logis)" },
+          { jp: "なくしてみました", romaji: "nakushite mimashita", meaning: "Mencoba menghilangkan (Tidak logis)" },
+          { jp: "なくしてありました", romaji: "nakushite arimashita", meaning: "Sengaja dihilangkan untuk suatu tujuan" }
+        ],
+        explanation: "TRIK 1 DETIK: Untuk kejadian buruk seperti lupa, hilang (なくす), rusak, atau ketiduran, selalu gunakan 『Vて + しまいました』 (atau bentuk singkatnya 〜ちゃいました)!"
+      },
+      {
+        targetId: "J37",
+        badge: "Simulasi JFT • Persiapan Sebelum Acara (JFT Hal. 12)",
+        instruction: "Pilih pola kalimat untuk melakukan sesuatu TERLEBIH DAHULU sebagai persiapan:",
+        mainText: "「らいしゅうの りょこうの まえに、ホテルを よやく（　　　）。」",
+        subText: "Sebelum wisata minggu depan, saya memesan hotel terlebih dahulu (sebagai persiapan).",
+        hint: "Persiapan sebelum kegiatan = Vて + おきます!",
+        correctOption: { jp: "しておきます", romaji: "shite okimasu", meaning: "Melakukan terlebih dahulu untuk persiapan (Vておきます — Hal. 12)" },
+        distractors: [
+          { jp: "してみます", romaji: "shite mimasu", meaning: "Mencoba melakukan (Hal. 10)" },
+          { jp: "してしまいます", romaji: "shite shimaimasu", meaning: "Tidak sengaja melakukan / selesai tuntas (Hal. 11)" },
+          { jp: "してあります", romaji: "shite arimasu", meaning: "Sudah dalam keadaan ter- (Kondisi benda — Hal. 15)" }
+        ],
+        explanation: "TRIK 1 DETIK: Ada kata 『〜のまえに』 (Sebelum wisata/rapat/pesta) lalu beli tiket/pesan hotel ➔ Itu adalah PERSIAPAN ➔ Wajib pilih 『Vて + おきます』!"
+      },
+      {
+        targetId: "H119",
+        badge: "Simulasi JFT • Situasi Restoran (Hyougen Hal. 5)",
+        instruction: "Anda sudah selesai makan di restoran dan ingin meminta bon/bayar ke kasir:",
+        mainText: "Anda mengangkat tangan memanggil pelayan:\n「すみません、（　　　）。」",
+        subText: "Permisi, minta bonnya / saya mau bayar.",
+        hint: "Kata 'pembayaran/bill' di restoran adalah おかいけい (お会計).",
+        correctOption: { jp: "お会計おねがいします", romaji: "Okaikei onegaishimasu", meaning: "Tolong hitung bonnya / Minta bayar (Hal. 5)" },
+        distractors: [
+          { jp: "ごちゅうもんは？", romaji: "Gochuumon wa?", meaning: "Pesanannya apa? (Ucapan pelayan saat mencatat menu)" },
+          { jp: "おまたせしました", romaji: "Omatase shimashita", meaning: "Maaf telah membuat menunggu (Ucapan pelayan)" },
+          { jp: "いただきます", romaji: "Itadakimasu", meaning: "Mari makan (Diucapkan sebelum makan)" }
+        ],
+        explanation: "TRIK 1 DETIK: Saat mau bayar di restoran, ucapkan 『お会計（おかいけい）おねがいします』. Kalau mau bayar pisah masing-masing, tambahkan 『べつべつにおねがいします』!"
+      },
+      {
+        targetId: "H025",
+        badge: "Simulasi JFT • Etika Pulang Kerja (Hyougen Hal. 1 & 2)",
+        instruction: "Anda selesai bekerja dan hendak pulang lebih dulu daripada rekan kerja yang masih di kantor:",
+        mainText: "Anda (Mau pulang duluan): 「（　①　）。」\nRekan Kerja: 「（　②　）。」",
+        subText: "Pilih pasangan sapaan pulang kerja yang wajib dihafal untuk ujian JFT:",
+        hint: "Pulang duluan = おさきに... | Balasan rekan kerja = おつかれさま...",
+        correctOption: { jp: "① おさきにしつれいします ／ ② おつかれさまでした", romaji: "① Osaki ni shitsureishimasu / ② Otsukaresama deshita", meaning: "① Saya permisi duluan / ② Terima kasih atas kerja kerasnya" },
+        distractors: [
+          { jp: "① いってきます ／ ② いってらっしゃい", romaji: "① Ittekimasu / ② Itterasshai", meaning: "Saat berangkat keluar dari rumah sendiri" },
+          { jp: "① ただいま ／ ② おかえりなさい", romaji: "① Tadaima / ② Okaerinasai", meaning: "Saat tiba kembali di rumah" },
+          { jp: "① おじゃまします ／ ② ようこそ", romaji: "① Ojamashimasu / ② Youkoso", meaning: "Saat bertamu ke rumah orang" }
+        ],
+        explanation: "TRIK 1 DETIK: Di tempat kerja, orang yang pulang duluan wajib berkata 『おさきにしつれいします』 (Maaf saya duluan), dan rekan yang masih tinggal membalas 『おつかれさまでした』!"
+      },
+      {
+        targetId: "J75",
+        badge: "Simulasi JFT • Memilih Menu di Restoran (JFT Hal. 31)",
+        instruction: "Pelayan menanyakan pesanan Anda, lalu Anda memutuskan memilih Kopi:",
+        mainText: "Pelayan: 「ごちゅうもんは？」\nAnda: 「わたしは コーヒー（　　　）。」",
+        subText: "Saya memutuskan memilih/pesan kopi.",
+        hint: "Kata Benda + にします = Memutuskan memilih (menu/pilihan)!",
+        correctOption: { jp: "にします", romaji: "ni shimasu", meaning: "Memilih / Memutuskan pesan ~ (KB + にします — Hal. 31)" },
+        distractors: [
+          { jp: "になります", romaji: "ni narimasu", meaning: "Menjadi kopi (Perubahan alami, bukan memilih menu)" },
+          { jp: "がほしいです", romaji: "ga hoshii desu", meaning: "Ingin memiliki (Kurang natural untuk memesan ke pelayan)" },
+          { jp: "たいです", romaji: "tai desu", meaning: "Salah rumus! 〜たい hanya bisa menempel pada Kata Kerja" }
+        ],
+        explanation: "TRIK 1 DETIK: Saat memilih menu di restoran (Kopi, Ramen, Set A), rumus patennya adalah 『Kata Benda + にします』 (コーヒーにします = Saya pesan kopi)!"
+      }
+    ];
+
+    /**
+     * 3. STATE APLIKASI & PENYIMPANAN PROGRES
+     */
+    const STORAGE_KEY = "jft_hyougen_godtier_progress_v1";
+    let userProgress = {}; // { [id]: 'UNLEARNED' | 'REVIEW' | 'MASTERED' }
+    let remedialQueue = new Set(); // Menyimpan ID soal yang dijawab salah
+    let showRomajiGlobal = true;
+    let furiganaMode = "ON"; // 'ON' | 'HOVER' | 'OFF'
+    let speechRate = 1.0;
+
+    // Drill Engine State
+    let activeQuestions = [];
+    let currentQIndex = 0;
+    let currentQAnswered = false;
+    let sessionCorrect = 0;
+    let sessionWrong = 0;
+    let sessionStreak = 0;
+
+    // Database List State
+    let blindMode = false;
+    let autoLoopActive = false;
+    let autoLoopIdx = 0;
+    let autoLoopTimer = null;
+
+    // INITIALIZATION
+    window.addEventListener("DOMContentLoaded", () => {
+      loadProgress();
+      updateTopProgressUI();
+      initDrillSession();
+      renderDatabaseList();
+      renderTricksKanjiGrid();
+
+      // Keyboard Shortcuts for Fast Brain-Hacking Drill
+      window.addEventListener("keydown", (e) => {
+        const drillView = document.getElementById("view-drill");
+        if (drillView.classList.contains("hidden")) return;
+        if (["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+
+        if (e.key.toLowerCase() === "f") {
+          e.preventDefault();
+          cycleFuriganaMode();
+          return;
+        }
+
+        if (!currentQAnswered) {
+          if (e.key === "1" || e.key.toLowerCase() === "a") selectOption(0);
+          else if (e.key === "2" || e.key.toLowerCase() === "b") selectOption(1);
+          else if (e.key === "3" || e.key.toLowerCase() === "c") selectOption(2);
+          else if (e.key === "4" || e.key.toLowerCase() === "d") selectOption(3);
+          else if (e.key.toLowerCase() === "h") toggleHintBox();
+        } else {
+          if (e.code === "Space" || e.code === "Enter" || e.code === "ArrowRight") {
+            e.preventDefault();
+            nextDrillQuestion();
+          }
+        }
+      });
+    });
+
+    function loadProgress() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          userProgress = JSON.parse(saved) || {};
+        }
+      } catch (err) {
+        userProgress = {};
+      }
+      remedialQueue.clear();
+      Object.keys(userProgress).forEach((id) => {
+        if (userProgress[id] === "REVIEW" && ITEM_MAP[id]) {
+          remedialQueue.add(id);
+        }
+      });
+    }
+
+    function saveProgress() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(userProgress));
+      } catch (err) {
+        // Ignore storage quota errors in restricted environments
+      }
+      updateTopProgressUI();
+    }
+
+    function getStatus(id) {
+      return userProgress[id] || "UNLEARNED";
+    }
+
+    function setStatus(id, status) {
+      if (!id) return;
+      userProgress[id] = status;
+      if (status === "REVIEW") {
+        remedialQueue.add(id);
+      } else if (status === "MASTERED") {
+        remedialQueue.delete(id);
+      }
+      saveProgress();
+    }
+
+    function updateTopProgressUI() {
+      const total = ALL_DATA.length;
+      let mastered = 0;
+      let review = 0;
+
+      ALL_DATA.forEach((item) => {
+        const st = getStatus(item.id);
+        if (st === "MASTERED") mastered++;
+        else if (st === "REVIEW") review++;
+      });
+
+      const pct = Math.round((mastered / total) * 100);
+      const revPct = Math.round((review / total) * 100);
+
+      const countEl = document.getElementById("masteredCountText");
+      const pctEl = document.getElementById("progressPercentText");
+      const mBar = document.getElementById("masteredBar");
+      const rBar = document.getElementById("reviewBar");
+      const remOpt = document.getElementById("remedialOption");
+
+      if (countEl) countEl.textContent = `${mastered} / ${total}`;
+      if (pctEl) pctEl.textContent = `${pct}%`;
+      if (mBar) mBar.style.width = `${pct}%`;
+      if (rBar) rBar.style.width = `${revPct}%`;
+      if (remOpt) {
+        remOpt.textContent = `♻️ Remedial: Ulangi Soal yang Tadi Dijawab Salah (${remedialQueue.size})`;
+      }
+    }
+
+    function switchTab(tabName) {
+      if (typeof stopAutoAudioLoop === "function" && autoLoopActive) {
+        stopAutoAudioLoop();
+      }
+
+      const tabs = ["drill", "tricks", "list"];
+      tabs.forEach((t) => {
+        const viewEl = document.getElementById(`view-${t}`);
+        const btnEl = document.getElementById(`tab-${t}`);
+        if (!viewEl || !btnEl) return;
+
+        if (t === tabName) {
+          viewEl.classList.remove("hidden");
+          btnEl.className = "py-2 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition flex items-center justify-center gap-1.5 bg-indigo-600 text-white shadow-lg shadow-indigo-600/25";
+        } else {
+          viewEl.classList.add("hidden");
+          btnEl.className = "py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 bg-slate-800/80 text-slate-300 hover:bg-slate-800";
+        }
+      });
+
+      if (tabName === "list") {
+        renderDatabaseList();
+      }
+    }
+
+    function toggleRomajiGlobal() {
+      showRomajiGlobal = !showRomajiGlobal;
+      const btn = document.getElementById("romajiToggleBtn");
+      if (btn) {
+        btn.textContent = showRomajiGlobal ? "🔤 Romaji: ON" : "🔤 Romaji: OFF";
+        btn.className = showRomajiGlobal
+          ? "px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-indigo-300 border border-slate-700 transition"
+          : "px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-bold text-slate-400 border border-slate-800 transition";
+      }
+      renderCurrentQuestion();
+      renderDatabaseList();
+    }
+
+    function speakJP(rawText) {
+      if (!("speechSynthesis" in window) || !rawText) return;
+      try {
+        window.speechSynthesis.cancel();
+        const cleaned = String(rawText)
+          .replace(/Vる|Vない|Vた|Vて|V\(ます\)|KSい|KSな|KB/g, "")
+          .replace(/\([^)]*\)/g, "")
+          .replace(/（[^）]*）/g, "")
+          .replace(/[①②〜➕＋/]/g, " ")
+          .trim();
+
+        const utter = new SpeechSynthesisUtterance(cleaned || rawText);
+        utter.lang = "ja-JP";
+        utter.rate = speechRate;
+        window.speechSynthesis.speak(utter);
+      } catch (err) {
+        // Ignore TTS errors on unsupported browsers
+      }
+    }
+
+    function toggleSpeechSpeed() {
+      if (speechRate === 1.0) speechRate = 0.8;
+      else if (speechRate === 0.8) speechRate = 1.2;
+      else speechRate = 1.0;
+
+      const label = speechRate === 1.0 ? "1.0x (Normal)" : speechRate === 0.8 ? "0.8x (Lambat & Jelas)" : "1.2x (Cepat)";
+      const btn = document.getElementById("speedModalBtn");
+      if (btn) {
+        btn.textContent = `🔊 Kecepatan Suara Jepang: ${label}`;
+      }
+    }
+
+    function cycleFuriganaMode() {
+      if (furiganaMode === "ON") furiganaMode = "HOVER";
+      else if (furiganaMode === "HOVER") furiganaMode = "OFF";
+      else furiganaMode = "ON";
+
+      document.body.classList.remove("furigana-on", "furigana-hover", "furigana-off");
+      const btn = document.getElementById("furiganaToggleBtn");
+
+      if (furiganaMode === "ON") {
+        document.body.classList.add("furigana-on");
+        btn.textContent = "ふ Furigana: ON";
+        btn.className = "px-2.5 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-xs font-extrabold text-sky-300 border border-sky-500/40 transition";
+      } else if (furiganaMode === "HOVER") {
+        document.body.classList.add("furigana-hover");
+        btn.textContent = "ふ Furigana: SENTUH";
+        btn.className = "px-2.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-xs font-extrabold text-amber-300 border border-amber-500/40 transition";
+      } else {
+        document.body.classList.add("furigana-off");
+        btn.textContent = "ふ Furigana: OFF (Ujian)";
+        btn.className = "px-2.5 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-xs font-extrabold text-rose-300 border border-rose-500/40 transition";
+      }
+
+      renderCurrentQuestion();
+      renderDatabaseList();
+    }
+
+    function renderTricksKanjiGrid() {
+      const container = document.getElementById("tricksKanjiGrid");
+      if (!container) return;
+      container.innerHTML = KANJI_MASTER_DB.map((k) => `
+        <div
+          onclick="speakJP('${k.kanji}')"
+          class="cursor-pointer p-3 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-sky-500/50 transition space-y-1"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-base font-black font-jp text-white">
+              <ruby class="jft-ruby">${k.kanji}<rt>${k.kana}</rt></ruby>
+            </span>
+            <span class="text-[11px] font-bold text-sky-400">🔊 ${k.romaji}</span>
+          </div>
+          <div class="text-xs font-bold text-emerald-300">${k.meaning}</div>
+          <div class="text-[11px] text-slate-400 leading-snug">💡 ${k.trick}</div>
+        </div>
+      `).join("");
+    }
+
+    function startKanjiDrillFromTricks() {
+      document.getElementById("drillDeckSelect").value = "KANJI_SPECIAL";
+      document.getElementById("drillStyleSelect").value = "KANJI_READ";
+      initDrillSession();
+      switchTab("drill");
+    }
+    function startSimulationFromTricks() {
+      document.getElementById("drillDeckSelect").value = "JFT_SIMULATION";
+      initDrillSession();
+      switchTab("drill");
+    }
+
+    /**
+     * 4. GENERATOR SOAL KONTEKSTUAL PINTAR + SOAL BACA KANJI (ANTI-BUTA HURUF) + BEDAH 4 OPSI
+     */
+    function buildKanjiSniperQuestion(kanjiEntry, idx) {
+      // Cari item PDF terkait yang mengandung Kanji ini
+      const relatedItem = ALL_DATA.find(item =>
+        item.jp.includes(kanjiEntry.kanji) ||
+        (item.exJP && item.exJP.includes(kanjiEntry.kanji)) ||
+        (kanjiEntry.aliases && kanjiEntry.aliases.some(a => item.jp.includes(a) || (item.exJP && item.exJP.includes(a))))
+      ) || ALL_DATA[idx % ALL_DATA.length];
+
+      const otherKanji = KANJI_MASTER_DB.filter(k => k.kanji !== kanjiEntry.kanji)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
+
+      const askKanjiToReading = idx % 2 === 0;
+
+      if (askKanjiToReading) {
+        // Tampilkan Kanji POLOS tanpa Furigana, minta tebak cara baca Hiragana & artinya!
+        const sampleContext = relatedItem.exJP || relatedItem.jp;
+        const choices = [kanjiEntry, ...otherKanji].map(k => ({
+          id: relatedItem.id,
+          isCorrect: k.kanji === kanjiEntry.kanji,
+          displayMain: `${k.kana} — ${k.meaning}`,
+          displaySub: k.romaji,
+          jp: `${k.kanji} （${k.kana}）`,
+          romaji: k.romaji,
+          meaning: `${k.meaning} | 💡 ${k.trick}`,
+          blindKanji: false
+        })).sort(() => Math.random() - 0.5);
+
+        return {
+          targetId: relatedItem.id,
+          badge: `漢 Tes Baca Kanji JFT • ${relatedItem.pdf} ${relatedItem.page}`,
+          instruction: "Perhatikan kata ber-Kanji di bawah ini (Tanpa Furigana seperti di Ujian JFT). Apa cara baca & artinya?",
+          mainText: `【Kanji Ujian JFT】  「 ${kanjiEntry.kanji} 」`,
+          subText: `Muncul pada materi ${relatedItem.pdf} (${relatedItem.page}): ${relatedItem.meaning}`,
+          hint: `💡 Trik Visual Kanji: ${kanjiEntry.trick}`,
+          audioText: kanjiEntry.kanji,
+          blindKanjiPrompt: true,
+          choices,
+          coreReason: `Kanji 『${kanjiEntry.kanji}』 dibaca 「${kanjiEntry.kana}」 (${kanjiEntry.romaji}), artinya "${kanjiEntry.meaning}". 💡 Cara Ingat Bentuknya: ${kanjiEntry.trick}.`,
+          exampleLine: `${sampleContext} = ${relatedItem.exID || relatedItem.meaning}`
+        };
+      } else {
+        // Tampilkan cara baca & arti Indonesia, minta pilih manakah bentuk Kanji JFT yang benar!
+        const choices = [kanjiEntry, ...otherKanji].map(k => ({
+          id: relatedItem.id,
+          isCorrect: k.kanji === kanjiEntry.kanji,
+          displayMain: k.kanji,
+          displaySub: `${k.romaji} (${k.kana})`,
+          jp: `${k.kanji} （${k.kana}）`,
+          romaji: k.romaji,
+          meaning: `${k.meaning} | 💡 ${k.trick}`,
+          blindKanji: true // Jangan bocorkan furigana di tombol opsi sebelum dijawab!
+        })).sort(() => Math.random() - 0.5);
+
+        return {
+          targetId: relatedItem.id,
+          badge: `漢 Tebak Bentuk Kanji • ${relatedItem.pdf} ${relatedItem.page}`,
+          instruction: "Manakah penulisan KANJI yang tepat untuk ungkapan Hyougen/Bunpou berikut?",
+          mainText: `「 ${kanjiEntry.kana} 」\nArti: "${kanjiEntry.meaning}"`,
+          subText: `Romaji: ${kanjiEntry.romaji} • Kategori: ${relatedItem.cat}`,
+          hint: `💡 Trik Visual Kanji: ${kanjiEntry.trick}`,
+          audioText: kanjiEntry.kanji,
+          blindKanjiPrompt: false,
+          choices,
+          coreReason: `Ungkapan 「${kanjiEntry.kana}」 (${kanjiEntry.meaning}) ditulis dengan Kanji 『${kanjiEntry.kanji}』. 💡 Trik Ingat Hurufnya: ${kanjiEntry.trick}.`,
+          exampleLine: `${kanjiEntry.kanji}（${kanjiEntry.kana}） = ${kanjiEntry.meaning}`
+        };
+      }
+    }
+
+    function buildContextualQuestionFromItem(item, styleMode) {
+      // Jika user memilih gaya KANJI_READ, prioritaskan latihan baca Kanji dari item tersebut
+      if (styleMode === "KANJI_READ") {
+        const matchedKanji = extractKanjiEntriesFromText(`${item.jp} ${item.exJP || ""}`);
+        if (matchedKanji.length > 0) {
+          return buildKanjiSniperQuestion(matchedKanji[0], parseInt(item.id.slice(1), 10) || 0);
+        }
+      }
+
+      // Pilih 3 pengecoh (distractors) dari kategori yang sama atau halaman berdekatan agar benar-benar menguji otak!
+      let sameCatPool = ALL_DATA.filter(x => x.id !== item.id && x.pdf === item.pdf && x.cat === item.cat);
+      if (sameCatPool.length < 3) {
+        const samePdfPool = ALL_DATA.filter(x => x.id !== item.id && x.pdf === item.pdf && !sameCatPool.includes(x));
+        sameCatPool = [...sameCatPool, ...samePdfPool.sort(() => Math.random() - 0.5)];
+      }
+      const distractors = sameCatPool.sort(() => Math.random() - 0.5).slice(0, 3);
+
+      // Tentukan tipe pertanyaan berdasarkan styleMode
+      let mode = styleMode;
+      if (mode === "EXAM_CONTEXT") {
+        mode = Math.random() < 0.55 ? "CONTEXT_JP" : "ID_TO_JP";
+      }
+
+      if (mode === "ID_TO_JP") {
+        // Situasi Indonesia -> Pilih Ungkapan / Pola Jepang yang tepat
+        const promptMain = item.exID
+          ? `【Konteks Kalimat】\n"${item.exID}"\n(${item.meaning})`
+          : `【Situasi / Makna】\n"${item.meaning}"`;
+        const promptSub = item.note ? `Konteks PDF (${item.page}): ${item.note}` : `Kategori: ${item.cat}`;
+
+        const allChoices = [item, ...distractors].map(d => ({
+          id: d.id,
+          isCorrect: d.id === item.id,
+          displayMain: d.exJP && item.pdf === "JFT" && Math.random() < 0.4 ? `${d.jp}  (例: ${d.exJP})` : d.jp,
+          displaySub: d.romaji,
+          jp: d.jp,
+          romaji: d.romaji,
+          meaning: d.meaning,
+          page: `${d.pdf} ${d.page}`
+        })).sort(() => Math.random() - 0.5);
+
+        return {
+          targetId: item.id,
+          badge: `${item.pdf} • ${item.page} (${item.cat})`,
+          instruction: "Pilih ungkapan / pola Bahasa Jepang yang tepat untuk makna berikut:",
+          mainText: promptMain,
+          subText: promptSub,
+          hint: `Kata kunci Jepang: ${item.jp.slice(0, 4)}... (${item.romaji.split(" ")[0]}...) — ${item.note || item.cat}`,
+          audioText: item.exJP || item.jp,
+          choices: allChoices,
+          coreReason: `${item.jp} (${item.romaji}) memiliki arti "${item.meaning}". ${item.note ? `Catatan Penting: ${item.note}` : ""}`,
+          exampleLine: item.exJP ? `${item.exJP} (${item.exRomaji}) = ${item.exID}` : `${item.jp} (${item.romaji})`
+        };
+      } else {
+        // JP -> Pilih makna / situasi / fungsi yang tepat
+        const hasEx = Boolean(item.exJP);
+        const promptMain = hasEx
+          ? `${item.exJP}\n【Pola: ${item.jp}】`
+          : `「 ${item.jp} 」`;
+        const promptSub = hasEx
+          ? `${item.exRomaji} (${item.romaji})`
+          : item.romaji;
+
+        const allChoices = [item, ...distractors].map(d => ({
+          id: d.id,
+          isCorrect: d.id === item.id,
+          displayMain: d.exID && hasEx ? `${d.meaning} — "${d.exID}"` : d.meaning,
+          displaySub: `Arti dari: ${d.jp} (${d.romaji})`,
+          jp: d.jp,
+          romaji: d.romaji,
+          meaning: d.meaning,
+          page: `${d.pdf} ${d.page}`
+        })).sort(() => Math.random() - 0.5);
+
+        return {
+          targetId: item.id,
+          badge: `${item.pdf} • ${item.page} (${item.cat})`,
+          instruction: hasEx
+            ? "Apakah arti dan fungsi pola kalimat pada kalimat JFT di bawah ini?"
+            : "Apakah arti / situasi penggunaan yang tepat untuk ungkapan berikut?",
+          mainText: promptMain,
+          subText: promptSub,
+          hint: item.note || `Perhatikan kategori: ${item.cat} (${item.page})`,
+          audioText: item.exJP || item.jp,
+          choices: allChoices,
+          coreReason: `Ungkapan/pola 『${item.jp}』 (${item.romaji}) berarti: "${item.meaning}". ${item.note ? `Trik Ingat: ${item.note}` : ""}`,
+          exampleLine: item.exJP ? `${item.exJP} = ${item.exID}` : `${item.jp} = ${item.meaning}`
+        };
+      }
+    }
+
+    function convertCuratedToQuestionObj(cur) {
+      const targetItem = ITEM_MAP[cur.targetId] || ALL_DATA[0];
+      const rawOpts = [
+        { ...cur.correctOption, isCorrect: true },
+        ...cur.distractors.map(d => ({ ...d, isCorrect: false }))
+      ].sort(() => Math.random() - 0.5);
+
+      return {
+        targetId: cur.targetId,
+        badge: cur.badge,
+        instruction: cur.instruction,
+        mainText: cur.mainText,
+        subText: cur.subText,
+        hint: cur.hint,
+        audioText: targetItem.exJP || targetItem.jp,
+        choices: rawOpts.map(o => ({
+          id: cur.targetId,
+          isCorrect: o.isCorrect,
+          displayMain: o.jp,
+          displaySub: o.romaji,
+          jp: o.jp,
+          romaji: o.romaji,
+          meaning: o.meaning,
+          page: cur.badge
+        })),
+        coreReason: cur.explanation,
+        exampleLine: targetItem.exJP ? `${targetItem.exJP} (${targetItem.exID})` : `${targetItem.jp} = ${targetItem.meaning}`
+      };
+    }
+
+    function initDrillSession() {
+      const deckType = document.getElementById("drillDeckSelect").value;
+      const styleMode = document.getElementById("drillStyleSelect").value;
+
+      let questions = [];
+
+      if (deckType === "KANJI_SPECIAL") {
+        // Paket Khusus Anti-Buta Huruf Kanji Hyougen & Bunpou
+        questions = KANJI_MASTER_DB.map((k, idx) => buildKanjiSniperQuestion(k, idx));
+      } else if (deckType === "JFT_SIMULATION") {
+        // Gabungkan semua soal simulasi JFT asli + soal kontekstual dari pola JFT tersulit
+        const curatedQs = CURATED_JFT_SIMULATIONS.map(convertCuratedToQuestionObj);
+        const extraJft = JFT_DATA.map(item => buildContextualQuestionFromItem(item, styleMode));
+        questions = [...curatedQs, ...extraJft.sort(() => Math.random() - 0.5).slice(0, 20)];
+      } else if (deckType === "REMEDIAL") {
+        const remIds = Array.from(remedialQueue);
+        if (remIds.length === 0) {
+          // Jika belum ada yang salah, ambil yang belum dikuasai
+          const unmastered = ALL_DATA.filter(i => getStatus(i.id) !== "MASTERED").slice(0, 25);
+          questions = unmastered.map(i => buildContextualQuestionFromItem(i, styleMode));
+        } else {
+          questions = remIds.map(id => buildContextualQuestionFromItem(ITEM_MAP[id], styleMode));
+        }
+      } else if (deckType.startsWith("SPRINT_")) {
+        let pool = [];
+        if (deckType === "SPRINT_1") pool = HYOUGEN_DATA.filter(i => i.page === "Hal. 1" || i.page === "Hal. 2");
+        else if (deckType === "SPRINT_2") pool = HYOUGEN_DATA.filter(i => i.page === "Hal. 3" || i.page === "Hal. 4");
+        else if (deckType === "SPRINT_3") pool = HYOUGEN_DATA.filter(i => i.page === "Hal. 5" || i.page === "Hal. 6");
+        else if (deckType === "SPRINT_4") pool = JFT_DATA.filter(i => parseInt(i.id.slice(1)) <= 35);
+        else if (deckType === "SPRINT_5") pool = JFT_DATA.filter(i => parseInt(i.id.slice(1)) >= 36 && parseInt(i.id.slice(1)) <= 52);
+        else if (deckType === "SPRINT_6") pool = JFT_DATA.filter(i => parseInt(i.id.slice(1)) >= 53);
+
+        questions = pool.map(item => buildContextualQuestionFromItem(item, styleMode));
+      } else {
+        // SMART_MIX: Prioritaskan Soal Simulasi JFT + Soal Kanji + Materi yang Belum Hafal
+        const curatedQs = CURATED_JFT_SIMULATIONS.map(convertCuratedToQuestionObj);
+        const kanjiQs = KANJI_MASTER_DB.slice(0, 15).map((k, idx) => buildKanjiSniperQuestion(k, idx));
+        const unmastered = ALL_DATA
+          .filter(i => getStatus(i.id) !== "MASTERED")
+          .sort(() => Math.random() - 0.5)
+          .map(i => buildContextualQuestionFromItem(i, styleMode));
+
+        // Selang-seling soal Simulasi JFT, Kanji, dan 256 Materi agar tidak bosan & langsung nempel
+        questions = [];
+        const maxLen = Math.max(curatedQs.length, kanjiQs.length, unmastered.length);
+        for (let i = 0; i < maxLen; i++) {
+          if (i < curatedQs.length) questions.push(curatedQs[i]);
+          if (i < kanjiQs.length) questions.push(kanjiQs[i]);
+          if (i < unmastered.length) questions.push(unmastered[i]);
+        }
+        if (questions.length === 0) {
+          questions = ALL_DATA.map(i => buildContextualQuestionFromItem(i, styleMode));
+        }
+      }
+
+      activeQuestions = questions;
+      currentQIndex = 0;
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      if (!activeQuestions.length) return;
+      const q = activeQuestions[currentQIndex];
+      currentQAnswered = false;
+
+      document.getElementById("drillCounterText").textContent = `${currentQIndex + 1} / ${activeQuestions.length}`;
+      document.getElementById("qBadge").textContent = q.badge;
+
+      const st = getStatus(q.targetId);
+      const mBadge = document.getElementById("qMasteryBadge");
+      if (st === "MASTERED") {
+        mBadge.textContent = "Sudah Dikuasai ✓";
+        mBadge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300";
+      } else if (st === "REVIEW") {
+        mBadge.textContent = "Perlu Remedial ♻️";
+        mBadge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300";
+      } else {
+        mBadge.textContent = "Belum Dikuasai";
+        mBadge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-800 text-slate-400";
+      }
+
+      document.getElementById("qInstruction").textContent = q.instruction;
+      document.getElementById("qMainText").innerHTML = formatJPWithFurigana(q.mainText, {
+        upgradeHiraganaToKanji: true,
+        blindKanjiMode: Boolean(q.blindKanjiPrompt)
+      });
+
+      const subEl = document.getElementById("qSubText");
+      if (showRomajiGlobal && !q.blindKanjiPrompt) {
+        subEl.textContent = q.subText;
+        subEl.classList.remove("hidden");
+      } else if (q.blindKanjiPrompt) {
+        subEl.textContent = q.subText;
+        subEl.classList.remove("hidden");
+      } else {
+        subEl.classList.add("hidden");
+      }
+
+      // Siapkan Hint & Daftar Kanji pada soal ini
+      document.getElementById("qHintBox").classList.add("hidden");
+      document.getElementById("qHintText").textContent = q.hint;
+
+      const combinedTextForKanji = `${q.mainText} ${q.choices.map(c => c.jp).join(" ")}`;
+      const detectedKanji = extractKanjiEntriesFromText(combinedTextForKanji);
+      const hintKanjiEl = document.getElementById("qHintKanjiList");
+      if (detectedKanji.length > 0) {
+        hintKanjiEl.innerHTML = detectedKanji.map(k => `
+          <div class="p-2 rounded-lg bg-slate-950/90 border border-amber-500/30 flex items-center justify-between gap-2">
+            <div>
+              <span class="font-jp font-black text-sm text-white">${k.kanji}</span>
+              <span class="text-sky-300 font-bold ml-1">(${k.kana})</span>
+              <span class="text-slate-300 ml-1">= ${k.meaning}</span>
+            </div>
+          </div>
+        `).join("");
+      } else {
+        hintKanjiEl.innerHTML = "";
+      }
+
+      document.getElementById("qExplanationPanel").classList.add("hidden");
+
+      const optsContainer = document.getElementById("qOptionsContainer");
+      optsContainer.innerHTML = q.choices.map((ch, idx) => {
+        const formattedMain = formatJPWithFurigana(ch.displayMain, {
+          upgradeHiraganaToKanji: true,
+          blindKanjiMode: Boolean(ch.blindKanji)
+        });
+        const showSubRomaji = showRomajiGlobal && ch.displaySub && !ch.displaySub.startsWith("Arti dari") && !ch.blindKanji;
+        return `
+          <button
+            onclick="selectOption(${idx})"
+            id="optBtn-${idx}"
+            class="w-full text-left p-3.5 sm:p-4 rounded-2xl bg-slate-950 hover:bg-slate-800/90 border border-slate-800 hover:border-indigo-500/60 transition flex items-center justify-between gap-3 group"
+          >
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-lg bg-slate-800 group-hover:bg-indigo-600 text-indigo-300 group-hover:text-white font-extrabold text-xs flex items-center justify-center shrink-0 transition">
+                ${idx + 1}
+              </span>
+              <div>
+                <div class="font-bold text-sm sm:text-base text-slate-100 font-jp leading-loose">${formattedMain}</div>
+                ${showSubRomaji ? `<div class="text-xs text-slate-400">${ch.displaySub}</div>` : ""}
+              </div>
+            </div>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function toggleHintBox() {
+      const box = document.getElementById("qHintBox");
+      box.classList.toggle("hidden");
+    }
+
+    function speakCurrentQuestion() {
+      if (!activeQuestions.length) return;
+      speakJP(activeQuestions[currentQIndex].audioText);
+    }
+
+    function selectOption(idx) {
+      if (currentQAnswered) return;
+      currentQAnswered = true;
+
+      const q = activeQuestions[currentQIndex];
+      const chosen = q.choices[idx];
+      const isRight = chosen.isCorrect;
+
+      // Buka semua Furigana yang tadi disembunyikan pada mode Blind Kanji
+      document.querySelectorAll(".kanji-test-blind").forEach(el => {
+        el.classList.remove("kanji-test-blind");
+      });
+
+      if (isRight) {
+        sessionCorrect++;
+        sessionStreak++;
+        setStatus(q.targetId, "MASTERED");
+      } else {
+        sessionWrong++;
+        sessionStreak = 0;
+        setStatus(q.targetId, "REVIEW");
+        // Otomatis tambahkan ulang soal ini ke akhir sesi latihan agar benar-benar hafal!
+        activeQuestions.push(q);
+        document.getElementById("drillCounterText").textContent = `${currentQIndex + 1} / ${activeQuestions.length}`;
+      }
+
+      document.getElementById("scoreCorrect").textContent = sessionCorrect;
+      document.getElementById("scoreWrong").textContent = sessionWrong;
+      document.getElementById("scoreStreak").textContent = sessionStreak;
+
+      // Highlight Tombol Opsi
+      q.choices.forEach((ch, i) => {
+        const btn = document.getElementById(`optBtn-${i}`);
+        if (ch.isCorrect) {
+          btn.className = "w-full text-left p-3.5 sm:p-4 rounded-2xl bg-emerald-950/70 border-2 border-emerald-500 flex items-center justify-between gap-3";
+        } else if (i === idx && !isRight) {
+          btn.className = "w-full text-left p-3.5 sm:p-4 rounded-2xl bg-rose-950/70 border-2 border-rose-500 flex items-center justify-between gap-3";
+        } else {
+          btn.className = "w-full text-left p-3.5 sm:p-4 rounded-2xl bg-slate-950/40 border border-slate-800/50 opacity-55 flex items-center justify-between gap-3";
+        }
+      });
+
+      // Tampilkan Panel Pembahasan Lengkap + Bedah Kanji + Bedah 4 Opsi
+      const expPanel = document.getElementById("qExplanationPanel");
+      const expTitle = document.getElementById("expHeaderTitle");
+      const expSub = document.getElementById("expSubTitle");
+
+      expPanel.classList.remove("hidden");
+      if (isRight) {
+        expPanel.className = "rounded-2xl border-2 border-emerald-500/40 bg-emerald-950/15 p-5 space-y-4 answered-reveal";
+        expTitle.className = "text-base sm:text-lg font-extrabold text-emerald-400";
+        expTitle.textContent = "✅ Jawaban Tepat! Materi Otomatis Ditandai Dikuasai.";
+        expSub.textContent = "Perhatikan Furigana & Bedah Kanji di bawah agar makin kuat di luar kepala:";
+      } else {
+        expPanel.className = "rounded-2xl border-2 border-rose-500/40 bg-rose-950/15 p-5 space-y-4 answered-reveal";
+        expTitle.className = "text-base sm:text-lg font-extrabold text-rose-400";
+        expTitle.textContent = "❌ Belum Tepat! Soal Ini Akan Diulang Nanti Sampai Anda Hafal.";
+        expSub.textContent = "Lihat cara baca Furigana & jembatan keledai Kanji di bawah ini:";
+      }
+
+      document.getElementById("expCoreReason").innerHTML = formatJPWithFurigana(q.coreReason, { upgradeHiraganaToKanji: true });
+      document.getElementById("expExampleText").innerHTML = formatJPWithFurigana(q.exampleLine, { upgradeHiraganaToKanji: true });
+
+      // Render Bedah Kanji Anti-Buta Huruf untuk soal ini
+      const combinedText = `${q.mainText} ${q.exampleLine} ${q.choices.map(c => c.jp).join(" ")}`;
+      const kanjiList = extractKanjiEntriesFromText(combinedText);
+      const kanjiSection = document.getElementById("expKanjiSection");
+      const kanjiGrid = document.getElementById("expKanjiGrid");
+
+      if (kanjiList.length > 0) {
+        kanjiSection.classList.remove("hidden");
+        kanjiGrid.innerHTML = kanjiList.map(k => `
+          <div
+            onclick="speakJP('${k.kanji}')"
+            class="cursor-pointer p-2.5 rounded-xl bg-slate-950/90 hover:bg-slate-900 border border-sky-500/30 flex flex-col justify-between gap-1 transition"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-jp font-black text-base text-white">
+                <ruby class="jft-ruby">${k.kanji}<rt>${k.kana}</rt></ruby>
+              </span>
+              <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold text-[11px]">
+                ${k.kana} (${k.romaji}) 🔊
+              </span>
+            </div>
+            <div class="text-xs font-bold text-emerald-300">Arti: ${k.meaning}</div>
+            <div class="text-[11px] text-slate-400">💡 ${k.trick}</div>
+          </div>
+        `).join("");
+      } else {
+        kanjiSection.classList.add("hidden");
+      }
+
+      // Render Bedah Ke-4 Opsi Jawaban lengkap dengan Furigana
+      const breakdownEl = document.getElementById("expOptionsBreakdown");
+      breakdownEl.innerHTML = q.choices.map((ch, i) => `
+        <div class="p-3 rounded-xl border ${ch.isCorrect ? 'bg-emerald-950/40 border-emerald-500/50' : 'bg-slate-950/80 border-slate-800'} flex flex-col justify-between gap-1">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-jp font-bold text-sm leading-loose ${ch.isCorrect ? 'text-emerald-300' : 'text-white'}">
+              ${i + 1}. ${formatJPWithFurigana(ch.jp, { upgradeHiraganaToKanji: true })}
+            </span>
+            <button onclick="speakJP('${ch.jp.replace(/'/g, "\\'")}')" class="text-[11px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-indigo-300">
+              🔊
+            </button>
+          </div>
+          <div class="text-[11px] text-indigo-300">${ch.romaji}</div>
+          <div class="text-xs font-semibold ${ch.isCorrect ? 'text-emerald-200' : 'text-slate-300'} pt-1 border-t border-slate-800/80">
+            Arti: ${ch.meaning}
+          </div>
+        </div>
+      `).join("");
+
+      // Auto-play audio of correct answer so auditory memory locks it in
+      speakCurrentQuestion();
+    }
+
+    function nextDrillQuestion() {
+      if (!activeQuestions.length) return;
+      currentQIndex = (currentQIndex + 1) % activeQuestions.length;
+      renderCurrentQuestion();
+    }
+
+    function prevDrillQuestion() {
+      if (!activeQuestions.length) return;
+      currentQIndex = (currentQIndex - 1 + activeQuestions.length) % activeQuestions.length;
+      renderCurrentQuestion();
+    }
+
+    /**
+     * 5. KAMUS CEPAT 256 MATERI PDF & MODE TUTUP ARTI (TAB 3)
+     */
+    function getFilteredListItems() {
+      const q = document.getElementById("listSearchInput").value.trim().toLowerCase();
+      const filter = document.getElementById("listFilterSelect").value;
+
+      return ALL_DATA.filter(item => {
+        if (filter === "HYOUGEN" && item.pdf !== "HYOUGEN") return false;
+        if (filter === "JFT" && item.pdf !== "JFT") return false;
+        if (filter === "UNMASTERED" && getStatus(item.id) === "MASTERED") return false;
+
+        if (q) {
+          const hay = `${item.id} ${item.jp} ${item.romaji} ${item.meaning} ${item.page} ${item.cat} ${item.exJP || ""} ${item.exID || ""}`.toLowerCase();
+          return hay.includes(q);
+        }
+        return true;
+      });
+    }
+
+    function renderDatabaseList() {
+      const items = getFilteredListItems();
+      document.getElementById("listCountText").textContent = items.length;
+      const container = document.getElementById("databaseListContainer");
+
+      container.innerHTML = items.map(item => {
+        const st = getStatus(item.id);
+        const isMastered = st === "MASTERED";
+        const jpWithRuby = formatJPWithFurigana(item.jp, { upgradeHiraganaToKanji: true });
+        const exWithRuby = item.exJP ? formatJPWithFurigana(item.exJP, { upgradeHiraganaToKanji: true }) : "";
+
+        return `
+          <div
+            onclick="handleCardClick('${item.id}')"
+            class="cursor-pointer rounded-2xl border ${isMastered ? 'border-emerald-500/30 bg-emerald-950/10' : 'border-slate-800 bg-slate-900/90'} hover:border-indigo-500/50 p-3.5 flex flex-col justify-between gap-2 transition"
+          >
+            <div class="flex items-center justify-between gap-2 text-[11px]">
+              <span class="px-2 py-0.5 rounded font-bold ${item.pdf === 'HYOUGEN' ? 'bg-indigo-500/20 text-indigo-300' : 'bg-purple-500/20 text-purple-300'}">
+                ${item.pdf} • ${item.page}
+              </span>
+              <div class="flex items-center gap-1.5">
+                <button
+                  onclick="event.stopPropagation(); toggleItemMastered('${item.id}')"
+                  class="px-2 py-0.5 rounded font-bold ${isMastered ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}"
+                >
+                  ${isMastered ? '✓ Hafal' : 'Tandai Hafal'}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="text-base sm:text-lg font-black font-jp text-white leading-loose">${jpWithRuby}</div>
+              <div class="text-[11px] text-slate-400 font-jp">Asli PDF: ${item.jp}</div>
+              ${showRomajiGlobal ? `<div class="text-xs text-indigo-300">${item.romaji}</div>` : ""}
+            </div>
+
+            <div id="meaningBox-${item.id}" class="${blindMode ? 'blur-sm select-none hover:blur-none' : ''} transition p-2.5 rounded-xl bg-slate-950 border border-slate-800/80 text-xs space-y-1">
+              <div class="font-bold text-emerald-300">${item.meaning}</div>
+              ${item.exJP ? `<div class="text-xs text-amber-300 font-jp leading-loose">${exWithRuby} <span class="text-slate-300 font-sans">(${item.exID})</span></div>` : ""}
+              ${item.note ? `<div class="text-[10px] text-slate-400">💡 ${item.note}</div>` : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function handleCardClick(id) {
+      const item = ITEM_MAP[id];
+      if (!item) return;
+      speakJP(item.exJP || item.jp);
+      if (blindMode) {
+        const el = document.getElementById(`meaningBox-${id}`);
+        if (el) el.classList.remove("blur-sm");
+      }
+    }
+
+    function toggleItemMastered(id) {
+      const next = getStatus(id) === "MASTERED" ? "UNLEARNED" : "MASTERED";
+      setStatus(id, next);
+      renderDatabaseList();
+    }
+
+    function toggleBlindMode() {
+      blindMode = !blindMode;
+      const btn = document.getElementById("blindModeBtn");
+      btn.textContent = blindMode ? "🙈 Tutup Arti: ON" : "🙈 Tutup Arti: OFF";
+      renderDatabaseList();
+    }
+
+    function toggleAutoAudioLoop() {
+      if (autoLoopActive) stopAutoAudioLoop();
+      else startAutoAudioLoop();
+    }
+
+    function startAutoAudioLoop() {
+      const items = getFilteredListItems();
+      if (!items.length) return;
+      autoLoopActive = true;
+      autoLoopIdx = 0;
+      const btn = document.getElementById("autoAudioBtn");
+      btn.textContent = "⏹️ Stop";
+      btn.className = "py-2 px-3 rounded-xl bg-rose-600 text-white text-xs font-bold transition";
+      runAutoAudioStep();
+    }
+
+    function stopAutoAudioLoop() {
+      autoLoopActive = false;
+      if (autoLoopTimer) clearTimeout(autoLoopTimer);
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      const btn = document.getElementById("autoAudioBtn");
+      btn.textContent = "▶️ Auto";
+      btn.className = "py-2 px-3 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition";
+    }
+
+    function runAutoAudioStep() {
+      if (!autoLoopActive) return;
+      const items = getFilteredListItems();
+      if (!items.length) {
+        stopAutoAudioLoop();
+        return;
+      }
+      const item = items[autoLoopIdx % items.length];
+      speakJP(item.jp);
+      autoLoopTimer = setTimeout(() => {
+        if (!autoLoopActive) return;
+        autoLoopIdx = (autoLoopIdx + 1) % items.length;
+        runAutoAudioStep();
+      }, 3200);
+    }
+
+    // RESET MODAL
+    function openResetModal() {
+      document.getElementById("resetModal").classList.remove("hidden");
+    }
+
+    function closeResetModal() {
+      document.getElementById("resetModal").classList.add("hidden");
+    }
+
+    function resetAllProgress() {
+      userProgress = {};
+      remedialQueue.clear();
+      saveProgress();
+      initDrillSession();
+      renderDatabaseList();
+      closeResetModal();
+    }
+  </script>
+</body>
+</html>
