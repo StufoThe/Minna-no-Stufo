@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Daishiken N4 - 100 Soal & Pembahasan Minna no Nihongo 2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .jp-text {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 2.3;
+        }
+        ruby {
+            ruby-align: center;
+        }
+        rt {
+            font-size: 0.62em;
+            color: #4f46e5;
+            font-weight: 600;
+            user-select: none;
+            transition: opacity 0.2s ease;
+        }
+        .hide-furigana rt {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .blank-box {
+            display: inline-block;
+            min-width: 3.5rem;
+            border-bottom: 2px solid #6366f1;
+            text-align: center;
+            font-weight: 700;
+            color: #4f46e5;
+            margin: 0 4px;
+            padding: 0 6px;
+        }
+        .kanji-target {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #b45309;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            margin: 0 3px;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Sticky Header & Control Bar -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <!-- Brand & Title -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-indigo-200">
+                            大
+                        </div>
+                        <div>
+                            <h1 class="font-extrabold text-slate-900 text-lg leading-tight">Master Daishiken N4</h1>
+                            <p class="text-xs text-slate-500 font-medium">100 Soal Bab 26-50 Minna no Nihongo & Kanji</p>
+                        </div>
+                    </div>
+                    <!-- Score Badge Mobile -->
+                    <div class="md:hidden flex items-center gap-2 bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-lg">
+                        <span class="text-xs font-semibold text-indigo-700">Skor:</span>
+                        <span id="mobile-score" class="text-sm font-extrabold text-indigo-600">0/100</span>
+                    </div>
+                </div>
+
+                <!-- Action Toggles -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- Toggle Furigana -->
+                    <button id="btn-furigana" onclick="toggleFurigana()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 transition">
+                        <span>あ</span>
+                        <span id="label-furigana">Furigana: ON</span>
+                    </button>
+
+                    <!-- Toggle Mode Belajar / Latihan -->
+                    <button id="btn-study-mode" onclick="toggleStudyMode()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-white shadow-sm hover:bg-amber-600 transition">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <span id="label-study-mode">Buka Semua Pembahasan</span>
+                    </button>
+
+                    <!-- Reset Quiz -->
+                    <button onclick="resetQuiz()" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-rose-50 hover:text-rose-600 border border-slate-200 transition">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        <span>Reset</span>
+                    </button>
+
+                    <!-- Score Badge Desktop -->
+                    <div class="hidden md:flex items-center gap-2 bg-indigo-50 border border-indigo-200 px-3.5 py-1.5 rounded-lg ml-1">
+                        <span class="text-xs font-semibold text-indigo-800">Dijawab: <b id="desktop-answered">0</b>/100</span>
+                        <span class="text-indigo-300">|</span>
+                        <span class="text-xs font-semibold text-emerald-700">Benar: <b id="desktop-score">0</b></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter & Search Row -->
+            <div class="mt-3 pt-2.5 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
+                <!-- Category Tabs -->
+                <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+                    <button onclick="setFilterSession('ALL')" id="tab-ALL" class="px-3 py-1 rounded-md text-xs font-bold bg-slate-900 text-white whitespace-nowrap transition">Semua (100)</button>
+                    <button onclick="setFilterSession('SESI1')" id="tab-SESI1" class="px-3 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">Sesi 1: Bunpou & Goi (1-70)</button>
+                    <button onclick="setFilterSession('SESI2A')" id="tab-SESI2A" class="px-3 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">Sesi 2A: Baca Kanji (71-85)</button>
+                    <button onclick="setFilterSession('SESI2B')" id="tab-SESI2B" class="px-3 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">Sesi 2B: Pilih Kanji (86-100)</button>
+                </div>
+
+                <!-- Search & Bab Filter -->
+                <div class="flex items-center gap-2">
+                    <select id="bab-select" onchange="applyFilters()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="ALL">Semua Bab (26-50 & Kanji)</option>
+                    </select>
+                    <div class="relative flex-1 sm:w-52">
+                        <input type="text" id="search-input" oninput="applyFilters()" placeholder="Cari nomor, kata, bunpou..." class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6">
+        <!-- Info Banner -->
+        <div class="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl p-4 sm:p-5 text-white shadow-md mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+                <div class="inline-flex items-center gap-1.5 bg-white/20 px-2.5 py-0.5 rounded-full text-xs font-semibold mb-1.5">
+                    <span>💡 Tips Belajar Cepat</span>
+                </div>
+                <h2 class="text-base sm:text-lg font-bold">Klik pilihan jawaban (A/B/C/D) untuk mengecek jawabanmu!</h2>
+                <p class="text-xs sm:text-sm text-indigo-100 mt-0.5">Atau klik tombol <b>"Buka Semua Pembahasan"</b> di atas jika ingin langsung membaca kunci jawaban, arti, dan trik cepat *bunpou* Bab 26–50.</p>
+            </div>
+            <button onclick="openNavModal()" class="shrink-0 bg-white text-indigo-700 hover:bg-indigo-50 font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm transition flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                <span>Lompat ke Nomor</span>
+            </button>
+        </div>
+
+        <!-- Questions List -->
+        <div id="questions-container" class="space-y-5"></div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-16 bg-white rounded-2xl border border-slate-200 p-8">
+            <div class="text-4xl mb-3">🔍</div>
+            <h3 class="text-base font-bold text-slate-800">Soal tidak ditemukan</h3>
+            <p class="text-xs text-slate-500 mt-1">Coba ganti filter Bab atau kata kunci pencarianmu.</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-semibold hover:bg-indigo-700">Tampilkan Semua Soal</button>
+        </div>
+    </main>
+
+    <!-- Quick Jump Number Modal -->
+    <div id="nav-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-xl border border-slate-200 max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-800 text-base">Lompat ke Nomor Soal (1 - 100)</h3>
+                <button onclick="closeNavModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="nav-grid" class="grid grid-cols-8 sm:grid-cols-10 gap-1.5 py-4 overflow-y-auto">
+                <!-- Populated by JS -->
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div class="flex items-center gap-3">
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span> Benar</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> Salah</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-slate-200 inline-block"></span> Belum</span>
+                </div>
+                <button onclick="closeNavModal()" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-md font-semibold text-slate-700">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to top button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-5 right-5 z-30 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+    </button>
+
+    <script>
+        // Helper function to parse {Kanji|Furigana} into <ruby>Kanji<rt>Furigana</rt></ruby>
+        function parseRuby(str) {
+            if (!str) return '';
+            let formatted = str.replace(/\{([^|{}]+)\|([^{}]+)\}/g, '<ruby>$1<rt>$2</rt></ruby>');
+            formatted = formatted.replace(/\(\s*\)/g, '<span class="blank-box">(&nbsp;&nbsp;&nbsp;)</span>');
+            formatted = formatted.replace(/【([^】]+)】/g, '<span class="kanji-target">【$1】</span>');
+            return formatted;
+        }
+
+        // Complete 100 Questions Database
+        const questionsData = [
+            // ================= SESI 1: NOMOR 1 - 70 =================
+            {
+                id: 1, session: "SESI1", bab: "Bab 36",
+                q: "{前|まえ}は{自転車|じてんしゃ}に{乗|の}れませんでしたが、{今|いま}は () ようになりました。",
+                opts: ["{乗|の}れる", "{乗|の}ろう", "{乗|の}って", "{乗|の}った"],
+                ans: 0,
+                arti: "Dulu saya tidak bisa naik sepeda, tetapi sekarang sudah menjadi bisa naik sepeda.",
+                pola: "KK Potensial (Bentuk Kamus) + ようになりました",
+                trik: "Ingat rumus perubahan kemampuan! 『～ようになりました』 = 'Menjadi bisa...'. Syarat wajib di depannya adalah Kata Kerja Potensial (bisa). 乗る (Noru: naik) ➔ Potensial: 乗れる (Noreru: bisa naik)."
+            },
+            {
+                id: 2, session: "SESI1", bab: "Bab 47",
+                q: "{部屋|へや}の{窓|まど}が{開|あ}いていますね。だれか{中|なか}に () ようです。",
+                opts: ["いよう", "いる", "いた", "いて"],
+                ans: 1,
+                arti: "Jendela kamarnya terbuka ya. Sepertinya ada seseorang di dalam.",
+                pola: "Bentuk Biasa (普通形) + ようです (Dugaan dari bukti panca indera)",
+                trik: "『～ようです』 artinya 'Sepertinya/Kelihatannya' berdasarkan bukti nyata yang kita lihat (jendela terbuka). Karena orangnya diduga *sekarang* sedang ada di dalam, gunakan bentuk kamus (Sekarang/Positif) yaitu 『いる』."
+            },
+            {
+                id: 3, session: "SESI1", bab: "Bab 33 / 46",
+                q: "{息子|むすこ}は{甘|あま}い{物|もの}が{好|す}きで、{毎日|まいにち}チョコレート () {食|た}べています。",
+                opts: ["ほど", "しか", "だけ", "ばかり"],
+                ans: 3,
+                arti: "Anak laki-laki saya suka makanan manis, setiap hari kerjanya makan cokelat melulu.",
+                pola: "Kata Benda + ばかり + Kata Kerja (Melulu / Terus-menerus)",
+                trik: "『ばかり』 = 'Melulu / Terus'. Dipakai saat seseorang melakukan hal yang sama berulang-ulang (biasanya ada kesan kurang baik/berlebihan). Kalau 『だけ』 artinya cuma 'hanya' tanpa kesan berulang-ulang, sedangkan 『しか』 wajib diikuti kalimat negatif."
+            },
+            {
+                id: 4, session: "SESI1", bab: "Bab 47",
+                q: "{天気予報|てんきよほう}によると、あしたは{一日中|いちにちじゅう}{風|かぜ}が () そうです。",
+                opts: ["{強|つよ}くて", "{強|つよ}く", "{強|つよ}い", "{強|つよ}"],
+                ans: 2,
+                arti: "Menurut ramalan cuaca, katanya besok angin akan kencang sepanjang hari.",
+                pola: " ～によると、Bentuk Biasa (普通形) + そうです (Katanya...)",
+                trik: "Hati-hati jebakan 『そうです』! Karena di awal kalimat ada 『～によると』 (Menurut...), maka 『そうです』 di sini artinya 'KATANYA' (Informasi/Denbun Bab 47), BUKAN 'Kelihatannya' (Bab 43). Rumus 'Katanya': huruf い pada Kata Sifat-i TETAP UTUH! Jadi 『強いそうです』."
+            },
+            {
+                id: 5, session: "SESI1", bab: "Bab 41",
+                q: "{毎朝|まいあさ}{仕事|しごと}へ{行|い}く{前|まえ}に、{庭|にわ}の{花|はな}に{水|みず}を () います。",
+                opts: ["くださって", "もらって", "いただいて", "やって"],
+                ans: 3,
+                arti: "Setiap pagi sebelum pergi bekerja, saya menyiram (memberi) air ke bunga di halaman.",
+                pola: "KK Bentuk て + やります (Memberi/melakukan untuk tanaman, hewan, atau adik/anak)",
+                trik: "Objek yang diberi air adalah 『花』(Bunga/Tanaman). Dalam Bab 41, memberi sesuatu kepada hewan, tumbuhan, atau bawahan/anak sendiri menggunakan 『やります』 (Bentuk て: やって)."
+            },
+            {
+                id: 6, session: "SESI1", bab: "Bab 49",
+                q: "{社長|しゃちょう}はもうけさの{新聞|しんぶん}をお () になりましたか。",
+                opts: ["{読|よ}む", "{読|よ}み", "{読|よ}まれ", "{読|よ}んで"],
+                ans: 1,
+                arti: "Apakah Bapak Direktur sudah membaca koran pagi ini?",
+                pola: "お + KK Bentuk ます (tanpa ます) + になります (Sonkeigo / Menghormati atasan)",
+                trik: "Ini adalah rumus kehormatan (Sonkeigo) untuk tindakan yang dilakukan atasan (社長). Rumus roti lapisnya: 『お + V-ます(buang ます) + になります』. 読みます ➔ お読みになります."
+            },
+            {
+                id: 7, session: "SESI1", bab: "Bab 33",
+                q: "ここは{図書館|としょかん}だから、{大|おお}きな{声|こえ}で ()！",
+                opts: ["{話|はな}した", "{話|はな}そう", "{話|はな}すな", "{話|はな}せ"],
+                ans: 2,
+                arti: "Karena di sini perpustakaan, jangan bicara dengan suara keras!",
+                pola: "KK Bentuk Kamus + な (Bentuk Larangan Keras / Kinshikei)",
+                trik: "Di perpustakaan tidak boleh berisik! Rumus larangan tegas (Jangan!): 『Bentuk Kamus + な』. 話す (bicara) + な = 話すな (Jangan bicara!). Sedangkan 『話せ』 adalah bentuk perintah (Bicaralah!)."
+            },
+            {
+                id: 8, session: "SESI1", bab: "Bab 38",
+                q: "{私|わたし}がいちばん{行|い}きたい () は、{北海道|ほっかいどう}の{札幌|さっぽろ}です。",
+                opts: ["こと", "もの", "の", "よう"],
+                ans: 2,
+                arti: "Tempat yang paling ingin saya kunjungi adalah Sapporo di Hokkaido.",
+                pola: "Kalimat Bentuk Biasa + のは + [Tempat / Orang / Barang] です",
+                trik: "Untuk membendakan kata kerja yang merujuk pada TEMPAT (Sapporo), ORANG, atau BARANG spesifik di akhir kalimat, gunakan 『の』 (pengganti ところ/場所). 『こと』 hanya dipakai untuk hal abstrak/kegiatan, bukan nama tempat."
+            },
+            {
+                id: 9, session: "SESI1", bab: "Bab 43",
+                q: "ちょっと{郵便局|ゆうびんきょく}へ{行|い}って{切手|きって}を () きますから、ここで{待|ま}っていてください。",
+                opts: ["{買|か}った", "{買|か}おう", "{買|か}って", "{買|か}う"],
+                ans: 2,
+                arti: "Saya mau pergi sebentar ke kantor pos untuk membeli perangko lalu kembali ke sini, jadi tolong tunggu di sini.",
+                pola: "KK Bentuk て + きます (Pergi melakukan sesuatu lalu kembali lagi)",
+                trik: "Ingat aksi 'Pergi - Lakukan - Balik lagi'! Karena disuruh menunggu di sini (ここで待っていて), berarti pembicara pergi beli perangko lalu balik lagi: 『買ってきます』."
+            },
+            {
+                id: 10, session: "SESI1", bab: "Bab 37",
+                q: "{子|こ}どものとき、{近所|きんじょ}の{犬|いぬ}に{手|て}を () ことがあります。",
+                opts: ["かめた", "かんだ", "かまれた", "かませた"],
+                ans: 2,
+                arti: "Waktu kecil, tangan saya pernah digigit oleh anjing tetangga.",
+                pola: "Pelaku + に + Bagian Tubuh/Milik + を + KK Pasif (受身形)",
+                trik: "Ada partikel 『犬に』(oleh anjing) dan kita menjadi korban yang dirugikan! Gunakan bentuk Pasif (di-...): かむ (menggigit) ➔ Huruf む berubah jadi ま + れる = かまれる ➔ Bentuk lampau karena diikuti ことがあります: 『かまれた』 (digigit)."
+            },
+            {
+                id: 11, session: "SESI1", bab: "Bab 31",
+                q: "{来月|らいげつ}の15{日|にち}に{新|あたら}しい{支店|してん}がオープンする () です。",
+                opts: ["ところ", "つもり", "予定", "こと"],
+                ans: 2,
+                arti: "Cabang baru dijadwalkan akan buka pada tanggal 15 bulan depan.",
+                pola: "KK Bentuk Kamus / Kata Benda の + 予定です (Dijadwalkan / Rencananya)",
+                trik: "Pembukaan kantor cabang adalah jadwal resmi/acara yang sudah ditetapkan tanggalnya (15日). Jadwal resmi menggunakan 『予定です』(Yotei desu). Kalau 『つもり』 itu niat pribadi seseorang."
+            },
+            {
+                id: 12, session: "SESI1", bab: "Bab 40",
+                q: "あしたのパーティーに{田中|たなか}さんも () かどうか、{知|し}っていますか。",
+                opts: ["{来|く}る", "{来|き}ます", "{来|こ}よう", "{来|き}て"],
+                ans: 0,
+                arti: "Apakah kamu tahu apakah besok Saudara Tanaka juga akan datang atau tidak ke pesta?",
+                pola: "Bentuk Biasa (普通形) + かどうか (Apakah ... atau tidak)",
+                trik: "Di depan 『かどうか』 (apakah ... atau tidak) WAJIB menggunakan Bentuk Biasa (Futsukei), tidak boleh bentuk ます! Karena pestanya besok (あした), gunakan bentuk kamus: 『来る』 (Kuru)."
+            },
+            {
+                id: 13, session: "SESI1", bab: "Bab 48",
+                q: "あした{病院|びょういん}へ{行|い}きたいんですが、{仕事|しごと}を () いただけませんか。",
+                opts: ["{休|やす}めて", "{休|やす}まれて", "{休|やす}んで", "{休|やす}ませて"],
+                ans: 3,
+                arti: "Besok saya ingin pergi ke rumah sakit, bisakah Anda mengizinkan saya libur kerja?",
+                pola: "KK Kausatif (使役形) Bentuk て + いただけませんか (Bolehkah saya diizinkan...)",
+                trik: "Saat meminta IZIN kepada atasan agar *kita* diperbolehkan melakukan sesuatu, gunakan rumus emas Bab 48: 『KK Kausatif-て + いただけませんか』. 休む ➔ 休ませる ➔ 『休ませていただけませんか』 (Bolehkah mengizinkan saya libur?)."
+            },
+            {
+                id: 14, session: "SESI1", bab: "Bab 27",
+                q: "{隣|となり}の{部屋|へや}からピアノの{音|おと}が () ね。だれか{弾|ひ}いているんでしょうか。",
+                opts: ["{聞|き}こえます", "{聞|き}けます", "{聞|き}かれます", "{聞|き}きます"],
+                ans: 0,
+                arti: "Dari kamar sebelah terdengar suara piano ya. Apakah ada seseorang yang sedang memainkannya?",
+                pola: "Suara / Bunyi + が + 聞こえます (Terdengar secara alami)",
+                trik: "Bedakan 『聞こえます』(Kikoemasu) dan 『聞けます』(Kikemasu)! Kalau suara masuk ke telinga kita secara alami tanpa kita sengaja cari, wajib pakai 『音が聞こえます』 (Terdengar suara). Kalau 『聞けます』 artinya bisa mendengarkan (misal lewat aplikasi/radio)."
+            },
+            {
+                id: 15, session: "SESI1", bab: "Bab 41",
+                q: "パソコンの{使|つか}い{方|かた}がよくわからないので、{教|おし}えて () ませんか。",
+                opts: ["いただけ", "くれ", "さしあげ", "ください"],
+                ans: 0,
+                arti: "Karena saya kurang mengerti cara memakai PC, maukah Anda mengajarkannya kepada saya?",
+                pola: "KK Bentuk て + いただけませんか (Meminta tolong dengan sangat sopan)",
+                trik: "Lihat ekor kalimatnya: 『～ませんか』. Pasangan yang paling tepat dan sopan adalah 『教えていただけませんか』 (bentuk potensial dari もらいます/いただきます). Kalau pilih 『ください』 harusnya 『くださりませんか』 (jarang dipakai untuk teman/umum dibanding いただけませんか)."
+            },
+            {
+                id: 16, session: "SESI1", bab: "Bab 44",
+                q: "このコップは{軽|かる}くて () にくいですから、{子|こ}どもが{使|つか}っても{安心|あんしん}です。",
+                opts: ["{割|わ}る", "{割|わ}れて", "{割|わ}り", "{割|わ}れ"],
+                ans: 3,
+                arti: "Karena gelas ini ringan dan tidak mudah pecah, anak kecil pun aman menggunakannya.",
+                pola: "KK Bentuk ます (tanpa ます) + にくい (Sulit / Tidak mudah ...)",
+                trik: "Dua langkah: 1) Di depan 『にくい』 wajib Bentuk ます tanpa ます. 2) Gelas itu 'pecah sendiri' (Intransitif: 割れます / Waremasu), bukan 'memecahkan' (Transitif: 割ります). Jadi 割れます buang ます ➔ 『割れにくい』 (tidak mudah pecah)."
+            },
+            {
+                id: 17, session: "SESI1", bab: "Bab 30",
+                q: "カレンダーに{今月|こんげつ}の{予定|よてい}が () から、{見|み}てください。",
+                opts: ["{書|か}いています", "{書|か}いておきます", "{書|か}いてあります", "{書|か}けています"],
+                ans: 2,
+                arti: "Di kalender sudah tertulis jadwal bulan ini, jadi silakan lihat.",
+                pola: "Benda + が + KK Transitif Bentuk て + あります (Keadaan hasil perbuatan yang disengaja)",
+                trik: "Lihat partikel 『予定が』(Benda + が) tapi kata kerjanya 『書く』(Transitif/butuh objek). Kalau Benda + が + KK Transitif, pasti jawabannya 『～てあります』 (Sudah tertulis dengan sengaja agar dibaca orang)."
+            },
+            {
+                id: 18, session: "SESI1", bab: "Bab 29",
+                q: "{電車|でんしゃ}の{網棚|あみだな}に{傘|かさ}を () しまいました。",
+                opts: ["{忘|わす}れる", "{忘|わす}れ", "{忘|わす}れて", "{忘|わす}れた"],
+                ans: 2,
+                arti: "Payung saya kelupaan (tertinggal) di rak bagasi atas kereta.",
+                pola: "KK Bentuk て + しまいました (Menyatakan penyesalan / ketidaksengajaan)",
+                trik: "Ketinggalan payung di kereta adalah hal yang bikin nyesel! Rumus penyesalan: 『KK Bentuk て + しまいました』. 忘れます ➔ 『忘れてしまいました』."
+            },
+            {
+                id: 19, session: "SESI1", bab: "Bab 44",
+                q: "この{薬|くすり}は{苦|にが}くて () にくいですから、{水|みず}といっしょに{飲|の}んでください。",
+                opts: ["{飲|の}み", "{飲|の}む", "{飲|の}め", "{飲|の}んで"],
+                ans: 0,
+                arti: "Obat ini pahit dan sulit diminum, jadi silakan minum bersama air.",
+                pola: "KK Bentuk ます (tanpa ます) + にくい (Sulit untuk di-...)",
+                trik: "Rumus 『～やすい / ～にくい』 (Mudah / Sulit): Cukup ambil KK Bentuk ます lalu coret ます-nya! 飲みます ➔ coret ます ➔ 『飲みにくい』 (Sulit diminum)."
+            },
+            {
+                id: 20, session: "SESI1", bab: "Bab 29",
+                q: "すみません、その{袋|ふくろ}は () から、{新|あたら}しいのと{取|と}り{替|か}えてください。",
+                opts: ["{破|やぶ}っています", "{破|やぶ}ってあります", "{破|やぶ}れておきます", "{破|やぶ}れています"],
+                ans: 3,
+                arti: "Permisi, karena kantong itu robek, tolong tukar dengan yang baru.",
+                pola: "KK Intransitif (自動詞) Bentuk て + います (Keadaan yang sedang terjadi)",
+                trik: "Ketika minta ganti barang yang rusak/robek di toko, gunakan KK Intransitif + ています. 『破れます』(Yaburemasu = robek) ➔ 『破れています』(dalam keadaan robek). Jangan pilih 破っています karena artinya 'sedang merobek'."
+            },
+            {
+                id: 21, session: "SESI1", bab: "Bab 33",
+                q: "あそこに「{止|と}まれ」と{書|か}いてあるのは、「ここで () 」という{意味|いみ}です。",
+                opts: ["{止|と}まるな", "{止|と}まった", "{止|と}まりなさい", "{止|と}まろう"],
+                ans: 2,
+                arti: "Tulisan 'Tomare' (Berhenti!) di sana itu artinya adalah 'Berhentilah di sini'.",
+                pola: "Penjelasan arti rambu: Bentuk Perintah (命令形) = ～なさい",
+                trik: "『止まれ』(Tomare) adalah Bentuk Perintah (Meireikei) yang artinya 'Berhentilah!'. Persamaan maknanya ketika menjelaskan arti rambu/instruksi adalah 『V-ます(tanpa ます) + なさい』 ➔ 『止まりなさい』."
+            },
+            {
+                id: 22, session: "SESI1", bab: "Bab 39",
+                q: "{夜中|よなか}に{変|へん}な{音|おと}が () 、{目|め}が{覚|さ}めてしまいました。",
+                opts: ["する", "し", "した", "して"],
+                ans: 3,
+                arti: "Karena terdengar suara aneh di tengah malam, saya jadi terbangun.",
+                pola: "KK Bentuk て, [Akibat yang terjadi secara alami]",
+                trik: "Menghubungkan Sebab (ada suara aneh) dan Akibat (terbangun) di tengah kalimat menggunakan Bentuk て! 『音がします』(terdengar suara) diubah ke Bentuk て menjadi 『音がして、～』."
+            },
+            {
+                id: 23, session: "SESI1", bab: "Bab 39",
+                q: "この{辺|あた}りは{夜|よる}とても () ので、{一人|ひとり}で{歩|ある}かないほうがいいです。",
+                opts: ["{静|しず}かで", "{静|しず}かな", "{静|しず}かに", "{静|しず}かだ"],
+                ans: 1,
+                arti: "Karena sekitar sini kalau malam sangat sepi, sebaiknya tidak berjalan sendirian.",
+                pola: "Kata Sifat-na + な + ので (Karena...)",
+                trik: "Hafalkan jembatan emas 『ので』! Kata Sifat-na dan Kata Benda kalau mau ketemu 『ので』, huruf 『だ』 WAJIB berubah jadi 『な』! 静かだ + ので ➔ 『静かなので』."
+            },
+            {
+                id: 24, session: "SESI1", bab: "Bab 34",
+                q: "ゆうべは{宿題|しゅくだい}を () {寝|ね}てしまったので、けさ{早|はや}く{起|お}きました。",
+                opts: ["しなかった", "しなくて", "しない", "しないで"],
+                ans: 3,
+                arti: "Karena tadi malam saya ketiduran tanpa mengerjakan PR, tadi pagi saya bangun cepat.",
+                pola: "KK1 Bentuk ない + で、KK2 (Melakukan KK2 tanpa melakukan KK1)",
+                trik: "Rumus 'TANPA melakukan A, malah melakukan B' adalah 『KK-ないで』. Tidur tanpa mengerjakan PR = 『宿題をしないで寝てしまった』."
+            },
+            {
+                id: 25, session: "SESI1", bab: "Bab 28",
+                q: "このアパートは{駅|えき}から{近|ちか}い () 、{家賃|やちん}も{安|やす}いから、とても{気|き}に{入|い}っています。",
+                opts: ["し", "ので", "のに", "から"],
+                ans: 0,
+                arti: "Apartemen ini selain dekat dari stasiun, uang sewanya juga murah, makanya saya sangat menyukainya.",
+                pola: "Bentuk Biasa + し、～も... から (Menyebutkan beberapa alasan sekaligus)",
+                trik: "Lihat petunjuk kembar di kalimat kedua: ada partikel 『も』 (家賃も安い = sewanya JUGA murah). Kalau ada deretan kelebihan/alasan diikuti 『も』, pasangannya pasti 『～し』!"
+            },
+            {
+                id: 26, session: "SESI1", bab: "Bab 48",
+                q: "うちの{部長|ぶちょう}は{毎日|まいにち}{社員|しゃいん}に30{分|ぷん}ぐらい{英語|えいご}を () 。",
+                opts: ["{勉強|べんきょう}させます", "{勉強|べんきょう}します", "{勉強|べんきょう}できます", "{勉強|べんきょう}されます"],
+                ans: 0,
+                arti: "Kepala bagian kami setiap hari menyuruh karyawan belajar bahasa Inggris sekitar 30 menit.",
+                pola: "Atasan は Bawahan に + Objek を + KK Kausatif (使役形: Menyuruh)",
+                trik: "Ada pola 『部長は 社員に 英語を...』(Bos kepada karyawan...). Bos menyuruh bawahannya melakukan sesuatu menggunakan Bentuk Kausatif (Shiekikei). 勉強します (Kelompok 3) ➔ 『勉強させます』."
+            },
+            {
+                id: 27, session: "SESI1", bab: "Bab 27",
+                q: "ローマ{字|じ}は{書|か}けますが、ひらがなはまだ{少|すこ}し () {読|よ}めません。",
+                opts: ["ほど", "しか", "だけ", "ばかり"],
+                ans: 1,
+                arti: "Saya bisa menulis huruf Romaji, tetapi huruf Hiragana baru bisa membaca sedikit saja.",
+                pola: "～しか + KK Bentuk Negatif (Hanya ... saja)",
+                trik: "Lihat ujung kalimatnya: 『読めません』 (Bentuk NEGATIF). Pasangan sehidup semati untuk kalimat negatif yang artinya 'hanya' adalah 『しか』! (だけ dipakai untuk kalimat positif)."
+            },
+            {
+                id: 28, session: "SESI1", bab: "Bab 40",
+                q: "サイズが{合|あ}うかどうかわかりませんから、この{靴|くつ}を () みてもいいですか。",
+                opts: ["はいた", "はき", "はく", "はいて"],
+                ans: 3,
+                arti: "Karena saya tidak tahu apakah ukurannya pas atau tidak, bolehkah saya mencoba memakai sepatu ini?",
+                pola: "KK Bentuk て + みます (Mencoba melakukan sesuatu)",
+                trik: "Mencoba melakukan sesuatu (coba pakai sepatu, coba makan, dll) rumusnya adalah 『KK Bentuk て + みます』. はきます (memakai sepatu) ➔ 『はいてみてもいいですか』."
+            },
+            {
+                id: 29, session: "SESI1", bab: "Bab 44",
+                q: "このかばんは () すぎて、{旅行|りょこう}にはあまり{便利|べんり}じゃありません。",
+                opts: ["{重|おも}く", "{重|おも}い", "{重|おも}", "{重|おも}さ"],
+                ans: 2,
+                arti: "Tas ini terlalu berat, jadi kurang praktis untuk perjalanan wisata.",
+                pola: "Kata Sifat-i (tanpa い) + すぎます (Terlalu ...)",
+                trik: "Rumus 『～すぎます』(Terlalu...): Untuk Kata Sifat-i, buang huruf 『い』-nya langsung tempel 『すぎます』! 重い (Omoi) ➔ buang い ➔ 『重すぎて』(Omosugite: karena terlalu berat)."
+            },
+            {
+                id: 30, session: "SESI1", bab: "Bab 31",
+                q: "{夏休|なつやす}みは{家族|かぞく}といっしょに{北海道|ほっかいどう}へ () と{思|おも}っています。",
+                opts: ["{行|い}く", "{行|い}こう", "{行|い}って", "{行|い}った"],
+                ans: 1,
+                arti: "Liburan musim panas nanti saya berencana pergi ke Hokkaido bersama keluarga.",
+                pola: "KK Bentuk Maksud (意向形: ～おう/～よう) + と思っています (Berencana...)",
+                trik: "Kalau di belakang ada 『と思っています』 untuk menyatakan niat/rencana masa depan, di depannya gunakan Bentuk Maksud (Ikoukei / Volitional): 行きます ➔ 『行こうと思っています』."
+            },
+            {
+                id: 31, session: "SESI1", bab: "Bab 50",
+                q: "{駅|えき}まで{遠|とお}いですから、{私|わたし}の{車|くるま}でお () しましょうか。",
+                opts: ["{送|おく}られ", "{送|おく}って", "{送|おく}る", "{送|おく}り"],
+                ans: 3,
+                arti: "Karena sampai stasiun jauh, bagaimana kalau saya antarkan dengan mobil saya?",
+                pola: "お + KK Bentuk ます (tanpa ます) + します / しましょうか (Kenjougo / Merendahkan diri)",
+                trik: "Ini adalah rumus Kenjougo (merendahkan diri saat menawarkan bantuan ke lawan bicara): 『お + V-ます(buang ます) + します/しましょうか』. 送ります (mengantar) ➔ 『お送りしましょうか』."
+            },
+            {
+                id: 32, session: "SESI1", bab: "Bab 35",
+                q: "{天気|てんき}が () 、{向|む}こうに{富士山|ふじさん}がきれいに{見|み}えますよ。",
+                opts: ["いければ", "よいなら", "よくて", "よければ"],
+                ans: 3,
+                arti: "Kalau cuacanya bagus, di sebelah sana Gunung Fuji akan terlihat dengan indah lho.",
+                pola: "Bentuk Pengandaian (条件形 ～ば): いい ➔ よければ",
+                trik: "Hafalkan perubahan khusus Kata Sifat 『いい』(bagus) ke bentuk pengandaian 『～ば』(Kalau...): BUKAN いければ, melainkan berubah ke bentuk aslinya 『よい』 ➔ 『よければ』 (Yokereba)!"
+            },
+            {
+                id: 33, session: "SESI1", bab: "Bab 28",
+                q: "{危|あぶ}ないですから、スマホを () ながら{歩|ある}かないでください。",
+                opts: ["{見|み}た", "{見|み}て", "{見|み}", "{見|み}る"],
+                ans: 2,
+                arti: "Karena berbahaya, tolong jangan berjalan sambil melihat smartphone.",
+                pola: "KK Bentuk ます (tanpa ます) + ながら (Sambil ...)",
+                trik: "Rumus 『～ながら』(Sambil melakukan 2 aktivitas bersamaan): Ambil KK Bentuk ます, lalu buang ます-nya! 見ます (Mimasu) ➔ buang ます ➔ 『見ながら』(Minagara)."
+            },
+            {
+                id: 34, session: "SESI1", bab: "Bab 32",
+                q: "{熱|ねつ}があるなら、きょうはお{風呂|ふろ}に () ほうがいいですよ。",
+                opts: ["{入|はい}ろう", "{入|はい}らない", "{入|はい}って", "{入|はい}る"],
+                ans: 1,
+                arti: "Kalau sedang demam, hari ini sebaiknya tidak mandi berendam (ofuro) lho.",
+                pola: "KK Bentuk た / KK Bentuk ない + ほうがいいです (Sebaiknya ... / Sebaiknya tidak ...)",
+                trik: "Saran 『～ほうがいいです』 punya 2 rumus: Kalau sarannya positif pakai Bentuk た (入ったほうがいい), kalau sarannya NEGATIF (jangan mandi karena demam) pakai Bentuk ない: 『入らないほうがいいです』."
+            },
+            {
+                id: 35, session: "SESI1", bab: "Bab 35",
+                q: "エアコンが{動|うご}かないんですが、どう () いいですか。",
+                opts: ["しよう", "すると", "して", "したら"],
+                ans: 3,
+                arti: "AC-nya tidak mau menyala, sebaiknya saya harus bagaimana ya?",
+                pola: "Kata Tanya + KK Pengandaian (～たら / ～ば) + いいですか (Sebaiknya harus bagaimana?)",
+                trik: "Saat meminta saran/petunjuk 'Harus bagaimana?', ekspresi bakunya adalah 『どうしたらいいですか』 atau 『どうすればいいですか』."
+            },
+            {
+                id: 36, session: "SESI1", bab: "Bab 36",
+                q: "{健康|けんこう}のために、{毎日|まいにち}{野菜|やさい}をたくさん () ようにしています。",
+                opts: ["{食|た}べて", "{食|た}べる", "{食|た}べた", "{食|た}べよう"],
+                ans: 1,
+                arti: "Demi kesehatan, setiap hari saya berusaha rutin makan banyak sayur.",
+                pola: "KK Bentuk Kamus / Bentuk ない + ようにしています (Berusaha rutin melakukan...)",
+                trik: "Rumus kebiasaan yang diusahakan terus-menerus: 『KK Kamus / ない + ようにしています』. Karena berusaha makan sayur, gunakan Bentuk Kamus: 『食べるようにしています』."
+            },
+            {
+                id: 37, session: "SESI1", bab: "Bab 33",
+                q: "{佐藤|さとう}さんはきょうは{用事|ようじ}があるから、{先|さき}に () と{言|い}っていました。",
+                opts: ["{帰|かえ}ろう", "{帰|かえ}れ", "{帰|かえ}るな", "{帰|かえ}る"],
+                ans: 3,
+                arti: "Saudara Sato tadi bilang bahwa karena hari ini ada urusan, dia pulang duluan.",
+                pola: "Kalimat Bentuk Biasa + と言っていました (Menyampaikan pesan orang ketiga)",
+                trik: "Menyampaikan pesan pernyataan biasa dari orang lain menggunakan Bentuk Kamus/Biasa: 'Saya mau pulang duluan' ➔ 『先に帰る』 + と言っていました."
+            },
+            {
+                id: 38, session: "SESI1", bab: "Bab 34",
+                q: "{仕事|しごと}が () あとで、{会社|かいしゃ}の{人|ひと}と{食事|しょくじ}に{行|い}きます。",
+                opts: ["{終|お}わる", "{終|お}わって", "{終|お}わった", "{終|お}わり"],
+                ans: 2,
+                arti: "Setelah pekerjaan selesai, saya akan pergi makan bersama orang kantor.",
+                pola: "KK Bentuk た + あとで (Setelah melakukan...)",
+                trik: "Lawan dari 『KK Kamus + まえに』(Sebelum) adalah 『KK Bentuk た + あとで』(Setelah). Karena pekerjaannya harus selesai dulu baru pergi makan, gunakan Bentuk た: 『終わったあとで』."
+            },
+            {
+                id: 39, session: "SESI1", bab: "Bab 43",
+                q: "きのう{買|か}った{本|ほん}はあまり () そうです。まだ{読|よ}んでいませんが。",
+                opts: ["おもしろくなさ", "おもしろさ", "おもしろくなく", "おもしろくない"],
+                ans: 0,
+                arti: "Buku yang saya beli kemarin kelihatannya kurang menarik. Meskipun saya belum membacanya sih.",
+                pola: "Kata Sifat Bentuk ない (buang い + さ) + そうです (Kelihatannya tidak...)",
+                trik: "Ada kalimat 『まだ読んでいませんが』(belum baca), artinya ini baru tebakan dari melihat sampulnya ('Kelihatannya' - Bab 43). Untuk bentuk negatif 『～ない』 + 『そうです』, huruf 『い』 berubah jadi 『さ』! おもしろくない ➔ 『おもしろくなさそうです』."
+            },
+            {
+                id: 40, session: "SESI1", bab: "Bab 49",
+                q: "{部長|ぶちょう}はさっき{会議室|かいぎしつ}へ () から、{今|いま}は{席|せき}にいらっしゃいません。",
+                opts: ["まいりました", "いたされました", "{行|い}かれました", "{申|もう}されました"],
+                ans: 2,
+                arti: "Karena Kepala Bagian baru saja pergi ke ruang rapat, sekarang beliau tidak ada di kursinya.",
+                pola: "Sonkeigo (Menghormati atasan): いらっしゃいます atau KK bentuk ～れます/～られます",
+                trik: "Subjeknya adalah 『部長』(Atasan), jadi wajib pakai Sonkeigo! 『まいりました』 dan 『申す』 adalah Kenjougo (untuk diri sendiri). Bentuk Sonkeigo dari 行きます adalah 『いらっしゃいました』 atau bentuk pasif-hormat 『行かれました』."
+            },
+            {
+                id: 41, session: "SESI1", bab: "Bab 50",
+                q: "{先週|せんしゅう}{課長|かちょう}が{撮|と}られた{写真|しゃしん}を () 、とてもきれいでした。",
+                opts: ["お{目|め}にかかって", "{拝見|はいけん}して", "ご{覧|らん}になって", "うかがって"],
+                ans: 1,
+                arti: "Saya telah melihat foto yang diambil oleh Kepala Seksi minggu lalu, fotonya sangat indah.",
+                pola: "Kenjougo (Merendahkan diri): 見ます ➔ 拝見します (Haiken shimasu)",
+                trik: "Siapa yang melihat foto milik課長? SAYA! Karena aksi 'melihat' dilakukan oleh saya terhadap karya atasan, gunakan Kenjougo dari 見ます yaitu 『拝見します』(Haiken shimasu) ➔ 『拝見して』. (ご覧になって itu untuk atasan yang melihat)."
+            },
+            {
+                id: 42, session: "SESI1", bab: "Bab 45",
+                q: "エレベーターが{故障|こしょう}している () は、{階段|かいだん}を{使|つか}ってください。",
+                opts: ["ところ", "つもり", "{場合|ばあい}", "はず"],
+                ans: 2,
+                arti: "Apabila (dalam kondisi) lift sedang rusak, silakan gunakan tangga.",
+                pola: "Kalimat Bentuk Biasa + 場合は (Apabila / Dalam kasus...)",
+                trik: "Untuk menyatakan kondisi darurat atau kemungkinan kasus tertentu ('Apabila terjadi X, lakukan Y'), gunakan 『場合は』(Baai wa)."
+            },
+            {
+                id: 43, session: "SESI1", bab: "Bab 26",
+                q: "きのうはどうして{日本語|にほんご}の{授業|じゅぎょう}を () んですか。",
+                opts: ["{休|やす}んで", "{休|やす}んだ", "{休|やす}みました", "{休|やす}もう"],
+                ans: 1,
+                arti: "Kemarin kenapa kamu libur (tidak masuk) kelas bahasa Jepang?",
+                pola: "Bentuk Biasa (普通形) + んですか (Meminta penjelasan)",
+                trik: "Di depan 『んですか』 wajib menggunakan Bentuk Biasa! Karena waktunya kemarin (きのう = lampau), ubah 休みました menjadi bentuk biasa lampau: 『休んだんですか』."
+            },
+            {
+                id: 44, session: "SESI1", bab: "Bab 29",
+                q: "プレゼントの{箱|はこ}の{中|なか}に{何|なに}が () か、{開|あ}けてみましょう。",
+                opts: ["{入|い}れてある", "{入|はい}ってある", "{入|はい}っている", "{入|い}れておく"],
+                ans: 2,
+                arti: "Mari kita coba buka untuk melihat apa yang ada di dalam kotak kado.",
+                pola: "Benda + が + 入っています (Berisi / Ada di dalam)",
+                trik: "Menanyakan apa isi di dalam kotak menggunakan KK Intransitif 『入ります』(Hairimasu: masuk/berisi) + ています ➔ 『何が入っているか』. (Kalau 入れてある fokusnya pada siapa yang sengaja memasukkan)."
+            },
+            {
+                id: 45, session: "SESI1", bab: "Bab 41",
+                q: "{私|わたし}が{入院|にゅういん}したとき、{部長|ぶちょう}がお{見舞|みま}いに{来|き}て () 。",
+                opts: ["やりました", "くださいました", "いただきました", "さしあげました"],
+                ans: 1,
+                arti: "Waktu saya dirawat di rumah sakit, Kepala Bagian telah berbaik hati datang menjenguk saya.",
+                pola: "Atasan は (私に) KK Bentuk て + くださいました (Atasan memberikan kebaikan kepada saya)",
+                trik: "Lihat subjek kalimatnya: 『部長が』(Kepala Bagian sebagai pelaku utama). Kalau Orang Lain/Atasan sebagai subjek yang memberi kebaikan kepada kita, gunakan 『くださいました』(versi hormat dari くれました)."
+            },
+            {
+                id: 46, session: "SESI1", bab: "Bab 37",
+                q: "{電話|でんわ}は19{世紀|せいき}にベルによって () 。",
+                opts: ["{発明|はつめい}されました", "{発明|はつめい}できました", "{発明|はつめい}させました", "{発明|はつめい}しました"],
+                ans: 0,
+                arti: "Telepon ditemukan oleh Bell pada abad ke-19.",
+                pola: "Benda は [Penemu/Pencipta] によって + KK Pasif (受身形)",
+                trik: "Ada kata kunci 『によって』(Oleh — khusus untuk penemuan/karya cipta)! Kalimatnya pasti kalimat PASIF (ditemukan). 発明します (menemukan) ➔ Pasif: 『発明されました』 (ditemukan)."
+            },
+            {
+                id: 47, session: "SESI1", bab: "Bab 46",
+                q: "{先月|せんげつ}{日本|にほん}へ () ばかりですから、まだ{日本語|にほんご}があまり{話|はな}せません。",
+                opts: ["{来|き}て", "{来|き}た", "{来|く}る", "{来|こ}よう"],
+                ans: 1,
+                arti: "Karena saya baru saja datang ke Jepang bulan lalu, saya masih belum begitu bisa berbicara bahasa Jepang.",
+                pola: "KK Bentuk た + ばかりです (Baru saja melakukan... menurut perasaan pembicara)",
+                trik: "Rumus 'Baru saja...' (bahkan untuk kejadian bulan lalu yang terasa masih baru) adalah 『KK Bentuk た + ばかりです』. 来ました ➔ 『来たばかりです』."
+            },
+            {
+                id: 48, session: "SESI1", bab: "Bab 34",
+                q: "{私|わたし}が{今|いま}から () とおりに、もう{一度|いちど}やってみてください。",
+                opts: ["やった", "{やって}", "やり", "やる"],
+                ans: 3,
+                arti: "Tolong coba lakukan sekali lagi persis seperti yang akan saya lakukan mulai sekarang.",
+                pola: "KK Bentuk Kamus / Bentuk た + とおりに (Persis seperti...)",
+                trik: "Di depan 『とおりに』 hanya boleh KK Bentuk Kamus (jika aksinya baru akan dilakukan) atau KK Bentuk た (jika aksinya sudah dilakukan). Karena ada kata 『今から』(mulai sekarang / belum dilakukan), wajib pakai Bentuk Kamus: 『やるとおりに』!"
+            },
+            {
+                id: 49, session: "SESI1", bab: "Bab 30",
+                q: "テーブルの{上|うえ}にコップやお{皿|さら}が{並|なら}べて () 。",
+                opts: ["しまいます", "あります", "おきます", "います"],
+                ans: 1,
+                arti: "Di atas meja telah tertata gelas dan piring.",
+                pola: "Benda + が + KK Transitif Bentuk て + あります",
+                trik: "Perhatikan partikel 『コップやお皿が』 diikuti kata kerja 『並べて』(Bentuk て dari 並べます = menata/Transitif). Rumus Benda + が + KK Transitif-て pasti diikuti 『あります』!"
+            },
+            {
+                id: 50, session: "SESI1", bab: "Bab 42",
+                q: "{将来|しょうらい}{自分|じぶん}の{店|みせ}を () ために、{毎月|まいつき}{少|すこ}しずつ{貯金|ちょきん}しています。",
+                opts: ["{持|も}つ", "{持|も}った", "{持|も}って", "{持|も}ち"],
+                ans: 0,
+                arti: "Demi memiliki toko sendiri di masa depan, setiap bulan saya menabung sedikit demi sedikit.",
+                pola: "KK Bentuk Kamus + ために (Demi / Untuk tujuan...)",
+                trik: "Rumus tujuan 『～ために』(Demi/Untuk): Jika menggunakan kata kerja, WAJIB dalam Bentuk Kamus (Dictionary form)! 持ちます ➔ 『持つために』."
+            },
+            {
+                id: 51, session: "SESI1", bab: "Bab 41",
+                q: "{先生|せんせい}に{日本語|にほんご}の{作文|さくぶん}を{直|なお}して () 。",
+                opts: ["くださいました", "いただきました", "やりました", "さしあげました"],
+                ans: 1,
+                arti: "Saya telah menerima bantuan dari Guru untuk mengoreksi karangan bahasa Jepang saya.",
+                pola: "(私は) Atasan/Guru に + KK Bentuk て + いただきました",
+                trik: "Lihat partikel di belakang 先生: 『先生に』(Kepada/Dari Guru). Kalau ada partikel 『に』 pada orang yang memberi bantuan, berarti subjeknya adalah SAYA yang menerima bantuan ➔ Gunakan 『いただきました』(versi sopan dari もらいました)."
+            },
+            {
+                id: 52, session: "SESI1", bab: "Bab 38",
+                q: "まだ{使|つか}える{物|もの}を{捨|す}ててしまう () はもったいないです。",
+                opts: ["ところ", "の", "もの", "こと"],
+                ans: 1,
+                arti: "Membuang barang yang masih bisa dipakai itu sayang sekali (mubazir).",
+                pola: "KK Bentuk Biasa + のは + Kata Sifat です (Membendakan kata kerja sebagai subjek)",
+                trik: "Di depan sifat penilaian emosional/langsung seperti 『もったいない』(sayang/mubazir), 『危ない』, 『おもしろい』, kata kerja dibendakan menjadi subjek dengan 『のは』."
+            },
+            {
+                id: 53, session: "SESI1", bab: "Bab 38 / 42",
+                q: "このはさみは{花|はな}を () のに{使|つか}います。",
+                opts: ["{切|き}って", "{切|き}った", "{切|き}り", "{切|き}る"],
+                ans: 3,
+                arti: "Gunting ini digunakan untuk memotong bunga.",
+                pola: "KK Bentuk Kamus + のに (使います / 便利です / いいです)",
+                trik: "Rumus kegunaan/fungsi alat Bab 42: 『KK Bentuk Kamus + のに + 使います』 (Digunakan untuk...). 切ります ➔ 『切るのに使います』."
+            },
+            {
+                id: 54, session: "SESI1", bab: "Bab 47",
+                q: "{台所|だいどころ}からいいにおいが () ね。{母|はは}が{何|なに}か{作|つく}っているようです。",
+                opts: ["なります", "します", "きます", "あります"],
+                ans: 1,
+                arti: "Dari dapur tercium aroma yang sedap ya. Sepertinya Ibu sedang memasak sesuatu.",
+                pola: "[Aroma / Rasa / Suara] + が + します",
+                trik: "Hafalkan pasangan tetap panca indera di Bab 47: 音がします (terdengar suara), 声がします (terdengar suara makhluk hidup), においがします (tercium bau/aroma), 味がします (terasa rasanya). Semuanya pakai 『がします』!"
+            },
+            {
+                id: 55, session: "SESI1", bab: "Bab 39",
+                q: "ゆうべは{地震|じしん}が () 、{夜中|よなか}までずっと{眠|ねむ}れませんでした。",
+                opts: ["こわく", "こわくて", "こわい", "こわかった"],
+                ans: 1,
+                arti: "Tadi malam karena gempanya menakutkan, saya tidak bisa tidur terus sampai tengah malam.",
+                pola: "Kata Sifat-i (buang い + くて), [Akibat]",
+                trik: "Menyambung alasan perasaan (こわい = takut) di tengah kalimat menggunakan Bentuk て untuk Kata Sifat-i: huruf 『い』 diubah menjadi 『くて』 ➔ 『こわくて』."
+            },
+            {
+                id: 56, session: "SESI1", bab: "Bab 43",
+                q: "{空|そら}が{暗|くら}くなってきましたね。{今|いま}にも{雨|あめ}が () そうです。",
+                opts: ["{降|ふ}り", "{降|ふ}る", "{降|ふ}った", "{降|ふ}って"],
+                ans: 0,
+                arti: "Langit sudah mulai gelap ya. Sebentar lagi kelihatannya akan turun hujan.",
+                pola: "KK Bentuk ます (tanpa ます) + そうです (Kelihatannya sebentar lagi akan...)",
+                trik: "Ada kata kunci 『今にも』(sebentar lagi/saat ini juga) dan kita melihat langit gelap secara langsung! Ini adalah 『そうです』 Bab 43 (Kelihatannya akan terjadi). Rumusnya: KK Bentuk ます buang ます ➔ 降ります menjadi 『降りそうです』."
+            },
+            {
+                id: 57, session: "SESI1", bab: "Bab 46",
+                q: "たった{今|いま}バスが () ところですから、{次|つぎ}のバスまで20{分|ぷん}ぐらいありますよ。",
+                opts: ["{出|で}る", "{出|で}た", "{出|で}よう", "{出|で}ている"],
+                ans: 1,
+                arti: "Karena busnya baru saja berangkat tepat barusan, masih ada sekitar 20 menit sampai bus berikutnya lho.",
+                pola: "たった今 + KK Bentuk た + ところです (Baru saja selesai terjadi beberapa detik/menit lalu)",
+                trik: "Kata kunci 『たった今』(barusan banget!) adalah pasangan tetap dari 『KK Bentuk た + ところです』. Karena busnya baru saja berangkat, gunakan 『出たところです』."
+            },
+            {
+                id: 58, session: "SESI1", bab: "Bab 35",
+                q: "この{歌|うた}は () {聞|き}くほど{好|す}きになります。",
+                opts: ["{聞|き}いたら", "{聞|き}けば", "{聞|き}くと", "{聞|き}いて"],
+                ans: 1,
+                arti: "Lagu ini semakin didengarkan, saya menjadi semakin suka.",
+                pola: "KK Bentuk ～ば + KK Bentuk Kamus + ほど (Semakin ... semakin ...)",
+                trik: "Rumus kembar 'Semakin... semakin...': Kata kerja yang sama diulang dua kali, yang pertama pakai bentuk 『～ば』, yang kedua pakai 『Bentuk Kamus + ほど』! 聞く ➔ 『聞けば聞くほど』."
+            },
+            {
+                id: 59, session: "SESI1", bab: "Bab 50",
+                q: "{来週|らいしゅう}の{金曜日|きんようび}にそちらへ () ますから、よろしくお{願|ねが}いいたします。",
+                opts: ["ご{覧|らん}になり", "うかがい", "いらっしゃい", "おっしゃい"],
+                ans: 1,
+                arti: "Pada hari Jumat minggu depan saya akan berkunjung ke tempat Anda, mohon bantuannya.",
+                pola: "Kenjougo (Merendahkan diri): 行きます ➔ うかがいます (Ukagaimasu)",
+                trik: "Siapa yang pergi ke tempat lawan bicara (そちらへ)? SAYA! Untuk merendahkan diri saat kita pergi/mengunjungi tempat klien atau atasan, gunakan Kenjougo 『うかがいます』. (ご覧になり, いらっしゃい, おっしゃい semuanya Sonkeigo untuk orang lain)."
+            },
+            {
+                id: 60, session: "SESI1", bab: "Bab 38",
+                q: "けさ{急|いそ}いでいたから、{部屋|へや}の{電気|でんき}を () のを{忘|わす}れてしまいました。",
+                opts: ["{消|け}して", "{消|け}した", "{消|け}す", "{消|け}し"],
+                ans: 2,
+                arti: "Karena tadi pagi terburu-buru, saya kelupaan mematikan lampu kamar.",
+                pola: "KK Bentuk Kamus + のを + 忘れました (Lupa melakukan sesuatu)",
+                trik: "Kalau kita LUPA melakukan suatu aktivitas (sehingga aktivitasnya belum dikerjakan), gunakan 『KK Bentuk Kamus + のを忘れました』 ➔ 『消すのを忘れてしまいました』."
+            },
+            {
+                id: 61, session: "SESI1", bab: "Bab 27",
+                q: "{駅|えき}の{前|まえ}に{新|あたら}しいスーパーが () から、{買|か}い{物|もの}が{便利|べんり}になりました。",
+                opts: ["できて", "なって", "して", "あって"],
+                ans: 0,
+                arti: "Karena telah dibangun (jadi) supermarket baru di depan stasiun, berbelanja menjadi praktis.",
+                pola: "[Bangunan / Jalan / Toko] + が + できます (Selesai dibangun / Muncul baru)",
+                trik: "Selain artinya 'bisa', kata kerja 『できます』 jika subjeknya adalah bangunan/toko baru artinya adalah 'selesai dibangun / buka'. Jadi 『新しいスーパーができてから』."
+            },
+            {
+                id: 62, session: "SESI1", bab: "Bab 45",
+                q: "{薬|くすり}を () のに、なかなかせきが{止|と}まりません。",
+                opts: ["{飲|の}んで", "{飲|の}みます", "{飲|の}んだ", "{飲|の}もう"],
+                ans: 2,
+                arti: "Padahal sudah minum obat, tetapi batuknya tak kunjung berhenti.",
+                pola: "Bentuk Biasa (普通形) + のに (Padahal ... tetapi ...)",
+                trik: "『のに』 artinya 'Padahal...'. Di depan 『のに』 wajib Bentuk Biasa! Karena obatnya SUDAH diminum tapi batuknya belum sembuh juga, gunakan bentuk lampau biasa: 『飲んだのに』."
+            },
+            {
+                id: 63, session: "SESI1", bab: "Bab 30",
+                q: "{会議|かいぎ}が{始|はじ}まる{前|まえ}に、これから{資料|しりょう}をコピーして () 。",
+                opts: ["あります", "います", "おきます", "しまいます"],
+                ans: 2,
+                arti: "Sebelum rapat dimulai, sekarang saya akan memfotokopi dokumen terlebih dahulu (sebagai persiapan).",
+                pola: "KK Bentuk て + おきます (Melakukan sesuatu terlebih dahulu untuk persiapan)",
+                trik: "Ada kata kunci 『会議が始まる前に』(sebelum rapat dimulai) dan 『これから』(mulai sekarang). Melakukan sesuatu sebagai PERSIAPAN masa depan menggunakan 『～ておきます』!"
+            },
+            {
+                id: 64, session: "SESI1", bab: "Bab 46",
+                q: "きのう{速達|そくたつ}で{手紙|てがみ}を{出|だ}したから、きょう{届|とど}く () です。",
+                opts: ["わけ", "ばかり", "はず", "ところ"],
+                ans: 2,
+                arti: "Karena kemarin saya mengirim surat dengan pos kilat, seharusnya (pasti) hari ini sampai.",
+                pola: "Bentuk Biasa + はずです (Seharusnya / Pasti ... karena ada alasan logis)",
+                trik: "Ada alasan logis yang kuat di depannya (kemarin kirim pakai pos kilat/速達). Kesimpulan logis 'Seharusnya/Pasti sampai hari ini' menggunakan 『届くはずです』!"
+            },
+            {
+                id: 65, session: "SESI1", bab: "Bab 36",
+                q: "パスポートを () ように、かばんの{中|なか}にしっかりしまっておきました。",
+                opts: ["なくす", "なくさない", "なくして", "なくした"],
+                ans: 1,
+                arti: "Supaya tidak menghilangkan paspor, saya telah menyimpannya rapat-rapat di dalam tas.",
+                pola: "KK Bentuk ない + ように (Supaya tidak ...)",
+                trik: "『～ように』 artinya 'Supaya / Agar'. Tentu kita menyimpan paspor di tas supaya TIDAK hilang! Bentuk negatif biasa dari なくします (menghilangkan) adalah 『なくさないように』."
+            },
+            {
+                id: 66, session: "SESI1", bab: "Bab 25 / 35",
+                q: "もし{宝|たから}くじが () 、{世界一周|せかいいっしゅう}の{旅行|りょこう}に{行|い}きたいです。",
+                opts: ["{当|あ}たって", "{当|あ}たると", "{当|あ}たったら", "{当|あ}たるなら"],
+                ans: 2,
+                arti: "Seandainya menang undian lotre, saya ingin pergi jalan-jalan keliling dunia.",
+                pola: "もし + KK Bentuk た + ら、～たいです (Pengandaian 'Seandainya')",
+                trik: "Dua petunjuk kuat: 1) Ada kata 『もし』(Seandainya) di awal kalimat, 2) Di akhir kalimat berupa keinginan 『～たいです』. Pengandaian 『と』 tidak boleh diikuti keinginan (～たい), jadi pasangan terbaik 『もし』 adalah 『～たら』: 『当たったら』!"
+            },
+            {
+                id: 67, session: "SESI1", bab: "Bab 32",
+                q: "{道|みち}が{混|こ}んでいますから、{約束|やくそく}の{時間|じかん}に () かもしれません。",
+                opts: ["{遅|おく}れよう", "{遅|おく}れる", "{遅|おく}れて", "{遅|おく}れ"],
+                ans: 1,
+                arti: "Karena jalannya macet, mungkin saya akan terlambat dari waktu janji.",
+                pola: "Bentuk Biasa (普通形) + かもしれません (Mungkin ...)",
+                trik: "Di depan 『かもしれません』(Mungkin...) wajib menggunakan Bentuk Biasa! Karena terlambatnya mungkin akan terjadi nanti, gunakan Bentuk Kamus dari 遅れます: 『遅れるかもしれません』."
+            },
+            {
+                id: 68, session: "SESI1", bab: "Bab 49",
+                q: "どうぞ{遠慮|えんりょ}しないで、たくさん () ください。",
+                opts: ["{召|め}し{上|あ}がって", "{申|もう}して", "いただいて", "うかがって"],
+                ans: 0,
+                arti: "Silakan jangan sungkan-sungkan, makanlah yang banyak.",
+                pola: "Sonkeigo (Menghormati tamu/lawan bicara): 食べます・飲みます ➔ 召し上がります",
+                trik: "Kita mempersilakan tamu untuk makan/minum! Kata kerja hormat (Sonkeigo) khusus untuk makan/minum adalah 『召し上がります』(Meshiagarimasu) ➔ 『召し上がってください』. Jangan terkecoh dengan 『いただいて』 karena いただきます adalah Kenjougo untuk diri kita sendiri!"
+            },
+            {
+                id: 69, session: "SESI1", bab: "Bab 46",
+                q: "{今|いま}からちょうど{昼|ひる}ご{飯|はん}を () ところです。いっしょにどうですか。",
+                opts: ["{食|た}べた", "{食|た}べる", "{食|た}べて", "{食|た}べよう"],
+                ans: 1,
+                arti: "Sekarang saya baru saja akan makan siang. Bagaimana kalau makan bersama?",
+                pola: "今から / ちょうど + KK Bentuk Kamus + ところです (Baru akan melakukan...)",
+                trik: "Lihat petunjuk waktunya: 『今から』(Mulai dari sekarang) dan mengajak makan bareng (berarti BELUM makan!). Rumus 'Baru akan melakukan' adalah 『KK Bentuk Kamus + ところです』: 『食べるところです』."
+            },
+            {
+                id: 70, session: "SESI1", bab: "Bab 48",
+                q: "{子|こ}どもが{自分|じぶん}の{部屋|へや}でピアノの{練習|れんしゅう}をしたがっているので、{自由|じゆう}に () います。",
+                opts: ["{弾|ひ}かれて", "{弾|ひ}けて", "{弾|ひ}かせて", "{弾|ひ}いて"],
+                ans: 2,
+                arti: "Karena anak saya ingin berlatih piano di kamarnya sendiri, saya membiarkannya bermain piano dengan bebas.",
+                pola: "KK Kausatif (使役形) Bentuk て + います (Membiarkan / Mengizinkan seseorang melakukan yang ia sukai)",
+                trik: "Ketika anak ingin melakukan sesuatu (～たがっている) lalu orang tua mendukungnya dengan 'membiarkan secara bebas' (自由に), gunakan bentuk Kausatif (Shiekikei)! 弾きます (bermain piano) ➔ 弾かせます ➔ 『弾かせています』."
+            },
+
+            // ================= SESI 2A: NOMOR 71 - 85 (BACA KANJI) =================
+            {
+                id: 71, session: "SESI2A", bab: "Kanji N4",
+                q: "あしたの{朝|あさ}、{飛行機|ひこうき}の【便】を{調|しら}べます。",
+                opts: ["びんり", "びん", "たより", "べん"],
+                ans: 1,
+                arti: "Besok pagi saya akan memeriksa jadwal penerbangan pesawat.",
+                pola: "Cara Baca Kanji 【便】",
+                trik: "Kanji 【便】 punya 2 bacaan penting di N4: 1) Dibaca 『べん』 pada 便利 (Benri = praktis) dan 郵便局 (Yuubinkyoku = kantor pos). 2) Dibaca 『びん』(Bin) jika artinya 'jadwal penerbangan pesawat / pengiriman paket' (飛行機の便 = Hikouki no bin)!"
+            },
+            {
+                id: 72, session: "SESI2A", bab: "Kanji N4",
+                q: "この【薬】はご{飯|はん}を{食|た}べたあとで{飲|の}んでください。",
+                opts: ["くさり", "たのし", "くすり", "らく"],
+                ans: 2,
+                arti: "Obat ini silakan diminum setelah makan.",
+                pola: "Cara Baca Kanji 【薬】",
+                trik: "Kanji 【薬】 adalah gabungan radikal Rumput (艹) di atas Kanji 楽 (Raku/Tanoshii). Rumput yang bikin badan nyaman/sembuh = 『くすり』(Kusuri = Obat)!"
+            },
+            {
+                id: 73, session: "SESI2A", bab: "Kanji N4",
+                q: "{兄|あに}は{大学|だいがく}で【医学】の{勉強|べんきょう}をしています。",
+                opts: ["いがっく", "ちがく", "いしゃ", "いがく"],
+                ans: 3,
+                arti: "Kakak laki-laki saya sedang belajar ilmu kedokteran di universitas.",
+                pola: "Cara Baca Kanji 【医学】",
+                trik: "医 (I = medis, seperti pada 医者/Isha = dokter) + 学 (Gaku = ilmu belajar). Digabung tanpa tsumaru (っ): 『いがく』(Igaku = Ilmu Kedokteran)."
+            },
+            {
+                id: 74, session: "SESI2A", bab: "Kanji N4",
+                q: "{夏休|なつやす}みに【家族】といっしょに{海|うみ}へ{行|い}きました。",
+                opts: ["かぞく", "やぞく", "いえぞく", "かそく"],
+                ans: 0,
+                arti: "Pada liburan musim panas saya pergi ke laut bersama keluarga.",
+                pola: "Cara Baca Kanji 【家族】",
+                trik: "家 (On'yomi: か / Kun'yomi: いえ・うち) + 族 (ぞく = suku/keluarga, pakai tenten!). Digabung menjadi 『かぞく』(Kazoku = Keluarga)."
+            },
+            {
+                id: 75, session: "SESI2A", bab: "Kanji N4",
+                q: "{毎日|まいにち}【自転車】に{乗|の}って{会社|かいしゃ}へ{通|かよ}っています。",
+                opts: ["じでんしゃ", "しでんしゃ", "じてんしゃ", "じてんくるま"],
+                ans: 2,
+                arti: "Setiap hari saya pulang-pergi ke kantor dengan naik sepeda.",
+                pola: "Cara Baca Kanji 【自転車】",
+                trik: "Awas jebakan tenten! 自 (じ = sendiri) + 転 (てん = berputar, TANPA tenten! Jangan tertukar dengan 電/でん listrik) + 車 (しゃ = roda/kendaraan) = 『じてんしゃ』(Jitensha = Sepeda)."
+            },
+            {
+                id: 76, session: "SESI2A", bab: "Kanji N4",
+                q: "{電車|でんしゃ}の{中|なか}で【気分】が{悪|わる}くなりました。",
+                opts: ["きぶん", "きふん", "きぷん", "けぶん"],
+                ans: 0,
+                arti: "Di dalam kereta perasaan (kondisi badan) saya menjadi tidak enak.",
+                pola: "Cara Baca Kanji 【気分】",
+                trik: "気 (き) + 分 (ぶん) = 『きぶん』(Kibun = perasaan / kondisi fisik). Ingat kalimat: 気分が悪い (Kibun ga warui = merasa mual/tidak enak badan)."
+            },
+            {
+                id: 77, session: "SESI2A", bab: "Kanji N4",
+                q: "{来週|らいしゅう}までにこの【計画】をまとめなければなりません。",
+                opts: ["けいかく", "きかく", "けいかっく", "けいがく"],
+                ans: 0,
+                arti: "Sampai minggu depan saya harus merangkum rencana ini.",
+                pola: "Cara Baca Kanji 【計画】",
+                trik: "計 (けい = menghitung/merancang, seperti pada 時計/Tokei) + 画 (かく = garis rencana, seperti pada 映画/Eiga tapi di sini dibaca かく) = 『けいかく』(Keikaku = Rencana)."
+            },
+            {
+                id: 78, session: "SESI2A", bab: "Kanji N4",
+                q: "わからない{言葉|ことば}があったら、{先生|せんせい}に【質問】してください。",
+                opts: ["しちもん", "しつぶん", "しつもん", "しもん"],
+                ans: 2,
+                arti: "Kalau ada kosakata yang tidak dimengerti, silakan bertanya kepada Guru.",
+                pola: "Cara Baca Kanji 【質問】",
+                trik: "質 (しつ = kualitas/isi) + 問 (もん = bertanya, ada gambar mulut 口 di dalam gerbang 門) = 『しつもん』(Shitsumon = Pertanyaan)."
+            },
+            {
+                id: 79, session: "SESI2A", bab: "Kanji N4",
+                q: "きのうは【台風】のせいで、{電車|でんしゃ}が{全部|ぜんぶ}{止|と}まりました。",
+                opts: ["たいふう", "だいかぜ", "だいふう", "たいかぜ"],
+                ans: 0,
+                arti: "Kemarin gara-gara angin topan (taifun), semua kereta berhenti beroperasi.",
+                pola: "Cara Baca Kanji 【台風】",
+                trik: "台 (たい, tanpa tenten untuk angin topan!) + 風 (ふう, vokal panjang!) = 『たいふう』(Taifuu = Angin Topan / Taifun)."
+            },
+            {
+                id: 80, session: "SESI2A", bab: "Kanji N4",
+                q: "ここは【特別】な{部屋|へや}ですから、{勝手|かって}に{入|はい}らないでください。",
+                opts: ["とくべつ", "とこべつ", "とくべち", "とっべつ"],
+                ans: 0,
+                arti: "Karena di sini adalah ruangan khusus, tolong jangan masuk sembarangan.",
+                pola: "Cara Baca Kanji 【特別】",
+                trik: "特 (とく = spesial, seperti pada 特急/Tokkyuu) + 別 (べつ = terpisah/beda) = 『とくべつ』(Tokubetsu = Khusus / Spesial)."
+            },
+            {
+                id: 81, session: "SESI2A", bab: "Kanji N4",
+                q: "{日本|にほん}の【工業】はとても{進|すす}んでいます。",
+                opts: ["こうぎょう", "くうぎょう", "こぎょう", "こうぎょ"],
+                ans: 0,
+                arti: "Industri manufaktur Jepang sangat maju.",
+                pola: "Cara Baca Kanji 【工業】",
+                trik: "Keduanya memiliki bunyi vokal panjang (う)! 工 (こう = teknik/pabrik) + 業 (ぎょう = usaha/industri) = 『こうぎょう』(Kougyou = Industri)."
+            },
+            {
+                id: 82, session: "SESI2A", bab: "Kanji N4",
+                q: "{今度|こんど}の{試合|しあい}に{勝|か}つために、{毎日|まいにち}【練習】しています。",
+                opts: ["ねんしゅう", "れんじゅう", "れんしゅう", "れんしゅ"],
+                ans: 2,
+                arti: "Demi menang pada pertandingan kali ini, saya berlatih setiap hari.",
+                pola: "Cara Baca Kanji 【練習】",
+                trik: "練 (れん = melatih) + 習 (しゅう = belajar/membiasakan, dengan vokal panjang う dan tanpa tenten) = 『れんしゅう』(Renshuu = Latihan)."
+            },
+            {
+                id: 83, session: "SESI2A", bab: "Kanji N4",
+                q: "{図書館|としょかん}で{日本|にほん}の{歴史|れきし}について【調べて】います。",
+                opts: ["くらべて", "ちょうべて", "ととのえて", "しらべて"],
+                ans: 3,
+                arti: "Saya sedang meneliti (memeriksa) tentang sejarah Jepang di perpustakaan.",
+                pola: "Cara Baca Kanji 【調べて】",
+                trik: "Kanji 【調】 punya radikal Kata (言) di kiri. Kun'yomi dari 調べる adalah 『しらべる』(Shiraberu = memeriksa/mencari tahu/meneliti). Bentuk て: 『しらべて』."
+            },
+            {
+                id: 84, session: "SESI2A", bab: "Kanji N4",
+                q: "あしたは{朝|あさ}【早い】{新幹線|しんかんせん}で{東京|とうきょう}へ{行|い}きます。",
+                opts: ["かるい", "ちかい", "おそい", "はやい"],
+                ans: 3,
+                arti: "Besok saya akan pergi ke Tokyo dengan Shinkansen pagi-pagi sekali (awal).",
+                pola: "Cara Baca Kanji 【早い】",
+                trik: "Kanji 【早】 bergambar matahari (日) di atas angka sepuluh/salib (+), artinya matahari baru terbit = 『はやい』(Hayai = Cepat/Awal waktu)."
+            },
+            {
+                id: 85, session: "SESI2A", bab: "Kanji N4",
+                q: "{夜|よる}【暗く】なってから{一人|ひとり}で{歩|ある}くのは{危|あぶ}ないです。",
+                opts: ["あかるく", "おそく", "くらく", "ひくく"],
+                ans: 2,
+                arti: "Berjalan sendirian setelah malam menjadi gelap itu berbahaya.",
+                pola: "Cara Baca Kanji 【暗く】",
+                trik: "Kanji 【暗】 terdiri dari Matahari (日) + Suara (音): ketika matahari tertutup awan tebal hingga bergemuruh, suasana menjadi GELAP = 『くらい』(Kurai) ➔ 『くらく』(Kuraku). Lawan katanya adalah 明るい (Akarui = Terang)."
+            },
+
+            // ================= SESI 2B: NOMOR 86 - 100 (PILIH KANJI) =================
+            {
+                id: 86, session: "SESI2B", bab: "Kanji N4",
+                q: "{毎朝|まいあさ}{公園|こうえん}を【あるいて】から{会社|かいしゃ}へ{行|い}きます。",
+                opts: ["渉いて", "走いて", "歩いて", "少いて"],
+                ans: 2,
+                arti: "Setiap pagi setelah berjalan kaki di taman, saya pergi ke kantor.",
+                pola: "Kanji dari 【あるいて】(Berjalan kaki)",
+                trik: "Kanji 『歩く』(Aruku = berjalan) adalah gabungan dari 止 (berhenti) di atas dan 少 (sedikit) di bawah: Berhenti sedikit-sedikit saat melangkah = 【歩いて】! (走る = Hashiru/berlari)."
+            },
+            {
+                id: 87, session: "SESI2B", bab: "Kanji N4",
+                q: "{駅|えき}の{近|ちか}くで{大変|たいへん}な【じこ】がありました。",
+                opts: ["字故", "時故", "事古", "事故"],
+                ans: 3,
+                arti: "Telah terjadi kecelakaan parah di dekat stasiun.",
+                pola: "Kanji dari 【じこ】(Kecelakaan)",
+                trik: "Kecelakaan (Jiko) adalah gabungan dari 【事】(Ji = urusan/hal, seperti pada 仕事) + 【故】(Ko = sebab lama/insiden) = 【事故】."
+            },
+            {
+                id: 88, session: "SESI2B", bab: "Kanji N4",
+                q: "この【たてもの】は50{年|ねん}ぐらい{前|まえ}に{作|つく}られました。",
+                opts: ["達物", "立物", "建物", "健物"],
+                ans: 2,
+                arti: "Bangunan ini dibuat sekitar 50 tahun yang lalu.",
+                pola: "Kanji dari 【たてもの】(Bangunan / Gedung)",
+                trik: "Bangunan (Tatemono) berasal dari kata kerja 建てます (Tatemasu = membangun gedung) + 物 (Mono = benda) = 【建物】. Jangan tertukar dengan 立 (Tatsu = berdiri) atau 健 (Ken = sehat, ada radikal orang 亻di kiri)."
+            },
+            {
+                id: 89, session: "SESI2B", bab: "Kanji N4",
+                q: "あしたはごみの【あつめる】{日|ひ}ですから、{忘|わす}れないでください。",
+                opts: ["止める", "集める", "進める", "決める"],
+                ans: 1,
+                arti: "Karena besok adalah hari pengumpulan sampah, tolong jangan lupa.",
+                pola: "Kanji dari 【あつめる】(Mengumpulkan)",
+                trik: "Kanji 【集める】(Atsumeru = mengumpulkan) bergambar burung-burung (隹) yang berkumpul di atas pohon (木)! (止める=Tomeru/menghentikan, 進める=Susumeru/memajukan, 決める=Kimeru/memutuskan)."
+            },
+            {
+                id: 90, session: "SESI2B", bab: "Kanji N4",
+                q: "{姉|あね}は{病院|びょういん}で【かんごし】の{仕事|しごと}をしています。",
+                opts: ["看語師", "観護師", "看護師", "着護師"],
+                ans: 2,
+                arti: "Kakak perempuan saya bekerja sebagai perawat di rumah sakit.",
+                pola: "Kanji dari 【かんごし】(Perawat)",
+                trik: "Perawat (Kangoshi) merawat pasien dengan meletakkan Tangan (手) di atas Mata (目) untuk mengawasi pasien = 【看】 + melindungi 【護】 + ahli 【師】 = 【看護師】!"
+            },
+            {
+                id: 91, session: "SESI2B", bab: "Kanji N4",
+                q: "{図書館|としょかん}で【かりた】{本|ほん}をあした{返|かえ}さなければなりません。",
+                opts: ["代りた", "替りた", "貸りた", "借りた"],
+                ans: 3,
+                arti: "Besok saya harus mengembalikan buku yang saya pinjam di perpustakaan.",
+                pola: "Kanji dari 【かりた】(Meminjam)",
+                trik: "Jangan tertukar antara 借りる (Kariru = meminjam) dan 貸す (Kasu = meminjamkan)! Trik hafalnya: Huruf かりる dimulai dengan garis vertikal seperti radikal Orang (亻) di sebelah kiri 【借りた】( dahulu 昔 ada orang 亻 yang meminjam)."
+            },
+            {
+                id: 92, session: "SESI2B", bab: "Kanji N4",
+                q: "{風邪|かぜ}をひいたので、あしたの{旅行|りょこう}は【ちゅうし】します。",
+                opts: ["中止", "仲止", "中正", "注止"],
+                ans: 0,
+                arti: "Karena masuk angin (flu), perjalanan wisata besok saya batalkan.",
+                pola: "Kanji dari 【ちゅうし】(Batal / Dihentikan)",
+                trik: "Chuushi (batal) artinya berhenti (止) di tengah jalan (中) = 【中止】!"
+            },
+            {
+                id: 93, session: "SESI2B", bab: "Kanji N4",
+                q: "もう{少|すこ}し【みじかい】ペンはありませんか。",
+                opts: ["低い", "軽い", "弱い", "短い"],
+                ans: 3,
+                arti: "Apakah tidak ada pulpen yang sedikit lebih pendek?",
+                pola: "Kanji dari 【みじかい】(Pendek ukuran panjang)",
+                trik: "Kanji 【短い】(Mijikai = pendek) memiliki radikal Anak Panah (矢) di kiri dan Kacang (豆) di kanan (anak panah seukuran kacang = pendek!). (低い=Hikui/rendah, 軽い=Karui/ringan, 弱い=Yowai/lemah)."
+            },
+            {
+                id: 94, session: "SESI2B", bab: "Kanji N4",
+                q: "{将来|しょうらい}のために、いろいろな【けいけん】をしたいです。",
+                opts: ["経験", "径験", "経険", "軽験"],
+                ans: 0,
+                arti: "Demi masa depan, saya ingin melakukan berbagai macam pengalaman.",
+                pola: "Kanji dari 【けいけん】(Pengalaman)",
+                trik: "Keiken (Pengalaman): Kanji pertama menggunakan radikal Benang (糸 = melewati untaian waktu) 【経】, dan kanji kedua menggunakan radikal Kuda (馬 = menguji ketangkasan seperti pada 試験/Shiken) 【験】 ➔ 【経験】."
+            },
+            {
+                id: 95, session: "SESI2B", bab: "Kanji N4",
+                q: "{次|つぎ}の{角|かど}を{右|みぎ}へ【まがると】、{郵便局|ゆうびんきょく}があります。",
+                opts: ["転がると", "曲がると", "直がると", "回がると"],
+                ans: 1,
+                arti: "Kalau belok ke kanan di tikungan berikutnya, ada kantor pos.",
+                pola: "Kanji dari 【まがると】(Belok)",
+                trik: "Magaru (Belok / Bengkok) menggunakan Kanji 【曲がる】(bentuknya seperti keranjang yang berlekuk-lekuk, juga dipakai untuk 曲/Kyoku = lagu). (転がる=Korogaru/menggelinding, 直る=Naoru/sembuh, 回る=Mawaru/berputar)."
+            },
+            {
+                id: 96, session: "SESI2B", bab: "Kanji N4",
+                q: "{宿題|しゅくだい}が{全部|ぜんぶ}【おわったら】、{遊|あそ}びに{行|い}ってもいいですよ。",
+                opts: ["終わったら", "始わったら", "開わったら", "閉わったら"],
+                ans: 0,
+                arti: "Kalau PR-nya sudah selesai semua, boleh pergi bermain lho.",
+                pola: "Kanji dari 【おわったら】(Selesai)",
+                trik: "Owaru (Selesai/Tamat) adalah gabungan radikal Benang (糸) + Musim Dingin (冬 = musim terakhir dalam setahun) = 【終わったら】! Lawan katanya adalah 始まる (Hajimaru = Mulai)."
+            },
+            {
+                id: 97, session: "SESI2B", bab: "Kanji N4",
+                q: "{東京|とうきょう}の【ちかてつ】はとても{便利|べんり}ですが、{複雑|ふくざつ}です。",
+                opts: ["地下鉄", "地価鉄", "知下鉄", "池下鉄"],
+                ans: 0,
+                arti: "Kereta bawah tanah (MRT) di Tokyo sangat praktis, tetapi rumit.",
+                pola: "Kanji dari 【ちかてつ】(Kereta Bawah Tanah)",
+                trik: "Chikatetsu artinya Besi/Kereta (鉄) yang berjalan di Bawah (下) Tanah (地) = 【地下鉄】!"
+            },
+            {
+                id: 98, session: "SESI2B", bab: "Kanji N4",
+                q: "{会議|かいぎ}の【ばしょ】が3{階|がい}から5{階|かい}に{変|か}わりました。",
+                opts: ["場所", "工場", "場処", "馬所"],
+                ans: 0,
+                arti: "Tempat rapat telah berubah dari lantai 3 ke lantai 5.",
+                pola: "Kanji dari 【ばしょ】(Tempat / Lokasi)",
+                trik: "Basho (Tempat): 【場】(Ba = lapangan/area, ada radikal Tanah 土 di kiri) + 【所】(Sho = tempat, seperti pada 台所/Daidokoro) = 【場所】."
+            },
+            {
+                id: 99, session: "SESI2B", bab: "Kanji N4",
+                q: "きのうからのどが【いたくて】、{何|なに}も{食|た}べられません。",
+                opts: ["疲くて", "病くて", "痒くて", "痛くて"],
+                ans: 3,
+                arti: "Sejak kemarin tenggorokan saya sakit, sehingga tidak bisa makan apa-apa.",
+                pola: "Kanji dari 【いたくて】(Sakit / Nyeri)",
+                trik: "Keempat pilihan punya radikal penyakit (疒), bedakan bagian dalamnya! 【痛い】(Itai = sakit/nyeri) di dalamnya ada huruf 甬 (mirip 通/menembus ➔ rasa nyeri yang menembus!). (疲れる=Tsukareru/lelah, 病気=Byouki/penyakit)."
+            },
+            {
+                id: 100, session: "SESI2B", bab: "Kanji N4",
+                q: "この{漢字|かんじ}の【いみ】を{辞書|じしょ}で{調|しら}べました。",
+                opts: ["医味", "異味", "意味", "意未"],
+                ans: 2,
+                arti: "Saya telah mencari arti dari Kanji ini di kamus.",
+                pola: "Kanji dari 【いみ】(Arti / Makna)",
+                trik: "Imi (Arti/Makna): 【意】(I = suara 音 dari dalam hati 心, yaitu pikiran/maksud) + 【味】(Mi = rasa, ada mulut 口 dan pohon 未) = 【意味】!"
+            }
+        ];
+
+        // State Variables
+        let userAnswers = {}; // { questionId: selectedIndex }
+        let revealedExplanations = {}; // { questionId: boolean }
+        let showFurigana = true;
+        let studyModeAll = false;
+        let currentSessionFilter = 'ALL';
+
+        // Initialize App
+        function initApp() {
+            populateBabDropdown();
+            renderQuestions();
+            updateScoreUI();
+        }
+
+        // Populate Bab Dropdown dynamically
+        function populateBabDropdown() {
+            const select = document.getElementById('bab-select');
+            const babs = new Set();
+            questionsData.forEach(item => babs.add(item.bab));
+            const sortedBabs = Array.from(babs).sort((a, b) => {
+                const numA = parseInt(a.replace(/\D/g, '')) || 999;
+                const numB = parseInt(b.replace(/\D/g, '')) || 999;
+                return numA - numB;
+            });
+            sortedBabs.forEach(bab => {
+                const opt = document.createElement('option');
+                opt.value = bab;
+                opt.textContent = bab;
+                select.appendChild(opt);
+            });
+        }
+
+        // Render Questions based on current filters
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            const emptyState = document.getElementById('empty-state');
+            const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+            const selectedBab = document.getElementById('bab-select').value;
+
+            container.innerHTML = '';
+
+            const filtered = questionsData.filter(item => {
+                const matchSession = currentSessionFilter === 'ALL' || item.session === currentSessionFilter;
+                const matchBab = selectedBab === 'ALL' || item.bab === selectedBab;
+                const plainText = (item.id + ' ' + item.q + ' ' + item.arti + ' ' + item.bab + ' ' + item.pola + ' ' + item.trik).toLowerCase();
+                const matchSearch = !searchQuery || plainText.includes(searchQuery);
+                return matchSession && matchBab && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            const letters = ['A', 'B', 'C', 'D'];
+
+            filtered.forEach(item => {
+                const userAns = userAnswers[item.id];
+                const isAnswered = userAns !== undefined;
+                const isRevealed = studyModeAll || isAnswered || revealedExplanations[item.id];
+
+                // Session Badge styling
+                let sessionBadge = '';
+                if (item.session === 'SESI1') {
+                    sessionBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700">${item.bab}</span>`;
+                } else if (item.session === 'SESI2A') {
+                    sessionBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">Kanji: Cara Baca</span>`;
+                } else {
+                    sessionBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Kanji: Pilih Kanji</span>`;
+                }
+
+                // Status Badge
+                let statusBadge = '';
+                if (isAnswered) {
+                    if (userAns === item.ans) {
+                        statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500 text-white">✓ Benar</span>`;
+                    } else {
+                        statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500 text-white">✗ kurang tepat</span>`;
+                    }
+                }
+
+                // Options HTML
+                let optionsHTML = '';
+                item.opts.forEach((optText, idx) => {
+                    let btnClass = "border-slate-200 bg-slate-50 hover:bg-indigo-50/60 hover:border-indigo-300 text-slate-800";
+                    let badgeClass = "bg-white border border-slate-300 text-slate-600";
+
+                    if (isRevealed) {
+                        if (idx === item.ans) {
+                            btnClass = "border-emerald-500 bg-emerald-50/90 text-emerald-950 ring-2 ring-emerald-500/20 font-semibold";
+                            badgeClass = "bg-emerald-600 border-emerald-600 text-white";
+                        } else if (isAnswered && idx === userAns && userAns !== item.ans) {
+                            btnClass = "border-rose-400 bg-rose-50 text-rose-900";
+                            badgeClass = "bg-rose-600 border-rose-600 text-white";
+                        }
+                    }
+
+                    // For Sesi 2A/2B, don't put furigana on the options themselves so it doesn't give away Kanji tests
+                    const formattedOpt = parseRuby(optText);
+
+                    optionsHTML += `
+                        <button onclick="selectOption(${item.id}, ${idx})" class="w-full text-left p-3 rounded-xl border transition flex items-center gap-3 ${btnClass}">
+                            <span class="w-7 h-7 shrink-0 rounded-lg text-xs font-bold flex items-center justify-center ${badgeClass}">
+                                ${letters[idx]}
+                            </span>
+                            <span class="jp-text text-base sm:text-lg leading-snug">${formattedOpt}</span>
+                        </button>
+                    `;
+                });
+
+                const card = document.createElement('div');
+                card.id = `soal-${item.id}`;
+                card.className = "bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:shadow-md transition p-4 sm:p-6 scroll-mt-36";
+                card.innerHTML = `
+                    <!-- Card Header -->
+                    <div class="flex items-center justify-between gap-2 mb-3 pb-2.5 border-b border-slate-100">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white font-extrabold text-xs">No. ${item.id}</span>
+                            ${sessionBadge}
+                            ${statusBadge}
+                        </div>
+                        <button onclick="toggleSingleExplanation(${item.id})" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 px-2.5 py-1 rounded-lg transition">
+                            <span>${isRevealed ? 'Sembunyikan' : 'Lihat Kunci & Bunpou'}</span>
+                        </button>
+                    </div>
+
+                    <!-- Question Text -->
+                    <div class="jp-text text-lg sm:text-xl font-medium text-slate-900 mb-4 pl-1">
+                        ${parseRuby(item.q)}
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        ${optionsHTML}
+                    </div>
+
+                    <!-- Explanation Box -->
+                    <div id="exp-${item.id}" class="${isRevealed ? 'block' : 'hidden'} mt-4 pt-4 border-t border-slate-100">
+                        <div class="bg-gradient-to-br from-slate-50 to-indigo-50/40 rounded-xl p-4 border border-indigo-100/80 space-y-2.5">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-md">
+                                        Jawaban: ${letters[item.ans]} (${item.opts[item.ans].replace(/\{([^|{}]+)\|([^{}]+)\}/g, '$1')})
+                                    </span>
+                                    <span class="text-xs font-semibold text-indigo-700 bg-indigo-100/80 px-2.5 py-0.5 rounded-md">
+                                        📚 ${item.bab}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Arti Bahasa Indonesia -->
+                            <div class="text-sm text-slate-700 bg-white/90 p-2.5 rounded-lg border border-slate-200/60">
+                                <span class="font-bold text-slate-900">🇮🇩 Arti:</span> "${item.arti}"
+                            </div>
+
+                            <!-- Rumus / Pola -->
+                            <div class="text-xs sm:text-sm text-indigo-950 bg-indigo-100/60 p-2.5 rounded-lg font-medium">
+                                <span class="font-bold text-indigo-700">📐 Rumus Bunpou:</span> ${item.pola}
+                            </div>
+
+                            <!-- Trik Nyantol di Otak -->
+                            <div class="text-xs sm:text-sm text-slate-800 bg-amber-50/90 border border-amber-200/70 p-3 rounded-lg leading-relaxed">
+                                <span class="font-extrabold text-amber-800 block mb-0.5">🧠 Penjelasan & Trik Nyantol di Otak:</span>
+                                ${item.trik}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // Select an answer option
+        function selectOption(questionId, optionIdx) {
+            userAnswers[questionId] = optionIdx;
+            revealedExplanations[questionId] = true;
+            updateScoreUI();
+            renderQuestions();
+        }
+
+        // Toggle explanation for a single card
+        function toggleSingleExplanation(questionId) {
+            if (studyModeAll) {
+                studyModeAll = false;
+                updateStudyModeButton();
+            }
+            revealedExplanations[questionId] = !revealedExplanations[questionId];
+            renderQuestions();
+        }
+
+        // Toggle Furigana ON/OFF
+        function toggleFurigana() {
+            showFurigana = !showFurigana;
+            const body = document.body;
+            const label = document.getElementById('label-furigana');
+            const btn = document.getElementById('btn-furigana');
+
+            if (showFurigana) {
+                body.classList.remove('hide-furigana');
+                label.textContent = 'Furigana: ON';
+                btn.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 transition";
+            } else {
+                body.classList.add('hide-furigana');
+                label.textContent = 'Furigana: OFF';
+                btn.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
+            }
+        }
+
+        // Toggle Study Mode (Show/Hide All Explanations)
+        function toggleStudyMode() {
+            studyModeAll = !studyModeAll;
+            updateStudyModeButton();
+            renderQuestions();
+        }
+
+        function updateStudyModeButton() {
+            const label = document.getElementById('label-study-mode');
+            const btn = document.getElementById('btn-study-mode');
+            if (studyModeAll) {
+                label.textContent = 'Tutup Semua Pembahasan';
+                btn.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 transition";
+            } else {
+                label.textContent = 'Buka Semua Pembahasan';
+                btn.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-white shadow-sm hover:bg-amber-600 transition";
+            }
+        }
+
+        // Filter by Session Tabs
+        function setFilterSession(sessionCode) {
+            currentSessionFilter = sessionCode;
+            ['ALL', 'SESI1', 'SESI2A', 'SESI2B'].forEach(code => {
+                const tab = document.getElementById(`tab-${code}`);
+                if (code === sessionCode) {
+                    tab.className = "px-3 py-1 rounded-md text-xs font-bold bg-slate-900 text-white whitespace-nowrap transition";
+                } else {
+                    tab.className = "px-3 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition";
+                }
+            });
+            renderQuestions();
+        }
+
+        function applyFilters() {
+            renderQuestions();
+        }
+
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('bab-select').value = 'ALL';
+            setFilterSession('ALL');
+        }
+
+        // Reset Quiz Progress
+        function resetQuiz() {
+            userAnswers = {};
+            revealedExplanations = {};
+            studyModeAll = false;
+            updateStudyModeButton();
+            updateScoreUI();
+            renderQuestions();
+        }
+
+        // Update Score Counter
+        function updateScoreUI() {
+            const answeredIds = Object.keys(userAnswers);
+            let correctCount = 0;
+            answeredIds.forEach(id => {
+                const q = questionsData.find(item => item.id === parseInt(id));
+                if (q && userAnswers[id] === q.ans) {
+                    correctCount++;
+                }
+            });
+            document.getElementById('desktop-answered').textContent = answeredIds.length;
+            document.getElementById('desktop-score').textContent = correctCount;
+            document.getElementById('mobile-score').textContent = `${correctCount}/${answeredIds.length}`;
+        }
+
+        // Quick Jump Modal Functions
+        function openNavModal() {
+            const modal = document.getElementById('nav-modal');
+            const grid = document.getElementById('nav-grid');
+            grid.innerHTML = '';
+
+            questionsData.forEach(item => {
+                const ans = userAnswers[item.id];
+                let colorClass = "bg-slate-100 text-slate-700 hover:bg-indigo-100 hover:text-indigo-700";
+                if (ans !== undefined) {
+                    colorClass = (ans === item.ans)
+                        ? "bg-emerald-500 text-white font-bold"
+                        : "bg-rose-500 text-white font-bold";
+                }
+
+                const btn = document.createElement('button');
+                btn.className = `h-9 rounded-lg text-xs font-semibold flex items-center justify-center transition ${colorClass}`;
+                btn.textContent = item.id;
+                btn.onclick = () => jumpToQuestion(item.id);
+                grid.appendChild(btn);
+            });
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeNavModal() {
+            document.getElementById('nav-modal').classList.add('hidden');
+        }
+
+        function jumpToQuestion(id) {
+            closeNavModal();
+            resetFilters();
+            setTimeout(() => {
+                const el = document.getElementById(`soal-${id}`);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 50);
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
