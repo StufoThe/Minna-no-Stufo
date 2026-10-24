@@ -1,0 +1,2360 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIMON — Sistem Hitung Primbon, Weton & Navigasi Hajat</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Cinzel Decorative for Royal Javanese Vibe -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        royal: ['Cinzel', 'serif'],
+                    },
+                    colors: {
+                        keraton: {
+                            950: '#0b0906',
+                            900: '#14100b',
+                            800: '#211a11',
+                            700: '#332819',
+                            gold: '#d4af37',
+                            amber: '#f59e0b',
+                            emerald: '#10b981',
+                            crimson: '#ef4444'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0b0906;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(212, 175, 55, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.06) 0%, transparent 45%);
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .gold-border {
+            border: 1px solid rgba(212, 175, 55, 0.28);
+        }
+        .gold-glow {
+            box-shadow: 0 0 25px -5px rgba(212, 175, 55, 0.18);
+        }
+        .card-glass {
+            background: rgba(20, 16, 11, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.22);
+        }
+        .tab-active {
+            background: linear-gradient(135deg, #d4af37 0%, #b48608 100%);
+            color: #0b0906 !important;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #14100b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #332819;
+            border-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4af37;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-black">
+
+    <!-- TOP HEADER & REAL-TIME JAVANESE COSMOLOGY BAR -->
+    <header class="sticky top-0 z-40 bg-keraton-950/95 backdrop-blur-md border-b border-amber-500/25">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                <!-- Brand -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 via-yellow-600 to-amber-900 flex items-center justify-center shadow-lg shadow-amber-500/20 border border-amber-300/40">
+                            <i class="fa-solid fa-compass-drafting text-keraton-950 text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="font-royal text-2xl sm:text-3xl font-extrabold tracking-wider bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 bg-clip-text text-transparent">
+                                    SHIMON
+                                </h1>
+                                <span class="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-semibold">
+                                    Kitab Primbon Engine v4.0
+                                </span>
+                            </div>
+                            <p class="text-xs text-stone-400">Sistem Hitung Primbon, Weton, Saat Lima & Navigasi Hajat Anti-Salah</p>
+                        </div>
+                    </div>
+                    <!-- Mobile Quick Reset Now Button -->
+                    <button onclick="setToCurrentTime()" class="lg:hidden px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-medium border border-amber-500/30 flex items-center gap-1.5">
+                        <i class="fa-solid fa-rotate"></i> Sekarang
+                    </button>
+                </div>
+
+                <!-- Live Status Ticker -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-keraton-900/90 p-2 rounded-xl border border-amber-500/20">
+                    <div class="px-2.5 py-1 border-r border-stone-800">
+                        <div class="text-[10px] uppercase tracking-wider text-stone-400 flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Waktu Aktif
+                        </div>
+                        <div id="liveClockDisplay" class="text-xs sm:text-sm font-bold text-white truncate">--:--:-- WIB</div>
+                        <div id="liveDateDisplay" class="text-[11px] text-amber-400/90 truncate">Memuat tanggal...</div>
+                    </div>
+                    <div class="px-2.5 py-1 sm:border-r border-stone-800">
+                        <div class="text-[10px] uppercase tracking-wider text-stone-400">Weton & Neptu</div>
+                        <div id="liveWetonDisplay" class="text-xs sm:text-sm font-bold text-amber-300 truncate">---</div>
+                        <div id="liveNeptuDisplay" class="text-[11px] text-stone-300 truncate">Neptu: --</div>
+                    </div>
+                    <div class="px-2.5 py-1 border-r border-stone-800">
+                        <div class="text-[10px] uppercase tracking-wider text-stone-400">Menit Sangat (Jam Ini)</div>
+                        <div id="liveSangatDisplay" class="text-xs sm:text-sm font-bold text-emerald-400 truncate">---</div>
+                        <div id="liveGolonganWaktuDisplay" class="text-[11px] text-stone-300 truncate">---</div>
+                    </div>
+                    <div class="px-2.5 py-1">
+                        <div class="text-[10px] uppercase tracking-wider text-stone-400">Nogo vs Joyo Hari Ini</div>
+                        <div id="liveNogoDisplay" class="text-xs font-bold text-rose-400 truncate">Nogo: ---</div>
+                        <div id="liveJoyoDisplay" class="text-[11px] font-semibold text-emerald-400 truncate">Joyo: ---</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex items-center gap-1.5 overflow-x-auto pt-3 pb-1 no-scrollbar">
+                <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="tab-btn tab-active px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 text-stone-300 hover:bg-stone-800/70">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> 1. Kalkulator Hajat & Simulasi Waktu
+                </button>
+                <button onclick="switchTab('navigasi')" id="tab-btn-navigasi" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 text-stone-300 hover:bg-stone-800/70">
+                    <i class="fa-solid fa-location-arrow"></i> 2. Kompas Rute Lokasi & Penangkal Nogo
+                </button>
+                <button onclick="switchTab('waktu')" id="tab-btn-waktu" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 text-stone-300 hover:bg-stone-800/70">
+                    <i class="fa-solid fa-hourglass-half"></i> 3. 4 Golongan Waktu & 5 Menit Sangat
+                </button>
+                <button onclick="switchTab('jodoh')" id="tab-btn-jodoh" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 text-stone-300 hover:bg-stone-800/70">
+                    <i class="fa-solid fa-heart-circle-check"></i> 4. Pertemon Jodoh & Warnane
+                </button>
+                <button onclick="switchTab('waspada')" id="tab-btn-waspada" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 text-rose-300 hover:bg-rose-950/40 border border-rose-500/20">
+                    <i class="fa-solid fa-shield-halved"></i> 5. Pantangan Santet & Pagar Diri
+                </button>
+                <button onclick="switchTab('kitab')" id="tab-btn-kitab" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 text-amber-300 hover:bg-stone-800/70">
+                    <i class="fa-solid fa-book-open-reader"></i> 6. Bedah 8 Lembar Kitab Asli (1 Menit)
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+        <!-- GLOBAL TIME & WETON CONTROLLER BAR -->
+        <section class="card-glass rounded-2xl p-4 sm:p-5 gold-glow">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30">
+                            pusat kendali waktu
+                        </span>
+                        <span id="simulationModeBadge" class="px-2.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30">
+                            <i class="fa-solid fa-bolt mr-1"></i> Mode Real-Time Sekarang
+                        </span>
+                    </div>
+                    <h2 class="text-base sm:text-lg font-bold text-white">
+                        Pilih Waktu Hajat, Ujian, Semedi, atau Keberangkatan Anda
+                    </h2>
+                    <p class="text-xs text-stone-400">
+                        Otomatis membaca Weton, Neptu, Nogo Dino, Joyo Dino, Ba'as Tanggal, Was Wulan, Nogo Wulan/Tahun, dan Menit Sangat.
+                    </p>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <div>
+                        <label class="block text-[10px] uppercase text-stone-400 mb-1">Tanggal Hajat</label>
+                        <input type="date" id="simDateInput" onchange="onManualDateTimeChange()" class="bg-keraton-950 text-white text-xs sm:text-sm rounded-xl px-3 py-2 border border-amber-500/30 focus:outline-none focus:border-amber-400">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-stone-400 mb-1">Jam Keberangkatan</label>
+                        <input type="time" id="simTimeInput" onchange="onManualDateTimeChange()" class="bg-keraton-950 text-white text-xs sm:text-sm rounded-xl px-3 py-2 border border-amber-500/30 focus:outline-none focus:border-amber-400">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-stone-400 mb-1">Atau Pilih Cepat 35 Weton Kitab</label>
+                        <select id="quickWetonSelect" onchange="onQuickWetonSelect()" class="bg-keraton-950 text-amber-300 text-xs sm:text-sm rounded-xl px-3 py-2 border border-amber-500/30 focus:outline-none focus:border-amber-400">
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                    <div class="flex flex-col justify-end pt-4 sm:pt-4">
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="setToCurrentTime()" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/20">
+                                <i class="fa-solid fa-clock"></i> Waktu Sekarang
+                            </button>
+                            <button onclick="loadKamisWageCase()" class="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold transition flex items-center gap-1.5" title="Contoh Kasus Ujian Hari Kamis Wage">
+                                <i class="fa-solid fa-graduation-cap"></i> Contoh: Ujian Kamis Wage
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- TAB 1: DASHBOARD KALKULATOR HAJAT & KOMBO OTOMATIS (GOD-TIER ENGINE) -->
+        <!-- ===================================================================== -->
+        <div id="tab-content-dashboard" class="tab-panel space-y-6">
+            
+            <!-- Top Row: Hajat Selector + Comprehensive Verdict -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Left 5 Cols: Konfigurasi Hajat & Arah -->
+                <div class="lg:col-span-5 card-glass rounded-2xl p-5 space-y-4">
+                    <div class="flex items-center justify-between border-b border-stone-800 pb-3">
+                        <h3 class="font-royal text-base sm:text-lg font-bold text-amber-400 flex items-center gap-2">
+                            <i class="fa-solid fa-sliders"></i> Parameter Hajat & Arah
+                        </h3>
+                        <span class="text-xs text-stone-400">Anti-Salah Hitung</span>
+                    </div>
+
+                    <!-- Pilih Jenis Hajat -->
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-300 mb-1.5">1. Apa Niat / Hajat Utama Anda?</label>
+                        <select id="hajatTypeSelect" onchange="recalculateAll()" class="w-full bg-keraton-950 text-white text-sm rounded-xl px-3.5 py-2.5 border border-amber-500/30 focus:outline-none focus:border-amber-400">
+                            <option value="rezeki">💰 Mencari Rezeki / Berdagang / Tender / Menagih Hutang</option>
+                            <option value="ujian">🎓 Menghadapi Ujian / Tes / Sidang / Wawancara Kerja</option>
+                            <option value="semedi">🧘 Semedi / Tirakat Batin / Meditasi / Hajat Khusus</option>
+                            <option value="asmara">💍 Lamaran / Pernikahan / Memikat Hati / Silaturahmi</option>
+                            <option value="perjalanan">🚗 Perjalanan Jauh / Pindah Rumah / Buka Lahan Baru</option>
+                        </select>
+                    </div>
+
+                    <!-- Pilih Arah Tujuan Mata Angin -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="text-xs font-semibold text-stone-300">2. Arah Mata Angin Tujuan Keberangkatan</label>
+                            <button onclick="switchTab('navigasi')" class="text-[11px] text-amber-400 hover:underline flex items-center gap-1">
+                                <i class="fa-solid fa-map-location-dot"></i> Cek dari Lokasi/Peta
+                            </button>
+                        </div>
+                        <select id="targetDirectionSelect" onchange="recalculateAll()" class="w-full bg-keraton-950 text-white text-sm rounded-xl px-3.5 py-2.5 border border-amber-500/30 focus:outline-none focus:border-amber-400">
+                            <option value="Kidul">⬇️ Selatan (Kidul) — Contoh: Tlogomas ke Lembah Dieng</option>
+                            <option value="Lor">⬆️ Utara (Lor) — Contoh: Ke Arah Utara</option>
+                            <option value="Wetan">➡️ Timur (Wetan)</option>
+                            <option value="Kulon">⬅️ Barat (Kulon)</option>
+                            <option value="Wetan Kidul">↘️ Tenggara (Wetan Kidul)</option>
+                            <option value="Kulon Lor">↖️ Barat Laut (Kulon Lor)</option>
+                            <option value="Wetan Lor">↗️ Timur Laut (Wetan Lor)</option>
+                            <option value="Kidul Kulon">↙️ Barat Daya (Kidul Kulon)</option>
+                            <option value="Tengah">🎯 Pusat / Tengah (Tetap di Tempat / Semedi Rumah)</option>
+                        </select>
+                    </div>
+
+                    <!-- Pilih Bulan & Tahun Jawa (Auto or Manual Override) -->
+                    <div class="grid grid-cols-2 gap-3 pt-1">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-stone-400 mb-1">3. Wulan Jawa (Bulan)</label>
+                            <select id="javaneseMonthSelect" onchange="recalculateAll()" class="w-full bg-keraton-950 text-amber-200 text-xs rounded-xl px-3 py-2 border border-stone-700">
+                                <option value="Suro">1. Suro</option>
+                                <option value="Sapar">2. Sapar</option>
+                                <option value="Mulut">3. Mulut (Maulud)</option>
+                                <option value="Bakdomulut">4. Bakdo Mulut</option>
+                                <option value="Jumadilawal" selected>5. Jumadil Awal</option>
+                                <option value="Jumadilakir">6. Jumadil Akir</option>
+                                <option value="Rajab">7. Rajab</option>
+                                <option value="Ruwah">8. Ruwah</option>
+                                <option value="Poso">9. Poso</option>
+                                <option value="Sawal">10. Sawal</option>
+                                <option value="Selo">11. Selo</option>
+                                <option value="Besar">12. Besar</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-stone-400 mb-1">4. Tahun Windu (Kurup)</label>
+                            <select id="javaneseYearSelect" onchange="recalculateAll()" class="w-full bg-keraton-950 text-amber-200 text-xs rounded-xl px-3 py-2 border border-stone-700">
+                                <option value="Alip">1. Tahun Alip (Angka 1)</option>
+                                <option value="Ehe">2. Tahun Ehe (Angka 5)</option>
+                                <option value="Jemawal">3. Tahun Jemawal (Angka 3)</option>
+                                <option value="Je">4. Tahun Je (Angka 7)</option>
+                                <option value="Dal">5. Tahun Dal (Angka 4)</option>
+                                <option value="Be" selected>6. Tahun Be (Angka 2)</option>
+                                <option value="Wan">7. Tahun Wawu/Wan (Angka 6)</option>
+                                <option value="Jemakir">8. Tahun Jimakir (Angka 3)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Box Ringkasan Ayat Kitab untuk Weton Aktif -->
+                    <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">
+                                <i class="fa-solid fa-scroll mr-1"></i> Kutipan Asli Kitab (Bab 35 Weton)
+                            </span>
+                            <span id="kitabVerseNumber" class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 font-mono">Ayat #--</span>
+                        </div>
+                        <p id="kitabOriginalQuote" class="text-xs sm:text-sm font-serif italic text-amber-100 leading-relaxed">
+                            "..."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right 7 Cols: Hasil Keputusan Otomatis (God-Tier Verdict Card) -->
+                <div class="lg:col-span-7 card-glass rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-800 pb-3">
+                            <div>
+                                <h3 class="font-royal text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-scale-balanced text-amber-400"></i> Keputusan Kombo Primbon & Strategi Hajat
+                                </h3>
+                                <p id="verdictSubtitle" class="text-xs text-stone-400">Analisis gabungan Weton, Jam Sangat, Arah Nogo/Joyo, dan Penanggalan</p>
+                            </div>
+                            <div id="verdictScoreBadge" class="px-3.5 py-1.5 rounded-xl font-bold text-sm border">
+                                Skor Kecocokan: --%
+                            </div>
+                        </div>
+
+                        <!-- Main Status Banner -->
+                        <div id="mainVerdictBanner" class="mt-4 p-4 rounded-xl border flex items-start gap-3.5">
+                            <div id="mainVerdictIcon" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <h4 id="mainVerdictTitle" class="text-sm sm:text-base font-bold text-white">Memuat analisis...</h4>
+                                <p id="mainVerdictDesc" class="text-xs sm:text-sm text-stone-200 leading-relaxed"></p>
+                            </div>
+                        </div>
+
+                        <!-- 4 Pilars Check Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                            <!-- Pilar 1: Arah Mata Angin vs Nogo/Joyo -->
+                            <div class="p-3 rounded-xl bg-keraton-950/90 border border-stone-800">
+                                <div class="text-[11px] text-stone-400 uppercase font-semibold flex items-center justify-between">
+                                    <span>1. Cek Arah Tujuan vs Nogo Dino</span>
+                                    <span id="pilarArahStatus" class="text-[10px] px-2 py-0.5 rounded font-bold">---</span>
+                                </div>
+                                <div id="pilarArahDetail" class="text-xs text-stone-200 mt-1.5 leading-relaxed">---</div>
+                            </div>
+
+                            <!-- Pilar 2: Jam Keberangkatan (Menit Sangat) -->
+                            <div class="p-3 rounded-xl bg-keraton-950/90 border border-stone-800">
+                                <div class="text-[11px] text-stone-400 uppercase font-semibold flex items-center justify-between">
+                                    <span>2. Cek Jam & Menit Sangat</span>
+                                    <span id="pilarJamStatus" class="text-[10px] px-2 py-0.5 rounded font-bold">---</span>
+                                </div>
+                                <div id="pilarJamDetail" class="text-xs text-stone-200 mt-1.5 leading-relaxed">---</div>
+                            </div>
+
+                            <!-- Pilar 3: Cek Hari Pantangan (Ba'as Tanggal & Was Wulan) -->
+                            <div class="p-3 rounded-xl bg-keraton-950/90 border border-stone-800">
+                                <div class="text-[11px] text-stone-400 uppercase font-semibold flex items-center justify-between">
+                                    <span>3. Ba'as Tanggal & Was Wulan</span>
+                                    <span id="pilarNaasStatus" class="text-[10px] px-2 py-0.5 rounded font-bold">---</span>
+                                </div>
+                                <div id="pilarNaasDetail" class="text-xs text-stone-200 mt-1.5 leading-relaxed">---</div>
+                            </div>
+
+                            <!-- Pilar 4: Nogo Wulan & Nogo Tahun/Windu -->
+                            <div class="p-3 rounded-xl bg-keraton-950/90 border border-stone-800">
+                                <div class="text-[11px] text-stone-400 uppercase font-semibold flex items-center justify-between">
+                                    <span>4. Nogo Wulan & Windu</span>
+                                    <span id="pilarWulanStatus" class="text-[10px] px-2 py-0.5 rounded font-bold">---</span>
+                                </div>
+                                <div id="pilarWulanDetail" class="text-xs text-stone-200 mt-1.5 leading-relaxed">---</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Counter Strategy / Solusi Kitab Box -->
+                    <div id="counterStrategyBox" class="p-4 rounded-xl bg-gradient-to-r from-amber-950/60 via-keraton-900 to-amber-950/40 border border-amber-500/40 space-y-2">
+                        <div class="flex items-center gap-2 text-amber-300 font-bold text-xs sm:text-sm">
+                            <i class="fa-solid fa-shield-cat"></i>
+                            <span id="counterStrategyHeader">Panduan Eksekusi & Solusi Penangkal (Counter-Nogo)</span>
+                        </div>
+                        <div id="counterStrategyBody" class="text-xs text-stone-200 space-y-1.5 leading-relaxed">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second Row: Detail Kosmologi Weton Hari Ini & Jam Terbaik Hajat -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1: Anatomi Neptu & Bojo Pasaran -->
+                <div class="card-glass rounded-2xl p-5 space-y-3">
+                    <h4 class="font-royal text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-atom"></i> Anatomi Weton & Bojo Pasaran
+                    </h4>
+                    <div id="wetonAnatomyContent" class="space-y-2.5 text-xs text-stone-300">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Card 2: Rekomendasi Jam Terbaik Hari Ini Sesuai Hajat -->
+                <div class="card-glass rounded-2xl p-5 space-y-3">
+                    <h4 class="font-royal text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Jam Terbaik Hari Ini (Saat Lima)
+                    </h4>
+                    <div id="bestHoursTodayContent" class="space-y-2 text-xs">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Card 3: Panduan Semedi & Arah Duduk Batin -->
+                <div class="card-glass rounded-2xl p-5 space-y-3">
+                    <h4 class="font-royal text-sm font-bold text-purple-400 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-spa"></i> Tata Cara Semedi & Hajat Hari Ini
+                    </h4>
+                    <div id="semediGuideContent" class="space-y-2.5 text-xs text-stone-300 leading-relaxed">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================================== -->
+        <!-- TAB 2: KOMPAS RUTE LOKASI & PENANGKAL NOGO DINO (CW COFFEE -> DIENG)  -->
+        <!-- ===================================================================== -->
+        <div id="tab-content-navigasi" class="tab-panel hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Left 6 Cols: Route Calculator & Presets -->
+                <div class="lg:col-span-6 card-glass rounded-2xl p-5 space-y-4">
+                    <div class="border-b border-stone-800 pb-3">
+                        <span class="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold">
+                            Navigasi Geografis Primbon
+                        </span>
+                        <h3 class="font-royal text-lg font-bold text-white mt-1">
+                            Kalkulator Arah Lokasi Keberangkatan ke Tujuan Hajat
+                        </h3>
+                        <p class="text-xs text-stone-400">
+                            Pastikan arah perjalanan fisik Anda tidak menabrak mulut <strong>Nogo Dino</strong> dan selaras dengan <strong>Joyo Dino</strong>.
+                        </p>
+                    </div>
+
+                    <!-- Quick Route Presets -->
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-300 mb-1.5">
+                            <i class="fa-solid fa-bolt mr-1"></i> Pilih Cepat Contoh Rute Nyata (Malang & Sekitarnya):
+                        </label>
+                        <select id="routePresetSelect" onchange="applyRoutePreset()" class="w-full bg-keraton-950 text-white text-xs sm:text-sm rounded-xl px-3.5 py-2.5 border border-amber-500/40 focus:outline-none">
+                            <option value="cw_dieng" selected>☕ CW Coffee Tlogomas ➔ 🏞️ Lembah Dieng (Utara ke Selatan / Kidul)</option>
+                            <option value="cw_ub">☕ CW Coffee Tlogomas ➔ 🎓 Kampus UB Veteran (Barat Laut ke Tenggara / Wetan Kidul)</option>
+                            <option value="alun_batu">🕌 Alun-Alun Malang ➔ ⛰️ Kota Wisata Batu (Tenggara ke Barat Laut / Kulon Lor)</option>
+                            <option value="dieng_stasiun">🏞️ Lembah Dieng ➔ 🚉 Stasiun Malang Kota Baru (Barat ke Timur / Wetan)</option>
+                            <option value="tugu_kawi">🏛️ Balai Kota Tugu Malang ➔ ⛩️ Pesarean Gunung Kawi (Timur ke Barat Daya / Kidul Kulon)</option>
+                            <option value="stasiun_singosari">🚉 Stasiun Malang ➔ 🛕 Candi Singosari (Selatan ke Utara / Lor)</option>
+                            <option value="custom">📍 Input Lokasi / Koordinat Kustom Sendiri</option>
+                        </select>
+                    </div>
+
+                    <!-- Origin & Destination Details -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="p-3.5 rounded-xl bg-keraton-950 border border-stone-800 space-y-2">
+                            <div class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-dot"></i> Titik Keberangkatan (Asal)
+                            </div>
+                            <input type="text" id="originNameInput" value="CW Coffee & Eatery - Tlogomas" oninput="calculateRouteDirection()" class="w-full bg-keraton-900 text-white text-xs rounded-lg px-2.5 py-1.5 border border-stone-700">
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <div>
+                                    <label class="text-[10px] text-stone-400">Latitude (LS/LU)</label>
+                                    <input type="number" step="0.0001" id="originLatInput" value="-7.9298" oninput="calculateRouteDirection()" class="w-full bg-keraton-900 text-amber-200 text-xs rounded px-2 py-1 border border-stone-700">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-stone-400">Longitude (BT)</label>
+                                    <input type="number" step="0.0001" id="originLngInput" value="112.6015" oninput="calculateRouteDirection()" class="w-full bg-keraton-900 text-amber-200 text-xs rounded px-2 py-1 border border-stone-700">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-keraton-950 border border-stone-800 space-y-2">
+                            <div class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-location-dot"></i> Titik Tujuan Hajat / Semedi
+                            </div>
+                            <input type="text" id="destNameInput" value="Taman Wisata Lembah Dieng" oninput="calculateRouteDirection()" class="w-full bg-keraton-900 text-white text-xs rounded-lg px-2.5 py-1.5 border border-stone-700">
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <div>
+                                    <label class="text-[10px] text-stone-400">Latitude (LS/LU)</label>
+                                    <input type="number" step="0.0001" id="destLatInput" value="-7.9685" oninput="calculateRouteDirection()" class="w-full bg-keraton-900 text-amber-200 text-xs rounded px-2 py-1 border border-stone-700">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-stone-400">Longitude (BT)</label>
+                                    <input type="number" step="0.0001" id="destLngInput" value="112.5960" oninput="calculateRouteDirection()" class="w-full bg-keraton-900 text-amber-200 text-xs rounded px-2 py-1 border border-stone-700">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Route Analysis Output Box -->
+                    <div id="routeResultBox" class="p-4 rounded-xl bg-keraton-950 border border-amber-500/30 space-y-2.5">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Special Deep-Dive Box: Studi Kasus Counter Nogo Dino (Kamis Wage) -->
+                    <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs sm:text-sm font-bold text-amber-300 flex items-center gap-2">
+                                <i class="fa-solid fa-chess-knight"></i> Ilmu Kitab: Cara Meng-Counter "Nogo Dino" Saat Terpaksa Berangkat
+                            </h4>
+                            <button onclick="loadKamisWageCase()" class="text-[11px] px-2.5 py-1 rounded-lg bg-amber-500 text-black font-bold hover:bg-amber-400 transition">
+                                Simulasikan Kamis Wage
+                            </button>
+                        </div>
+                        <p class="text-xs text-stone-300 leading-relaxed">
+                            <strong>Contoh Kasus:</strong> Anda punya jadwal <strong>Ujian pada hari Kamis Wage</strong> dan lokasi kampus/ujian berada di arah <strong>Utara (Lor)</strong>. Padahal menurut Ayat 14 Kitab: <em>"Yen ono dino Kamis Wage, Nogo dino ono Lor = Joyo dino Tengah, Wage Lor"</em> (Mulut Naga ada di Utara, Kejayaan Hari ada di Pusat/Tengah).
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-xs">
+                            <div class="p-2.5 rounded-lg bg-keraton-950/90 border border-stone-800">
+                                <div class="font-bold text-amber-400 mb-1">1. Teknik "Mbelok Langkah" (Siku Naga)</div>
+                                <p class="text-[11px] text-stone-300">Jangan keluar pintu langsung menghadap Utara (Lor). Berhentilah 10 detik di teras/pusat rumah (mengambil tuah <strong>Joyo Dino Tengah</strong>), lalu melangkah ke <strong>Timur atau Barat</strong> sejauh 7 langkah dulu, baru berbelok menuju lokasi ujian di Utara.</p>
+                            </div>
+                            <div class="p-2.5 rounded-lg bg-keraton-950/90 border border-stone-800">
+                                <div class="font-bold text-emerald-400 mb-1">2. Kunci Jam "Jobrail Kuwat"</div>
+                                <p class="text-[11px] text-stone-300">Pada pasaran <strong>Wage</strong>, jam 07:00–08:59 adalah <em>Brahim Blahi</em> (Celaka). Counter dengan keluar rumah lebih pagi (sebelum 07:00) atau tepat pada <strong>Jam 09:00–10:59 (Jobrail Kuwat)</strong> atau <strong>11:00–12:59 (Ahmad Slamet)</strong>.</p>
+                            </div>
+                            <div class="p-2.5 rounded-lg bg-keraton-950/90 border border-stone-800">
+                                <div class="font-bold text-purple-400 mb-1">3. Posisi Duduk Saat Ujian</div>
+                                <p class="text-[11px] text-stone-300">Karena Kamis Wage memiliki <strong>Joyo Dino Tengah</strong> dan <strong>Pasaran Wage = Lor</strong>, begitu sampai di gedung ujian, pilihlah kursi di bagian <strong>tengah ruangan</strong> agar energi kejayaan Kamis mengunci fokus Anda.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 6 Cols: Interactive Keraton Compass Canvas -->
+                <div class="lg:col-span-6 card-glass rounded-2xl p-5 flex flex-col items-center justify-between space-y-4">
+                    <div class="w-full flex items-center justify-between border-b border-stone-800 pb-3">
+                        <div>
+                            <h3 class="font-royal text-base sm:text-lg font-bold text-amber-400">
+                                Radar Kompas Kosmologi Jawa (8 Penjuru)
+                            </h3>
+                            <p class="text-xs text-stone-400">Visualisasi Real-Time Rute Perjalanan, Nogo Dino, Joyo Dino & Nogo Wulan</p>
+                        </div>
+                        <span id="compassWetonBadge" class="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold text-xs border border-amber-500/30">
+                            ---
+                        </span>
+                    </div>
+
+                    <!-- Responsive Canvas Container -->
+                    <div class="w-full max-w-[420px] aspect-square relative flex items-center justify-center my-auto">
+                        <canvas id="primbonCompassCanvas" class="w-full h-full rounded-2xl bg-keraton-950 border border-amber-500/25 shadow-inner"></canvas>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="w-full grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
+                        <div class="p-2 rounded-lg bg-keraton-950 border border-stone-800 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-rose-500 shrink-0"></span>
+                            <span><strong>Nogo Dino:</strong> Pantang Frontal</span>
+                        </div>
+                        <div class="p-2 rounded-lg bg-keraton-950 border border-stone-800 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-emerald-400 shrink-0"></span>
+                            <span><strong>Joyo Dino:</strong> Arah Kejayaan</span>
+                        </div>
+                        <div class="p-2 rounded-lg bg-keraton-950 border border-stone-800 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-sky-400 shrink-0"></span>
+                            <span><strong>Arah Pasaran:</strong> Pintu Rezeki</span>
+                        </div>
+                        <div class="p-2 rounded-lg bg-keraton-950 border border-stone-800 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-amber-400 shrink-0"></span>
+                            <span><strong>Garis Emas:</strong> Rute Hajat Anda</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ===================================================================== -->
+        <!-- TAB 3: 4 GOLONGAN WAKTU & TABEL LENGKAP 5 MENIT SANGAT KITAB          -->
+        <!-- ===================================================================== -->
+        <div id="tab-content-waktu" class="tab-panel hidden space-y-6">
+            
+            <!-- Bagian A: 4 Golongan Waktu (Catur Wanci Semedi & 4 Derajat Waktu Hajat) -->
+            <div class="card-glass rounded-2xl p-5 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800 pb-3">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-semibold">
+                            Ilmu Wanci & Semedi Kejawen
+                        </span>
+                        <h3 class="font-royal text-lg font-bold text-white mt-1">
+                            4 Golongan Jenis Waktu (Catur Kala Hajat, Rezeki & Semedi)
+                        </h3>
+                    </div>
+                    <div id="activeWanciBadge" class="px-3 py-1.5 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-200 text-xs font-bold">
+                        Wanci Aktif Saat Ini: ---
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Golongan 1 -->
+                    <div id="wanci-card-1" class="p-4 rounded-xl bg-keraton-950 border border-stone-800 space-y-2.5 transition-all">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 text-xs font-bold">00:00 – 03:30 WIB</span>
+                            <i class="fa-solid fa-moon text-indigo-400 text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">1. Golongan Wanci Lingsir Wengi (Hening Agung)</h4>
+                        <p class="text-xs text-stone-300 leading-relaxed">
+                            Saat dimensi fisik tenang dan gerbang batin (*Pancer*) terbuka lebar. Energi kosmik berada di titik paling murni.
+                        </p>
+                        <div class="pt-2 border-t border-stone-800/80 space-y-1 text-[11px]">
+                            <div class="text-emerald-400"><strong>✅ Cocok Untuk:</strong> Semedi Manunggaling, Hajat Besar, Tirakat Tolak Bala, Memohon Petunjuk Batin.</div>
+                            <div class="text-rose-400"><strong>⚠️ Catatan:</strong> Jam 01:00–03:00 juga merupakan jam rawan kiriman energi negatif; wajib wudhu/doa pagar diri sebelum hening.</div>
+                        </div>
+                    </div>
+
+                    <!-- Golongan 2 -->
+                    <div id="wanci-card-2" class="p-4 rounded-xl bg-keraton-950 border border-stone-800 space-y-2.5 transition-all">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 text-xs font-bold">03:30 – 10:30 WIB</span>
+                            <i class="fa-solid fa-sun-plant-wilt text-emerald-400 text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">2. Golongan Wanci Byar & Panglong (Pintu Rezeki)</h4>
+                        <p class="text-xs text-stone-300 leading-relaxed">
+                            Saat matahari terbit dari Wetan membawa energi kehidupan baru (*Urip*). Puncak pergerakan rezeki duniawi.
+                        </p>
+                        <div class="pt-2 border-t border-stone-800/80 space-y-1 text-[11px]">
+                            <div class="text-emerald-400"><strong>✅ Cocok Untuk:</strong> Membuka toko/usaha, berangkat kerja/ujian, menanam modal, semedi syukur & penarik rezeki.</div>
+                            <div class="text-amber-300"><strong>💡 Kunci Kitab:</strong> Padukan dengan jam <em>Idjrail Rejeki</em> atau <em>Ahmad Slamet</em> sesuai Pasaran.</div>
+                        </div>
+                    </div>
+
+                    <!-- Golongan 3 -->
+                    <div id="wanci-card-3" class="p-4 rounded-xl bg-keraton-950 border border-stone-800 space-y-2.5 transition-all">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-xs font-bold">10:30 – 15:30 WIB</span>
+                            <i class="fa-solid fa-sun text-amber-400 text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">3. Golongan Wanci Tengange & Lingsir Kulon (Kuwat/Derajat)</h4>
+                        <p class="text-xs text-stone-300 leading-relaxed">
+                            Matahari berada di puncak (*Tengah*) lalu bergeser ke Barat. Energi bersifat keras, tegas, dan penuh wibawa.
+                        </p>
+                        <div class="pt-2 border-t border-stone-800/80 space-y-1 text-[11px]">
+                            <div class="text-emerald-400"><strong>✅ Cocok Untuk:</strong> Menemui pejabat/atasan, negosiasi alot, sidang/ujian (terutama jam <em>Jobrail Kuwat</em>).</div>
+                            <div class="text-rose-400"><strong>⚠️ Pantangan:</strong> Hindari memulai langkah pertama tepat saat bedhug (11:45–12:15) sebelum lewat tergelincir matahari.</div>
+                        </div>
+                    </div>
+
+                    <!-- Golongan 4 -->
+                    <div id="wanci-card-4" class="p-4 rounded-xl bg-keraton-950 border border-stone-800 space-y-2.5 transition-all">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-md bg-rose-500/20 text-rose-300 text-xs font-bold">15:30 – 23:59 WIB</span>
+                            <i class="fa-solid fa-cloud-moon text-rose-400 text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">4. Golongan Wanci Surup & Sirep Bocah (Pengasihan & Teduh)</h4>
+                        <p class="text-xs text-stone-300 leading-relaxed">
+                            Peralihan senja (*Sandyikala*) menuju malam. Setelah jam 19:00 energi melunak menjadi pengasihan dan ketenteraman.
+                        </p>
+                        <div class="pt-2 border-t border-stone-800/80 space-y-1 text-[11px]">
+                            <div class="text-emerald-400"><strong>✅ Cocok Untuk:</strong> Silaturahmi, lamaran/jodoh (setelah Isya / jam 19:00+), semedi ketenangan batin (*Yusuf Bagus*).</div>
+                            <div class="text-rose-400"><strong>⚠️ Pantangan:</strong> Jangan memulai perjalanan jauh tepat saat Maghrib/Surup (17:30–18:30).</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bagian B: Tabel Interaktif 5 Menit Sangat Asli dari Kitab (Halaman 4) -->
+            <div class="card-glass rounded-2xl p-5 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800 pb-3">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold">
+                            Transkripsi Halaman 4 Kitab
+                        </span>
+                        <h3 class="font-royal text-lg font-bold text-white mt-1">
+                            Tabel "Menit Sangat" (Saat Lima) Berdasarkan 5 Pasaran
+                        </h3>
+                        <p class="text-xs text-stone-400">
+                            Baris yang menyala menunjukkan Pasaran dan Jam yang sedang aktif pada simulasi Anda. Angka <code>+24</code> menandakan siklus 24 jam (berlaku untuk jam Pagi/Siang maupun Malam/Dini Hari) serta menit ke-24 sebagai puncak *Sangat*.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 5 Makna Menit Sangat Legend -->
+                <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5 text-xs">
+                    <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                        <div class="font-bold text-emerald-400">1. Ahmad Slamet</div>
+                        <p class="text-[11px] text-stone-300 mt-1">Keselamatan mutlak, hajat mulia, pernikahan, perjalanan aman, doa terkabul.</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                        <div class="font-bold text-amber-400">2. Idjrail Rejeki</div>
+                        <p class="text-[11px] text-stone-300 mt-1">Pintu rezeki deras, berdagang, transaksi besar, menagih hutang, panen.</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-sky-500/10 border border-sky-500/30">
+                        <div class="font-bold text-sky-400">3. Yusuf Bagus</div>
+                        <p class="text-[11px] text-stone-300 mt-1">Karisma, pengasihan, wawancara, memikat hati, semedi ketenteraman.</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-purple-500/10 border border-purple-500/30">
+                        <div class="font-bold text-purple-400">4. Jobrail Kuwat</div>
+                        <p class="text-[11px] text-stone-300 mt-1">Kekuatan mental, menang ujian/sidang, wibawa kepemimpinan, semedi sakti.</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30">
+                        <div class="font-bold text-rose-400">5. Brahim Blahi</div>
+                        <p class="text-[11px] text-stone-300 mt-1"><strong>PANTANGAN!</strong> Waktu panas/balak, rawan halangan, sengketa, atau celaka.</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Table of the 5 Pasarans -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                            <tr class="border-b border-amber-500/30 text-amber-300 bg-keraton-950">
+                                <th class="py-3 px-4">Pasaran (Arah & Neptu)</th>
+                                <th class="py-3 px-4">Jam 7 + 8 (+24)<br><span class="text-[10px] text-stone-400 font-normal">07:00 - 08:59</span></th>
+                                <th class="py-3 px-4">Jam 9 + 10 (+24)<br><span class="text-[10px] text-stone-400 font-normal">09:00 - 10:59</span></th>
+                                <th class="py-3 px-4">Jam 11 + 12 (+24)<br><span class="text-[10px] text-stone-400 font-normal">11:00 - 12:59</span></th>
+                                <th class="py-3 px-4">Jam 1 + 2 (+24)<br><span class="text-[10px] text-stone-400 font-normal">13:00 - 14:59 / 01-02</span></th>
+                                <th class="py-3 px-4">Jam 3 + 4 (+24)<br><span class="text-[10px] text-stone-400 font-normal">15:00 - 16:59 / 03-04</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="sangatTableBody" class="divide-y divide-stone-800">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================================== -->
+        <!-- TAB 4: PERTEMON RUMAH TANGGA & WARNANE PERTEMON (JODOH / MITRA)       -->
+        <!-- ===================================================================== -->
+        <div id="tab-content-jodoh" class="tab-panel hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Left 5 Cols: Input Weton Pasangan -->
+                <div class="lg:col-span-5 card-glass rounded-2xl p-5 space-y-4">
+                    <div class="border-b border-stone-800 pb-3">
+                        <span class="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold">
+                            Bab Pertemon Rumah Tangga
+                        </span>
+                        <h3 class="font-royal text-lg font-bold text-white mt-1">
+                            Kalkulator Kecocokan Jodoh & Mitra Hajat
+                        </h3>
+                        <p class="text-xs text-stone-400">
+                            Mengecek pantangan mutlak kitab (seperti <em>Ketemu 25 Tundunan Kebo Gerang</em>) dan memetakan <strong>Warnane Pertemon</strong>.
+                        </p>
+                    </div>
+
+                    <!-- Person 1 -->
+                    <div class="p-3.5 rounded-xl bg-keraton-950 border border-stone-800 space-y-2">
+                        <label class="text-xs font-bold text-amber-300 block">Weton Pihak Pertama (Anda / Calon Suami)</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="jodohDino1" onchange="calculateJodoh()" class="bg-keraton-900 text-white text-xs sm:text-sm rounded-lg px-3 py-2 border border-stone-700">
+                                <option value="Jum'at">Jum'at (6 - Wetan Kidul)</option>
+                                <option value="Sabtu" selected>Sabtu (9 - Kidul)</option>
+                                <option value="Minggu">Minggu (5 - Wetan)</option>
+                                <option value="Senin">Senin (4 - Lor)</option>
+                                <option value="Seloso">Seloso (3 - Kulon Lor)</option>
+                                <option value="Rebo">Rebo (7 - Kulon)</option>
+                                <option value="Kamis">Kamis (8 - Tengah)</option>
+                            </select>
+                            <select id="jodohPasaran1" onchange="calculateJodoh()" class="bg-keraton-900 text-white text-xs sm:text-sm rounded-lg px-3 py-2 border border-stone-700">
+                                <option value="Legi">Legi (5 - Wetan)</option>
+                                <option value="Paing" selected>Paing (9 - Kidul)</option>
+                                <option value="Pon">Pon (7 - Kulon)</option>
+                                <option value="Wage">Wage (4 - Lor)</option>
+                                <option value="Kliwon">Kliwon (8 - Tengah)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Person 2 -->
+                    <div class="p-3.5 rounded-xl bg-keraton-950 border border-stone-800 space-y-2">
+                        <label class="text-xs font-bold text-emerald-300 block">Weton Pihak Kedua (Pasangan / Calon Istri)</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="jodohDino2" onchange="calculateJodoh()" class="bg-keraton-900 text-white text-xs sm:text-sm rounded-lg px-3 py-2 border border-stone-700">
+                                <option value="Jum'at">Jum'at (6 - Wetan Kidul)</option>
+                                <option value="Sabtu">Sabtu (9 - Kidul)</option>
+                                <option value="Minggu">Minggu (5 - Wetan)</option>
+                                <option value="Senin">Senin (4 - Lor)</option>
+                                <option value="Seloso" selected>Seloso (3 - Kulon Lor)</option>
+                                <option value="Rebo">Rebo (7 - Kulon)</option>
+                                <option value="Kamis">Kamis (8 - Tengah)</option>
+                            </select>
+                            <select id="jodohPasaran2" onchange="calculateJodoh()" class="bg-keraton-900 text-white text-xs sm:text-sm rounded-lg px-3 py-2 border border-stone-700">
+                                <option value="Legi">Legi (5 - Wetan)</option>
+                                <option value="Paing">Paing (9 - Kidul)</option>
+                                <option value="Pon">Pon (7 - Kulon)</option>
+                                <option value="Wage" selected>Wage (4 - Lor)</option>
+                                <option value="Kliwon">Kliwon (8 - Tengah)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Quick Test Buttons from Kitab -->
+                    <div class="space-y-1.5">
+                        <div class="text-[11px] text-stone-400 font-semibold">Uji Cepat Kasus di Dalam Kitab:</div>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="setJodohPair('Sabtu','Paing','Seloso','Wage')" class="text-[11px] px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30">
+                                Sabtu Paing + Seloso Wage (Kebo Gerang 25)
+                            </button>
+                            <button onclick="setJodohPair('Jum\'at','Legi','Rebo','Pon')" class="text-[11px] px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30">
+                                Jum'at Legi + Rebo Pon (Daringan Barat)
+                            </button>
+                            <button onclick="setJodohPair('Sabtu','Legi','Senin','Pon')" class="text-[11px] px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30">
+                                Sabtu + Senin (Kranjang Bejat)
+                            </button>
+                            <button onclick="setJodohPair('Kamis','Paing','Seloso','Legi')" class="text-[11px] px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30">
+                                Kamis Paing + Seloso Legi (Ora Keno)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 7 Cols: Hasil Analisis Pertemon & Warnane -->
+                <div class="lg:col-span-7 card-glass rounded-2xl p-5 space-y-4">
+                    <div id="jodohResultContainer" class="space-y-4">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================================== -->
+        <!-- TAB 5: PANTANGAN SANTET, WAKTU RAWAN & PERINGATAN KERAS ETIKA         -->
+        <!-- ===================================================================== -->
+        <div id="tab-content-waspada" class="tab-panel hidden space-y-6">
+            
+            <!-- Mandatory Ethical Warning Banner -->
+            <div class="p-5 rounded-2xl bg-gradient-to-r from-rose-950/90 via-red-950/80 to-keraton-950 border-2 border-rose-500/60 shadow-xl space-y-3">
+                <div class="flex items-start gap-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-500/20 border border-rose-400 flex items-center justify-center shrink-0 text-rose-300 text-2xl">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="space-y-1.5">
+                        <span class="px-2.5 py-0.5 rounded-full bg-rose-500 text-black font-extrabold text-[10px] uppercase tracking-wider">
+                            Peringatan Keras & Sumpah Leluhur Jawa
+                        </span>
+                        <h3 class="font-royal text-lg sm:text-xl font-bold text-white">
+                            LARANGAN MUTLAK MENYALAHGUNAKAN PRIMBON UNTUK MENCELAKAI ORANG LAIN
+                        </h3>
+                        <p class="text-xs sm:text-sm text-rose-100 leading-relaxed">
+                            Dalam pakem luhur Kejawen berlaku hukum besi: <strong>"Sopo Nandur Bakal Ngunduh"</strong> (Siapa menanam keburukan pasti memanen kehancuran) dan <strong>"Suro Diro Joyoningrat, Lebur Dening Pangastuti"</strong> (Segala kekuatan hitam dan angkara murka pasti hancur lebur oleh kelembutan hati, doa, dan kebaikan). Penjabaran titik waktu rawan di bawah ini disusun <strong>MURNI UNTUK EDUKASI KEWASPADAAN & BENTENG PERTAHANAN DIRI (PAGAR GAIB)</strong>, bukan dan dilarang keras untuk dipraktikkan guna menyakiti sesama.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Analisis Weton & Jam Rawan Serangan Gaib vs Cara Menangkalnya -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Left 6 Cols: Kapan Biasanya Oknum Melepas Santet/Teluh Menurut Literatur Primbon? -->
+                <div class="lg:col-span-6 card-glass rounded-2xl p-5 space-y-4">
+                    <h4 class="font-royal text-base font-bold text-rose-400 flex items-center gap-2 border-b border-stone-800 pb-3">
+                        <i class="fa-solid fa-eye-low-vision"></i> Anatomi Waktu & Weton yang Sering Dipakai Ilmu Hitam (Agar Anda Waspada)
+                    </h4>
+                    <p class="text-xs text-stone-300 leading-relaxed">
+                        Dalam tradisi Jawa, pelaku ilmu hitam (*teluh, tenung, santet*) tidak mengirim serangan secara acak. Mereka mengincar celah ketika <strong>energi perisai korban sedang turun</strong> atau saat <strong>gerbang Kala sedang memuncak</strong> berdasarkan rumus kitab ini:
+                    </p>
+
+                    <div class="space-y-3 text-xs">
+                        <div class="p-3.5 rounded-xl bg-keraton-950 border border-rose-500/30 space-y-1">
+                            <div class="font-bold text-rose-300">1. Kombinasi Weton "Angker / Pancer Kliwon & Ba'as Tanggal"</div>
+                            <p class="text-stone-300 leading-relaxed">
+                                Hari yang paling sering diwaspadai adalah <strong>Jum'at Kliwon</strong> (Neptu 14 - Nogo Dino Kidul), <strong>Seloso Kliwon</strong> (*Anggoro Kasih* - Neptu 11 - Nogo Dino Kulon), serta <strong>5 Hari Ba'as Tanggal</strong> di dalam kitab (<em>Seloso Wage, Sabtu Kliwon, Rebo Legi, Minggu Pahing, Kamis Pon</em>) karena pada hari-hari tersebut sifat *Sangar Tanggal* sedang aktif.
+                            </p>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-keraton-950 border border-rose-500/30 space-y-1">
+                            <div class="font-bold text-rose-300">2. Jam "Menit Sangat Brahim Blahi" & "Lingsir Wengi"</div>
+                            <p class="text-stone-300 leading-relaxed">
+                                Mengacu pada Tabel Halaman 4 Kitab, setiap pasaran memiliki slot jam <strong>Brahim Blahi</strong> (Jam Balak/Panas):
+                                <br>• <strong>Legi:</strong> Jam 01:00–02:59 (Siang/Dini Hari)
+                                <br>• <strong>Paing:</strong> Jam 11:00–12:59 (Tengange/Tengah Malam)
+                                <br>• <strong>Pon:</strong> Jam 09:00–10:59 (Pagi/Malam)
+                                <br>• <strong>Wage:</strong> Jam 07:00–08:59 (Pagi/Malam)
+                                <br>• <strong>Kliwon:</strong> Jam 03:00–04:59 (Menjelang Subuh/Sore)
+                                <br>Serangan batin biasanya dilepaskan pada irisan <strong>Lingsir Wengi (01:00 – 03:30 WIB)</strong> yang bertepatan dengan jam <em>Brahim Blahi</em> di atas, ketika target sedang tidur lelap dan gelombang otak tidak terjaga.
+                            </p>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-keraton-950 border border-rose-500/30 space-y-1">
+                            <div class="font-bold text-rose-300">3. Menyerang pada Hari "Apes Weton" Target</div>
+                            <p class="text-stone-300 leading-relaxed">
+                                Dalam perhitungan Jawa, energi fisik dan batin seseorang melemah setiap 35 hari sekali, yaitu <strong>3 hari sebelum Weton kelahirannya</strong> atau ketika hari berjalan berlawanan arah (*Ngruwat Segoro Getih*: misal orang lahir Sabtu [Kidul] diserang pada hari Senin [Lor]).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 6 Cols: Kalkulator Status Keamanan Batin Hari Ini & Protokol Pagar Diri -->
+                <div class="lg:col-span-6 card-glass rounded-2xl p-5 space-y-4">
+                    <h4 class="font-royal text-base font-bold text-emerald-400 flex items-center gap-2 border-b border-stone-800 pb-3">
+                        <i class="fa-solid fa-shield-heart"></i> Radar Perisai Diri & Penangkal Balak Hari Ini
+                    </h4>
+
+                    <!-- Dynamic Alert for Current Selected Time -->
+                    <div id="spiritualShieldStatusBox" class="p-4 rounded-xl border space-y-2">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <h5 class="font-bold text-amber-300 uppercase tracking-wider">5 Protokol Penangkal ("Tolak Bala") Menurut Pakem Leluhur:</h5>
+                        
+                        <div class="p-3 rounded-xl bg-keraton-950 border border-stone-800 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center shrink-0">1</span>
+                            <div>
+                                <div class="font-bold text-white">Tidur Menghadap Arah "Joyo Dino" atau Membujur Utara-Selatan dengan Wudhu</div>
+                                <p class="text-stone-300 mt-0.5">Jangan tidur tepat di bawah balok melintang tanpa plafon, dan hindari mengarahkan ubun-ubun kepala langsung ke arah <strong>Nogo Dino</strong> pada malam <em>Jum'at Kliwon / Seloso Kliwon</em>.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-keraton-950 border border-stone-800 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center shrink-0">2</span>
+                            <div>
+                                <div class="font-bold text-white">Bangun Sejenak pada Jam "Ahmad Slamet" atau Lingsir Wengi</div>
+                                <p class="text-stone-300 mt-0.5">Orang yang terjaga, berzikir/berdoa, atau duduk hening (*melek wengi*) pada jam 01:00–03:00 WIB otomatis memantulkan kembali segala kiriman energi buruk karena frekuensi batinnya lebih tinggi.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-keraton-950 border border-stone-800 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center shrink-0">3</span>
+                            <div>
+                                <div class="font-bold text-white">Media Penetral Alami Bumi (Garam Kasar & Air Doa)</div>
+                                <p class="text-stone-300 mt-0.5">Taburkan sedikit garam kasar di empat penjuru rumah sambil memohon perlindungan Tuhan pada waktu <em>Surup</em> (menjelang Maghrib) saat memasuki hari <em>Ba'as Tanggal</em>.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-keraton-950 border border-stone-800 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center shrink-0">4</span>
+                            <div>
+                                <div class="font-bold text-white">Sedekah Weton (Bancakan / Pangruwat)</div>
+                                <p class="text-stone-300 mt-0.5">Berbagi makanan atau sedekah pada hari Weton kelahiran Anda menutup rapat celah <em>Naas/Apes</em> dan mengubah energi <em>Brahim Blahi</em> menjadi <em>Ahmad Slamet</em>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ===================================================================== -->
+        <!-- TAB 6: BEDAH LENGKAP 8 LEMBAR KITAB ASLI (ENSIKLOPEDIA INTERAKTIF)     -->
+        <!-- ===================================================================== -->
+        <div id="tab-content-kitab" class="tab-panel hidden space-y-6">
+            
+            <!-- Banner Ringkasan 1 Menit -->
+            <div class="card-glass rounded-2xl p-5 space-y-4 border-l-4 border-l-amber-400">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">
+                            Masterclass 60 Detik
+                        </span>
+                        <h3 class="font-royal text-lg sm:text-xl font-bold text-white mt-1">
+                            Peta Konsep Utuh Kitab Primbon Anda (8 Halaman Lengkap)
+                        </h3>
+                    </div>
+                    <input type="text" id="searchWetonKitabInput" oninput="renderFull35WetonTable()" placeholder="🔍 Cari Weton di Tabel 35 Ayat..." class="bg-keraton-950 text-white text-xs rounded-xl px-3.5 py-2 border border-amber-500/30 focus:outline-none">
+                </div>
+
+                <!-- 6 Core Chapters Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="p-4 rounded-xl bg-keraton-950 border border-stone-800 space-y-1.5">
+                        <div class="text-amber-400 font-bold">BAB 1: Dino Bojone Pasaran (75 & 186)</div>
+                        <p class="text-stone-300 leading-relaxed">
+                            Menjelaskan pasangan kosmik Hari dan Pasaran. Contoh tertulis di kitab:
+                            <br>• <strong>Rebo (7) bojone Pon (7) = 14</strong> (Keduanya berarah <em>Kulon/Barat</em>).
+                            <br>• <strong>Kamis (8) bojone Kliwon (8) = 16</strong> (Keduanya berarah <em>Tengah/Pusat</em>).
+                            <br>• <strong>Angka 75:</strong> Jumlah seluruh Neptu 7 Hari (42) + 5 Pasaran (33).
+                            <br>• <strong>Angka 186:</strong> Total perputaran <em>Dino, Wulan, Tahun, dan Windu</em>.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-keraton-950 border border-stone-800 space-y-1.5">
+                        <div class="text-emerald-400 font-bold">BAB 2: Ba'as Tanggal & Was Wulan</div>
+                        <p class="text-stone-300 leading-relaxed">
+                            • <strong>5 Ba'as Tanggal (Naas Tanggal):</strong> <em>Seloso Wage, Sabtu Kliwon, Rebo Legi, Minggu Pahing, Kamis Pon</em>.
+                            <br>• <strong>4 Was Wulan (Naas Bulan):</strong>
+                            <br>1. <em>Poso–Sawal–Selo:</em> Jum'at ngijeni
+                            <br>2. <em>Besar–Suro–Sapar:</em> Sabtu & Minggu
+                            <br>3. <em>Mulut–Bakdomulut–Jumadilawal:</em> Senin & Seloso
+                            <br>4. <em>Jumadilakir–Rajab–Ruwah:</em> Rebo & Kamis
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-keraton-950 border border-stone-800 space-y-1.5">
+                        <div class="text-sky-400 font-bold">BAB 3: Nogo Wulan, Windu & Kurup 8 Tahun</div>
+                        <p class="text-stone-300 leading-relaxed">
+                            • <strong>Nogo Windu:</strong> Alip–Ehe (<em>Lor</em>), Jemawal–Je (<em>Wetan</em>), Dal–Be (<em>Kidul</em>), Wan–Jemakir (<em>Kulon</em>).
+                            <br>• <strong>8 Tahun Kurup Aboge:</strong>
+                            <br>Alip (1 Suro Rebo Wage / Riyoyo Rebo Kliwon), Ehe (Minggu Pon / Minggu Wage), Jemawal (Jum'at Pon / Jum'at Wage), Je (Seloso Paing / Seloso Pon), Dal (Sabtu Legi / Sabtu Paing), Be (Kamis Legi / Kamis Paing), Wan (Senin Kliwon / Senin Legi), Jemakir (Jum'at Wage / Jum'at Kliwon).
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabel Lengkap 35 Ayat Weton dari Kitab (Ayat 1 - 35) -->
+            <div class="card-glass rounded-2xl p-5 space-y-4">
+                <h4 class="font-royal text-base sm:text-lg font-bold text-amber-400">
+                    Daftar Lengkap 35 Ayat Weton Kitab (Nogo Dino, Joyo Dino & Arah Pasaran)
+                </h4>
+                <div class="overflow-x-auto max-h-[460px]">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead class="sticky top-0 bg-keraton-950 border-b border-amber-500/30 text-amber-300">
+                            <tr>
+                                <th class="py-2.5 px-3">No. Ayat</th>
+                                <th class="py-2.5 px-3">Weton (Dino + Pasaran)</th>
+                                <th class="py-2.5 px-3">Neptu</th>
+                                <th class="py-2.5 px-3 text-rose-400">Nogo Dino (Pantangan)</th>
+                                <th class="py-2.5 px-3 text-emerald-400">Joyo Dino (Kejayaan Hari)</th>
+                                <th class="py-2.5 px-3 text-sky-400">Arah Pasaran</th>
+                                <th class="py-2.5 px-3">Teks Asli di Kitab</th>
+                                <th class="py-2.5 px-3">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="full35WetonTableBody" class="divide-y divide-stone-800">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-stone-800/80 bg-keraton-950 py-5 px-4 text-center text-xs text-stone-500 mt-8">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div>
+                <strong class="text-amber-400 font-royal">SHIMON</strong> — Digitalisasi Kitab Primbon & Kosmologi Jawa Presisi Tinggi
+            </div>
+            <div>
+                Gunakan untuk kemaslahatan, keselamatan, dan kebajikan (<em>Memayu Hayuning Bawana</em>).
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===================================================================== -->
+    <!-- JAVASCRIPT ENGINE: COMPLETE KITAB PRIMBON DATA & ALGORITHMS           -->
+    <!-- ===================================================================== -->
+    <script>
+        // 1. DATA NEPTU & ARAH TETAP HARI (DINO) & PASARAN SESUAI KITAB
+        const DINO_DATA = {
+            "Minggu":  { neptu: 5, joyo: "Wetan", bojo: "Pon/Wage", desc: "Timur (Wetan)" },
+            "Senin":   { neptu: 4, joyo: "Lor", bojo: "Wage", desc: "Utara (Lor)" },
+            "Seloso":  { neptu: 3, joyo: "Kulon Lor", bojo: "Kliwon/Paing", desc: "Barat Laut (Kulon Lor)" },
+            "Rebo":    { neptu: 7, joyo: "Kulon", bojo: "Pon (7+7=14 Kulon)", desc: "Barat (Kulon)" },
+            "Kamis":   { neptu: 8, joyo: "Tengah", bojo: "Kliwon (8+8=16 Tengah)", desc: "Pusat (Tengah)" },
+            "Jum'at":  { neptu: 6, joyo: "Wetan Kidul", bojo: "Legi", desc: "Tenggara (Wetan Kidul)" },
+            "Sabtu":   { neptu: 9, joyo: "Kidul", bojo: "Paing", desc: "Selatan (Kidul)" }
+        };
+
+        const PASARAN_DATA = {
+            "Legi":   { neptu: 5, arah: "Wetan", desc: "Timur (Wetan Bener)" },
+            "Paing":  { neptu: 9, arah: "Kidul", desc: "Selatan (Kidul)" },
+            "Pon":    { neptu: 7, arah: "Kulon", desc: "Barat (Kulon Bener)" },
+            "Wage":   { neptu: 4, arah: "Lor", desc: "Utara (Lor)" },
+            "Kliwon": { neptu: 8, arah: "Tengah", desc: "Pusat (Tengah)" }
+        };
+
+        // 2. DATA 35 AYAT WETON ASLI DARI KITAB (HALAMAN 1, 2, 3)
+        const KITAB_35_WETON = [
+            { no: 1,  dino: "Jum'at", pasaran: "Legi",   nogo: "Kulon", joyo: "Wetan Kidul", arahPasaran: "Wetan", text: "Yen ono dino Jum'at Legi, Nogo dino ono Kulon = Joyo dino Wetan Kidul, Legi Wetan bener" },
+            { no: 2,  dino: "Sabtu",  pasaran: "Paing",  nogo: "Kidul", joyo: "Kidul",       arahPasaran: "Kidul", text: "Yen ono dino Sabtu Paing, Nogo dino ono Kidul = Joyo dino Paing Kidul" },
+            { no: 3,  dino: "Minggu", pasaran: "Pon",    nogo: "Lor",   joyo: "Wetan",       arahPasaran: "Kulon", text: "Yen ono dino Minggu Pon, Nogo dino ono Lor = Joyo dino Wetan, Pon Kulon bener" },
+            { no: 4,  dino: "Senin",  pasaran: "Wage",   nogo: "Lor",   joyo: "Lor",         arahPasaran: "Lor",   text: "Yen ono dino Senin Wage, Nogo dino ono Lor = Joyo dino Lor, Wage Lor" },
+            { no: 5,  dino: "Seloso", pasaran: "Kliwon", nogo: "Kulon", joyo: "Kulon Lor",   arahPasaran: "Tengah",text: "Yen ono dino Seloso Kliwon, Nogo dino ono Kulon = Joyo dino Kulon Lor, Kliwon Tengah" },
+            { no: 6,  dino: "Rebo",   pasaran: "Legi",   nogo: "Lor",   joyo: "Kulon",       arahPasaran: "Wetan", text: "Yen ono dino Rebo Legi, Nogo dino Lor = Joyo dino Kulon, Legi Wetan bener" },
+            { no: 7,  dino: "Kamis",  pasaran: "Paing",  nogo: "Wetan", joyo: "Tengah",      arahPasaran: "Kidul", text: "Yen ono dino Kamis Paing, Nogo dino ono Wetan = Joyo dino Tengah, Paing Kidul" },
+            { no: 8,  dino: "Jum'at", pasaran: "Pon",    nogo: "Wetan", joyo: "Wetan Kidul", arahPasaran: "Kulon", text: "Yen ono dino Jum'at Pon, Nogo dino ono Wetan = Joyo dino Wetan Kidul, Pon Kidul/Kulon" },
+            { no: 9,  dino: "Sabtu",  pasaran: "Wage",   nogo: "Wetan", joyo: "Kidul",       arahPasaran: "Lor",   text: "Yen ono dino Sabtu Wage, Nogo dino ono Wetan = Joyo dino Kidul, Wage Lor" },
+            { no: 10, dino: "Minggu", pasaran: "Kliwon", nogo: "Wetan", joyo: "Wetan",       arahPasaran: "Tengah",text: "Yen ono dino Minggu Kliwon, Nogo dino ono Wetan = Joyo dino Wetan, Kliwon Tengah" },
+            { no: 11, dino: "Senin",  pasaran: "Legi",   nogo: "Wetan", joyo: "Lor",         arahPasaran: "Wetan", text: "Yen ono dino Senin Legi, Nogo dino ono Wetan = Joyo dino Lor, Legi Wetan" },
+            { no: 12, dino: "Seloso", pasaran: "Paing",  nogo: "Lor",   joyo: "Kulon Lor",   arahPasaran: "Kidul", text: "Yen ono dino Seloso Paing, Nogo dino ono Lor = Joyo dino Kulon Lor, Legi Wetan, Paing Kidul" },
+            { no: 13, dino: "Rebo",   pasaran: "Pon",    nogo: "Kidul", joyo: "Kulon",       arahPasaran: "Kulon", text: "Yen ono dino Rebo Pon, Nogo dino ono Kidul = Joyo dino Kulon, Pon Kulon" },
+            { no: 14, dino: "Kamis",  pasaran: "Wage",   nogo: "Lor",   joyo: "Tengah",      arahPasaran: "Lor",   text: "Yen ono dino Kamis Wage, Nogo dino ono Lor = Joyo dino Tengah, Wage Lor" },
+            { no: 15, dino: "Jum'at", pasaran: "Kliwon", nogo: "Kidul", joyo: "Wetan Kidul", arahPasaran: "Tengah",text: "Yen ono dino Jum'at Kliwon, Nogo dino ono Kidul = Joyo dino Wetan Kidul, Kliwon Tengah" },
+            { no: 16, dino: "Sabtu",  pasaran: "Legi",   nogo: "Kidul", joyo: "Kidul",       arahPasaran: "Wetan", text: "Yen ono dino Sabtu Legi, Nogo dino ono Kidul = Joyo dino Kidul, Legi Wetan" },
+            { no: 17, dino: "Minggu", pasaran: "Paing",  nogo: "Kidul", joyo: "Wetan",       arahPasaran: "Kidul", text: "Yen ono dino Minggu Paing, Nogo dino ono Kidul = Joyo dino Wetan, Paing Kidul" },
+            { no: 18, dino: "Senin",  pasaran: "Pon",    nogo: "Kulon", joyo: "Lor",         arahPasaran: "Kulon", text: "Yen ono dino Senin Pon, Nogo dino ono Kulon = Joyo dino Lor, Pon Kulon" },
+            { no: 19, dino: "Seloso", pasaran: "Wage",   nogo: "Kulon", joyo: "Kulon Lor",   arahPasaran: "Lor",   text: "Yen ono dino Seloso Wage, Nogo dino ono Kulon = Joyo dino Lor Pon Kulon / Wage Lor" },
+            { no: 20, dino: "Rebo",   pasaran: "Kliwon", nogo: "Kulon", joyo: "Kulon",       arahPasaran: "Tengah",text: "Yen ono dino Rebo Kliwon, Nogo dino ono Kulon = Joyo dino Kulon, Kliwon Tengah" },
+            { no: 21, dino: "Kamis",  pasaran: "Legi",   nogo: "Wetan", joyo: "Tengah",      arahPasaran: "Wetan", text: "Yen ono dino Kamis Legi, Nogo dino ono Wetan = Joyo dino Tengah, Legi Wetan" },
+            { no: 22, dino: "Jum'at", pasaran: "Paing",  nogo: "Kulon", joyo: "Wetan Kidul", arahPasaran: "Kidul", text: "Yen ono dino Jum'at Paing, Nogo dino ono Kulon = Joyo dino Wetan Kidul, Paing Kidul" },
+            { no: 23, dino: "Sabtu",  pasaran: "Pon",    nogo: "Lor",   joyo: "Kidul",       arahPasaran: "Kulon", text: "Yen ono dino Sabtu Pon, Nogo dino ono Lor = Joyo dino Kidul, Pon Kulon" },
+            { no: 24, dino: "Minggu", pasaran: "Wage",   nogo: "Wetan", joyo: "Wetan",       arahPasaran: "Lor",   text: "Yen ono dino Minggu Wage, Nogo dino ono Wetan = Joyo dino Wetan, Wage Lor" },
+            { no: 25, dino: "Senin",  pasaran: "Kliwon", nogo: "Lor",   joyo: "Lor",         arahPasaran: "Tengah",text: "Yen ono dino Senin Kliwon, Nogo dino ono Lor = Joyo dino Lor, Kliwon Tengah" },
+            { no: 26, dino: "Seloso", pasaran: "Legi",   nogo: "Lor",   joyo: "Kulon Lor",   arahPasaran: "Wetan", text: "Yen ono dino Seloso Legi, Nogo dino ono Lor = Joyo dino Kulon Lor, Legi Wetan" },
+            { no: 27, dino: "Rebo",   pasaran: "Paing",  nogo: "Lor",   joyo: "Kulon",       arahPasaran: "Kidul", text: "Yen ono dino Rebo Paing, Nogo dino ono Lor = Joyo dino Kulon Lor, Paing Kidul" },
+            { no: 28, dino: "Kamis",  pasaran: "Pon",    nogo: "Kulon", joyo: "Tengah",      arahPasaran: "Kulon", text: "Yen ono dino Kamis Pon, Nogo dino ono Kulon = Joyo dino Tengah, Pon Kulon" },
+            { no: 29, dino: "Jum'at", pasaran: "Wage",   nogo: "Kidul", joyo: "Wetan Kidul", arahPasaran: "Lor",   text: "Yen ono dino Jum'at Wage, Nogo dino ono Kidul = Joyo dino Wetan Kidul, Wage Lor" },
+            { no: 30, dino: "Sabtu",  pasaran: "Kliwon", nogo: "Wetan", joyo: "Kidul",       arahPasaran: "Tengah",text: "Yen ono dino Sabtu Kliwon, Nogo dino ono Wetan = Joyo dino Kidul, Kliwon Tengah" },
+            { no: 31, dino: "Minggu", pasaran: "Legi",   nogo: "Kidul", joyo: "Wetan",       arahPasaran: "Wetan", text: "Yen ono dino Minggu Legi, Nogo dino ono Kidul = Joyo dino Wetan, Legi Wetan" },
+            { no: 32, dino: "Senin",  pasaran: "Paing",  nogo: "Wetan", joyo: "Lor",         arahPasaran: "Kidul", text: "Yen ono dino Senin Paing, Nogo dino ono Wetan = Joyo dino Lor, Paing Kidul" },
+            { no: 33, dino: "Seloso", pasaran: "Pon",    nogo: "Kidul", joyo: "Kulon Lor",   arahPasaran: "Kulon", text: "Yen ono dino Seloso Pon, Nogo dino ono Kidul = Joyo dino Kulon Lor, Pon Kulon" },
+            { no: 34, dino: "Rebo",   pasaran: "Wage",   nogo: "Kulon", joyo: "Kulon",       arahPasaran: "Lor",   text: "Yen ono dino Rebo Wage, Nogo dino ono Kulon = Joyo dino Kulon, Wage Lor" },
+            { no: 35, dino: "Kamis",  pasaran: "Kliwon", nogo: "Lor",   joyo: "Tengah",      arahPasaran: "Tengah",text: "Yen ono dino Kamis Kliwon, Nogo dino ono Lor = Joyo dino Tengah, Kliwon Tengah" }
+        ];
+
+        // 3. DATA 5 BA'AS TANGGAL (NAAS TANGGAL)
+        const BAAS_TANGGAL_LIST = [
+            "Seloso Wage",
+            "Sabtu Kliwon",
+            "Rebo Legi",
+            "Minggu Paing",
+            "Kamis Pon"
+        ];
+
+        // 4. DATA WAS WULAN & NOGO WULAN (12 BULAN JAWA)
+        const WULAN_DATA = {
+            "Suro":        { wasDino: ["Sabtu", "Minggu"], nogoWulan: "Wetan Lor",   group: "Besar – Suro – Sapar" },
+            "Sapar":       { wasDino: ["Sabtu", "Minggu"], nogoWulan: "Wetan",       group: "Besar – Suro – Sapar" },
+            "Mulut":       { wasDino: ["Senin", "Seloso"], nogoWulan: "Wetan Kidul", group: "Mulut – Bakdo Mulut – Jumadilawal" },
+            "Bakdomulut":  { wasDino: ["Senin", "Seloso"], nogoWulan: "Wetan Kidul", group: "Mulut – Bakdo Mulut – Jumadilawal" },
+            "Jumadilawal": { wasDino: ["Senin", "Seloso"], nogoWulan: "Kidul",       group: "Mulut – Bakdo Mulut – Jumadilawal" },
+            "Jumadilakir": { wasDino: ["Rebo", "Kamis"],   nogoWulan: "Kidul Kulon", group: "Jumadilakir – Rajab – Ruwah" },
+            "Rajab":       { wasDino: ["Rebo", "Kamis"],   nogoWulan: "Kulon",       group: "Jumadilakir – Rajab – Ruwah" },
+            "Ruwah":       { wasDino: ["Rebo", "Kamis"],   nogoWulan: "Kulon",       group: "Jumadilakir – Rajab – Ruwah" },
+            "Poso":        { wasDino: ["Jum'at"],          nogoWulan: "Kulon Lor",   group: "Poso – Sawal – Selo (Jum'ah ngijeni)" },
+            "Sawal":       { wasDino: ["Jum'at"],          nogoWulan: "Lor",         group: "Poso – Sawal – Selo (Jum'ah ngijeni)" },
+            "Selo":        { wasDino: ["Jum'at"],          nogoWulan: "Lor",         group: "Poso – Sawal – Selo (Jum'ah ngijeni)" },
+            "Besar":       { wasDino: ["Sabtu", "Minggu"], nogoWulan: "Wetan Lor",   group: "Besar – Suro – Sapar" }
+        };
+
+        // 5. DATA 8 TAHUN WINDU (NOGO WINDON & KURUP ABOGE)
+        const TAHUN_WINDU_DATA = {
+            "Alip":    { angka: 1, nogoWindon: "Lor",   tanggale: "Rebo Wage",   wase: "Rebo Wage",   riyoyo: "Rebo Kliwon" },
+            "Ehe":     { angka: 5, nogoWindon: "Lor",   tanggale: "Minggu Pon",  wase: "Minggu Pon",  riyoyo: "Minggu Wage" },
+            "Jemawal": { angka: 3, nogoWindon: "Wetan", tanggale: "Jum'at Pon",  wase: "Jum'at Pon",  riyoyo: "Jum'at Wage" },
+            "Je":      { angka: 7, nogoWindon: "Wetan", tanggale: "Seloso Paing",wase: "Seloso Paing",riyoyo: "Seloso Pon" },
+            "Dal":     { angka: 4, nogoWindon: "Kidul", tanggale: "Sabtu Legi",  wase: "Sabtu Legi",  riyoyo: "Sabtu Paing" },
+            "Be":      { angka: 2, nogoWindon: "Kidul", tanggale: "Kamis Legi",  wase: "Kamis Legi",  riyoyo: "Kamis Paing" },
+            "Wan":     { angka: 6, nogoWindon: "Kulon", tanggale: "Senin Kliwon",wase: "Senin Kliwon",riyoyo: "Senin Legi" },
+            "Jemakir": { angka: 3, nogoWindon: "Kulon", tanggale: "Jum'at Wage", wase: "Jum'at Wage", riyoyo: "Jum'at Kliwon" }
+        };
+
+        // 6. DATA TABEL MENIT SANGAT (SAAT LIMA) HALAMAN 4 KITAB
+        // Urutan slot jam:
+        // Slot 0: Jam 7+8+24 (07:00 - 08:59 / 19:00 - 20:59)
+        // Slot 1: Jam 9+10+24 (09:00 - 10:59 / 21:00 - 22:59)
+        // Slot 2: Jam 11+12+24 (11:00 - 12:59 / 23:00 - 00:59)
+        // Slot 3: Jam 1+2+24 (13:00 - 14:59 / 01:00 - 02:59)
+        // Slot 4: Jam 3+4+24 (15:00 - 16:59 / 03:00 - 04:59)
+        // (Untuk Jam 5+6 [05:00-06:59 / 17:00-18:59], siklus kembali ke urutan awal slot 0 sebagai transisi fajar/senja)
+        const SANGAT_TABLE = {
+            "Legi":   ["Ahmad Slamet", "Idjrail Rejeki", "Yusuf Bagus", "Brahim Blahi", "Jobrail Kuwat"],
+            "Paing":  ["Idjrail Rejeki", "Yusuf Bagus", "Brahim Blahi", "Jobrail Kuwat", "Ahmad Slamet"],
+            "Pon":    ["Yusuf Bagus", "Brahim Blahi", "Jobrail Kuwat", "Ahmad Slamet", "Idjrail Rejeki"],
+            "Wage":   ["Brahim Blahi", "Jobrail Kuwat", "Ahmad Slamet", "Idjrail Rejeki", "Yusuf Bagus"],
+            "Kliwon": ["Jobrail Kuwat", "Ahmad Slamet", "Idjrail Rejeki", "Yusuf Bagus", "Brahim Blahi"]
+        };
+
+        const SANGAT_SLOT_LABELS = [
+            { index: 0, label: "Jam 7+8+24", range: "07:00–08:59 & 19:00–20:59" },
+            { index: 1, label: "Jam 9+10+24", range: "09:00–10:59 & 21:00–22:59" },
+            { index: 2, label: "Jam 11+12+24", range: "11:00–12:59 & 23:00–00:59" },
+            { index: 3, label: "Jam 1+2+24", range: "13:00–14:59 & 01:00–02:59" },
+            { index: 4, label: "Jam 3+4+24", range: "15:00–16:59 & 03:00–04:59" }
+        ];
+
+        // 7. PRESET LOKASI RUTE NYATA (MALANG & JAWA TIMUR)
+        const ROUTE_PRESETS = {
+            "cw_dieng": {
+                originName: "CW Coffee & Eatery - Tlogomas (Jl. Raya Tlogomas No.10)",
+                originLat: -7.9298, originLng: 112.6015,
+                destName: "Taman Wisata Lembah Dieng (Kalisongo, Dau)",
+                destLat: -7.9685, destLng: 112.5960,
+                note: "Rute lurus dari Utara (Tlogomas) menuju ke Selatan / Kidul (Lembah Dieng)."
+            },
+            "cw_ub": {
+                originName: "CW Coffee & Eatery - Tlogomas",
+                originLat: -7.9298, originLng: 112.6015,
+                destName: "Kampus Universitas Brawijaya (UB Veteran)",
+                destLat: -7.9525, destLng: 112.6140,
+                note: "Rute dari Barat Laut menuju Tenggara (Wetan Kidul)."
+            },
+            "alun_batu": {
+                originName: "Alun-Alun Merdeka Kota Malang",
+                originLat: -7.9826, originLng: 112.6308,
+                destName: "Alun-Alun Kota Wisata Batu",
+                destLat: -7.8712, destLng: 112.5269,
+                note: "Rute dari Tenggara menuju Barat Laut (Kulon Lor)."
+            },
+            "dieng_stasiun": {
+                originName: "Taman Wisata Lembah Dieng",
+                originLat: -7.9685, originLng: 112.5960,
+                destName: "Stasiun Malang Kota Baru",
+                destLat: -7.9772, destLng: 112.6370,
+                note: "Rute dari Barat menuju Timur (Wetan)."
+            },
+            "tugu_kawi": {
+                originName: "Alun-Alun Tugu Balai Kota Malang",
+                originLat: -7.9771, originLng: 112.6340,
+                destName: "Pesarean Gunung Kawi (Wonosari)",
+                destLat: -8.0265, destLng: 112.4922,
+                note: "Rute dari Timur Laut menuju Barat Daya (Kidul Kulon)."
+            },
+            "stasiun_singosari": {
+                originName: "Stasiun Malang Kota Baru",
+                originLat: -7.9772, originLng: 112.6370,
+                destName: "Candi Singosari (Kab. Malang Utara)",
+                destLat: -7.8878, destLng: 112.6638,
+                note: "Rute dari Selatan menuju Utara (Lor)."
+            }
+        };
+
+        // STATE VARIABLES
+        let isLiveMode = true;
+        let activeDate = new Date();
+        let currentRouteArah = "Kidul";
+        let currentRouteBearing = 188;
+
+        // =====================================================================
+        // CORE JAVANESE CALENDAR CALCULATION (EXACT WETON FROM GREGORIAN DATE)
+        // =====================================================================
+        // Reference Anchor: Saturday, October 24, 2026 = Sabtu Wage
+        // Let's verify anchor: Jan 1, 1970 (Unix Epoch) was Thursday (Kamis) Wage!
+        // Wait: Let's check Jan 1, 1970 in Javanese Pasaran:
+        // Standard Pasaran cycle: Legi (0), Paing (1), Pon (2), Wage (3), Kliwon (4).
+        // On Jan 1, 1970, it was Kamis Wage.
+        function getWetonFromDate(dateObj) {
+            // Use local date components at noon to avoid timezone shift issues
+            const y = dateObj.getFullYear();
+            const m = dateObj.getMonth();
+            const d = dateObj.getDate();
+            const utcNoon = Date.UTC(y, m, d, 12, 0, 0);
+            const epochNoon = Date.UTC(1970, 0, 1, 12, 0, 0);
+            const diffDays = Math.round((utcNoon - epochNoon) / (1000 * 60 * 60 * 24));
+
+            const dinoNames = ["Minggu", "Senin", "Seloso", "Rebo", "Kamis", "Jum'at", "Sabtu"];
+            const dinoName = dinoNames[dateObj.getDay()];
+
+            // Pasaran cycle: Jan 1, 1970 = Wage (index 3 in [Legi, Paing, Pon, Wage, Kliwon])
+            const pasaranNames = ["Legi", "Paing", "Pon", "Wage", "Kliwon"];
+            const pasaranIdx = ((diffDays % 5) + 5 + 3) % 5;
+            const pasaranName = pasaranNames[pasaranIdx];
+
+            // Find matching entry in KITAB_35_WETON
+            const kitabEntry = KITAB_35_WETON.find(
+                item => item.dino === dinoName && item.pasaran === pasaranName
+            ) || KITAB_35_WETON[0];
+
+            const neptuDino = DINO_DATA[dinoName].neptu;
+            const neptuPasaran = PASARAN_DATA[pasaranName].neptu;
+
+            return {
+                dino: dinoName,
+                pasaran: pasaranName,
+                wetonFull: `${dinoName} ${pasaranName}`,
+                neptuDino,
+                neptuPasaran,
+                totalNeptu: neptuDino + neptuPasaran,
+                kitab: kitabEntry
+            };
+        }
+
+        // Get Menit Sangat from Hour & Pasaran
+        function getSangatFromTime(hour, minute, pasaran) {
+            // Map 24h to 12h clock (1..12)
+            let h12 = hour % 12;
+            if (h12 === 0) h12 = 12;
+
+            let slotIndex = 0;
+            if (h12 === 7 || h12 === 8) slotIndex = 0;
+            else if (h12 === 9 || h12 === 10) slotIndex = 1;
+            else if (h12 === 11 || h12 === 12) slotIndex = 2;
+            else if (h12 === 1 || h12 === 2) slotIndex = 3;
+            else if (h12 === 3 || h12 === 4) slotIndex = 4;
+            else if (h12 === 5 || h12 === 6) slotIndex = 0; // Pralihan fajar/senja mengikuti pembuka siklus 7-8
+
+            const sangatName = SANGAT_TABLE[pasaran][slotIndex];
+            const slotMeta = SANGAT_SLOT_LABELS[slotIndex];
+            const isPeakMinute24 = (minute >= 20 && minute <= 29);
+
+            return {
+                sangatName,
+                slotIndex,
+                slotLabel: slotMeta.label,
+                slotRange: slotMeta.range,
+                isPeakMinute24
+            };
+        }
+
+        // Get 4 Golongan Waktu (Catur Wanci) from Hour
+        function getGolonganWaktu(hour, minute) {
+            const totalMinutes = hour * 60 + minute;
+            if (totalMinutes >= 0 && totalMinutes < 210) {
+                return {
+                    id: 1,
+                    name: "Wanci Lingsir Wengi (Hening Agung)",
+                    short: "Lingsir Wengi (00:00–03:30)",
+                    nature: "Tirakat Batin, Semedi Puncak & Doa Langit Terbuka (Waspada jam 01-03 bagi yang tanpa pagar doa)"
+                };
+            } else if (totalMinutes >= 210 && totalMinutes < 630) {
+                return {
+                    id: 2,
+                    name: "Wanci Byar & Panglong (Pembuka Rezeki)",
+                    short: "Wanci Byar/Pagi (03:30–10:30)",
+                    nature: "Energi Urip/Segar: Terbaik untuk mulai usaha, berangkat kerja/ujian & menjemput rezeki"
+                };
+            } else if (totalMinutes >= 630 && totalMinutes < 930) {
+                return {
+                    id: 3,
+                    name: "Wanci Tengange & Lingsir Kulon (Derajat/Kuwat)",
+                    short: "Tengange/Siang (10:30–15:30)",
+                    nature: "Energi Wibawa & Ketegasan: Kuat untuk negosiasi/ujian (hindari tepat saat bedhug 11:45-12:15)"
+                };
+            } else {
+                return {
+                    id: 4,
+                    name: "Wanci Surup & Sirep Bocah (Pengasihan/Teduh)",
+                    short: "Wanci Sore/Malam (15:30–23:59)",
+                    nature: "Peralihan Senja ke Malam: Hindari keluar saat Maghrib (17:30-18:30); setelah 19:00 bagus untuk silaturahmi & semedi"
+                };
+            }
+        }
+
+        // =====================================================================
+        // INITIALIZATION & REAL-TIME LOOP
+        // =====================================================================
+        function initApp() {
+            populateQuickWetonSelect();
+            setToCurrentTime();
+            calculateRouteDirection();
+            calculateJodoh();
+            renderFull35WetonTable();
+
+            // Live 1-second ticker
+            setInterval(() => {
+                if (isLiveMode) {
+                    activeDate = new Date();
+                    syncInputsWithActiveDate();
+                    recalculateAll();
+                } else {
+                    // Still update the top live clock display if needed, or show simulated time clearly
+                    updateTopHeaderBar();
+                }
+            }, 1000);
+
+            window.addEventListener('resize', () => {
+                drawCompassCanvas();
+            });
+        }
+
+        function populateQuickWetonSelect() {
+            const select = document.getElementById('quickWetonSelect');
+            let html = `<option value="">-- Pilih dari 35 Weton Kitab --</option>`;
+            KITAB_35_WETON.forEach(item => {
+                const neptu = DINO_DATA[item.dino].neptu + PASARAN_DATA[item.pasaran].neptu;
+                html += `<option value="${item.no}">#${item.no}. ${item.dino} ${item.pasaran} (Neptu ${neptu} | Nogo: ${item.nogo})</option>`;
+            });
+            select.innerHTML = html;
+        }
+
+        function syncInputsWithActiveDate() {
+            const yyyy = activeDate.getFullYear();
+            const mm = String(activeDate.getMonth() + 1).padStart(2, '0');
+            const dd = String(activeDate.getDate()).padStart(2, '0');
+            const hh = String(activeDate.getHours()).padStart(2, '0');
+            const min = String(activeDate.getMinutes()).padStart(2, '0');
+
+            const dateInput = document.getElementById('simDateInput');
+            const timeInput = document.getElementById('simTimeInput');
+            if (document.activeElement !== dateInput) dateInput.value = `${yyyy}-${mm}-${dd}`;
+            if (document.activeElement !== timeInput) timeInput.value = `${hh}:${min}`;
+        }
+
+        function setToCurrentTime() {
+            isLiveMode = true;
+            activeDate = new Date();
+            document.getElementById('quickWetonSelect').value = "";
+            const badge = document.getElementById('simulationModeBadge');
+            badge.className = "px-2.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30";
+            badge.innerHTML = `<i class="fa-solid fa-bolt mr-1"></i> Mode Real-Time Sekarang`;
+            syncInputsWithActiveDate();
+            recalculateAll();
+        }
+
+        function onManualDateTimeChange() {
+            isLiveMode = false;
+            const dVal = document.getElementById('simDateInput').value;
+            const tVal = document.getElementById('simTimeInput').value || "09:00";
+            if (dVal) {
+                const [y, m, d] = dVal.split('-').map(Number);
+                const [hh, mm] = tVal.split(':').map(Number);
+                activeDate = new Date(y, m - 1, d, hh || 0, mm || 0, 0);
+            }
+            const badge = document.getElementById('simulationModeBadge');
+            badge.className = "px-2.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30";
+            badge.innerHTML = `<i class="fa-solid fa-Sliders mr-1"></i> Mode Simulasi Waktu Pilihan`;
+            recalculateAll();
+        }
+
+        function onQuickWetonSelect() {
+            const val = Number(document.getElementById('quickWetonSelect').value);
+            if (!val) return;
+            const target = KITAB_35_WETON.find(x => x.no === val);
+            if (!target) return;
+
+            // Find the nearest date starting from today that matches target.dino & target.pasaran
+            let probe = new Date(activeDate.getTime());
+            for (let i = 0; i < 40; i++) {
+                const w = getWetonFromDate(probe);
+                if (w.dino === target.dino && w.pasaran === target.pasaran) {
+                    isLiveMode = false;
+                    activeDate = probe;
+                    syncInputsWithActiveDate();
+                    const badge = document.getElementById('simulationModeBadge');
+                    badge.className = "px-2.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30";
+                    badge.innerHTML = `<i class="fa-solid fa-scroll mr-1"></i> Simulasi Ayat #${target.no}: ${target.dino} ${target.pasaran}`;
+                    recalculateAll();
+                    break;
+                }
+                probe.setDate(probe.getDate() + 1);
+            }
+        }
+
+        // Load specific case requested by user: Ujian pada Kamis Wage arah ke Lor (Utara)
+        function loadKamisWageCase() {
+            // Find next Kamis Wage
+            let probe = new Date();
+            probe.setHours(8, 0, 0, 0); // Jam 08:00 pagi (Brahim Blahi on Wage!) so user sees full counter-strategy
+            for (let i = 0; i < 40; i++) {
+                const w = getWetonFromDate(probe);
+                if (w.dino === "Kamis" && w.pasaran === "Wage") {
+                    isLiveMode = false;
+                    activeDate = probe;
+                    break;
+                }
+                probe.setDate(probe.getDate() + 1);
+            }
+            document.getElementById('hajatTypeSelect').value = "ujian";
+            document.getElementById('targetDirectionSelect').value = "Lor";
+            document.getElementById('quickWetonSelect').value = "14";
+            syncInputsWithActiveDate();
+
+            const badge = document.getElementById('simulationModeBadge');
+            badge.className = "px-2.5 py-0.5 rounded-md bg-rose-500/20 text-rose-300 text-xs font-semibold border border-rose-500/40";
+            badge.innerHTML = `<i class="fa-solid fa-graduation-cap mr-1"></i> Studi Kasus: Ujian Kamis Wage (Tujuan ke Lor)`;
+
+            recalculateAll();
+        }
+
+        function updateTopHeaderBar() {
+            const weton = getWetonFromDate(activeDate);
+            const sangat = getSangatFromTime(activeDate.getHours(), activeDate.getMinutes(), weton.pasaran);
+            const wanci = getGolonganWaktu(activeDate.getHours(), activeDate.getMinutes());
+
+            const hh = String(activeDate.getHours()).padStart(2, '0');
+            const mm = String(activeDate.getMinutes()).padStart(2, '0');
+            const ss = String(activeDate.getSeconds()).padStart(2, '0');
+
+            const indoMonths = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+            const dateStr = `${activeDate.getDate()} ${indoMonths[activeDate.getMonth()]} ${activeDate.getFullYear()}`;
+
+            document.getElementById('liveClockDisplay').textContent = `${hh}:${mm}:${ss} WIB`;
+            document.getElementById('liveDateDisplay').textContent = `${dateStr} ${isLiveMode ? '(Sekarang)' : '(Simulasi)'}`;
+            document.getElementById('liveWetonDisplay').textContent = `${weton.wetonFull}`;
+            document.getElementById('liveNeptuDisplay').textContent = `Neptu ${weton.totalNeptu} (${weton.neptuDino}+${weton.neptuPasaran})`;
+
+            const sangatEl = document.getElementById('liveSangatDisplay');
+            sangatEl.textContent = sangat.sangatName;
+            sangatEl.className = `text-xs sm:text-sm font-bold truncate ${sangat.sangatName === 'Brahim Blahi' ? 'text-rose-400' : 'text-emerald-400'}`;
+
+            document.getElementById('liveGolonganWaktuDisplay').textContent = wanci.short;
+            document.getElementById('liveNogoDisplay').textContent = `🚫 Nogo: ${weton.kitab.nogo}`;
+            document.getElementById('liveJoyoDisplay').textContent = `✨ Joyo: ${weton.kitab.joyo} | ${weton.kitab.arahPasaran}`;
+        }
+
+        // =====================================================================
+        // MASTER RECALCULATION ENGINE
+        // =====================================================================
+        function recalculateAll() {
+            updateTopHeaderBar();
+
+            const weton = getWetonFromDate(activeDate);
+            const sangat = getSangatFromTime(activeDate.getHours(), activeDate.getMinutes(), weton.pasaran);
+            const wanci = getGolonganWaktu(activeDate.getHours(), activeDate.getMinutes());
+            const hajatType = document.getElementById('hajatTypeSelect').value;
+            const targetArah = document.getElementById('targetDirectionSelect').value;
+            const selectedWulan = document.getElementById('javaneseMonthSelect').value;
+            const selectedTahun = document.getElementById('javaneseYearSelect').value;
+
+            const wulanMeta = WULAN_DATA[selectedWulan];
+            const tahunMeta = TAHUN_WINDU_DATA[selectedTahun];
+
+            // Update Kitab Verse Box
+            document.getElementById('kitabVerseNumber').textContent = `Ayat #${weton.kitab.no} dari 35`;
+            document.getElementById('kitabOriginalQuote').textContent = `"${weton.kitab.text}"`;
+
+            // 1. Evaluate Pillar 1: Direction vs Nogo Dino & Joyo Dino
+            let score = 75;
+            const nogoDino = weton.kitab.nogo;
+            const joyoDino = weton.kitab.joyo;
+            const arahPasaran = weton.kitab.arahPasaran;
+
+            const isHittingNogoDino = (targetArah === nogoDino) || (targetArah.includes(nogoDino) && targetArah !== "Tengah");
+            const isMatchingJoyo = (targetArah === joyoDino) || (targetArah === arahPasaran);
+
+            const pilarArahStatus = document.getElementById('pilarArahStatus');
+            const pilarArahDetail = document.getElementById('pilarArahDetail');
+
+            if (isHittingNogoDino) {
+                score -= 35;
+                pilarArahStatus.className = "text-[10px] px-2 py-0.5 rounded font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40";
+                pilarArahStatus.textContent = "TABRAK NOGO DINO!";
+                pilarArahDetail.innerHTML = `Tujuan Anda ke <strong class="text-rose-400">${targetArah}</strong> berhadapan langsung dengan <strong>Nogo Dino (${nogoDino})</strong> pada hari ${weton.wetonFull}. Wajib gunakan <em>Protokol Counter Mbelok Langkah</em> di bawah!`;
+            } else if (isMatchingJoyo) {
+                score += 15;
+                pilarArahStatus.className = "text-[10px] px-2 py-0.5 rounded font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+                pilarArahStatus.textContent = "ARAH JOYO EMAS";
+                pilarArahDetail.innerHTML = `Tujuan ke <strong class="text-emerald-400">${targetArah}</strong> tepat searah dengan <strong>Joyo Dino (${joyoDino}) / Pasaran (${arahPasaran})</strong> dan bebas dari Nogo Dino (${nogoDino}).`;
+            } else {
+                score += 5;
+                pilarArahStatus.className = "text-[10px] px-2 py-0.5 rounded font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40";
+                pilarArahStatus.textContent = "AMAN / NETRAL";
+                pilarArahDetail.innerHTML = `Tujuan ke <strong>${targetArah}</strong> aman karena tidak menabrak Nogo Dino (<strong>${nogoDino}</strong>). Kejayaan utama hari ini berada di <strong>${joyoDino}</strong> & <strong>${arahPasaran}</strong>.`;
+            }
+
+            // 2. Evaluate Pillar 2: Jam Menit Sangat
+            const pilarJamStatus = document.getElementById('pilarJamStatus');
+            const pilarJamDetail = document.getElementById('pilarJamDetail');
+
+            if (sangat.sangatName === "Brahim Blahi") {
+                score -= 30;
+                pilarJamStatus.className = "text-[10px] px-2 py-0.5 rounded font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40";
+                pilarJamStatus.textContent = "BRAHIM BLAHI (PANTANG)";
+                pilarJamDetail.innerHTML = `Jam ini berada di <strong class="text-rose-400">Menit Sangat Brahim Blahi</strong> (${sangat.slotLabel}). Rawan rintangan/panas. Geser jam keberangkatan Anda!`;
+            } else {
+                // Check synergy with Hajat
+                let bonusJam = 10;
+                if (
+                    (hajatType === "rezeki" && sangat.sangatName === "Idjrail Rejeki") ||
+                    (hajatType === "ujian" && (sangat.sangatName === "Jobrail Kuwat" || sangat.sangatName === "Ahmad Slamet")) ||
+                    (hajatType === "asmara" && sangat.sangatName === "Yusuf Bagus") ||
+                    (hajatType === "semedi" && (sangat.sangatName === "Ahmad Slamet" || sangat.sangatName === "Jobrail Kuwat"))
+                ) {
+                    bonusJam = 15;
+                }
+                score += bonusJam;
+                pilarJamStatus.className = "text-[10px] px-2 py-0.5 rounded font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+                pilarJamStatus.textContent = sangat.sangatName.toUpperCase();
+                pilarJamDetail.innerHTML = `Aktif di <strong class="text-emerald-400">Menit Sangat ${sangat.sangatName}</strong> (${sangat.slotRange}). ${sangat.isPeakMinute24 ? '<span class="text-amber-300 font-bold">⚡ Sedang di Puncak Menit +24!</span>' : 'Energi sangat mendukung hajat Anda.'}`;
+            }
+
+            // 3. Evaluate Pillar 3: Ba'as Tanggal & Was Wulan
+            const isBaasTanggal = BAAS_TANGGAL_LIST.includes(weton.wetonFull);
+            const isWasWulan = wulanMeta.wasDino.includes(weton.dino);
+
+            const pilarNaasStatus = document.getElementById('pilarNaasStatus');
+            const pilarNaasDetail = document.getElementById('pilarNaasDetail');
+
+            if (isBaasTanggal || isWasWulan) {
+                score -= 20;
+                pilarNaasStatus.className = "text-[10px] px-2 py-0.5 rounded font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40";
+                pilarNaasStatus.textContent = isBaasTanggal ? "BA'AS TANGGAL" : "WAS WULAN";
+                let reasons = [];
+                if (isBaasTanggal) reasons.push(`<strong>${weton.wetonFull}</strong> termasuk 5 hari <em>Ba'as Tanggal</em> di kitab`);
+                if (isWasWulan) reasons.push(`Hari <strong>${weton.dino}</strong> adalah <em>Was Wulan</em> pada bulan ${selectedWulan}`);
+                pilarNaasDetail.innerHTML = `${reasons.join(' & ')}. Kurang baik untuk akad nikah/pindah rumah, namun untuk ujian/tugas wajib tetap bisa ditembus dengan sedekah & doa pembuka.`;
+            } else {
+                score += 5;
+                pilarNaasStatus.className = "text-[10px] px-2 py-0.5 rounded font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+                pilarNaasStatus.textContent = "BERSIH / TIDAK NAAS";
+                pilarNaasDetail.innerHTML = `Hari <strong>${weton.wetonFull}</strong> bebas dari 5 <em>Ba'as Tanggal</em> maupun <em>Was Wulan</em> (${wulanMeta.wasDino.join('/')}) pada bulan ${selectedWulan}.`;
+            }
+
+            // 4. Evaluate Pillar 4: Nogo Wulan & Nogo Windu
+            const hitNogoWulan = (targetArah === wulanMeta.nogoWulan);
+            const hitNogoWindu = (targetArah === tahunMeta.nogoWindon);
+            const pilarWulanStatus = document.getElementById('pilarWulanStatus');
+            const pilarWulanDetail = document.getElementById('pilarWulanDetail');
+
+            if (hitNogoWulan || hitNogoWindu) {
+                score -= 10;
+                pilarWulanStatus.className = "text-[10px] px-2 py-0.5 rounded font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40";
+                pilarWulanStatus.textContent = "PERHATIAN ARAH TAHUN";
+                pilarWulanDetail.innerHTML = `Nogo Wulan (${selectedWulan}) ada di <strong>${wulanMeta.nogoWulan}</strong> & Nogo Windu (${selectedTahun}) di <strong>${tahunMeta.nogoWindon}</strong>. Hindari membangun rumah/pindah permanen ke arah tersebut.`;
+            } else {
+                pilarWulanStatus.className = "text-[10px] px-2 py-0.5 rounded font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+                pilarWulanStatus.textContent = "SELARAS KOSMOS";
+                pilarWulanDetail.innerHTML = `Nogo Wulan ${selectedWulan} di <strong>${wulanMeta.nogoWulan}</strong> | Nogo Tahun ${selectedTahun} di <strong>${tahunMeta.nogoWindon}</strong> (1 Suro: ${tahunMeta.tanggale}, Riyoyo: ${tahunMeta.riyoyo}).`;
+            }
+
+            // Clamp score
+            score = Math.max(15, Math.min(99, score));
+
+            // Render Main Verdict Banner
+            const scoreBadge = document.getElementById('verdictScoreBadge');
+            const banner = document.getElementById('mainVerdictBanner');
+            const icon = document.getElementById('mainVerdictIcon');
+            const title = document.getElementById('mainVerdictTitle');
+            const desc = document.getElementById('mainVerdictDesc');
+
+            if (score >= 78 && !isHittingNogoDino && sangat.sangatName !== "Brahim Blahi") {
+                scoreBadge.className = "px-3.5 py-1.5 rounded-xl font-bold text-sm bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+                scoreBadge.textContent = `Skor Kecocokan: ${score}% (SANGAT DIREKOMENDASIKAN)`;
+                banner.className = "mt-4 p-4 rounded-xl border border-emerald-500/40 bg-emerald-950/30 flex items-start gap-3.5";
+                icon.className = "w-10 h-10 rounded-xl bg-emerald-500 text-black flex items-center justify-center shrink-0 text-lg font-bold";
+                icon.innerHTML = `<i class="fa-solid fa-crown"></i>`;
+                title.textContent = `WAKTU & ARAH SANGAT BAGUS (PINTU KEJAYAAN TERBUKA)`;
+                desc.innerHTML = `Pada hari <strong>${weton.wetonFull}</strong> (Neptu ${weton.totalNeptu}), berangkat menuju arah <strong>${targetArah}</strong> pada jam <strong>${sangat.sangatName}</strong> sangat selaras dengan kitab. Arah perjalanan Anda bebas dari Nogo Dino (${nogoDino}) dan didukung kejayaan <strong>${joyoDino} / ${arahPasaran}</strong>.`;
+            } else if (isHittingNogoDino || sangat.sangatName === "Brahim Blahi") {
+                scoreBadge.className = "px-3.5 py-1.5 rounded-xl font-bold text-sm bg-rose-500/20 text-rose-300 border border-rose-500/40";
+                scoreBadge.textContent = `Skor Kecocokan: ${score}% (WAJIB PAKAI COUNTER KITAB)`;
+                banner.className = "mt-4 p-4 rounded-xl border border-rose-500/40 bg-rose-950/30 flex items-start gap-3.5";
+                icon.className = "w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0 text-lg font-bold";
+                icon.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
+                title.textContent = `PERINGATAN KITAB: ADA BENTURAN ${isHittingNogoDino ? 'ARAH NOGO DINO (' + nogoDino.toUpperCase() + ')' : ''} ${sangat.sangatName === 'Brahim Blahi' ? '& JAM BRAHIM BLAHI' : ''}`;
+                desc.innerHTML = `Jika jadwal bisa digeser, pilihlah jam/arah lain. Namun <strong>jika ini jadwal wajib (seperti Ujian/Kerja di hari ${weton.wetonFull})</strong>, jangan panik! Kitab menyediakan teknik <strong>Penangkal / Counter Nogo Dino</strong> di bawah ini agar Anda tetap sukses dan selamat.`;
+            } else {
+                scoreBadge.className = "px-3.5 py-1.5 rounded-xl font-bold text-sm bg-amber-500/20 text-amber-300 border border-amber-500/40";
+                scoreBadge.textContent = `Skor Kecocokan: ${score}% (CUKUP BAIK DENGAN SYARAT)`;
+                banner.className = "mt-4 p-4 rounded-xl border border-amber-500/40 bg-amber-950/30 flex items-start gap-3.5";
+                icon.className = "w-10 h-10 rounded-xl bg-amber-500 text-black flex items-center justify-center shrink-0 text-lg font-bold";
+                icon.innerHTML = `<i class="fa-solid fa-compass"></i>`;
+                title.textContent = `AMAN DITEMPUH DENGAN PENGUATAN ARAH JOYO (${joyoDino})`;
+                desc.innerHTML = `Perjalanan ke arah <strong>${targetArah}</strong> tidak menabrak Nogo Dino (${nogoDino}), namun untuk memaksimalkan hasil hajat, awali langkah menghadap <strong>${joyoDino}</strong> atau <strong>${arahPasaran}</strong>.`;
+            }
+
+            // Render Counter Strategy Box
+            renderCounterStrategy(weton, sangat, targetArah, isHittingNogoDino);
+
+            // Render Bottom 3 Cards on Dashboard
+            renderWetonAnatomyCard(weton);
+            renderBestHoursCard(weton, sangat, hajatType);
+            renderSemediGuideCard(weton, wanci, hajatType);
+
+            // Update Tab 3 (Sangat Table & Wanci Cards)
+            renderSangatTable(weton.pasaran, sangat.slotIndex);
+            highlightActiveWanciCard(wanci);
+
+            // Update Tab 5 (Spiritual Shield Box)
+            renderSpiritualShieldStatus(weton, sangat, wanci, isBaasTanggal);
+
+            // Update Tab 2 Compass Canvas
+            drawCompassCanvas();
+        }
+
+        function renderCounterStrategy(weton, sangat, targetArah, isHittingNogoDino) {
+            const body = document.getElementById('counterStrategyBody');
+            const nogo = weton.kitab.nogo;
+            const joyo = weton.kitab.joyo;
+            const arahPas = weton.kitab.arahPasaran;
+
+            // Find best safe hours today for this Pasaran
+            const pasaranSchedule = SANGAT_TABLE[weton.pasaran];
+            const KuwatSlot = SANGAT_SLOT_LABELS[pasaranSchedule.indexOf("Jobrail Kuwat")];
+            const SlametSlot = SANGAT_SLOT_LABELS[pasaranSchedule.indexOf("Ahmad Slamet")];
+            const RejekiSlot = SANGAT_SLOT_LABELS[pasaranSchedule.indexOf("Idjrail Rejeki")];
+
+            let html = ``;
+            if (isHittingNogoDino) {
+                html += `
+                    <div class="p-2.5 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-100">
+                        <strong>🚨 Solusi Penakluk Nogo Dino (${weton.wetonFull} ke arah ${targetArah}):</strong>
+                        <ul class="list-disc list-inside mt-1 space-y-1 text-xs">
+                            <li><strong>1. Langkah Zig-Zag (Nyelirani Nogo):</strong> Karena Nogo Dino ada di <strong>${nogo}</strong>, saat keluar pintu rumah/kos <strong>JANGAN langsung melangkah ke ${nogo}</strong>. Berdirilah tenang di tengah ruangan (mengambil tuah <strong>Joyo Dino: ${joyo}</strong>), lalu melangkahlah 7 tindak ke arah <strong>${joyo === 'Tengah' ? 'Wetan (Timur) atau Kulon (Barat)' : joyo}</strong> terlebih dahulu sebelum berbelok menuju lokasi di ${targetArah}.</li>
+                            <li><strong>2. Kunci Jam Keberangkatan:</strong> Hindari keluar rumah pada jam <em>Brahim Blahi</em>. Berangkatlah pada jam <strong>Jobrail Kuwat (${KuwatSlot.range})</strong> agar mental/ujian menang mutlak, atau jam <strong>Ahmad Slamet (${SlametSlot.range})</strong> agar dilindungi dari segala balak.</li>
+                            <li><strong>3. Posisi Duduk Saat Tiba di Lokasi:</strong> Saat duduk mengerjakan ujian/hajat, usahakan duduk di area <strong>${joyo}</strong> ruangan atau menghadap ke arah <strong>${arahPas}</strong>.</li>
+                        </ul>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="text-xs text-stone-200 space-y-1">
+                        <p>✅ <strong>Langkah Awal Terbaik:</strong> Keluarlah dari pintu dengan kaki kanan sambil menghadap sejenak ke arah <strong>Joyo Dino (${joyo})</strong> atau <strong>Arah Pasaran (${arahPas})</strong> untuk mengunci keberuntungan hari <strong>${weton.wetonFull}</strong>.</p>
+                        <p>⏰ <strong>Kombo Jam Emas Hari Ini:</strong> Untuk Rezeki gunakan <strong>${RejekiSlot.range} (Idjrail Rejeki)</strong>, untuk Ujian/Jabatan gunakan <strong>${KuwatSlot.range} (Jobrail Kuwat)</strong>, dan untuk Keselamatan/Semedi gunakan <strong>${SlametSlot.range} (Ahmad Slamet)</strong>.</p>
+                    </div>
+                `;
+            }
+            body.innerHTML = html;
+        }
+
+        function renderWetonAnatomyCard(weton) {
+            const container = document.getElementById('wetonAnatomyContent');
+            const dinoMeta = DINO_DATA[weton.dino];
+            const pasMeta = PASARAN_DATA[weton.pasaran];
+
+            container.innerHTML = `
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-keraton-950 border border-stone-800">
+                    <span>Hari (Dino): <strong class="text-white">${weton.dino}</strong></span>
+                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">Neptu ${weton.neptuDino} | Joyo: ${dinoMeta.joyo}</span>
+                </div>
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-keraton-950 border border-stone-800">
+                    <span>Pasaran: <strong class="text-white">${weton.pasaran}</strong></span>
+                    <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold">Neptu ${weton.neptuPasaran} | Arah: ${pasMeta.arah}</span>
+                </div>
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                    <span>Total Neptu Weton:</span>
+                    <span class="text-sm font-extrabold text-amber-300">${weton.totalNeptu} (Dari Total Kosmik 75)</span>
+                </div>
+                <div class="p-2.5 rounded-xl bg-keraton-950 border border-stone-800 text-[11px] leading-relaxed">
+                    <strong class="text-amber-400">Hukum "Dino Bojone Pasaran":</strong><br>
+                    Hari ${weton.dino} berpasangan kosmik dengan ${dinoMeta.bojo}. Dalam diagram kitab, perputaran <em>Dino + Wulan + Tahun + Windu</em> bermuara pada angka kunci <strong>186</strong>.
+                </div>
+            `;
+        }
+
+        function renderBestHoursCard(weton, currentSangat, hajatType) {
+            const container = document.getElementById('bestHoursTodayContent');
+            const list = SANGAT_TABLE[weton.pasaran];
+
+            let html = ``;
+            list.forEach((sName, idx) => {
+                const slot = SANGAT_SLOT_LABELS[idx];
+                const isCurrent = (idx === currentSangat.slotIndex);
+                const isBad = (sName === "Brahim Blahi");
+
+                let badgeClass = isBad
+                    ? "bg-rose-500/20 text-rose-300 border-rose-500/30"
+                    : "bg-emerald-500/15 text-emerald-300 border-emerald-500/30";
+
+                html += `
+                    <div class="p-2 rounded-xl border ${isCurrent ? 'bg-amber-500/20 border-amber-400' : 'bg-keraton-950 border-stone-800'} flex items-center justify-between">
+                        <div>
+                            <div class="font-bold text-white flex items-center gap-1.5">
+                                ${slot.label}
+                                ${isCurrent ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-400 text-black font-extrabold">AKTIF</span>' : ''}
+                            </div>
+                            <div class="text-[10px] text-stone-400">${slot.range}</div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-lg border text-[11px] font-bold ${badgeClass}">
+                            ${sName}
+                        </span>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderSemediGuideCard(weton, wanci, hajatType) {
+            const container = document.getElementById('semediGuideContent');
+            const joyo = weton.kitab.joyo;
+            const arahPas = weton.kitab.arahPasaran;
+            const nogo = weton.kitab.nogo;
+
+            let arahSemedi = (joyo === "Tengah")
+                ? `Duduk di <strong>Pusat/Tengah</strong> ruangan atau menghadap ke <strong>${arahPas === 'Tengah' ? 'Wetan (Timur)' : arahPas}</strong>`
+                : `Menghadap ke arah <strong>${joyo}</strong> atau <strong>${arahPas}</strong>`;
+
+            container.innerHTML = `
+                <div class="p-2.5 rounded-xl bg-keraton-950 border border-purple-500/30">
+                    <div class="text-purple-300 font-bold mb-1">🧘 Arah Menghadap Semedi / Doa Hajat:</div>
+                    <p>${arahSemedi}. <strong>Jangan menghadap ke ${nogo}</strong> karena merupakan letak Nogo Dino hari ini.</p>
+                </div>
+                <div class="p-2.5 rounded-xl bg-keraton-950 border border-stone-800">
+                    <div class="text-amber-300 font-bold mb-1">⏳ Golongan Waktu Sekarang:</div>
+                    <p><strong>${wanci.name}:</strong> ${wanci.nature}.</p>
+                </div>
+                <div class="p-2.5 rounded-xl bg-keraton-950 border border-stone-800">
+                    <div class="text-emerald-300 font-bold mb-1">🕯️ Kunci Menit "+24" di Kitab:</div>
+                    <p>Dalam tabel kitab tertulis angka <code>+24</code> pada setiap jam. Mulailah niat/doa puncak pada <strong>menit ke-24</strong> di jam <em>Ahmad Slamet</em> atau <em>Jobrail Kuwat</em>.</p>
+                </div>
+            `;
+        }
+
+        // =====================================================================
+        // TAB 2: GEODESIC ROUTE DIRECTION & COMPASS CANVAS
+        // =====================================================================
+        function applyRoutePreset() {
+            const key = document.getElementById('routePresetSelect').value;
+            if (key === 'custom') return;
+            const preset = ROUTE_PRESETS[key];
+            if (!preset) return;
+
+            document.getElementById('originNameInput').value = preset.originName;
+            document.getElementById('originLatInput').value = preset.originLat;
+            document.getElementById('originLngInput').value = preset.originLng;
+            document.getElementById('destNameInput').value = preset.destName;
+            document.getElementById('destLatInput').value = preset.destLat;
+            document.getElementById('destLngInput').value = preset.destLng;
+
+            calculateRouteDirection();
+        }
+
+        function calculateRouteDirection() {
+            const lat1 = parseFloat(document.getElementById('originLatInput').value) || 0;
+            const lng1 = parseFloat(document.getElementById('originLngInput').value) || 0;
+            const lat2 = parseFloat(document.getElementById('destLatInput').value) || 0;
+            const lng2 = parseFloat(document.getElementById('destLngInput').value) || 0;
+            const originName = document.getElementById('originNameInput').value || "Titik Asal";
+            const destName = document.getElementById('destNameInput').value || "Titik Tujuan";
+
+            // Calculate Bearing (Azimuth in degrees 0..360, where 0=North/Lor, 90=East/Wetan, 180=South/Kidul, 270=West/Kulon)
+            const toRad = deg => deg * Math.PI / 180;
+            const toDeg = rad => rad * 180 / Math.PI;
+
+            const dLon = toRad(lng2 - lng1);
+            const y = Math.sin(dLon) * Math.cos(toRad(lat2));
+            const x = Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
+                      Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(dLon);
+            let brng = toDeg(Math.atan2(y, x));
+            brng = (brng + 360) % 360;
+
+            // Approximate distance in km (Haversine)
+            const R = 6371;
+            const dLat = toRad(lat2 - lat1);
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            const distKm = (R * c).toFixed(2);
+
+            // Map Bearing to 8 Javanese Compass Directions
+            let arahJawa = "Lor";
+            let arahIndo = "Utara -> Selatan";
+            if (brng >= 337.5 || brng < 22.5) {
+                arahJawa = "Lor";
+                arahIndo = "Selatan ke Utara (Menuju Lor)";
+            } else if (brng >= 22.5 && brng < 67.5) {
+                arahJawa = "Wetan Lor";
+                arahIndo = "Barat Daya ke Timur Laut (Menuju Wetan Lor)";
+            } else if (brng >= 67.5 && brng < 112.5) {
+                arahJawa = "Wetan";
+                arahIndo = "Barat ke Timur (Menuju Wetan)";
+            } else if (brng >= 112.5 && brng < 157.5) {
+                arahJawa = "Wetan Kidul";
+                arahIndo = "Barat Laut ke Tenggara (Menuju Wetan Kidul)";
+            } else if (brng >= 157.5 && brng < 202.5) {
+                arahJawa = "Kidul";
+                arahIndo = "Utara ke Selatan (Menuju Kidul)";
+            } else if (brng >= 202.5 && brng < 247.5) {
+                arahJawa = "Kidul Kulon";
+                arahIndo = "Timur Laut ke Barat Daya (Menuju Kidul Kulon)";
+            } else if (brng >= 247.5 && brng < 292.5) {
+                arahJawa = "Kulon";
+                arahIndo = "Timur ke Barat (Menuju Kulon)";
+            } else {
+                arahJawa = "Kulon Lor";
+                arahIndo = "Tenggara ke Barat Laut (Menuju Kulon Lor)";
+            }
+
+            currentRouteArah = arahJawa;
+            currentRouteBearing = Math.round(brng);
+
+            // Sync with Dashboard dropdown
+            const dirSelect = document.getElementById('targetDirectionSelect');
+            if (dirSelect) {
+                dirSelect.value = arahJawa;
+            }
+
+            const weton = getWetonFromDate(activeDate);
+            const nogo = weton.kitab.nogo;
+            const joyo = weton.kitab.joyo;
+            const pasArah = weton.kitab.arahPasaran;
+
+            const isConflictNogo = (arahJawa === nogo) || (arahJawa.includes(nogo));
+            const isJoyoMatch = (arahJawa === joyo) || (arahJawa === pasArah);
+
+            const box = document.getElementById('routeResultBox');
+            box.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-800 pb-2">
+                    <div>
+                        <div class="text-[11px] text-stone-400">Hasil Deteksi Kompas Perjalanan:</div>
+                        <div class="text-sm sm:text-base font-bold text-amber-300">
+                            ${arahIndo} — Arah Tujuan: <span class="underline">${arahJawa.toUpperCase()}</span> (${currentRouteBearing}°)
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-lg bg-stone-800 text-stone-300 text-xs font-mono">
+                        Jarak Lurus: ~${distKm} km
+                    </span>
+                </div>
+                <div class="text-xs leading-relaxed space-y-1.5 pt-1">
+                    <p>📍 <strong>Rute:</strong> Dari <em>${originName}</em> menuju <em>${destName}</em> berarti Anda bergerak dari arah <strong>${arahIndo}</strong>.</p>
+                    ${isConflictNogo ? `
+                        <div class="p-2.5 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-200">
+                            ⚠️ <strong>WASPADA NOGO DINO:</strong> Pada hari <strong>${weton.wetonFull}</strong>, mulut <em>Nogo Dino</em> berada di arah <strong>${nogo}</strong>! Untuk berangkat ke <em>${destName}</em>, keluarlah dari titik keberangkatan dengan mengambil jalan memutar ke arah <strong>${joyo === 'Tengah' ? 'Wetan/Kulon' : joyo}</strong> terlebih dahulu sebelum menuju ${arahJawa}.
+                        </div>
+                    ` : `
+                        <div class="p-2.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-200">
+                            ✅ <strong>ARAH PERJALANAN AMAN & TEPAT:</strong> Pada hari <strong>${weton.wetonFull}</strong>, Nogo Dino berada di <strong>${nogo}</strong>, sehingga perjalanan Anda menuju arah <strong>${arahJawa}</strong> (${destName}) <strong>TIDAK menabrak mulut Naga</strong>! ${isJoyoMatch ? 'Bahkan rute ini tepat searah dengan <strong>Joyo Dino / Arah Pasaran</strong> hari ini!' : `Setibanya di ${destName} untuk semedi/hajat, duduklah menghadap ke arah <strong>${joyo}</strong> atau <strong>${pasArah}</strong>.`}
+                        </div>
+                    `}
+                </div>
+            `;
+
+            drawCompassCanvas();
+        }
+
+        function drawCompassCanvas() {
+            const canvas = document.getElementById('primbonCompassCanvas');
+            if (!canvas) return;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const size = Math.max(280, Math.min(rect.width, 420));
+            canvas.width = size;
+            canvas.height = size;
+
+            const ctx = canvas.getContext('2d');
+            const cx = size / 2;
+            const cy = size / 2;
+            const rOuter = size * 0.40;
+            const rInner = size * 0.26;
+
+            ctx.clearRect(0, 0, size, size);
+
+            const weton = getWetonFromDate(activeDate);
+            const selectedWulan = document.getElementById('javaneseMonthSelect').value;
+            const nogoWulan = WULAN_DATA[selectedWulan].nogoWulan;
+
+            const badge = document.getElementById('compassWetonBadge');
+            if (badge) badge.textContent = `${weton.wetonFull} (Neptu ${weton.totalNeptu})`;
+
+            // Background decorative rings
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.2)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(cx, cy, rOuter, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, rInner, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // 8 Javanese Directions Map (Angle in degrees where 0 is top/North)
+            const directions = [
+                { key: "Lor",        label: "LOR (U)",        deg: 0 },
+                { key: "Wetan Lor",  label: "WETAN LOR (TL)", deg: 45 },
+                { key: "Wetan",      label: "WETAN (T)",      deg: 90 },
+                { key: "Wetan Kidul",label: "WETAN KIDUL (TG)",deg: 135 },
+                { key: "Kidul",      label: "KIDUL (S)",      deg: 180 },
+                { key: "Kidul Kulon",label: "KIDUL KULON (BD)",deg: 225 },
+                { key: "Kulon",      label: "KULON (B)",      deg: 270 },
+                { key: "Kulon Lor",  label: "KULON LOR (BL)", deg: 315 }
+            ];
+
+            directions.forEach(dir => {
+                const rad = (dir.deg - 90) * Math.PI / 180;
+                const xEdge = cx + Math.cos(rad) * rOuter;
+                const yEdge = cy + Math.sin(rad) * rOuter;
+                const xLabel = cx + Math.cos(rad) * (rOuter + 24);
+                const yLabel = cy + Math.sin(rad) * (rOuter + 24);
+
+                // Spoke line
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(xEdge, yEdge);
+                ctx.stroke();
+
+                // Check markers for this direction
+                const isNogo = (weton.kitab.nogo === dir.key);
+                const isJoyo = (weton.kitab.joyo === dir.key);
+                const isPasaran = (weton.kitab.arahPasaran === dir.key);
+
+                // Draw node on outer ring
+                ctx.beginPath();
+                ctx.arc(xEdge, yEdge, isNogo || isJoyo ? 9 : 5, 0, Math.PI * 2);
+                if (isNogo) {
+                    ctx.fillStyle = '#f43f5e'; // Rose for Nogo Dino
+                } else if (isJoyo) {
+                    ctx.fillStyle = '#10b981'; // Emerald for Joyo Dino
+                } else if (isPasaran) {
+                    ctx.fillStyle = '#38bdf8'; // Sky for Pasaran
+                } else {
+                    ctx.fillStyle = 'rgba(212, 175, 55, 0.45)';
+                }
+                ctx.fill();
+
+                // Direction text label
+                ctx.font = 'bold 10px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = isNogo ? '#fda4af' : (isJoyo ? '#6ee7b7' : '#e5e7eb');
+                ctx.fillText(dir.label, xLabel, yLabel);
+
+                // Sub-badge for Nogo / Joyo
+                if (isNogo) {
+                    ctx.font = 'bold 9px Inter, sans-serif';
+                    ctx.fillStyle = '#f43f5e';
+                    ctx.fillText('🐉 NOGO DINO', xLabel, yLabel + 12);
+                } else if (isJoyo) {
+                    ctx.font = 'bold 9px Inter, sans-serif';
+                    ctx.fillStyle = '#10b981';
+                    ctx.fillText('👑 JOYO DINO', xLabel, yLabel + 12);
+                }
+            });
+
+            // Draw Route Vector Arrow (from Center to currentRouteBearing)
+            const routeRad = (currentRouteBearing - 90) * Math.PI / 180;
+            const rx = cx + Math.cos(routeRad) * (rOuter - 12);
+            const ry = cy + Math.sin(routeRad) * (rOuter - 12);
+
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 3.5;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(rx, ry);
+            ctx.stroke();
+
+            // Arrowhead
+            const headLen = 11;
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.moveTo(rx, ry);
+            ctx.lineTo(rx - headLen * Math.cos(routeRad - Math.PI / 6), ry - headLen * Math.sin(routeRad - Math.PI / 6));
+            ctx.lineTo(rx - headLen * Math.cos(routeRad + Math.PI / 6), ry - headLen * Math.sin(routeRad + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+
+            // Center Pancer (Tengah) Node
+            const isCenterJoyo = (weton.kitab.joyo === "Tengah" || weton.kitab.arahPasaran === "Tengah");
+            ctx.beginPath();
+            ctx.arc(cx, cy, 24, 0, Math.PI * 2);
+            ctx.fillStyle = isCenterJoyo ? 'rgba(16, 185, 129, 0.25)' : 'rgba(20, 16, 11, 0.95)';
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = isCenterJoyo ? '#10b981' : '#d4af37';
+            ctx.stroke();
+
+            ctx.font = 'bold 9px Inter, sans-serif';
+            ctx.fillStyle = '#fde68a';
+            ctx.textAlign = 'center';
+            ctx.fillText('PANCER', cx, cy - 4);
+            ctx.fillText(isCenterJoyo ? 'JOYO TENGAH' : 'TENGAH', cx, cy + 7);
+        }
+
+        // =====================================================================
+        // TAB 3: SANGAT TABLE & WANCI HIGHLIGHT
+        // =====================================================================
+        function renderSangatTable(activePasaran, activeSlotIdx) {
+            const tbody = document.getElementById('sangatTableBody');
+            if (!tbody) return;
+
+            const pasarans = ["Legi", "Paing", "Pon", "Wage", "Kliwon"];
+            let html = ``;
+
+            pasarans.forEach((pas, pIdx) => {
+                const isRowActive = (pas === activePasaran);
+                const meta = PASARAN_DATA[pas];
+                const rowSlots = SANGAT_TABLE[pas];
+
+                html += `
+                    <tr class="${isRowActive ? 'bg-amber-500/15 font-semibold' : 'hover:bg-stone-900/60'} transition">
+                        <td class="py-3 px-4 border-r border-stone-800">
+                            <div class="flex items-center gap-2">
+                                <span class="w-5 h-5 rounded-full bg-stone-800 text-amber-300 text-xs flex items-center justify-center font-bold">${pIdx + 1}</span>
+                                <div>
+                                    <div class="text-white font-bold">${pas} ${isRowActive ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-400 text-black ml-1">HARI INI</span>' : ''}</div>
+                                    <div class="text-[10px] text-stone-400">Neptu ${meta.neptu} • ${meta.arah}</div>
+                                </div>
+                            </div>
+                        </td>
+                `;
+
+                rowSlots.forEach((sangatName, sIdx) => {
+                    const isCellActive = isRowActive && (sIdx === activeSlotIdx);
+                    let colorClass = "text-stone-300";
+                    if (sangatName === "Ahmad Slamet") colorClass = "text-emerald-400";
+                    else if (sangatName === "Idjrail Rejeki") colorClass = "text-amber-300";
+                    else if (sangatName === "Yusuf Bagus") colorClass = "text-sky-300";
+                    else if (sangatName === "Jobrail Kuwat") colorClass = "text-purple-300";
+                    else if (sangatName === "Brahim Blahi") colorClass = "text-rose-400 font-bold";
+
+                    html += `
+                        <td class="py-3 px-4 ${isCellActive ? 'bg-amber-400/25 border-2 border-amber-400 rounded-lg' : ''}">
+                            <div class="${colorClass}">${sangatName}</div>
+                            ${isCellActive ? '<div class="text-[10px] text-amber-200 font-bold mt-0.5">⚡ Jam Aktif</div>' : ''}
+                        </td>
+                    `;
+                });
+
+                html += `</tr>`;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function highlightActiveWanciCard(wanci) {
+            const badge = document.getElementById('activeWanciBadge');
+            if (badge) badge.textContent = `Wanci Aktif: ${wanci.name}`;
+
+            for (let i = 1; i <= 4; i++) {
+                const card = document.getElementById(`wanci-card-${i}`);
+                if (!card) continue;
+                if (i === wanci.id) {
+                    card.className = "p-4 rounded-xl bg-purple-950/30 border-2 border-purple-400 shadow-lg shadow-purple-500/10 space-y-2.5 transition-all";
+                } else {
+                    card.className = "p-4 rounded-xl bg-keraton-950 border border-stone-800 space-y-2.5 opacity-80 transition-all";
+                }
+            }
+        }
+
+        // =====================================================================
+        // TAB 4: BAB PERTEMON RUMAH TANGGA & WARNANE PERTEMON
+        // =====================================================================
+        function setJodohPair(d1, p1, d2, p2) {
+            document.getElementById('jodohDino1').value = d1;
+            document.getElementById('jodohPasaran1').value = p1;
+            document.getElementById('jodohDino2').value = d2;
+            document.getElementById('jodohPasaran2').value = p2;
+            calculateJodoh();
+        }
+
+        function calculateJodoh() {
+            const d1 = document.getElementById('jodohDino1').value;
+            const p1 = document.getElementById('jodohPasaran1').value;
+            const d2 = document.getElementById('jodohDino2').value;
+            const p2 = document.getElementById('jodohPasaran2').value;
+
+            const w1 = `${d1} ${p1}`;
+            const w2 = `${d2} ${p2}`;
+
+            const neptu1 = DINO_DATA[d1].neptu + PASARAN_DATA[p1].neptu;
+            const neptu2 = DINO_DATA[d2].neptu + PASARAN_DATA[p2].neptu;
+            const totalNeptuJodoh = neptu1 + neptu2;
+
+            // Check Prohibited Pairs from Image 1 & Image 6 of the Kitab
+            const checkPair = (a, b) => (w1 === a && w2 === b) || (w1 === b && w2 === a);
+
+            let forbiddenReason = null;
+            if (checkPair("Jum'at Wage", "Jum'at Paing")) {
+                forbiddenReason = "Tertulis di Kitab Bab Pertemon No. 1: 'Pertemon Jum'at Wage + Jum'at Paing ora keno dinggo'.";
+            } else if (checkPair("Jum'at Paing", "Seloso Pon")) {
+                forbiddenReason = "Tertulis di Kitab Bab Pertemon No. 2: 'Jum'at Paing + Seloso Pon ora keno dinggo'.";
+            } else if (checkPair("Jum'at Paing", "Minggu Legi")) {
+                forbiddenReason = "Tertulis di Kitab Bab Pertemon No. 3: 'Jum'at Paing + Minggu Legi ora keno dinggo'.";
+            } else if (checkPair("Sabtu Paing", "Seloso Wage") || totalNeptuJodoh === 25) {
+                forbiddenReason = `Tertulis di Kitab Bab Pertemon No. 4: 'Sabtu Paing + Seloso Wage ora keno dinggo. Sebab ketemu 25 tundunan kebo Gerang' (Total Neptu Anda = ${totalNeptuJodoh}).`;
+            } else if (checkPair("Kamis Paing", "Seloso Legi")) {
+                forbiddenReason = "Tertulis di Kitab Halaman 6 No. 6: 'Kemis Paing + Seloso Legi iku ora keno dinggo. Nyen mekso-mekso keno ditoto'.";
+            } else if (d1 === d2 && p1 === p2) {
+                forbiddenReason = "Tertulis di Kitab Halaman 6: 'Weton podo dinane lan pasarane yo ora dinggo' (Weton kembar persis hari dan pasarannya).";
+            }
+
+            // Check Special Good Pairs listed in Kitab Top Page 6 (No 1-5)
+            let specialKitabMatch = null;
+            if (checkPair("Jum'at Legi", "Rebo Pon")) specialKitabMatch = "Pertemon Utama Kitab #1: Jum'at Legi + Rebo Pon (Daringan Barat - Sangat Subur Rezeki).";
+            else if (checkPair("Senin Wage", "Kamis Paing")) specialKitabMatch = "Pertemon Utama Kitab #2: Senin Wage + Kemis Paing.";
+            else if (checkPair("Senin Paing", "Rebo Legi")) specialKitabMatch = "Pertemon Utama Kitab #3: Senin Paing + Rebo Legi.";
+            else if (checkPair("Seloso Legi", "Sabtu Kliwon")) specialKitabMatch = "Pertemon Utama Kitab #4: Seloso Legi + Sabtu Kliwon.";
+            else if (checkPair("Minggu Wage", "Kamis Kliwon")) specialKitabMatch = "Pertemon Utama Kitab #5: Minggu Wage + Kemis Kliwon.";
+
+            // Detect "WARNANE PERTEMON" (5 Categories in Kitab Page 6)
+            let warnaneList = [];
+
+            // 1. Daringan Barat (Pon + Legi)
+            if ((p1 === "Pon" && p2 === "Legi") || (p1 === "Legi" && p2 === "Pon")) {
+                warnaneList.push({
+                    title: "1. Daringan Barat / Daringan Kebak (Pon + Legi)",
+                    type: "good",
+                    desc: "Tertulis di kitab: 'Daringan barat artine pertenon Pon + Legi'. Melambangkan lumbung beras yang selalu penuh, murah rezeki, dan makmur rumah tangganya."
+                });
+            }
+
+            // 2. Kranjang Bejat / Ngruwat Segoro Getih (Sabtu + Senin, atau Rebo + Minggu)
+            if ((d1 === "Sabtu" && d2 === "Senin") || (d1 === "Senin" && d2 === "Sabtu")) {
+                warnaneList.push({
+                    title: "2. Kranjang Bejat & Ngruwat Segoro Getih (Sabtu + Senin)",
+                    type: "warn",
+                    desc: "Tertulis di kitab: 'Kranjang Bejat artine pertenon Sabtu + Senin. Yo Ngruwat segoro getih sebab Sabtu kidul + Senin lor'. Karena arah hari saling bertolak belakang (Selatan vs Utara), perlu pengendalian emosi & tata syarat ruwat agar rezeki tidak bocor."
+                });
+            }
+
+            if ((d1 === "Rebo" && d2 === "Minggu") || (d1 === "Minggu" && d2 === "Rebo")) {
+                warnaneList.push({
+                    title: "2b. Ngruwat Segoro Getih & Kolo Luang (Rebo + Minggu)",
+                    type: "warn",
+                    desc: "Tertulis di kitab: 'Rebo + Minggu artine pertenon ngruwat segoro getih yo kolo luang sebab Minggu wetan Rebo kulon yo pertenon gang loro dinane' (Timur vs Barat berlawanan & selisih 2 hari)."
+                });
+            }
+
+            // 3. Kolo Luang (Selisih / gang loro dinane, misal Jum'at + Senin)
+            const dinoOrder = ["Minggu", "Senin", "Seloso", "Rebo", "Kamis", "Jum'at", "Sabtu"];
+            const idx1 = dinoOrder.indexOf(d1);
+            const idx2 = dinoOrder.indexOf(d2);
+            const diffDino = Math.abs(idx1 - idx2);
+            if (diffDino === 3 || diffDino === 4) { // Lompat 2 hari di antaranya (misal Jum'at [5] ke Senin [1] = selisih Sabtu & Minggu)
+                warnaneList.push({
+                    title: `3. Kolo Luang (${d1} + ${d2} — Pertemon Gang Loro Dinane)`,
+                    type: "info",
+                    desc: "Tertulis di kitab: 'Kolo Luang artine Jum'at + Senin. Sing dimaksud Kolo luang pertenon gang loro dinane' (Terpaut/melompati 2 hari di antaranya). Wajib memilih jam akad nikah tepat pada Menit Sangat Ahmad Slamet."
+                });
+            }
+
+            // 4. Gurit Sejati (Podo Dinane)
+            if (d1 === d2) {
+                warnaneList.push({
+                    title: `4. Gurit Sejati (Sama Harinya: ${d1} + ${d2})`,
+                    type: "info",
+                    desc: "Tertulis di kitab: 'Gurit sejati artine pertenon sing podo dinane'. Memiliki karakter dan watak dasar yang searah, mudah kompak bila saling mengalah."
+                });
+            }
+
+            // 5. Gurit Mukti (Podo Pasarane)
+            if (p1 === p2) {
+                warnaneList.push({
+                    title: `5. Gurit Mukti (Sama Pasarannya: ${p1} + ${p2})`,
+                    type: "good",
+                    desc: "Tertulis di kitab: 'Gurit Mukti artine pertenon sing podo pasarane'. Satu frekuensi batin dan pintu rezekinya menghadap ke arah mata angin yang sama."
+                });
+            }
+
+            if (warnaneList.length === 0) {
+                warnaneList.push({
+                    title: "Pertemon Selaras Umum",
+                    type: "good",
+                    desc: `Kombinasi ${w1} dan ${w2} tidak terkena kategori Kranjang Bejat maupun Ngruwat Segoro Getih.`
+                });
+            }
+
+            const container = document.getElementById('jodohResultContainer');
+            container.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-800 pb-3">
+                    <div>
+                        <h4 class="text-base sm:text-lg font-bold text-white">${w1} (Neptu ${neptu1}) ❤️ ${w2} (Neptu ${neptu2})</h4>
+                        <p class="text-xs text-stone-400">Total Neptu Gabungan: <strong class="text-amber-300">${totalNeptuJodoh}</strong> | Arah Hari: ${DINO_DATA[d1].joyo} + ${DINO_DATA[d2].joyo}</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-xl text-xs font-bold ${forbiddenReason ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'}">
+                        ${forbiddenReason ? '⚠️ PANTANGAN KITAB (WAJIB DITOTO)' : '✅ BOLEH / DIRESTUI KITAB'}
+                    </span>
+                </div>
+
+                ${forbiddenReason ? `
+                    <div class="p-4 rounded-xl bg-rose-950/40 border border-rose-500/40 space-y-2">
+                        <div class="text-xs sm:text-sm font-bold text-rose-300 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-exclamation"></i> Peringatan Bab Pertemon Rumah Tangga:
+                        </div>
+                        <p class="text-xs text-rose-100 leading-relaxed">${forbiddenReason}</p>
+                        <div class="p-3 rounded-lg bg-keraton-950 border border-amber-500/30 text-xs text-amber-200">
+                            <strong>💡 Solusi Kitab ("Nyen mekso-mekso keno ditoto"):</strong><br>
+                            Jika kedua calon sudah terlanjur cinta dan tetap ingin menikah, kitab menyebutkan <em>"keno ditoto"</em> (bisa ditata/diruwat) dengan syarat:
+                            <br>1. Hari akad nikah wajib memilih hari di luar <em>Ba'as Tanggal</em> dan di luar <em>Was Wulan</em>.
+                            <br>2. Jam ijab kabul wajib jatuh tepat pada <strong>Menit Sangat Ahmad Slamet</strong>.
+                            <br>3. Mengadakan <em>Bancakan / Ruwatan Sedekah</em> dan melangkah masuk rumah baru menghadap arah <strong>Joyo Dino</strong>.
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${specialKitabMatch ? `
+                    <div class="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-xs text-emerald-200 font-semibold">
+                        🌟 ${specialKitabMatch}
+                    </div>
+                ` : ''}
+
+                <div class="space-y-2.5">
+                    <div class="text-xs font-bold uppercase tracking-wider text-amber-400">Analisis "Warnane Pertemon" (Halaman 6 Kitab):</div>
+                    ${warnaneList.map(w => `
+                        <div class="p-3.5 rounded-xl bg-keraton-950 border ${w.type === 'warn' ? 'border-amber-500/40' : 'border-stone-800'} space-y-1">
+                            <div class="text-xs font-bold ${w.type === 'warn' ? 'text-amber-300' : 'text-emerald-400'}">${w.title}</div>
+                            <p class="text-xs text-stone-300 leading-relaxed">${w.desc}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // =====================================================================
+        // TAB 5: SPIRITUAL SHIELD STATUS
+        // =====================================================================
+        function renderSpiritualShieldStatus(weton, sangat, wanci, isBaasTanggal) {
+            const box = document.getElementById('spiritualShieldStatusBox');
+            if (!box) return;
+
+            const isKliwon = (weton.pasaran === "Kliwon");
+            const isBrahimBlahi = (sangat.sangatName === "Brahim Blahi");
+            const isLingsirWengi = (wanci.id === 1);
+
+            if (isBrahimBlahi || isLingsirWengi || isKliwon || isBaasTanggal) {
+                box.className = "p-4 rounded-xl bg-amber-950/40 border border-amber-500/40 space-y-2";
+                box.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-amber-300 uppercase">⚡ Status Radar Saat Ini: PERLU BENTENG DOA AKTIF</span>
+                        <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-200">${weton.wetonFull}</span>
+                    </div>
+                    <p class="text-xs text-stone-200 leading-relaxed">
+                        Waktu yang sedang dipilih (${weton.wetonFull}, ${sangat.sangatName}, ${wanci.short}) beririsan dengan ${isBrahimBlahi ? 'jam <strong>Brahim Blahi</strong>' : ''} ${isKliwon ? 'pasaran <strong>Kliwon (Pancer)</strong>' : ''} ${isBaasTanggal ? 'hari <strong>Ba\'as Tanggal</strong>' : ''}. Hidupkan benteng batin dengan wudhu/doa, hindari melamun di waktu senja/tengah malam, dan duduklah menghadap <strong>${weton.kitab.joyo}</strong>.
+                    </p>
+                `;
+            } else {
+                box.className = "p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/40 space-y-2";
+                box.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-emerald-300 uppercase">🛡️ Status Radar Saat Ini: ENERGI TENANG & TERLINDUNGI</span>
+                        <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200">${weton.wetonFull}</span>
+                    </div>
+                    <p class="text-xs text-stone-200 leading-relaxed">
+                        Saat ini berada dalam naungan <strong>${sangat.sangatName}</strong> pada hari <strong>${weton.wetonFull}</strong>. Frekuensi alam sedang bersih dan baik untuk beraktivitas maupun berdoa.
+                    </p>
+                `;
+            }
+        }
+
+        // =====================================================================
+        // TAB 6: RENDER FULL 35 WETON KITAB TABLE
+        // =====================================================================
+        function renderFull35WetonTable() {
+            const tbody = document.getElementById('full35WetonTableBody');
+            if (!tbody) return;
+            const query = (document.getElementById('searchWetonKitabInput')?.value || "").toLowerCase();
+
+            let html = ``;
+            KITAB_35_WETON.forEach(item => {
+                const full = `${item.dino} ${item.pasaran}`.toLowerCase();
+                if (query && !full.includes(query) && !item.nogo.toLowerCase().includes(query)) return;
+
+                const neptu = DINO_DATA[item.dino].neptu + PASARAN_DATA[item.pasaran].neptu;
+                const isBaas = BAAS_TANGGAL_LIST.includes(`${item.dino} ${item.pasaran}`);
+
+                html += `
+                    <tr class="hover:bg-stone-900/70 transition">
+                        <td class="py-2.5 px-3 font-mono text-amber-400">#${item.no}</td>
+                        <td class="py-2.5 px-3 font-bold text-white">
+                            ${item.dino} ${item.pasaran}
+                            ${isBaas ? '<span class="ml-1 text-[9px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">Ba\'as Tanggal</span>' : ''}
+                        </td>
+                        <td class="py-2.5 px-3 text-amber-200 font-semibold">${neptu}</td>
+                        <td class="py-2.5 px-3 text-rose-400 font-bold">🚫 ${item.nogo}</td>
+                        <td class="py-2.5 px-3 text-emerald-400 font-bold">✨ ${item.joyo}</td>
+                        <td class="py-2.5 px-3 text-sky-300">${item.arahPasaran}</td>
+                        <td class="py-2.5 px-3 italic text-stone-400">${item.text}</td>
+                        <td class="py-2.5 px-3">
+                            <button onclick="selectWetonFromTable(${item.no})" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-black font-bold transition">
+                                Gunakan
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function selectWetonFromTable(no) {
+            document.getElementById('quickWetonSelect').value = String(no);
+            onQuickWetonSelect();
+            switchTab('dashboard');
+        }
+
+        // =====================================================================
+        // TAB NAVIGATION CONTROLLER
+        // =====================================================================
+        function switchTab(tabId) {
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(p => p.classList.add('hidden'));
+
+            const targetPanel = document.getElementById(`tab-content-${tabId}`);
+            if (targetPanel) targetPanel.classList.remove('hidden');
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(b => b.classList.remove('tab-active'));
+
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (activeBtn) activeBtn.classList.add('tab-active');
+
+            if (tabId === 'navigasi') {
+                setTimeout(() => drawCompassCanvas(), 50);
+            }
+        }
+
+        // Start SHIMON on window load
+        window.onload = function () {
+            initApp();
+        };
+    </script>
+</body>
+</html>
