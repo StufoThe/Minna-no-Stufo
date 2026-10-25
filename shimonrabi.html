@@ -33,14 +33,14 @@
         body {
             background-color: #0c0a09;
             background-image: 
-                radial-gradient(circle at 15% 10%, rgba(218, 166, 54, 0.10) 0%, transparent 45%),
-                radial-gradient(circle at 85% 90%, rgba(16, 185, 129, 0.07) 0%, transparent 45%);
+                radial-gradient(circle at 15% 10%, rgba(218, 166, 54, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 90%, rgba(16, 185, 129, 0.08) 0%, transparent 45%);
             color: #f5f5f4;
         }
         .card-royal {
-            background: rgba(28, 25, 23, 0.88);
-            border: 1px solid rgba(218, 166, 54, 0.25);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+            background: rgba(28, 25, 23, 0.92);
+            border: 1px solid rgba(218, 166, 54, 0.28);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.75);
         }
         .gold-text {
             background: linear-gradient(135deg, #f5eccb 0%, #daa636 55%, #c78c20 100%);
@@ -48,67 +48,71 @@
             -webkit-text-fill-color: transparent;
         }
         .day-selected {
-            outline: 2px solid #f5eccb;
-            outline-offset: 2px;
-            transform: scale(1.02);
+            outline: 2px solid #f5eccb !important;
+            outline-offset: 1px;
+            transform: scale(1.03);
+            z-index: 10;
         }
     </style>
 </head>
 <body class="font-sans antialiased min-h-screen flex flex-col selection:bg-gold-500 selection:text-stone-950">
 
     <!-- HEADER SIMPEL SHIMON RABI -->
-    <header class="sticky top-0 z-40 backdrop-blur-xl bg-stone-950/90 border-b border-gold-400/20">
-        <div class="max-w-6xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
+    <header class="sticky top-0 z-40 backdrop-blur-xl bg-stone-950/95 border-b border-gold-400/20">
+        <div class="max-w-6xl mx-auto px-3 sm:px-4 py-3 flex flex-wrap items-center justify-between gap-2.5">
             <div class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-gold-300 to-amber-700 flex items-center justify-center text-stone-950 font-serif font-extrabold text-xl shadow-lg shadow-gold-500/20">
+                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-gold-300 to-amber-700 flex items-center justify-center text-stone-950 font-serif font-extrabold text-lg sm:text-xl shadow-lg shadow-gold-500/20 shrink-0">
                     💍
                 </div>
                 <div>
-                    <div class="flex items-center gap-2">
-                        <h1 class="font-serif text-xl sm:text-2xl font-extrabold gold-text tracking-wider">SHIMON RABI</h1>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="font-serif text-lg sm:text-2xl font-extrabold gold-text tracking-wider">SHIMON RABI</h1>
                         <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-gold-500/20 text-gold-300 rounded-full border border-gold-400/30">Edisi Pernikahan</span>
                     </div>
-                    <p class="text-xs text-stone-400">Kalender Jawa & Penentu Hari serta Jam Terbaik Menikah Otomatis</p>
+                    <p class="text-[11px] sm:text-xs text-stone-400">Kalender Jawa & Penentu Hari serta Jam Terbaik Menikah Otomatis</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2 text-xs bg-stone-900 border border-stone-800 px-3 py-2 rounded-xl">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-stone-400">Hari Ini:</span>
-                <span id="today-info-badge" class="font-bold text-gold-200">Memuat...</span>
+            <!-- Real-time Status Hari Ini -->
+            <div class="flex items-center gap-2 text-[11px] sm:text-xs bg-stone-900/95 border border-stone-800 px-3 py-1.5 rounded-xl w-full sm:w-auto justify-between sm:justify-start">
+                <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+                    <span class="text-stone-400">Sekarang:</span>
+                </div>
+                <span id="today-info-badge" class="font-bold text-gold-200 truncate">Menghitung...</span>
             </div>
         </div>
     </header>
 
-    <!-- KONTEN UTAMA (3 LANGKAH MUDAH) -->
-    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full space-y-6">
+    <!-- KONTEN UTAMA -->
+    <main class="max-w-6xl mx-auto px-3 sm:px-4 py-5 flex-grow w-full space-y-5">
 
         <!-- ================================================================= -->
         <!-- LANGKAH 1: PILIH WETON CALON PENGANTIN (SUAMI & ISTRI)            -->
         <!-- ================================================================= -->
-        <section class="card-royal rounded-2xl p-5 sm:p-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-stone-800 pb-4">
+        <section class="card-royal rounded-2xl p-4 sm:p-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-stone-800 pb-3.5">
                 <div>
                     <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Langkah 1 • Data Calon Pengantin</span>
-                    <h2 class="text-lg sm:text-xl font-bold text-stone-100 mt-0.5">Masukkan Weton Calon Suami & Calon Istri</h2>
+                    <h2 class="text-base sm:text-xl font-bold text-stone-100 mt-0.5">Masukkan Weton Calon Suami & Calon Istri</h2>
                 </div>
-                <div class="text-xs text-emerald-300 bg-emerald-950/50 border border-emerald-500/30 px-3 py-1.5 rounded-xl">
-                    💡 <strong>Info Penting:</strong> Hari & jam terbaik menikah <strong>otomatis menyesuaikan</strong> dengan weton kedua calon di bawah ini!
+                <div class="text-[11px] sm:text-xs text-emerald-300 bg-emerald-950/50 border border-emerald-500/30 px-3 py-1.5 rounded-xl">
+                    💡 Kalender & jam terbaik di bawah <strong>otomatis menyesuaikan</strong> dengan weton kedua calon ini!
                 </div>
             </div>
 
             <!-- Input Weton 2 Calon -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 mt-4">
                 <!-- Calon Suami -->
-                <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-4">
+                <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 sm:p-4">
                     <div class="flex items-center justify-between mb-2.5">
                         <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">🤵 Calon Pengantin Pria</span>
-                        <span id="suami-neptu-badge" class="text-xs font-mono font-bold text-gold-300 bg-gold-500/10 px-2 py-0.5 rounded border border-gold-500/20">Neptu: 11</span>
+                        <span id="suami-neptu-badge" class="text-xs font-mono font-bold text-gold-300 bg-gold-500/10 px-2 py-0.5 rounded border border-gold-500/20">Jum'at Legi (Neptu 11)</span>
                     </div>
                     <div class="grid grid-cols-2 gap-2.5">
                         <div>
                             <label class="block text-[11px] text-stone-400 mb-1">Hari Lahir</label>
-                            <select id="suami-dino" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 focus:border-gold-400 rounded-xl px-3 py-2 text-sm font-semibold text-stone-100 outline-none">
+                            <select id="suami-dino" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 focus:border-gold-400 rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold text-stone-100 outline-none">
                                 <option value="Minggu">Minggu (5)</option>
                                 <option value="Senin">Senin (4)</option>
                                 <option value="Seloso">Seloso (3)</option>
@@ -120,7 +124,7 @@
                         </div>
                         <div>
                             <label class="block text-[11px] text-stone-400 mb-1">Pasaran</label>
-                            <select id="suami-pasaran" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 focus:border-gold-400 rounded-xl px-3 py-2 text-sm font-semibold text-stone-100 outline-none">
+                            <select id="suami-pasaran" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 focus:border-gold-400 rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold text-stone-100 outline-none">
                                 <option value="Legi" selected>Legi (5)</option>
                                 <option value="Paing">Paing (9)</option>
                                 <option value="Pon">Pon (7)</option>
@@ -132,15 +136,15 @@
                 </div>
 
                 <!-- Calon Istri -->
-                <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-4">
+                <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 sm:p-4">
                     <div class="flex items-center justify-between mb-2.5">
                         <span class="text-xs font-bold text-pink-400 uppercase tracking-wider">👰 Calon Pengantin Wanita</span>
-                        <span id="istri-neptu-badge" class="text-xs font-mono font-bold text-gold-300 bg-gold-500/10 px-2 py-0.5 rounded border border-gold-500/20">Neptu: 12</span>
+                        <span id="istri-neptu-badge" class="text-xs font-mono font-bold text-gold-300 bg-gold-500/10 px-2 py-0.5 rounded border border-gold-500/20">Minggu Pon (Neptu 12)</span>
                     </div>
                     <div class="grid grid-cols-2 gap-2.5">
                         <div>
                             <label class="block text-[11px] text-stone-400 mb-1">Hari Lahir</label>
-                            <select id="istri-dino" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 focus:border-gold-400 rounded-xl px-3 py-2 text-sm font-semibold text-stone-100 outline-none">
+                            <select id="istri-dino" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 focus:border-gold-400 rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold text-stone-100 outline-none">
                                 <option value="Minggu" selected>Minggu (5)</option>
                                 <option value="Senin">Senin (4)</option>
                                 <option value="Seloso">Seloso (3)</option>
@@ -152,7 +156,7 @@
                         </div>
                         <div>
                             <label class="block text-[11px] text-stone-400 mb-1">Pasaran</label>
-                            <select id="istri-pasaran" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 focus:border-gold-400 rounded-xl px-3 py-2 text-sm font-semibold text-stone-100 outline-none">
+                            <select id="istri-pasaran" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 focus:border-gold-400 rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold text-stone-100 outline-none">
                                 <option value="Legi">Legi (5)</option>
                                 <option value="Paing">Paing (9)</option>
                                 <option value="Pon" selected>Pon (7)</option>
@@ -164,28 +168,77 @@
                 </div>
             </div>
 
-            <!-- Hasil Ringkas Kecocokan Pasangan (Bab Pertemon Rumah Tangga) -->
-            <div id="couple-compatibility-banner" class="mt-4">
-                <!-- Diisi otomatis via JS -->
+            <!-- Hasil Ringkas Kecocokan Pasangan & Tibo Jodoh -->
+            <div id="couple-compatibility-banner" class="mt-4"></div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- PANDUAN BEDA TIBO SRI, LUNGGUH, DAN GEDHONG PADA HARI AKAD         -->
+        <!-- ================================================================= -->
+        <section class="card-royal rounded-2xl p-4 sm:p-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800 pb-3">
+                <div>
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Panduan Memilih Tanggal Hijau di Kalender</span>
+                    <h2 class="text-sm sm:text-lg font-bold text-stone-100">Bedanya Hari Akad "Tibo Sri", "Tibo Lungguh", dan "Tibo Gedhong"</h2>
+                </div>
+                <span class="text-[11px] text-stone-400 bg-stone-900 border border-stone-800 px-2.5 py-1 rounded-lg self-start sm:self-auto">Rumus: (Neptu Suami + Istri + Hari Akad) ÷ 5</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                <!-- TIBO SRI -->
+                <div class="bg-emerald-950/35 border border-emerald-500/30 rounded-xl p-3 space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-extrabold text-emerald-300 uppercase">🌾 1. TIBO SRI (Sisa 1)</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200">Pangan & Pengasihan</span>
+                    </div>
+                    <p class="text-xs text-stone-200 font-semibold">Rezeki Harian Lancar, Adem Ayem & Disayang Banyak Orang</p>
+                    <p class="text-[11px] text-stone-400 leading-relaxed">
+                        Simbol <em>Dewi Sri (padi)</em>. Dapur terus mengepul, rumah tangga sejuk/rukun, dan disukai banyak relasi. <strong>Cocok untuk meredam pasangan yang wetonnya Tibo Padu/Sujanan.</strong>
+                    </p>
+                </div>
+
+                <!-- TIBO LUNGGUH -->
+                <div class="bg-sky-950/35 border border-sky-500/30 rounded-xl p-3 space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-extrabold text-sky-300 uppercase">👑 2. TIBO LUNGGUH (Sisa 2)</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-200">Pangkat & Wibawa</span>
+                    </div>
+                    <p class="text-xs text-stone-200 font-semibold">Kedudukan, Karier, Jabatan & Kehormatan Sosial</p>
+                    <p class="text-[11px] text-stone-400 leading-relaxed">
+                        <em>Lungguh</em> artinya duduk di kursi kehormatan. Mengangkat derajat keluarga, disegani masyarakat, dan karier mudah naik. <strong>Cocok untuk ASN, pejabat, profesional & pemimpin.</strong>
+                    </p>
+                </div>
+
+                <!-- TIBO GEDHONG -->
+                <div class="bg-amber-950/35 border border-gold-400/40 rounded-xl p-3 space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-extrabold text-gold-300 uppercase">🏛️ 3. TIBO GEDHONG (Sisa 3)</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-gold-500/20 text-gold-200">Gudang Harta & Aset</span>
+                    </div>
+                    <p class="text-xs text-stone-200 font-semibold">Kaya Aset Besar (Rumah/Tanah) & Tabungan Kuat</p>
+                    <p class="text-[11px] text-stone-400 leading-relaxed">
+                        <em>Gedhong</em> artinya gudang penyimpanan harta. Fokus pada <strong>mengumpulkan aset besar & mengunci uang agar tidak bocor</strong>. <strong>Wajib dipilih jika weton pasangan Lebu Katiup Angin (boros) atau Topo.</strong>
+                    </p>
+                </div>
             </div>
         </section>
 
         <!-- ================================================================= -->
-        <!-- LANGKAH 2: REKOMENDASI TANGGAL TERBAIK & KALENDER JAWA            -->
+        <!-- LANGKAH 2 & 3: KALENDER JAWA & PANEL DETAIL JAM AKAD              -->
         <!-- ================================================================= -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
             <!-- KOLOM KIRI (7 KOLOM): KALENDER JAWA INTERAKTIF -->
-            <section class="lg:col-span-7 card-royal rounded-2xl p-5">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-800 pb-4">
+            <section class="lg:col-span-7 card-royal rounded-2xl p-4 sm:p-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-800 pb-3.5">
                     <div>
                         <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Langkah 2 • Kalender Jawa Pernikahan</span>
-                        <h2 class="text-lg font-bold text-stone-100">Pilih Bulan & Klik Tanggal Rencana Akad</h2>
+                        <h2 class="text-base sm:text-lg font-bold text-stone-100">Pilih Bulan & Klik Tanggal Rencana Akad</h2>
                     </div>
 
                     <!-- Navigasi Bulan & Tahun -->
-                    <div class="flex items-center gap-1.5">
-                        <button onclick="changeMonth(-1)" class="px-3 py-1.5 rounded-xl bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 text-xs font-bold transition">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <button type="button" onclick="changeMonth(-1)" class="px-3 py-1.5 rounded-xl bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 text-xs font-bold transition">
                             &larr;
                         </button>
                         <select id="cal-month" onchange="onMonthYearSelect()" class="bg-stone-950 border border-stone-700 rounded-xl px-2.5 py-1.5 text-xs font-bold text-gold-200 outline-none">
@@ -203,31 +256,38 @@
                             <option value="11">Desember</option>
                         </select>
                         <select id="cal-year" onchange="onMonthYearSelect()" class="bg-stone-950 border border-stone-700 rounded-xl px-2.5 py-1.5 text-xs font-bold text-gold-200 outline-none">
-                            <!-- Diisi JS 2025 - 2032 -->
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026" selected>2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030">2030</option>
+                            <option value="2031">2031</option>
+                            <option value="2032">2032</option>
                         </select>
-                        <button onclick="changeMonth(1)" class="px-3 py-1.5 rounded-xl bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 text-xs font-bold transition">
+                        <button type="button" onclick="changeMonth(1)" class="px-3 py-1.5 rounded-xl bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 text-xs font-bold transition">
                             &rarr;
+                        </button>
+                        <button type="button" onclick="goToToday()" class="px-2.5 py-1.5 rounded-xl bg-gold-500/20 hover:bg-gold-500/30 border border-gold-400/40 text-gold-200 text-[11px] font-bold transition">
+                            Hari Ini
                         </button>
                     </div>
                 </div>
 
                 <!-- Info Wulan Jawa & Pantangan Bulan Ini -->
-                <div id="month-javanese-banner" class="mt-3 bg-stone-950/80 border border-stone-800 rounded-xl p-3 text-xs flex flex-wrap items-center justify-between gap-2">
-                    <!-- Diisi JS -->
-                </div>
+                <div id="month-javanese-banner" class="mt-3 bg-stone-950/90 border border-stone-800 rounded-xl p-3 text-xs flex flex-wrap items-center justify-between gap-2"></div>
 
                 <!-- Rekomendasi Cepat Tanggal Terbaik Bulan Ini -->
-                <div class="mt-4">
+                <div class="mt-3.5">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-xs font-bold text-emerald-400">🌟 Rekomendasi Tanggal Terbaik Bulan Ini (Klik untuk Lihat Jamnya):</span>
                     </div>
-                    <div id="top-dates-container" class="flex gap-2 overflow-x-auto pb-2">
-                        <!-- Diisi JS -->
-                    </div>
+                    <div id="top-dates-container" class="flex gap-2 overflow-x-auto pb-2"></div>
                 </div>
 
                 <!-- Header Nama Hari Kalender -->
-                <div class="grid grid-cols-7 gap-1.5 mt-3 text-center text-[11px] font-bold text-stone-400 py-1.5 bg-stone-950/60 rounded-lg">
+                <div class="grid grid-cols-7 gap-1 sm:gap-1.5 mt-2 text-center text-[11px] font-bold text-stone-400 py-1.5 bg-stone-950/70 rounded-lg">
                     <div class="text-red-400">Min</div>
                     <div>Sen</div>
                     <div>Sel</div>
@@ -238,74 +298,62 @@
                 </div>
 
                 <!-- Grid Tanggal Kalender Jawa -->
-                <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 mt-1.5">
-                    <!-- Diisi JS -->
-                </div>
+                <div id="calendar-grid" class="grid grid-cols-7 gap-1 sm:gap-1.5 mt-1.5"></div>
 
                 <!-- Legenda Warna Kalender -->
                 <div class="mt-4 pt-3 border-t border-stone-800 flex flex-wrap items-center justify-between gap-2 text-[11px] text-stone-400">
                     <div class="flex items-center gap-1.5">
                         <span class="w-3 h-3 rounded bg-emerald-500/30 border border-emerald-400 inline-block"></span>
-                        <span><strong class="text-emerald-300">Hijau:</strong> Hari Terbaik Menikah</span>
+                        <span><strong class="text-emerald-300">Hijau:</strong> Hari Terbaik (Sri/Lungguh/Gedhong)</span>
                     </div>
                     <div class="flex items-center gap-1.5">
                         <span class="w-3 h-3 rounded bg-amber-500/20 border border-amber-400/50 inline-block"></span>
-                        <span><strong class="text-amber-300">Kuning:</strong> Cukup / Biasa</span>
+                        <span><strong class="text-amber-300">Kuning:</strong> Cukup</span>
                     </div>
                     <div class="flex items-center gap-1.5">
                         <span class="w-3 h-3 rounded bg-red-950/80 border border-red-500/50 inline-block"></span>
-                        <span><strong class="text-red-400">Merah:</strong> Pantangan / Hari Naas</span>
+                        <span><strong class="text-red-400">Merah:</strong> Pantangan (Loro/Pati/Naas)</span>
                     </div>
                 </div>
             </section>
 
             <!-- KOLOM KANAN (5 KOLOM): DETAIL HARI, JAM IJAB QABUL & ARAH -->
-            <section class="lg:col-span-5 card-royal rounded-2xl p-5 sticky top-20 space-y-4">
+            <section id="detail-section-panel" class="lg:col-span-5 card-royal rounded-2xl p-4 sm:p-5 lg:sticky lg:top-20 space-y-4">
                 <div class="border-b border-stone-800 pb-3">
                     <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Langkah 3 • Detail Hari & Jam Akad</span>
-                    <h2 id="detail-date-title" class="font-serif text-xl font-bold text-stone-100 mt-0.5">Pilih Tanggal</h2>
+                    <h2 id="detail-date-title" class="font-serif text-lg sm:text-xl font-bold text-stone-100 mt-0.5">Pilih Tanggal</h2>
                     <p id="detail-javanese-subtitle" class="text-xs text-gold-300 font-medium mt-0.5">-</p>
                 </div>
 
                 <!-- Status Kelayakan Tanggal untuk Pasangan Ini -->
-                <div id="detail-status-card">
-                    <!-- Diisi JS -->
-                </div>
+                <div id="detail-status-card"></div>
 
                 <!-- JADWAL JAM TERBAIK IJAB QABUL / AKAD NIKAH -->
-                <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-4 space-y-3">
+                <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 sm:p-4 space-y-3">
                     <div>
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between gap-2">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-gold-400">🕰️ Jam Terbaik Ijab Qabul / Akad Nikah</h3>
-                            <span id="detail-pasaran-badge" class="text-[11px] font-bold text-stone-300 bg-stone-800 px-2 py-0.5 rounded">Pasaran -</span>
+                            <span id="detail-pasaran-badge" class="text-[11px] font-bold text-stone-200 bg-stone-800 px-2 py-0.5 rounded shrink-0">Pasaran -</span>
                         </div>
                         <p class="text-[11px] text-stone-400 mt-1">
                             Diambil dari <strong>Tabel Menit Sangat</strong> di kitab. Pilih jam <strong>Yusuf Bagus</strong> atau <strong>Ahmad Slamet</strong>, dan hindari <strong>Brahim Blahi</strong>:
                         </p>
                     </div>
 
-                    <div id="detail-jam-list" class="space-y-2">
-                        <!-- Diisi JS -->
-                    </div>
+                    <div id="detail-jam-list" class="space-y-2"></div>
                 </div>
 
                 <!-- ARAH MENGHADAP SAAT AKAD & IRING-IRINGAN PENGANTIN -->
-                <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-4 space-y-2.5">
+                <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 sm:p-4 space-y-2.5">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-gold-400">🧭 Arah Duduk Akad & Rombongan Pengantin</h3>
-                    <div id="detail-arah-box" class="grid grid-cols-2 gap-2 text-xs">
-                        <!-- Diisi JS -->
-                    </div>
-                    <p id="detail-kitab-quote" class="text-[11px] italic text-stone-400 pt-1 border-t border-stone-800/80">
-                        -
-                    </p>
+                    <div id="detail-arah-box" class="grid grid-cols-2 gap-2 text-xs"></div>
+                    <p id="detail-kitab-quote" class="text-[11px] italic text-stone-400 pt-1.5 border-t border-stone-800/80">-</p>
                 </div>
 
                 <!-- RINCIAN SARINGAN KITAB PADA TANGGAL INI -->
                 <div class="bg-stone-950/60 border border-stone-800/80 rounded-xl p-3.5 text-xs space-y-1.5">
                     <div class="font-bold text-stone-300 mb-1">📋 Ceklis Kelayakan Tanggal Menurut Kitab:</div>
-                    <div id="detail-checklist" class="space-y-1 text-[11px]">
-                        <!-- Diisi JS -->
-                    </div>
+                    <div id="detail-checklist" class="space-y-1 text-[11px]"></div>
                 </div>
             </section>
 
@@ -315,14 +363,14 @@
 
     <!-- FOOTER SIMPEL -->
     <footer class="border-t border-stone-800/80 bg-stone-950 py-4 mt-8">
-        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-2">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-2 text-center sm:text-left">
             <div><strong>SHIMON RABI</strong> — Sistem Hitung Primbon Pernikahan & Kalender Jawa Otomatis.</div>
             <div class="text-gold-400/80">Berdasarkan Kitab Primbon: Bab Pertemon, Nogo-Joyo, Ba'as Tanggal & Menit Sangat.</div>
         </div>
     </footer>
 
     <!-- ===================================================================== -->
-    <!-- MESIN PERHITUNGAN PRIMBON PERNIKAHAN & KALENDER JAWA                  -->
+    <!-- MESIN PERHITUNGAN PRIMBON PERNIKAHAN & KALENDER JAWA LENGKAP          -->
     <!-- ===================================================================== -->
     <script>
         // 1. DATA DASAR NEPTU & ARAH (100% SESUAI KITAB)
@@ -346,6 +394,7 @@
 
         const LIST_DINO = ["Minggu", "Senin", "Seloso", "Rebo", "Kamis", "Jum'at", "Sabtu"];
         const LIST_PASARAN = ["Legi", "Paing", "Pon", "Wage", "Kliwon"];
+        const NAMA_BULAN_MASEHI = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
         // 2. TABEL 35 WETON (NOGO DINO & JOYO DINO HAL. 1 & 3 KITAB)
         const KITAB_35_WETON = [
@@ -390,7 +439,6 @@
         const BAAS_TANGGAL = ["Seloso Wage", "Sabtu Kliwon", "Rebo Legi", "Minggu Paing", "Kamis Pon"];
 
         // 4. DATA 12 WULAN JAWA (WAS WULAN & NOGO WULAN HAL. 3 & 4 KITAB)
-        //Catatan: Dalam tradisi Jawa, bulan Suro, Mulut, Rajab, Poso memiliki pantangan umum untuk hajatan mantu kecuali terpaksa, sedangkan Besar, Sawal, Bakdo Mulut, Jumadilakir, Ruwah, Sapar sangat populer. Kita tetap tampilkan perhitungan hari terbaiknya dengan keterangan yang jelas.
         const DATA_WULAN = [
             { no: 1,  nama: "Suro",         nogo: "Wetan Lor",   wasDays: ["Sabtu", "Minggu"],  statusWulan: "Bulan Sakral/Tirakat (Umumnya dihindari untuk pesta besar)" },
             { no: 2,  nama: "Sapar",        nogo: "Wetan Bener", wasDays: ["Sabtu", "Minggu"],  statusWulan: "Cukup Baik untuk Akad Nikah" },
@@ -449,82 +497,233 @@
             ["Kamis Paing", "Seloso Legi"]
         ];
 
+        // 8. TABEL LENGKAP TIBO JODOH (PETUNG 8, PETUNG 7, DAN PETUNG 5)
+        const TIBO_JODOH_8 = {
+            1: {
+                nama: "PEGAT",
+                status: "Perlu Penataan (Hati-hati)",
+                warna: "amber",
+                arti: "Dalam primbon, 'Pegat' (putus/pisah) berarti pasangan ini rawan menghadapi ujian berat terkait ekonomi, ego, atau komunikasi di tahun-tahun awal.",
+                saranHari: "Wajib memilih tanggal akad TIBO SRI (agar hati adem & saling mengasihi) atau TIBO GEDHONG (agar ekonomi kokoh)."
+            },
+            2: {
+                nama: "RATU",
+                status: "Sangat Baik (Jodoh Mulia)",
+                warna: "emerald",
+                arti: "Ibarat Raja dan Ratu, pasangan ini memang sudah jodohnya. Rumah tangganya dihormati tetangga, kompak, dan disegani lingkungan sekitar.",
+                saranHari: "Bebas memilih tanggal akad TIBO GEDHONG, SRI, maupun LUNGGUH."
+            },
+            3: {
+                nama: "JODOH",
+                status: "Sangat Baik (Berjodoh Kuat)",
+                warna: "emerald",
+                arti: "Pasangan ini benar-benar cocok satu sama lain, mudah saling menerima kekurangan dan kelebihan, serta harmonis hingga tua.",
+                saranHari: "Sangat bagus dipadukan dengan tanggal akad TIBO GEDHONG (untuk kemapanan aset) atau TIBO LUNGGUH."
+            },
+            4: {
+                nama: "TOPO",
+                status: "Baik di Akhir (Tirakat Dulu)",
+                warna: "sky",
+                arti: "'Topo' (bertapa/prihatin) artinya di awal menikah akan merasakan perjuangan dari nol, namun setelah punya anak atau melewati beberapa tahun akan sukses besar dan mulia.",
+                saranHari: "Sangat disarankan memilih tanggal akad TIBO GEDHONG atau TIBO SRI untuk mempercepat datangnya kemapanan rezeki."
+            },
+            5: {
+                nama: "TINARI",
+                status: "Sangat Baik (Mudah Rezeki)",
+                warna: "emerald",
+                arti: "'Tinari' artinya menemukan kebahagiaan. Rumah tangga ini diberkahi kemudahan dalam mencari nafkah, jarang kekurangan, dan sering mendapat keberuntungan.",
+                saranHari: "Pilih tanggal akad TIBO GEDHONG agar rezeki yang mudah datang bisa tersimpan menjadi aset besar."
+            },
+            6: {
+                nama: "PADU",
+                status: "Cukup (Sering Beda Pendapat)",
+                warna: "amber",
+                arti: "'Padu' artinya sering berdebat atau selisih paham untuk urusan sepele sehari-hari, namun uniknya ikatan cintanya kuat sehingga tidak sampai bercerai.",
+                saranHari: "Sangat dianjurkan memilih tanggal akad TIBO SRI agar suasana rumah tangga menjadi lebih sejuk, sabar, dan adem ayem."
+            },
+            7: {
+                nama: "SUJANAN",
+                status: "Perlu Kesetiaan Ekstra",
+                warna: "amber",
+                arti: "'Sujanan' artinya rawan rasa cemburu, curiga, atau godaan pihak ketiga. Kunci utamanya adalah keterbukaan dan saling menjaga kepercayaan.",
+                saranHari: "Utamakan tanggal akad TIBO SRI dan jam akad YUSUF BAGUS untuk mengikat kerukunan batin suami-istri."
+            },
+            0: {
+                nama: "PESTHI",
+                status: "Sangat Baik (Tentram Selamanya)",
+                warna: "emerald",
+                arti: "'Pesthi' artinya sudah takdir/ketetapan yang harmonis. Rumah tangga akan berjalan sangat rukun, damai, adem ayem sampai kakek-nenek meskipun ada badai di luar.",
+                saranHari: "Bebas memilih tanggal akad TIBO GEDHONG, LUNGGUH, atau SRI."
+            }
+        };
+
+        const TIBO_JODOH_7 = {
+            1: { nama: "Waseso Segoro", arti: "Berbudi luhur, mudah memaafkan, berwibawa, dan rezekinya seluas samudra." },
+            2: { nama: "Tunggak Semi", arti: "Rezeki rumah tangga selalu tumbuh dan bersemi kembali; habis satu tumbuh seribu." },
+            3: { nama: "Satrio Wibowo", arti: "Rumah tangga mendapatkan kemuliaan, kehormatan tinggi, dan disegani masyarakat." },
+            4: { nama: "Sumur Sinobo", arti: "Menjadi teladan, pengayom, dan tempat meminta nasihat bagi keluarga maupun lingkungan." },
+            5: { nama: "Satrio Wirang", arti: "Terkadang menghadapi ujian omongan orang/fitnah, namun bisa diatasi dengan kesabaran dan sedekah." },
+            6: { nama: "Bumi Kapethak", arti: "Pasangan pekerja keras, ulet, tahan banting, dan hasil jerih payahnya kelak menjadi warisan kuat bagi anak-cucu." },
+            0: { nama: "Lebu Katiup Angin", arti: "Uang sering mudah keluar/boros atau sering pindah tempat di awal nikah (Disarankan pilih hari akad Tibo Gedhong untuk mengunci harta)." }
+        };
+
+        const DETAIL_PETUNG_5 = {
+            1: {
+                nama: "SRI",
+                ikon: "🌾",
+                judul: "Tibo SRI (Kemakmuran Pangan & Pengasihan)",
+                artiSingkat: "Rezeki harian mengalir terus, rumah tangga adem ayem & disayang banyak orang",
+                artiLengkap: "Berasal dari filosofi Dewi Sri (simbol padi/kehidupan). Fokus utamanya adalah kecukupan sandang-pangan yang tidak pernah putus, suasana rumah tangga yang sejuk (adem ayem), serta daya pengasihan sehingga pasangan disukai banyak relasi/tetangga.",
+                cocokUntuk: "Pasangan yang mengutamakan ketenteraman batin, keharmonisan, usaha kuliner/jasa harian, atau meredam weton yang keras.",
+                baik: true,
+                skor: 94
+            },
+            2: {
+                nama: "LUNGGUH",
+                ikon: "👑",
+                judul: "Tibo LUNGGUH (Derajat, Pangkat & Kekuasaan)",
+                artiSingkat: "Naik derajat, jabatan/karier kuat, berwibawa & dihormati masyarakat",
+                artiLengkap: "'Lungguh' berarti duduk di tempat terhormat (kedudukan/kursi jabatan). Berbeda dengan Sri (pangan) dan Gedhong (harta benda), Lungguh berfokus pada kemuliaan status sosial, kepemimpinan, wibawa, dan kelancaran jenjang karier.",
+                cocokUntuk: "Pasangan yang berkarier di instansi/pemerintahan, profesional, tokoh masyarakat, atau ingin mengangkat martabat keluarga.",
+                baik: true,
+                skor: 92
+            },
+            3: {
+                nama: "GEDHONG",
+                ikon: "🏛️",
+                judul: "Tibo GEDHONG (Gudang Harta & Aset Besar)",
+                artiSingkat: "Kaya harta benda, mudah punya rumah/tanah, tabungan terkunci kuat",
+                artiLengkap: "'Gedhong' berarti gedung atau gudang penyimpanan harta. Keunggulan utamanya bukan sekadar uang lewat, melainkan kemampuan MENGUMPULKAN dan MENGUNCI kekayaan besar (rumah, tanah, kendaraan, modal bisnis) agar tidak mudah habis.",
+                cocokUntuk: "Pasangan pengusaha, pedagang, investor, atau penawar bagi pasangan yang wetonnya cenderung boros (Lebu Katiup Angin).",
+                baik: true,
+                skor: 98
+            },
+            4: {
+                nama: "LORO",
+                ikon: "⚠️",
+                judul: "Tibo LORO (Sakit / Ujian Fisik & Batin)",
+                artiSingkat: "Rawan ujian kesehatan, kelelahan, atau kerepotan di awal pernikahan",
+                artiLengkap: "'Loro' berarti sakit atau kesakitan. Jika dipakai sebagai hari akad nikah untuk pasangan ini, dikhawatirkan memicu kelelahan fisik, ujian kesehatan salah satu mempelai, atau rintangan berat di awal berumah tangga.",
+                cocokUntuk: "Sebaiknya dihindari untuk tanggal akad nikah.",
+                baik: false,
+                skor: 40
+            },
+            0: {
+                nama: "PATI",
+                ikon: "🚫",
+                judul: "Tibo PATI (Mati / Terputus)",
+                artiSingkat: "Pantangan untuk hari akad pasangan ini (rawan terputus rezeki/semangat)",
+                artiLengkap: "'Pati' berarti mati atau berhenti. Dalam perhitungan hari akad, jatuh pada Pati merupakan pantangan karena melambangkan tertutupnya pintu kemudahan atau terputusnya keharmonisan.",
+                cocokUntuk: "Wajib dihindari untuk tanggal akad nikah.",
+                baik: false,
+                skor: 20
+            }
+        };
+
         // STATE APLIKASI
+        const nowInit = new Date();
         let state = {
-            viewYear: 2026,
-            viewMonth: 9, // Oktober (0-indexed)
-            selectedDateStr: "", // YYYY-MM-DD
             suamiDino: "Jum'at",
             suamiPasaran: "Legi",
             istriDino: "Minggu",
-            istriPasaran: "Pon"
+            istriPasaran: "Pon",
+            calMonth: nowInit.getMonth(),
+            calYear: nowInit.getFullYear(),
+            selectedDate: new Date(nowInit.getFullYear(), nowInit.getMonth(), nowInit.getDate(), 12, 0, 0)
         };
 
         // =====================================================================
-        // FUNGSI KONVERSI TANGGAL MASEHI KE WETON & KALENDER JAWA AKURAT
+        // MESIN KONVERSI TANGGAL MASEHI KE KALENDER JAWA & PASARAN AKURAT
         // =====================================================================
-        function getJavaneseDateDetails(year, month, day) {
-            // Titik Jangkar Sejarah: 17 Agustus 1945 = Jum'at Legi
-            const anchorUTC = Date.UTC(1945, 7, 17);
+        function getJavaneseDateInfo(dateObj) {
+            const year = dateObj.getFullYear();
+            const month = dateObj.getMonth();
+            const day = dateObj.getDate();
+
             const targetUTC = Date.UTC(year, month, day);
-            const diffDays = Math.round((targetUTC - anchorUTC) / (1000 * 60 * 60 * 24));
 
-            // Jum'at adalah index 5 di LIST_DINO, Legi adalah index 0 di LIST_PASARAN
-            const dinoIdx = ((5 + (diffDays % 7)) % 7 + 7) % 7;
-            const pasaranIdx = ((0 + (diffDays % 5)) % 5 + 5) % 5;
+            // Jangkar Sejarah Pasaran: 17 Agustus 1945 adalah JUM'AT LEGI (Pasaran index 0 = Legi)
+            const anchor1945UTC = Date.UTC(1945, 7, 17);
+            const diffDaysFrom1945 = Math.round((targetUTC - anchor1945UTC) / 86400000);
+            const pasaranIdx = ((diffDaysFrom1945 % 5) + 5) % 5;
 
-            const dino = LIST_DINO[dinoIdx];
+            const dino = LIST_DINO[dateObj.getDay()];
             const pasaran = LIST_PASARAN[pasaranIdx];
             const weton = `${dino} ${pasaran}`;
             const neptu = NEPTU_DINO[dino].neptu + NEPTU_PASARAN[pasaran].neptu;
 
-            // Konversi ke Tanggal & Bulan Hijriah/Jawa
-            let tglJawa = 1;
-            let wulanIndex = 0;
-            let tahunJawaAngka = 1959;
+            // Jangkar Kalender Jawa: 1 Suro 1958 (Tahun Je) = 7 Juli 2024
+            const anchorSuroUTC = Date.UTC(2024, 6, 7);
+            const diffDaysSuro = Math.round((targetUTC - anchorSuroUTC) / 86400000);
 
-            try {
-                const dateObj = new Date(year, month, day, 12, 0, 0);
-                const parts = new Intl.DateTimeFormat('en-TN-u-ca-islamic-umalqura', {
-                    day: 'numeric',
-                    month: 'numeric',
-                    year: 'numeric'
-                }).formatToParts(dateObj);
+            const LUNAR_YEAR = 354.36707;
+            const LUNAR_MONTH = 29.53059;
 
-                const hDay = parseInt(parts.find(p => p.type === 'day')?.value || '1', 10);
-                const hMonth = parseInt(parts.find(p => p.type === 'month')?.value || '1', 10);
-                const hYear = parseInt(parts.find(p => p.type === 'year')?.value || '1448', 10);
-
-                tglJawa = hDay;
-                wulanIndex = Math.max(0, Math.min(11, hMonth - 1));
-                tahunJawaAngka = hYear + 512; // Selisih Tahun Jawa Sultan Agung dengan Hijriah adalah 512 tahun
-            } catch (e) {
-                // Fallback matematis jika browser lama
-                const refHijriUTC = Date.UTC(2024, 6, 7); // 1 Suro 1958 Jawa (Tahun Je)
-                const d = Math.floor((targetUTC - refHijriUTC) / 86400000);
-                const lunarDayTotal = ((d % 354.367) + 354.367) % 354.367;
-                wulanIndex = Math.min(11, Math.floor(lunarDayTotal / 29.53));
-                tglJawa = Math.max(1, Math.floor(lunarDayTotal % 29.53) + 1);
-                tahunJawaAngka = 1958 + Math.floor(d / 354.367);
+            let yearOffset = Math.floor(diffDaysSuro / LUNAR_YEAR);
+            let remDays = diffDaysSuro - (yearOffset * LUNAR_YEAR);
+            if (remDays < 0) {
+                yearOffset -= 1;
+                remDays += LUNAR_YEAR;
             }
 
-            // Siklus 8 Tahun Windu: 1958 Jawa adalah Tahun Je (index 3 di DATA_TAHUN_WINDU)
-            const tahunWinduIdx = (((tahunJawaAngka - 1958 + 3) % 8) + 8) % 8;
-            const wulanObj = DATA_WULAN[wulanIndex];
-            const tahunWinduObj = DATA_TAHUN_WINDU[tahunWinduIdx];
+            const tahunJawa = 1958 + yearOffset;
+            let monthIdx = Math.floor(remDays / LUNAR_MONTH);
+            if (monthIdx > 11) monthIdx = 11;
+            if (monthIdx < 0) monthIdx = 0;
+
+            let tglJawa = Math.floor(remDays - (monthIdx * LUNAR_MONTH)) + 1;
+            if (tglJawa < 1) tglJawa = 1;
+            if (tglJawa > 30) tglJawa = 30;
+
+            const wulanObj = DATA_WULAN[monthIdx];
+            // Tahun 1958 adalah Tahun Je (indeks 3 di DATA_TAHUN_WINDU)
+            const winduIdx = (((3 + yearOffset) % 8) + 8) % 8;
+            const tahunWinduObj = DATA_TAHUN_WINDU[winduIdx];
+
+            const kitabRow = KITAB_35_WETON.find(item => item.dino === dino && item.pasaran === pasaran) || KITAB_35_WETON[0];
 
             return {
-                year, month, day,
-                dateStr: `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
+                dateObj: new Date(year, month, day, 12, 0, 0),
+                day,
+                month,
+                year,
                 dino,
                 pasaran,
                 weton,
                 neptu,
                 tglJawa,
                 wulanObj,
-                tahunJawaAngka,
-                tahunWinduObj
+                tahunJawa,
+                tahunWinduObj,
+                kitabRow
             };
+        }
+
+        // =====================================================================
+        // REAL-TIME CLOCK & DETEKTOR HARI INI DI HEADER
+        // =====================================================================
+        function getActiveSangatSlotIndex(hour) {
+            if ((hour >= 6 && hour < 9) || (hour >= 18 && hour < 21)) return 0;
+            if ((hour >= 9 && hour < 11) || (hour >= 21 && hour < 23)) return 1;
+            if ((hour >= 11 && hour < 13) || hour === 23 || hour === 0) return 2;
+            if ((hour >= 13 && hour < 15) || (hour >= 1 && hour < 3)) return 3;
+            return 4;
+        }
+
+        function updateRealtimeBadge() {
+            const now = new Date();
+            const info = getJavaneseDateInfo(now);
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            const ss = String(now.getSeconds()).padStart(2, '0');
+
+            const slotIdx = getActiveSangatSlotIndex(now.getHours());
+            const sangatName = TABEL_SANGAT[info.pasaran][slotIdx];
+
+            const badge = document.getElementById('today-info-badge');
+            if (badge) {
+                badge.innerHTML = `${info.weton} (Neptu ${info.neptu}) • ${info.tglJawa} ${info.wulanObj.nama} ${info.tahunJawa} • <span class="text-emerald-300 font-mono">${hh}:${mm}:${ss}</span> (${sangatName})`;
+            }
         }
 
         // =====================================================================
@@ -545,74 +744,129 @@
             document.getElementById('suami-neptu-badge').textContent = `${w1} (Neptu ${n1})`;
             document.getElementById('istri-neptu-badge').textContent = `${w2} (Neptu ${n2})`;
 
+            // 1. Hitung Tibo 8, Tibo 7, dan Tibo 5 Dasar Pasangan
+            const tibo8 = TIBO_JODOH_8[totalNeptu % 8];
+            const tibo7 = TIBO_JODOH_7[totalNeptu % 7];
+            const tibo5Pasangan = DETAIL_PETUNG_5[totalNeptu % 5];
+
             let pantanganList = [];
             let catatanWarnane = [];
 
-            // 1. Cek 10 Pasangan Pantangan Kitab & Ketemu 25
+            // 2. Cek 10 Pasangan Pantangan Kitab & Ketemu 25
             const isListedForbidden = PANTANGAN_JODOH_KITAB.some(pair =>
                 (pair[0] === w1 && pair[1] === w2) || (pair[0] === w2 && pair[1] === w1)
             );
             if (isListedForbidden || totalNeptu === 25) {
-                pantanganList.push(`Termasuk <strong>Tundunan Kebo Gerang (Ketemu 25)</strong> di dalam kitab ("ora keno dinggo, nyen mekso-mekso keno ditoto").`);
+                pantanganList.push(`<strong>Tundunan Kebo Gerang (Ketemu 25)</strong>: Di dalam kitab halaman 2 & 7 tertulis <em>"ora keno dinggo, nyen mekso-mekso keno ditoto"</em> (pantangan keras karena jumlah neptu 25, jika tetap menikah wajib ditata dengan hari & jam akad penawar).`);
             }
 
-            // 2. Cek Weton Kembar
+            // 3. Cek Weton Kembar
             if (w1 === w2) {
-                pantanganList.push(`<strong>Weton Podo Dinane lan Pasarane (${w1})</strong>: Di dalam kitab halaman 2 tertulis "yo ora dinggo" (wajib diruwat/ditata dengan hari akad yang tepat).`);
+                pantanganList.push(`<strong>Weton Podo Dinane lan Pasarane (${w1})</strong>: Di dalam kitab halaman 2 tertulis <em>"yo ora dinggo"</em> (weton kembar memiliki watak dan titik naas yang persis sama, sehingga wajib ditata dengan hari akad yang tepat).`);
             }
 
-            // 3. Cek Warnane Pertemon (Hal. 2 Kitab)
+            // 4. Cek Warnane Pertemon (Hal. 2 Kitab) beserta artinya
             if ((d1 === "Sabtu" && d2 === "Senin") || (d1 === "Senin" && d2 === "Sabtu")) {
-                pantanganList.push(`<strong>Kranjang Bejat & Ngruwat Segoro Getih</strong> (Sabtu Kidul lawan Senin Lor).`);
+                pantanganList.push(`<strong>Kranjang Bejat & Ngruwat Segoro Getih</strong> (Pertemuan Sabtu Kidul melawan Senin Lor — arah Joyo Dino kedua mempelai bertolak belakang 180° Utara vs Selatan, rawan benturan ego jika tidak saling mengalah).`);
             }
             if ((d1 === "Rebo" && d2 === "Minggu") || (d1 === "Minggu" && d2 === "Rebo")) {
-                pantanganList.push(`<strong>Ngruwat Segoro Getih & Kolo Luang</strong> (Minggu Wetan lawan Rebo Kulon).`);
+                pantanganList.push(`<strong>Ngruwat Segoro Getih & Kolo Luang</strong> (Pertemuan Minggu Wetan melawan Rebo Kulon — arah Joyo Dino berlawanan Timur vs Barat sekaligus berselisih 2 hari).`);
             }
 
             const diffDino = Math.abs(NEPTU_DINO[d1].urutan - NEPTU_DINO[d2].urutan);
-            if (diffDino === 3 || diffDino === 4) {
-                catatanWarnane.push(`<strong>Kolo Luang</strong> (Selisih 2 hari / gang loro dinane)`);
+            if ((diffDino === 3 || diffDino === 4) && !((d1 === "Rebo" && d2 === "Minggu") || (d1 === "Minggu" && d2 === "Rebo"))) {
+                catatanWarnane.push(`<strong>Kolo Luang (${d1} + ${d2})</strong>: Pertemuan hari yang melompati 2 hari (<em>gang loro dinane</em>), perlu kehati-hatian dalam menjaga komunikasi.`);
             }
             if ((p1 === "Pon" && p2 === "Legi") || (p1 === "Legi" && p2 === "Pon")) {
-                catatanWarnane.push(`<strong>Daringan Barat</strong> (Pertemon Pon + Legi)`);
+                catatanWarnane.push(`<strong>Daringan Barat (Pon + Legi)</strong>: Pertemuan pasaran Pon (Kulon) dengan Legi (Wetan). Melambangkan tempat beras (daringan) yang tertiup angin; rezeki mudah datang namun harus pandai menabung.`);
             }
             if (d1 === d2 && p1 !== p2) {
-                catatanWarnane.push(`<strong>Gurit Sejati</strong> (Sama harinya: ${d1})`);
+                catatanWarnane.push(`<strong>Gurit Sejati (Sama-sama hari ${d1})</strong>: Memiliki kesamaan prinsip dasar dan frekuensi pikiran karena lahir pada hari yang sama.`);
             }
             if (p1 === p2 && d1 !== d2) {
-                catatanWarnane.push(`<strong>Gurit Mukti</strong> (Sama pasarannya: ${p1})`);
+                catatanWarnane.push(`<strong>Gurit Mukti (Sama-sama pasaran ${p1})</strong>: Memiliki ikatan batin yang sejalan dan berpotensi mencapai kemuliaan (mukti) bersama.`);
             }
 
             const banner = document.getElementById('couple-compatibility-banner');
-            if (pantanganList.length > 0) {
-                banner.innerHTML = `
-                    <div class="p-3.5 rounded-xl bg-amber-950/60 border border-amber-500/50 text-xs space-y-1.5">
-                        <div class="flex flex-wrap items-center justify-between gap-2">
-                            <span class="font-bold text-amber-300">⚠️ Catatan Kitab untuk Pasangan ${w1} + ${w2} (Total Neptu: ${totalNeptu}):</span>
-                            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 font-semibold">Wajib Pilih Hari Akad "Penawar/Ditoto"</span>
-                        </div>
-                        <ul class="list-disc list-inside text-stone-200 space-y-0.5">
-                            ${pantanganList.map(item => `<li>${item}</li>`).join('')}
-                        </ul>
-                        <p class="text-[11px] text-emerald-300 pt-1">
-                            ✅ <strong>Solusi Kitab ("Nyen mekso-mekso keno ditoto"):</strong> Pilih tanggal akad nikah bertanda <strong>HIJAU (Terbaik)</strong> di kalender bawah dan gunakan jam <strong>Yusuf Bagus / Ahmad Slamet</strong> sebagai penolak sengkolo.
-                        </p>
-                    </div>
-                `;
-            } else {
-                banner.innerHTML = `
-                    <div class="p-3.5 rounded-xl bg-emerald-950/50 border border-emerald-500/40 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+
+            const tibo8BadgeClass = tibo8.warna === "emerald"
+                ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                : tibo8.warna === "sky"
+                ? "bg-sky-500/20 text-sky-300 border-sky-500/40"
+                : "bg-amber-500/20 text-amber-300 border-amber-500/40";
+
+            banner.innerHTML = `
+                <div class="rounded-xl bg-stone-950/90 border border-stone-800 p-3.5 sm:p-4 space-y-3.5">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-stone-800">
                         <div>
-                            <span class="font-bold text-emerald-300">✅ Pasangan ${w1} (${n1}) + ${w2} (${n2}) = Neptu ${totalNeptu}: AMAN & SELARAS!</span>
-                            <p class="text-stone-300 mt-0.5">
-                                Bebas dari pantangan <em>Tundunan Kebo Gerang (25)</em>, bebas <em>Weton Kembar</em>, dan bebas <em>Ngruwat Segoro Getih</em>.
-                                ${catatanWarnane.length > 0 ? `Termasuk kategori: ${catatanWarnane.join(', ')}.` : ''}
-                            </p>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-gold-400">Hasil Hitungan Tibo Weton Pasangan</span>
+                            <h3 class="text-sm sm:text-base font-bold text-stone-100 mt-0.5">
+                                ${w1} (${n1}) + ${w2} (${n2}) = <span class="text-gold-300">Total Neptu ${totalNeptu}</span>
+                            </h3>
                         </div>
-                        <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold shrink-0 text-center">Jodoh Baik</span>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-3 py-1 rounded-lg border text-xs font-extrabold ${tibo8BadgeClass}">
+                                Tibo Jodoh: ${tibo8.nama} (${tibo8.status})
+                            </span>
+                        </div>
                     </div>
-                `;
-            }
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+                        <div class="bg-stone-900/90 border border-stone-800 rounded-xl p-3 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold uppercase text-stone-400">1. Petung Jodoh (÷ 8)</span>
+                                <span class="font-mono text-[10px] text-gold-300">${totalNeptu} ÷ 8 sisa ${totalNeptu % 8}</span>
+                            </div>
+                            <div class="text-sm font-extrabold text-gold-300">TIBO ${tibo8.nama}</div>
+                            <p class="text-[11px] text-stone-300 leading-relaxed">${tibo8.arti}</p>
+                        </div>
+
+                        <div class="bg-stone-900/90 border border-stone-800 rounded-xl p-3 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold uppercase text-stone-400">2. Watak Rezeki (÷ 7)</span>
+                                <span class="font-mono text-[10px] text-gold-300">${totalNeptu} ÷ 7 sisa ${totalNeptu % 7}</span>
+                            </div>
+                            <div class="text-sm font-extrabold text-emerald-300">TIBO ${tibo7.nama.toUpperCase()}</div>
+                            <p class="text-[11px] text-stone-300 leading-relaxed">${tibo7.arti}</p>
+                        </div>
+
+                        <div class="bg-stone-900/90 border border-stone-800 rounded-xl p-3 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold uppercase text-stone-400">3. Dasar Pangan (÷ 5)</span>
+                                <span class="font-mono text-[10px] text-gold-300">${totalNeptu} ÷ 5 sisa ${totalNeptu % 5}</span>
+                            </div>
+                            <div class="text-sm font-extrabold text-sky-300">${tibo5Pasangan.ikon} DASAR ${tibo5Pasangan.nama}</div>
+                            <p class="text-[11px] text-stone-300 leading-relaxed">${tibo5Pasangan.artiSingkat}.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs">
+                        <div class="p-3 rounded-xl ${pantanganList.length > 0 ? 'bg-amber-950/50 border border-amber-500/40' : 'bg-emerald-950/40 border border-emerald-500/30'}">
+                            <div class="font-bold ${pantanganList.length > 0 ? 'text-amber-300' : 'text-emerald-300'} mb-1">
+                                ${pantanganList.length > 0 ? '⚠️ Deteksi Pantangan Kitab (Bab Pertemon):' : '✅ Status Bab Pertemon Rumah Tangga (Kitab Hal. 2 & 7):'}
+                            </div>
+                            ${pantanganList.length > 0
+                                ? `<ul class="list-disc list-inside text-[11px] text-stone-200 space-y-1">${pantanganList.map(i => `<li>${i}</li>`).join('')}</ul>`
+                                : `<p class="text-[11px] text-stone-300">Aman! Pasangan ini <strong>bebas dari pantangan Ketemu 25 (Tundunan Kebo Gerang)</strong>, bebas <strong>Weton Kembar</strong>, dan bebas <strong>Ngruwat Segoro Getih</strong>.</p>`
+                            }
+                            ${catatanWarnane.length > 0
+                                ? `<div class="mt-2 pt-2 border-t border-stone-800/80 text-[11px] text-stone-300"><strong>Warnane Pertemon:</strong><ul class="list-disc list-inside mt-0.5 space-y-0.5">${catatanWarnane.map(c => `<li>${c}</li>`).join('')}</ul></div>`
+                                : ''
+                            }
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-stone-900/90 border border-gold-400/30 flex flex-col justify-between">
+                            <div>
+                                <div class="font-bold text-gold-300 mb-1">💡 Saran Pemilihan Tanggal Akad untuk Pasangan Ini:</div>
+                                <p class="text-[11px] text-stone-200 leading-relaxed">${tibo8.saranHari}</p>
+                            </div>
+                            <div class="mt-2 pt-2 border-t border-stone-800 text-[11px] text-emerald-300">
+                                👉 Lihat kalender di bawah: Setiap tanggal <strong>Hijau</strong> sudah bertuliskan apakah tanggal tersebut jatuh pada <strong>SRI</strong>, <strong>LUNGGUH</strong>, atau <strong>GEDHONG</strong> khusus untuk pasangan ini.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         // =====================================================================
@@ -629,25 +883,16 @@
             const isWaseTahun = (dateInfo.weton === dateInfo.tahunWinduObj.wase);
 
             // 2. Cek apakah Hari Akad menabrak arah Segoro Getih salah satu mempelai
-            // (Sabtu Kidul <-> Senin Lor, Minggu Wetan <-> Rebo Kulon)
             const pasanganLawanArah = { "Sabtu": "Senin", "Senin": "Sabtu", "Minggu": "Rebo", "Rebo": "Minggu" };
             const isClashSuami = pasanganLawanArah[state.suamiDino] === dateInfo.dino;
             const isClashIstri = pasanganLawanArah[state.istriDino] === dateInfo.dino;
             const isSegoroGetihHari = isClashSuami || isClashIstri;
 
             // 3. Perhitungan Petung Hari Akad dengan Weton Pengantin (Siklus 5: Sri, Lungguh, Gedhong, Loro, Pati)
-            // Rumus: (Neptu Suami + Neptu Istri + Neptu Hari Akad) mod 5
-            const mod5 = (totalCoupleNeptu + dateInfo.neptu) % 5;
-            const PETUNG_5 = {
-                1: { nama: "SRI",     arti: "Murah rezeki, disayang banyak orang, rumah tangga makmur", baik: true,  skor: 92 },
-                2: { nama: "LUNGGUH", arti: "Derajat mulia, wibawa, kedudukan rumah tangga kokoh",       baik: true,  skor: 90 },
-                3: { nama: "GEDHONG", arti: "Kaya raya, mapan harta benda, berkah melimpah (Paling Utama)", baik: true, skor: 98 },
-                4: { nama: "LORO",    arti: "Rawan ujian kesehatan/kerepotan di awal pernikahan",        baik: false, skor: 45 },
-                0: { nama: "PATI",    arti: "Kurang baik untuk hari akad pasangan ini (rawan hambatan)", baik: false, skor: 25 }
-            };
-            const hasilPetung = PETUNG_5[mod5];
+            const totalDenganHariAkad = totalCoupleNeptu + dateInfo.neptu;
+            const mod5 = totalDenganHariAkad % 5;
+            const hasilPetung = DETAIL_PETUNG_5[mod5];
 
-            // Tentukan Kategori Akhir: 'terbaik' (Hijau), 'cukup' (Kuning), atau 'pantangan' (Merah)
             let kategori = "terbaik";
             let labelSingkat = hasilPetung.nama;
             let alasanUtama = "";
@@ -665,30 +910,32 @@
             } else if (!hasilPetung.baik) {
                 kategori = "pantangan";
                 labelSingkat = hasilPetung.nama;
-                alasanUtama = `Perhitungan weton pengantin + hari ini jatuh pada ${hasilPetung.nama} (${hasilPetung.arti}).`;
+                alasanUtama = `Hitungan (Neptu Pasangan ${totalCoupleNeptu} + Hari Akad ${dateInfo.neptu} = ${totalDenganHariAkad}) dibagi 5 jatuh pada TIBO ${hasilPetung.nama}: ${hasilPetung.artiSingkat}.`;
             } else if (isSegoroGetihHari) {
                 kategori = "cukup";
-                labelSingkat = "CUKUP";
+                labelSingkat = hasilPetung.nama;
                 skor = 68;
-                alasanUtama = `Jatuh pada ${hasilPetung.nama}, namun hari ${dateInfo.dino} berlawanan arah mata angin dengan hari lahir salah satu mempelai.`;
+                alasanUtama = `Secara hitungan jatuh pada TIBO ${hasilPetung.nama} (${hasilPetung.artiSingkat}), namun hari ${dateInfo.dino} berlawanan arah Joyo Dino (Segoro Getih) dengan hari lahir salah satu mempelai.`;
             } else if (dateInfo.wulanObj.nama === "Suro") {
                 kategori = "cukup";
                 labelSingkat = hasilPetung.nama;
                 skor = 72;
-                alasanUtama = `Secara hitungan jatuh pada ${hasilPetung.nama} (${hasilPetung.arti}), namun berada di Wulan Suro.`;
+                alasanUtama = `Secara hitungan jatuh pada TIBO ${hasilPetung.nama} (${hasilPetung.artiSingkat}), namun berada di Wulan Suro.`;
             } else {
                 kategori = "terbaik";
                 labelSingkat = hasilPetung.nama;
-                alasanUtama = `Sangat cocok untuk pasangan ini! Jatuh pada ${hasilPetung.nama} (${hasilPetung.arti}) dan 100% bebas hari naas kitab.`;
+                alasanUtama = `Hitungan (${totalCoupleNeptu} + ${dateInfo.neptu} = ${totalDenganHariAkad}) ÷ 5 sisa ${mod5} → Jatuh pada ${hasilPetung.judul}. ${hasilPetung.artiLengkap}`;
             }
 
-            // Ambil Jam Terbaik (Yusuf Bagus & Ahmad Slamet) pada pasaran hari tersebut
             const sangatHariIni = TABEL_SANGAT[dateInfo.pasaran];
             const idxYusuf = sangatHariIni.indexOf("Yusuf Bagus");
             const idxAhmad = sangatHariIni.indexOf("Ahmad Slamet");
 
             return {
                 dateInfo,
+                totalCoupleNeptu,
+                totalDenganHariAkad,
+                mod5,
                 kategori,
                 labelSingkat,
                 skor,
@@ -707,163 +954,174 @@
         // RENDER KALENDER JAWA & REKOMENDASI TANGGAL TERBAIK
         // =====================================================================
         function renderCalendar() {
-            const year = state.viewYear;
-            const month = state.viewMonth;
+            const year = state.calYear;
+            const month = state.calMonth;
 
-            document.getElementById('cal-month').value = month;
-            document.getElementById('cal-year').value = year;
+            const monthSelect = document.getElementById('cal-month');
+            const yearSelect = document.getElementById('cal-year');
+            if (monthSelect) monthSelect.value = String(month);
+            if (yearSelect) yearSelect.value = String(year);
 
-            const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 = Minggu
+            const firstDayOfMonth = new Date(year, month, 1, 12, 0, 0);
             const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const startDayOfWeek = firstDayOfMonth.getDay();
+
+            // Info Wulan Jawa pertengahan bulan
+            const midMonthInfo = getJavaneseDateInfo(new Date(year, month, 15, 12, 0, 0));
+            const monthBanner = document.getElementById('month-javanese-banner');
+            monthBanner.innerHTML = `
+                <div>
+                    <span class="text-stone-400">Wulan Jawa:</span>
+                    <strong class="text-gold-300 ml-1">${midMonthInfo.wulanObj.nama} ${midMonthInfo.tahunJawa} (Tahun ${midMonthInfo.tahunWinduObj.nama})</strong>
+                    <span class="text-stone-400 ml-1">• ${midMonthInfo.wulanObj.statusWulan}</span>
+                </div>
+                <div class="text-[11px] text-amber-300 bg-amber-950/60 border border-amber-500/30 px-2.5 py-1 rounded-lg">
+                    🚫 Pantangan Was Wulan ${midMonthInfo.wulanObj.nama}: <strong>Hari ${midMonthInfo.wulanObj.wasDays.join(" & ")}</strong> | Nogo Wulan: <strong>${midMonthInfo.wulanObj.nogo}</strong>
+                </div>
+            `;
 
             const grid = document.getElementById('calendar-grid');
             grid.innerHTML = '';
 
             // Sel kosong sebelum tanggal 1
-            for (let i = 0; i < firstDayOfMonth; i++) {
+            for (let i = 0; i < startDayOfWeek; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.className = "rounded-xl bg-stone-950/30 border border-stone-900/40 min-h-[74px]";
+                emptyCell.className = "rounded-xl bg-stone-950/25 border border-stone-900/40 min-h-[68px] sm:min-h-[78px]";
                 grid.appendChild(emptyCell);
             }
 
-            let allEvaluatedDays = [];
+            const todayNow = new Date();
+            const bestDatesThisMonth = [];
 
             for (let d = 1; d <= daysInMonth; d++) {
-                const info = getJavaneseDateDetails(year, month, d);
+                const currentDate = new Date(year, month, d, 12, 0, 0);
+                const info = getJavaneseDateInfo(currentDate);
                 const evalRes = evaluateWeddingDay(info);
-                allEvaluatedDays.push(evalRes);
 
-                const isSelected = (info.dateStr === state.selectedDateStr);
+                if (evalRes.kategori === "terbaik") {
+                    bestDatesThisMonth.push(evalRes);
+                }
 
-                let cellStyle = "";
+                const isSelected = (
+                    state.selectedDate.getFullYear() === year &&
+                    state.selectedDate.getMonth() === month &&
+                    state.selectedDate.getDate() === d
+                );
+
+                const isToday = (
+                    todayNow.getFullYear() === year &&
+                    todayNow.getMonth() === month &&
+                    todayNow.getDate() === d
+                );
+
+                let cardStyle = "";
                 let badgeStyle = "";
 
                 if (evalRes.kategori === "terbaik") {
-                    cellStyle = "bg-emerald-950/40 hover:bg-emerald-900/50 border-emerald-500/40 text-stone-100";
-                    badgeStyle = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                    cardStyle = "bg-emerald-950/45 hover:bg-emerald-900/60 border-emerald-500/50 text-stone-100";
+                    badgeStyle = "bg-emerald-500/25 text-emerald-300 border border-emerald-500/40";
                 } else if (evalRes.kategori === "cukup") {
-                    cellStyle = "bg-amber-950/25 hover:bg-amber-900/40 border-amber-500/30 text-stone-200";
-                    badgeStyle = "bg-amber-500/20 text-amber-300";
+                    cardStyle = "bg-amber-950/30 hover:bg-amber-900/40 border-amber-500/40 text-stone-200";
+                    badgeStyle = "bg-amber-500/20 text-amber-300 border border-amber-500/30";
                 } else {
-                    cellStyle = "bg-red-950/25 hover:bg-red-950/45 border-red-900/40 text-stone-400";
-                    badgeStyle = "bg-red-500/15 text-red-400";
+                    cardStyle = "bg-red-950/35 hover:bg-red-900/40 border-red-500/35 text-stone-400";
+                    badgeStyle = "bg-red-500/20 text-red-300 border border-red-500/30";
                 }
 
-                const btn = document.createElement('button');
-                btn.type = "button";
-                btn.onclick = () => selectDate(info.dateStr);
-                btn.className = `p-1.5 sm:p-2 rounded-xl border text-left transition flex flex-col justify-between min-h-[78px] ${cellStyle} ${isSelected ? 'day-selected' : ''}`;
+                const cell = document.createElement('button');
+                cell.type = "button";
+                cell.onclick = () => selectDate(year, month, d, true);
+                cell.className = `text-left p-1.5 sm:p-2 rounded-xl border transition flex flex-col justify-between min-h-[68px] sm:min-h-[80px] relative ${cardStyle} ${isSelected ? 'day-selected' : ''}`;
 
-                btn.innerHTML = `
+                cell.innerHTML = `
                     <div class="flex items-start justify-between w-full">
-                        <span class="text-sm sm:text-base font-extrabold leading-none">${d}</span>
-                        <span class="text-[9px] font-mono px-1 rounded bg-stone-950/70 text-gold-300">${info.tglJawa}</span>
+                        <span class="text-xs sm:text-sm font-extrabold ${evalRes.kategori === 'terbaik' ? 'text-emerald-300' : ''}">${d}</span>
+                        <span class="text-[9px] font-mono text-stone-400">${info.tglJawa}</span>
                     </div>
-                    <div class="my-1">
-                        <div class="text-[10px] font-semibold leading-tight truncate">${info.pasaran}</div>
-                        <div class="text-[9px] text-stone-400 truncate">${info.wulanObj.nama}</div>
+                    <div class="my-0.5">
+                        <div class="text-[9px] sm:text-[10px] font-semibold text-gold-200 leading-tight truncate">${info.pasaran}</div>
                     </div>
                     <div class="w-full">
-                        <span class="block text-center text-[9px] font-bold uppercase py-0.5 rounded ${badgeStyle}">
+                        <span class="block text-center text-[8px] sm:text-[9px] font-extrabold px-1 py-0.5 rounded truncate ${badgeStyle}">
                             ${evalRes.labelSingkat}
                         </span>
                     </div>
+                    ${isToday ? '<span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-gold-400 ring-2 ring-stone-950" title="Hari Ini"></span>' : ''}
                 `;
-                grid.appendChild(btn);
+
+                grid.appendChild(cell);
             }
 
-            // Info Wulan Jawa di pertengahan bulan
-            const midInfo = getJavaneseDateDetails(year, month, 15);
-            document.getElementById('month-javanese-banner').innerHTML = `
-                <div>
-                    <span class="text-stone-400">Kalender Jawa Bulan Ini:</span>
-                    <strong class="text-gold-300 ml-1">Wulan ${midInfo.wulanObj.nama} — Tahun ${midInfo.tahunWinduObj.nama} (${midInfo.tahunJawaAngka} J)</strong>
-                </div>
-                <div class="text-stone-400">
-                    Pantangan Was Wulan: <strong class="text-red-400">Hari ${midInfo.wulanObj.wasDays.join(' & ')}</strong> • Nogo Wulan: <strong class="text-amber-300">${midInfo.wulanObj.nogo}</strong>
-                </div>
-            `;
-
-            // Render Top Rekomendasi Tanggal Terbaik Bulan Ini
-            const bestDays = allEvaluatedDays
-                .filter(item => item.kategori === "terbaik")
-                .sort((a, b) => b.skor - a.skor || a.dateInfo.day - b.dateInfo.day);
-
+            // Render Rekomendasi Cepat Tanggal Terbaik Bulan Ini
             const topContainer = document.getElementById('top-dates-container');
-            if (bestDays.length === 0) {
-                topContainer.innerHTML = `<div class="text-xs text-amber-300 bg-amber-950/40 border border-amber-500/30 px-3 py-2 rounded-xl w-full">Bulan ini tidak ada tanggal kategori Utama, silakan pilih tanggal bertanda Kuning atau geser ke bulan berikutnya.</div>`;
+            if (bestDatesThisMonth.length === 0) {
+                topContainer.innerHTML = `<div class="text-xs text-stone-400 italic py-1">Tidak ada tanggal kategori utama di bulan ini, silakan geser ke bulan berikutnya.</div>`;
             } else {
-                topContainer.innerHTML = bestDays.slice(0, 6).map(item => {
-                    const activeClass = item.dateInfo.dateStr === state.selectedDateStr
-                        ? "border-gold-300 bg-emerald-900/70"
-                        : "border-emerald-500/40 bg-emerald-950/50 hover:bg-emerald-900/50";
+                topContainer.innerHTML = bestDatesThisMonth.map(item => {
+                    const d = item.dateInfo.day;
+                    const isSel = (
+                        state.selectedDate.getFullYear() === year &&
+                        state.selectedDate.getMonth() === month &&
+                        state.selectedDate.getDate() === d
+                    );
                     return `
-                        <button onclick="selectDate('${item.dateInfo.dateStr}')" class="shrink-0 text-left px-3 py-2 rounded-xl border transition ${activeClass}">
-                            <div class="flex items-center justify-between gap-3">
-                                <span class="text-xs font-extrabold text-emerald-300">${item.dateInfo.day} ${getNamaBulan(month)}</span>
-                                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-200">${item.labelSingkat}</span>
+                        <button type="button" onclick="selectDate(${year}, ${month}, ${d}, true)"
+                            class="shrink-0 px-3 py-2 rounded-xl border text-left transition ${isSel ? 'bg-emerald-500 text-stone-950 border-white font-bold' : 'bg-emerald-950/60 hover:bg-emerald-900/70 border-emerald-500/40 text-stone-100'}">
+                            <div class="text-xs font-extrabold">${d} ${NAMA_BULAN_MASEHI[month]} • ${item.dateInfo.weton}</div>
+                            <div class="text-[10px] ${isSel ? 'text-stone-900 font-semibold' : 'text-emerald-300'}">
+                                ${item.hasilPetung.ikon} Tibo ${item.hasilPetung.nama} • Jam ${item.jamYusuf.jamPagi.split(' ')[0]}
                             </div>
-                            <div class="text-[11px] font-semibold text-stone-100 mt-0.5">${item.dateInfo.weton}</div>
-                            <div class="text-[10px] text-gold-300 mt-0.5">Jam Akad: ${item.jamYusuf.jamPagi.split(' ')[0]}</div>
                         </button>
                     `;
                 }).join('');
             }
-
-            // Jika belum ada tanggal terpilih di bulan ini, pilih tanggal terbaik pertama (atau tanggal 1)
-            const currentSelectedInMonth = allEvaluatedDays.find(d => d.dateInfo.dateStr === state.selectedDateStr);
-            if (!currentSelectedInMonth) {
-                const defaultPick = bestDays.length > 0 ? bestDays[0].dateInfo.dateStr : allEvaluatedDays[0].dateInfo.dateStr;
-                state.selectedDateStr = defaultPick;
-                renderCalendar();
-                return;
-            }
-
-            renderSelectedDateDetail(currentSelectedInMonth);
         }
 
         // =====================================================================
-        // RENDER PANEL DETAIL TANGGAL, JAM IJAB QABUL & ARAH
+        // RENDER PANEL DETAIL TANGGAL & JAM AKAD (KOLOM KANAN)
         // =====================================================================
-        function renderSelectedDateDetail(evalRes) {
-            const info = evalRes.dateInfo;
-            const kitabWeton = KITAB_35_WETON.find(w => w.dino === info.dino && w.pasaran === info.pasaran) || KITAB_35_WETON[0];
+        function renderSelectedDateDetail() {
+            const info = getJavaneseDateInfo(state.selectedDate);
+            const evalRes = evaluateWeddingDay(info);
 
-            // Judul Tanggal
-            document.getElementById('detail-date-title').textContent = `${info.dino} ${info.pasaran}, ${info.day} ${getNamaBulan(info.month)} ${info.year}`;
-            document.getElementById('detail-javanese-subtitle').textContent = `${info.tglJawa} ${info.wulanObj.nama} ${info.tahunJawaAngka} Jawa (Tahun ${info.tahunWinduObj.nama}) • Neptu Hari: ${info.neptu}`;
+            document.getElementById('detail-date-title').textContent = `${info.dino} ${info.pasaran}, ${info.day} ${NAMA_BULAN_MASEHI[info.month]} ${info.year}`;
+            document.getElementById('detail-javanese-subtitle').textContent = `Kalender Jawa: ${info.tglJawa} ${info.wulanObj.nama} ${info.tahunJawa} (Tahun ${info.tahunWinduObj.nama}) • Neptu Hari: ${info.neptu}`;
             document.getElementById('detail-pasaran-badge').textContent = `Pasaran ${info.pasaran}`;
 
             // Kartu Status
             const statusCard = document.getElementById('detail-status-card');
             if (evalRes.kategori === "terbaik") {
                 statusCard.innerHTML = `
-                    <div class="p-4 rounded-xl bg-emerald-950/70 border-2 border-emerald-500/70 space-y-1.5">
-                        <div class="flex items-center justify-between">
+                    <div class="p-3.5 sm:p-4 rounded-xl bg-emerald-950/70 border-2 border-emerald-500/70 space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-1">
                             <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-300">🌟 HARI TERBAIK UNTUK MENIKAH</span>
-                            <span class="px-2 py-0.5 rounded bg-emerald-500 text-stone-950 font-extrabold text-xs">Jatuh: ${evalRes.hasilPetung.nama}</span>
+                            <span class="px-2.5 py-0.5 rounded bg-emerald-500 text-stone-950 font-extrabold text-xs">${evalRes.hasilPetung.ikon} TIBO ${evalRes.hasilPetung.nama}</span>
                         </div>
+                        <div class="text-xs font-bold text-gold-200">${evalRes.hasilPetung.judul}</div>
                         <p class="text-xs text-stone-200 leading-relaxed">${evalRes.alasanUtama}</p>
+                        <div class="pt-1.5 border-t border-emerald-500/30 text-[11px] text-emerald-300">
+                            <strong>Cocok untuk:</strong> ${evalRes.hasilPetung.cocokUntuk}
+                        </div>
                     </div>
                 `;
             } else if (evalRes.kategori === "cukup") {
                 statusCard.innerHTML = `
-                    <div class="p-4 rounded-xl bg-amber-950/70 border-2 border-amber-500/60 space-y-1.5">
-                        <div class="flex items-center justify-between">
+                    <div class="p-3.5 sm:p-4 rounded-xl bg-amber-950/70 border-2 border-amber-500/60 space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-1">
                             <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-300">⚠️ HARI CUKUP / PERLU PERHATIAN</span>
-                            <span class="px-2 py-0.5 rounded bg-amber-400 text-stone-950 font-extrabold text-xs">Jatuh: ${evalRes.hasilPetung.nama}</span>
+                            <span class="px-2.5 py-0.5 rounded bg-amber-400 text-stone-950 font-extrabold text-xs">${evalRes.hasilPetung.ikon} TIBO ${evalRes.hasilPetung.nama}</span>
                         </div>
                         <p class="text-xs text-stone-200 leading-relaxed">${evalRes.alasanUtama}</p>
                     </div>
                 `;
             } else {
                 statusCard.innerHTML = `
-                    <div class="p-4 rounded-xl bg-red-950/75 border-2 border-red-500/70 space-y-1.5">
-                        <div class="flex items-center justify-between">
+                    <div class="p-3.5 sm:p-4 rounded-xl bg-red-950/75 border-2 border-red-500/70 space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-1">
                             <span class="text-[11px] font-extrabold uppercase tracking-wider text-red-300">🚫 HINDARI TANGGAL INI UNTUK AKAD</span>
-                            <span class="px-2 py-0.5 rounded bg-red-500 text-stone-950 font-extrabold text-xs">${evalRes.labelSingkat}</span>
+                            <span class="px-2.5 py-0.5 rounded bg-red-500 text-stone-950 font-extrabold text-xs">${evalRes.labelSingkat}</span>
                         </div>
-                        <p class="text-xs text-stone-200 leading-relaxed">${evalRes.alasanUtama} Silakan klik salah satu tanggal berwarna <strong>Hijau</strong> di kalender.</p>
+                        <p class="text-xs text-stone-200 leading-relaxed">${evalRes.alasanUtama} Silakan klik salah satu tanggal berwarna <strong>Hijau (SRI / LUNGGUH / GEDHONG)</strong> di kalender.</p>
                     </div>
                 `;
             }
@@ -872,95 +1130,78 @@
             const sangatList = TABEL_SANGAT[info.pasaran];
             const jamContainer = document.getElementById('detail-jam-list');
 
+            const KETERANGAN_SANGAT_NIKAH = {
+                "Yusuf Bagus":   { label: "TERBAIK 1 (UTAMA)", desc: "Sangat terbaik untuk Ijab Qabul & temu manten (rumah tangga rukun, indah, dan penuh pengasihan).", style: "bg-emerald-950/60 border-emerald-500/50 text-emerald-200", badge: "bg-emerald-500 text-stone-950" },
+                "Ahmad Slamet":  { label: "TERBAIK 2 (SLAMET)", desc: "Sangat baik untuk akad nikah (diberkahi keselamatan, ketenteraman, dan dijauhkan dari balak).", style: "bg-emerald-950/40 border-emerald-500/40 text-emerald-200", badge: "bg-emerald-400 text-stone-950" },
+                "Idjrail Rejeki":{ label: "BAIK (REJEKI)", desc: "Baik untuk membuka resepsi/walimah agar tamu & rezeki mengalir deras.", style: "bg-stone-900 border-stone-700 text-stone-200", badge: "bg-gold-400 text-stone-950" },
+                "Jobrail Kuwat": { label: "CUKUP (KUWAT)", desc: "Baik untuk keteguhan batin, namun agak keras untuk awal ijab qabul.", style: "bg-stone-900 border-stone-800 text-stone-300", badge: "bg-stone-700 text-stone-200" },
+                "Brahim Blahi":  { label: "PANTANGAN (BLAHI)", desc: "Dilarang menggelar Ijab Qabul atau berangkat rombongan pada jam ini karena bermakna bilahi/halangan.", style: "bg-red-950/50 border-red-500/40 text-red-200", badge: "bg-red-500 text-white" }
+            };
+
             jamContainer.innerHTML = SANGAT_SLOTS.map((slot, idx) => {
-                const tokoh = sangatList[idx];
-                let boxClass = "bg-stone-900 border-stone-800 text-stone-300";
-                let badge = "";
-                let desc = "";
-
-                if (tokoh === "Yusuf Bagus") {
-                    boxClass = "bg-emerald-950/60 border-emerald-500/60 text-stone-100";
-                    badge = `<span class="px-2 py-0.5 rounded bg-emerald-500 text-stone-950 font-extrabold text-[10px]">⭐ TERBAIK #1 IJAB QABUL</span>`;
-                    desc = "Tuah Nabi Yusuf: Rumah tangga harmonis, penuh kasih sayang, rukun & berwibawa.";
-                } else if (tokoh === "Ahmad Slamet") {
-                    boxClass = "bg-teal-950/50 border-teal-500/50 text-stone-100";
-                    badge = `<span class="px-2 py-0.5 rounded bg-teal-400 text-stone-950 font-extrabold text-[10px]">⭐ TERBAIK #2 SELAMAT</span>`;
-                    desc = "Tuah Ahmad Slamet: Pernikahan diberkahi keselamatan, tentram & langgeng.";
-                } else if (tokoh === "Idjrail Rejeki") {
-                    boxClass = "bg-sky-950/40 border-sky-500/40 text-stone-200";
-                    badge = `<span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold text-[10px]">✅ BAIK (REZEKI)</span>`;
-                    desc = "Baik untuk kelancaran rezeki dan perniagaan rumah tangga.";
-                } else if (tokoh === "Jobrail Kuwat") {
-                    boxClass = "bg-stone-900/90 border-stone-700 text-stone-300";
-                    badge = `<span class="px-2 py-0.5 rounded bg-stone-800 text-stone-300 font-semibold text-[10px]">CUKUP (KUAT)</span>`;
-                    desc = "Cocok untuk persiapan acara/resepsi, watak energinya kuat/tegas.";
-                } else {
-                    boxClass = "bg-red-950/40 border-red-500/40 text-stone-400";
-                    badge = `<span class="px-2 py-0.5 rounded bg-red-500/20 text-red-300 font-bold text-[10px]">🚫 JANGAN AKAD</span>`;
-                    desc = "Menit Sangat Brahim Blahi: Pantangan melangsungkan ijab qabul pada jam ini.";
-                }
-
+                const namaSangat = sangatList[idx];
+                const meta = KETERANGAN_SANGAT_NIKAH[namaSangat];
                 return `
-                    <div class="p-2.5 rounded-xl border ${boxClass} text-xs">
+                    <div class="p-2.5 rounded-xl border ${meta.style} text-xs">
                         <div class="flex flex-wrap items-center justify-between gap-1">
-                            <span class="font-bold text-gold-300">${slot.jamPagi}</span>
-                            ${badge}
+                            <span class="font-bold text-stone-100">${slot.jamPagi} <span class="text-[10px] text-stone-400 font-normal">(${slot.kode})</span></span>
+                            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded ${meta.badge}">${namaSangat} • ${meta.label}</span>
                         </div>
-                        <div class="flex items-center justify-between mt-1">
-                            <span class="font-semibold">Menit Sangat ${tokoh}</span>
-                            <span class="text-[10px] text-stone-400">Malam: ${slot.jamMalam}</span>
-                        </div>
-                        <p class="text-[11px] text-stone-400 mt-0.5">${desc}</p>
+                        <p class="text-[11px] opacity-90 mt-1">${meta.desc}</p>
                     </div>
                 `;
             }).join('');
 
-            // Arah Nogo & Joyo Dino pada Hari Akad
+            // Arah Menghadap & Rombongan Pengantin
             document.getElementById('detail-arah-box').innerHTML = `
-                <div class="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30">
-                    <span class="text-[10px] text-emerald-400 font-bold uppercase block">✨ Arah Terbaik (Joyo Dino)</span>
-                    <strong class="text-stone-100 text-sm">${kitabWeton.joyo}</strong>
-                    <span class="text-[10px] text-stone-400 block mt-0.5">Bagus untuk arah hadap akad / besan datang</span>
+                <div class="bg-emerald-950/40 border border-emerald-500/30 p-2.5 rounded-xl">
+                    <span class="text-[10px] font-bold uppercase text-emerald-400 block">✅ Arah Kejayaan (Joyo Dino)</span>
+                    <strong class="text-sm text-stone-100">${info.kitabRow.joyo}</strong>
+                    <span class="block text-[10px] text-stone-400 mt-0.5">Arah terbaik menghadap saat doa / langkah awal</span>
                 </div>
-                <div class="p-2.5 rounded-xl bg-red-950/40 border border-red-500/30">
-                    <span class="text-[10px] text-red-400 font-bold uppercase block">🐉 Hindari Arah (Nogo Dino)</span>
-                    <strong class="text-stone-100 text-sm">${kitabWeton.nogo}</strong>
-                    <span class="text-[10px] text-stone-400 block mt-0.5">Jangan berangkat lurus menantang arah ini</span>
+                <div class="bg-red-950/40 border border-red-500/30 p-2.5 rounded-xl">
+                    <span class="text-[10px] font-bold uppercase text-red-400 block">🚫 Arah Pantangan (Nogo Dino)</span>
+                    <strong class="text-sm text-stone-100">${info.kitabRow.nogo}</strong>
+                    <span class="block text-[10px] text-stone-400 mt-0.5">Jangan berangkat tepat menantang arah ini</span>
                 </div>
             `;
 
-            document.getElementById('detail-kitab-quote').textContent =
-                `Kutipan Kitab (#${kitabWeton.no}): "Yen ono dino ${info.weton}, Nogo dino ono ${kitabWeton.nogo.split(' ')[0]} = Joyo dino ${kitabWeton.joyo.split(' (')[0]}, ${kitabWeton.arahPasaran}."`;
+            document.getElementById('detail-kitab-quote').innerHTML = `
+                Kutipan Kitab (No. ${info.kitabRow.no}): <em>"Yen ono dino ${info.weton}, Nogo dino ono ${info.kitabRow.nogo} = Joyo dino ${info.kitabRow.joyo}, ${info.kitabRow.arahPasaran}."</em>
+            `;
 
-            // Ceklis 4 Filter Kitab
+            // Ceklis Kelayakan Tanggal Menurut Kitab
             document.getElementById('detail-checklist').innerHTML = `
-                <div class="flex items-center justify-between">
-                    <span class="text-stone-400">1. Hitungan Weton Pasangan + Hari Akad:</span>
-                    <span class="${evalRes.hasilPetung.baik ? 'text-emerald-400' : 'text-red-400'} font-bold">${evalRes.hasilPetung.nama} (${evalRes.hasilPetung.baik ? 'Baik' : 'Kurang Baik'})</span>
+                <div class="flex items-center justify-between py-1 border-b border-stone-800/70">
+                    <span class="text-stone-400">1. Hitungan Petung Pasangan + Hari Akad:</span>
+                    <span class="font-bold ${evalRes.hasilPetung.baik ? 'text-emerald-400' : 'text-red-400'}">
+                        (${evalRes.totalCoupleNeptu} + ${info.neptu} = ${evalRes.totalDenganHariAkad}) &rarr; Tibo ${evalRes.hasilPetung.nama}
+                    </span>
                 </div>
-                <div class="flex items-center justify-between">
-                    <span class="text-stone-400">2. Bebas 5 Hari Ba'as Tanggal:</span>
-                    <span class="${!evalRes.isBaasTanggal ? 'text-emerald-400' : 'text-red-400'} font-bold">${!evalRes.isBaasTanggal ? '✓ Aman' : '✗ Kena Ba\'as Tanggal'}</span>
+                <div class="flex items-center justify-between py-1 border-b border-stone-800/70">
+                    <span class="text-stone-400">2. Bebas 5 Hari Ba'as Tanggal (Naas):</span>
+                    <span class="font-bold ${!evalRes.isBaasTanggal ? 'text-emerald-400' : 'text-red-400'}">
+                        ${!evalRes.isBaasTanggal ? '✅ Aman (Bukan Ba\'as Tanggal)' : '🚫 Terkena Ba\'as Tanggal'}
+                    </span>
                 </div>
-                <div class="flex items-center justify-between">
-                    <span class="text-stone-400">3. Bebas Was Wulan (${info.wulanObj.nama}):</span>
-                    <span class="${!evalRes.isWasWulan ? 'text-emerald-400' : 'text-red-400'} font-bold">${!evalRes.isWasWulan ? '✓ Aman' : '✗ Kena Was Wulan'}</span>
+                <div class="flex items-center justify-between py-1 border-b border-stone-800/70">
+                    <span class="text-stone-400">3. Bebas Was Wulan ${info.wulanObj.nama}:</span>
+                    <span class="font-bold ${!evalRes.isWasWulan ? 'text-emerald-400' : 'text-red-400'}">
+                        ${!evalRes.isWasWulan ? '✅ Aman' : `🚫 Terkena Was Wulan (${info.dino})`}
+                    </span>
                 </div>
-                <div class="flex items-center justify-between">
-                    <span class="text-stone-400">4. Bebas Wase Tahun (${info.tahunWinduObj.nama}):</span>
-                    <span class="${!evalRes.isWaseTahun ? 'text-emerald-400' : 'text-red-400'} font-bold">${!evalRes.isWaseTahun ? '✓ Aman' : '✗ Kena Wase Tahun'}</span>
+                <div class="flex items-center justify-between py-1">
+                    <span class="text-stone-400">4. Bebas Wase Tahun ${info.tahunWinduObj.nama}:</span>
+                    <span class="font-bold ${!evalRes.isWaseTahun ? 'text-emerald-400' : 'text-red-400'}">
+                        ${!evalRes.isWaseTahun ? '✅ Aman' : `🚫 Terkena Wase Tahun (${info.tahunWinduObj.wase})`}
+                    </span>
                 </div>
             `;
         }
 
         // =====================================================================
-        // INTERAKSI & INISIALISASI
+        // INTERAKSI PENGGUNA (EVENT HANDLERS)
         // =====================================================================
-        function getNamaBulan(idx) {
-            const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            return bulan[idx];
-        }
-
         function onCoupleChange() {
             state.suamiDino = document.getElementById('suami-dino').value;
             state.suamiPasaran = document.getElementById('suami-pasaran').value;
@@ -969,57 +1210,89 @@
 
             evaluateCoupleCompatibility();
             renderCalendar();
-        }
-
-        function selectDate(dateStr) {
-            state.selectedDateStr = dateStr;
-            renderCalendar();
+            renderSelectedDateDetail();
         }
 
         function changeMonth(delta) {
-            let newMonth = state.viewMonth + delta;
-            let newYear = state.viewYear;
+            let newMonth = state.calMonth + delta;
+            let newYear = state.calYear;
+
             if (newMonth < 0) {
                 newMonth = 11;
-                newYear--;
+                newYear -= 1;
             } else if (newMonth > 11) {
                 newMonth = 0;
-                newYear++;
+                newYear += 1;
             }
-            state.viewMonth = newMonth;
-            state.viewYear = newYear;
-            state.selectedDateStr = "";
+
+            if (newYear < 2024) newYear = 2024;
+            if (newYear > 2032) newYear = 2032;
+
+            state.calMonth = newMonth;
+            state.calYear = newYear;
             renderCalendar();
         }
 
         function onMonthYearSelect() {
-            state.viewMonth = parseInt(document.getElementById('cal-month').value, 10);
-            state.viewYear = parseInt(document.getElementById('cal-year').value, 10);
-            state.selectedDateStr = "";
+            state.calMonth = parseInt(document.getElementById('cal-month').value, 10);
+            state.calYear = parseInt(document.getElementById('cal-year').value, 10);
             renderCalendar();
         }
 
-        window.onload = function () {
-            // Isi pilihan tahun (2025 s/d 2032)
-            const yearSelect = document.getElementById('cal-year');
-            let yearOpts = '';
-            for (let y = 2025; y <= 2032; y++) {
-                yearOpts += `<option value="${y}">${y}</option>`;
-            }
-            yearSelect.innerHTML = yearOpts;
-
-            // Deteksi tanggal hari ini
+        function goToToday() {
             const now = new Date();
-            state.viewYear = now.getFullYear();
-            state.viewMonth = now.getMonth();
-
-            const todayInfo = getJavaneseDateDetails(now.getFullYear(), now.getMonth(), now.getDate());
-            document.getElementById('today-info-badge').textContent =
-                `${todayInfo.weton}, ${now.getDate()} ${getNamaBulan(now.getMonth())} ${now.getFullYear()} (${todayInfo.tglJawa} ${todayInfo.wulanObj.nama} ${todayInfo.tahunJawaAngka} J)`;
-
-            evaluateCoupleCompatibility();
+            state.calYear = now.getFullYear();
+            state.calMonth = now.getMonth();
+            state.selectedDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0);
             renderCalendar();
-        };
+            renderSelectedDateDetail();
+        }
+
+        function selectDate(year, month, day, scrollOnMobile) {
+            state.selectedDate = new Date(year, month, day, 12, 0, 0);
+            renderCalendar();
+            renderSelectedDateDetail();
+
+            if (scrollOnMobile && window.innerWidth < 1024) {
+                const detailEl = document.getElementById('detail-section-panel');
+                if (detailEl) {
+                    detailEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        }
+
+        // =====================================================================
+        // INISIALISASI UTAMA SAAT HALAMAN DIBUKA
+        // =====================================================================
+        function initApp() {
+            try {
+                const now = new Date();
+                state.calYear = now.getFullYear();
+                state.calMonth = now.getMonth();
+                state.selectedDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0);
+
+                // Pastikan tahun sekarang ada di pilihan dropdown
+                const yearSelect = document.getElementById('cal-year');
+                if (yearSelect && !Array.from(yearSelect.options).some(o => parseInt(o.value, 10) === state.calYear)) {
+                    const opt = document.createElement('option');
+                    opt.value = String(state.calYear);
+                    opt.textContent = String(state.calYear);
+                    yearSelect.appendChild(opt);
+                }
+
+                updateRealtimeBadge();
+                setInterval(updateRealtimeBadge, 1000);
+
+                evaluateCoupleCompatibility();
+                renderCalendar();
+                renderSelectedDateDetail();
+            } catch (err) {
+                console.error("Gagal memuat SHIMON RABI:", err);
+            }
+        }
+
+        // Jalankan langsung agar tidak pernah tertahan di "Memuat..."
+        initApp();
     </script>
 </body>
 </html>
