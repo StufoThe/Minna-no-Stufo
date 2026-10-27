@@ -1,0 +1,3080 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JFT-Basic Kotoba & Kanji Master</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc;
+        }
+        .jp-font {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        /* Card Flip Styling */
+        .perspective {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-30">
+        <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl">🇯🇵</span>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">JFT-Basic Kotoba Master</h1>
+                    <p class="text-xs text-indigo-200">Kuasai Kosakata & Kanji Jebakan Ujian</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 bg-indigo-700 px-3 py-1.5 rounded-full text-xs font-medium">
+                <span>⭐ Dikuasai:</span>
+                <span id="mastered-count" class="font-bold text-amber-300">0/0</span>
+            </div>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <div class="max-w-3xl mx-auto px-4 flex space-x-1 overflow-x-auto border-t border-indigo-500/40 pt-1">
+            <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn flex-1 py-2.5 px-3 text-xs sm:text-sm font-semibold border-b-2 border-white text-white whitespace-nowrap transition">
+                📝 Simulasi Ujian
+            </button>
+            <button onclick="switchTab('flashcard')" id="tab-flashcard" class="tab-btn flex-1 py-2.5 px-3 text-xs sm:text-sm font-medium border-b-2 border-transparent text-indigo-200 hover:text-white whitespace-nowrap transition">
+                🃏 Flashcard Visual
+            </button>
+            <button onclick="switchTab('traps')" id="tab-traps" class="tab-btn flex-1 py-2.5 px-3 text-xs sm:text-sm font-medium border-b-2 border-transparent text-indigo-200 hover:text-white whitespace-nowrap transition">
+                ⚠️ Jebakan Mirip
+            </button>
+            <button onclick="switchTab('list')" id="tab-list" class="tab-btn flex-1 py-2.5 px-3 text-xs sm:text-sm font-medium border-b-2 border-transparent text-indigo-200 hover:text-white whitespace-nowrap transition">
+                📚 Daftar Lengkap
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-3xl w-full mx-auto p-4 pb-16">
+
+        <!-- Category Filter Bar (Shared for Quiz & Flashcards) -->
+        <div id="category-bar" class="mb-4 flex items-center space-x-2 overflow-x-auto pb-1.5">
+            <button onclick="setCategory('all')" data-cat="all" class="cat-pill bg-indigo-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm transition">
+                📚 Semua Materi (<span id="count-all">0</span>)
+            </button>
+            <button onclick="setCategory('unmastered')" data-cat="unmastered" class="cat-pill bg-amber-50 text-amber-800 border border-amber-300 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap hover:bg-amber-100 transition">
+                🎯 Belum Hafal (<span id="count-unmastered">0</span>)
+            </button>
+            <button onclick="setCategory('soal_kamu')" data-cat="soal_kamu" class="cat-pill bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap hover:bg-slate-50 transition">
+                🔥 Dari Soalmu Tadi
+            </button>
+            <button onclick="setCategory('dapur')" data-cat="dapur" class="cat-pill bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap hover:bg-slate-50 transition">
+                🍳 Makan & Memasak
+            </button>
+            <button onclick="setCategory('bahan')" data-cat="bahan" class="cat-pill bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap hover:bg-slate-50 transition">
+                🥬 Makanan & Alam
+            </button>
+            <button onclick="setCategory('kanji')" data-cat="kanji" class="cat-pill bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap hover:bg-slate-50 transition">
+                🈲 Kanji Jebakan Mirip
+            </button>
+            <button onclick="setCategory('aktivitas')" data-cat="aktivitas" class="cat-pill bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap hover:bg-slate-50 transition">
+                🧹 Rumah & Aktivitas
+            </button>
+            <button onclick="setCategory('kota')" data-cat="kota" class="cat-pill bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap hover:bg-slate-50 transition">
+                🏪 Belanja, Transport & Kerja
+            </button>
+            <button onclick="setCategory('kesehatan')" data-cat="kesehatan" class="cat-pill bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap hover:bg-slate-50 transition">
+                🏥 Kesehatan & Gejala
+            </button>
+            <button onclick="setCategory('sifat')" data-cat="sifat" class="cat-pill bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap hover:bg-slate-50 transition">
+                ✨ Kata Sifat & Kondisi
+            </button>
+        </div>
+
+        <!-- SECTION 1: QUIZ (SIMULASI UJIAN) -->
+        <section id="section-quiz" class="space-y-4">
+            <!-- Quiz Score & Progress Header -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm" id="quiz-progress-badge">
+                        1/10
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium">Mode Latihan Soal JFT</p>
+                        <p class="text-sm font-bold text-slate-800" id="quiz-type-label">Tebak Kosakata Gambar</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="text-right">
+                        <p class="text-xs text-slate-400">Skor Benar</p>
+                        <p class="text-base font-bold text-emerald-600" id="quiz-score-display">0</p>
+                    </div>
+                    <button onclick="startNewQuiz()" title="Acak Ulang Soal" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition">
+                        🔄
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Card (Google Form / JFT Style) -->
+            <div id="quiz-card" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-indigo-50/70 px-5 py-2.5 border-b border-slate-100 flex justify-between items-center">
+                    <span class="text-xs font-semibold text-indigo-700 uppercase tracking-wider" id="quiz-cat-badge">Script & Vocabulary (文字・語彙)</span>
+                    <span class="text-xs font-medium text-slate-400">4 poin</span>
+                </div>
+
+                <div class="p-5 sm:p-6">
+                    <!-- Visual Illustration Container -->
+                    <div id="quiz-visual-box" class="mb-5 flex flex-col items-center justify-center bg-slate-50 rounded-2xl p-6 border border-slate-200/80 min-h-[180px]">
+                        <!-- Filled dynamically by JS -->
+                    </div>
+
+                    <!-- Sentence Question (for Kanji or Context questions) -->
+                    <div id="quiz-sentence-box" class="mb-5 hidden">
+                        <div class="bg-slate-100 p-4 rounded-xl border-l-4 border-indigo-500">
+                            <p id="quiz-sentence-jp" class="jp-font text-lg sm:text-xl font-bold text-slate-800 leading-relaxed"></p>
+                            <p id="quiz-sentence-id" class="text-xs text-slate-500 mt-1"></p>
+                        </div>
+                    </div>
+
+                    <p id="quiz-prompt-text" class="text-sm font-medium text-slate-600 mb-4">Pilih kosakata bahasa Jepang yang paling tepat:</p>
+
+                    <!-- Options List (Radio Button Look like Google Forms) -->
+                    <div id="quiz-options" class="space-y-2.5">
+                        <!-- Options populated by JS -->
+                    </div>
+
+                    <!-- Explanation Feedback Box -->
+                    <div id="quiz-feedback" class="mt-5 hidden rounded-xl p-4 border">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span id="feedback-icon" class="text-xl"></span>
+                                <h4 id="feedback-title" class="font-bold text-sm"></h4>
+                            </div>
+                            <button onclick="speakCurrentQuizWord()" class="flex items-center space-x-1 text-xs bg-white/90 hover:bg-white px-2.5 py-1 rounded-lg shadow-sm border border-slate-200 font-medium text-slate-700 transition">
+                                <span>🔊</span>
+                                <span>Dengarkan</span>
+                            </button>
+                        </div>
+                        <div id="feedback-body" class="mt-2 text-xs sm:text-sm space-y-1.5 leading-relaxed"></div>
+                        
+                        <div class="mt-4 flex justify-end">
+                            <button onclick="nextQuizQuestion()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm shadow-sm transition flex items-center space-x-1">
+                                <span>Soal Berikutnya</span>
+                                <span>→</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: FLASHCARD VISUAL -->
+        <section id="section-flashcard" class="hidden space-y-4">
+            <div class="flex items-center justify-between bg-white px-4 py-3 rounded-2xl shadow-sm border border-slate-200">
+                <span class="text-xs font-semibold text-slate-500" id="fc-counter">Kartu 1 dari 32</span>
+                <div class="flex items-center space-x-2">
+                    <button onclick="shuffleFlashcards()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition">
+                        🔀 Acak Kartu
+                    </button>
+                    <button onclick="toggleMasteredCurrent()" id="fc-master-btn" class="text-xs bg-slate-100 hover:bg-amber-100 text-slate-600 px-3 py-1.5 rounded-lg font-medium transition">
+                        ☆ Tandai Hafal
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3D Flip Card -->
+            <div class="perspective w-full h-80 sm:h-96 cursor-pointer select-none" onclick="flipCard()">
+                <div id="fc-inner" class="transform-style-3d relative w-full h-full">
+                    
+                    <!-- Front of Flashcard -->
+                    <div class="backface-hidden absolute inset-0 bg-white rounded-3xl shadow-md border border-slate-200 p-6 flex flex-col items-center justify-between">
+                        <div class="w-full flex justify-between items-center">
+                            <span id="fc-badge-front" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600">Kategori</span>
+                            <span class="text-xs text-slate-400">Ketuk untuk balik 👆</span>
+                        </div>
+
+                        <div id="fc-front-content" class="flex-1 flex flex-col items-center justify-center text-center w-full my-2">
+                            <!-- Dynamic SVG / Emoji & Question -->
+                        </div>
+
+                        <div class="w-full text-center">
+                            <p class="text-xs text-slate-400">Apa bahasa Jepangnya?</p>
+                        </div>
+                    </div>
+
+                    <!-- Back of Flashcard -->
+                    <div class="backface-hidden rotate-y-180 absolute inset-0 bg-gradient-to-br from-indigo-600 to-indigo-800 text-white rounded-3xl shadow-md p-6 flex flex-col items-center justify-between">
+                        <div class="w-full flex justify-between items-center">
+                            <span class="text-xs font-medium text-indigo-200">Jawaban & Cara Ingat</span>
+                            <button onclick="event.stopPropagation(); speakCurrentFlashcard();" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1 transition">
+                                <span>🔊</span>
+                                <span>Suara</span>
+                            </button>
+                        </div>
+
+                        <div class="flex-1 flex flex-col items-center justify-center text-center w-full">
+                            <p id="fc-back-kana" class="jp-font text-3xl sm:text-4xl font-bold tracking-wide mb-1"></p>
+                            <p id="fc-back-kanji" class="jp-font text-xl text-indigo-200 font-medium mb-2"></p>
+                            <p id="fc-back-romaji" class="text-xs uppercase tracking-widest text-amber-300 font-semibold mb-3"></p>
+                            <p id="fc-back-meaning" class="text-lg font-bold bg-white/10 px-4 py-1.5 rounded-xl mb-3"></p>
+                            <div class="bg-indigo-950/50 p-3 rounded-xl max-w-md border border-indigo-400/30">
+                                <p class="text-xs text-indigo-100 leading-relaxed" id="fc-back-tip"></p>
+                            </div>
+                        </div>
+
+                        <div class="w-full text-center">
+                            <span class="text-xs text-indigo-200">Ketuk untuk kembali ke depan</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Flashcard Controls -->
+            <div class="flex items-center justify-between gap-3 pt-2">
+                <button onclick="prevFlashcard()" class="flex-1 bg-white hover:bg-slate-50 text-slate-700 font-semibold py-3 px-4 rounded-2xl shadow-sm border border-slate-200 transition">
+                    ← Sebelumnya
+                </button>
+                <button onclick="flipCard()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold py-3 px-5 rounded-2xl transition">
+                    🔄 Balik
+                </button>
+                <button onclick="nextFlashcard()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-2xl shadow-sm transition">
+                    Selanjutnya →
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 3: JEBAKAN MIRIP (COMPARISON GUIDE) -->
+        <section id="section-traps" class="hidden space-y-4">
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                <h2 class="font-bold text-amber-900 text-sm sm:text-base flex items-center gap-2">
+                    <span>💡</span>
+                    <span>Kenapa Kotoba JFT Terasa Sulit?</span>
+                </h2>
+                <p class="text-xs sm:text-sm text-amber-800 mt-1 leading-relaxed">
+                    Pembuat soal JFT sengaja memasangkan kata-kata yang <strong>bunyinya mirip</strong> (seperti <em>muku</em> vs <em>maku</em>) atau <strong>tindakannya mirip di meja makan</strong> (dicelup vs dituang vs ditaruh atasnya). Hafalkan perbedaannya secara berdampingan di bawah ini!
+                </p>
+            </div>
+
+            <div id="traps-container" class="space-y-4">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 4: DAFTAR LENGKAP & PENCARIAN -->
+        <section id="section-list" class="hidden space-y-4">
+            <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
+                <div class="flex items-center space-x-2 flex-1">
+                    <span class="text-slate-400 pl-2">🔍</span>
+                    <input type="text" id="search-input" oninput="renderWordList()" placeholder="Cari kosakata (contoh: kupas, dokter, tsukeru, ねぎ, demam)..." class="w-full text-sm focus:outline-none text-slate-700">
+                </div>
+                <div class="flex items-center space-x-2 border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100">
+                    <select id="list-cat-filter" onchange="renderWordList()" class="text-xs bg-slate-100 text-slate-700 font-medium px-3 py-2 rounded-xl focus:outline-none">
+                        <option value="all">Semua Kategori</option>
+                        <option value="soal_kamu">🔥 Soal Screenshot</option>
+                        <option value="dapur">🍳 Makan & Memasak</option>
+                        <option value="bahan">🥬 Makanan & Alam</option>
+                        <option value="kanji">🈲 Kanji Jebakan</option>
+                        <option value="aktivitas">🧹 Rumah & Aktivitas</option>
+                        <option value="kota">🏪 Belanja, Transport & Kerja</option>
+                        <option value="kesehatan">🏥 Kesehatan & Gejala</option>
+                        <option value="sifat">✨ Kata Sifat & Kondisi</option>
+                    </select>
+                    <button onclick="resetProgress()" class="text-xs text-rose-600 hover:bg-rose-50 px-2.5 py-2 rounded-xl font-medium transition whitespace-nowrap" title="Reset Hafalan">
+                        🗑️ Reset
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between px-1">
+                <p id="list-result-count" class="text-xs font-semibold text-slate-500">Menampilkan semua kosakata</p>
+                <p class="text-xs text-slate-400">Klik 🔊 untuk suara • Klik ⭐ untuk tandai hafal</p>
+            </div>
+
+            <div id="word-list-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // ==========================================
+        // DATABASE LENGKAP KOTOBA & KANJI JFT-BASIC (120+ ITEM)
+        // ==========================================
+        const vocabData = [
+            // --- 1. DARI SOAL GAMBAR PENGGUNA (14 ITEM) ---
+            {
+                id: 1,
+                category: 'dapur',
+                fromUserExam: true,
+                kana: 'つける',
+                kanji: '漬ける / 付ける',
+                romaji: 'tsukeru',
+                meaning: 'Mencelupkan (ke saus/kecap)',
+                visualType: 'svg',
+                svg: `<svg viewBox="0 0 120 100" class="w-28 h-28"><ellipse cx="60" cy="78" rx="38" ry="14" fill="#e2e8f0" stroke="#475569" stroke-width="2.5"/><ellipse cx="60" cy="79" rx="30" ry="9" fill="#7c2d12"/><rect x="48" y="38" width="22" height="32" rx="3" fill="#fef3c7" stroke="#475569" stroke-width="2"/><path d="M48 56 Q60 62 70 56 L70 70 L48 70 Z" fill="#9a3412"/><line x1="78" y1="10" x2="58" y2="48" stroke="#b45309" stroke-width="3.5" stroke-linecap="round"/><line x1="88" y1="14" x2="64" y2="50" stroke="#b45309" stroke-width="3.5" stroke-linecap="round"/><path d="M35 42 L35 62 M30 57 L35 63 L40 57" stroke="#2563eb" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`,
+                tip: 'Ingat: TSUkeru = TSU-tusuk/celupkan makanan ke piring saus kecil.',
+                options: ['つける', 'のせる', 'かける', 'まぜる'],
+                optionMeanings: {
+                    'つける': 'Mencelupkan makanan ke saus',
+                    'のせる': 'Menaruh di atas (topping)',
+                    'かける': 'Menuangkan/menyiram saus ke makanan',
+                    'まぜる': 'Mengaduk / mencampur'
+                }
+            },
+            {
+                id: 2,
+                category: 'dapur',
+                fromUserExam: true,
+                kana: 'のせる',
+                kanji: '乗せる / 載せる',
+                romaji: 'noseru',
+                meaning: 'Menaruh di atas (topping)',
+                visualType: 'emoji',
+                emoji: '🍜🥚⬆️',
+                tip: 'Menaruh telur atau daun bawang di atas mie/nasi. Ingat: NOseru = NOngkrong di atas.',
+                options: ['のせる', 'つける', 'かける', 'いれる'],
+                optionMeanings: {
+                    'のせる': 'Menaruh di atas makanan',
+                    'つける': 'Mencelupkan ke saus',
+                    'かける': 'Menuangkan cairan/saus',
+                    'いれる': 'Memasukkan ke dalam wadah'
+                }
+            },
+            {
+                id: 3,
+                category: 'dapur',
+                fromUserExam: true,
+                kana: 'かける',
+                kanji: '掛ける',
+                romaji: 'kakeru',
+                meaning: 'Menuangkan / Menyiramkan (saus/kecap)',
+                visualType: 'emoji',
+                emoji: '🍾🫗🍛',
+                tip: 'Botol saus yang dituangkan dari atas ke makanan. Beda dengan つける (makanan yang dicelup ke saus).',
+                options: ['かける', 'つける', 'のせる', 'むく'],
+                optionMeanings: {
+                    'かける': 'Menuangkan/menyiram saus ke atas makanan',
+                    'つける': 'Mencelupkan makanan ke saus',
+                    'のせる': 'Menaruh topping di atas',
+                    'むく': 'Mengupas kulit'
+                }
+            },
+            {
+                id: 4,
+                category: 'dapur',
+                fromUserExam: true,
+                kana: 'むく',
+                kanji: '剥く',
+                romaji: 'muku',
+                meaning: 'Mengupas (kulit buah/sayur)',
+                visualType: 'svg',
+                svg: `<svg viewBox="0 0 120 100" class="w-28 h-28"><path d="M55 20 Q75 35 68 78" stroke="#eab308" stroke-width="18" stroke-linecap="round" fill="none"/><path d="M55 22 Q72 35 66 75" stroke="#fef08a" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M62 48 Q40 50 28 70" stroke="#facc15" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M65 50 Q85 52 92 70" stroke="#eab308" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M35 30 Q25 40 25 52 M20 46 L25 53 L31 47" stroke="#2563eb" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`,
+                tip: 'Jebakan klasik: むく (MUku) = MengUpas kulit pisang/apel. Jangan tertukar dengan まく (MAku = menggulung).',
+                options: ['むく', 'まく', 'いれる', 'きる'],
+                optionMeanings: {
+                    'むく': 'Mengupas (kulit buah/sayur)',
+                    'まく': 'Menggulung (sushi/syal) / menabur',
+                    'いれる': 'Memasukkan',
+                    'きる': 'Memotong'
+                }
+            },
+            {
+                id: 5,
+                category: 'dapur',
+                fromUserExam: true,
+                kana: 'まく',
+                kanji: '巻く / 蒔く',
+                romaji: 'maku',
+                meaning: 'Menggulung (nori/syal) / Menabur',
+                visualType: 'emoji',
+                emoji: '🍣🧣🌀',
+                tip: 'Ingat: MAku = seperti MAkizushi (sushi gulung). Kalau mengupas pisang itu MUku (むく).',
+                options: ['まく', 'むく', 'やく', 'わかす'],
+                optionMeanings: {
+                    'まく': 'Menggulung / melilitkan',
+                    'むく': 'Mengupas kulit buah',
+                    'やく': 'Memanggang / membakar',
+                    'わかす': 'Mendidihkan air'
+                }
+            },
+            {
+                id: 6,
+                category: 'bahan',
+                fromUserExam: true,
+                kana: 'ねぎ',
+                kanji: '葱',
+                romaji: 'negi',
+                meaning: 'Daun Bawang',
+                visualType: 'svg',
+                svg: `<svg viewBox="0 0 120 100" class="w-28 h-28"><rect x="15" y="62" width="55" height="24" rx="4" fill="#f8fafc" stroke="#64748b" stroke-width="2"/><circle cx="30" cy="74" r="5" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/><circle cx="40" cy="76" r="5" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/><circle cx="50" cy="73" r="5" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/><path d="M35 15 L95 82" stroke="#f1f5f9" stroke-width="9" stroke-linecap="round"/><path d="M35 15 L62 45" stroke="#15803d" stroke-width="9" stroke-linecap="round"/><path d="M48 12 L102 76" stroke="#e2e8f0" stroke-width="8" stroke-linecap="round"/><path d="M48 12 L72 40" stroke="#16a34a" stroke-width="8" stroke-linecap="round"/></svg>`,
+                tip: 'Batang bawahnya putih panjang, atasnya hijau dan sering diiris bulat kecil untuk ramen/udon.',
+                options: ['ねぎ', 'わさび', 'ナッツ', 'しょうが'],
+                optionMeanings: {
+                    'ねぎ': 'Daun bawang',
+                    'わさび': 'Wasabi (sambal hijau Jepang)',
+                    'ナッツ': 'Kacang-kacangan (Nuts)',
+                    'しょうが': 'Jahe'
+                }
+            },
+            {
+                id: 7,
+                category: 'bahan',
+                fromUserExam: true,
+                kana: 'こうげん',
+                kanji: '高原',
+                romaji: 'kougen',
+                meaning: 'Dataran Tinggi (Pegunungan Hijau)',
+                visualType: 'svg',
+                svg: `<svg viewBox="0 0 120 100" class="w-28 h-28"><rect width="120" height="100" rx="14" fill="#7dd3fc"/><polygon points="20,70 55,22 95,70" fill="#e0f2fe"/><polygon points="55,22 72,45 45,50" fill="#bae6fd"/><ellipse cx="88" cy="48" rx="22" ry="6" fill="#ffffff"/><path d="M0 65 Q45 50 120 68 L120 100 L0 100 Z" fill="#4ade80"/><path d="M0 75 Q60 65 120 80 L120 100 L0 100 Z" fill="#22c55e"/><circle cx="25" cy="52" r="10" fill="#15803d"/><rect x="23" y="60" width="4" height="8" fill="#78350f"/></svg>`,
+                tip: 'Ada gunung tinggi & awan sejajar dengan bukit rumput: 高 (Kou = Tinggi) + 原 (Gen = Padang) = Dataran Tinggi.',
+                options: ['こうげん', 'そうげん', 'さばく', 'かいがん'],
+                optionMeanings: {
+                    'こうげん': 'Dataran tinggi (高原)',
+                    'そうげん': 'Padang rumput datar (草原)',
+                    'さばく': 'Padang pasir / gurun (砂漠)',
+                    'かいがん': 'Pantai / pesisir (海岸)'
+                }
+            },
+            {
+                id: 8,
+                category: 'bahan',
+                fromUserExam: true,
+                kana: 'そうげん',
+                kanji: '草原',
+                romaji: 'sougen',
+                meaning: 'Padang Rumput Luas',
+                visualType: 'emoji',
+                emoji: '🌾🌿🐎',
+                tip: '草 (Sou/Kusa = Rumput) + 原 (Gen = Padang). Hamparan rumput datar luas tanpa gunung tinggi.',
+                options: ['そうげん', 'こうげん', 'さばく', 'もり'],
+                optionMeanings: {
+                    'そうげん': 'Padang rumput (草原)',
+                    'こうげん': 'Dataran tinggi (高原)',
+                    'さばく': 'Gurun pasir (砂漠)',
+                    'もり': 'Hutan lebat (森)'
+                }
+            },
+            {
+                id: 9,
+                category: 'bahan',
+                fromUserExam: true,
+                kana: 'さばく',
+                kanji: '砂漠',
+                romaji: 'sabaku',
+                meaning: 'Padang Pasir / Gurun',
+                visualType: 'emoji',
+                emoji: '🏜️🐪☀️',
+                tip: 'Ingat: SAbaku = SAhara (Gurun pasir).',
+                options: ['さばく', 'そうげん', 'こうげん', 'しま'],
+                optionMeanings: {
+                    'さばく': 'Padang pasir / gurun',
+                    'そうげん': 'Padang rumput',
+                    'こうげん': 'Dataran tinggi',
+                    'しま': 'Pulau'
+                }
+            },
+            {
+                id: 10,
+                category: 'kanji',
+                fromUserExam: true,
+                kana: 'たてる',
+                kanji: '建てる',
+                romaji: 'tateru',
+                meaning: 'Membangun (rumah/gedung)',
+                sentenceJP: '家を<u>たてる</u>ために銀行からお金を借りました。',
+                sentenceID: 'Saya meminjam uang dari bank untuk membangun rumah.',
+                visualType: 'emoji',
+                emoji: '🏗️🏠🧱',
+                tip: 'Jebakan Kanji! 建てる = Membangun rumah (tidak ada radikal orang 亻 di kirinya). Kalau 健 itu artinya sehat (Kenkou). Kalau 立てる artinya mendirikan/menegakkan barang.',
+                options: ['建てる', '健てる', '立てる', '主てる'],
+                optionMeanings: {
+                    '建てる': 'BENAR: Membangun (rumah/bangunan)',
+                    '健てる': 'SALAH: Kanji 健 untuk "Sehat" (健康)',
+                    '立てる': 'SALAH: Menegakkan benda / membuat rencana',
+                    '主てる': 'SALAH: Kanji 主 artinya pemilik/utama'
+                }
+            },
+            {
+                id: 11,
+                category: 'kanji',
+                fromUserExam: true,
+                kana: 'おいしゃさん',
+                kanji: 'お医者さん',
+                romaji: 'oishasan',
+                meaning: 'Dokter (sopan)',
+                sentenceJP: 'あの人のお父さんは<u>おいしゃさん</u>らしいですよ。',
+                sentenceID: 'Katanya ayah orang itu adalah seorang dokter, lho.',
+                visualType: 'emoji',
+                emoji: '👨‍⚕️🩺🏥',
+                tip: 'Perhatikan Kanji 医 (I = Medis, di dalamnya ada panah 矢) + 者 (Sha = Orang). Jangan tertukar dengan 臣 (menteri) atau 考 (berpikir)!',
+                options: ['お医者さん', 'お臣者さん', 'お医考さん', 'お臣考さん'],
+                optionMeanings: {
+                    'お医者さん': 'BENAR: 医 (medis) + 者 (orang) = Dokter',
+                    'お臣者さん': 'SALAH: 臣 bukan kanji medis',
+                    'お医考さん': 'SALAH: 考 artinya berpikir (kangaeru)',
+                    'お臣考さん': 'SALAH: Kedua kanjinya pengecoh'
+                }
+            },
+            {
+                id: 12,
+                category: 'kanji',
+                fromUserExam: true,
+                kana: 'かぜ',
+                kanji: '風',
+                romaji: 'kaze',
+                meaning: 'Angin',
+                sentenceJP: 'こんなに強い<u>かぜ</u>はいままでにけいけんしたことがありません。',
+                sentenceID: 'Saya belum pernah mengalami angin sekencang ini sebelumnya.',
+                visualType: 'emoji',
+                emoji: '🌬️🍃🌀',
+                tip: 'Kanji 風 (Kaze = Angin) di dalamnya ada radikal 虫. Hati-hati pengecoh 凪 (angin reda), 瓜 (melon), atau 用 (urusan).',
+                options: ['風', '凪', '瓜', '用'],
+                optionMeanings: {
+                    '風': 'BENAR: Angin (Kaze)',
+                    '凪': 'SALAH: Nagi (angin laut yang tenang)',
+                    '瓜': 'SALAH: Uri (buah labu/melon)',
+                    '用': 'SALAH: You (keperluan/menggunakan)'
+                }
+            },
+            {
+                id: 13,
+                category: 'aktivitas',
+                fromUserExam: true,
+                kana: 'きねんしゃしんをとる',
+                kanji: '記念写真を撮る',
+                romaji: 'kinen shashin o toru',
+                meaning: 'Mengambil foto kenang-kenangan / selfie bersama',
+                visualType: 'emoji',
+                emoji: '👘🤳📸✌️',
+                tip: 'Gambar orang pakai kimono lalu foto bersama/selfie di JFT biasanya menanyakan 写真を撮る (shashin o toru) atau 記念写真 (foto kenang-kenangan).',
+                options: ['きねんしゃしんをとる', 'えをかく', 'でんわをかける', 'ビデオをみる'],
+                optionMeanings: {
+                    'きねんしゃしんをとる': 'Mengambil foto kenang-kenangan',
+                    'えをかく': 'Menggambar lukisan',
+                    'でんわをかける': 'Menelepon',
+                    'ビデオをみる': 'Menonton video'
+                }
+            },
+            {
+                id: 14,
+                category: 'bahan',
+                fromUserExam: true,
+                kana: 'かに',
+                kanji: '蟹',
+                romaji: 'kani',
+                meaning: 'Kepiting',
+                visualType: 'emoji',
+                emoji: '🦀🍲',
+                tip: 'Gambar capit kemerahan di soalmu tadi adalah かに (Kani = Kepiting). Sering muncul di topik makanan laut Jepang bersama えび (Udang) dan いか (Cumi).',
+                options: ['かに', 'えび', 'たこ', 'いか'],
+                optionMeanings: {
+                    'かに': 'Kepiting',
+                    'えび': 'Udang',
+                    'たこ': 'Gurita',
+                    'いか': 'Cumi-cumi'
+                }
+            },
+
+            // --- 2. KATEGORI DAPUR & MEMASAK (LENGKAP) ---
+            {
+                id: 15,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'まぜる',
+                kanji: '混ぜる',
+                romaji: 'mazeru',
+                meaning: 'Mengaduk / Mencampur',
+                visualType: 'emoji',
+                emoji: '🥣🥄🔄',
+                tip: 'Ingat: MAzeru = MengAduk (campur adonan atau salad).',
+                options: ['まぜる', 'かける', 'むく', 'きる'],
+                optionMeanings: {
+                    'まぜる': 'Mengaduk / mencampur',
+                    'かける': 'Menuangkan saus',
+                    'むく': 'Mengupas kulit',
+                    'きる': 'Memotong'
+                }
+            },
+            {
+                id: 16,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'やく',
+                kanji: '焼く',
+                romaji: 'yaku',
+                meaning: 'Memanggang / Membakar / Menggoreng teflon',
+                visualType: 'emoji',
+                emoji: '🥩🔥🍳',
+                tip: 'Ingat: Yakiniku, Takoyaki, Okonomiyaki -> semuanya pakai やく (dibakar/dipanggang).',
+                options: ['やく', 'あげる', 'にる', 'むす'],
+                optionMeanings: {
+                    'やく': 'Memanggang / membakar',
+                    'あげる': 'Menggoreng dalam minyak banyak (deep fry)',
+                    'にる': 'Merebus dengan bumbu',
+                    'むす': 'Mengukus'
+                }
+            },
+            {
+                id: 17,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'あげる',
+                kanji: '揚げる',
+                romaji: 'ageru',
+                meaning: 'Menggoreng (minyak banyak / deep fry)',
+                visualType: 'emoji',
+                emoji: '🍤🍗♨️',
+                tip: 'Ingat: Kara-AGE (ayam goreng tepung) -> あげる = menggoreng di minyak panas.',
+                options: ['あげる', 'やく', 'ゆでる', 'いためる'],
+                optionMeanings: {
+                    'あげる': 'Menggoreng (deep fry)',
+                    'やく': 'Memanggang / membakar',
+                    'ゆでる': 'Merebus dalam air (telur/mie)',
+                    'いためる': 'Menumis dengan sedikit minyak'
+                }
+            },
+            {
+                id: 18,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'ゆでる',
+                kanji: '茹でる',
+                romaji: 'yuderu',
+                meaning: 'Merebus di air mendidih (telur/sayur/mie)',
+                visualType: 'emoji',
+                emoji: '🥚🫧🍲',
+                tip: 'Merebus dengan air saja (tanpa kuah bumbu). Contoh: ゆでたまご (telur rebus).',
+                options: ['ゆでる', 'わかす', 'やく', 'あげる'],
+                optionMeanings: {
+                    'ゆでる': 'Merebus bahan makanan di air',
+                    'わかす': 'Mendidihkan air (airnya yang dimasak)',
+                    'やく': 'Memanggang',
+                    'あげる': 'Menggoreng'
+                }
+            },
+            {
+                id: 19,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'わかす',
+                kanji: '沸かす',
+                romaji: 'wakasu',
+                meaning: 'Mendidihkan / Memasak air',
+                visualType: 'emoji',
+                emoji: '🫖💧🔥',
+                tip: 'お湯をわかす (Oyu o wakasu) = Memasak air sampai mendidih.',
+                options: ['わかす', 'ゆでる', 'ひやす', 'こおらせる'],
+                optionMeanings: {
+                    'わかす': 'Mendidihkan air',
+                    'ゆでる': 'Merebus telur/mie',
+                    'ひやす': 'Mendinginkan di kulkas',
+                    'こおらせる': 'Membekukan'
+                }
+            },
+            {
+                id: 20,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'いためる',
+                kanji: '炒める',
+                romaji: 'itameru',
+                meaning: 'Menumis (oseng-oseng)',
+                visualType: 'emoji',
+                emoji: '🥬🥕🍳🔥',
+                tip: '野菜をいためる (Yasai o itameru) = Menumis sayur di wajan.',
+                options: ['いためる', 'あげる', 'むす', 'にる'],
+                optionMeanings: {
+                    'いためる': 'Menumis dengan sedikit minyak',
+                    'あげる': 'Menggoreng minyak banyak',
+                    'むす': 'Mengukus',
+                    'にる': 'Merebus dengan kuah bumbu'
+                }
+            },
+            {
+                id: 31,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'にる',
+                kanji: '煮る',
+                romaji: 'niru',
+                meaning: 'Merebus dengan kuah bumbu (ungkep/semur)',
+                visualType: 'emoji',
+                emoji: '🍲🥕🐟',
+                tip: 'Beda dengan ゆでる (rebus air biasa), にる adalah merebus lama dengan bumbu kecap/dashi sampai meresap.',
+                options: ['にる', 'ゆでる', 'やく', 'いためる'],
+                optionMeanings: {
+                    'にる': 'Merebus dengan bumbu',
+                    'ゆでる': 'Merebus di air tawar',
+                    'やく': 'Memanggang',
+                    'いためる': 'Menumis'
+                }
+            },
+            {
+                id: 32,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'むす',
+                kanji: '蒸す',
+                romaji: 'musu',
+                meaning: 'Mengukus (dengan uap panas)',
+                visualType: 'emoji',
+                emoji: '🥟♨️💨',
+                tip: 'Mengukus bakpao/dimsum/chawanmushi. Ingat: MUsu = MengUkus.',
+                options: ['むす', 'にる', 'あげる', 'やく'],
+                optionMeanings: {
+                    'むす': 'Mengukus',
+                    'にる': 'Merebus dengan bumbu',
+                    'あげる': 'Menggoreng (deep fry)',
+                    'やく': 'Memanggang'
+                }
+            },
+            {
+                id: 33,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'きざむ',
+                kanji: '刻む',
+                romaji: 'kizamu',
+                meaning: 'Mencincang halus (bawang/sayur)',
+                visualType: 'emoji',
+                emoji: '🔪🧅✨',
+                tip: 'Memotong kecil-kecil/mencincang daun bawang atau bawang putih = きざむ (Kizamu).',
+                options: ['きざむ', 'むく', 'つつむ', 'つぶす'],
+                optionMeanings: {
+                    'きざむ': 'Mencincang halus',
+                    'むく': 'Mengupas kulit',
+                    'つつむ': 'Membungkus',
+                    'つぶす': 'Menghancurkan / melumatkan'
+                }
+            },
+            {
+                id: 34,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'つつむ',
+                kanji: '包む',
+                romaji: 'tsutsumu',
+                meaning: 'Membungkus (gyoza/kado/bekal)',
+                visualType: 'emoji',
+                emoji: '🥟🎁👐',
+                tip: 'Membungkus isi gyoza dengan kulitnya atau membungkus kado = つつむ (Tsutsumu).',
+                options: ['つつむ', 'まく', 'むく', 'たたむ'],
+                optionMeanings: {
+                    'つつむ': 'Membungkus (menutupi seluruhnya)',
+                    'まく': 'Menggulung memanjang',
+                    'むく': 'Mengupas kulit',
+                    'たたむ': 'Melipat'
+                }
+            },
+            {
+                id: 35,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'そそぐ',
+                kanji: '注ぐ',
+                romaji: 'sosogu',
+                meaning: 'Menuangkan minuman ke gelas/cangkir',
+                visualType: 'emoji',
+                emoji: '🍶🥛🫗',
+                tip: 'Menuangkan air/teh/jus ke dalam gelas = そそぐ (Sosogu). Kalau かける menyiram saus ke atas makanan.',
+                options: ['そそぐ', 'かける', 'つける', 'こぼす'],
+                optionMeanings: {
+                    'そそぐ': 'Menuangkan cairan ke gelas',
+                    'かける': 'Menyiram saus ke makanan',
+                    'つける': 'Mencelupkan ke saus',
+                    'こぼす': 'Menumpahkan cairan'
+                }
+            },
+            {
+                id: 36,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'こぼす',
+                kanji: '零す',
+                romaji: 'kobosu',
+                meaning: 'Menumpahkan (minuman/kuah)',
+                visualType: 'emoji',
+                emoji: '☕💦😱',
+                tip: 'Tidak sengaja menumpahkan kopi/air di meja = こぼす (Kobosu).',
+                options: ['こぼす', 'そそぐ', 'おとす', 'わかす'],
+                optionMeanings: {
+                    'こぼす': 'Menumpahkan cairan',
+                    'そそぐ': 'Menuangkan ke gelas',
+                    'おとす': 'Menjatuhkan benda padat',
+                    'わかす': 'Mendidihkan air'
+                }
+            },
+            {
+                id: 37,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'のこす',
+                kanji: '残す',
+                romaji: 'nokosu',
+                meaning: 'Menyisakan makanan (tidak dihabiskan)',
+                visualType: 'emoji',
+                emoji: '🍛🙅‍♂️🍽️',
+                tip: 'ごはんを のこす (Gohan o nokosu) = Menyisakan makanan di piring karena kenyang.',
+                options: ['のこす', 'たべすぎる', 'つつむ', 'すてる'],
+                optionMeanings: {
+                    'のこす': 'Menyisakan (tidak dihabiskan)',
+                    'たべすぎる': 'Makan terlalu banyak',
+                    'つつむ': 'Membungkus',
+                    'すてる': 'Membuang'
+                }
+            },
+            {
+                id: 38,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'ひやす',
+                kanji: '冷やす',
+                romaji: 'hiyasu',
+                meaning: 'Mendinginkan (di kulkas / es)',
+                visualType: 'emoji',
+                emoji: '🍉🧊❄️',
+                tip: 'Memasukkan buah/minuman ke kulkas supaya dingin = ひやす (Hiyasu). Lawannya あたためる (Menghangatkan).',
+                options: ['ひやす', 'あたためる', 'わかす', 'やく'],
+                optionMeanings: {
+                    'ひやす': 'Mendinginkan makanan/minuman',
+                    'あたためる': 'Menghangatkan (di microwave)',
+                    'わかす': 'Mendidihkan air',
+                    'やく': 'Memanggang'
+                }
+            },
+            {
+                id: 39,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'あたためる',
+                kanji: '温める',
+                romaji: 'atatameru',
+                meaning: 'Menghangatkan / Memanaskan (bento/susu)',
+                visualType: 'emoji',
+                emoji: '🍱♨️📟',
+                tip: 'Sering ditanyakan pegawai konbini: お弁当をあたためますか (Apakah bentonya mau dihangatkan?).',
+                options: ['あたためる', 'ひやす', 'こおらせる', 'むك'],
+                optionMeanings: {
+                    'あたためる': 'Menghangatkan makanan',
+                    'ひやす': 'Mendinginkan',
+                    'こおらせる': 'Membekukan',
+                    'むく': 'Mengupas'
+                }
+            },
+            {
+                id: 40,
+                category: 'dapur',
+                fromUserExam: false,
+                kana: 'たく',
+                kanji: '炊く',
+                romaji: 'taku',
+                meaning: 'Menanak / Memasak nasi',
+                visualType: 'emoji',
+                emoji: '🍚♨️⚡',
+                tip: 'Khusus untuk memasak beras jadi nasi: ごはんを たく (Gohan o taku). Alatnya 炊飯器 (Suihanki = Rice cooker).',
+                options: ['たく', 'やく', 'むす', 'ゆでる'],
+                optionMeanings: {
+                    'たく': 'Menanak nasi',
+                    'やく': 'Memanggang roti/daging',
+                    'むす': 'Mengukus',
+                    'ゆでる': 'Merebus mie/telur'
+                }
+            },
+
+            // --- 3. KATEGORI BAHAN MAKANAN, BUMBU & ALAM ---
+            {
+                id: 21,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'わさび',
+                kanji: '山葵',
+                romaji: 'wasabi',
+                meaning: 'Wasabi (Pasta pedas hijau Jepang)',
+                visualType: 'emoji',
+                emoji: '🟢🍣🌶️',
+                tip: 'Sering muncul di pilihan ganda bersama ねぎ (daun bawang) dan しょうが (jahe).',
+                options: ['わさび', 'ねぎ', 'ナッツ', 'とうがらし'],
+                optionMeanings: {
+                    'わさび': 'Wasabi',
+                    'ねぎ': 'Daun bawang',
+                    'ナッツ': 'Kacang-kacangan',
+                    'とうがらし': 'Cabai merah'
+                }
+            },
+            {
+                id: 22,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'ナッツ',
+                kanji: 'ナッツ',
+                romaji: 'nattsu',
+                meaning: 'Kacang-kacangan (Nuts)',
+                visualType: 'emoji',
+                emoji: '🥜🌰',
+                tip: 'Dari bahasa Inggris "Nuts" -> ナッツ (Nattsu). Sering muncul di label alergi makanan Jepang.',
+                options: ['ナッツ', 'チーズ', 'ソーセージ', 'わさび'],
+                optionMeanings: {
+                    'ナッツ': 'Kacang-kacangan',
+                    'チーズ': 'Keju',
+                    'ソーセージ': 'Sosis',
+                    'わさび': 'Wasabi'
+                }
+            },
+            {
+                id: 41,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'しょうが',
+                kanji: '生姜',
+                romaji: 'shouga',
+                meaning: 'Jahe',
+                visualType: 'emoji',
+                emoji: '🫚🍵',
+                tip: 'Ingat makanan Jepang populer: 豚のしょうが焼き (Buta no shougayaki = Daging babi panggang saus jahe).',
+                options: ['しょうが', 'にんにく', 'わさび', 'ねぎ'],
+                optionMeanings: {
+                    'しょうが': 'Jahe',
+                    'にんにく': 'Bawang putih',
+                    'わさび': 'Wasabi',
+                    'ねぎ': 'Daun bawang'
+                }
+            },
+            {
+                id: 42,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'にんにく',
+                kanji: '大蒜',
+                romaji: 'ninniku',
+                meaning: 'Bawang Putih',
+                visualType: 'emoji',
+                emoji: '🧄🍜',
+                tip: 'Sering ditanyakan saat makan ramen atau gyoza: にんにくをいれますか (Pakai bawang putih?).',
+                options: ['にんにく', 'たまねぎ', 'しょうが', 'ねぎ'],
+                optionMeanings: {
+                    'にんにく': 'Bawang putih',
+                    'たまねぎ': 'Bawang bombay',
+                    'しょうが': 'Jahe',
+                    'ねぎ': 'Daun bawang'
+                }
+            },
+            {
+                id: 43,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'たまねぎ',
+                kanji: '玉ねぎ',
+                romaji: 'tamanegi',
+                meaning: 'Bawang Bombay',
+                visualType: 'emoji',
+                emoji: '🧅🔪',
+                tip: '玉 (Tama = Bola bulat) + ねぎ (Bawang) = Bawang bulat besar alias Bawang Bombay.',
+                options: ['たまねぎ', 'ねぎ', 'にんにく', 'じゃがいも'],
+                optionMeanings: {
+                    'たまねぎ': 'Bawang bombay',
+                    'ねぎ': 'Daun bawang panjang',
+                    'にんにく': 'Bawang putih',
+                    'じゃがいも': 'Kentang'
+                }
+            },
+            {
+                id: 44,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'とうがらし',
+                kanji: '唐辛子',
+                romaji: 'tougarashi',
+                meaning: 'Cabai Merah',
+                visualType: 'emoji',
+                emoji: '🌶️🔥',
+                tip: 'Bumbu bubuk cabai di meja restoran Jepang disebut 一味とうがらし (Ichimi tougarashi).',
+                options: ['とうがらし', 'こしょう', 'わさび', 'からし'],
+                optionMeanings: {
+                    'とうがらし': 'Cabai merah',
+                    'こしょう': 'Merica / lada',
+                    'わさび': 'Wasabi hijau',
+                    'からし': 'Mustard kuning pedas'
+                }
+            },
+            {
+                id: 45,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'えび',
+                kanji: '海老',
+                romaji: 'ebi',
+                meaning: 'Udang',
+                visualType: 'emoji',
+                emoji: '🦐🍤',
+                tip: 'Sering muncul di soal alergi makanan & menu tempura bersama かに (Kepiting) dan いか (Cumi).',
+                options: ['えび', 'かに', 'いか', 'たこ'],
+                optionMeanings: {
+                    'えび': 'Udang',
+                    'かに': 'Kepiting',
+                    'いか': 'Cumi-cumi',
+                    'たこ': 'Gurita'
+                }
+            },
+            {
+                id: 46,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'たこ',
+                kanji: '蛸 / タコ',
+                romaji: 'tako',
+                meaning: 'Gurita',
+                visualType: 'emoji',
+                emoji: '🐙🟢',
+                tip: 'Ingat: TAKOyaki = Bola-bola berisi potongan gurita (Tako).',
+                options: ['たこ', 'いか', 'えび', 'かに'],
+                optionMeanings: {
+                    'たこ': 'Gurita (kepala bulat, kaki 8)',
+                    'いか': 'Cumi-cumi (kepala segitiga)',
+                    'えび': 'Udang',
+                    'かに': 'Kepiting'
+                }
+            },
+            {
+                id: 47,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'いか',
+                kanji: '烏賊 / イカ',
+                romaji: 'ika',
+                meaning: 'Cumi-cumi',
+                visualType: 'emoji',
+                emoji: '🦑🍣',
+                tip: 'Badannya putih lonjong dengan ujung segitiga. Sering dipasangkan dengan たこ (Gurita) di gambar JFT.',
+                options: ['いか', 'たこ', 'かい', 'さけ'],
+                optionMeanings: {
+                    'いか': 'Cumi-cumi',
+                    'たこ': 'Gurita',
+                    'かい': 'Kerang',
+                    'さけ': 'Ikan salmon'
+                }
+            },
+            {
+                id: 48,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'す',
+                kanji: '酢',
+                romaji: 'su',
+                meaning: 'Cuka',
+                visualType: 'emoji',
+                emoji: '🍾🍋🥗',
+                tip: 'Bumbu dapur dasar Jepang (さしすせそ): さとう (Gula), しお (Garam), す (Cuka), しょうゆ (Kecap asin), みそ (Miso).',
+                options: ['す', 'しお', 'さとう', 'あぶら'],
+                optionMeanings: {
+                    'す': 'Cuka (asam)',
+                    'しお': 'Garam',
+                    'さとう': 'Gula',
+                    'あぶら': 'Minyak goreng'
+                }
+            },
+            {
+                id: 49,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'かいがん',
+                kanji: '海岸',
+                romaji: 'kaigan',
+                meaning: 'Pantai / Pesisir Laut',
+                visualType: 'emoji',
+                emoji: '🏖️🌊🌴',
+                tip: '海 (Kai = Laut) + 岸 (Gan = Tepi) = Pantai/pesisir laut.',
+                options: ['かいがん', 'こうげん', 'みずうみ', 'たき'],
+                optionMeanings: {
+                    'かいがん': 'Pantai / tepi laut',
+                    'こうげん': 'Dataran tinggi',
+                    'みずうみ': 'Danau',
+                    'たき': 'Air terjun'
+                }
+            },
+            {
+                id: 50,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'たき',
+                kanji: '滝',
+                romaji: 'taki',
+                meaning: 'Air Terjun',
+                visualType: 'emoji',
+                emoji: '🏞️💦🪨',
+                tip: 'Sering keluar di soal gambar wisata alam Jepang: たき (Taki = Air terjun) vs みずうみ (Mizuumi = Danau).',
+                options: ['たき', 'みずうみ', 'かわ', 'いけ'],
+                optionMeanings: {
+                    'たき': 'Air terjun',
+                    'みずうみ': 'Danau',
+                    'かわ': 'Sungai',
+                    'いけ': 'Kolam'
+                }
+            },
+            {
+                id: 51,
+                category: 'bahan',
+                fromUserExam: false,
+                kana: 'みずうみ',
+                kanji: '湖',
+                romaji: 'mizuumi',
+                meaning: 'Danau',
+                visualType: 'emoji',
+                emoji: '🏞️🦢🚤',
+                tip: 'Perairan luas yang dikelilingi daratan/gunung = みずうみ (Mizuumi = Danau). Kalau kolam taman yang kecil itu いけ (Ike).',
+                options: ['みずうみ', 'いけ', 'かいがん', 'たき'],
+                optionMeanings: {
+                    'みずうみ': 'Danau besar',
+                    'いけ': 'Kolam',
+                    'かいがん': 'Pantai',
+                    'たき': 'Air terjun'
+                }
+            },
+
+            // --- 4. KANJI JEBAKAN KEMBAR (SANGAT SERING KELUAR) ---
+            {
+                id: 23,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'かりる',
+                kanji: '借りる',
+                romaji: 'kariru',
+                meaning: 'Meminjam (dari orang/bank)',
+                sentenceJP: '銀行からお金を<u>かりました</u>。',
+                sentenceID: 'Saya telah meminjam uang dari bank.',
+                visualType: 'emoji',
+                emoji: '🏦💴🤲',
+                tip: 'Muncul di kalimat soalmu! 借りる (Kariru = Meminjam) punya radikal orang (亻) + 昔. Lawannya adalah 貸す (Kasu = Meminjamkan).',
+                options: ['借りる', '貸りる', '惜りる', '昔りる'],
+                optionMeanings: {
+                    '借りる': 'BENAR: Meminjam (Kariru)',
+                    '貸りる': 'SALAH: Kanji 貸 untuk Kasu (Meminjamkan)',
+                    '惜りる': 'SALAH: Kanji 惜 artinya sayang/menyesal',
+                    '昔りる': 'SALAH: Kanji 昔 artinya zaman dahulu (Mukashi)'
+                }
+            },
+            {
+                id: 24,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'つよい',
+                kanji: '強い',
+                romaji: 'tsuyoi',
+                meaning: 'Kuat / Kencang (angin/hujan)',
+                sentenceJP: 'きょうはとても<u>つよい</u>風がふいています。',
+                sentenceID: 'Hari ini angin bertiup sangat kencang.',
+                visualType: 'emoji',
+                emoji: '💪🌬️',
+                tip: 'Kanji 強い (Tsuyoi = Kuat) punya busur panah (弓) di kiri dan radikal 虫 di kanan bawah.',
+                options: ['強い', '弱い', '弾い', '張い'],
+                optionMeanings: {
+                    '強い': 'BENAR: Kuat / kencang (Tsuyoi)',
+                    '弱い': 'SALAH: Lemah (Yowai)',
+                    '弾い': 'SALAH: Peluru / memetik gitar',
+                    '張い': 'SALAH: Menempel / merentangkan (Haru)'
+                }
+            },
+            {
+                id: 25,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'けいけん',
+                kanji: '経験',
+                romaji: 'keiken',
+                meaning: 'Pengalaman',
+                sentenceJP: '日本へ行った<u>けいけん</u>がありますか。',
+                sentenceID: 'Apakah kamu punya pengalaman pergi ke Jepang?',
+                visualType: 'emoji',
+                emoji: '✨🧠📖',
+                tip: 'Ada di kalimat soal angin tadi! 経験 (Keiken = Pengalaman). Jangan tertukar dengan 試験 (Shiken = Ujian).',
+                options: ['経験', '試験', '実験', '体験'],
+                optionMeanings: {
+                    '経験': 'BENAR: Pengalaman (Keiken)',
+                    '試験': 'SALAH: Ujian / tes (Shiken)',
+                    '実験': 'SALAH: Eksperimen (Jikken)',
+                    '体験': 'SALAH: Pengalaman langsung/uji coba (Taiken)'
+                }
+            },
+            {
+                id: 30,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'まつ',
+                kanji: '待つ',
+                romaji: 'matsu',
+                meaning: 'Menunggu',
+                sentenceJP: 'バス停で30分ぐらい<u>まちました</u>。',
+                sentenceID: 'Saya telah menunggu sekitar 30 menit di halte bus.',
+                visualType: 'emoji',
+                emoji: '🚏⌚🧍',
+                tip: 'Jebakan Kanji paling sering keluar! 待つ (Matsu = Menunggu, radikal 彳 jalan) vs 持つ (Motsu = Membawa, radikal 扌 tangan).',
+                options: ['待ちました', '持ちました', '侍ちました', '時ちました'],
+                optionMeanings: {
+                    '待ちました': 'BENAR: Menunggu (Matsu)',
+                    '持ちました': 'SALAH: Membawa/memegang (Motsu)',
+                    '侍ちました': 'SALAH: Samurai',
+                    '時ちました': 'SALAH: Waktu (Toki)'
+                }
+            },
+            {
+                id: 52,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'もつ',
+                kanji: '持つ',
+                romaji: 'motsu',
+                meaning: 'Membawa / Memegang',
+                sentenceJP: '重い荷物を<u>もって</u>あげましょうか。',
+                sentenceID: 'Mau saya bawakan barang bawaan yang berat itu?',
+                visualType: 'emoji',
+                emoji: '🧳🤲💪',
+                tip: 'Karena membawa barang pakai TANGAN, pilih yang radikal kirinya tangan (扌) yaitu 持つ (Motsu).',
+                options: ['持って', '待って', '特って', '時って'],
+                optionMeanings: {
+                    '持って': 'BENAR: Membawa (radikal tangan 扌)',
+                    '待って': 'SALAH: Menunggu (Matsu)',
+                    '特って': 'SALAH: Spesial (Tokubetsu)',
+                    '時って': 'SALAH: Waktu (Toki)'
+                }
+            },
+            {
+                id: 53,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'おくります',
+                kanji: '送ります',
+                romaji: 'okurimasu',
+                meaning: 'Mengirim (barang/email) / Mengantar orang',
+                sentenceJP: '母に誕生日のプレゼントを<u>おくります</u>。',
+                sentenceID: 'Saya mengirim hadiah ulang tahun kepada ibu.',
+                visualType: 'emoji',
+                emoji: '🎁📦📮',
+                tip: '送る (Okuru = Mengirim). Hati-hati pengecoh 遅れる (Okureru = Terlambat) dan 返す (Kaesu = Mengembalikan).',
+                options: ['送ります', '遅ります', '選ります', '通ります'],
+                optionMeanings: {
+                    '送ります': 'BENAR: Mengirim (Okuru)',
+                    '遅ります': 'SALAH: Terlambat (Okureru)',
+                    '選ります': 'SALAH: Memilih (Erabu)',
+                    '通ります': 'SALAH: Melewati (Tooru)'
+                }
+            },
+            {
+                id: 54,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'おくれます',
+                kanji: '遅れます',
+                romaji: 'okuremasu',
+                meaning: 'Terlambat (kereta/janji)',
+                sentenceJP: '電車が<u>おくれて</u>、会社に間に合いませんでした。',
+                sentenceID: 'Karena keretanya terlambat, saya tidak sempat tepat waktu ke kantor.',
+                visualType: 'emoji',
+                emoji: '🚆⏰💦',
+                tip: '遅れる (Okureru = Terlambat). Di dalamnya ada kanji 羊 (domba) yang jalannya lambat!',
+                options: ['遅れて', '送れて', '違れて', '遠れて'],
+                optionMeanings: {
+                    '遅れて': 'BENAR: Terlambat (Okureru)',
+                    '送れて': 'SALAH: Mengirim (Okuru)',
+                    '違れて': 'SALAH: Berbeda/salah (Chigau)',
+                    '遠れて': 'SALAH: Jauh (Tooi)'
+                }
+            },
+            {
+                id: 55,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'あけます',
+                kanji: '開けます',
+                romaji: 'akemasu',
+                meaning: 'Membuka (pintu/jendela)',
+                sentenceJP: '暑いので、窓を<u>あけて</u>もいいですか。',
+                sentenceID: 'Karena panas, bolehkah saya membuka jendela?',
+                visualType: 'emoji',
+                emoji: '🪟🔓🌬️',
+                tip: 'Jebakan 3 Kanji Gerbang (門): 開ける (Akeru = Membuka), 閉める (Shimeru = Menutup), 聞く (Kiku = Mendengar, ada telinga 耳 di tengah).',
+                options: ['開けて', '閉けて', '聞けて', '間けて'],
+                optionMeanings: {
+                    '開けて': 'BENAR: Membuka (Akeru)',
+                    '閉けて': 'SALAH: Menutup (Shimeru)',
+                    '聞けて': 'SALAH: Mendengar (Kiku)',
+                    '間けて': 'SALAH: Antara/waktu (Aida/Ma)'
+                }
+            },
+            {
+                id: 56,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'しめます',
+                kanji: '閉めます',
+                romaji: 'shimemasu',
+                meaning: 'Menutup (pintu/jendela)',
+                sentenceJP: '出かける前に、ドアを<u>しめて</u>ください。',
+                sentenceID: 'Sebelum berangkat keluar, tolong tutup pintunya.',
+                visualType: 'emoji',
+                emoji: '🚪🔒',
+                tip: '閉める (Shimeru = Menutup) di dalam gerbangnya ada huruf 才 (seperti palang penutup pintu).',
+                options: ['閉めて', '開めて', '問めて', '関めて'],
+                optionMeanings: {
+                    '閉めて': 'BENAR: Menutup (Shimeru)',
+                    '開めて': 'SALAH: Membuka (Akeru)',
+                    '問めて': 'SALAH: Masalah/bertanya (Mondai)',
+                    '関めて': 'SALAH: Hubungan/gerbang (Kankei)'
+                }
+            },
+            {
+                id: 57,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'かります / かします',
+                kanji: '貸します',
+                romaji: 'kashimasu',
+                meaning: 'Meminjamkan (kepada orang lain)',
+                sentenceJP: '友だちに傘を<u>かしました</u>。',
+                sentenceID: 'Saya meminjamkan payung kepada teman.',
+                visualType: 'emoji',
+                emoji: '☂️🤝',
+                tip: '貸す (Kasu = Meminjamkan, bawahnya ada radikal kerang/uang 貝). Kalau 借りる (Kariru = Meminjam).',
+                options: ['貸しました', '借しました', '貨しました', '資しました'],
+                optionMeanings: {
+                    '貸しました': 'BENAR: Meminjamkan (Kasu)',
+                    '借しました': 'SALAH: Meminjam (Kariru)',
+                    '貨しました': 'SALAH: Barang/mata uang',
+                    '資しました': 'SALAH: Modal/sumber daya'
+                }
+            },
+            {
+                id: 58,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'かえします',
+                kanji: '返します',
+                romaji: 'kaeshimasu',
+                meaning: 'Mengembalikan (barang pinjaman)',
+                sentenceJP: '図書館に本を<u>かえしに</u>行きます。',
+                sentenceID: 'Saya pergi ke perpustakaan untuk mengembalikan buku.',
+                visualType: 'emoji',
+                emoji: '📚🏛️↩️',
+                tip: '返す (Kaesu = Mengembalikan barang). Jangan tertukar dengan 帰る (Kaeru = Pulang ke rumah) atau 変える (Kaeru = Mengubah).',
+                options: ['返しに', '帰しに', '変しに', '近しに'],
+                optionMeanings: {
+                    '返しに': 'BENAR: Mengembalikan (Kaesu)',
+                    '帰しに': 'SALAH: Pulang (Kaeru)',
+                    '変しに': 'SALAH: Mengubah/aneh (Kaeru/Hen)',
+                    '近しに': 'SALAH: Dekat (Chikai)'
+                }
+            },
+            {
+                id: 59,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'とまります',
+                kanji: '泊まります',
+                romaji: 'tomarimasu',
+                meaning: 'Menginap (di hotel/ryokan)',
+                sentenceJP: '京都のホテルに２泊<u>とまりました</u>。',
+                sentenceID: 'Saya telah menginap 2 malam di hotel Kyoto.',
+                visualType: 'emoji',
+                emoji: '🏨🛌🌙',
+                tip: 'Menginap = 泊まる (Tomaru, ada radikal air 氵+ putih 白). Kalau berhenti (mobil/kereta) pakai 止まる!',
+                options: ['泊まりました', '止まりました', '白まりました', '拍まりました'],
+                optionMeanings: {
+                    '泊まりました': 'BENAR: Menginap (Tomaru)',
+                    '止まりました': 'SALAH: Berhenti bergerak (Tomaru)',
+                    '白まりました': 'SALAH: Putih (Shiroi)',
+                    '拍まりました': 'SALAH: Tepuk tangan/ketukan'
+                }
+            },
+            {
+                id: 60,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'はかります',
+                kanji: '測ります / 量ります',
+                romaji: 'hakarimasu',
+                meaning: 'Mengukur (suhu badan / tinggi / berat)',
+                sentenceJP: '熱があるかどうか、体温を<u>はかります</u>。',
+                sentenceID: 'Saya mengukur suhu tubuh untuk tahu apakah demam atau tidak.',
+                visualType: 'emoji',
+                emoji: '🌡️📏⚖️',
+                tip: '測る (Hakaru = Mengukur suhu/tinggi/kedalaman). Sangat sering muncul di topik kesehatan dan kerja pabrik/konstruksi.',
+                options: ['測ります', '則ります', '側ります', '例ります'],
+                optionMeanings: {
+                    '測ります': 'BENAR: Mengukur (Hakaru)',
+                    '則ります': 'SALAH: Aturan (Kisoku)',
+                    '側ります': 'SALAH: Sisi/sebelah (Gawa)',
+                    '例ります': 'SALAH: Contoh (Rei)'
+                }
+            },
+            {
+                id: 61,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'なおします',
+                kanji: '直します',
+                romaji: 'naoshimasu',
+                meaning: 'Memperbaiki (barang rusak / kesalahan)',
+                sentenceJP: '壊れた自転車を<u>なおしました</u>。',
+                sentenceID: 'Saya telah memperbaiki sepeda yang rusak.',
+                visualType: 'emoji',
+                emoji: '🚲🔧🛠️',
+                tip: 'Jebakan 2 Naosu: 直す (Memperbaiki barang/koreksi tulisan) vs 治す (Menyembuhkan penyakit/luka, ada radikal air 氵).',
+                options: ['直しました', '治しました', '置しました', '真しました'],
+                optionMeanings: {
+                    '直しました': 'BENAR: Memperbaiki barang/kesalahan',
+                    '治しました': 'SALAH: Menyembuhkan penyakit',
+                    '置しました': 'SALAH: Meletakkan (Oku)',
+                    '真しました': 'SALAH: Benar/tengah (Mannaka)'
+                }
+            },
+            {
+                id: 62,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'おります',
+                kanji: '降ります',
+                romaji: 'orimasu',
+                meaning: 'Turun (dari kereta/bus)',
+                sentenceJP: '次の駅で電車を<u>おります</u>。',
+                sentenceID: 'Saya turun dari kereta di stasiun berikutnya.',
+                visualType: 'emoji',
+                emoji: '🚉🚶‍♂️⬇️',
+                tip: '降りる (Oriru = Turun kendaraan) dan 降る (Furu = Turun hujan) pakai kanji yang sama! Jangan tertukar dengan 乗る (Noru = Naik).',
+                options: ['降ります', '乗ります', '落ります', '隆ります'],
+                optionMeanings: {
+                    '降ります': 'BENAR: Turun kendaraan (Oriru)',
+                    '乗ります': 'SALAH: Naik kendaraan (Noru)',
+                    '落ります': 'SALAH: Jatuh (Ochiru)',
+                    '隆ります': 'SALAH: Kanji pengecoh'
+                }
+            },
+            {
+                id: 63,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'うんてん',
+                kanji: '運転',
+                romaji: 'unten',
+                meaning: 'Menyetir / Mengemudi',
+                sentenceJP: 'お酒を飲んだら、車を<u>うんてん</u>してはいけません。',
+                sentenceID: 'Kalau sudah minum alkohol, tidak boleh menyetir mobil.',
+                visualType: 'emoji',
+                emoji: '🚗🛞🚦',
+                tip: '運転 (Unten = Mengemudi). Hati-hati tertukar dengan 運動 (Undou = Olahraga)! Bedanya di huruf kedua: 転 (roda berputar) vs 動 (bergerak).',
+                options: ['運転', '運動', '連転', '運伝'],
+                optionMeanings: {
+                    '運転': 'BENAR: Mengemudi (Unten)',
+                    '運動': 'SALAH: Olahraga (Undou)',
+                    '連転': 'SALAH: 連 artinya membawa serta',
+                    '運伝': 'SALAH: 伝 artinya menyampaikan'
+                }
+            },
+            {
+                id: 64,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'かぞく',
+                kanji: '家族',
+                romaji: 'kazoku',
+                meaning: 'Keluarga',
+                sentenceJP: '週末は<u>かぞく</u>と一緒に買い物に行きます。',
+                sentenceID: 'Akhir pekan saya pergi berbelanja bersama keluarga.',
+                visualType: 'emoji',
+                emoji: '👨‍👩‍👧‍👦🏠',
+                tip: 'Perhatikan kanji kedua: 族 (Zoku, kanan bawahnya huruf panah 矢), sering dikecoh dengan 旅 (Tabi/Ryokou = Perjalanan)!',
+                options: ['家族', '家旅', '室族', '家放'],
+                optionMeanings: {
+                    '家族': 'BENAR: Keluarga (Kazoku)',
+                    '家旅': 'SALAH: 旅 artinya perjalanan/travel',
+                    '室族': 'SALAH: 室 artinya ruangan',
+                    '家放': 'SALAH: 放 artinya melepaskan'
+                }
+            },
+            {
+                id: 65,
+                category: 'kanji',
+                fromUserExam: false,
+                kana: 'あじ',
+                kanji: '味',
+                romaji: 'aji',
+                meaning: 'Rasa (makanan)',
+                sentenceJP: 'このスープは少し<u>あじ</u>がうすいですね。',
+                sentenceID: 'Sup ini rasanya agak hambar ya.',
+                visualType: 'emoji',
+                emoji: '👅🍲✨',
+                tip: '味 (Aji = Rasa) punya radikal mulut (口) + 未 (garis atas lebih pendek). Jangan tertukar dengan 妹 (Imouto = Adik perempuan, radikal 女)!',
+                options: ['味', '妹', '未', '末'],
+                optionMeanings: {
+                    '味': 'BENAR: Rasa (mulut 口 + 未)',
+                    '妹': 'SALAH: Adik perempuan (Imouto)',
+                    '未': 'SALAH: Belum (Mada)',
+                    '末': 'SALAH: Akhir (Sue/Matsubi)'
+                }
+            },
+
+            // --- 5. RUMAH TANGGA & AKTIVITAS SEHARI-HARI ---
+            {
+                id: 26,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'たたむ',
+                kanji: '畳む',
+                romaji: 'tatamu',
+                meaning: 'Melipat (pakaian/payung)',
+                visualType: 'emoji',
+                emoji: '👕🧺🙌',
+                tip: 'Sering keluar di soal gambar pekerjaan rumah: せんたくものを たたむ (Melipat jemuran pakaian).',
+                options: ['たたむ', '干す（ほす）', 'あらう', 'かける'],
+                optionMeanings: {
+                    'たたむ': 'Melipat (baju/payung)',
+                    '干す（ほす）': 'Menjemur pakaian',
+                    'あらう': 'Mencuci',
+                    'かける': 'Menggantungkan (di hanger)'
+                }
+            },
+            {
+                id: 27,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'ほす',
+                kanji: '干す',
+                romaji: 'hosu',
+                meaning: 'Menjemur (pakaian/futon)',
+                visualType: 'emoji',
+                emoji: '☀️👕👚',
+                tip: 'Menjemur pakaian di bawah matahari = ほす (Hosu).',
+                options: ['ほす', 'たたむ', 'ぬぐ', 'きる'],
+                optionMeanings: {
+                    'ほす': 'Menjemur di bawah matahari',
+                    'たたむ': 'Melipat pakaian',
+                    'ぬぐ': 'Melepas pakaian/sepatu',
+                    'きる': 'Memakai baju'
+                }
+            },
+            {
+                id: 28,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'すてる',
+                kanji: '捨てる',
+                romaji: 'suteru',
+                meaning: 'Membuang (sampah)',
+                visualType: 'emoji',
+                emoji: '🗑️🚮',
+                tip: 'ごみを すてる (Gomi o suteru) = Membuang sampah. Lawannya ひろう (Hirou = Memungut).',
+                options: ['すてる', 'ひろう', 'わける', 'あつめる'],
+                optionMeanings: {
+                    'すてる': 'Membuang (sampah)',
+                    'ひろう': 'Memungut / mengambil dari bawah',
+                    'わける': 'Memilah / membagi',
+                    'あつめる': 'Mengumpulkan'
+                }
+            },
+            {
+                id: 29,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'ならぶ',
+                kanji: '並ぶ',
+                romaji: 'narabu',
+                meaning: 'Mengantre / Berbaris',
+                visualType: 'emoji',
+                emoji: '🚶‍♂️🚶‍♀️🚶‍♂️🏪',
+                tip: 'Orang-orang berbaris antre di depan kasir atau stasiun = ならぶ (Narabu). Kalau menata piring di meja itu ならべる (Naraberu).',
+                options: ['ならぶ', 'すわる', 'はしる', 'まがる'],
+                optionMeanings: {
+                    'ならぶ': 'Mengantre / berbaris',
+                    'すわる': 'Duduk',
+                    'はしる': 'Berlari',
+                    'まがる': 'Belok'
+                }
+            },
+            {
+                id: 66,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'ならべる',
+                kanji: '並べる',
+                romaji: 'naraberu',
+                meaning: 'Menata / Menyusun berjajar (piring/kursi)',
+                visualType: 'emoji',
+                emoji: '🍽️🥢🍽️👐',
+                tip: 'テーブルにお皿をならべる = Menata piring di atas meja. Ingat: NaraBU (orang berbaris), NaraBERU (menyusun barang).',
+                options: ['ならべる', 'かたづける', 'しまう', 'あらう'],
+                optionMeanings: {
+                    'ならべる': 'Menata / menyusun berjajar',
+                    'かたづける': 'Membereskan / merapikan',
+                    'しまう': 'Menyimpan ke dalam lemari',
+                    'あらう': 'Mencuci'
+                }
+            },
+            {
+                id: 67,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'かたづける',
+                kanji: '片付ける',
+                romaji: 'katazukeru',
+                meaning: 'Membereskan / Merapikan (meja/kamar)',
+                visualType: 'emoji',
+                emoji: '🧹📦✨',
+                tip: '机の上を かたづける (Membereskan atas meja yang berantakan).',
+                options: ['かたづける', 'ならべる', 'よごす', 'ちらかす'],
+                optionMeanings: {
+                    'かたづける': 'Membereskan / merapikan',
+                    'ならべる': 'Menyusun berjajar',
+                    'よごす': 'Mengotori',
+                    'ちらかす': 'Membuat berantakan'
+                }
+            },
+            {
+                id: 68,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'ふく',
+                kanji: '拭く',
+                romaji: 'fuku',
+                meaning: 'Mengelap / Menyeka (meja/kaca/keringat)',
+                visualType: 'emoji',
+                emoji: '🧽🪑✨',
+                tip: 'テーブルを ふく (Mengelap meja dengan kain lap). Hati-hati: 風がふく (Kaze ga fuku = Angin bertiup) bunyinya sama tapi kanjinya 吹く.',
+                options: ['ふく', 'はく', 'あらう', 'みがく'],
+                optionMeanings: {
+                    'ふく': 'Mengelap dengan kain',
+                    'はく': 'Menyapu dengan sapu',
+                    'あらう': 'Mencuci dengan air',
+                    'みがく': 'Menggosok gigi / menyemir sepatu'
+                }
+            },
+            {
+                id: 69,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'はく',
+                kanji: '掃く',
+                romaji: 'haku',
+                meaning: 'Menyapu (lantai/halaman)',
+                visualType: 'emoji',
+                emoji: '🧹🍂',
+                tip: 'ほうきで 部屋を はく (Menyapu kamar dengan sapu). Selain itu はく (履く) juga berarti memakai celana/sepatu!',
+                options: ['はく', 'ふく', 'すてる', 'ひろう'],
+                optionMeanings: {
+                    'はく': 'Menyapu lantai',
+                    'ふく': 'Mengelap meja',
+                    'すてる': 'Membuang sampah',
+                    'ひろう': 'Memungut'
+                }
+            },
+            {
+                id: 70,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'みがく',
+                kanji: '磨く',
+                romaji: 'migaku',
+                meaning: 'Menggosok / Menyikat (gigi / sepatu)',
+                visualType: 'emoji',
+                emoji: '🪥🦷✨',
+                tip: '歯を みがく (Ha o migaku = Menggosok gigi).',
+                options: ['みがく', 'あらう', 'ふく', 'うがいをする'],
+                optionMeanings: {
+                    'みがく': 'Menggosok gigi / memoles',
+                    'あらう': 'Mencuci tangan/muka',
+                    'ふく': 'Mengelap',
+                    'うがいをする': 'Berkumur'
+                }
+            },
+            {
+                id: 71,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'しまう',
+                kanji: '仕舞う',
+                romaji: 'shimau',
+                meaning: 'Menyimpan kembali ke tempatnya (lemari/laci)',
+                visualType: 'emoji',
+                emoji: '🗄️👕📥',
+                tip: '押し入れに ふとんを しまう = Menyimpan futon ke dalam lemari.',
+                options: ['しまう', 'だす', 'ほす', 'すてる'],
+                optionMeanings: {
+                    'しまう': 'Menyimpan ke dalam wadah/lemari',
+                    'だす': 'Mengeluarkan',
+                    'ほす': 'Menjemur',
+                    'すてる': 'Membuang'
+                }
+            },
+            {
+                id: 72,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'わける / ぶんべつする',
+                kanji: '分ける / 分別する',
+                romaji: 'wakeru / bunbetsu suru',
+                meaning: 'Memilah / Membagi (sampah)',
+                visualType: 'emoji',
+                emoji: '♻️🗑️🍾',
+                tip: 'Di Jepang wajib memilah sampah: ごみを わける (Gomi o wakeru) atau ごみを ぶんべつする.',
+                options: ['わける', 'すてる', 'あつめる', 'もやす'],
+                optionMeanings: {
+                    'わける': 'Memilah / memisahkan',
+                    'すてる': 'Membuang',
+                    'あつめる': 'Mengumpulkan',
+                    'もやす': 'Membakar'
+                }
+            },
+            {
+                id: 73,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'かぶる',
+                kanji: '被る',
+                romaji: 'kaburu',
+                meaning: 'Memakai di kepala (topi / helm)',
+                visualType: 'emoji',
+                emoji: '🧢⛑️👷',
+                tip: '4 Cara "Memakai" di JFT: かぶる (Kepala: topi/helm), きる (Badan atas: baju), はく (Bawah: celana/sepatu), かける (Kacamata).',
+                options: ['かぶる', 'きる', 'はく', 'かける'],
+                optionMeanings: {
+                    'かぶる': 'Memakai di kepala (topi/helm)',
+                    'きる': 'Memakai baju/jaket',
+                    'はく': 'Memakai celana/rok/sepatu',
+                    'かける': 'Memakai kacamata'
+                }
+            },
+            {
+                id: 74,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'ぬぐ',
+                kanji: '脱ぐ',
+                romaji: 'nugu',
+                meaning: 'Melepas (baju / sepatu / topi)',
+                visualType: 'emoji',
+                emoji: '👞🧦⬇️',
+                tip: 'Semua pakaian/sepatu kalau DILEPAS bahasa Jepangnya cukup satu: ぬぐ (Nugu). Contoh: 靴をぬぐ (Melepas sepatu).',
+                options: ['ぬぐ', 'きる', 'はく', 'たたむ'],
+                optionMeanings: {
+                    'ぬぐ': 'Melepas pakaian/sepatu',
+                    'きる': 'Memakai baju',
+                    'はく': 'Memakai sepatu/celana',
+                    'たたむ': 'Melipat baju'
+                }
+            },
+            {
+                id: 75,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'ひろう',
+                kanji: '拾う',
+                romaji: 'hirou',
+                meaning: 'Memungut / Mengambil barang jatuh',
+                visualType: 'emoji',
+                emoji: '🚮🤲⬇️',
+                tip: 'Memungut sampah atau dompet yang jatuh di jalan = ひろう (Hirou). Lawannya すてる (Membuang).',
+                options: ['ひろう', 'すてる', 'おとす', 'さがす'],
+                optionMeanings: {
+                    'ひろう': 'Memungut dari bawah',
+                    'すてる': 'Membuang',
+                    'おとす': 'Menjatuhkan',
+                    'さがす': 'Mencari'
+                }
+            },
+            {
+                id: 76,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'おとす',
+                kanji: '落とす',
+                romaji: 'otosu',
+                meaning: 'Menjatuhkan (dompet/HP/barang)',
+                visualType: 'emoji',
+                emoji: '📱⬇️😱',
+                tip: 'サイフを おとす = Tidak sengaja menjatuhkan dompet. Kalau barangnya jatuh sendiri itu おちる (Ochiru).',
+                options: ['おとす', 'ひろう', 'こわす', 'なくす'],
+                optionMeanings: {
+                    'おとす': 'Menjatuhkan benda',
+                    'ひろう': 'Memungut benda',
+                    'こわす': 'Merusakkan',
+                    'なくす': 'Menghilangkan'
+                }
+            },
+            {
+                id: 77,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'なくす',
+                kanji: '無くす',
+                romaji: 'nakusu',
+                meaning: 'Menghilangkan / Kehilangan (kunci/tiket)',
+                visualType: 'emoji',
+                emoji: '🔑❓😰',
+                tip: 'かぎを なくしました (Saya kehilangan kunci). Pasangannya: みつかる (Mitsukaru = Ketemu).',
+                options: ['なくす', 'さがす', 'みつける', 'わすれる'],
+                optionMeanings: {
+                    'なくす': 'Menghilangkan barang',
+                    'さがす': 'Mencari barang',
+                    'みつける': 'Menemukan barang',
+                    'わすれる': 'Lupa / ketinggalan'
+                }
+            },
+            {
+                id: 78,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'さがす',
+                kanji: '探す',
+                romaji: 'sagasu',
+                meaning: 'Mencari (barang hilang / kerja / rumah)',
+                visualType: 'emoji',
+                emoji: '🔍👀',
+                tip: '部屋を さがす (Mencari kos/apartemen) atau カギを さがす (Mencari kunci).',
+                options: ['さがす', 'みつける', 'なくす', 'えらぶ'],
+                optionMeanings: {
+                    'さがす': 'Mencari',
+                    'みつける': 'Menemukan',
+                    'なくす': 'Menghilangkan',
+                    'えらぶ': 'Memilih'
+                }
+            },
+            {
+                id: 79,
+                category: 'aktivitas',
+                fromUserExam: false,
+                kana: 'かざる',
+                kanji: '飾る',
+                romaji: 'kazaru',
+                meaning: 'Menghias / Memajang (bunga/boneka/poster)',
+                visualType: 'emoji',
+                emoji: '💐🖼️✨',
+                tip: '部屋に 花を かざる (Memajang bunga di kamar).',
+                options: ['かざる', 'ならべる', 'かたづける', 'うえる'],
+                optionMeanings: {
+                    'かざる': 'Menghias / memajang dekorasi',
+                    'ならべる': 'Menyusun berjajar',
+                    'かたづける': 'Membereskan',
+                    'うえる': 'Menanam pohon/bunga'
+                }
+            },
+
+            // --- 6. BELANJA, TRANSPORTASI, FASILITAS KOTA & KERJA ---
+            {
+                id: 80,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'おろす / ひきだす',
+                kanji: '下ろす / 引き出す',
+                romaji: 'orosu / hikidasu',
+                meaning: 'Menarik uang (di ATM/Bank)',
+                visualType: 'emoji',
+                emoji: '🏧💴💳',
+                tip: 'ATMで お金を おろす (atau ひきだす) = Mengambil/menarik uang tunai di ATM.',
+                options: ['おろす', 'あずける', 'ふりこむ', 'はらう'],
+                optionMeanings: {
+                    'おろす': 'Menarik uang / menurunkan barang',
+                    'あずける': 'Menabung / menitipkan uang',
+                    'ふりこむ': 'Mentransfer uang',
+                    'はらう': 'Membayar'
+                }
+            },
+            {
+                id: 81,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'ふりこむ',
+                kanji: '振り込む',
+                romaji: 'furikomu',
+                meaning: 'Mentransfer uang (ke rekening)',
+                visualType: 'emoji',
+                emoji: '🏦📲💴',
+                tip: '家賃を ふりこむ (Mentransfer uang sewa kos). Kata bendanya: 振込 (Furikomi = Transfer bank).',
+                options: ['ふりこむ', 'おろす', 'かりる', 'りょうがえする'],
+                optionMeanings: {
+                    'ふりこむ': 'Mentransfer uang',
+                    'おろす': 'Menarik uang tunai',
+                    'かりる': 'Meminjam uang',
+                    'りょうがえする': 'Menukar mata uang (money changer)'
+                }
+            },
+            {
+                id: 82,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'チャージする',
+                kanji: 'チャージする',
+                romaji: 'chaaji suru',
+                meaning: 'Mengisi saldo kartu IC (Suica/Pasmo)',
+                visualType: 'emoji',
+                emoji: '💳🚉💴',
+                tip: 'Di stasiun Jepang, mengisi saldo kartu kereta disebut ICカードに チャージする.',
+                options: ['チャージする', 'キャンセルする', 'チェックインする', 'サインする'],
+                optionMeanings: {
+                    'チャージする': 'Mengisi ulang saldo / baterai',
+                    'キャンセルする': 'Membatalkan pesanan',
+                    'チェックインする': 'Check-in hotel/bandara',
+                    'サインする': 'Menandatangani'
+                }
+            },
+            {
+                id: 83,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'のりかえる',
+                kanji: '乗り換える',
+                romaji: 'norikaeru',
+                meaning: 'Transit / Ganti kereta atau bus',
+                visualType: 'emoji',
+                emoji: '🚆🔄🚇',
+                tip: '乗る (Naik) + 換える (Tukar/ganti) = のりかえる (Berganti kereta/bus).',
+                options: ['のりかえる', 'のりおくれる', 'おりる', 'とまる'],
+                optionMeanings: {
+                    'のりかえる': 'Ganti kereta / transit',
+                    'のりおくれる': 'Ketinggalan kereta',
+                    'おりる': 'Turun dari kereta',
+                    'とまる': 'Berhenti'
+                }
+            },
+            {
+                id: 84,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'のりおくれる',
+                kanji: '乗り遅れる',
+                romaji: 'noriokureru',
+                meaning: 'Ketinggalan kereta / bus / pesawat',
+                visualType: 'emoji',
+                emoji: '🚆🏃‍♂️💨😭',
+                tip: '乗る (Naik) + 遅れる (Terlambat) = のりおくれる (Terlambat naik alias ketinggalan kereta).',
+                options: ['のりおくれる', 'のりかえる', 'まにあう', 'まちがえる'],
+                optionMeanings: {
+                    'のりおくれる': 'Ketinggalan kereta/bus',
+                    'のりかえる': 'Transit / ganti kereta',
+                    'まにあう': 'Tepat waktu / keburu',
+                    'まちがえる': 'Salah (naik kereta)'
+                }
+            },
+            {
+                id: 85,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'まにあう',
+                kanji: '間に合う',
+                romaji: 'maniau',
+                meaning: 'Tepat waktu / Keburu (tidak telat)',
+                visualType: 'emoji',
+                emoji: '⌚🏃‍♂️👍',
+                tip: '約束の時間に まにあう (Keburu/tepat waktu sesuai jam janji). Kalau tidak keburu: まにあわない.',
+                options: ['まにあう', 'おくれる', 'のりおくれる', 'いそぐ'],
+                optionMeanings: {
+                    'まにあう': 'Tepat waktu / sempat',
+                    'おくれる': 'Terlambat',
+                    'のりおくれる': 'Ketinggalan kendaraan',
+                    'いそぐ': 'Bergegas / buru-buru'
+                }
+            },
+            {
+                id: 86,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'わたる',
+                kanji: '渡る',
+                romaji: 'wataru',
+                meaning: 'Menyeberang (jalan / jembatan)',
+                visualType: 'emoji',
+                emoji: '🚶‍♂️🚦🛣️',
+                tip: '橋（はし）を わたる (Menyeberang jembatan) atau 道を わたる (Menyeberang jalan).',
+                options: ['わたる', 'まがる', 'とまる', 'あるく'],
+                optionMeanings: {
+                    'わたる': 'Menyeberang',
+                    'まがる': 'Belok (di tikungan)',
+                    'とまる': 'Berhenti',
+                    'あるく': 'Berjalan kaki'
+                }
+            },
+            {
+                id: 87,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'まがる',
+                kanji: '曲がる',
+                romaji: 'magaru',
+                meaning: 'Belok (kanan / kiri)',
+                visualType: 'emoji',
+                emoji: '↪️🚦🚗',
+                tip: '角（かど）を 右へ まがる = Belok kanan di pertigaan/perempatan.',
+                options: ['まがる', 'わたる', 'もどる', 'すすむ'],
+                optionMeanings: {
+                    'まがる': 'Belok',
+                    'わたる': 'Menyeberang',
+                    'もどる': 'Kembali / putar balik',
+                    'すすむ': 'Maju terus'
+                }
+            },
+            {
+                id: 88,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'おつり',
+                kanji: 'お釣り',
+                romaji: 'otsuri',
+                meaning: 'Uang Kembalian',
+                visualType: 'emoji',
+                emoji: '🪙💴🤲',
+                tip: 'Sering tertukar di kasir! おつり (Otsuri) = Uang kembalian. レシート (Reshiito) = Struk belanja.',
+                options: ['おつり', 'レシート', 'げんきん', 'さいふ'],
+                optionMeanings: {
+                    'おつり': 'Uang kembalian',
+                    'レシート': 'Struk pembayaran',
+                    'げんきん': 'Uang tunai (Cash)',
+                    'さいふ': 'Dompet'
+                }
+            },
+            {
+                id: 89,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'わりびき / はんがく',
+                kanji: '割引 / 半額',
+                romaji: 'waribiki / hangaku',
+                meaning: 'Diskon / Setengah Harga (50% Off)',
+                visualType: 'emoji',
+                emoji: '🏷️🍱5️⃣0️⃣%',
+                tip: '割引 (Waribiki) = Diskon potongan harga. 半額 (Hangaku) = Setengah harga (stiker diskon bento malam hari di supermarket).',
+                options: ['わりびき', 'むりょう', 'ぜいこみ', 'うりきれ'],
+                optionMeanings: {
+                    'わりびき': 'Diskon potongan harga',
+                    'むりょう': 'Gratis (Free)',
+                    'ぜいこみ': 'Sudah termasuk pajak',
+                    'うりきれ': 'Habis terjual (Sold out)'
+                }
+            },
+            {
+                id: 90,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'うりきれ',
+                kanji: '売り切れ',
+                romaji: 'urikire',
+                meaning: 'Habis Terjual (Sold Out)',
+                visualType: 'emoji',
+                emoji: '🚫🛒SOLD',
+                tip: '売る (Jual) + 切れる (Habis) = うりきれ (Stok habis terjual).',
+                options: ['うりきれ', 'わりびき', 'ちゅうし', 'じゅんびちゅう'],
+                optionMeanings: {
+                    'うりきれ': 'Habis terjual',
+                    'わりびき': 'Diskon',
+                    'ちゅうし': 'Dibatalkan (acara)',
+                    'じゅんびちゅう': 'Sedang persiapan (toko belum buka)'
+                }
+            },
+            {
+                id: 91,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'うけつけ',
+                kanji: '受付',
+                romaji: 'uketsuke',
+                meaning: 'Resepsionis / Meja Pendaftaran',
+                visualType: 'emoji',
+                emoji: '💁‍♀️🏥🛎️',
+                tip: 'Tempat melapor pertama kali saat datang ke rumah sakit, kantor, atau gedung acara = うけつけ (Uketsuke).',
+                options: ['うけつけ', 'かいけい', 'いりぐち', 'ひじょうぐち'],
+                optionMeanings: {
+                    'うけつけ': 'Meja resepsionis / pendaftaran',
+                    'かいけい': 'Kasir pembayaran (di restoran)',
+                    'いりぐち': 'Pintu masuk',
+                    'ひじょうぐち': 'Pintu darurat'
+                }
+            },
+            {
+                id: 92,
+                category: 'kota',
+                fromUserExam: false,
+                kana: 'きゅうりょう / ざんぎょう',
+                kanji: '給料 / 残業',
+                romaji: 'kyuuryou / zangyou',
+                meaning: 'Gaji / Kerja Lembur',
+                visualType: 'emoji',
+                emoji: '💴💼🌙',
+                tip: 'Kosakata wajib pekerja di Jepang: 給料 (Kyuuryou = Gaji), 残業 (Zangyou = Lembur), 夜勤 (Yakin = Shift malam).',
+                options: ['きゅうりょう', 'りょうきん', 'やちん', 'しょう与'],
+                optionMeanings: {
+                    'きゅうりょう': 'Gaji bulanan',
+                    'りょうきん': 'Biaya / tarif layanan',
+                    'やちん': 'Biaya sewa kamar/kos',
+                    'しょう与': 'Bonus (Boonasu)'
+                }
+            },
+
+            // --- 7. KESEHATAN, OBAT & GEJALA TUBUH ---
+            {
+                id: 93,
+                category: 'kesehatan',
+                fromUserExam: false,
+                kana: 'せきがでる',
+                kanji: '咳が出る',
+                romaji: 'seki ga deru',
+                meaning: 'Batuk-batuk',
+                visualType: 'emoji',
+                emoji: '😷🗣️💨',
+                tip: 'Perhatikan pasangannya: せきが でる (Batuk), ねつが ある (Demam), のどが いたい (Sakit tenggorokan).',
+                options: ['せきがでる', 'ねつがある', 'はきけがする', 'めまいがする'],
+                optionMeanings: {
+                    'せきがでる': 'Batuk-batuk',
+                    'ねつがある': 'Demam (badan panas)',
+                    'はきけがする': 'Merasa mual ingin muntah',
+                    'めまいがする': 'Pusing tujuh keliling / kliyengan'
+                }
+            },
+            {
+                id: 94,
+                category: 'kesehatan',
+                fromUserExam: false,
+                kana: 'ねつがある',
+                kanji: '熱がある',
+                romaji: 'netsu ga aru',
+                meaning: 'Demam (Suhu badan tinggi)',
+                visualType: 'emoji',
+                emoji: '🤒🌡️38.5℃',
+                tip: 'Gambar orang pakai termometer dan kompres di dahi = ねつが ある (Netsu ga aru = Demam).',
+                options: ['ねつがある', 'さむけがする', 'せきがでる', 'けがをする'],
+                optionMeanings: {
+                    'ねつがある': 'Demam / panas tinggi',
+                    'さむけがする': 'Menggigil kedinginan',
+                    'せきがでる': 'Batuk',
+                    'けがをする': 'Terluka'
+                }
+            },
+            {
+                id: 95,
+                category: 'kesehatan',
+                fromUserExam: false,
+                kana: 'やけどをする',
+                kanji: '火傷をする',
+                romaji: 'yakedo o suru',
+                meaning: 'Luka bakar / Terkena air atau wajan panas',
+                visualType: 'emoji',
+                emoji: '🤚🔥🫖',
+                tip: 'Ingat: YAKEdo (dari kata Yaku = membakar) = Luka bakar karena air panas/setrika/minyak.',
+                options: ['やけどをする', 'けがをする', '骨折（こっせつ）する', 'かゆい'],
+                optionMeanings: {
+                    'やけどをする': 'Mengalami luka bakar / melepuh',
+                    'けがをする': 'Terluka (jatuh/tergores)',
+                    '骨折（こっせつ）する': 'Patah tulang',
+                    'かゆい': 'Gatal'
+                }
+            },
+            {
+                id: 96,
+                category: 'kesehatan',
+                fromUserExam: false,
+                kana: 'くすりをぬる',
+                kanji: '薬を塗る',
+                romaji: 'kusuri o nuru',
+                meaning: 'Mengoleskan obat salep',
+                visualType: 'emoji',
+                emoji: '🧴🤚🩹',
+                tip: 'Kalau minum obat itu 薬をのむ (Nomu), tapi kalau mengoleskan salep/krim ke kulit itu 薬をぬる (Nuru)!',
+                options: ['くすりをぬる', 'くすりをのむ', 'ばんそうこうをはる', 'ちゅうしゃをする'],
+                optionMeanings: {
+                    'くすりをぬる': 'Mengoleskan obat salep',
+                    'くすりをのむ': 'Meminum obat',
+                    'ばんそうこうをはる': 'Menempelkan plester luka',
+                    'ちゅうしゃをする': 'Menyuntik'
+                }
+            },
+            {
+                id: 97,
+                category: 'kesehatan',
+                fromUserExam: false,
+                kana: 'うがいをする',
+                kanji: 'うがいをする',
+                romaji: 'ugai o suru',
+                meaning: 'Berkumur (membersihkan tenggorokan)',
+                visualType: 'emoji',
+                emoji: '🚰😮💧',
+                tip: 'Kebiasaan orang Jepang saat pulang ke rumah agar tidak flu: 手洗い・うがい (Cuci tangan & berkumur).',
+                options: ['うがいをする', 'はをみがく', 'かおをあらう', 'シャワーをあびる'],
+                optionMeanings: {
+                    'うがいをする': 'Berkumur',
+                    'はをみがく': 'Menggosok gigi',
+                    'かおをあらう': 'Mencuci muka',
+                    'シャワーをあびる': 'Mandi shower'
+                }
+            },
+            {
+                id: 98,
+                category: 'kesehatan',
+                fromUserExam: false,
+                kana: 'マスクをする',
+                kanji: 'マスクをする',
+                romaji: 'masuku o suru',
+                meaning: 'Memakai masker',
+                visualType: 'emoji',
+                emoji: '😷✨',
+                tip: 'Untuk masker, dasi, jam tangan, dan aksesori, kata kerja "memakai" menggunakan をする (Masuku o suru).',
+                options: ['マスクをする', 'めがねをかける', 'ぼうしをかぶる', 'くつをはく'],
+                optionMeanings: {
+                    'マスクをする': 'Memakai masker',
+                    'めがねをかける': 'Memakai kacamata',
+                    'ぼうしをかぶる': 'Memakai topi',
+                    'くつをはく': 'Memakai sepatu'
+                }
+            },
+
+            // --- 8. KATA SIFAT, RASA & PERUBAHAN KONDISI ---
+            {
+                id: 99,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'こい / うすい',
+                kanji: '濃い / 薄い',
+                romaji: 'koi / usui',
+                meaning: 'Pekat (berbumbu kuat) / Hambar (tipis)',
+                visualType: 'emoji',
+                emoji: '🍜🧂⚖️',
+                tip: 'Untuk rasa makanan/warna: こい (Koi = Rasa kuat/kental/pekat) vs うすい (Usui = Rasa hambar/kurang bumbu/tipis).',
+                options: ['あじが うすい', 'あじが あさい', 'あじが かるい', 'あじが ほそい'],
+                optionMeanings: {
+                    'あじが うすい': 'BENAR: Rasanya hambar / kurang bumbu',
+                    'あじが あさい': 'SALAH: 浅い artinya dangkal (kolam/sungai)',
+                    'あじが かるい': 'SALAH: 軽い artinya ringan (bobot)',
+                    'あじが ほそい': 'SALAH: 細い artinya ramping/kecil memanjang'
+                }
+            },
+            {
+                id: 100,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'すっぱい / にがい',
+                kanji: '酸っぱい / 苦い',
+                romaji: 'suppai / nigai',
+                meaning: 'Asam (kecut) / Pahit',
+                visualType: 'emoji',
+                emoji: '🍋😖☕',
+                tip: '5 Rasa wajib hafal: あまい (Manis), からい (Pedas), しょっぱい (Asin), すっぱい (Asam/lemon), にがい (Pahit/obat/kopi).',
+                options: ['すっぱい', 'しょっぱい', 'あまい', 'からい'],
+                optionMeanings: {
+                    'すっぱい': 'Asam / kecut (lemon/cuka)',
+                    'しょっぱい': 'Asin (garam)',
+                    'あまい': 'Manis',
+                    'からい': 'Pedas'
+                }
+            },
+            {
+                id: 101,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'かたい / やわらかい',
+                kanji: '硬い / 柔らかい',
+                romaji: 'katai / yawらかi',
+                meaning: 'Keras (alot) / Empuk (lembut)',
+                visualType: 'emoji',
+                emoji: '🥖🪨🆚🍞☁️',
+                tip: 'Daging atau roti yang empuk = やわらかい (Yawarakai). Kalau keras/alot = かたい (Katai).',
+                options: ['やわらかい', 'かたい', 'あたたかい', 'こまかい'],
+                optionMeanings: {
+                    'やわらかい': 'Empuk / lembut / lunak',
+                    'かたい': 'Keras / kaku',
+                    'あたたかい': 'Hangat',
+                    'こまかい': 'Kecil-kecil / receh'
+                }
+            },
+            {
+                id: 102,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'ふとい / ほそい',
+                kanji: '太い / 細い',
+                romaji: 'futoi / hosoi',
+                meaning: 'Besar memanjang (tebal) / Kecil memanjang (tipis/ramping)',
+                visualType: 'emoji',
+                emoji: '📏🖊️',
+                tip: 'Untuk benda silinder/memanjang (mie udon, jalan, kaki, pensil): ふとい (Tebal/lebar) vs ほそい (Tipis/sempit/ramping).',
+                options: ['ほそい', 'うすい', 'ちいさい', 'みじかい'],
+                optionMeanings: {
+                    'ほそい': 'Tipis/ramping (untuk benda memanjang: jalan/mie/jari)',
+                    'うすい': 'Tipis (untuk benda lembaran: buku/kertas/baju)',
+                    'ちいさい': 'Kecil',
+                    'みじかい': 'Pendek'
+                }
+            },
+            {
+                id: 103,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'あつい / うすい',
+                kanji: '厚い / 薄い',
+                romaji: 'atsui / usui',
+                meaning: 'Tebal / Tipis (untuk buku, kertas, jaket, roti)',
+                visualType: 'emoji',
+                emoji: '📕📄',
+                tip: 'Hati-hati 3 Atsui: 暑い (Cuaca panas), 熱い (Benda/minuman panas), 厚い (Tebal untuk buku/baju).',
+                options: ['あつい（厚い）', 'ふとい（太い）', 'おもい（重い）', 'たかい（高い）'],
+                optionMeanings: {
+                    'あつい（厚い）': 'Tebal (buku/kertas/pakaian)',
+                    'ふとい（太い）': 'Gemuk/besar (pipa/mie/pohon)',
+                    'おもい（重い）': 'Berat',
+                    'たかい（高い）': 'Tinggi / mahal'
+                }
+            },
+            {
+                id: 104,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'こまかい',
+                kanji: '細かい',
+                romaji: 'komakai',
+                meaning: 'Uang kecil (receh) / Detail / Potongan halus',
+                visualType: 'emoji',
+                emoji: '🪙💴',
+                tip: 'こまかい お金が ありません (Saya tidak punya uang receh/pecahan kecil).',
+                options: ['こまかい', 'すくない', 'ちいさい', 'みじかい'],
+                optionMeanings: {
+                    'こまかい': 'Uang pecahan kecil / halus / detail',
+                    'すくない': 'Sedikit jumlahnya',
+                    'ちいさい': 'Ukuran kecil',
+                    'みじかい': 'Pendek'
+                }
+            },
+            {
+                id: 105,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'きつい / ゆるい',
+                kanji: 'きつい / 緩い',
+                romaji: 'kitsui / yurui',
+                meaning: 'Sempit (ketat/berat) / Longgar (kebesaran)',
+                visualType: 'emoji',
+                emoji: '👟😣🆚👟😌',
+                tip: 'Saat mencoba baju atau sepatu di toko: この靴は ちょっと きついです (Sepatu ini agak kekecilan/sempit). Lawannya ゆるい (Longgar).',
+                options: ['きつい', 'ゆるい', 'せまい', 'ほそい'],
+                optionMeanings: {
+                    'きつい': 'Ketat / sempit (ukuran baju/sepatu) / kerjaan berat',
+                    'ゆるい': 'Longgar (sepatu/ikat pinggang)',
+                    'せまい': 'Sempit (untuk ruangan/kamar)',
+                    'ほそい': 'Ramping / tipis memanjang'
+                }
+            },
+            {
+                id: 106,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'ぬれる / かわく',
+                kanji: '濡れる / 乾く',
+                romaji: 'nureru / kawaku',
+                meaning: 'Menjadi basah / Menjadi kering',
+                visualType: 'emoji',
+                emoji: '🌧️👕💧🆚☀️👕✨',
+                tip: '雨に ぬれる (Basah kehujanan). 洗濯物が かわく (Jemuran sudah kering). Selain itu のどが かわく = Haus (tenggorokan kering)!',
+                options: ['かわく', 'ぬれる', 'よごれる', 'やぶれる'],
+                optionMeanings: {
+                    'かわく': 'Menjadi kering (jemuran) / haus',
+                    'ぬれる': 'Menjadi basah',
+                    'よごれる': 'Menjadi kotor',
+                    'やぶれる': 'Robek (kertas/baju)'
+                }
+            },
+            {
+                id: 107,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'われる / おれる / やぶれる',
+                kanji: '割れる / 折れる / 破れる',
+                romaji: 'wareru / oreru / yabureru',
+                meaning: 'Pecah (gelas/kaca) vs Patah (kayu/payung) vs Robek (kertas/baju)',
+                visualType: 'emoji',
+                emoji: '🍷💥',
+                tip: '3 jenis rusak di JFT: われる = Pecah berkeping (gelas/piring/telur), おれる = Patah (dahan pohon/payung/tulang), やぶれる = Robek (kertas/celana).',
+                options: ['われる', 'おれる', 'やぶれる', 'よごれる'],
+                optionMeanings: {
+                    'われる': 'Pecah (gelas/piring/kaca)',
+                    'おれる': 'Patah (payung/ranting/pensil)',
+                    'やぶれる': 'Robek (kertas/pakaian)',
+                    'よごれる': 'Menjadi kotor'
+                }
+            },
+            {
+                id: 108,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'こわれる / こしょうする',
+                kanji: '壊れる / 故障する',
+                romaji: 'kowareru / koshou suru',
+                meaning: 'Rusak (kursi/barang) / Mogok atau Error (mesin/AC/mobil)',
+                visualType: 'emoji',
+                emoji: '🖨️⚠️🔧',
+                tip: 'Kalau kursi/sepeda/payung rusak pakai こわれる (Kowareru). Kalau mesin elektronik (AC, printer, lift, mesin cuci) error/mogok sering disebut こしょうする (Koshou suru).',
+                options: ['こしょうする', 'やぶれる', 'われる', 'ぬれる'],
+                optionMeanings: {
+                    'こしょうする': 'Mesin rusak / error / mogok',
+                    'やぶれる': 'Robek (kertas/kain)',
+                    'われる': 'Pecah (kaca/piring)',
+                    'ぬれる': 'Basah'
+                }
+            },
+            {
+                id: 109,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'こむ / すく',
+                kanji: '込む / 空く',
+                romaji: 'komu / suku',
+                meaning: 'Penuh sesak (macet/ramai) / Sepi (lowong)',
+                visualType: 'emoji',
+                emoji: '🚃👥👥😖',
+                tip: '道が こんでいる (Jalannya macet) atau 電車が こんでいる (Keretanya penuh sesak). Lawannya すいている (Sepi/lowong).',
+                options: ['こんでいる', 'すいている', 'あいている', 'しまっている'],
+                optionMeanings: {
+                    'こんでいる': 'Penuh sesak / macet / ramai antre',
+                    'すいている': 'Sepi / lengang (jalan/kereta)',
+                    'あいている': 'Terbuka / kosong',
+                    'しまっている': 'Tertutup'
+                }
+            },
+            {
+                id: 110,
+                category: 'sifat',
+                fromUserExam: false,
+                kana: 'うっかり / しっかり',
+                kanji: 'うっかり / しっかり',
+                romaji: 'ukkari / shikkari',
+                meaning: 'Kelupaan tidak sengaja (ceroboh) / Dengan mantap & teliti',
+                visualType: 'emoji',
+                emoji: '🤦‍♂️💭',
+                tip: 'Kata keterangan favorit JFT: うっかり 忘れてしまいました (Aduh saya kelupaan tanpa sengaja). Kalau しっかり = dengan sungguh-sungguh/kuat.',
+                options: ['うっかり', 'しっかり', 'ゆっくり', 'はっきり'],
+                optionMeanings: {
+                    'うっかり': 'Tanpa sengaja / kelupaan / lengah',
+                    'しっかり': 'Dengan kuat / teliti / sungguh-sungguh',
+                    'ゆっくり': 'Pelan-pelan / santai',
+                    'はっきり': 'Dengan jelas (suara/tulisan)'
+                }
+            }
+        ];
+
+        // Data Perbandingan Jebakan (10 Grup Lengkap)
+        const trapGroups = [
+            {
+                title: '1. Tiga Cara Makan Saus / Topping (Soal Gambar 1)',
+                desc: 'Ketiganya sering muncul bersamaan di pilihan ganda gambar makanan:',
+                items: [
+                    { jp: 'つける (Tsukeru)', mean: 'Mencelupkan', detail: 'Makanan dijepit sumpit lalu DICELUPKAN ke mangkuk saus kecil (sushi, sashimi, yakiniku).' },
+                    { jp: 'かける (Kakeru)', mean: 'Menuangkan / Menyiram', detail: 'Botol kecap/saus DITUANGKAN dari atas ke makanan. Kalau menuang air ke gelas = そそぐ (Sosogu).' },
+                    { jp: 'のせる (Noseru)', mean: 'Menaruh di atas', detail: 'Menaruh benda padat (telur, daun bawang, keju) DI ATAS makanan sebagai topping.' }
+                ]
+            },
+            {
+                title: '2. Bunyi Mirip: むく (Muku) vs まく (Maku) vs ふく (Fuku)',
+                desc: 'Hanya beda 1 huruf tapi artinya jauh berbeda:',
+                items: [
+                    { jp: 'むく (Muku)', mean: 'Mengupas kulit', detail: 'Mengupas kulit buah (pisang, apel) atau sayur (kentang, bawang). Ingat: MUku = MengUpas.' },
+                    { jp: 'まく (Maku)', mean: 'Menggulung / Melilit', detail: 'Menggulung sushi (Makizushi), melilitkan syal di leher, atau menabur benih.' },
+                    { jp: 'ふく (Fuku)', mean: 'Mengelap / Menyeka', detail: 'Mengelap meja/kaca dengan kain lap (拭く), atau angin bertiup (風が吹く).' }
+                ]
+            },
+            {
+                title: '3. Teknik Memasak di Dapur Jepang',
+                desc: 'Jangan sampai tertukar saat melihat gambar panci atau wajan:',
+                items: [
+                    { jp: 'やく (Yaku - 焼く)', mean: 'Memanggang / Bakar', detail: 'Memanggang daging (Yakiniku), ikan, roti, atau menggoreng di teflon sedikit minyak.' },
+                    { jp: 'あげる (Ageru - 揚げる)', mean: 'Menggoreng (Deep Fry)', detail: 'Menggoreng tenggelam di minyak banyak seperti Tempura dan Karaage.' },
+                    { jp: 'いためる (Itameru - 炒める)', mean: 'Menumis (Oseng)', detail: 'Menumis sayur/nasi goreng di wajan sambil diaduk.' },
+                    { jp: 'ゆでる vs にる vs むす', mean: 'Rebus Air vs Bumbu vs Kukus', detail: 'ゆでる = Rebus di air biasa (telur/mie). にる = Rebus lama dengan kuah kecap/bumbu. むす = Mengukus dengan uap.' }
+                ]
+            },
+            {
+                title: '4. Pemandangan Alam: こうげん vs そうげん vs さばく (Soal Gambar 4)',
+                desc: 'Perhatikan latar belakang gambarnya dengan teliti:',
+                items: [
+                    { jp: 'こうげん (高原 - Kougen)', mean: 'Dataran Tinggi', detail: 'Ada rumput hijau TAPI berada di ketinggian gunung (terlihat puncak gunung bersalju & awan).' },
+                    { jp: 'そうげん (草原 - Sougen)', mean: 'Padang Rumput', detail: 'Hamparan rumput hijau yang datar dan luas.' },
+                    { jp: 'さばく (砂漠 - Sabaku)', mean: 'Padang Pasir / Gurun', detail: 'Hamparan pasir kering, kaktus, atau unta.' }
+                ]
+            },
+            {
+                title: '5. Kanji Kembar Pengecoh Level 1 (Soal Gambar 2)',
+                desc: 'Jangan terburu-buru memilih sebelum melihat radikal (bagian samping) kanjinya:',
+                items: [
+                    { jp: '建てる vs 健てる vs 立てる', mean: 'Membangun Rumah = 建てる', detail: '建てる = Membangun gedung/rumah. 健 (ada 亻) = Sehat (Kenkou). 立てる = Menegakkan tiang/membuat rencana.' },
+                    { jp: 'お医者さん vs お臣者さん', mean: 'Dokter = お医者さん', detail: 'Kanji dokter adalah 医 (di dalamnya adalah huruf panah 矢), bukan 臣 (kotak-kotak).' },
+                    { jp: '待つ (Matsu) vs 持つ (Motsu)', mean: 'Menunggu vs Membawa', detail: '待つ (radikal kiri 彳) = Menunggu. 持つ (radikal kiri 扌 tangan) = Membawa dengan tangan.' }
+                ]
+            },
+            {
+                title: '6. Kanji Kembar Pengecoh Level 2 (Langganan Ujian)',
+                desc: 'Pasangan kanji yang bentuk dan bunyinya sering ditukar di soal JFT:',
+                items: [
+                    { jp: '借りる (Kariru) vs 貸す (Kasu)', mean: 'Meminjam vs Meminjamkan', detail: '借りる = Meminjam (dari bank/teman). 貸す = Meminjamkan (kepada teman).' },
+                    { jp: '開ける (Akeru) vs 閉める (Shimeru) vs 聞く (Kiku)', mean: 'Membuka vs Menutup vs Mendengar', detail: 'Ketiganya pakai gerbang 門! 開 = Buka, 閉 = Tutup, 聞 (ada telinga 耳) = Mendengar.' },
+                    { jp: '送る (Okuru) vs 遅れる (Okureru)', mean: 'Mengirim vs Terlambat', detail: '送る = Mengirim paket/mengantar orang. 遅れる = Terlambat kereta/janji.' },
+                    { jp: '運転 (Unten) vs 運動 (Undou)', mean: 'Menyetir vs Olahraga', detail: '運転 (roda berputar 車) = Mengemudi mobil. 運動 (bergerak 動) = Berolahraga.' }
+                ]
+            },
+            {
+                title: '7. Empat Cara "Memakai" Pakaian & Aksesori',
+                desc: 'Dalam bahasa Jepang, kata kerja "memakai" berbeda tergantung posisi di tubuh:',
+                items: [
+                    { jp: 'きる (着る - Kiru)', mean: 'Memakai Baju Atasan', detail: 'Kemeja, jaket, jas, kimono (bagian bahu ke badan).' },
+                    { jp: 'はく (履く - Haku)', mean: 'Memakai Bawahan & Alas Kaki', detail: 'Celana, rok, kaos kaki, sepatu, sandal.' },
+                    { jp: 'かぶる (被る - Kaburu)', mean: 'Memakai di Kepala', detail: 'Topi, helm proyek, kerudung.' },
+                    { jp: 'かける / をする', mean: 'Kacamata / Aksesori', detail: 'めがねをかける (Kacamata). Kalau masker, dasi, jam tangan pakai をする (マスクをする).' }
+                ]
+            },
+            {
+                title: '8. Lima Jenis "Rusak" pada Barang',
+                desc: 'Perhatikan gambar benda apa yang rusak di soal:',
+                items: [
+                    { jp: 'われる (割れる - Wareru)', mean: 'Pecah Berkeping', detail: 'Gelas, piring, kaca jendela, cermin, telur.' },
+                    { jp: 'おれる (折れる - Oreru)', mean: 'Patah', detail: 'Benda panjang: payung, ranting pohon, pensil, tulang.' },
+                    { jp: 'やぶれる (破れる - Yabureru)', mean: 'Robek / Koyak', detail: 'Kertas, buku, baju, kantong plastik.' },
+                    { jp: 'こわれる vs こしょうする', mean: 'Rusak Umum vs Mesin Error', detail: 'こわれる = Kursi, sepeda, jam rusak. こしょうする = Mesin (AC, printer, mobil) mogok/error.' }
+                ]
+            },
+            {
+                title: '9. Pasangan Kata Kerja Transitive vs Intransitive (Jebakan Kalimat)',
+                desc: 'Bedakan antara "Kita yang melakukan (を)" dan "Keadaan benda itu sendiri (が)":',
+                items: [
+                    { jp: 'ならぶ (が) vs ならべる (を)', mean: 'Berbaris vs Menyusun', detail: '人が ならぶ (Orang mengantre/berbaris). 皿を ならべる (Menata piring di meja).' },
+                    { jp: 'おちる (が) vs おとす (を)', mean: 'Jatuh vs Menjatuhkan', detail: '葉が おちる (Daun jatuh sendiri). 財布を おとす (Tidak sengaja menjatuhkan dompet).' },
+                    { jp: 'なくす (を) vs みつかる (が)', mean: 'Menghilangkan vs Ketemu', detail: '鍵を なくす (Kehilangan kunci). 鍵が みつかる (Kuncinya sudah ketemu).' }
+                ]
+            },
+            {
+                title: '10. Jebakan Kata Sifat Ukuran & Rasa',
+                desc: 'Dalam bahasa Indonesia artinya sama-sama "tipis" atau "sempit", tapi di Jepang beda:',
+                items: [
+                    { jp: 'うすい (薄い) vs ほそい (細い)', mean: 'Dua Jenis "Tipis"', detail: 'うすい = Tipis lembaran (buku, kertas) atau rasa hambar. ほそい = Tipis/ramping memanjang (mie, jalan, pensil).' },
+                    { jp: 'あつい (厚い) vs ふとい (太い)', mean: 'Dua Jenis "Tebal"', detail: 'あつい = Tebal lembaran (kamus, mantel). ふとい = Tebal/besar silinder (udon, pohon, kaki).' },
+                    { jp: 'せまい (狭い) vs きつい', mean: 'Dua Jenis "Sempit"', detail: 'せまい = Ruangan/kamar/jalan yang sempit. きつい = Baju/sepatu yang sempit (kekecilan).' }
+                ]
+            }
+        ];
+
+        // ==========================================
+        // STATE APLIKASI & LOCAL STORAGE
+        // ==========================================
+        let currentTab = 'quiz';
+        let currentCategory = 'all';
+        let masteredIds = new Set([12]);
+
+        // Muat progres dari LocalStorage jika ada
+        try {
+            const saved = localStorage.getItem('jft_kotoba_mastered');
+            if (saved) {
+                masteredIds = new Set(JSON.parse(saved));
+            }
+        } catch (e) {
+            console.warn('LocalStorage tidak tersedia');
+        }
+
+        function saveMastered() {
+            try {
+                localStorage.setItem('jft_kotoba_mastered', JSON.stringify([...masteredIds]));
+            } catch (e) {}
+        }
+
+        function resetProgress() {
+            masteredIds = new Set();
+            saveMastered();
+            updateMasteredBadge();
+            renderWordList();
+        }
+
+        // State Quiz
+        let quizList = [];
+        let quizIndex = 0;
+        let quizScore = 0;
+        let quizAnswered = false;
+
+        // State Flashcard
+        let fcList = [];
+        let fcIndex = 0;
+        let isFlipped = false;
+
+        // ==========================================
+        // FUNGSI AUDIO (TEXT-TO-SPEECH JEPANG)
+        // ==========================================
+        function speakJapanese(text) {
+            try {
+                if (!('speechSynthesis' in window)) return;
+                window.speechSynthesis.cancel();
+                const cleanText = text.replace(/<[^>]*>/g, '').split('/')[0].split('（')[0].trim();
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {
+                console.error("Audio error:", e);
+            }
+        }
+
+        function speakCurrentQuizWord() {
+            const item = quizList[quizIndex];
+            if (item) speakJapanese(item.kana);
+        }
+
+        function speakCurrentFlashcard() {
+            const item = fcList[fcIndex];
+            if (item) speakJapanese(item.kana);
+        }
+
+        // ==========================================
+        // FILTER & NAVIGASI TAB
+        // ==========================================
+        function getFilteredData() {
+            if (currentCategory === 'all') return [...vocabData];
+            if (currentCategory === 'unmastered') {
+                const unm = vocabData.filter(d => !masteredIds.has(d.id));
+                return unm.length > 0 ? unm : [...vocabData];
+            }
+            if (currentCategory === 'soal_kamu') return vocabData.filter(d => d.fromUserExam);
+            return vocabData.filter(d => d.category === currentCategory);
+        }
+
+        function updateMasteredBadge() {
+            const badge = document.getElementById('mastered-count');
+            if (badge) badge.textContent = `${masteredIds.size}/${vocabData.length}`;
+            const countAll = document.getElementById('count-all');
+            if (countAll) countAll.textContent = vocabData.length;
+            const countUnm = document.getElementById('count-unmastered');
+            if (countUnm) countUnm.textContent = vocabData.length - masteredIds.size;
+            saveMastered();
+        }
+
+        function switchTab(tabName) {
+            currentTab = tabName;
+            ['quiz', 'flashcard', 'traps', 'list'].forEach(t => {
+                const sec = document.getElementById(`section-${t}`);
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tabName) {
+                    sec.classList.remove('hidden');
+                    btn.classList.add('border-white', 'text-white', 'font-semibold');
+                    btn.classList.remove('border-transparent', 'text-indigo-200', 'font-medium');
+                } else {
+                    sec.classList.add('hidden');
+                    btn.classList.remove('border-white', 'text-white', 'font-semibold');
+                    btn.classList.add('border-transparent', 'text-indigo-200', 'font-medium');
+                }
+            });
+
+            // Sembunyikan filter bar pada tab Traps & List
+            const catBar = document.getElementById('category-bar');
+            if (tabName === 'traps' || tabName === 'list') {
+                catBar.classList.add('hidden');
+            } else {
+                catBar.classList.remove('hidden');
+            }
+
+            if (tabName === 'flashcard') renderFlashcard();
+            if (tabName === 'traps') renderTraps();
+            if (tabName === 'list') renderWordList();
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = 'cat-pill bg-indigo-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm transition';
+                } else if (btn.dataset.cat === 'unmastered') {
+                    btn.className = 'cat-pill bg-amber-50 text-amber-800 border border-amber-300 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap hover:bg-amber-100 transition';
+                } else {
+                    btn.className = 'cat-pill bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap hover:bg-slate-50 transition';
+                }
+            });
+
+            startNewQuiz();
+            fcList = getFilteredData();
+            fcIndex = 0;
+            if (currentTab === 'flashcard') renderFlashcard();
+        }
+
+        // ==========================================
+        // LOGIKA SIMULASI UJIAN (QUIZ)
+        // ==========================================
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function startNewQuiz() {
+            const filtered = getFilteredData();
+            // Prioritaskan soal dari gambar user jika kategori 'all' atau 'soal_kamu'
+            quizList = shuffleArray(filtered);
+            quizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-score-display').textContent = '0';
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            if (quizList.length === 0) return;
+            quizAnswered = false;
+            const item = quizList[quizIndex];
+
+            document.getElementById('quiz-progress-badge').textContent = `${quizIndex + 1}/${quizList.length}`;
+            document.getElementById('quiz-feedback').classList.add('hidden');
+
+            const visualBox = document.getElementById('quiz-visual-box');
+            const sentenceBox = document.getElementById('quiz-sentence-box');
+            const promptText = document.getElementById('quiz-prompt-text');
+            const typeLabel = document.getElementById('quiz-type-label');
+
+            // Tampilkan badge jika ini dari soal asli user
+            const catBadge = document.getElementById('quiz-cat-badge');
+            catBadge.innerHTML = item.fromUserExam 
+                ? `🔥 Soal dari Screenshot Kamu • 文字・語彙`
+                : `Latihan JFT-Basic • 文字・語彙`;
+
+            if (item.category === 'kanji' && item.sentenceJP) {
+                typeLabel.textContent = 'Pilih Kanji yang Tepat';
+                sentenceBox.classList.remove('hidden');
+                document.getElementById('quiz-sentence-jp').innerHTML = item.sentenceJP;
+                document.getElementById('quiz-sentence-id').textContent = `Arti: "${item.sentenceID}"`;
+                visualBox.innerHTML = `<div class="text-5xl mb-1">${item.emoji || '🈲'}</div><span class="text-xs font-semibold text-slate-500">${item.meaning}</span>`;
+                visualBox.className = "mb-4 flex flex-col items-center justify-center bg-slate-50 rounded-2xl p-4 border border-slate-200/80";
+                promptText.textContent = 'Manakah penulisan Kanji yang benar untuk kata yang digarisbawahi?';
+            } else {
+                typeLabel.textContent = 'Tebak Kosakata dari Ilustrasi';
+                sentenceBox.classList.add('hidden');
+                visualBox.className = "mb-5 flex flex-col items-center justify-center bg-slate-50 rounded-2xl p-6 border border-slate-200/80 min-h-[170px]";
+                if (item.visualType === 'svg') {
+                    visualBox.innerHTML = `${item.svg}<p class="mt-2 text-sm font-bold text-slate-700">${item.meaning}</p>`;
+                } else {
+                    visualBox.innerHTML = `<div class="text-6xl mb-3">${item.emoji}</div><p class="text-sm font-bold text-slate-700">${item.meaning}</p>`;
+                }
+                promptText.textContent = 'Pilih kosakata bahasa Jepang yang sesuai dengan gambar di atas:';
+            }
+
+            // Acak urutan pilihan jawaban
+            const correctOption = item.category === 'kanji' ? item.options[0] : item.kana;
+            const shuffledOptions = shuffleArray(item.options);
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            shuffledOptions.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/30 transition flex items-center space-x-3 group';
+                btn.onclick = () => selectQuizAnswer(opt, correctOption, item, btn);
+                btn.dataset.optionValue = opt;
+
+                btn.innerHTML = `
+                    <span class="w-5 h-5 rounded-full border-2 border-slate-400 group-hover:border-indigo-600 flex items-center justify-center flex-shrink-0 radio-circle">
+                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-600 hidden radio-dot"></span>
+                    </span>
+                    <span class="jp-font text-base sm:text-lg font-medium text-slate-800">${opt}</span>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectQuizAnswer(selected, correct, item, clickedBtn) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            const isCorrect = selected === correct;
+            if (isCorrect) {
+                quizScore++;
+                masteredIds.add(item.id);
+                updateMasteredBadge();
+                document.getElementById('quiz-score-display').textContent = quizScore;
+            }
+
+            // Putar suara kata yang benar
+            speakJapanese(item.kana);
+
+            // Tandai semua tombol opsi
+            const allBtns = document.querySelectorAll('#quiz-options button');
+            allBtns.forEach(btn => {
+                const val = btn.dataset.optionValue;
+                const dot = btn.querySelector('.radio-dot');
+                const circle = btn.querySelector('.radio-circle');
+
+                if (val === correct) {
+                    btn.className = 'w-full text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/70 flex items-center justify-between';
+                    circle.className = 'w-5 h-5 rounded-full border-2 border-emerald-600 flex items-center justify-center flex-shrink-0';
+                    dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-600 block';
+                } else if (val === selected && !isCorrect) {
+                    btn.className = 'w-full text-left p-3.5 rounded-xl border-2 border-rose-400 bg-rose-50/70 flex items-center justify-between';
+                    circle.className = 'w-5 h-5 rounded-full border-2 border-rose-600 flex items-center justify-center flex-shrink-0';
+                    dot.className = 'w-2.5 h-2.5 rounded-full bg-rose-600 block';
+                } else {
+                    btn.className = 'w-full text-left p-3.5 rounded-xl border border-slate-200 opacity-60 flex items-center justify-between';
+                }
+
+                // Tambahkan arti di sebelah kanan tiap opsi agar user tahu bedanya
+                const meaningText = item.optionMeanings[val] || '';
+                const meaningSpan = document.createElement('span');
+                meaningSpan.className = 'text-xs text-slate-500 font-medium ml-2 text-right';
+                meaningSpan.textContent = meaningText;
+                btn.appendChild(meaningSpan);
+            });
+
+            // Tampilkan kotak penjelasan
+            const fbBox = document.getElementById('quiz-feedback');
+            const fbIcon = document.getElementById('feedback-icon');
+            const fbTitle = document.getElementById('feedback-title');
+            const fbBody = document.getElementById('feedback-body');
+
+            fbBox.classList.remove('hidden');
+            if (isCorrect) {
+                fbBox.className = 'mt-5 rounded-xl p-4 border bg-emerald-50/80 border-emerald-200 text-emerald-950';
+                fbIcon.textContent = '✅';
+                fbTitle.textContent = 'Mantap! Jawabanmu Benar!';
+            } else {
+                fbBox.className = 'mt-5 rounded-xl p-4 border bg-rose-50/80 border-rose-200 text-rose-950';
+                fbIcon.textContent = '💡';
+                fbTitle.textContent = `Kurang Tepat! Jawaban yang benar: ${correct}`;
+            }
+
+            fbBody.innerHTML = `
+                <p><strong>Kosakata:</strong> <span class="jp-font font-bold">${item.kana}</span> (${item.kanji}) — <em>${item.romaji}</em></p>
+                <p><strong>Arti:</strong> ${item.meaning}</p>
+                <p class="pt-1 text-indigo-900 bg-white/70 p-2.5 rounded-lg border border-indigo-100"><strong>🎯 Trik Ingat Cepat:</strong> ${item.tip}</p>
+            `;
+        }
+
+        function nextQuizQuestion() {
+            if (quizIndex < quizList.length - 1) {
+                quizIndex++;
+                renderQuizQuestion();
+            } else {
+                // Restart dan acak lagi
+                startNewQuiz();
+            }
+        }
+
+        // ==========================================
+        // LOGIKA FLASHCARD VISUAL
+        // ==========================================
+        function renderFlashcard() {
+            if (fcList.length === 0) fcList = getFilteredData();
+            const item = fcList[fcIndex];
+            if (!item) return;
+
+            // Reset flip ke depan
+            isFlipped = false;
+            document.getElementById('fc-inner').classList.remove('rotate-y-180');
+
+            document.getElementById('fc-counter').textContent = `Kartu ${fcIndex + 1} dari ${fcList.length}`;
+            document.getElementById('fc-badge-front').textContent = item.fromUserExam ? '🔥 Dari Soal Ujianmu' : `Kategori: ${item.category.toUpperCase()}`;
+
+            // Update tombol tandai hafal
+            const masterBtn = document.getElementById('fc-master-btn');
+            if (masteredIds.has(item.id)) {
+                masterBtn.textContent = '⭐ Sudah Hafal';
+                masterBtn.className = 'text-xs bg-amber-100 text-amber-800 px-3 py-1.5 rounded-lg font-bold transition';
+            } else {
+                masterBtn.textContent = '☆ Tandai Hafal';
+                masterBtn.className = 'text-xs bg-slate-100 hover:bg-amber-100 text-slate-600 px-3 py-1.5 rounded-lg font-medium transition';
+            }
+
+            // Isi bagian depan
+            const frontContent = document.getElementById('fc-front-content');
+            if (item.category === 'kanji') {
+                frontContent.innerHTML = `
+                    <div class="text-4xl mb-2">${item.emoji}</div>
+                    <p class="jp-font text-2xl sm:text-3xl font-bold text-indigo-600 mb-2">${item.kana}</p>
+                    <p class="text-base font-bold text-slate-700">${item.meaning}</p>
+                    <p class="text-xs text-slate-500 mt-2 max-w-sm">${item.sentenceJP || ''}</p>
+                `;
+            } else if (item.visualType === 'svg') {
+                frontContent.innerHTML = `
+                    <div class="mb-3">${item.svg}</div>
+                    <p class="text-lg sm:text-xl font-bold text-slate-800">${item.meaning}</p>
+                `;
+            } else {
+                frontContent.innerHTML = `
+                    <div class="text-6xl sm:text-7xl mb-4">${item.emoji}</div>
+                    <p class="text-lg sm:text-xl font-bold text-slate-800">${item.meaning}</p>
+                `;
+            }
+
+            // Isi bagian belakang
+            document.getElementById('fc-back-kana').textContent = item.kana;
+            document.getElementById('fc-back-kanji').textContent = item.kanji;
+            document.getElementById('fc-back-romaji').textContent = item.romaji;
+            document.getElementById('fc-back-meaning').textContent = item.meaning;
+            document.getElementById('fc-back-tip').textContent = `💡 ${item.tip}`;
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            const inner = document.getElementById('fc-inner');
+            if (isFlipped) {
+                inner.classList.add('rotate-y-180');
+                speakCurrentFlashcard();
+            } else {
+                inner.classList.remove('rotate-y-180');
+            }
+        }
+
+        function nextFlashcard() {
+            fcIndex = (fcIndex + 1) % fcList.length;
+            renderFlashcard();
+        }
+
+        function prevFlashcard() {
+            fcIndex = (fcIndex - 1 + fcList.length) % fcList.length;
+            renderFlashcard();
+        }
+
+        function shuffleFlashcards() {
+            fcList = shuffleArray(fcList);
+            fcIndex = 0;
+            renderFlashcard();
+        }
+
+        function toggleMasteredCurrent() {
+            const item = fcList[fcIndex];
+            if (!item) return;
+            if (masteredIds.has(item.id)) {
+                masteredIds.delete(item.id);
+            } else {
+                masteredIds.add(item.id);
+            }
+            updateMasteredBadge();
+            renderFlashcard();
+        }
+
+        // ==========================================
+        // RENDER TAB JEBAKAN MIRIP & DAFTAR LENGKAP
+        // ==========================================
+        function renderTraps() {
+            const container = document.getElementById('traps-container');
+            container.innerHTML = '';
+            trapGroups.forEach(group => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl shadow-sm border border-slate-200 p-5';
+                
+                let itemsHtml = '';
+                group.items.forEach(it => {
+                    const cleanSpeak = it.jp.split('(')[0].split('vs')[0].trim();
+                    itemsHtml += `
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-start justify-between gap-3">
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="jp-font font-bold text-indigo-700 text-base">${it.jp}</span>
+                                    <span class="text-xs font-semibold bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-md">${it.mean}</span>
+                                </div>
+                                <p class="text-xs text-slate-600 mt-1 leading-relaxed">${it.detail}</p>
+                            </div>
+                            <button onclick="speakJapanese('${cleanSpeak}')" class="p-2 rounded-lg bg-white border border-slate-200 hover:bg-indigo-50 text-slate-700 text-xs flex-shrink-0">
+                                🔊
+                            </button>
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <h3 class="font-bold text-slate-800 text-base">${group.title}</h3>
+                    <p class="text-xs text-slate-500 mt-0.5 mb-3">${group.desc}</p>
+                    <div class="space-y-2.5">${itemsHtml}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderWordList() {
+            const query = (document.getElementById('search-input').value || '').toLowerCase();
+            const catFilter = document.getElementById('list-cat-filter') ? document.getElementById('list-cat-filter').value : 'all';
+            const container = document.getElementById('word-list-container');
+            container.innerHTML = '';
+
+            const filtered = vocabData.filter(item => {
+                const matchCat = catFilter === 'all' || 
+                                 (catFilter === 'soal_kamu' && item.fromUserExam) || 
+                                 item.category === catFilter;
+                const matchQuery = item.kana.toLowerCase().includes(query) ||
+                                   item.kanji.toLowerCase().includes(query) ||
+                                   item.romaji.toLowerCase().includes(query) ||
+                                   item.meaning.toLowerCase().includes(query) ||
+                                   item.tip.toLowerCase().includes(query);
+                return matchCat && matchQuery;
+            });
+
+            const countEl = document.getElementById('list-result-count');
+            if (countEl) countEl.textContent = `Menampilkan ${filtered.length} dari ${vocabData.length} kosakata`;
+
+            filtered.forEach(item => {
+                const isMastered = masteredIds.has(item.id);
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-2xl p-4 shadow-sm border ${isMastered ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-200'} flex flex-col justify-between`;
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <div class="flex items-center space-x-2 flex-wrap">
+                                    <span class="text-lg">${item.emoji || '🇯🇵'}</span>
+                                    <span class="jp-font text-lg font-bold text-indigo-700">${item.kana}</span>
+                                    <span class="jp-font text-sm text-slate-500">(${item.kanji})</span>
+                                </div>
+                                <p class="text-xs font-semibold text-amber-600 uppercase tracking-wider mt-0.5">${item.romaji}</p>
+                            </div>
+                            <div class="flex items-center space-x-1 flex-shrink-0">
+                                ${item.fromUserExam ? '<span class="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-semibold">Soalmu</span>' : ''}
+                                <button onclick="toggleMasteredById(${item.id})" class="p-1.5 rounded-lg ${isMastered ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-400'} hover:bg-amber-200 text-xs transition" title="Tandai Hafal">
+                                    ${isMastered ? '⭐' : '☆'}
+                                </button>
+                                <button onclick="speakJapanese('${item.kana}')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-indigo-100 text-slate-700 text-xs transition" title="Dengarkan">
+                                    🔊
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-sm font-bold text-slate-800 mt-2">${item.meaning}</p>
+                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">${item.tip}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleMasteredById(id) {
+            if (masteredIds.has(id)) {
+                masteredIds.delete(id);
+            } else {
+                masteredIds.add(id);
+            }
+            updateMasteredBadge();
+            renderWordList();
+        }
+
+        // ==========================================
+        // INISIALISASI SAAT HALAMAN DIMUAT
+        // ==========================================
+        window.onload = function() {
+            updateMasteredBadge();
+            fcList = getFilteredData();
+            startNewQuiz();
+        };
+    </script>
+</body>
+</html>
