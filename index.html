@@ -1,490 +1,1154 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kotoba 37 - Flashcard Minimalis</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            surface: {
-              DEFAULT: '#121215',
-              card: '#18181b',
-              border: '#27272a',
-              muted: '#71717a'
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JFT Hyougen Brain-Hack System (300 Soal Lengkap)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        jp: ['"Noto Sans JP"', 'sans-serif'],
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  </script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
-
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      background-color: #0c0c0e;
-    }
-
-    .jp-font {
-      font-family: 'Noto Sans JP', sans-serif;
-    }
-
-    .perspective {
-      perspective: 1000px;
-    }
-
-    .preserve-3d {
-      transform-style: preserve-3d;
-    }
-
-    .backface-hidden {
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-
-    .rotate-y-180 {
-      transform: rotateY(180deg);
-    }
-
-    /* Minimalist smooth transition */
-    .card-transition {
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-  </style>
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .jp-text { font-family: 'Noto Sans JP', sans-serif; }
+        .chat-bubble-left {
+            border-radius: 18px 18px 18px 4px;
+        }
+        .chat-bubble-right {
+            border-radius: 18px 18px 4px 18px;
+        }
+        @keyframes pulse-fast {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        .combo-pop {
+            animation: pulse-fast 0.3s ease-in-out;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
 </head>
-<body class="text-zinc-100 min-h-screen flex flex-col items-center justify-between p-4 sm:p-6 antialiased">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
 
-  <!-- Minimal Header -->
-  <header class="w-full max-w-lg flex items-center justify-between py-2">
-    <div>
-      <h1 class="text-base font-bold tracking-tight text-white flex items-center gap-2">
-        <span>Kotoba 37</span>
-        <span class="text-xs px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-400 font-normal">Bab 37</span>
-      </h1>
-      <p class="text-xs text-zinc-500">Minna no Nihongo</p>
-    </div>
+    <!-- TOP NAVBAR & GAMIFICATION STATS -->
+    <header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3">
+        <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <i class="fa-solid fa-brain text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-lg tracking-tight bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        HYOUGEN BRAIN-HACK
+                    </h1>
+                    <p class="text-xs text-slate-400">300 Soal Asli PDF & DOCX • Sistem Akali Otak</p>
+                </div>
+            </div>
 
-    <div class="flex items-center gap-2">
-      <button 
-        onclick="shuffleDeck()" 
-        class="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition" 
-        title="Acak Kartu (R)">
-        🔀
-      </button>
-      <button 
-        onclick="toggleListDrawer()" 
-        class="px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 text-xs font-semibold transition flex items-center gap-1.5">
-        <span>📖</span>
-        <span>Daftar (<span id="total-badge">52</span>)</span>
-      </button>
-    </div>
-  </header>
+            <!-- Stats Bar -->
+            <div class="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm font-semibold">
+                <div id="comboBadge" class="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 px-3 py-1.5 rounded-full">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                    <span>Streak: <strong id="streakCount">0</strong></span>
+                </div>
+                <div class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 py-1.5 rounded-full">
+                    <i class="fa-solid fa-check-double"></i>
+                    <span>Mastered: <strong id="masteredCount">0</strong>/300</span>
+                </div>
+                <button onclick="openCheatSheetModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-full transition flex items-center gap-1.5 shadow-md shadow-indigo-600/20">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span class="hidden sm:inline">Rumus Akali Otak</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
-  <main class="w-full max-w-lg flex-1 flex flex-col items-center justify-center my-auto py-4">
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 flex flex-col gap-5">
 
-    <!-- Progress Indicator -->
-    <div class="w-full flex items-center justify-between text-xs text-zinc-500 mb-2 px-1">
-      <span>Kartu <strong id="card-counter" class="text-zinc-300">1</strong> dari <span id="deck-size">52</span></span>
-      <span id="card-group" class="text-[11px] text-zinc-400">Kata Kerja</span>
-    </div>
-
-    <!-- Minimal Thin Progress Line -->
-    <div class="w-full h-1 bg-zinc-900 rounded-full mb-4 overflow-hidden">
-      <div id="progress-line" class="h-full bg-zinc-400 transition-all duration-300" style="width: 2%;"></div>
-    </div>
-
-    <!-- 3D Card -->
-    <div class="w-full perspective">
-      <div 
-        id="card-element" 
-        onclick="flipCard()"
-        class="relative w-full h-80 sm:h-96 preserve-3d card-transition cursor-pointer rounded-2xl border border-zinc-800/80 bg-zinc-900 shadow-xl flex items-center justify-center">
-
-        <!-- DEPAN (Kanji & Furigana) -->
-        <div class="absolute inset-0 backface-hidden p-6 flex flex-col justify-between items-center text-center">
-          <!-- Top Tag & Audio -->
-          <div class="w-full flex justify-between items-center">
-            <span id="front-type" class="text-xs text-zinc-500 font-medium tracking-wide">JEPANG</span>
-            <button 
-              onclick="event.stopPropagation(); playAudio();" 
-              class="p-2 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800 transition" 
-              title="Dengarkan (A)">
-              🔊
+        <!-- MODE SELECTOR TABS -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
+            <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 bg-indigo-600 text-white shadow">
+                <i class="fa-solid fa-gamepad"></i> Latihan Dopamin
             </button>
-          </div>
-
-          <!-- Main Japanese Text -->
-          <div class="my-auto select-none">
-            <div id="card-furigana" class="jp-font text-base text-zinc-400 font-normal mb-1">
-              ほめます
-            </div>
-            <div id="card-kanji" class="jp-font text-4xl sm:text-5xl font-bold text-white tracking-wide">
-              褒めます
-            </div>
-            <div id="card-romaji" class="text-xs sm:text-sm text-zinc-500 mt-2 font-mono">
-              homemasu
-            </div>
-          </div>
-
-          <!-- Bottom hint -->
-          <div class="text-[11px] text-zinc-600">
-            Ketuk untuk melihat arti • <kbd class="px-1 py-0.5 bg-zinc-800 text-zinc-400 rounded">Spasi</kbd>
-          </div>
-        </div>
-
-        <!-- BELAKANG (Arti & Contoh) -->
-        <div class="absolute inset-0 backface-hidden rotate-y-180 p-6 flex flex-col justify-between items-center text-center bg-zinc-900 rounded-2xl">
-          <!-- Top Tag -->
-          <div class="w-full flex justify-between items-center">
-            <span class="text-xs text-zinc-500 font-medium tracking-wide">ARTI & CONTOH</span>
-            <button 
-              onclick="event.stopPropagation(); playAudio();" 
-              class="p-2 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
-              🔊
+            <button onclick="switchTab('speed')" id="tab-speed" class="tab-btn py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                <i class="fa-solid fa-stopwatch"></i> Speed-Hack (5s)
             </button>
-          </div>
+            <button onclick="switchTab('srs')" id="tab-srs" class="tab-btn py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                <i class="fa-solid fa-skull-crossbones text-rose-400"></i> Zona Lemah (<span id="weakCountBadge">0</span>)
+            </button>
+            <button onclick="switchTab('explorer')" id="tab-explorer" class="tab-btn py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                <i class="fa-solid fa-list-check"></i> Bank 300 Soal
+            </button>
+        </div>
 
-          <!-- Meaning -->
-          <div class="my-auto px-4">
-            <div class="text-xs text-zinc-500 mb-1">Bahasa Indonesia</div>
-            <h2 id="card-meaning" class="text-2xl sm:text-3xl font-bold text-white mb-4">
-              Memuji
-            </h2>
+        <!-- FILTER & DECK CONTROLS (Shown in Quiz / Speed modes) -->
+        <div id="deckControls" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-1"><i class="fa-solid fa-layer-group mr-1"></i>Pilih Paket:</span>
+                <select id="deckSelect" onchange="changeDeck()" class="bg-slate-800 border border-slate-700 text-white text-xs sm:text-sm rounded-xl px-3 py-2 font-medium focus:outline-none focus:border-indigo-500">
+                    <option value="all">🔥 Semua 300 Soal (Campuran)</option>
+                    <option value="part1">⚡ Paket 1: 200 Soal Refleks Cepat (No. 1 - 200)</option>
+                    <option value="part2">🎯 Paket 2: 100 Soal JFT-Basic A2 / N4 (No. 1 - 100)</option>
+                    <option value="chunk1">📦 Chunk 1: Refleks #1 - #50</option>
+                    <option value="chunk2">📦 Chunk 2: Refleks #51 - #100</option>
+                    <option value="chunk3">📦 Chunk 3: Refleks #101 - #150</option>
+                    <option value="chunk4">📦 Chunk 4: Refleks #151 - #200</option>
+                    <option value="chunk5">📦 Chunk 5: JFT Kontekstual #1 - #50</option>
+                    <option value="chunk6">📦 Chunk 6: JFT Kontekstual #51 - #100</option>
+                </select>
 
-            <!-- Minimal Example Box -->
-            <div id="card-example-box" class="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3 text-left">
-              <div id="card-example-jp" class="jp-font text-xs sm:text-sm text-zinc-200 font-medium">
-                先生に褒められました。
-              </div>
-              <div id="card-example-id" class="text-[11px] text-zinc-400 mt-1">
-                Dipuji oleh guru. (Bentuk Pasif)
-              </div>
+                <button onclick="shuffleCurrentDeck()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs sm:text-sm px-3 py-2 rounded-xl transition flex items-center gap-1.5" title="Acak Urutan Soal">
+                    <i class="fa-solid fa-shuffle text-indigo-400"></i> Acak Soal
+                </button>
             </div>
-          </div>
 
-          <!-- Back hint -->
-          <div class="text-[11px] text-zinc-600">
-            Ketuk untuk kembali
-          </div>
+            <div class="flex items-center gap-3">
+                <label class="flex items-center gap-2 text-xs sm:text-sm text-slate-300 cursor-pointer select-none">
+                    <input type="checkbox" id="autoAudioToggle" checked class="accent-indigo-500 w-4 h-4 rounded">
+                    <span><i class="fa-solid fa-volume-high text-indigo-400 mr-1"></i>Auto-Suara Jepang</span>
+                </label>
+                <label class="flex items-center gap-2 text-xs sm:text-sm text-slate-300 cursor-pointer select-none">
+                    <input type="checkbox" id="highlightHackToggle" checked onchange="renderQuestion()" class="accent-pink-500 w-4 h-4 rounded">
+                    <span><i class="fa-solid fa-wand-magic-sparkles text-pink-400 mr-1"></i>Sensor Kata Kunci</span>
+                </label>
+            </div>
         </div>
 
-      </div>
-    </div>
+        <!-- QUIZ / SPEED / SRS PLAYGROUND VIEW -->
+        <div id="view-playground" class="flex flex-col gap-4">
+            
+            <!-- Speed Timer Bar (Only active in Speed Mode) -->
+            <div id="speedTimerContainer" class="hidden w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                <div id="speedTimerBar" class="bg-gradient-to-r from-emerald-400 via-amber-400 to-rose-500 h-full w-full transition-all duration-100"></div>
+            </div>
 
-    <!-- Minimal Navigation Buttons -->
-    <div class="w-full flex items-center justify-between gap-3 mt-5">
-      <button 
-        onclick="prevCard()" 
-        class="flex-1 py-3 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs font-semibold transition active:scale-95 flex items-center justify-center gap-1">
-        <span>←</span>
-        <span>Sebelumnya</span>
-      </button>
+            <!-- Question Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
+                
+                <!-- Question Header Meta -->
+                <div class="flex items-center justify-between border-b border-slate-800/80 pb-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <span id="qSourceBadge" class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold px-2.5 py-1 rounded-lg">
+                            Paket 1 • #1
+                        </span>
+                        <span id="qPatternBadge" class="bg-fuchsia-500/15 text-fuchsia-300 border border-fuchsia-500/30 text-xs font-semibold px-2.5 py-1 rounded-lg">
+                            💡 Pola: Izin & Larangan
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="speakCurrentDialogue()" class="bg-slate-800 hover:bg-slate-700 text-indigo-400 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-slate-700 transition">
+                            <i class="fa-solid fa-volume-high"></i> Putar Dialog
+                        </button>
+                        <span id="qProgressText" class="text-xs font-mono text-slate-400">1 / 300</span>
+                    </div>
+                </div>
 
-      <button 
-        onclick="flipCard()" 
-        class="flex-1 py-3 px-4 rounded-xl bg-white hover:bg-zinc-200 text-zinc-900 text-xs font-bold transition active:scale-95">
-        Balik Kartu
-      </button>
+                <!-- Dialogue Chat Bubbles Container -->
+                <div id="dialogueContainer" class="space-y-3 my-2 min-h-[130px] flex flex-col justify-center">
+                    <!-- Populated via JS -->
+                </div>
 
-      <button 
-        onclick="nextCard()" 
-        class="flex-1 py-3 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs font-semibold transition active:scale-95 flex items-center justify-center gap-1">
-        <span>Berikutnya</span>
-        <span>→</span>
-      </button>
-    </div>
+                <!-- Brain-Hack Keyword Hint Box -->
+                <div id="brainHackHintBox" class="mt-4 bg-slate-950/70 border border-slate-800/90 rounded-2xl p-3 flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
+                    <i class="fa-solid fa-lightbulb text-amber-400 mt-0.5"></i>
+                    <div id="brainHackHintText">
+                        Perhatikan ekor kalimat lawan bicara untuk menentukan bentuk waktu (Tense) dan siapa yang melakukan aksi!
+                    </div>
+                </div>
 
-    <!-- Minimal Filter Pills -->
-    <div class="flex items-center gap-2 mt-4 text-xs">
-      <button onclick="setFilter('all')" id="btn-filter-all" class="filter-btn px-3 py-1 rounded-full bg-zinc-800 text-white font-medium">Semua (52)</button>
-      <button onclick="setFilter('verb')" id="btn-filter-verb" class="filter-btn px-3 py-1 rounded-full text-zinc-500 hover:text-zinc-300 font-medium">Kata Kerja</button>
-      <button onclick="setFilter('noun')" id="btn-filter-noun" class="filter-btn px-3 py-1 rounded-full text-zinc-500 hover:text-zinc-300 font-medium">Kata Benda</button>
-      <button onclick="setFilter('other')" id="btn-filter-other" class="filter-btn px-3 py-1 rounded-full text-zinc-500 hover:text-zinc-300 font-medium">Lainnya</button>
-    </div>
+                <!-- Answer Options Grid -->
+                <div id="optionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
+                    <!-- Populated via JS -->
+                </div>
 
-  </main>
+                <!-- Instant Explanation & Feedback Banner (Hidden until answered) -->
+                <div id="feedbackPanel" class="hidden mt-5 rounded-2xl p-4 border transition-all">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="space-y-1">
+                            <div id="feedbackTitle" class="font-extrabold text-base flex items-center gap-2"></div>
+                            <p id="feedbackExplanation" class="text-xs sm:text-sm text-slate-200 leading-relaxed"></p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button onclick="prevQuestion()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition">
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </button>
+                            <button id="nextBtn" onclick="nextQuestion()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
+                                <span>Soal Berikutnya</span> <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-  <footer class="w-full max-w-lg text-center py-2 text-[11px] text-zinc-600">
-    Pintasan: <kbd class="px-1 bg-zinc-900 rounded border border-zinc-800">Spasi</kbd> Balik • <kbd class="px-1 bg-zinc-900 rounded border border-zinc-800">←</kbd> <kbd class="px-1 bg-zinc-900 rounded border border-zinc-800">→</kbd> Geser • <kbd class="px-1 bg-zinc-900 rounded border border-zinc-800">A</kbd> Suara
-  </footer>
+                <!-- Bottom Quick Navigation -->
+                <div class="mt-6 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                    <button onclick="prevQuestion()" class="hover:text-white flex items-center gap-1 transition">
+                        <i class="fa-solid fa-chevron-left"></i> Sebelumnya
+                    </button>
+                    <span>Tips: Tekan angka <strong>1, 2, 3, 4</strong> di keyboard untuk menjawab cepat, <strong>Spasi/Enter</strong> untuk lanjut!</span>
+                    <button onclick="nextQuestion()" class="hover:text-white flex items-center gap-1 transition">
+                        Lewati <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
 
-  <!-- Clean Word List Drawer / Modal -->
-  <div id="list-drawer" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-end sm:items-center justify-center">
-    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-lg h-[80vh] sm:rounded-2xl rounded-t-2xl flex flex-col overflow-hidden shadow-2xl">
-      
-      <!-- Drawer Header -->
-      <div class="p-4 border-b border-zinc-800 flex items-center justify-between">
-        <div>
-          <h3 class="text-sm font-bold text-white">Daftar Kotoba Bab 37</h3>
-          <p class="text-xs text-zinc-500">Klik kata untuk langsung melompat ke kartu</p>
+            </div>
         </div>
-        <button onclick="toggleListDrawer()" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 text-sm">
-          ✕
-        </button>
-      </div>
 
-      <!-- Quick Search Bar -->
-      <div class="p-3 border-b border-zinc-800/60 bg-zinc-900">
-        <input 
-          type="text" 
-          id="search-input" 
-          oninput="filterList(this.value)"
-          placeholder="Cari kanji, romaji, atau arti..." 
-          class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white placeholder:text-zinc-600 outline-none focus:border-zinc-600 transition"
-        >
-      </div>
+        <!-- BANK 300 SOAL EXPLORER VIEW -->
+        <div id="view-explorer" class="hidden flex-col gap-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <div class="relative flex-1">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                    <input type="text" id="searchInput" oninput="renderExplorer()" placeholder="Cari kata Jepang, nomor soal, atau rumus (misal: ほうがいい, もらえますか, 病院)..." class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div class="flex items-center gap-2">
+                    <select id="explorerFilter" onchange="renderExplorer()" class="bg-slate-800 border border-slate-700 text-xs sm:text-sm rounded-xl px-3 py-2 text-white">
+                        <option value="all">Semua (300 Soal)</option>
+                        <option value="part1">200 Soal Refleks (PDF 1)</option>
+                        <option value="part2">100 Soal JFT-A2 (DOCX 2)</option>
+                        <option value="weak">Hanya Soal Lemah / Salah</option>
+                        <option value="mastered">Sudah Dikuasai</option>
+                    </select>
+                </div>
+            </div>
 
-      <!-- Scrollable List -->
-      <div id="list-content" class="flex-1 overflow-y-auto p-3 space-y-1.5 divide-y divide-zinc-800/40">
-        <!-- Rendered by JS -->
-      </div>
+            <div id="explorerList" class="space-y-3 max-h-[70vh] overflow-y-auto pr-1">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL: RUMUS AKALI OTAK (CHEAT SHEET) -->
+    <div id="cheatSheetModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-bolt text-amber-400 text-xl"></i>
+                    <h2 class="font-extrabold text-base sm:text-lg text-white">7 Rumus "Akali Otak" Hyougen JFT-Basic & N4</h2>
+                </div>
+                <button onclick="closeCheatSheetModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm leading-relaxed text-slate-200">
+                <div class="bg-indigo-950/40 border border-indigo-500/30 rounded-2xl p-4">
+                    <p class="font-bold text-indigo-300 mb-1">🎯 Kenapa Banyak Orang Terjebak di Soal Hyougen?</p>
+                    <p class="text-slate-300">Karena pembuat soal sengaja membuat 4 pilihan jawaban dengan <strong>kata dasar yang sama persis</strong>, hanya berbeda di <strong>ekor kalimatnya</strong> (<em>~ます vs ~ました vs ~てください vs ~て</em>). Gunakan 7 rumus kilat ini untuk menjawab dalam 2 detik tanpa perlu menerjemahkan seluruh kalimat!</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-3.5">
+                        <h3 class="font-bold text-amber-400 mb-1">1. Jebakan "Siapa Pelakunya?" (Saya vs Kamu)</h3>
+                        <p class="text-slate-300 text-xs">Jika kamu yang akan melakukan aksi, <strong>JANGAN PERNAH</strong> pilih ekor <span class="text-rose-400 font-mono">～てください / ～て</span> (itu menyuruh orang lain!). Pilih bentuk niat/akan: <span class="text-emerald-400 font-mono">～ます / ～る / ～てみる / ～ておく</span>.</p>
+                    </div>
+                    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-3.5">
+                        <h3 class="font-bold text-emerald-400 mb-1">2. Jebakan Waktu (Belum vs Sudah)</h3>
+                        <p class="text-slate-300 text-xs">Jika baru mau melakukan sesuatu sekarang/nanti, <strong>CORET semua yang berakhiran lampau <span class="text-rose-400 font-mono">～た / ～ました</span></strong>! Kecuali untuk ucapan <span class="text-emerald-400 font-mono">助かりました</span> (sangat terbantu) atau <span class="text-emerald-400 font-mono">メモしました</span> setelah diberi tahu info.</p>
+                    </div>
+                    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-3.5">
+                        <h3 class="font-bold text-pink-400 mb-1">3. Rumus Saran: ～たほうがいいよ / ～たら？</h3>
+                        <p class="text-slate-300 text-xs">Kalau lawan bicara memberi saran (sebaiknya...), respon alami otak adalah setuju dan mencoba: <span class="text-emerald-400 font-mono">うん、そうする / やってみる / 聞いてみる</span>.</p>
+                    </div>
+                    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-3.5">
+                        <h3 class="font-bold text-cyan-400 mb-1">4. Rumus Ajakan: ～ない？ / ～ませんか</h3>
+                        <p class="text-slate-300 text-xs">Jika diajak dan setuju → gunakan bentuk ajakan bersama <span class="text-emerald-400 font-mono">～よう / ～ましょう (行こう / やろう)</span>. Jika menolak karena sibuk → tawarkan waktu pengganti <span class="text-emerald-400 font-mono">～ならどう？ (来週ならどう？)</span>.</p>
+                    </div>
+                    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-3.5">
+                        <h3 class="font-bold text-purple-400 mb-1">5. Rumus Minta Izin: ～てもいいですか</h3>
+                        <p class="text-slate-300 text-xs">Jika diizinkan (<em>いいですよ / どうぞ</em>), cukup jawab <span class="text-emerald-400 font-mono">ありがとうございます</span> (+ aksi yang akan kamu lakukan). Jika dilarang (<em>～ないで / いけません</em>), patuhi dengan alternatif (<span class="text-emerald-400 font-mono">フラッシュなしで / 外でかけるね</span>).</p>
+                    </div>
+                    <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-3.5">
+                        <h3 class="font-bold text-orange-400 mb-1">6. Rumus Bantuan: 手伝おうか / ～てあげます</h3>
+                        <p class="text-slate-300 text-xs">Saat orang menawarkan bantuan, di Jepang pantang menolak kasar. Selalu pilih respon berterima kasih: <span class="text-emerald-400 font-mono">ありがとうございます。助かります / お願いします</span>.</p>
+                    </div>
+                </div>
+
+                <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-2xl p-4">
+                    <h3 class="font-bold text-emerald-300 mb-1">7. Hack Khusus 100 Soal JFT-Basic A2 (Dialog 3 Baris)</h3>
+                    <p class="text-slate-300 text-xs">Pada soal dimana bagian kosong <strong>＿＿＿＿＿ berada di tengah dialog</strong>, kunci jawabannya <strong>100% ada di kalimat ke-3 (respon lawan bicara setelah titik-titik)</strong>! Contoh: Jika di baris ke-3 lawan bicara menjawab <em>"えっ、自分で作ったんですか" (Eh, buat sendiri?)</em>, maka titik-titik di atasnya pasti berisi <em>"自分で作ったんです"</em>!</p>
+                </div>
+            </div>
+            <div class="p-4 border-t border-slate-800 bg-slate-950/60 flex justify-end">
+                <button onclick="closeCheatSheetModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2 rounded-xl text-xs sm:text-sm">Siap Praktikkan!</button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Database lengkap 52 Kotoba dari buku Bab 37
-    const KOTOBA_DATA = [
-      { id: 1, kanji: "褒めます", furigana: "ほめます", romaji: "homemasu", arti: "memuji", type: "verb", group: "Kata Kerja II", exJp: "先生に褒められました。", exId: "Dipuji oleh guru." },
-      { id: 2, kanji: "しかります", furigana: "しかります", romaji: "shikarimasu", arti: "memarahi", type: "verb", group: "Kata Kerja I", exJp: "母に叱られました。", exId: "Dimarahi oleh ibu." },
-      { id: 3, kanji: "誘います", furigana: "さそいます", romaji: "sasoimasu", arti: "mengajak", type: "verb", group: "Kata Kerja I", exJp: "友達を映画に誘いました。", exId: "Mengajak teman nonton." },
-      { id: 4, kanji: "招待します", furigana: "しょうたいします", romaji: "shoutaishimasu", arti: "mengundang", type: "verb", group: "Kata Kerja III", exJp: "パーティーに招待されました。", exId: "Diundang ke pesta." },
-      { id: 5, kanji: "頼みます", furigana: "たのみます", romaji: "tanomimasu", arti: "meminta / memohon", type: "verb", group: "Kata Kerja I", exJp: "仕事を頼まれました。", exId: "Dimintai tolong pekerjaan." },
-      { id: 6, kanji: "注意します", furigana: "ちゅういします", romaji: "chuuyishimasu", arti: "menasihati / memperingatkan", type: "verb", group: "Kata Kerja III", exJp: "先生に注意されました。", exId: "Dinasihati oleh guru." },
-      { id: 7, kanji: "とります", furigana: "とります", romaji: "torimasu", arti: "mencuri / mengambil", type: "verb", group: "Kata Kerja I", exJp: "泥棒に財布をとられました。", exId: "Dompet dicuri oleh maling." },
-      { id: 8, kanji: "踏みます", furigana: "ふみます", romaji: "fumimasu", arti: "menginjak", type: "verb", group: "Kata Kerja I", exJp: "足を踏まれました。", exId: "Kaki saya terinjak." },
-      { id: 9, kanji: "壊します", furigana: "こわします", romaji: "kowashimasu", arti: "merusak", type: "verb", group: "Kata Kerja I", exJp: "パソコンを壊されました。", exId: "Komputer dirusak orang." },
-      { id: 10, kanji: "汚します", furigana: "よごします", romaji: "yogoshimasu", arti: "mengotori", type: "verb", group: "Kata Kerja I", exJp: "服を汚してしまいました。", exId: "Mengotori pakaian." },
-      { id: 11, kanji: "行います", furigana: "おこないます", romaji: "okonaimasu", arti: "mengadakan / melaksanakan", type: "verb", group: "Kata Kerja I", exJp: "会議が行われます。", exId: "Rapat akan diadakan." },
-      { id: 12, kanji: "輸出します", furigana: "ゆしゅつします", romaji: "yushutsushimasu", arti: "mengekspor", type: "verb", group: "Kata Kerja III", exJp: "車が輸出されています。", exId: "Mobil sedang diekspor." },
-      { id: 13, kanji: "輸入します", furigana: "ゆにゅうします", romaji: "yunyuushimasu", arti: "mengimpor", type: "verb", group: "Kata Kerja III", exJp: "石油を輸入しています。", exId: "Mengimpor minyak bumi." },
-      { id: 14, kanji: "翻訳します", furigana: "ほんやくします", romaji: "honyakushimasu", arti: "menerjemahkan", type: "verb", group: "Kata Kerja III", exJp: "英語に翻訳されました。", exId: "Diterjemahkan ke bahasa Inggris." },
-      { id: 15, kanji: "発明します", furigana: "はつめいします", romaji: "hatsumeishimasu", arti: "menciptakan (inovasi)", type: "verb", group: "Kata Kerja III", exJp: "電話が発明されました。", exId: "Telepon diciptakan." },
-      { id: 16, kanji: "発見します", furigana: "はっけんします", romaji: "hakkenshimasu", arti: "menemukan", type: "verb", group: "Kata Kerja III", exJp: "新しい星が発見されました。", exId: "Bintang baru ditemukan." },
-      { id: 17, kanji: "米", furigana: "こめ", romaji: "kome", arti: "beras", type: "noun", group: "Kata Benda", exJp: "日本の米はおいしいです。", exId: "Beras Jepang enak." },
-      { id: 18, kanji: "麦", furigana: "むぎ", romaji: "mugi", arti: "gandum", type: "noun", group: "Kata Benda", exJp: "麦からビールを作ります。", exId: "Bir dibuat dari gandum." },
-      { id: 19, kanji: "石油", furigana: "せきゆ", romaji: "sekiyu", arti: "minyak tanah / minyak bumi", type: "noun", group: "Kata Benda", exJp: "石油は大切な資源です。", exId: "Minyak adalah sumber daya penting." },
-      { id: 20, kanji: "原料", furigana: "げんりょう", romaji: "genryou", arti: "bahan baku", type: "noun", group: "Kata Benda", exJp: "ビールの原料は何ですか。", exId: "Apa bahan baku bir?" },
-      { id: 21, kanji: "インスタントラーメン", furigana: "インスタントラーメン", romaji: "insutanto raamen", arti: "mie instan", type: "noun", group: "Kata Benda", exJp: "手軽でおいしいです。", exId: "Praktis dan enak." },
-      { id: 22, kanji: "デート", furigana: "デート", romaji: "deeto", arti: "kencan", type: "noun", group: "Kata Benda", exJp: "デートに誘われました。", exId: "Diajak kencan." },
-      { id: 23, kanji: "泥棒", furigana: "どろぼう", romaji: "dorobou", arti: "pencuri / maling", type: "noun", group: "Kata Benda", exJp: "泥棒が入りました。", exId: "Pencuri masuk rumah." },
-      { id: 24, kanji: "警官", furigana: "けいかん", romaji: "keikan", arti: "polisi", type: "noun", group: "Kata Benda", exJp: "警官に道を聞きました。", exId: "Bertanya jalan ke polisi." },
-      { id: 25, kanji: "世界中", furigana: "せかいじゅう", romaji: "sekaijuu", arti: "seluruh dunia", type: "noun", group: "Kata Benda", exJp: "世界中で使われています。", exId: "Digunakan di seluruh dunia." },
-      { id: 26, kanji: "～中", furigana: "～じゅう", romaji: "~juu", arti: "seluruh ～", type: "other", group: "Akhiran", exJp: "日本中を旅行します。", exId: "Keliling seluruh Jepang." },
-      { id: 27, kanji: "ー世紀", furigana: "ーせいき", romaji: "-seiki", arti: "abad ke －", type: "other", group: "Penghitung", exJp: "21世紀に生きています。", exId: "Hidup di abad ke-21." },
-      { id: 28, kanji: "何語", furigana: "なに ご", romaji: "nanigo", arti: "bahasa apa", type: "other", group: "Kata Tanya", exJp: "何語を話しますか。", exId: "Bicara bahasa apa?" },
-      { id: 29, kanji: "誰か", furigana: "だれか", romaji: "dareka", arti: "siapa / seseorang", type: "other", group: "Kata Ganti", exJp: "誰かに呼ばれました。", exId: "Dipanggil oleh seseorang." },
-      { id: 30, kanji: "よかったですね。", furigana: "よかったですね。", romaji: "yokatta desu ne.", arti: "Bagus, ya.", type: "other", group: "Ungkapan", exJp: "合格してよかったですね。", exId: "Bagus ya kamu lulus." },
-      { id: 31, kanji: "ロシア", furigana: "ロシア", romaji: "roshia", arti: "Rusia", type: "noun", group: "Negara", exJp: "ロシアは広いです。", exId: "Rusia sangat luas." },
-      { id: 32, kanji: "皆様", furigana: "みなさま", romaji: "minasama", arti: "semuanya (hormat)", type: "other", group: "Kaiwa", exJp: "皆様、こんにちは。", exId: "Halo hadirin sekalian." },
-      { id: 33, kanji: "焼けます [うちが～]", furigana: "やけます [うちが～]", romaji: "yakemasu [uchi ga~]", arti: "[rumah] terbakar", type: "verb", group: "Kata Kerja II", exJp: "火事でうちが焼けました。", exId: "Rumah terbakar karena api." },
-      { id: 34, kanji: "その後", furigana: "そのご", romaji: "sonogo", arti: "setelah itu, sesudah itu", type: "other", group: "Keterangan", exJp: "その後、どうなりましたか。", exId: "Setelah itu bagaimana jadinya?" },
-      { id: 35, kanji: "世界遺産", furigana: "せかいいさん", romaji: "sekai isan", arti: "Situs Warisan Dunia UNESCO", type: "noun", group: "Kata Benda", exJp: "金閣寺は世界遺産です。", exId: "Kinkaku-ji adalah warisan dunia." },
-      { id: 36, kanji: "～の一つ", furigana: "～のひとつ", romaji: "~no hitotsu", arti: "salah satu ～", type: "other", group: "Pola Kalimat", exJp: "名所の一つです。", exId: "Salah satu tempat terkenal." },
-      { id: 37, kanji: "金色", furigana: "きんいろ", romaji: "kin'iro", arti: "warna emas", type: "noun", group: "Warna", exJp: "金色に輝いています。", exId: "Berkilau warna emas." },
-      { id: 38, kanji: "本物", furigana: "ほんもの", romaji: "honmono", arti: "asli (bukan tiruan)", type: "noun", group: "Kata Benda", exJp: "本物のダイヤです。", exId: "Berlian asli." },
-      { id: 39, kanji: "金", furigana: "きん", romaji: "kin", arti: "emas", type: "noun", group: "Kata Benda", exJp: "金で作られています。", exId: "Terbuat dari emas." },
-      { id: 40, kanji: "ーキロ", furigana: "ーキロ", romaji: "-kiro", arti: "kilogram, kilometer", type: "other", group: "Satuan", exJp: "5キロ歩きました。", exId: "Berjalan 5 kilometer." },
-      { id: 41, kanji: "美しい", furigana: "うつくしい", romaji: "utsukushii", arti: "indah, elok", type: "other", group: "Kata Sifat -i", exJp: "景色が美しいです。", exId: "Pemandangannya indah." },
-      { id: 42, kanji: "豪華[な]", furigana: "ごうか[な]", romaji: "gouka[na]", arti: "mewah", type: "other", group: "Kata Sifat -na", exJp: "豪華なホテルですね。", exId: "Hotel yang mewah ya." },
-      { id: 43, kanji: "彫刻", furigana: "ちょうこく", romaji: "choukoku", arti: "ukiran, pahatan", type: "noun", group: "Kata Benda", exJp: "日光の彫刻です。", exId: "Ukiran dari Nikko." },
-      { id: 44, kanji: "言い伝え", furigana: "いいつたえ", romaji: "iitsutae", arti: "tradisi / cerita turun-temurun", type: "noun", group: "Kata Benda", exJp: "古い言い伝えがあります。", exId: "Ada legenda kuno." },
-      { id: 45, kanji: "眠ります", furigana: "ねむります", romaji: "nemurimasu", arti: "tidur (lelap)", type: "verb", group: "Kata Kerja I", exJp: "ぐっすり眠りました。", exId: "Tidur dengan lelap." },
-      { id: 46, kanji: "彫ります", furigana: "ほります", romaji: "horimasu", arti: "mengukir, memahat", type: "verb", group: "Kata Kerja I", exJp: "猫を彫りました。", exId: "Memahat bentuk kucing." },
-      { id: 47, kanji: "仲間", furigana: "なかま", romaji: "nakama", arti: "teman, sahabat seperjuangan", type: "noun", group: "Kata Benda", exJp: "仲間と協力します。", exId: "Bekerja sama dengan teman." },
-      { id: 48, kanji: "しかし", furigana: "しかし", romaji: "shikashi", arti: "tetapi, namun", type: "other", group: "Kata Sambung", exJp: "しかし、雨が降りました。", exId: "Tetapi hari hujan." },
-      { id: 49, kanji: "その あと", furigana: "その あと", romaji: "sono ato", arti: "setelah itu, sesudah itu", type: "other", group: "Keterangan", exJp: "そのあと散歩しました。", exId: "Setelah itu jalan-jalan santai." },
-      { id: 50, kanji: "一生懸命", furigana: "いっしょうけんめい", romaji: "isshoukenmei", arti: "sungguh-sungguh / sekuat tenaga", type: "other", group: "Keterangan", exJp: "一生懸命勉強します。", exId: "Belajar sungguh-sungguh." },
-      { id: 51, kanji: "ねずみ", furigana: "ねずみ", romaji: "nezumi", arti: "tikus", type: "noun", group: "Hewan", exJp: "ねずみが逃げました。", exId: "Tikus kabur." },
-      { id: 52, kanji: "一匹も いません。", furigana: "いっぴきも いません。", romaji: "ippiki mo imasen.", arti: "Tidak ada seekor pun.", type: "other", group: "Ungkapan", exJp: "部屋にねずみはいません。", exId: "Di kamar tidak ada seekor pun." }
-    ];
+    <script>
+        // ============================================================================
+        // COMPACT DATA PARSER FOR ALL 300 QUESTIONS (200 PDF1 + 100 DOCX2)
+        // Format: "dialogue_lines_joined_by_\n|optA|optB|optC|optD|correctIndex(0-3)"
+        // ============================================================================
 
-    let currentFilter = 'all';
-    let currentList = [...KOTOBA_DATA];
-    let currentIndex = 0;
-    let isFlipped = false;
+        const rawPart1Data = [
+`さくら: すみません、ここで写真をとってもいいですか。\nゆうた: いいですよ。でも、フラッシュは使わないでください。\nさくら: （　　）|じゃあ、フラッシュを使ってとりますね。|わかりました。フラッシュなしでとります。|わかりました。フラッシュを使わないでください。|わかりました。フラッシュを使わないでとってください。|1`,
+`みき: ごめん、おそくなった!\nけん: 大丈夫。今来たところだよ。\nみき: （　　）|じゃあ、まだ来ないで。|じゃあ、もう帰ってよ。|よかった。待たせてごめんね。|よかった。じゃあ、行こう。|3`,
+`りな: 昨日から せきが止まらないんだ。\nたけし: それは大変だね。病院に行ったほうがいいよ。\nりな: （　　）|うん、行ってはいけないよね。|ううん、行ってもいいよ。|うん、午後行ってみる。|うん、午後行ってみた。|2`,
+`あや: すみません、ペンを貸してもらえますか。\nはる: いいですよ。\nあや: （　　）|ありがとうございます。今かしてください。|ありがとう。かしてくれますか。|ありがとうございます。かしてくれてください。|ありがとうございます。すぐ返します。|3`,
+`なお: 明日一緒に映画見ない?\nみお: ごめん、明日はバイトなんだ。\nなお: （　　）|じゃあ、明日見ようか。|じゃあ、来週見た?|じゃあ、来週ならどう?|じゃあ、来週でどうしますか。|2`,
+`しょうた: 宿題、もう出した?\nえみ: ううん、家にわすれてしまった。\nしょうた: （　　）|じゃあ、先生にあやまってください。|じゃあ、先生にあやまったほうがいいよ。|じゃあ、先生にあやまらないほうがいいよ。|じゃあ、先生にあやまってはいけないよ。|1`,
+`かずき: すみません、このズボン、はいてみてもいいですか。\nゆい: はい、どうぞ。あちらです。\nかずき: （　　）|ありがとうございます。|ありがとうございます。はいてみません。|ありがとうございます。はいてください。|ありがとうございます。はいてみた。|0`,
+`りょう: もしもし、山田さんはいますか。\nあかり: すみません、今出かけています。帰る時間はわかりません。\nりょう: （　　）|じゃあ、あとでかけなおします。|じゃあ、今かわってください。|じゃあ、何時に帰りますか。|じゃあ、ここで待ってもいいですか。|0`,
+`なおき: 今日雨降りそうだね。\nまい: うん。傘持ってきた?\nなおき: （　　）|ううん、持ってきて。|うん、持ってきたよ。|うん、持ってきてね。|うん、持っていくよ。|1`,
+`こうき: この電車、さくら駅にとまりますか。\nひな: はい、とまりますよ。\nこうき: （　　）|よかった。ありがとうございます。|よかった。とまりませんね。|よかった。とまってください。|よかった。とまりますか。|0`,
+`だいき: 今夜ひま?\nあい: うん。どうしたの?\nだいき: あたらしいカフェに行ってみたいんだけど。\nあい: （　　）|いいね。行ってみた。|いいね。行ってください。|いいね。行こう。|いいね。行かない。|2`,
+`しゅん: すみません、もう一度言ってください。\nみさき: はい、ゆっくり言いますね。\nしゅん: （　　）|ありがとうございます。ゆっくり言ってください。|ありがとうございます。ゆっくり言います。|ありがとうございます。ゆっくり言って。|ありがとうございます。|3`,
+`そうた: あれ? 財布がない。\nかな: えっ、さっき コンビニで見たよ。\nそうた: （　　）|じゃあ、コンビニに行ってください。|じゃあ、コンビニに行きますか。|じゃあ、コンビニに聞いてみよう。|じゃあ、コンビニに聞いてみた。|2`,
+`ひろき: この漢字、どう読むの?\nちひろ: 「やくそく」だよ。\nひろき: （　　）|ありがとう。教えます。|教えてくれてありがとう。|教えてくれてありがとう。教えて。|教えてくれてありがとう。教えた。|1`,
+`たくみ: すみません、水をもう一つもらえますか。\nりお: はい。\nたくみ: （　　）|ありがとうございます。もらいます。|ありがとうございます。もらってください。|ありがとうございます。もらいました。|ありがとうございます。|3`,
+`まさと: 今日、元気ないね。\nさや: うん、ちょっと熱があるかも。\nまさと: （　　）|じゃあ、早く帰ったほうがいいよ。|じゃあ、早く帰ったほうがいいですか。|じゃあ、早く帰るほうがいいよ。|じゃあ、早く帰ったほうがいいね。|0`,
+`ゆうき: 週末、うちに来ない?\nみほ: いいの?\nゆうき: （　　）|うん、ぜひ来て。|うん、ぜひ来た。|うん、ぜひ来てください。|うん、ぜひ来ないで。|0`,
+`けい: ここでタバコを吸ってもいいですか。\nりょうた: すみません、ここでは吸ってはいけません。\nけい: （　　）|じゃあ、ここで吸います。|わかりました。外で吸います。|わかりました。外で吸ってください。|わかりました。外で吸った。|1`,
+`みな: このメール、もう送りましたか。\nそう: まだです。今から送ります。\nみな: （　　）|じゃあ、お願いします。|じゃあ、お願いしました。|じゃあ、お願いして。|じゃあ、お願いしないで。|0`,
+`まな: 今日のテスト、むずかしかったね。\nけんた: うん、ほんと。\nまな: （　　）|でも、がんばったよね。|でも、がんばったよ。ね?|でも、がんばってください。|でも、がんばった?|0`,
+`りん: この本、借りたいんですが。\nはるか: すみません、その本はいま貸しだし中です。\nりん: （　　）|じゃあ、よやくしてもいいですか。|じゃあ、よやくしてもいいです。|じゃあ、よやくしてください。|じゃあ、よやくしないで。|0`,
+`ゆう: 今日、雨だね。\nなおこ: うん。かさを持っていったほうがいいよ。\nゆう: （　　）|そうだね。持っていく。|そうだね。持っていった。|そうだね。持ってください。|そうだね。持って。|0`,
+`しおり: すみません、山田さんをお願いします。\nしん: はい、少々お待ちください。\nしおり: （　　）|はい、待ちます。|はい、待った。|はい、待ってください。|はい、待って。|0`,
+`あやか: 来週の月曜日、ミーティングある?\nれん: うん、午前10時から。\nあやか: （　　）|わかった。メモしておくね。|わかった。メモしておいたね。|わかった。メモしてください。|わかった。メモして。|0`,
+`みづき: でんき、消した?\nひかる: あっ、消しわすれた。\nみづき: （　　）|じゃあ、すぐ消しに行って。|じゃあ、すぐ消しに行った。|じゃあ、すぐ消しに行く?|じゃあ、すぐ消してください。|0`,
+`さくら: すみません、しょるい、いつまでですか。\nゆうた: 今日中にお願いします。\nさくら: （　　）|わかりました。すぐやります。|わかりました。すぐやった。|わかりました。すぐやってください。|わかりました。すぐやって。|0`,
+`みき: のどが痛い。\nけん: じゃあ、あたたかいお茶を飲んだほうがいいよ。\nみき: （　　）|うん、そうする。|うん、そうした。|うん、そうして。|うん、そうしてください。|0`,
+`りな: すみません、トイレはどこですか。\nたけし: あちらをまっすぐ行って、右です。\nりな: （　　）|ありがとうございます。助かりました。|ありがとう。助かってください。|ありがとうございます。助かった?|ありがとうございます。助かって。|0`,
+`あや: 明日の宿題、もう終わった?\nはる: まだ。今夜やるつもり。\nあや: （　　）|じゃあ、一緒にやろうか。|じゃあ、一緒にやった。|じゃあ、一緒にやってください。|じゃあ、一緒にやって。|0`,
+`なお: コーヒー、もう一杯飲む?\nみお: ううん、もういい。\nなお: （　　）|じゃあ、そろそろ帰ろう。|じゃあ、そろそろ帰った。|じゃあ、そろそろ帰って。|じゃあ、そろそろ帰ってください。|0`,
+`しょうた: このシャツ、Mサイズありますか。\nえみ: すみません、Lだけです。\nしょうた: （　　）|じゃあ、Lを着てみます。|じゃあ、Lを着てください。|じゃあ、Lを着た。|じゃあ、Lを着て。|0`,
+`かずき: 昨日の映画、どうだった?\nゆい: おもしろかったよ。\nかずき: （　　）|じゃあ、私も見てみる。|じゃあ、私も見てみた。|じゃあ、私も見て。|じゃあ、私も見てください。|0`,
+`りょう: 音楽を聞きながら勉強するの?\nあかり: うん、そのほうが勉強しやすい。\nりょう: （　　）|へえ。私はしずかなほうがいいな。|へえ。私はしずかなほうがよかった。|へえ。私はしずかなほうがいいですか。|へえ。私はしずかなほうがいいよね?|0`,
+`なおき: 間に合わなかったね。\nまい: うん、電車が行ってしまった。\nなおき: （　　）|次の電車は何時?|次の電車は何時です。|次の電車を何時?|次の電車が何時?|0`,
+`こうき: 空がくらいね。\nひな: 雨が降りそう。\nこうき: （　　）|じゃあ、かさを持っていこう。|じゃあ、かさを持っていった。|じゃあ、かさを持って。|じゃあ、かさを持ってください。|0`,
+`だいき: この問題、わからない。\nあい: 先生に聞いたら?\nだいき: （　　）|うん、あとで聞いてみる。|うん、あとで聞いてみた。|うん、あとで聞いて。|うん、あとで聞いてください。|0`,
+`しゅん: 荷物多いね。\nみさき: うん、重い...。\nしゅん: （　　）|じゃあ、持ってあげるよ。|じゃあ、持ってあげた。|じゃあ、持ってあげて。|じゃあ、持ってあげてください。|0`,
+`そうた: すみません、コピーができません。\nかな: あ、紙がないのかも。\nそうた: （　　）|じゃあ、紙を入れておきます。|じゃあ、紙を入れておいた。|じゃあ、紙を入れて。|じゃあ、紙を入れてください。|0`,
+`ひろき: 今日、夕飯なにがいい?\nちひろ: うーん、カレーがいい。\nひろき: （　　）|じゃあ、カレーを作るね。|じゃあ、カレーを作った。|じゃあ、カレーを作って。|じゃあ、カレーを作ってください。|0`,
+`たくみ: さっきでんわしたけど、出なかった。\nりお: ごめん、シャワーしてた。\nたくみ: （　　）|そうだったんだ。今、大丈夫?|そうだったんだ。今、大丈夫。|そうだったんだ。今、大丈夫ですか。|そうだったんだ。今、大丈夫でした。|0`,
+`まさと: すみません、この料理、からいです。\nさや: では、みずをもってきますね。\nまさと: （　　）|ありがとうございます。助かります。|ありがとうございます。助かりました。|ありがとうございます。助かってください。|ありがとうございます。助かって。|0`,
+`ゆうき: そのファイル、あとで送ってくれる?\nみほ: いいよ。\nゆうき: （　　）|ありがとう!|ありがとう?|ありがとうじゃない。|ありがたい。|0`,
+`けい: 今日、さむいね。\nりょうた: うん。コート着てきてよかった。\nけい: （　　）|ほんとだね。|ほんとだった。|ほんとですか。|ほんとで。|0`,
+`みな: 昨日、あまり寝てないんだ。\nそう: じゃあ、今日は早く寝たほうがいいよ。\nみな: （　　）|うん、そうする。ありがとう。|うん、そうした。ありがとう。|うん、そうして。ありがとう。|うん、そうしてください。ありがとう。|0`,
+`まな: すみません、今日早く帰ってもいいですか。\nけんた: はい、大丈夫ですよ。\nまな: （　　）|ありがとうございます。明日またがんばります。|ありがとうございます。明日またがんばった。|ありがとうございます。明日またがんばって。|ありがとうございます。明日またがんばってください。|0`,
+`りん: 週末、どこか行く予定ある?\nはるか: まだないよ。\nりん: （　　）|じゃあ、一緒に買い物しない?|じゃあ、一緒に買い物した?|じゃあ、一緒に買い物して。|じゃあ、一緒に買い物してください。|0`,
+`ゆう: バス、なかなか来ないね。\nなおこ: うん、おくれているかもしれない。\nゆう: （　　）|じゃあ、電車で行こうか。|じゃあ、電車で行こう。|じゃあ、電車で行って。|じゃあ、電車で行ってください。|0`,
+`しおり: すみません、もう少しゆっくり話してもらえますか。\nしん: はい。\nしおり: （　　）|ありがとうございます。|ありがとう。話してもらえますか。|ありがとうございます。ゆっくり話して。|ありがとうございます。ゆっくり話しました。|0`,
+`あやか: かぎが見つからない。\nれん: 最後にどこで使ったの?\nあやか: （　　）|さっき コンビニで使った。|さっき コンビニで使って。|さっき コンビニで使いました。|さっき コンビニで使ってください。|0`,
+`みづき: 毎日走ってるの?\nひかる: ううん、週に2回ぐらい。\nみづき: （　　）|へえ、つづけるのはえらいね。|へえ、つづけたのはえらいね。|へえ、つづけたえらいね。|へえ、つづけるをえらいね。|0`,
+`さくら: 頭が痛い。\nゆうた: 大丈夫?\nさくら: （　　）|薬を飲んで寝てみる。|薬を飲んで寝てみた。|薬を飲んで寝てみて。|薬を飲んで寝てみてください。|0`,
+`みき: 図書館でしゃべってもいい?\nけん: ううん、ここではしゃべってはいけないよ。\nみき: （　　）|ごめん。しずかにする。|ごめん。しずかにした。|ごめん。しずかにして。|ごめん。しずかにしてください。|0`,
+`りな: スマホの電池がもうない。\nたけし: モバイルバッテリー持ってる?\nりな: （　　）|うん、持ってるよ。貸してあげる。|うん、持ってたよ。貸してあげる。|うん、持ってるよ。貸して。|うん、持ってるよ。貸してください。|0`,
+`あや: もうすぐミーティングだよ。\nはる: えっ、わすれてた!\nあや: （　　）|じゃあ、急いで行こう。|じゃあ、急いで行った。|じゃあ、急いで行って。|じゃあ、急いで行ってください。|0`,
+`なお: このケーキ、おいしいよ。\nみお: ほんと?\nなお: （　　）|うん。一口食べてみて。|うん。一口食べてみた。|うん。一口食べてみる。|うん。一口食べてみます。|0`,
+`しょうた: 明日、教科書持っていく?\nえみ: 先生が「持ってこなくてもいい」って言ったよ。\nしょうた: （　　）|じゃあ、ノートだけでいいね。|じゃあ、ノートだけでいいですか。|じゃあ、ノートだけでいい。ね。|じゃあ、ノートだけはいいね。|0`,
+`かずき: かさ、どこに置いたかな...。\nゆい: 電車にわすれてしまったんじゃない?\nかずき: （　　）|ええ! そうかも。駅に聞いてみる。|ええ! そうかも。駅に聞いてみた。|ええ! そうかも。駅に聞いて。|ええ! そうかも。駅に聞いてください。|0`,
+`りょう: 来週の金曜日、バイトかわってもらえる?\nあかり: いいよ。\nりょう: （　　）|ほんとう? ありがとう!|ほんとう。ありがとう!|ほんとう? ありがとうして!|ほんとう? ありがとうじゃない!|0`,
+`なおき: すみません、「しゅっせき」ってどういう意味?\nまい: 「出る」ってことだよ。\nなおき: （　　）|なるほど、わかった。|なるほど、わかったよね。|なるほど、わかって。|なるほど、わかりましたか。|0`,
+`こうき: 牛乳、買ってきた?\nひな: あっ、買いわすれた。\nこうき: （　　）|じゃあ、私が買ってくるよ。|じゃあ、私が買ってきたよ。|じゃあ、私が買って。|じゃあ、私が買ってください。|0`,
+`だいき: おなかすいたね。\nあい: うん。\nだいき: （　　）|コンビニで何か買ってこようか。|コンビニで何か買ってきた。|コンビニで何か買って。|コンビニで何か買ってください。|0`,
+`しゅん: 明日何時に駅で会う?\nみさき: 午後3時はどう?\nしゅん: （　　）|うん。じゃあ3時にしよう。|うん。じゃあ3時にした。|うん。じゃあ3時にして。|うん。じゃあ3時にしてください。|0`,
+`そうた: この紙、もうかきましたか。\nかな: まだです。\nそうた: （　　）|じゃあ、今かいてください。|じゃあ、今かいて。|じゃあ、今かいた。|じゃあ、今かきますか。|0`,
+`ひろき: ここででんわしてもいい?\nちひろ: ううん。ここはしずかにする場所だから。\nひろき: （　　）|わかった。外でかけるね。|わかった。外でかけたね。|わかった。外でかけて。|わかった。外でかけてください。|0`,
+`たくみ: このバッグ、高いね。\nりお: うん。でもかわいいし...。\nたくみ: （　　）|じゃあ、もう少し考えてから買おう。|じゃあ、もう少し考えてから買った。|じゃあ、もう少し考えてから買って。|じゃあ、もう少し考えてから買ってください。|0`,
+`まさと: かぜっぽい。\nさや: じゃあ、むりしないで。\nまさと: （　　）|ありがとう。早く帰ってねる。|ありがとう。早く帰ってねた。|ありがとう。早く帰ってねて。|ありがとう。早く帰ってねてください。|0`,
+`ゆうき: ていきけんがない!\nみほ: えっ、どこかでおとした?\nゆうき: （　　）|たぶん駅でおとしたかもしれない。|たぶん駅でおとした。かもしれない。|たぶん駅でおとしてください。|たぶん駅でおとして。|0`,
+`けい: すみません、二人の写真とってもらえますか。\nりょうた: はい、いいですよ。\nけい: （　　）|ありがとうございます!|ありがとうございます。とってください。|ありがとうございます。とりました。|ありがとうございます。とって。|0`,
+`みな: この問題、一緒にやってもいい?\nそう: もちろん。\nみな: （　　）|じゃあ、ここからやろう。|じゃあ、ここからやった。|じゃあ、ここからやって。|じゃあ、ここからやってください。|0`,
+`まな: さかな、まだ買ってない。\nけんた: じゃあ、買ってから帰ろう。\nまな: （　　）|うん。わすれないように先に買う。|うん。わすれないように先に買った。|うん。わすれないように先に買って。|うん。わすれないように先に買ってください。|0`,
+`りん: 旅行のじゅんび、もう終わった?\nはるか: ううん、まだ。\nりん: （　　）|じゃあ、今日中にしておいたほうがいいよ。|じゃあ、今日中にしておいたほうがいいですか。|じゃあ、今日中にしておいてください。|じゃあ、今日中にしておいた。|0`,
+`ゆう: すみません、明日休んでもいいですか。\nなおこ: 大丈夫だけど、今日中にれんらくしてね。\nゆう: （　　）|はい、わかりました。すぐれんらくします。|はい、わかりました。すぐれんらくした。|はい、わかりました。すぐれんらくして。|はい、わかりました。すぐれんらくしてください。|0`,
+`しおり: このレストラン、こんでそうだね。\nしん: でも、少し待てば入れるかも。\nしおり: （　　）|じゃあ、ちょっと待ってみよう。|じゃあ、ちょっと待ってみた。|じゃあ、ちょっと待ってみて。|じゃあ、ちょっと待ってみてください。|0`,
+`あやか: かさをわすれた...。\nれん: じゃあ、これつかっていいよ。\nあやか: （　　）|ほんとう? ありがとう。|ほんとう? ありがとうでした。|ほんとう? ありがとうして。|ほんとう? ありがとうください。|0`,
+`みづき: すみません、もう一回住所を言ってください。\nひかる: はい、「さくら町3-2-1」です。\nみづき: （　　）|ありがとうございます。メモしました。|ありがとうございます。メモします。|ありがとうございます。メモして。|ありがとうございます。メモした?|0`,
+`さくら: このバス、駅まで行きますか。\nゆうた: はい、行きますよ。\nさくら: （　　）|よかった。ありがとうございます。|よかった。ありがとうございますか。|よかった。ありがとうして。|よかった。ありがとうください。|0`,
+`みき: となりのへや、うるさいね。\nけん: うん、夜もうるさい。\nみき: （　　）|じゃあ、かんりにんにそうだんしてみよう。|じゃあ、かんりにんにそうだんしてみた。|じゃあ、かんりにんにそうだんして。|じゃあ、かんりにんにそうだんしてください。|0`,
+`りな: 会話、まだこわい。\nたけし: じゃあ、毎日少しずつ話してみたら?\nりな: （　　）|うん、そうしてみる。|うん、そうしてみた。|うん、そうしてみて。|うん、そうしてみてください。|0`,
+`あや: しゅくだい、いつまで?\nはる: 明日までだよ。\nあや: （　　）|えっ、じゃあ、今日やらなきゃ。|えっ、じゃあ、今日やった。|えっ、じゃあ、今日やって。|えっ、じゃあ、今日やってください。|0`,
+`なお: すみません、次の電車は何時ですか。\nみお: 5分後です。\nなお: （　　）|じゃあ、ここで待ちます。|じゃあ、ここで待った。|じゃあ、ここで待って。|じゃあ、ここで待ってください。|0`,
+`しょうた: おふろ、入ってもいい?\nえみ: いいよ。でも、先にそうじしてね。\nしょうた: （　　）|うん、じゃあ先に入ってからそうじするね。|わかった。そうじしてから入るね。|じゃあ、そうじはえみがしてくれる?|うん、そうじはあとでするね。|1`,
+`かずき: いまひま?\nゆい: ごめん、ちょっといそがしい。\nかずき: （　　）|じゃあ、いますぐ話せる?|じゃあ、もういいよ。|じゃあ、またあとで話そう。|じゃあ、ここでまってるね。|2`,
+`りょう: まぶしいね。\nあかり: うん。\nりょう: （　　）|じゃあ、でんきをつけようか。|じゃあ、カーテンをあけようか。|じゃあ、でんきを消してもいい?|じゃあ、目をとじないで。|2`,
+`なおき: 先生、まだよくわかりません。\nまい: そうですか。\nなおき: （　　）|もう だいじょうぶです。|もう少しせつめいしてもらいますか。|もう少しせつめいしてもらえますか。|もう少しせつめいしてもらいました。|2`,
+`こうき: 明日雨かな。\nひな: うん、雨かもしれない。\nこうき: （　　）|じゃあ、かさをすてよう。|じゃあ、雨なら行かなくてもいいね。|じゃあ、かさを持っていったほうがいいね。|じゃあ、かさを持っていってはいけないね。|2`,
+`だいき: すみません、このはこを送りたいです。\nあい: じゃあ、ここに住所を書いてください。\nだいき: （　　）|はい、書きます。|住所は書きませんか。|住所を書いてもらえますか。|書き方がわかりませんでした。|0`,
+`しゅん: すみません、ここすわってもいいですか。\nみさき: どうぞ。\nしゅん: （　　）|ありがとうございます。|じゃあ、すわってはいけませんか。|じゃあ、立ったままでいいです。|ここ、あなたがすわりますか。|0`,
+`そうた: 昨日ねぼうした。\nかな: 大丈夫だった?\nそうた: （　　）|うん、いままにあうところ。|うん、あしたはまにあうよ。|うん、なんとかまにあったよ。|うん、まにあう。|2`,
+`ひろき: スマホ、こわれたみたい。\nちひろ: えっ、どうしたの?\nひろき: （　　）|たぶん、でんちがないだけ。|ううん、こわれてないよ。|おとしてしまったんだ。|だれかに貸してある。|2`,
+`たくみ: JFTのべんきょう、むずかしい。\nりお: でも、毎日やれば上手になるよ。\nたくみ: （　　）|そうだね。でももうやめる。|そうだね。だから週末だけやる。|そうだね。じゃあ、今日は休む。|うん、あきらめないでがんばる。|3`,
+`まさと: 今日、バイトのあとひま?\nさや: うん、ひま。\nまさと: （　　）|じゃあ、家でねよう。|じゃあ、ごはん食べに行かない?|じゃあ、バイトをやめたほうがいいよ。|じゃあ、ひまじゃないね。|1`,
+`ゆうき: 明日 テストだね。\nみほ: うん、きんちょうする。\nゆうき: （　　）|じゃあ、今から勉強しない。|でも、今まで勉強したから大丈夫だよ。|きんちょうするなら、テストをうけないで。|きんちょうは食べ物だよ。|1`,
+`けい: のどが痛いんです。\nりょうた: じゃあ、今日はたくさん水をのんでください。\nけい: （　　）|すみません、水はきらいです。|のどはもういたくないです。|はい、そうします。|じゃあ、たくさん走ります。|2`,
+`みな: このそうさ、わかりません。\nそう: じゃあ、一度一緒にやってみましょう。\nみな: （　　）|すみません、ひとりでやってみます。|じゃあ、もういいです。|お願いします。|やってはいけません。|2`,
+`まな: 明日早いんだ。\nけんた: じゃあ...。\nけんた: （　　）|じゃあ、もっとおそくねよう。|じゃあ、あそぼう。|じゃあ、コーヒーをのめばいいね。|今日は早くねたほうがいいね。|3`,
+`りん: すみません、ちがうものを買ってしまいました。\nはるか: 大丈夫ですよ。レシートはありますか。\nりん: （　　）|レシートはいくらですか。|はい、ここにあります。|レシートをください。|レシートはいりません。|1`,
+`ゆう: ちょっとあついね。\nなおこ: うん。まど、しまってるね。\nゆう: （　　）|まどを開けてもいい?|まどをしめてもいい?|まどを開けないで。|エアコンをけしてもいい?|0`,
+`しおり: すみません、かさをわすれたかもしれません。\nしん: いつどこでわすれましたか。\nしおり: （　　）|えっと、わすれたかどうかわかりません。|きのうの夜です。|駅のホームだと思います。|たぶん今日の朝、駅のホームです。|3`,
+`あやか: ごめん、今日のよてい、かわってもいい?\nれん: いいよ。どうしたの?\nあやか: （　　）|だれがかわりますか。|よていはかわってはいけない。|急にしごとが入っちゃった。|じゃあ、きょうは休みだね。|2`,
+`みづき: ここ、Wi-Fiつかえますか。\nひかる: はい、つかえますよ。\nみづき: （　　）|じゃあ、つかえませんね。|よかった。ありがとうございます。|じゃあ、Wi-Fiをけしてください。|Wi-Fiはいくらですか。|1`,
+`さくら: もうお昼食べた?\nゆうた: まだ。\nさくら: （　　）|じゃあ、もう食べないで。|じゃあ、ひとりで食べて。|じゃあ、もう食べたよ。|じゃあ、一緒に食べよう。|3`,
+`みき: すみません、このプリント、10まいコピーしてください。\nけん: はい。\nけん: （　　）|わかりました。すぐします。|10まい コピーしてもいいですか。|すみません、コピーはできません。|10まいはきらいです。|0`,
+`りな: 今日のかんじ、むずかしかった。\nたけし: うん。\nりな: （　　）|家でもう一度勉強しよう。|じゃあ、今日はもう勉強しない。|じゃあ、かんじはすてよう。|今日はかんじがかんたんだったよ。|0`,
+`あや: ごめん、まちがえた。\nはる: 大丈夫だよ。\nあや: （　　）|じゃあ、もうやめる。|ありがとう。気をつけない。|ごめん。つぎは気をつけて。|ありがとう。つぎは気をつける。|3`,
+`なお: ちょっとつかれた。\nみお: じゃあ、少し休みませんか。\nなお: （　　）|休みません。まだ大丈夫です。|うん、そうしよう。|じゃあ、もっとあるこう。|休んではいけません。|1`,
+`しょうた: この日本語、インドネシア語で何?\nえみ: えっとね...。\nしょうた: （　　）|もういいよ。わからなくても。|わかったらおしえてね。|わかったら おしえるね。|今すぐ おしえてください。|1`,
+`かずき: すみません、これもう一つ おねがいします。\nゆい: はい、わかりました。\nかずき: （　　）|じゃあ、やっぱりいいです。|すみません、もう一ついりませんか。|ありがとうございます。|これをくださいません。|2`,
+`りょう: 日本語の会話、上手になりたい。\nあかり: じゃあ、毎日5分でも話すようにするといいよ。\nりょう: （　　）|5分も話さなくていいよね。|毎日じゃなくてもいいよね。|うん、やってみる。|話すのはこわいから、しない。|2`,
+`なおき: ていきけん、どこに入れたかな...。\nまい: いつもと同じところに入れた?\nなおき: （　　）|うん、いつもと同じところに入れたよ。|ぜったい入れてない。|たぶん かばんに入れたまま。|たぶんちがうポケットに入れてしまった。|3`,
+`こうき: すみません、このふた、あけられません。\nひな: じゃあ、私があけてあげます。\nこうき: （　　）|あけないで。|自分で あけます。|助かります。ありがとうございます。|ふたはいらない。|2`,
+`だいき: あれ? 財布がない!\nあい: えっ!\nあい: （　　）|じゃあ、笑おう。|財布はすてた。|もういい。|おちついて。まずかばんの中をさがそう。|3`,
+`しゅん: まどの近く、すわりたいな。\nみさき: あそこ、あいてるよ。\nしゅん: （　　）|あそこはだめ。|ここに立とう。|じゃあ、あそこにしよう。|すわってはいけない。|2`,
+`そうた: 明日、わかったられんらくしてね。\nかな: うん。\nそうた: （　　）|じゃあ、またね。|れんらくしないで。|今日はまたねじゃない。|明日は休みです。|0`,
+`ひろき: これ、もう食べない?\nちひろ: うん、もういい。\nひろき: （　　）|じゃあ、私がもらってもいい?|じゃあ、もらってもいい。|じゃあ、私も食べない。|じゃあ、少し食べて。|0`,
+`たくみ: 先生、しゅくだいまだです。\nりお: そうですか。\nたくみ: （　　）|出しません。|今日は休みです。|しゅくだいはありません。|明日までに出します。|3`,
+`まさと: にほんご、むずかしい。\nさや: うん。でも...。\nさや: （　　）|毎日やるとだめ。|上手にならない。|毎日少しずつやれば上手になるよ。|日本語はたべもの。|2`,
+`ゆうき: かぎ、みつかった?\nみほ: ううん。\nゆうき: （　　）|もう探さない。|かぎはいらない。|じゃあ、一緒に探そう。|探してはいけない。|2`,
+`けい: 今日休むなら、先生にれんらくしなきゃ。\nりょうた: うん。\nけい: （　　）|送らない。|先生に会う。|じゃあ、今メッセージを送っておく。|メッセージはきらい。|2`,
+`みな: この日本語、むずかしいね。\nそう: うん。\nみな: （　　）|とりあえずねよう。|先生はきらい。|とりあえず、先生に聞いてみよう。|聞かないほうがいい。|2`,
+`まな: そろそろ出かける?\nけんた: うん。\nまな: （　　）|じゃあ、行こう。|行かないで。|今日は行きません。|もうねます。|0`,
+`りん: テスト、どうだった?\nはるか: ちょっとむずかしかった。\nりん: （　　）|ぜんぜん がんばらなかった。|でも、がんばったからいいよね。|テストはきらい。|いいよねはだめ。|1`,
+`ゆう: 明日、7時に来てください。\nなおこ: はい。\nなおこ: （　　）|7時はこない。|わかりました。早めに来ます。|早めはいや。|今日来ます。|1`,
+`しおり: このかばん、重い...。\nしん: じゃあ、手伝おうか。\nしおり: （　　）|ありがとう。じゃあ、こっちをおねがい。|いらない。|重くない。|こっちは食べ物。|0`,
+`あやか: すみません、ちゅうもんしてもいいですか。\nれん: はい。\nあやか: （　　）|ラーメンはだめ。|じゃあ、このラーメンをおねがいします。|ちゅうもんしない。|ここは学校です。|1`,
+`みづき: すみません、ここにぼうしをわすれませんでしたか。\nひかる: ちょっとさがしてみますね。\nみづき: （　　）|さがさないでください。|ぼうしはありません。|もう帰ります。|はい、お願いします。|3`,
+`さくら: 今日さむいね。\nゆうた: うん。明日はもっとさむいそうだよ。\nさくら: （　　）|あついふくはいらない。|さむいのがすき。|じゃあ、あついふくをきておこう。|ふくをすてよう。|2`,
+`みき: ちょっとのどがかわいた。\nけん: じゃあ、みずを買いに行こうか。\nみき: （　　）|行かない。|うん、行こう。|みずはきらい。|のどはかわかない。|1`,
+`りな: ここ、すずしいね。\nたけし: エアコンがきいてるからね。\nりな: （　　）|立ったままにしよう。|じゃあ、ここにすわろう。|すずしいから帰る。|エアコンは食べ物。|1`,
+`あや: 明日、あついかな。\nはる: たぶんあついよ。\nあや: （　　）|水はいらない。|じゃあ、水をたくさん持っていこう。|水をすてよう。|あついから外に出ないで。|1`,
+`なお: すみません、ここつかってますか。\nみお: いいえ、どうぞ。\nなお: （　　）|つかってるよ。|ありがとうございます。|どうぞじゃない。|ここはだめ。|1`,
+`しょうた: 今週、いそがしい?\nえみ: うん、ちょっと。\nしょうた: （　　）|今週会おう。|じゃあ、来週会おう。|もう会わない。|来週はない。|1`,
+`かずき: ごめん、今日のよやく忘れてた。\nゆい: えー。\nかずき: （　　）|ほんとうにごめん。つぎはぜったいわすれない。|忘れるのはいいこと。|よやくはしない。|つぎはない。|0`,
+`りょう: もしもし、今大丈夫?\nあかり: うん、大丈夫だよ。\nりょう: （　　）|もうだめ。|じゃあ、ちょっとききたいことがある。|でんわはきらい。|ききたいことはない。|1`,
+`なおき: ここ、ちょっとさわがしいね。\nまい: うん。べんきょうするならとなりのへやのほうがしずかだよ。\nなおき: （　　）|さわがしいほうがいい。|うつらない。|じゃあ、そっちにうつろう。|へやを食べる。|2`,
+`こうき: すみません、このおべんとう、ここであたためてもいいですか。\nひな: はい、いいですよ。\nこうき: （　　）|あたためないでください。|ここはだめです。|すぐたべます。|ありがとうございます。すぐあたためます。|3`,
+`だいき: これ、たんじょうびプレゼント。\nあい: えっ、いいの?\nだいき: （　　）|だめ、返して。|ありがとうはいらない。|たんじょうびじゃない。|うん。いつもありがとう。|3`,
+`しゅん: 今日は日本語だけで話すようにしましょう。\nみさき: はい。\nみさき: （　　）|がんばります。|日本語はだめ。|話しません。|今日は休みです。|0`,
+`そうた: バス、おくれたね。\nかな: うん、じこがあったみたい。\nそうた: （　　）|バスでまとう。|じこはうそ。|どこにも行かない。|じゃあ、電車で行ったほうがいいかも。|3`,
+`ひろき: すみません、田中さんにつないでください。\nちひろ: 田中はいませきにいません。\nひろき: （　　）|いま せきにすわります。|田中はだれですか。|では、またあとででんわします。|つながないでください。|2`,
+`たくみ: この漢字、よめない。\nりお: じゃあ...。\nりお: （　　）|スマホをすてよう。|スマホでしらべてみよう。|よめないままでいい。|しらべるのはだめ。|1`,
+`まさと: うんどうしたいけど、つづかない。\nさや: じゃあ、友だちと一緒にやったら?\nまさと: （　　）|ぜったいしない。|それいいね。やってみる。|友だちはいない。|うんどうはきらい。|1`,
+`ゆうき: すみません、このしごと、まだ終わっていません。\nみほ: じゃあ、手伝おうか。\nゆうき: （　　）|手伝わないで。|もう終わりました。|ありがとうございますはだめ。|ありがとうございます。助かります。|3`,
+`けい: おみやげ、何がいいかな。\nりょうた: うーん。\nりょうた: （　　）|おかしがいいんじゃない?|おみやげはいらない。|おかしはきらい。|いいんじゃないはだめ。|0`,
+`みな: イヤホン、どこで買った?\nそう: 駅の前の店だよ。\nみな: （　　）|じゃあ、私もそこに行ってみる。|駅の前に行かない。|イヤホンは食べ物。|もう行った。|0`,
+`まな: さむいね。\nけんた: うん。\nまな: （　　）|ドアをあけて。|ドアをしめてもいい?|ドアをしめてはいけない。|ドアはきらい。|1`,
+`りん: あっ、ICカードわすれた。\nはるか: じゃあ、現金ではらえば?\nりん: （　　）|はらわない。|うん、そうする。|現金は食べ物。|ICカードを買う。|1`,
+`ゆう: 今日のぶんぽう、まだ自信ない。\nなおこ: じゃあ、れんしゅうしよう。\nゆう: （　　）|もうやめる。|もんだいはかんたん。|うん、もう一回もんだいをやってみる。|ぶんぽうはきらい。|2`,
+`しおり: すみません、トイレに行ってもいいですか。\nしん: はい。\nしおり: （　　）|ありがとうございます。|行ってはいけません。|いま行かない。|トイレはどこ?|0`,
+`あやか: さっき、雨ふった?\nれん: うん、ちょっと。\nあやか: （　　）|道はかわいてる。|じゃあ、道がぬれてるかもね。|雨はきらい。|ぬれてはいけない。|1`,
+`みづき: じゃあ、またあとでれんらくするね。\nひかる: うん。\nみづき: （　　）|じゃあね。|じゃあねじゃない。|もうだめ。|さようならはきらい。|0`,
+`さくら: にほんごのべんきょう、つかれた。\nゆうた: そうだね。\nゆうた: （　　）|休まないでつづけよう。|つづけない。|少し休んでからつづけよう。|つかれたから食べよう。|2`,
+`みき: ここ、いっぱいだね。\nけん: うん、席がないね。\nみき: （　　）|ここでねよう。|席があるよ。|じゃあ、べつの店にしようか。|べつの店はきらい。|2`,
+`りな: 先生、しつもんしてもいいですか。\nたけし: はい、どうぞ。\nりな: （　　）|ありがとうございます。|しつもんしません。|どうぞはだめ。|先生はいません。|0`,
+`あや: このくつ、どう思う?\nはる: うーん....\nはる: （　　）|こっちはたべる。|私ならこっちをえらぶかな。|どう思うはだめ。|えらばないでください。|1`,
+`なお: すみません、きっぷの買い方がわかりません。\nみお: じゃあ、一緒に買ってあげます。\nなお: （　　）|自分でできます。|助かります。ありがとうございます。|きっぷはいらない。|もう帰ります。|1`,
+`しょうた: 明日、バイト何時から?\nえみ: 午後5時からだよ。\nしょうた: （　　）|5時にねます。|わかった。じゃあ、4時半に駅で会おう。|4時半はだめ。|会わない。|1`,
+`かずき: このへや、くらいね。\nゆい: うん。\nかずき: （　　）|でんきをつけようか。|でんきを消そう。|へやはくらくない。|つけてはいけない。|0`,
+`りょう: すみません、ちょっとでんわしてもいいですか。\nあかり: はい、どうぞ。\nりょう: （　　）|でんわしないで。|ありがとうございます。|ここはだめ。|でんわはこわい。|1`,
+`なおき: あっ、水をこぼしてしまった!\nまい: 大丈夫?\nなおき: （　　）|そのままでいい。|ふかない。|水をのむ。|うん。すぐふいておくね。|3`,
+`こうき: 今日はあついね。\nひな: うん。\nこうき: （　　）|アイスはさむい。|食べないで。|ねよう。|じゃあ、アイスでも食べよう。|3`,
+`だいき: おなかがいたいんです。\nあい: じゃあ、今日はあぶらっこいものを食べないでください。\nだいき: （　　）|食べます。|はい、気をつけます。|気をつけません。|あぶらっこいものがすきです。|1`,
+`しゅん: 明日早いのに、まだ起きてるの?\nみさき: うん、ゲームしてた。\nしゅん: （　　）|もっとゲームしよう。|ねるのはだめ。|早いのはいや。|じゃあ、そろそろねたほうがいいよ。|3`,
+`そうた: これ、ボタンをおしてくれる?\nかな: いいよ。\nそうた: （　　）|ありがとう!|ありがとうじゃない。|おさないで。|ボタンはきらい。|0`,
+`ひろき: スマホが見つからない。\nちひろ: どこかにおいてきたかもしれないね。\nひろき: （　　）|さがさない。|ならさないで。|もう あきらめる。|まずでんわしてならしてみる。|3`,
+`たくみ: 今日、授業休んでもいい?\nりお: だめだよ。大事なところだよ。\nたくみ: （　　）|ぜったい 行かない。|じゃあ、行くよ。|授業はきらい。|休むのがいい。|1`,
+`まさと: この店、やすいね。\nさや: うん。\nまさと: （　　）|たかい店に行こう。|買い物しない。|やすいからだめ。|じゃあ、ここで買い物しよう。|3`,
+`ゆうき: みず、のんでもいい?\nみほ: いいよ。\nゆうき: （　　）|ありがとう。|ありがとうはいらない。|みずはだめ。|のまない。|0`,
+`けい: 先生にれんらくした?\nりょうた: あっ、まだ。\nけい: （　　）|じゃあ、今しておこう。|しないで。|もうおそい。|れんらくはきらい。|0`,
+`みな: もう帰るの?\nそう: うん、明日早いから。\nみな: （　　）|まだ帰らないで。|じゃあ、お疲れさま。またね。|お疲れさまはだめ。|明日はこないで。|1`,
+`まな: すみません、メニューをもう一つもらえますか。\nけんた: はい。\nまな: （　　）|メニューはいらない。|もう帰ります。|はいじゃない。|ありがとうございます。|3`,
+`りん: 雨、やんだね。\nはるか: うん。\nりん: （　　）|雨がすきだから行かない。|さんぽはきらい。|じゃあ、さんぽに行こうか。|やんだらねる。|2`,
+`ゆう: つぎのしゅうまつ、ひま?\nなおこ: たぶんひま。\nゆう: （　　）|映画はもう見た。|ひまなら、映画見に行こうよ。|しゅうまつはない。|見に行かないで。|1`,
+`しおり: すみません、このやり方であってますか。\nしん: うん、そうだよ。\nしおり: （　　）|ちがうよ。|ありがとうはいらない。|よかった。ありがとう。|やり方はきらい。|2`,
+`あやか: もう夜10時だ。\nれん: えっ、そんなに。\nあやか: （　　）|もっとあそぼう。|10時はあさ。|ねない。|じゃあ、そろそろねよう。|3`,
+`みづき: 昨日 たべすぎた。\nひかる: じゃあ...。\nひかる: （　　）|もっとたべよう。|うんどうしないほうがいい。|ねよう。|今日はすこしうんどうしたほうがいいね。|3`,
+`さくら: このメール、送る前に見てくれる?\nゆうた: いいよ。\nさくら: （　　）|見ないで。|ありがとう。助かる。|送らない。|助かるはだめ。|1`,
+`みき: 明日 9時に会える?\nけん: ごめん、9時はむり。\nみき: （　　）|じゃあ、会わない。|10時もむり。|じゃあ、10時ならどう?|9時がいい。|2`,
+`りな: すみません、ここからくうこうまでどうやって行きますか。\nたけし: この電車で行けますよ。\nりな: （　　）|電車に乗らない。|くうこうはきらい。|どうやって?|じゃあ、この電車に乗ります。|3`,
+`あや: すみません、これかえたいんですが。\nはる: レシートはありますか。\nあや: （　　）|レシートはどこですか。|かえません。|レシートはたべました。|はい、あります。|3`,
+`なお: 明日 雨だって。\nみお: ほんと?\nなお: （　　）|天気よほうはきらい。|雨じゃない。|うん、天気よほうでそう言ってた。|そう言ってたはだめ。|2`,
+`しょうた: この本、かりてもいい?\nえみ: いいよ。\nしょうた: （　　）|返さない。|ありがとう。来週返すね。|本はいらない。|来週は返さないで。|1`,
+`かずき: 今日、少し早く終わったね。\nゆい: うん。\nかずき: （　　）|べんきょうしない。|じゃあ、カフェでべんきょうしない?|カフェはきらい。|早く終わらない。|1`,
+`りょう: すみません、えきの出口はどこですか。\nあかり: あちらです。\nりょう: （　　）|ありがとうございます。|どこでもいいです。|出口はありません。|あちらはだめです。|0`,
+`なおき: 昨日、ねむれなかった。\nまい: どうして?\nなおき: （　　）|コーヒーをのみすぎたから。|コーヒーがきらいだから。|ねむったから。|のみすぎないでください。|0`,
+`こうき: ここ、くつをぬぐ?\nひな: うん、ぬいだほうがいいよ。\nこうき: （　　）|わかった。ぬぐね。|ぬがない。|くつをすてる。|ぬぐのはだめ。|0`,
+`だいき: コンサートのきっぷ、もう買った?\nあい: まだ。\nだいき: （　　）|買わないでおこう。|もういらない。|じゃあ、今日中に買っておこう。|今日中にすてよう。|2`,
+`しゅん: おなかすいた。\nみさき: 私も。\nしゅん: （　　）|たべないで。|すいたはうそ。|いまねよう。|じゃあ、何かたべに行こう。|3`,
+`そうた: すみません、このしりょう、コピーしておいてください。\nかな: はい、コピーしておきますね。\nそうた: （　　）|お願いします。|おねがいしません。|コピーはだめ。|しりょうはいりません。|0`,
+`ひろき: 今日、休む人多いね。\nちひろ: かぜがはやってるみたい。\nひろき: （　　）|手はあらわない。|かぜはすき。|じゃあ、手をよくあらったほうがいいね。|あらったほうがいいはだめ。|2`,
+`たくみ: このイス、なおせる?\nりお: たぶんなおせるよ。\nたくみ: （　　）|なおさない。|イスはたべる。|やってはいけない。|じゃあ、一度やってみるよ。|3`,
+`まさと: すみません、この日本語、読めません。\nさや: どれ?\nまさと: （　　）|これです。おしえてください。|読めるよ。|どれでもいい。|おしえない。|0`,
+`ゆうき: このくつ、もうありませんか。\nみほ: すみません、今日はもうないです。\nゆうき: （　　）|じゃあ、買いません。|もうあります。|べつのはいや。|じゃあ、べつのを見てみます。|3`,
+`けい: 今日、時間ある?\nりょうた: あるよ。\nけい: （　　）|じゃあ、ちょっと手伝ってくれない?|時間がない。|手伝わないで。|今日は手伝う日じゃない。|0`,
+`みな: すみません、明日1時間おそく行ってもいいですか。\nそう: いいよ。でも、早めにしらせてね。\nみな: （　　）|しらせません。|はい、わかりました。ありがとうございます。|おそく行きません。|明日は行かない。|1`,
+`まな: へや、きれいにしたいな。\nけんた: じゃあ、一緒にそうじしようか。\nまな: （　　）|そうじしない。|うん、たすかる。|きれいにしたくない。|たすかるはだめ。|1`,
+`りん: この店、あたらしいね。\nはるか: うん。\nりん: （　　）|入らないで。|入ってみようか。|入ってはいけない。|あたらしいはきらい。|1`,
+`ゆう: すみません、この文、あってますか。\nなおこ: ちょっと見るよ。\nゆう: （　　）|見ないでください。|ありがとうございますはいらない。|もうやめます。|ありがとうございます。お願いします。|3`,
+`しおり: 明日、何をする?\nしん: まだ きめてない。\nしおり: （　　）|じゃあ、映画でも見に行こう。|きめたよ。|映画はだめ。|行こうはいや。|0`,
+`あやか: お疲れさま。先に帰ってもいい?\nれん: いいよ。\nあやか: （　　）|じゃあ、お先にしつれいします。|しつれいしません。|先に帰らない。|お疲れさまはだめ。|0`,
+`みづき: 昨日のパーティー、どうだった?\nひかる: すごくおもしろかったよ。\nみづき: （　　）|パーティーはきらい。|送らないで。|しゃしんはとらない。|いいね。しゃしん、あとで送ってね。|3`
+        ];
 
-    function renderCard() {
-      if (currentList.length === 0) return;
-      const item = currentList[currentIndex];
-      const cardEl = document.getElementById('card-element');
+        const rawPart2Data = [
+`ゆい：はなさん、そのかばん、とてもきれいですね。どこで買ったんですか。\nはな：ありがとうございます。これ、＿＿＿＿＿。\nゆい：えっ、自分で作ったんですか。すごいですね！|たんじょうびに母からもらったんです。|駅前のデパートで買いました。|先週の休みに、自分で作ったんです。|インターネットで買いました。|2`,
+`ミカ：すみません、きのうここでパンを1個買ったんですが、レシートを見たら2個のお金になっていました。\nけんた：えっ、すみません。1個しか買っていないんですね。\nミカ：はい、カレーパンを1個だけ買いました。\nけんた：たいへんしつれいしました。＿＿＿＿＿。|今すぐ1個分のお金をお返しします。|では、もう1個分のお金をください。|レシートがないとお金は返せませんよ。|カレーパンは今日もうありません。|0`,
+`マリア：すみません、今日返す本を、家にわすれてしまいました。\nさとう：そうですか。＿＿＿＿＿。明日かならず持ってきてくださいね。\nマリア：はい、わかりました。すみません。|今日中に買ってくださいね。|もう借りられなくなりますよ。|じゃあ、明日でもいいですよ。|図書館は今日お休みですよ。|2`,
+`ミカ：すみません、＿＿＿＿＿。まどを少し閉めてもいいですか。\nたろう：あ、すみません。どうぞ閉めてください。|新しい風を入れたいんですが。|外のけしきがよく見えないんですが。|部屋の中がとても暑いんですが。|風が入ってきて寒いんですが。|3`,
+`たろう：ナオミさん、今度の金曜日の夜、会社のみんなで食事に行くんですが、行けますか。\nナオミ：金曜日の夜ですね。何時ごろからですか。\nたろう：7時から駅の近くのレストランで始めます。\nナオミ：じつは金曜日、6時半まで病院のよやくがあるんです。＿＿＿＿＿。\nたろう：ええ、もちろんいいですよ。着いたら電話してくださいね。|30分ぐらいおくれて行ってもいいですか。|7時より前にレストランへ行ってもいいですか。|病院には行かないことにしますね。|金曜日は一日中あいていますよ。|0`,
+`マイク：さとうさん、きのうは荷物を運んでくれて、ほんとうにありがとうございました。\nさとう：いいえ、どういたしまして。新しい部屋、広くていいですね。\nマイク：ええ。＿＿＿＿＿、今度の日曜日にうちへご飯を食べに来ませんか。\nさとう：わあ、うれしいです。ぜひ行きます。|まだ荷物がぜんぜんかたづいていませんから。|日曜日は家にいませんから。|また荷物を運んでもらいたいので。|わたしの国の料理を作りますから。|3`,
+`リナ：けんたさん、かいぎ室のエアコン、けしましたか。\nけんた：あ、電気はけしたんですが、エアコンはわすれていました。\nリナ：＿＿＿＿＿。\nけんた：すみません、今から行ってけしてきます。|だれも使わないなら、けしておいたほうがいいですよ。|じゃあ、電気もつけておきましょう。|エアコンはつけたままにしてください。|わたしがさっきけしておきましたよ。|0`,
+`たくや：すみません、来週から使う電車のパスを買いたいんですが。\nさくら：はい、学校へ行くパスですか、会社へ行くパスですか。\nたくや：学校へ行くパスです。4月からこの近くの大学に通うんです。\nさくら：かしこまりました。＿＿＿＿＿。\nたくや：あ、学生のカードですね。はい、これです。\nさくら：ありがとうございます。では、この紙にお名前と乗る駅を書いてください。|来週になってからまた来てください。|会社へ行くパスのほうが安くなりますよ。|では、学生のカードを見せてもらえますか。|大学の先生に電話をしてください。|2`,
+`あおい：もしもし、あおいですが。ゆいさん、今どこにいますか。\nゆい：ごめんなさい！今、バスに乗っているんですが、道に車が多くて進まないんです。\nあおい：そうですか。映画が始まるまであと20分ありますけど、まにあいそうですか。\nゆい：＿＿＿＿＿。さきに映画館の中に入っていてもらえますか。\nあおい：わかりました。ゆいさんの切符はうけつけの人に渡しておきますね。|あと5分で着くから、外で待っていてください。|今日は映画を見に行くのをやめにしましょう。|もう映画館の前に着いているからだいじょうぶですよ。|少しおくれるかもしれません。|3`,
+`ナオミ：＿＿＿＿＿。3番の電車でいいですか。\nさとう：いいえ、東京駅へ行く電車は3番のホームではなくて、4番のホームですよ。|すみません、東京駅へ行きたいんですが。|すみません、この電車はどこから来ましたか。|すみません、今何時か分かりますか。|あのう、切符売り場はどこですか。|0`,
+`たろう：すみません、エアコンを少し弱くしてもいいですか。\nリナ：＿＿＿＿＿。わたしも少し寒いと思っていたんです。|もっと涼しくしましょう。|すみません、今使っています。|いいえ、いけませんよ。|ええ、どうぞ。|3`,
+`ソラ：ゆいさん、お昼ご飯はもう食べましたか。\nゆい：いいえ、これからです。ソラさんは？\nソラ：わたしもまだなんです。駅前に新しいラーメン屋ができたんですが、＿＿＿＿＿。\nゆい：いいですね！わたしも行ってみたかったんです。行きましょう。|ひとりで行くつもりです。|いっしょに行ってみませんか。|あまりおいしくなかったですよ。|もう食べてきましたよ。|1`,
+`ユミ：すずきさん、きのうの夜、強い雨と風でしたが、家のほうはだいじょうぶでしたか。\nすずき：ええ、にわの木が少しおれましたが、たいしたことはありませんでした。ユミさんは？\nユミ：＿＿＿＿＿。でも、風の音がすごくてあまり寝られませんでした。|まどがわれてたいへんなことになりました。|わたしはきのう、雨に気がつきませんでした。|うちのほうも、なにももんだいありませんでした。|ええ、今からホテルへ行くところです。|2`,
+`たろう：ミカさん、よかったらこのおかし、食べませんか。北海道のおみやげなんです。\nミカ：わあ、おいしそうですね。＿＿＿＿＿。\nたろう：どうぞ、たくさんありますから。|ごちそうさまでした、おいしかったです。|じゃあ、一ついただきます。|いいえ、北海道へは行きません。|おみやげを買ってきてあげますね。|1`,
+`ジョン：ゆいさん、今度友だちのけっこんのパーティーへ行くんですが、どんな服を着ていけばいいですか。\nゆい：男の人は、暗い色のスーツに白いネクタイをしますよ。\nジョン：黒いネクタイでもいいですか。\nゆい：いいえ、＿＿＿＿＿。白いネクタイのほうがいいですよ。|けっこんのパーティーには黒いネクタイが一番いいですよ。|どんな色のネクタイでもじゆうにつけていいですよ。|ネクタイはしないでTシャツで行くのがふつうです。|黒いネクタイはおそうしきのときに使うんです。|3`,
+`マリア：やまださん、このコピーのきかいの使い方を教えてもらえませんか。紙の表とうらにコピーしたいんですが。\nやまだ：ああ、それなら、まずこの『表とうら』というボタンをおします。\nマリア：これですね。おしました。\nやまだ：＿＿＿＿＿。\nマリア：わかりました。……あ、きれいに両方コピーできました！|電気をけしてからもう一度やりなおしてくださいね。|あとはここに紙をおいて、スタートボタンをおすだけですよ。|このきかいは古いからコピーができないんですよ。|紙を1枚ずつ手で入れないといけませんよ。|1`,
+`ナオミ：たろうさん、いつもおべんとうを持ってきていますね。自分で作っているんですか。\nたろう：ええ、体のために先月から作り始めたんです。\nナオミ：すごいですね。毎朝早く起きるのはたいへんじゃありませんか。\nたろう：＿＿＿＿＿。朝はご飯を入れるだけですよ。|じつは、毎日コンビニで買ってから来ているんです。|ええ、毎朝4時に起きて1時間かけて作っています。|前の日の夜に料理を作っておくので、かんたんですよ。|たいへんなので、もう来週からやめることにしました。|2`,
+`たろう：すずきさん、このコピーのきかい、赤い電気がついていて動かないんですが。\nすずき：どれどれ。ああ、中に紙が止まっていますね。\nたろう：紙が止まっているんですか。＿＿＿＿＿。\nすずき：よこのドアを開けて、ゆっくり紙を出せばだいじょうぶですよ。\nたろう：やってみます。……あ、出せました！ありがとうございます。|新しい紙を入れればいいんですね。|どうしたらいいですか。|新しいきかいを買いましょうか。|部屋の電気をけしましょうか。|1`,
+`ジョン：すずきさん、この紙の書き方がよく分からないんですが。\nすずき：ああ、それは先週から書き方がかわったんですよ。＿＿＿＿＿。\nジョン：ありがとうございます。たすかります。|書き方のれいがありますから、今持ってきますね。|わたしも書き方が分かりません。|先週のうちに出してください。|自分でしらべて書いてくださいね。|0`,
+`さとう：ミカさん、新しいアパートの近くにスーパーはありますか。\nミカ：ええ、歩いて5分のところに大きいスーパーがあって、夜11時まであいているんです。\nさとう：へえ、＿＿＿＿＿。|駅から遠くて買い物に行くのがたいへんそうですね。|仕事で遅くなっても買い物に行けて便利ですね。|夜早く閉まってしまうから不便ですね。|そのアパートには住まないほうがいいですね。|1`,
+`たなか：すずきさん、今度の土曜日、学校のコートでテニスをしませんか。\nすずき：いいですね！ぜひやりたいです。でも、ラケットを持っていないんです。\nたなか：＿＿＿＿＿。そこで1本200円で借りられますよ。\nすずき：そうなんですか。じゃあ、動きやすい服と靴で行きますね。|買わなくてもだいじょうぶですよ。|わたしもラケットを持っていないんです。|ラケットがないならできませんよ。|お店で買ってきてくださいね。|0`,
+`マイク：たなかさん、今度の休みに友だちと高い山にのぼるんですが、たなかさんはのぼったことがありますか。\nたなか：ええ、去年のぼりましたよ。天気はよさそうですか。\nマイク：はい、いい天気だそうです。昼は暑いから、うすいシャツで行こうと思っています。\nたなか：いや、＿＿＿＿＿。わたしはセーターを持っていってよかったですよ。\nマイク：えっ、そんなに寒いんですか。じゃあ、暖かい服も持っていきます。|雨が降ってもかさをさせばぜんぜん寒くありませんよ。|山の上は昼も夜もずっと暑いから、うすいシャツでいいですよ。|山の上は夏でもすごく寒くなりますから、あつい服もいりますよ。|その山は冬にしかのぼることができない山なんですよ。|2`,
+`ゆい：たくやくん、今度の土曜日、みんなでパーティーをするんだけど、来られる？\nたくや：土曜日は午前中だけ病院へ行く用事があるんだ。＿＿＿＿＿。\nゆい：うん、お昼すぎから始めるから、ぜんぜんいいよ。|日曜日なら行けるんだけど。|午後から行ってもいいかな。|今度の土曜日は行けないよ。|朝からてつだいに行くね。|1`,
+`すずき：はるかさん、このコーヒーを作るきかい、使い方がちょっと分からないんですが。\nはるか：ああ、まずうしろに水を入れて、ここにコーヒーを入れます。\nすずき：なるほど。＿＿＿＿＿。\nはるか：ええ、その赤いボタンをおすだけで、すぐできますよ。|コーヒーはどこで買えばいいですか。|お湯は自分で作らなければなりませんか。|そのあと、このボタンをおせばいいんですか。|もうコーヒーはできていますか。|2`,
+`はるか：すみません、来週の火曜日のよやくを、ほかの日にかえてもいいですか。\nけんた：はい、いいですよ。いつがいいですか。\nはるか：木曜日の午後2時はあいていますか。\nけんた：ちょっとしらべますね。……はい、＿＿＿＿＿。|よやくはやめておきますね。|木曜日の2時ならあいていますよ。|木曜日は一日中いっぱいです。|火曜日の2時にかえました。|1`,
+`はるか：あれ、雨が降ってきましたね。ケンさん、かさを持っていますか。\nケン：いいえ、今朝はいい天気だったので、持ってこなかったんです。\nはるか：わたしは小さいかさがもう1本ありますよ。＿＿＿＿＿。|かさを貸してもらえませんか。|よかったら、これを使ってください。|コンビニへ買いに行きましょう。|雨が止むまで待ちますか。|1`,
+`けんた：すみません、このいす、あいていますか。\nナオミ：＿＿＿＿＿。友だちが今トイレに行っているんです。|あ、すみません、使っています。|いいえ、だれもいませんよ。|ええ、あいていますよ。|はい、どうぞ使ってください。|0`,
+`はるか：さとうさん、さっきのかいぎのメモ、もうたなかさんに出しましたか。\nさとう：いいえ、まだです。今、まちがいがないか見ているところです。\nはるか：あ、よかった。じつは、つぎのかいぎの日が水曜日から木曜日にかわったんです。\nさとう：えっ、そうなんですか。＿＿＿＿＿。\nはるか：ええ、出す前にわかってよかったです。|教えてくれてありがとうございます。今すぐなおしますね。|どうしてかいぎに出なかったんですか。|水曜日のままで出してももんだいないと思いますよ。|もうたなかさんに出してしまったのでなおせませんよ。|0`,
+`ナオミ：たくやさん、来週のテストの勉強、もうしましたか。\nたくや：じつは、漢字の読み方がよく分からなくてこまっているんです。\nナオミ：わたしでよければ、＿＿＿＿＿。|ひとりでがんばってくださいね。|漢字の読み方を教えてもらえませんか。|テストをうけないようにしましょう。|あとでいっしょに勉強しましょうか。|3`,
+`ケン：すみません、このバスはさくら病院に行きますか。\nやまだ：いいえ、＿＿＿＿＿。あそこのバスていから出るバスに乗ってください。|はい、つぎのバスていですよ。|病院まで乗せてあげます。|ここで降りないでください。|これは行きませんよ。|3`,
+`ゆい：たなかさん、来週の金曜日、新しい社員のジョンさんの食事会がありますよね。\nたなか：ええ、駅の近くのレストランでやりますね。\nゆい：はい。じつはジョンさん、からい料理がぜんぜん食べられないそうなんです。\nたなか：えっ、そうなんですか。よやくしたお店はからい料理が多いですよ。\nゆい：＿＿＿＿＿。\nたなか：そうですね。今すぐお店に電話して、からくない料理にできるか聞いてみます。|もっとからい料理をたくさんたのんでおきましょう。|お店に聞いて、料理をかえてもらえませんか。|そのお店はもうきのうやめましたよ。|ジョンさんには食事会に来ないように言いましょう。|1`,
+`マリア：すみません、この部屋のエアコンをつけたいんですが。\nリナ：あ、その部屋のエアコン、きのうから悪くてつかないんです。\nマリア：えっ、そうなんですか。＿＿＿＿＿。|まどを全部開けて寒くしましょうか。|じゃあ、となりの部屋を使ってもいいですか。|エアコンがついていてとても暖かいですね。|では、わたしがエアコンを買いに行きますね。|1`,
+`ナオミ：ジョンさん、夏休みは国へ帰るんですか。\nジョン：いいえ、今年は休みが短いので、日本の中を旅行しようと思っています。\nナオミ：いいですね。どこへ行くかもうきめましたか。\nジョン：涼しいところへ行きたいんですが、＿＿＿＿＿。\nナオミ：それなら、長野の山はどうですか。風も気もちいいですよ。|南の海でおよぐことにしました。|ホテルのよやくはもう全部終わりました。|どこかいい場所を知りませんか。|暑いところのほうがすきなんですよ。|2`,
+`マイク：すずきさん、先週借りた本、とてもおもしろかったです。これ、お返しします。\nすずき：＿＿＿＿＿。よかったら、またいつでも言ってくださいね。|どういたしまして。|おだいじにしてください。|つまらないものですが。|お借りしますね。|0`,
+`マイク：やまださん、今度の休みに京都へ行くんですが、いい場所はありますか。\nやまだ：そうですね。今のきせつなら、あらし山がきれいだと思いますよ。\nマイク：あらし山ですか。＿＿＿＿＿。\nやまだ：ええ、京都駅から電車で20分ぐらいですから、行きやすいですよ。|ホテルはどこがいいですか。|どんなおみやげが有名ですか。|京都駅から近くにありますか。|入るお金はいくらぐらいですか。|2`,
+`たくや：ゆいさん、このたいせつな手紙、たなかさんのつくえの上においておいてもいいですか。\nゆい：それは大事な手紙だから、＿＿＿＿＿。\nたくや：わかりました。じゃあ、たなかさんが帰ってくるのを待ちます。|つくえの中に入れておきましょう。|わたしがメールで送っておきますよ。|ごみばこにすてておいてくださいね。|会ってじぶんの手で渡したほうがいいですよ。|3`,
+`あおい：たくやくん、そのカメラ、新しく買ったの？\nたくや：ううん、兄が新しいのを買ったから、古いのをもらったんだ。\nあおい：へえ、いいね。＿＿＿＿＿。\nたくや：うん、ちょっと重いけど、すごくきれいな写真がとれるんだよ。|お兄さんにあげたの？|どこのお店でなおしたの？|使ってみてどうだった？|いくらで買ったの？|2`,
+`さとう：ケンさん、先週おねがいした新しいパンフレット、もう届いていますか。\nケン：すみません、さっき聞いたら、明日の午前中に届くそうです。\nさとう：そうですか。明日の午後、おきゃくさんに渡したいんですが、まにあいますかね。\nケン：＿＿＿＿＿。|パンフレットはもう全部使ってしまいましたよ。|明日の午後は会社が休みだったと思いますよ。|じゃあ、来週になってから渡しますね。|届いたらすぐさとうさんのつくえに持っていきますね。|3`,
+`ゆい：もしもし、ゆいですが。すみません、そちらの店のよやくを3時からおねがいしていたんですが。\nさくら：はい、ゆいさまですね。どうしましたか。\nゆい：すみません、電車がじこで止まってしまって、＿＿＿＿＿。\nさくら：そうでしたか。3時半までに来られれば、だいじょうぶですよ。\nゆい：ありがとうございます。バスに乗って行きます。|3時にまにあわないかもしれないんです。|よやくを来週の月曜日にかえてください。|もうお店の前に着いているんですが。|今日行くのをやめにしたいんですが。|0`,
+`はな：すみません、＿＿＿＿＿。\nけんた：はい、100円を10枚ですね。どうぞ。\nはな：ありがとうございます。たすかりました。|このかばんを返したいんですが。|名前を書いてもらえませんか。|カードで払ってもいいですか。|1000円を小さいお金にかえてもらえませんか。|3`,
+`マイク：すみません、この近くに自転車を止めるところはありますか。\nさくら：この建物のうしろに止めるところがありますよ。\nマイク：ありがとうございます。＿＿＿＿＿。\nさくら：はじめの2時間はただで、そのあとは100円かかります。|建物のうしろはどこですか。|お金はかかりますか。|何時まであいていますか。|自転車を借りられますか。|1`,
+`たろう：さくらさん、今度の休みはどこかへ出かけるんですか。\nさくら：いいえ、休みはどこも人が多いですから、＿＿＿＿＿。\nたろう：それもいいですね。わたしも家で映画を見るつもりです。|友だちと海へあそびに行きます。|毎日会社へ来て仕事をするつもりです。|有名な町へ旅行に行くよていです。|家でゆっくり本でも読もうと思っています。|3`,
+`さくら：やまださん、さっきの電話、だれからでしたか。\nやまだ：あ、荷物を運ぶ会社からでした。今日届くよていの荷物が、ゆきが多いので明日になるそうです。\nさくら：そうですか。＿＿＿＿＿。|今日の午前中に届いてよかったですね。|今すぐその会社へとりに行きましょう。|今日すぐ使うものではないので、明日でもだいじょうぶですよ。|ゆきが降っていないのにおかしいですね。|2`,
+`ジョン：すみません、このアパートのごみを出す場所はどこにありますか。\nはな：1階の入口のよこにありますよ。今日ひっこしてきたんですか。\nジョン：はい、203の部屋のジョンです。よろしくおねがいします。\nはな：私は204の部屋のはなです。＿＿＿＿＿。\nジョン：ありがとうございます。分からないことがあったら、また教えてください。|となりの部屋ですね。こちらこそよろしくおねがいします。|203の部屋にはだれも住んでいないはずですよ。|もうすぐこのアパートから出ていくんですよ。|ごみはいつでもすきなときに出していいんですよ。|0`,
+`ナオミ：やまださん、来週の会社の勉強会のメール、もう見ましたか。\nやまだ：ええ、見ましたよ。水曜日の午後1時からでしたよね。\nナオミ：はい。それで、持ってくるものに『ペンとテキスト』と書いてあったんですが。\nやまだ：テキストですか。＿＿＿＿＿。\nナオミ：いえ、わたしもまだもらっていないんです。たなかさんに聞けばいいでしょうか。\nやまだ：そうですね。ちょっとたなかさんに電話で聞いてみましょう。|テキストならきのうのうちに全部読み終わりましたよ。|勉強会は来月になったと聞きましたよ。|あれ、テキストはもうもらいましたか。|ペンは持っていくひつようがないそうですよ。|2`,
+`あおい：すみません、ケーキを4つ買いたいんですが、家まで1時間ぐらいかかります。\nたなか：かしこまりました。＿＿＿＿＿。\nあおい：はい、おねがいします。ありがとうございます。|では、つめたくするものを入れておきますね。|ケーキはあたためてから渡しますね。|1時間ぐらいに全部食べてくださいね。|それなら、この店の中で食べてください。|0`,
+`リナ：マリアさん、今度の日本語の試験、うけるんですか。\nマリア：はい、うけるつもりです。でも、聞くもんだいがむずかしくてしんぱいなんです。\nリナ：わたしも前は聞くのがむずかしかったですよ。＿＿＿＿＿。\nマリア：毎日少しずつ聞くのが大事なんですね。今日からやってみます。|でも、毎日日本のニュースを聞くようにしたら、だんだん分かるようになりましたよ。|試験の前の日に一日中勉強すれば、すぐ上手になりますよ。|漢字の練習だけしていれば、聞くもんだいもできるようになりますよ。|だから、聞く練習はぜんぜんしなくてもだいじょうぶでしたよ。|0`,
+`ケン：はるかさん、来週の月曜日のアルバイト、ぼくのかわりに出てもらえませんか。\nはるか：月曜日ですか。＿＿＿＿＿。\nケン：学校の試験が急に入ってしまって、休まないといけないんです。|いいですよ、何時から働けばいいですか。|休みですけど、どうしたんですか。|アルバイトはもうやめたんじゃありませんか。|すみません、月曜日は用事があるんです。|1`,
+`リナ：マイクさん、土曜日のサッカーのしあい、見に行きますか。\nマイク：ええ、もちろん行きますよ。リナさんも行くんですか。\nリナ：はい、はじめて見に行くんですが、なにか持っていくといいものはありますか。\nマイク：そうですね。夕方は風がつめたくなるから、＿＿＿＿＿。\nリナ：なるほど。じゃあ、暖かい上着をかばんに入れていきますね。|つめたい飲み物をたくさん買ったほうがいいですよ。|かさは重くなるからおいていったほうがいいですよ。|うすいシャツだけでだいじょうぶだと思いますよ。|上に着るものを持っていったほうがいいですよ。|3`,
+`マリア：あおいさん、かぜはどうですか。もうねつは下がりましたか。\nあおい：はい、＿＿＿＿＿、すっかりよくなりました。|おだいじに。|ごめんなさい。|お元気で。|おかげさまで。|3`,
+`ナオミ：すみません、きのう買ったこのシャツを、とりかえてもらえませんか。\nたろう：かしこまりました。どうしましたか。\nナオミ：家で着てみたんですが、＿＿＿＿＿。レシートはこれです。\nたろう：そうでしたか。同じ色の大きいサイズがありますが、いかがですか。|よごれていたところがあったんです。|同じものを二つ買ってしまって。|思ったより少し小さかったんです。|色がすきじゃなかったんです。|2`,
+`はな：あ、ケンさん、その手、どうしたんですか。白いテープがついていますね。\nケン：きのうの夜、料理をしているときに少し切ってしまったんです。\nはな：えっ、だいじょうぶですか。病院へは行きましたか。\nケン：＿＿＿＿＿。もう痛くもありませんよ。\nはな：そうですか。でも、水を使うときは気をつけてくださいね。|ええ、病院で1週間休みました。|今から病院へ行こうと思っています。|痛くてなにも持つことができないんです。|少し切っただけなので、家で薬をつけただけです。|3`,
+`ゆい：すみません、この近くに花屋はありますか。\nたくや：花屋ですか。＿＿＿＿＿。あそこのこうばんで聞いてみてください。|ええ、毎日その花屋で買っています。|すみません、このへんはあまり分からないんです。|花屋なら、わたしがあんないしてあげますよ。|はい、駅のすぐとなりにありますよ。|1`,
+`はな：先生、来週話すスピーチの文を書いたんですが、見ていただけませんか。\nたなか：いいですよ。何について書いたんですか。\nはな：日本の電車とわたしの国の電車のちがいについて書きました。\nたなか：おもしろいですね。＿＿＿＿＿。|では、明日までに読んでおきますね。|文はまだ書かないでください。|スピーチは先週もう終わりましたよ。|わたしが全部書いてあげますね。|0`,
+`たなか：ユミさん、さっきおねがいしたかいぎのコピー、もう終わりましたか。\nユミ：すみません、コピーの紙がなくなってしまって、＿＿＿＿＿。\nたなか：そうですか。新しい紙はあのつくえの下にありますよ。|コピーのきかいが動きません。|まだ半分しかできていないんです。|もう全部つくえの上におきました。|紙の場所が分かりました。|1`,
+`リナ：すずきさん、ちょっといいですか。来週京都へ仕事で行くときのホテルをさがしているんですが。\nすずき：ああ、来週の京都ですね。いいホテルがありましたか。\nリナ：駅の近くに二つあるんですが、＿＿＿＿＿。\nすずき：そうですね。会社のきまりで1晩8000円までとなっていますから、安いほうにしましょう。\nリナ：わかりました。では、7500円のホテルをよやくしますね。|どちらも人がいっぱいでよやくできなかったんですが。|京都にはホテルが一つもないんです。|少し高いほうと安いほう、どちらがいいですか。|京都へは行かないことになりましたよ。|2`,
+`ケン：あおいさん、英語の手紙の書き方を教えてほしいんですが、今お時間ありますか。\nあおい：すみません、今から昼休みまでかいぎがあるんです。＿＿＿＿＿。\nケン：あ、明日のお昼までに書ければいいので、いそぎませんよ。\nあおい：それなら、昼休みが終わってからいっしょに見ましょう。|今すぐここで書きましょうか。|ほかの人に聞いてくれませんか。|今すぐ書かないといけませんか。|英語はぜんぜん分からないんですよ。|2`,
+`ソラ：すみません、この図書館でパソコンを使ってもいいですか。\nやまだ：はい、使えますが、＿＿＿＿＿。\nソラ：わかりました。じゃあ、あそこのうけつけで名前を書きますね。|なにも書かなくてそのまま使えますよ。|使う前に、うけつけで名前を書いてください。|パソコンは持ってこないでください。|今日は図書館が休みで使えません。|1`,
+`はるか：あ、すみません、ハンカチがおちましたよ。\nケン：えっ、あ、ほんとうだ。＿＿＿＿＿。|教えてくれて、ありがとうございます。|おとさないように気をつけてくださいね。|いいえ、わたしのハンカチではありません。|どうぞ、そのまま使ってください。|0`,
+`ユミ：先生、来週の金曜日ですが、国から両親が来るので、じゅぎょうを休んでもいいですか。\nたなか：ご両親がいらっしゃるんですね。いいですよ。\nユミ：ありがとうございます。金曜日に小さいテストがあると聞いたんですが、＿＿＿＿＿。\nたなか：月曜日のじゅぎょうのあとにうけられますから、しんぱいしないでください。|テストはうけなくてもいいですか。|両親もいっしょにテストをうけますか。|金曜日のじゅぎょうに出ますね。|別の日にうけることはできますか。|3`,
+`ソラ：すみません、電車の切符をなくしてしまったみたいなんですが、どうすればいいですか。\nやまだ：どの駅から乗りましたか。\nソラ：みどり駅からです。かばんの中をさがしたんですが、なくて……。\nやまだ：そうですか。＿＿＿＿＿。もしあとで見つかったら、お金を返しますよ。\nソラ：わかりました。おねがいします。|それなら、今日はお金を払わなくてもいいですよ。|切符がない人は電車から出ることができませんよ。|では、もう一度みどり駅からのお金を払ってください。|今すぐみどり駅まで帰ってさがしてきてください。|2`,
+`すずき：やまださん、来週の月曜日から新しいアルバイトの人が来ますよ。\nやまだ：そうですか。＿＿＿＿＿。|どんな人が来るか楽しみですね。|アルバイトをやめることになりました。|先週からもう働いていますよ。|長い間おせわになりました。|0`,
+`ミカ：すみません、こちらの病院へ来るのははじめてなんですが。\nたろう：いらっしゃいませ。病院のカードかほけんのカードはありますか。\nミカ：はい、これです。きのうからねつとせきが出るんです。\nたろう：おあずかりします。では、この紙にいつから悪いかと、今のねつを書いてください。\nミカ：＿＿＿＿＿。\nたろう：はい、これでねつをはかって、終わったら教えてくださいね。|今朝はかったらねつはぜんぜんありませんでした。|薬だけもらえればいいので、医者には会わなくていいです。|あのう、今朝家でねつをはかるのをわすれてしまったんですが。|この紙はもう家で全部書いて持ってきていますよ。|2`,
+`さとう：リナさん、さっきおきゃくさんから電話があって、パンの数を20個から30個にかえたいそうです。\nリナ：えっ、30個ですか。ちょっと店の中にいくつあるか見てきますね。\nさとう：＿＿＿＿＿。\nリナ：はい、まだ50個ありましたから、だいじょうぶです。|どうですか、30個ありそうですか。|20個送ってしまいましたか。|だれから電話がありましたか。|いつ買いに行けばいいですか。|0`,
+`さくら：マイクさん、日本の生活にはもうなれましたか。\nマイク：ええ、だいぶなれましたが、ごみの出し方がまだ少しむずかしいです。\nさくら：＿＿＿＿＿。市のホームページに英語のせつめいもありますよ。|もうすぐ国へ帰りますね。|ごみをすててはいけませんよ。|日本語がとても上手ですね。|はじめはおぼえるのがたいへんですよね。|3`,
+`やまだ：すみません、この近くに銀行はありますか。\nあおい：銀行は遠いですけど、あそこのコンビニでお金が出せますよ。\nやまだ：ありがとうございます。＿＿＿＿＿。\nあおい：ええ、夜でも朝でも、いつでも使えますよ。|お金はいくらかかりますか。|どこの銀行のカードですか。|夜遅くでも使えますか。|コンビニで何を売っていますか。|2`,
+`ソラ：ユミさん、今晩の食事会、ユミさんも行きますよね。\nユミ：それが、急に国からあねが来ることになって、＿＿＿＿＿。\nソラ：そうなんですか。ざんねんですが、また今度行きましょう。|行けなくなってしまったんです。|とても楽しみにしているんです。|あねもいっしょにつれていきますよ。|一番さきにお店へ行きますね。|0`,
+`たくや：すみません、このせんたくのきかい、お金を入れても動かないんですが。\nはな：あ、ほんとうですね。上のドアがちゃんと閉まっていないのかもしれません。\nたくや：もう一度閉めてみますね。……あ、＿＿＿＿＿。\nはな：よかったです。ちゃんと閉めないと動かないんですよ。|お金がでてきてしまいました。|やっぱりわるくなっているみたいですね。|ドアが開かなくなってしまいました。|動き始めました！ありがとうございます。|3`,
+`リナ：すみません、駅前の郵便局へはどう行けばいいですか。\nたろう：この道をまっすぐ行って、二つ目のかどを右にまがるとありますよ。\nリナ：二つ目のかどを右ですね。＿＿＿＿＿。|歩いてどのくらいかかりますか。|切手を買いに行きたいんです。|道をおしえてあげましょうか。|郵便局は何時に閉まりますか。|0`,
+`ユミ：あ、もう10時ですね。電車の時間があるので、＿＿＿＿＿。\nさとう：そうですか。気をつけて帰ってくださいね。|ごちそうさまでした。|おさきにどうぞ。|そろそろしつれいします。|おじゃまします。|2`,
+`マリア：すみません、このアパートの部屋を見たいんですが。\nけんた：いらっしゃいませ。駅前の1階の部屋ですね。\nマリア：はい。お金も安いし、駅からも近いのでいいなと思ったんです。\nけんた：ありがとうございます。でも、＿＿＿＿＿。今から見に行きますか。\nマリア：ええ、ぜひ見てみたいです。おねがいします。|かぎをなくしてしまったので入れないんです。|北の部屋なので、昼でも少し暗いかもしれません。|駅から歩いて1時間もかかる不便な場所ですよ。|もうほかの人が住むことになったので見られません。|1`,
+`ミカ：＿＿＿＿＿。ミカですが。\nけんた：いらっしゃいませ。ミカさまですね。2名さまでまどの近くのおせきですね。\nミカ：すみません、友だちがもう一人来て、3人になったんですが。\nけんた：かしこまりました。では、あちらの大きいテーブルへどうぞ。|すみません、今日のよやくをやめたいんですが。|こんばんは、7時からよやくしているんですが。|こんにちは、おべんとうを買って帰りたいんですが。|あのう、お金を払いたいんですが。|1`,
+`ジョン：はるかさん、日本語のじしょを買いたいんですが、本とスマホと、どちらがいいと思いますか。\nはるか：そうですね。わたしはスマホのほうが便利だと思いますよ。\nジョン：どうしてですか。\nはるか：＿＿＿＿＿。|スマホは小さくて読みにくいですよ。|本のじしょのほうが軽くて持ちやすいですからね。|本のじしょが一番見やすいと思いますよ。|いつも持っているから、すぐしらべられるでしょう。|3`,
+`ケン：さとうさん、この近くでお昼ご飯を食べるなら、どこがいいですか。\nさとう：そうですね。安くて多いのは、駅のうしろにある『さくら食堂』ですよ。\nケン：いいですね。どんな料理があるんですか。\nさとう：＿＿＿＿＿。\nケン：わあ、おいしそうですね。今日はそこへ行ってみます。|ねだんがすごく高くて、よやくしないと入れないお店です。|先月閉まってしまったので、今はもうやっていませんよ。|コーヒーとパンしかおいていない小さなお店ですよ。|肉や魚のセットがあって、ご飯もたくさん食べられますよ。|3`,
+`ケン：すみません、頭が痛くて少しねつがあるので、＿＿＿＿＿。\nたなか：それはいけませんね。むりをしないで、すぐ帰って休んでください。\nケン：ありがとうございます。おさきにしつれいします。|仕事をてつだいましょうか。|今日は早く帰ってもいいですか。|明日も会社へ来てもいいですか。|薬を買いに行ってきてくれませんか。|1`,
+`たろう：あれ、ミカさん、どうしたんですか。かおの色が悪いですよ。\nミカ：朝から少し頭が痛くて、気もちが悪いんです。\nたろう：たいへんですね。＿＿＿＿＿。\nミカ：ありがとうございます。じゃあ、少しだけあちらの部屋で休ませてください。|かおの色がとてもよくなりましたね。|もっと仕事をがんばってください。|あちらの部屋へ行って少し休みましょうか。|今からかいぎを始めましょうか。|2`,
+`ユミ：すみません、この料理教室にまいしゅう通いたいんですが。\nたくや：ありがとうございます。はじめてのクラスと、料理になれた人のクラスがありますが、どちらがいいですか。\nユミ：かんたんな野菜の料理は作れますが、魚を切ったことがないんです。\nたくや：＿＿＿＿＿。魚の洗い方や切り方から練習しますよ。\nユミ：そうですか。じゃあ、そのクラスでおねがいします。|では、魚を買うところから始めましょう。|どちらのクラスもむずかしすぎると思いますよ。|野菜の料理が作れないなら、なれた人のクラスですね。|それなら、はじめてのクラスのほうがいいですね。|3`,
+`リナ：＿＿＿＿＿。さっきからさがしているんですが、どこにもなくて。\nマイク：えっ、かいぎ室にわすれてきたんじゃないですか。\nリナ：あ、そうかもしれません。ちょっと見てきます。|かいぎ室のドアはもう閉めましたか。|あれ、わたしの黒いペンを見ませんでしたか。|マイクさんの時計、どこにありますか。|新しいかばんを買おうと思うんですが。|1`,
+`あおい：すみません、ランチのセットを二つください。\nけんた：かしこまりました。飲み物はコーヒーとこうちゃがありますが、＿＿＿＿＿。\nあおい：じゃあ、あたたかいコーヒーを二つおねがいします。|どちらにしますか。|お水を持ってきましょうか。|お金は別々に払いますか。|これだけでいいですか。|0`,
+`マリア：あおいさん、きのうはすてきなプレゼントをありがとうございました。\nあおい：いいえ。＿＿＿＿＿。|また来年もよろしくおねがいします。|よろこんでもらえて、うれしいです。|プレゼントをえらんでくれてありがとう。|たんじょうびは、いつでしたか。|1`,
+`あおい：たくやくん、さっき言っていた映画の切符、もう買った？\nたくや：ううん、まだだよ。これからコンビニへ買いに行くところ。\nあおい：＿＿＿＿＿。\nたくや：ほんとう？じゃあ、ぼくの分とあわせて2枚買ってきてくれる？お金は今渡すよ。|映画はもう見に行かないことにしたよ。|インターネットで買ったほうが安いよ。|コンビニの場所を教えてくれない？|わたしも行くから、いっしょに買ってこようか。|3`,
+`ジョン：すみません、かぜの薬がほしいんですが、どれがいいですか。\nナオミ：こちらの白い薬がよくききますよ。でも、＿＿＿＿＿。\nジョン：あ、これから車をうんてんするので、ねむくならない薬はありますか。|一日三回、ご飯のあとに水で飲んでください。|子どもには飲ませないようにしてください。|ねだんが少し高くなってしまいますよ。|飲むと少しねむくなることがあります。|3`,
+`ソラ：すみません、このパソコンを見てもらいたいんですが。\nけんた：どうしましたか。\nソラ：きのうの夜から、ボタンをおしても電気がつかないんです。\nけんた：電気のコードはつないでみましたか。\nソラ：＿＿＿＿＿。|電気のコードははじめからパソコンについていませんよ。|はい、きのうの夜からずっとつないでいるんですが、つかないんです。|いいえ、パソコンはとても明るくついていますよ。|ええ、ボタンをおしたらすぐに使えるようになりました。|1`,
+`マリア：すずきさん、来月の会社の旅行、すずきさんは行きますか。\nすずき：ええ、行くつもりですよ。マリアさんは？\nマリア：わたしはまだまよっているんです。＿＿＿＿＿。\nすずき：みんなでバスに乗って有名な場所を回るから、とても楽しいと思いますよ。|来月は毎日仕事が休みですから。|旅行のお金を払いたくないんです。|会社の旅行に行ったことがあまりなくて。|もう行くと返事をしてしまいましたから。|2`,
+`けんた：すみません、そこにあるミルクをとってもらえませんか。\nはな：はい、どうぞ。……あ、＿＿＿＿＿。\nけんた：ほんとうですね。じゃあ、新しいのを出してください。|まだたくさん入っていますね。|テーブルの上においてありますよ。|もうすこししか入っていないですね。|これはミルクではありませんよ。|2`,
+`ケン：すみません、きのうここで黒いかさをわすれたんですが、ありませんか。\nさくら：黒いかさですね。どんなかさですか。\nケン：＿＿＿＿＿。\nさくら：ああ、それなら今朝、店の人が見つけてあそこにおいてありますよ。|きのう、駅前のデパートで買いました。|雨が降っていたので使いました。|友だちから借りたたいせつなかさなんです。|持つところに白いテープがついています。|3`,
+`やまだ：もしもし、やまだですが、さとうさんはいますか。\nミカ：すみません。さとうは今、ほかの電話に出ています。＿＿＿＿＿。\nやまだ：いえ、10分後にまたこちらから電話します。|また明日電話してもらえますか。|終わったら、そちらに電話しましょうか。|いつ帰るか分かりません。|電話ばんごうを教えてもらえますか。|1`,
+`ジョン：たなかさん、明日のテニスのしあい、がんばってくださいね。\nたなか：ありがとうございます。＿＿＿＿＿。|きのうのしあいはまけてざんねんでした。|ジョンさんもしあいに出られてよかったですね。|かてるようにがんばります。|テニスのやり方を教えてもらえませんか。|2`,
+`ソラ：すみません、この赤いシャツのLサイズはありますか。\nはな：しょうしょうお待ちください。……すみません、赤はMサイズしかないんです。\nソラ：そうですか。＿＿＿＿＿。|じゃあ、ほかの色を見せてもらえますか。|では、赤いLサイズをください。|着る部屋はどこにありますか。|Mサイズは大きすぎますね。|0`,
+`ジョン：さくらさん、今度の日曜日、うちの近くでおまつりがあるんですが、見に来ませんか。\nさくら：わあ、いいですね。何時ごろから始まるんですか。\nジョン：お昼からいろいろなお店が出て、夜7時からは花火も見えるそうです。\nさくら：花火もあるんですね！ぜひ行きたいです。＿＿＿＿＿。\nジョン：じゃあ、夕方の5時に駅の入口で会いましょうか。\nさくら：わかりました。楽しみにしていますね。|日曜日は仕事で行けそうにありません。|お店でなにを売るつもりなんですか。|何時にどこで会いましょうか。|花火はテレビで見ることにしますね。|2`,
+`はるか：あおいさん、さっきそこにおいたケーキ、知りませんか。\nあおい：えっ、あのケーキ、はるかさんのだったんですか。\nはるか：はい、あとで食べようと思ってはこに名前を書いておいたんですが。\nあおい：ごめんなさい！名前を見ないで、＿＿＿＿＿。\nはるか：そうだったんですか。じゃあ、今度同じものを買ってくださいね。|テーブルの下においておきましたよ。|古くなっていたので、すててしまいました。|まだあそこにそのまま入っていますよ。|みんなのおみやげだと思って食べてしまいました。|3`,
+`はるか：先生、ちょっとお聞きしたいことがあるんですが、今いいですか。\nたなか：＿＿＿＿＿。3時からのかいぎの前に話しましょう。|ええ、いいですよ。|すみません、今いそがしいです。|こちらこそ、よろしく。|いいえ、どういたしまして。|0`,
+`やまだ：ソラさん、さっきかいぎで使ったパソコン、どこにおきましたか。\nソラ：まだかいぎ室のテーブルの上においてあります。午後も使うと聞いたので。\nやまだ：あ、午後のかいぎはなくなったんですよ。\nソラ：そうだったんですか。＿＿＿＿＿。|そのパソコンはもう動きませんよ。|午後のかいぎもがんばってくださいね。|じゃあ、今すぐかたづけてきますね。|では、そのまま出しておきましょう。|2`,
+`はるか：すみません、この建物の中で写真をとってもいいですか。\nさとう：すみません。1階の部屋では写真をとらないでください。\nはるか：そうですか。2階はどうですか。\nさとう：2階はとってもいいですが、＿＿＿＿＿。|カメラをかばんから出さないでください。|2階も写真はぜんぜんとらないでください。|建物の外でもとってはいけません。|強い電気は出さないようにおねがいします。|3`,
+`ソラ：すずきさん、今度の金曜日の食事会、場所はどこでしたか。\nすずき：駅の北口にある『さくら』というレストランですよ。\nソラ：ああ、あそこですね。＿＿＿＿＿。|金曜日には行けませんよ。|始まる時間は7時でいいですか。|どんな料理を作りますか。|北口はどこにありますか。|1`,
+`マイク：たろうさん、日本人はどうして家に入る前に靴をぬぐんですか。\nたろう：うーん、むかしから家の中をきれいにするしゅうかんがあるからだと思いますよ。\nマイク：なるほど。＿＿＿＿＿。|だから部屋の中でそのまま下にすわれるんですね。|外を靴なしで歩くのと同じですね。|それで家の中でも靴をはくんですね。|日本の家はそうじをしなくてもいいんですね。|0`,
+`たなか：さくらさん、明日の朝、おきゃくさんの会社へ行く時間ですが、9時に駅で会うよていでしたね。\nさくら：はい、そうでしたが、電車に人が多いかもしれないので、少し早くしませんか。\nたなか：そうですね。＿＿＿＿＿。\nさくら：はい、8時45分ならゆっくり行けると思います。\nたなか：わかりました。では、切符売り場の前で会いましょう。|明日のよていは来週にしましょうか。|じゃあ、15分早くして8時45分にしましょうか。|やっぱり電車ではなく歩いて行きましょう。|では、9時半にかえてもいいですか。|1`,
+`さくら：あ、やまださん、その荷物は重そうですね。＿＿＿＿＿。\nやまだ：ありがとうございます。じゃあ、この小さいかばんをおねがいします。|半分持ちましょうか。|てつだってくれませんか。|重くてもいいですよ。|持ってあげましたよ。|0`,
+`ユミ：あ、ジョンさん、パソコンの電気がついたままですよ。\nジョン：すみません、今まだ仕事で使っているところなんです。\nユミ：そうだったんですか。＿＿＿＿＿。\nジョン：はい、あと5分ぐらいで終わりますから、終わったらけしますね。|まだ時間がかかりそうですか。|パソコンがわるくなったんですか。|わたしが電気をけしましょうか。|もう帰ってしまったと思いました。|3`,
+`ユミ：たくやくん、学校の宿題、もう出した？\nたくや：うん、さっき先生のつくえに出したところだよ。ユミさんは？\nユミ：わたしはこれから出すんだけど、＿＿＿＿＿。\nたくや：今日の午後5時までだから、まだ2時間あるよ。\nユミ：あ、ほんとうだ。4時までかと思っていたから、よかった！|宿題はどこについて書けばいいかな。|何時までに出せばいいんだっけ。|きのうのうちに出しておいたよ。|どうやって先生に出すの？|1`
+        ];
 
-      // Reset flip state smoothly
-      isFlipped = false;
-      cardEl.classList.remove('rotate-y-180');
+        // ============================================================================
+        // BRAIN-HACK PATTERN DETECTOR & AUTOMATIC EXPLANATION ENGINE
+        // ============================================================================
+        function analyzeBrainHackPattern(dialogue, options, correctIdx, part, num) {
+            const correctOpt = options[correctIdx];
+            const fullText = dialogue + " " + correctOpt;
 
-      // Counters & Group
-      document.getElementById('card-counter').textContent = currentIndex + 1;
-      document.getElementById('deck-size').textContent = currentList.length;
-      document.getElementById('card-group').textContent = item.group;
+            let pattern = "Respon Kontekstual Alami";
+            let hint = "Perhatikan siapa yang berbicara terakhir dan kalimat setelah titik-titik untuk menemukan alur logika yang paling nyambung.";
+            let explanation = `Jawaban yang tepat adalah <strong>"${correctOpt}"</strong>. Pilihan lainnya salah karena bentuk waktunya (lampau ~た), kalimat perintah (~て/ください), atau bertolak belakang dengan konteks dialog.`;
 
-      // Progress bar
-      const pct = ((currentIndex + 1) / currentList.length) * 100;
-      document.getElementById('progress-line').style.width = `${pct}%`;
+            if (part === 2) {
+                pattern = "JFT-A2 Konteks Tengah/Akhir";
+                hint = "🔥 TRIK JFT: Lihat kalimat SETELAH ＿＿＿＿＿! Jawaban yang benar pasti memicu respon di kalimat berikutnya.";
+            }
 
-      // Front Face
-      document.getElementById('card-furigana').textContent = item.furigana;
-      document.getElementById('card-kanji').textContent = item.kanji;
-      document.getElementById('card-romaji').textContent = item.romaji;
+            if (fullText.includes("ほうがいい") || fullText.includes("たら?") || fullText.includes("たら？") || fullText.includes("ば?")) {
+                pattern = "Saran & Nasihat (～たほうがいい)";
+                hint = "💡 RUMUS SARAN: Jika diberi saran (～たほうがいい / ～たら？) atau memberi saran ke teman yang punya masalah, gunakan respon setuju mencoba (～てみる / そうする) atau kalimat saran.";
+                explanation = `Lawan bicara membutuhkan/memberikan saran. Kalimat <strong>"${correctOpt}"</strong> tepat karena menggunakan bentuk niat melaksanakan saran (bukan bentuk lampau ~た atau menyuruh balik ~てください).`;
+            } else if (fullText.includes("てもいいですか") || fullText.includes("てもいい?") || fullText.includes("てもいい？")) {
+                pattern = "Izin & Larangan (～てもいい)";
+                hint = "💡 RUMUS IZIN: Jika meminta izin dan diizinkan (いいよ/どうぞ), ucapkan terima kasih + aksi yang akan kamu lakukan (~ます). Jika dilarang, ikuti syaratnya.";
+                explanation = `Dalam konteks meminta/memberi izin (～てもいい), <strong>"${correctOpt}"</strong> adalah respon yang paling sopan dan sesuai dengan aturan/kondisi yang disebutkan.`;
+            } else if (fullText.includes("もらえますか") || fullText.includes("くれる?") || fullText.includes("手伝おうか") || fullText.includes("あげます") || fullText.includes("あげようか") || fullText.includes("ましょうか")) {
+                pattern = "Bantuan & Permintaan (授受表現)";
+                hint = "💡 RUMUS BANTUAN: Saat meminta tolong atau ditawari bantuan (～てもらえますか / ～ましょうか), respon wajib adalah berterima kasih (ありがとうございます / 助かります / お願いします).";
+                explanation = `Ketika seseorang menawarkan bantuan atau menyanggupi permintaan kita, <strong>"${correctOpt}"</strong> adalah ungkapan apresiasi/penerimaan yang paling tepat di budaya kerja Jepang.`;
+            } else if (fullText.includes("ない?") || fullText.includes("ませんか") || correctOpt.includes("よう") || correctOpt.includes("ましょう")) {
+                pattern = "Ajakan & Rencana Bersama (～よう)";
+                hint = "💡 RUMUS AJAKAN: Ajakan melakukan sesuatu bersama-sama selalu menggunakan akhiran Volitional (～よう / ～ましょう / ～ない？). Jangan pilih bentuk perintah ～てください!";
+                explanation = `Untuk mengajak atau menyetujui ajakan bersama, bentuk <strong>"${correctOpt}"</strong> (ajakan/usul) adalah yang paling alami.`;
+            } else if (correctOpt.includes("ておく") || correctOpt.includes("ておきます") || correctOpt.includes("ておこう")) {
+                pattern = "Persiapan Lebih Awal (～ておく)";
+                hint = "💡 RUMUS ～ておく: Digunakan saat melakukan sesuatu sekarang sebagai persiapan untuk nanti (misal: mencatat, membeli tiket dulu, membersihkan).";
+                explanation = `Pola <strong>～ておく</strong> dalam <strong>"${correctOpt}"</strong> menyatakan tindakan persiapan yang dilakukan terlebih dahulu sebelum waktunya tiba.`;
+            } else if (correctOpt.includes("てみる") || correctOpt.includes("てみます") || correctOpt.includes("てみよう")) {
+                pattern = "Mencoba Melakukan (～てみる)";
+                hint = "💡 RUMUS ～てみる: Saat belum tahu hasilnya (mencoba baju, menanyakan ke stasiun/konbini, mencoba latihan), gunakan ～てみる (Akan mencoba), BUKAN ～てみた (Sudah mencoba)!";
+                explanation = `Karena aksinya baru akan dicoba sekarang/nanti, gunakan bentuk non-lampau <strong>"${correctOpt}"</strong>.`;
+            }
 
-      // Back Face
-      document.getElementById('card-meaning').textContent = item.arti;
-      document.getElementById('card-example-jp').textContent = item.exJp;
-      document.getElementById('card-example-id').textContent = item.exId;
-    }
+            return { pattern, hint, explanation };
+        }
 
-    function flipCard() {
-      const cardEl = document.getElementById('card-element');
-      isFlipped = !isFlipped;
-      if (isFlipped) {
-        cardEl.classList.add('rotate-y-180');
-      } else {
-        cardEl.classList.remove('rotate-y-180');
-      }
-    }
+        // Build complete 300-question database
+        const allQuestions = [];
 
-    function nextCard() {
-      if (currentIndex < currentList.length - 1) {
-        currentIndex++;
-      } else {
-        currentIndex = 0;
-      }
-      renderCard();
-    }
+        rawPart1Data.forEach((raw, idx) => {
+            const parts = raw.split("|");
+            const dialogue = parts[0];
+            const options = [parts[1], parts[2], parts[3], parts[4]];
+            const correct = parseInt(parts[5], 10);
+            const meta = analyzeBrainHackPattern(dialogue, options, correct, 1, idx + 1);
+            allQuestions.push({
+                id: `P1-${idx + 1}`,
+                globalIndex: idx,
+                part: 1,
+                num: idx + 1,
+                dialogue,
+                options,
+                correct,
+                pattern: meta.pattern,
+                hint: meta.hint,
+                explanation: meta.explanation
+            });
+        });
 
-    function prevCard() {
-      if (currentIndex > 0) {
-        currentIndex--;
-      } else {
-        currentIndex = currentList.length - 1;
-      }
-      renderCard();
-    }
+        rawPart2Data.forEach((raw, idx) => {
+            const parts = raw.split("|");
+            const dialogue = parts[0];
+            const options = [parts[1], parts[2], parts[3], parts[4]];
+            const correct = parseInt(parts[5], 10);
+            const meta = analyzeBrainHackPattern(dialogue, options, correct, 2, idx + 1);
+            allQuestions.push({
+                id: `P2-${idx + 1}`,
+                globalIndex: 200 + idx,
+                part: 2,
+                num: idx + 1,
+                dialogue,
+                options,
+                correct,
+                pattern: meta.pattern,
+                hint: meta.hint,
+                explanation: meta.explanation
+            });
+        });
 
-    function shuffleDeck() {
-      currentList.sort(() => Math.random() - 0.5);
-      currentIndex = 0;
-      renderCard();
-    }
+        // ============================================================================
+        // APPLICATION STATE (IN-MEMORY BRAIN-HACK TRACKER)
+        // ============================================================================
+        let currentTab = 'quiz'; // 'quiz', 'speed', 'srs', 'explorer'
+        let activeDeck = [...allQuestions];
+        let currentIndex = 0;
+        let streak = 0;
+        let answeredCurrent = false;
+        let masteredIds = new Set();
+        let weakIds = new Set();
+        let speedTimerInterval = null;
+        let speedTimeLeft = 100; // percentage
 
-    function playAudio() {
-      const item = currentList[currentIndex];
-      if (!item || !('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(item.kanji || item.furigana);
-      u.lang = 'ja-JP';
-      u.rate = 0.9;
-      window.speechSynthesis.speak(u);
-    }
+        // ============================================================================
+        // KEYWORD HIGHLIGHTER (BRAIN-HACK VISUAL SENSOR)
+        // ============================================================================
+        const keywordHighlights = [
+            { word: "使わないでください", cls: "bg-rose-500/30 text-rose-200 px-1 rounded border border-rose-500/40" },
+            { word: "ないでください", cls: "bg-rose-500/30 text-rose-200 px-1 rounded border border-rose-500/40" },
+            { word: "てはいけません", cls: "bg-rose-500/30 text-rose-200 px-1 rounded border border-rose-500/40" },
+            { word: "てはいけない", cls: "bg-rose-500/30 text-rose-200 px-1 rounded border border-rose-500/40" },
+            { word: "たほうがいい", cls: "bg-amber-500/30 text-amber-200 px-1 rounded border border-amber-500/40" },
+            { word: "てもいいですか", cls: "bg-cyan-500/30 text-cyan-200 px-1 rounded border border-cyan-500/40" },
+            { word: "てもいい?", cls: "bg-cyan-500/30 text-cyan-200 px-1 rounded border border-cyan-500/40" },
+            { word: "てもいい？", cls: "bg-cyan-500/30 text-cyan-200 px-1 rounded border border-cyan-500/40" },
+            { word: "もらえますか", cls: "bg-purple-500/30 text-purple-200 px-1 rounded border border-purple-500/40" },
+            { word: "ませんか", cls: "bg-emerald-500/30 text-emerald-200 px-1 rounded border border-emerald-500/40" },
+            { word: "手伝おうか", cls: "bg-emerald-500/30 text-emerald-200 px-1 rounded border border-emerald-500/40" },
+            { word: "ましょうか", cls: "bg-emerald-500/30 text-emerald-200 px-1 rounded border border-emerald-500/40" },
+            { word: "＿＿＿＿＿", cls: "bg-indigo-500/40 text-white font-bold px-2 py-0.5 rounded border border-indigo-400 animate-pulse" },
+            { word: "（　　）", cls: "bg-indigo-500/40 text-white font-bold px-2 py-0.5 rounded border border-indigo-400 animate-pulse" }
+        ];
 
-    function setFilter(type) {
-      currentFilter = type;
-      if (type === 'all') {
-        currentList = [...KOTOBA_DATA];
-      } else if (type === 'verb') {
-        currentList = KOTOBA_DATA.filter(k => k.type === 'verb');
-      } else if (type === 'noun') {
-        currentList = KOTOBA_DATA.filter(k => k.type === 'noun');
-      } else {
-        currentList = KOTOBA_DATA.filter(k => k.type === 'other');
-      }
+        function formatDialogueText(text) {
+            const highlightEnabled = document.getElementById('highlightHackToggle')?.checked;
+            if (!highlightEnabled) return text;
+            let formatted = text;
+            keywordHighlights.forEach(item => {
+                formatted = formatted.split(item.word).join(`<span class="${item.cls}">${item.word}</span>`);
+            });
+            return formatted;
+        }
 
-      currentIndex = 0;
-      
-      // Update pills style
-      document.querySelectorAll('.filter-btn').forEach(b => {
-        b.className = "filter-btn px-3 py-1 rounded-full text-zinc-500 hover:text-zinc-300 font-medium";
-      });
-      document.getElementById(`btn-filter-${type}`).className = "filter-btn px-3 py-1 rounded-full bg-zinc-800 text-white font-medium";
+        // ============================================================================
+        // DECK & NAVIGATION FUNCTIONS
+        // ============================================================================
+        function changeDeck() {
+            const val = document.getElementById('deckSelect').value;
+            if (val === 'all') activeDeck = [...allQuestions];
+            else if (val === 'part1') activeDeck = allQuestions.filter(q => q.part === 1);
+            else if (val === 'part2') activeDeck = allQuestions.filter(q => q.part === 2);
+            else if (val === 'chunk1') activeDeck = allQuestions.slice(0, 50);
+            else if (val === 'chunk2') activeDeck = allQuestions.slice(50, 100);
+            else if (val === 'chunk3') activeDeck = allQuestions.slice(100, 150);
+            else if (val === 'chunk4') activeDeck = allQuestions.slice(150, 200);
+            else if (val === 'chunk5') activeDeck = allQuestions.slice(200, 250);
+            else if (val === 'chunk6') activeDeck = allQuestions.slice(250, 300);
 
-      renderCard();
-    }
+            currentIndex = 0;
+            renderQuestion();
+        }
 
-    const listDrawer = document.getElementById('list-drawer');
-    function toggleListDrawer() {
-      if (listDrawer.classList.contains('hidden')) {
-        listDrawer.classList.remove('hidden');
-        listDrawer.classList.add('flex');
-        renderFullList();
-      } else {
-        listDrawer.classList.add('hidden');
-        listDrawer.classList.remove('flex');
-      }
-    }
+        function shuffleCurrentDeck() {
+            for (let i = activeDeck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]];
+            }
+            currentIndex = 0;
+            renderQuestion();
+        }
 
-    function renderFullList(query = '') {
-      const container = document.getElementById('list-content');
-      container.innerHTML = '';
+        function switchTab(tab) {
+            currentTab = tab;
+            stopSpeedTimer();
 
-      const q = query.toLowerCase().trim();
-      const filtered = KOTOBA_DATA.filter(item => 
-        item.kanji.toLowerCase().includes(q) ||
-        item.furigana.toLowerCase().includes(q) ||
-        item.romaji.toLowerCase().includes(q) ||
-        item.arti.toLowerCase().includes(q)
-      );
+            // Update button styles
+            ['quiz', 'speed', 'srs', 'explorer'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tab) {
+                    btn.className = "tab-btn py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 bg-indigo-600 text-white shadow";
+                } else {
+                    btn.className = "tab-btn py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800";
+                }
+            });
 
-      filtered.forEach((item) => {
-        const row = document.createElement('div');
-        row.className = "py-2.5 px-3 rounded-xl hover:bg-zinc-800/60 cursor-pointer flex items-center justify-between transition";
-        row.onclick = () => {
-          // Switch to all to ensure index matches or find in current list
-          currentFilter = 'all';
-          currentList = [...KOTOBA_DATA];
-          currentIndex = KOTOBA_DATA.findIndex(k => k.id === item.id);
-          renderCard();
-          toggleListDrawer();
+            const viewPlayground = document.getElementById('view-playground');
+            const viewExplorer = document.getElementById('view-explorer');
+            const deckControls = document.getElementById('deckControls');
+            const speedTimerContainer = document.getElementById('speedTimerContainer');
+
+            if (tab === 'explorer') {
+                viewPlayground.classList.add('hidden');
+                deckControls.classList.add('hidden');
+                viewExplorer.classList.remove('hidden');
+                viewExplorer.classList.add('flex');
+                renderExplorer();
+                return;
+            }
+
+            viewExplorer.classList.add('hidden');
+            viewExplorer.classList.remove('flex');
+            viewPlayground.classList.remove('hidden');
+
+            if (tab === 'srs') {
+                deckControls.classList.add('hidden');
+                speedTimerContainer.classList.add('hidden');
+                const weakList = allQuestions.filter(q => weakIds.has(q.id));
+                if (weakList.length === 0) {
+                    // Fallback to unmastered questions if no weak questions yet
+                    activeDeck = allQuestions.filter(q => !masteredIds.has(q.id));
+                } else {
+                    activeDeck = weakList;
+                }
+                currentIndex = 0;
+                renderQuestion();
+            } else {
+                deckControls.classList.remove('hidden');
+                if (tab === 'speed') {
+                    speedTimerContainer.classList.remove('hidden');
+                } else {
+                    speedTimerContainer.classList.add('hidden');
+                }
+                changeDeck();
+            }
+        }
+
+        // ============================================================================
+        // RENDER QUESTION & OPTIONS
+        // ============================================================================
+        function renderQuestion() {
+            stopSpeedTimer();
+            answeredCurrent = false;
+
+            if (activeDeck.length === 0) {
+                activeDeck = [...allQuestions];
+                currentIndex = 0;
+            }
+            if (currentIndex >= activeDeck.length) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = activeDeck.length - 1;
+
+            const q = activeDeck[currentIndex];
+
+            // Update Meta Badges
+            const partName = q.part === 1 ? "⚡ Refleks Cepat (PDF 1)" : "🎯 JFT-Basic A2 (DOCX 2)";
+            document.getElementById('qSourceBadge').innerHTML = `${partName} • <strong>#${q.num}</strong>`;
+            document.getElementById('qPatternBadge').innerHTML = `💡 ${q.pattern}`;
+            document.getElementById('qProgressText').textContent = `${currentIndex + 1} / ${activeDeck.length}`;
+            document.getElementById('brainHackHintText').innerHTML = q.hint;
+
+            // Render Chat Bubbles
+            const dialogueContainer = document.getElementById('dialogueContainer');
+            dialogueContainer.innerHTML = '';
+            const lines = q.dialogue.split('\n');
+
+            lines.forEach((line, idx) => {
+                const colonIdx = line.indexOf(':') !== -1 ? line.indexOf(':') : line.indexOf('：');
+                let speaker = "";
+                let speech = line;
+                if (colonIdx !== -1) {
+                    speaker = line.substring(0, colonIdx).trim();
+                    speech = line.substring(colonIdx + 1).trim();
+                }
+
+                const isRight = idx % 2 === 1;
+                const bubbleWrapper = document.createElement('div');
+                bubbleWrapper.className = `flex flex-col ${isRight ? 'items-end' : 'items-start'}`;
+
+                const bubble = document.createElement('div');
+                bubble.className = `max-w-[90%] sm:max-w-[80%] px-4 py-3 jp-text text-sm sm:text-base leading-relaxed shadow ${
+                    isRight 
+                        ? 'bg-indigo-600/25 border border-indigo-500/40 text-indigo-100 chat-bubble-right' 
+                        : 'bg-slate-800/90 border border-slate-700 text-slate-100 chat-bubble-left'
+                }`;
+
+                bubble.innerHTML = `
+                    ${speaker ? `<div class="text-[11px] font-bold uppercase tracking-wider mb-1 ${isRight ? 'text-indigo-300' : 'text-amber-400'}">${speaker}</div>` : ''}
+                    <div>${formatDialogueText(speech)}</div>
+                `;
+                bubbleWrapper.appendChild(bubble);
+                dialogueContainer.appendChild(bubbleWrapper);
+            });
+
+            // Render Options
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            const labels = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `opt-btn-${idx}`;
+                btn.onclick = () => selectAnswer(idx);
+                btn.className = "group text-left bg-slate-800/70 hover:bg-slate-800 border-2 border-slate-700/80 hover:border-indigo-500 rounded-2xl p-3.5 sm:p-4 transition-all flex items-center gap-3 shadow-sm";
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 group-hover:border-indigo-400 group-hover:text-indigo-300 flex items-center justify-center font-extrabold text-xs sm:text-sm text-slate-300 shrink-0 transition">
+                        ${labels[idx]}
+                    </span>
+                    <span class="jp-text text-sm sm:text-base font-medium text-slate-100 flex-1">${optText}</span>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            // Hide Feedback Panel
+            const feedbackPanel = document.getElementById('feedbackPanel');
+            feedbackPanel.classList.add('hidden');
+
+            // Auto-speak if enabled
+            if (document.getElementById('autoAudioToggle')?.checked) {
+                speakCurrentDialogue();
+            }
+
+            // Start 5s Speed Timer if in speed mode
+            if (currentTab === 'speed') {
+                startSpeedTimer();
+            }
+        }
+
+        // ============================================================================
+        // HANDLE ANSWER SELECTION & GAMIFICATION
+        // ============================================================================
+        function selectAnswer(selectedIdx) {
+            if (answeredCurrent) return;
+            answeredCurrent = true;
+            stopSpeedTimer();
+
+            const q = activeDeck[currentIndex];
+            const isCorrect = selectedIdx === q.correct;
+
+            // Style buttons
+            q.options.forEach((_, idx) => {
+                const btn = document.getElementById(`opt-btn-${idx}`);
+                if (!btn) return;
+                btn.disabled = true;
+
+                if (idx === q.correct) {
+                    btn.className = "text-left bg-emerald-500/20 border-2 border-emerald-500 rounded-2xl p-3.5 sm:p-4 transition-all flex items-center gap-3 shadow-lg shadow-emerald-500/10";
+                } else if (idx === selectedIdx && !isCorrect) {
+                    btn.className = "text-left bg-rose-500/20 border-2 border-rose-500 rounded-2xl p-3.5 sm:p-4 transition-all flex items-center gap-3 opacity-90";
+                } else {
+                    btn.className = "text-left bg-slate-900/40 border border-slate-800 rounded-2xl p-3.5 sm:p-4 transition-all flex items-center gap-3 opacity-40";
+                }
+            });
+
+            // Update Stats & SRS Memory
+            const feedbackPanel = document.getElementById('feedbackPanel');
+            const feedbackTitle = document.getElementById('feedbackTitle');
+            const feedbackExplanation = document.getElementById('feedbackExplanation');
+
+            feedbackPanel.classList.remove('hidden');
+
+            if (isCorrect) {
+                streak++;
+                masteredIds.add(q.id);
+                weakIds.delete(q.id);
+
+                feedbackPanel.className = "mt-5 rounded-2xl p-4 border bg-emerald-950/40 border-emerald-500/40 transition-all";
+                feedbackTitle.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i> <span class="text-emerald-300">Mantap! Otakmu Makin Refleks! (+1 Streak)</span>`;
+                
+                // Speak correct answer in Japanese
+                speakJapaneseText(q.options[q.correct]);
+            } else {
+                streak = 0;
+                weakIds.add(q.id);
+
+                feedbackPanel.className = "mt-5 rounded-2xl p-4 border bg-rose-950/40 border-rose-500/40 transition-all";
+                const reasonText = selectedIdx === -1 ? "Waktu Habis (5 Detik)!" : "Kurang Tepat! Masuk ke Zona Lemah (SRS)";
+                feedbackTitle.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400 text-lg"></i> <span class="text-rose-300">${reasonText}</span>`;
+            }
+
+            feedbackExplanation.innerHTML = q.explanation;
+            updateStatsUI();
+        }
+
+        function updateStatsUI() {
+            const streakEl = document.getElementById('streakCount');
+            const masteredEl = document.getElementById('masteredCount');
+            const weakEl = document.getElementById('weakCountBadge');
+            const comboBadge = document.getElementById('comboBadge');
+
+            streakEl.textContent = streak;
+            masteredEl.textContent = masteredIds.size;
+            weakEl.textContent = weakIds.size;
+
+            comboBadge.classList.remove('combo-pop');
+            void comboBadge.offsetWidth;
+            comboBadge.classList.add('combo-pop');
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex >= activeDeck.length) currentIndex = 0;
+            renderQuestion();
+        }
+
+        function prevQuestion() {
+            currentIndex--;
+            if (currentIndex < 0) currentIndex = activeDeck.length - 1;
+            renderQuestion();
+        }
+
+        // ============================================================================
+        // SPEED-HACK 5 SECOND TIMER
+        // ============================================================================
+        function startSpeedTimer() {
+            stopSpeedTimer();
+            speedTimeLeft = 100;
+            const bar = document.getElementById('speedTimerBar');
+            bar.style.width = '100%';
+
+            speedTimerInterval = setInterval(() => {
+                speedTimeLeft -= 2; // 50 ticks * 100ms = 5.0 seconds
+                bar.style.width = `${Math.max(0, speedTimeLeft)}%`;
+                if (speedTimeLeft <= 0) {
+                    stopSpeedTimer();
+                    selectAnswer(-1); // Timeout
+                }
+            }, 100);
+        }
+
+        function stopSpeedTimer() {
+            if (speedTimerInterval) {
+                clearInterval(speedTimerInterval);
+                speedTimerInterval = null;
+            }
+        }
+
+        // ============================================================================
+        // JAPANESE TEXT-TO-SPEECH (WEB SPEECH API)
+        // ============================================================================
+        function speakJapaneseText(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const cleanText = text
+                .replace(/（　　）/g, '')
+                .replace(/＿＿＿＿＿/g, '')
+                .replace(/^[^:：]+[:：]/gm, ''); // strip speaker names for smoother audio
+            const utter = new SpeechSynthesisUtterance(cleanText);
+            utter.lang = 'ja-JP';
+            utter.rate = 1.02;
+            window.speechSynthesis.speak(utter);
+        }
+
+        function speakCurrentDialogue() {
+            const q = activeDeck[currentIndex];
+            if (!q) return;
+            speakJapaneseText(q.dialogue);
+        }
+
+        // ============================================================================
+        // BANK 300 SOAL EXPLORER
+        // ============================================================================
+        function renderExplorer() {
+            const query = (document.getElementById('searchInput')?.value || '').toLowerCase();
+            const filter = document.getElementById('explorerFilter')?.value || 'all';
+            const listEl = document.getElementById('explorerList');
+            listEl.innerHTML = '';
+
+            const filtered = allQuestions.filter(q => {
+                if (filter === 'part1' && q.part !== 1) return false;
+                if (filter === 'part2' && q.part !== 2) return false;
+                if (filter === 'weak' && !weakIds.has(q.id)) return false;
+                if (filter === 'mastered' && !masteredIds.has(q.id)) return false;
+
+                if (query) {
+                    const hay = `${q.id} #${q.num} ${q.dialogue} ${q.options.join(' ')} ${q.pattern}`.toLowerCase();
+                    return hay.includes(query);
+                }
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400">
+                        Tidak ada soal yang cocok dengan filter/pencarian ini.
+                    </div>
+                `;
+                return;
+            }
+
+            const labels = ['A', 'B', 'C', 'D'];
+            filtered.forEach(q => {
+                const isMastered = masteredIds.has(q.id);
+                const isWeak = weakIds.has(q.id);
+                const card = document.createElement('div');
+                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col gap-2 hover:border-slate-700 transition";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                                ${q.part === 1 ? 'PDF1 Refleks' : 'DOCX2 JFT-A2'} #${q.num}
+                            </span>
+                            <span class="text-xs text-fuchsia-300 font-medium">${q.pattern}</span>
+                            ${isMastered ? '<span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">✓ Mastered</span>' : ''}
+                            ${isWeak ? '<span class="text-xs bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded">⚠ Perlu Review</span>' : ''}
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="speakJapaneseText(\`${q.dialogue.replace(/`/g, '')}\`)" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-400 px-2.5 py-1 rounded-lg">
+                                <i class="fa-solid fa-volume-high"></i> Audio
+                            </button>
+                            <button onclick="jumpToQuestion('${q.id}')" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-lg font-semibold">
+                                Latih Soal Ini
+                            </button>
+                        </div>
+                    </div>
+                    <pre class="jp-text text-xs sm:text-sm text-slate-200 whitespace-pre-wrap font-sans bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">${q.dialogue}</pre>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs jp-text mt-1">
+                        ${q.options.map((opt, i) => `
+                            <div class="px-3 py-1.5 rounded-lg border ${i === q.correct ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300 font-bold' : 'bg-slate-950/40 border-slate-800 text-slate-400'}">
+                                ${labels[i]}. ${opt} ${i === q.correct ? '✓' : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        function jumpToQuestion(id) {
+            switchTab('quiz');
+            document.getElementById('deckSelect').value = 'all';
+            activeDeck = [...allQuestions];
+            const idx = activeDeck.findIndex(q => q.id === id);
+            currentIndex = idx !== -1 ? idx : 0;
+            renderQuestion();
+        }
+
+        // ============================================================================
+        // MODAL & KEYBOARD SHORTCUTS
+        // ============================================================================
+        function openCheatSheetModal() {
+            document.getElementById('cheatSheetModal').classList.remove('hidden');
+        }
+        function closeCheatSheetModal() {
+            document.getElementById('cheatSheetModal').classList.add('hidden');
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (currentTab === 'explorer') return;
+            if (document.activeElement && ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+            if (!answeredCurrent) {
+                if (e.key === '1' || e.key === 'a' || e.key === 'A') selectAnswer(0);
+                else if (e.key === '2' || e.key === 'b' || e.key === 'B') selectAnswer(1);
+                else if (e.key === '3' || e.key === 'c' || e.key === 'C') selectAnswer(2);
+                else if (e.key === '4' || e.key === 'd' || e.key === 'D') selectAnswer(3);
+            } else {
+                if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    nextQuestion();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevQuestion();
+                }
+            }
+        });
+
+        // Initialize on load
+        window.onload = () => {
+            renderQuestion();
         };
-
-        row.innerHTML = `
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="jp-font text-sm font-bold text-white">${item.kanji}</span>
-              <span class="jp-font text-xs text-zinc-400">(${item.furigana})</span>
-            </div>
-            <p class="text-xs text-zinc-300 mt-0.5">${item.arti}</p>
-          </div>
-          <div class="text-right">
-            <span class="text-[10px] text-zinc-500 block">${item.group}</span>
-          </div>
-        `;
-        container.appendChild(row);
-      });
-    }
-
-    function filterList(val) {
-      renderFullList(val);
-    }
-
-    window.addEventListener('keydown', (e) => {
-      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-
-      if (e.code === 'Space') {
-        e.preventDefault();
-        flipCard();
-      } else if (e.code === 'ArrowRight') {
-        e.preventDefault();
-        nextCard();
-      } else if (e.code === 'ArrowLeft') {
-        e.preventDefault();
-        prevCard();
-      } else if (e.key.toLowerCase() === 'a') {
-        playAudio();
-      } else if (e.key.toLowerCase() === 'r') {
-        shuffleDeck();
-      }
-    });
-
-    // Initialize on load
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('total-badge').textContent = KOTOBA_DATA.length;
-      renderCard();
-    });
-  </script>
+    </script>
 </body>
 </html>
