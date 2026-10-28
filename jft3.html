@@ -1,0 +1,2454 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JFT-Basic Simulator: Hyōgen Asli & Bunpou Bab 26-48</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: #f1f5f9;
+            user-select: none;
+        }
+        .jp-text {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 2.1;
+        }
+        ruby {
+            ruby-align: center;
+        }
+        rt {
+            font-size: 0.65em;
+            color: #475569;
+            font-weight: 500;
+        }
+        /* Prometric CBT Authentic Colors & Styling */
+        .cbt-header {
+            background: linear-gradient(180deg, #1e3a8a 0%, #172554 100%);
+        }
+        .cbt-subheader {
+            background-color: #e2e8f0;
+            border-bottom: 2px solid #cbd5e1;
+        }
+        .cbt-option {
+            transition: all 0.15s ease;
+            border: 2px solid #cbd5e1;
+            background-color: #ffffff;
+        }
+        .cbt-option:hover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .cbt-option.selected {
+            border-color: #1d4ed8;
+            background-color: #dbeafe;
+            box-shadow: inset 0 0 0 1px #1d4ed8;
+        }
+        .cbt-option.correct {
+            border-color: #15803d !important;
+            background-color: #dcfce7 !important;
+        }
+        .cbt-option.wrong {
+            border-color: #b91c1c !important;
+            background-color: #fee2e2 !important;
+        }
+        .hide-furigana rt {
+            display: none;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800">
+
+    <!-- TOP NAVIGATION / MODE SWITCHER -->
+    <header class="cbt-header text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="bg-amber-400 text-slate-950 font-black px-2.5 py-1 rounded text-sm tracking-wider flex items-center gap-1 shadow">
+                    <span>JFT</span>
+                    <span class="text-xs bg-slate-900 text-amber-400 px-1 rounded">CBT</span>
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm sm:text-base leading-tight">Simulasi Layar Asli JFT-Basic (A2)</h1>
+                    <p class="text-[11px] text-blue-200 hidden sm:block">Hyōgen Kontekstual Asli & Reminder Berurutan Bunpou Bab 26–48</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex items-center bg-slate-900/60 p-1 rounded-lg border border-blue-800/60 overflow-x-auto max-w-full">
+                <button onclick="switchTab('hyogen')" id="tab-hyogen" class="px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition whitespace-nowrap bg-blue-600 text-white shadow">
+                    1. Simulasi Hyōgen (Layar CBT)
+                </button>
+                <button onclick="switchTab('bunpou')" id="tab-bunpou" class="px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition whitespace-nowrap text-blue-200 hover:text-white">
+                    2. Bunpou Bab 26–48 (Urut)
+                </button>
+                <button onclick="switchTab('mock')" id="tab-mock" class="px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition whitespace-nowrap text-blue-200 hover:text-white">
+                    3. JFT Mock Test
+                </button>
+                <button onclick="switchTab('cheatsheet')" id="tab-cheatsheet" class="px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition whitespace-nowrap text-blue-200 hover:text-white">
+                    4. Kamus & AI Soal
+                </button>
+            </nav>
+
+            <!-- Global Quick Controls -->
+            <div class="flex items-center space-x-2">
+                <button onclick="toggleFurigana()" id="btn-furigana" class="bg-blue-800 hover:bg-blue-700 border border-blue-500 text-xs px-2.5 py-1.5 rounded font-medium transition flex items-center gap-1.5">
+                    <span>あ</span>
+                    <span id="furigana-label">Furigana: ON</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 flex flex-col">
+
+        <!-- ==========================================
+             VIEW 1: SIMULASI HYOGEN (TAMPILAN ASLI CBT)
+             ========================================== -->
+        <section id="view-hyogen" class="flex-1 flex flex-col bg-white rounded-xl shadow-md border border-slate-300 overflow-hidden">
+            <!-- Prometric Style Sub-bar -->
+            <div class="cbt-subheader px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+                <div class="flex items-center space-x-3">
+                    <span class="font-bold text-slate-800 bg-white px-2.5 py-1 rounded border border-slate-300 shadow-sm">
+                        セクション 2 : 会話と表現 (Kaiwa to Hyōgen)
+                    </span>
+                    <span id="hyogen-category-badge" class="bg-indigo-100 text-indigo-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">
+                        Tipe Dialog Situasi
+                    </span>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <select id="hyogen-filter" onchange="filterHyogenCategory(this.value)" class="bg-white border border-slate-300 rounded px-2.5 py-1 text-xs font-medium text-slate-700 focus:outline-none focus:border-blue-600">
+                        <option value="all">Semua Variasi Soal Hyōgen (25 Soal Inti)</option>
+                        <option value="situasi">Tipe Ilustrasi Situasi (Apa yang diucapkan?)</option>
+                        <option value="aisatsu">Aisatsu, Etika Kantor & Bisnis</option>
+                        <option value="respon">Respon Cepat (Aizuchi, Penolakan Halus, Izin)</option>
+                        <option value="toko">Percakapan Staf Toko / Restoran / Layanan</option>
+                        <option value="kondisi">Keluhan Kesehatan, Cuaca & Perasaan</option>
+                    </select>
+                    <button onclick="toggleFlagCurrent('hyogen')" id="hyogen-flag-btn" class="bg-white hover:bg-amber-50 border border-slate-300 text-slate-700 px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1 transition">
+                        <span>🚩</span> <span>Tandai (Review)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Split Screen CBT Area -->
+            <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
+                
+                <!-- LEFT PANE: Prompt, Context Illustration & Dialogue Box (Like Real JFT Screenshot) -->
+                <div class="lg:col-span-7 p-4 sm:p-6 flex flex-col justify-between bg-slate-50/60">
+                    <div>
+                        <!-- Question Number & Instruction Box -->
+                        <div class="flex items-start justify-between gap-2 mb-4">
+                            <div class="bg-slate-800 text-white font-bold px-3 py-1 rounded text-sm">
+                                問題 <span id="hyogen-qnum">1</span> / <span id="hyogen-qtotal">25</span>
+                            </div>
+                            <span id="hyogen-source-tag" class="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded">
+                                ★ Sering Muncul di JFT Asli
+                            </span>
+                        </div>
+
+                        <!-- Japanese Question Prompt -->
+                        <div id="hyogen-instruction" class="jp-text text-base sm:text-lg font-bold text-slate-900 bg-white p-3.5 rounded-lg border-l-4 border-blue-700 shadow-sm mb-4">
+                            <!-- Filled dynamically -->
+                        </div>
+
+                        <!-- Visual Context Card (Simulating JFT Situation Illustration + Dialogue) -->
+                        <div class="bg-white rounded-xl border-2 border-slate-200 p-4 shadow-sm mb-4">
+                            <!-- SVG / Scene Illustration Header -->
+                            <div id="hyogen-scene-box" class="bg-slate-100 rounded-lg p-3 mb-4 border border-slate-200 flex items-center gap-4">
+                                <div id="hyogen-scene-svg" class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-white rounded-lg border border-slate-300 flex items-center justify-center shadow-inner">
+                                    <!-- Dynamic SVG Icon -->
+                                </div>
+                                <div>
+                                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Situasi / Gambar Layar Ujian:</div>
+                                    <div id="hyogen-scene-desc" class="text-sm sm:text-base font-semibold text-slate-800"></div>
+                                    <div id="hyogen-scene-sub" class="text-xs text-slate-600 mt-0.5"></div>
+                                </div>
+                            </div>
+
+                            <!-- Dialogue / Blank Bubble Area -->
+                            <div id="hyogen-dialogue-container" class="space-y-3 jp-text text-base sm:text-lg">
+                                <!-- Filled dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Explanation Box (Hidden until answered or toggled) -->
+                    <div id="hyogen-explanation" class="hidden rounded-xl border-2 p-4 transition-all">
+                        <!-- Dynamic Feedback -->
+                    </div>
+                </div>
+
+                <!-- RIGHT PANE: Choices A / B / C + Question Navigator -->
+                <div class="lg:col-span-5 p-4 sm:p-6 flex flex-col justify-between bg-white">
+                    <div>
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                            Pilih Jawaban yang Paling Tepat (クリックして選択):
+                        </div>
+
+                        <!-- Options List -->
+                        <div id="hyogen-options" class="space-y-3 jp-text">
+                            <!-- Filled dynamically -->
+                        </div>
+
+                        <!-- Instant Check / Hint Buttons -->
+                        <div class="mt-5 flex flex-wrap items-center gap-2">
+                            <button onclick="revealHyogenExplanation()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-semibold text-xs px-3 py-2 rounded-lg transition flex items-center gap-1.5">
+                                <span>💡</span> <span>Lihat Pembahasan & Arti Per Opsi</span>
+                            </button>
+                            <button onclick="speakCurrentDialogue('hyogen')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs px-3 py-2 rounded-lg transition flex items-center gap-1.5">
+                                <span>🔊</span> <span>Dengarkan Pelafalan Jepang</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Question Grid Navigator -->
+                    <div class="mt-6 pt-4 border-t border-slate-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-500">Navigasi Nomor Soal Hyōgen:</span>
+                            <span id="hyogen-score-counter" class="text-xs font-bold text-blue-700">Terjawab: 0/25</span>
+                        </div>
+                        <div id="hyogen-grid" class="grid grid-cols-7 sm:grid-cols-9 gap-1.5 max-h-36 overflow-y-auto p-1">
+                            <!-- Number buttons -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prometric Style Bottom Bar -->
+            <div class="bg-slate-800 text-white px-4 py-3 flex items-center justify-between">
+                <button onclick="prevQuestion('hyogen')" class="bg-slate-700 hover:bg-slate-600 border border-slate-500 px-4 py-2 rounded font-semibold text-xs sm:text-sm flex items-center gap-2 transition">
+                    <span>◀</span> <span>前へ (Sebelumnya)</span>
+                </button>
+                <div class="text-xs text-slate-300 hidden sm:block">
+                    Tips: Klik pilihan jawaban untuk langsung mengecek analisis jebakan soal JFT
+                </div>
+                <button onclick="nextQuestion('hyogen')" class="bg-blue-600 hover:bg-blue-500 border border-blue-400 px-5 py-2 rounded font-semibold text-xs sm:text-sm flex items-center gap-2 transition shadow">
+                    <span>次へ (Selanjutnya)</span> <span>▶</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             VIEW 2: BUNPOU MINNA BAB 26 - 48 (BERURUTAN)
+             ========================================== -->
+        <section id="view-bunpou" class="hidden flex-1 flex flex-col gap-4">
+            <!-- Top Filter & Mode Control for Bunpou 26-48 -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-300 p-4 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="bg-emerald-600 text-white text-xs font-bold px-2.5 py-1 rounded">BAB 26 – 48</span>
+                        <h2 class="font-bold text-base sm:text-lg text-slate-900">Reminder Berurutan Bunpou Minna no Nihongo II</h2>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-0.5">
+                        Setiap variasi pola kalimat diwakili tepat <strong>1 soal berurutan per bab</strong> agar tidak kebanyakan dan mudah diingat polanya.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- View Mode Switch: Card by Card vs List per Chapter -->
+                    <div class="bg-slate-100 p-1 rounded-lg border border-slate-300 flex text-xs font-semibold">
+                        <button onclick="setBunpouLayout('cbt')" id="btn-bunpou-cbt" class="px-3 py-1.5 rounded bg-blue-600 text-white shadow">
+                            Mode Latihan Satu-Satu
+                        </button>
+                        <button onclick="setBunpouLayout('list')" id="btn-bunpou-list" class="px-3 py-1.5 rounded text-slate-700 hover:bg-white">
+                            Mode Daftar Urut Semua Bab
+                        </button>
+                    </div>
+
+                    <!-- Chapter Jump Dropdown -->
+                    <select id="bunpou-chapter-select" onchange="jumpToBunpouChapter(this.value)" class="bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-600">
+                        <option value="all">Pilih Lompat ke Bab (Bab 26 - 48)</option>
+                        <!-- Populated via JS -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- BUNPOU SUBVIEW A: SINGLE CBT CARD MODE -->
+            <div id="bunpou-cbt-container" class="flex-1 flex flex-col bg-white rounded-xl shadow-md border border-slate-300 overflow-hidden">
+                <div class="cbt-subheader px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+                    <div class="flex items-center gap-2">
+                        <span id="bunpou-bab-badge" class="bg-blue-700 text-white font-bold px-3 py-1 rounded">
+                            Bab 26 - Pola 1/3
+                        </span>
+                        <span id="bunpou-pattern-title" class="font-bold text-slate-800 text-sm sm:text-base">
+                            ～んです / ～んですが
+                        </span>
+                    </div>
+                    <div class="text-xs font-semibold text-slate-600">
+                        Urutan Pola ke-<span id="bunpou-seq-num">1</span> dari <span id="bunpou-seq-total">69</span> Pola Inti (Bab 26–48)
+                    </div>
+                </div>
+
+                <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
+                    <!-- Left: Question & Grammar Formula Reminder -->
+                    <div class="lg:col-span-7 p-4 sm:p-6 flex flex-col justify-between bg-slate-50/60">
+                        <div>
+                            <!-- Rumus Reminder Pill -->
+                            <div class="bg-amber-50 border border-amber-300 rounded-lg p-3 mb-4 flex items-start justify-between gap-2">
+                                <div>
+                                    <div class="text-[11px] font-bold uppercase text-amber-800 tracking-wider">Target Pengingat Pola Kalimat:</div>
+                                    <div id="bunpou-formula-hint" class="text-sm font-bold text-slate-900 mt-0.5"></div>
+                                </div>
+                                <button onclick="toggleFormulaVisibility()" class="text-[11px] bg-white border border-amber-300 px-2 py-1 rounded text-amber-800 font-semibold hover:bg-amber-100 whitespace-nowrap">
+                                    Sembunyikan/Lihat Rumus
+                                </button>
+                            </div>
+
+                            <!-- Dialogue / Sentence Box -->
+                            <div class="bg-white rounded-xl border-2 border-slate-200 p-5 shadow-sm mb-4">
+                                <div class="text-xs font-bold text-slate-400 uppercase mb-2">Pilih bentuk tata bahasa yang tepat untuk mengisi ( 　 ):</div>
+                                <div id="bunpou-question-text" class="jp-text text-lg sm:text-xl font-bold text-slate-900 leading-relaxed">
+                                    <!-- Filled dynamically -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Explanation Box -->
+                        <div id="bunpou-explanation" class="hidden rounded-xl border-2 p-4">
+                            <!-- Filled dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Right: Options & Chapter Quick Strip -->
+                    <div class="lg:col-span-5 p-4 sm:p-6 flex flex-col justify-between bg-white">
+                        <div>
+                            <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                                Pilihan Jawaban:
+                            </div>
+                            <div id="bunpou-options" class="space-y-3 jp-text">
+                                <!-- Filled dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Chapter Mini Bar -->
+                        <div class="mt-6 pt-4 border-t border-slate-200">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-slate-500">Daftar Bab 26–48 (Klik untuk lompat):</span>
+                                <span id="bunpou-progress-text" class="text-xs font-bold text-emerald-700">Selesai: 0/69</span>
+                            </div>
+                            <div id="bunpou-chapter-pills" class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-1">
+                                <!-- Chapter buttons 26..48 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Navigation -->
+                <div class="bg-slate-800 text-white px-4 py-3 flex items-center justify-between">
+                    <button onclick="prevQuestion('bunpou')" class="bg-slate-700 hover:bg-slate-600 border border-slate-500 px-4 py-2 rounded font-semibold text-xs sm:text-sm flex items-center gap-2 transition">
+                        <span>◀</span> <span>Pola Sebelumnya</span>
+                    </button>
+                    <div id="bunpou-footer-info" class="text-xs text-slate-300 font-medium">
+                        Bab 26 (Soal 1 dari 3 di bab ini)
+                    </div>
+                    <button onclick="nextQuestion('bunpou')" class="bg-blue-600 hover:bg-blue-500 border border-blue-400 px-5 py-2 rounded font-semibold text-xs sm:text-sm flex items-center gap-2 transition shadow">
+                        <span>Pola Selanjutnya</span> <span>▶</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- BUNPOU SUBVIEW B: FULL SEQUENTIAL LIST MODE (BAB 26 - 48) -->
+            <div id="bunpou-list-container" class="hidden space-y-6 pb-8">
+                <!-- Populated dynamically with all chapters 26-48 in order -->
+            </div>
+        </section>
+
+        <!-- ==========================================
+             VIEW 3: JFT MOCK TEST (SIMULASI UJIAN PENUH)
+             ========================================== -->
+        <section id="view-mock" class="hidden flex-1 flex flex-col">
+            <!-- Mock Start Screen -->
+            <div id="mock-start-screen" class="bg-white rounded-xl shadow-md border border-slate-300 p-6 sm:p-10 max-w-3xl mx-auto my-auto text-center">
+                <div class="w-16 h-16 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl font-bold shadow-sm">
+                    ⏱️
+                </div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mb-2">
+                    JFT-Basic Mock Test (Fokus Hyōgen & Bunpou A2)
+                </h2>
+                <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+                    Uji kesiapan Anda menghadapi ujian sesungguhnya dengan layar CBT Prometric, hitung mundur waktu otomatis, tanpa bantuan pembahasan hingga Anda menekan tombol <strong>Finish Test</strong>.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 text-left">
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                        <div class="text-xs font-bold text-slate-400 uppercase">Komposisi Soal</div>
+                        <div class="text-base font-bold text-slate-800 mt-1">30 Soal Pilihan</div>
+                        <div class="text-xs text-slate-500 mt-0.5">15 Hyōgen Asli + 15 Bunpou Bab 26-48</div>
+                    </div>
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                        <div class="text-xs font-bold text-slate-400 uppercase">Waktu Ujian</div>
+                        <div class="text-base font-bold text-slate-800 mt-1">30 Menit</div>
+                        <div class="text-xs text-slate-500 mt-0.5">1 menit / soal (Standar JFT)</div>
+                    </div>
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                        <div class="text-xs font-bold text-slate-400 uppercase">Standar Lulus</div>
+                        <div class="text-base font-bold text-emerald-700 mt-1">Skor ≥ 200 / 250</div>
+                        <div class="text-xs text-slate-500 mt-0.5">Minimal 80% jawaban benar</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button onclick="startMockTest(30)" class="bg-blue-700 hover:bg-blue-600 text-white font-bold px-6 py-3 rounded-xl shadow-md transition flex items-center gap-2">
+                        <span>▶</span> <span>Mulai Full Mock Test (30 Soal)</span>
+                    </button>
+                    <button onclick="startMockTest(15)" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-5 py-3 rounded-xl shadow-md transition flex items-center gap-2">
+                        <span>⚡</span> <span>Quick Mock Test (15 Soal)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Mock Exam Screen -->
+            <div id="mock-exam-screen" class="hidden flex-1 flex flex-col bg-white rounded-xl shadow-md border border-slate-300 overflow-hidden">
+                <!-- Prometric Timer Top Bar -->
+                <div class="bg-slate-900 text-white px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-3">
+                        <span id="mock-section-label" class="bg-blue-700 text-xs font-bold px-2.5 py-1 rounded">
+                            セクション 2 : 会話と表現
+                        </span>
+                        <span class="text-sm font-bold">
+                            Soal <span id="mock-qnum">1</span> / <span id="mock-qtotal">30</span>
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="bg-slate-800 border border-slate-600 px-3 py-1 rounded font-mono text-sm font-bold text-amber-400 flex items-center gap-1.5">
+                            <span>⏳ Sisa Waktu:</span>
+                            <span id="mock-timer">30:00</span>
+                        </div>
+                        <button onclick="finishMockTest()" class="bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold px-3 py-1.5 rounded shadow transition">
+                            Selesai & Kumpulkan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mock Split Question & Options -->
+                <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
+                    <div class="lg:col-span-7 p-4 sm:p-6 bg-slate-50/60">
+                        <div id="mock-prompt-box" class="jp-text text-base sm:text-lg font-bold text-slate-900 bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-4"></div>
+                        <div id="mock-context-box" class="bg-white rounded-xl border-2 border-slate-200 p-4 shadow-sm jp-text text-base sm:text-lg"></div>
+                    </div>
+                    <div class="lg:col-span-5 p-4 sm:p-6 flex flex-col justify-between bg-white">
+                        <div>
+                            <div class="text-xs font-bold uppercase text-slate-400 mb-3">Pilih satu jawaban:</div>
+                            <div id="mock-options-box" class="space-y-3 jp-text"></div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-200">
+                            <div class="text-xs font-bold text-slate-500 mb-2">Peta Jawaban Mock Test:</div>
+                            <div id="mock-grid" class="grid grid-cols-8 sm:grid-cols-10 gap-1.5"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mock Bottom Nav -->
+                <div class="bg-slate-800 text-white px-4 py-3 flex items-center justify-between">
+                    <button onclick="mockNav(-1)" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded font-semibold text-xs sm:text-sm">◀ Sebelumnya</button>
+                    <button onclick="mockNav(1)" class="bg-blue-600 hover:bg-blue-500 px-5 py-2 rounded font-semibold text-xs sm:text-sm">Selanjutnya ▶</button>
+                </div>
+            </div>
+
+            <!-- Mock Result Screen -->
+            <div id="mock-result-screen" class="hidden bg-white rounded-xl shadow-md border border-slate-300 p-6 space-y-6">
+                <!-- Populated on finish -->
+            </div>
+        </section>
+
+        <!-- ==========================================
+             VIEW 4: KAMUS UNGKAPAN HYOGEN & AI GENERATOR
+             ========================================== -->
+        <section id="view-cheatsheet" class="hidden flex-1 space-y-6 pb-8">
+            <!-- AI Custom Question Generator Card -->
+            <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-xl p-5 shadow-md">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <span class="bg-amber-400 text-slate-900 text-xs font-extrabold px-2.5 py-0.5 rounded uppercase">Fitur Tambahan</span>
+                        <h2 class="text-lg sm:text-xl font-bold mt-1">Generator Variasi Soal Hyōgen & Bunpou Baru (AI)</h2>
+                        <p class="text-xs sm:text-sm text-blue-100 mt-1">
+                            Ingin menguji diri dengan skenario baru di luar PDF agar sama sekali tidak kaget saat ujian? Pilih topik situasi di bawah ini dan buat soal JFT baru secara instan.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <select id="ai-topic-select" class="bg-slate-900/90 text-white border border-blue-400 rounded-lg px-3 py-2 text-xs sm:text-sm font-medium">
+                            <option value="Pekerjaan di Pabrik / Restoran & Kesalahan Kerja">Situasi: Kesalahan Kerja / Lapor Bos</option>
+                            <option value="Izin Sakit, Terlambat Kereta, & Janji Temu">Situasi: Izin Sakit / Terlambat</option>
+                            <option value="Ungkapan Sopan Saat Bertamu, Pindah Rumah & Tetangga">Situasi: Bertamu & Tetangga Jepang</option>
+                            <option value="Belanja, Kasir Konbini, Rumah Sakit & Apotek">Situasi: Konbini, RS & Layanan</option>
+                            <option value="Gabungan Bunpou Minna Bab 35-48 (Keigo, Ukemi, Shieki)">Situasi: Keigo, Pasif & Kausatif (Bab 37-48)</option>
+                        </select>
+                        <button onclick="generateAIQuestion()" id="btn-ai-gen" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs sm:text-sm transition shadow flex items-center gap-1.5">
+                            <span>✨</span> <span>Buat Soal Baru</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="ai-generated-result" class="hidden mt-4 bg-white text-slate-800 rounded-xl p-4 shadow-inner"></div>
+            </div>
+
+            <!-- Cheat Sheet Grid: Daftar Hyogen Pasti Keluar JFT -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-300 p-5">
+                <h3 class="font-bold text-base sm:text-lg text-slate-900 mb-1">
+                    📌 Ringkasan Ungkapan (Hyōgen) Wajib Hafal Sebelum Masuk Ruang CBT JFT
+                </h3>
+                <p class="text-xs text-slate-500 mb-4">
+                    Berdasarkan kumpulan tangkapan layar (SS) soal JFT asli dan buku Irodori A2 / Minna no Nihongo.
+                </p>
+                <div id="cheatsheet-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // =========================================================================
+        // 1. DATABASE SOAL HYOGEN ASLI JFT-BASIC (25 VARIASI LENGKAP DARI SS & PDF)
+        // =========================================================================
+        const HYOGEN_QUESTIONS = [
+            {
+                id: 1,
+                category: "aisatsu",
+                tag: "SS JFT Asli - Etika Kantor",
+                instruction: "<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終<rt>お</rt></ruby>わりました。<ruby>他<rt>ほか</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>はまだ<ruby>仕事<rt>しごと</rt></ruby>をしています。<ruby>帰<rt>かえ</rt></ruby>るとき、<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Pulang Lebih Dulu Saat Rekan Kerja Masih Bekerja",
+                sceneSub: "Di kantor pukul 17:30, Anda sudah selesai dan membawa tas mau pulang.",
+                svgType: "office_leave",
+                dialogue: [
+                    { speaker: "あなた", text: "「 ( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "同僚 (Rekan)", text: "「お疲れ様でした。」", isBlank: false }
+                ],
+                options: [
+                    "お<ruby>先<rt>さき</rt></ruby>に<ruby>失礼<rt>しつれい</rt></ruby>します",
+                    "ご<ruby>苦労様<rt>くろうさま</rt></ruby>でした",
+                    "お<ruby>世話<rt>せわ</rt></ruby>になりました"
+                ],
+                correct: 0,
+                explanation: "Saat pulang mendahului rekan kerja yang masih bekerja, ungkapan mutlak di Jepang adalah <strong>「お先に失礼します」 (Osaki ni shitsurei shimasu - Permisi saya duluan)</strong>.<br>• Opsi B (ご苦労様でした) diucapkan dari atasan ke bawahan, tidak sopan dipakai ke rekan/atasan.<br>• Opsi C (お世話になりました) dipakai saat resign/berpisah permanen."
+            },
+            {
+                id: 2,
+                category: "situasi",
+                tag: "SS JFT Asli - Bertamu",
+                instruction: "<ruby>友達<rt>ともだち</rt></ruby>の<ruby>家<rt>いえ</rt></ruby>へ<ruby>遊<rt>あそ</rt></ruby>びに<ruby>行<rt>い</rt></ruby>きました。<ruby>家<rt>いえ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>るとき、<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Melangkah Masuk ke Dalam Rumah Teman / Ruangan Orang Lain",
+                sceneSub: "Teman Anda berkata 「どうぞ、入ってください」 di pintu masuk (Genkan).",
+                svgType: "house_enter",
+                dialogue: [
+                    { speaker: "友達", text: "「どうぞ、あがってください。」", isBlank: false },
+                    { speaker: "あなた", text: "「ありがとうございます。( 　　　　　　　 )。」", isBlank: true }
+                ],
+                options: [
+                    "おじゃまします",
+                    "ただいま",
+                    "いらっしゃいませ"
+                ],
+                correct: 0,
+                explanation: "Ketika masuk ke rumah orang lain atau ruangan atasan, ucapkan <strong>「おじゃまします」 (Ojama shimasu - Permisi mengganggu)</strong>.<br>• ただいま dipakai saat pulang ke rumah sendiri.<br>• いらっしゃいませ dipakai oleh staf toko kepada pelanggan."
+            },
+            {
+                id: 3,
+                category: "respon",
+                tag: "SS JFT Asli - Menolak Halus",
+                instruction: "<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>食事<rt>しょくじ</rt></ruby>に<ruby>誘<rt>さそ</rt></ruby>われましたが、<ruby>今日<rt>きょう</rt></ruby>は<ruby>行<rt>い</rt></ruby>けません。<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Menolak Ajakan Makan Malam Secara Sopan",
+                sceneSub: "Rekan mengajak makan malam hari ini, tapi Anda sudah ada janji/urusan lain.",
+                svgType: "decline_invite",
+                dialogue: [
+                    { speaker: "同僚", text: "「これから、みんなで<ruby>食事<rt>しょくじ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きませんか。」", isBlank: false },
+                    { speaker: "あなた", text: "「すみません、( 　　　　　　　 )。」", isBlank: true }
+                ],
+                options: [
+                    "<ruby>今日<rt>きょう</rt></ruby>はちょっと……また<ruby>今度<rt>こんど</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>いします",
+                    "<ruby>今日<rt>きょう</rt></ruby>は<ruby>行<rt>い</rt></ruby>きたくないです",
+                    "いいえ、けっこうです"
+                ],
+                correct: 0,
+                explanation: "Dalam budaya Jepang (JFT Hyōgen), menolak ajakan teman/rekan kerja dilakukan secara tidak langsung dengan <strong>「今日はちょっと……また今度お願いします」 (Hari ini agak kurang bisa... lain kali ya)</strong>.<br>• Mengatakan 「行きたくないです」(tidak mau pergi) terdengar kasar."
+            },
+            {
+                id: 4,
+                category: "kondisi",
+                tag: "SS JFT Asli - Empati Sakit",
+                instruction: "<ruby>同僚<rt>どうりょう</rt></ruby>は<ruby>風邪<rt>かぜ</rt></ruby>をひいて、<ruby>早退<rt>そうたい</rt></ruby>します。<ruby>同僚<rt>どうりょう</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Rekan Kerja Pulang Cepat Karena Sakit / Demam",
+                sceneSub: "Rekan tampak pucat memegang masker dan pamit pulang lebih awal.",
+                svgType: "sick_care",
+                dialogue: [
+                    { speaker: "同僚", text: "「<ruby>熱<rt>ねつ</rt></ruby>があるので、<ruby>今日<rt>きょう</rt></ruby>は<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>ります。」", isBlank: false },
+                    { speaker: "あなた", text: "「そうですか。( 　　　　　　　 )。」", isBlank: true }
+                ],
+                options: [
+                    "お<ruby>大事<rt>だいじ</rt></ruby>に",
+                    "お<ruby>元気<rt>げんき</rt></ruby>で",
+                    "ごちそうさまでした"
+                ],
+                correct: 0,
+                explanation: "Kepada orang yang sedang sakit atau cedera, selalu ucapkan <strong>「お大事に」 (Odaiji ni - Semoga lekas sembuh / Jaga diri)</strong>.<br>• Jebakan klasik JFT: 「お元気で」 (Ogenki de) HANYA dipakai untuk perpisahan jangka panjang (pindah negara/kota), BUKAN untuk orang sakit!"
+            },
+            {
+                id: 5,
+                category: "toko",
+                tag: "SS JFT Asli - Restoran",
+                instruction: "レストランに<ruby>入<rt>はい</rt></ruby>りました。<ruby>店員<rt>てんいん</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>われましたか。どう<ruby>答<rt>こた</rt></ruby>えますか。",
+                sceneTitle: "Masuk ke Restoran dan Ditanya Jumlah Orang",
+                sceneSub: "Pelayan restoran menyambut Anda yang datang berdua bersama teman.",
+                svgType: "restaurant",
+                dialogue: [
+                    { speaker: "店員", text: "「いらっしゃいませ。<ruby>何名様<rt>なんめいさま</rt></ruby>ですか。」", isBlank: false },
+                    { speaker: "あなた", text: "「 ( 　　　　　　　 )。」", isBlank: true }
+                ],
+                options: [
+                    "<ruby>二人<rt>ふたり</rt></ruby>です",
+                    "<ruby>二階<rt>にかい</rt></ruby>です",
+                    "<ruby>二時<rt>にじ</rt></ruby>です"
+                ],
+                correct: 0,
+                explanation: "<strong>「何名様ですか」 (Nan-mei-sama desu ka)</strong> adalah bentuk hormat dari 「何人ですか」 (Berapa orang?). Jadi jawabannya adalah jumlah orang: <strong>「二人です」 (Futari desu - Dua orang)</strong>."
+            },
+            {
+                id: 6,
+                category: "situasi",
+                tag: "SS JFT Asli - Barang Jatuh",
+                instruction: "<ruby>前<rt>まえ</rt></ruby>を<ruby>歩<rt>ある</rt></ruby>いている<ruby>人<rt>ひと</rt></ruby>がハンカチを<ruby>落<rt>お</rt></ruby>としました。<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Memberitahu Orang di Depan Bahwa Saputangannya Jatuh",
+                sceneSub: "Di stasiun, orang di depan Anda tidak sadar saputangannya terjatuh.",
+                svgType: "dropped_item",
+                dialogue: [
+                    { speaker: "あなた", text: "「あのう、すみません。ハンカチ、( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "前の人", text: "「あ、ありがとうございます！」", isBlank: false }
+                ],
+                options: [
+                    "<ruby>落<rt>お</rt></ruby>ちましたよ",
+                    "<ruby>落<rt>お</rt></ruby>ちていますか",
+                    "<ruby>落<rt>お</rt></ruby>としてください"
+                ],
+                correct: 0,
+                explanation: "Untuk memberitahu informasi baru kepada lawan bicara bahwa barangnya jatuh, gunakan kata kerja intransitif + よ: <strong>「落ちましたよ」 (Ochimashita yo)</strong> atau 「落としましたよ」."
+            },
+            {
+                id: 7,
+                category: "respon",
+                tag: "SS JFT Asli - Meminta Izin",
+                instruction: "<ruby>会議室<rt>かいぎしつ</rt></ruby>にあるペンを<ruby>使<rt>つか</rt></ruby>いたいです。<ruby>先輩<rt>せんぱい</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Meminta Izin Memakai Pulpen Milik Kantor/Senior",
+                sceneSub: "Anda butuh mencatat sesuatu dan melihat ada pulpen di meja.",
+                svgType: "permission",
+                dialogue: [
+                    { speaker: "あなた", text: "「すみません、このペン、( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "先輩", text: "「ええ、どうぞ。」", isBlank: false }
+                ],
+                options: [
+                    "<ruby>使<rt>つか</rt></ruby>ってもいいですか",
+                    "<ruby>使<rt>つか</rt></ruby>ってください",
+                    "<ruby>使<rt>つか</rt></ruby>いましょうか"
+                ],
+                correct: 0,
+                explanation: "Meminta izin melakukan sesuatu untuk diri sendiri menggunakan pola <strong>～てもいいですか (Bolehkah saya...?)</strong> → 「使ってもいいですか」。<br>• 「使いましょうか」 artinya menawarkan bantuan kepada orang lain."
+            },
+            {
+                id: 8,
+                category: "respon",
+                tag: "SS JFT Asli - Menawarkan Bantuan",
+                instruction: "<ruby>先輩<rt>せんぱい</rt></ruby>が<ruby>重<rt>おも</rt></ruby>い<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っています。<ruby>手伝<rt>てつだ</rt></ruby>いたいです。<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Menawarkan Bantuan Membawakan Kardus Berat",
+                sceneSub: "Senior tampak kerepotan membawa tumpukan kardus seorang diri.",
+                svgType: "help_carry",
+                dialogue: [
+                    { speaker: "あなた", text: "「<ruby>先輩<rt>せんぱい</rt></ruby>、<ruby>重<rt>おも</rt></ruby>そうですね。半分 ( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "先輩", text: "「ありがとう。助かるよ。」", isBlank: false }
+                ],
+                options: [
+                    "<ruby>持<rt>も</rt></ruby>ちましょうか",
+                    "<ruby>持<rt>も</rt></ruby>ってください",
+                    "<ruby>持<rt>も</rt></ruby>ってくれますか"
+                ],
+                correct: 0,
+                explanation: "Saat menawarkan bantuan secara sukarela kepada orang lain, gunakan pola <strong>KK-Masu + ましょうか (Bagaimana kalau saya... untuk Anda?)</strong> → 「持ちましょうか」 (Mari saya bawakan)."
+            },
+            {
+                id: 9,
+                category: "aisatsu",
+                tag: "SS JFT Asli - Masuk Ruangan",
+                instruction: "<ruby>部長<rt>ぶちょう</rt></ruby>の<ruby>部屋<rt>へや</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ります。ノックをしてから、<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Mengetuk Pintu dan Masuk ke Ruang Kepala Bagian",
+                sceneSub: "Anda membawa dokumen untuk ditandatangani oleh Buchou.",
+                svgType: "office_knock",
+                dialogue: [
+                    { speaker: "あなた", text: "（コンコン）「 ( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "部長", text: "「はい、どうぞ。」", isBlank: false }
+                ],
+                options: [
+                    "<ruby>失礼<rt>しつれい</rt></ruby>します",
+                    "ごめんなさい",
+                    "お<ruby>邪魔<rt>じゃま</rt></ruby>しました"
+                ],
+                correct: 0,
+                explanation: "Etika di tempat kerja Jepang saat mengetuk pintu dan masuk ke ruang atasan/rapat adalah mengucapkan <strong>「失礼します」 (Shitsurei shimasu - Permisi)</strong>."
+            },
+            {
+                id: 10,
+                category: "toko",
+                tag: "SS JFT Asli - Konbini / Kasir",
+                instruction: "コンビニでお<ruby>弁当<rt>べんとう</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。<ruby>店員<rt>てんいん</rt></ruby>の<ruby>質問<rt>しつもん</rt></ruby>にどう<ruby>答<rt>こた</rt></ruby>えますか。",
+                sceneTitle: "Ditanya Kasir Konbini Saat Membeli Bento",
+                sceneSub: "Kasir menunjuk ke microwave di belakangnya.",
+                svgType: "konbini",
+                dialogue: [
+                    { speaker: "店員", text: "「お<ruby>弁当<rt>べんとう</rt></ruby>は<ruby>温<rt>あたた</rt></ruby>めますか。」", isBlank: false },
+                    { speaker: "あなた", text: "「はい、( 　　　　　　　 )。」", isBlank: true }
+                ],
+                options: [
+                    "お<ruby>願<rt>ねが</rt></ruby>いします",
+                    "どういたしまして",
+                    "ごちそうさまです"
+                ],
+                correct: 0,
+                explanation: "Kasir bertanya 「お弁当は温めますか」 (Apakah bentonya mau dipanaskan?). Jika menjawab 「はい」(Ya), lanjutkan dengan <strong>「お願いします」 (Tolong ya)</strong>. Jika tidak perlu dipanaskan, jawab 「いいえ、大丈夫です」."
+            },
+            {
+                id: 11,
+                category: "situasi",
+                tag: "SS JFT Asli - Foto Wisata",
+                instruction: "<ruby>観光地<rt>かんこうち</rt></ruby>で、<ruby>近<rt>ちか</rt></ruby>くにいる<ruby>人<rt>ひと</rt></ruby>に<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ってほしいです。<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Meminta Tolong Orang Lain Memotret Anda",
+                sceneSub: "Anda menyodorkan kamera/HP kepada orang di dekat tempat wisata.",
+                svgType: "camera_ask",
+                dialogue: [
+                    { speaker: "あなた", text: "「すみません、シャッターを ( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "近くの人", text: "「いいですよ。はい、チーズ！」", isBlank: false }
+                ],
+                options: [
+                    "<ruby>押<rt>お</rt></ruby>してもらえませんか",
+                    "<ruby>押<rt>お</rt></ruby>してあげましょうか",
+                    "<ruby>押<rt>お</rt></ruby>してもいいですか"
+                ],
+                correct: 0,
+                explanation: "Meminta tolong orang lain melakukan sesuatu dengan sopan menggunakan pola <strong>～てもらえませんか / ～てくれませんか</strong>. 「シャッターを押してもらえませんか」 (Bisakah tolong tekan tombol fotonya?)."
+            },
+            {
+                id: 12,
+                category: "aisatsu",
+                tag: "SS JFT Asli - Makan Bersama",
+                instruction: "<ruby>先輩<rt>せんぱい</rt></ruby>がレストランでご<ruby>飯<rt>はん</rt></ruby>をおごってくれました。<ruby>店<rt>みせ</rt></ruby>を<ruby>出<rt>で</rt></ruby>たとき、<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Berterima Kasih Setelah Ditraktir Makan oleh Senior",
+                sceneSub: "Senior yang membayar semua tagihan makan siang di kasir.",
+                svgType: "treat_meal",
+                dialogue: [
+                    { speaker: "あなた", text: "「<ruby>先輩<rt>せんぱい</rt></ruby>、とてもおいしかったです。( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "先輩", text: "「どういたしまして。また行こうね。」", isBlank: false }
+                ],
+                options: [
+                    "ごちそうさまでした",
+                    "いただきます",
+                    "お<ruby>腹<rt>なか</rt></ruby>がいっぱいです"
+                ],
+                correct: 0,
+                explanation: "Selain diucapkan selesai makan, <strong>「ごちそうさまでした」 (Gochisousama deshita)</strong> juga digunakan untuk berterima kasih kepada orang yang telah mentraktir/menjamu kita makan."
+            },
+            {
+                id: 13,
+                category: "respon",
+                tag: "SS JFT Asli - Mendengar Kabar Baik",
+                instruction: "<ruby>友達<rt>ともだち</rt></ruby>が<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>しました。<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Memberi Selamat kepada Teman yang Lulus Ujian",
+                sceneSub: "Teman menunjukkan sertifikat kelulusan JFT-Basic dengan wajah gembira.",
+                svgType: "congrats",
+                dialogue: [
+                    { speaker: "友達", text: "「JFTの<ruby>試験<rt>しけん</rt></ruby>、<ruby>合格<rt>ごうかく</rt></ruby>したよ！」", isBlank: false },
+                    { speaker: "あなた", text: "「わあ、すごいね！( 　　　　　　　 )！」", isBlank: true }
+                ],
+                options: [
+                    "おめでとう",
+                    "がんばって",
+                    "ざんねんだね"
+                ],
+                correct: 0,
+                explanation: "Saat teman sudah lulus/berhasil (合格した), ucapkan selamat: <strong>「おめでとう (ございます)」</strong>. 「がんばって」 dipakai SEBELUM ujian berlangsung."
+            },
+            {
+                id: 14,
+                category: "respon",
+                tag: "SS JFT Asli - Aizuchi Kabar Buruk",
+                instruction: "<ruby>友達<rt>ともだち</rt></ruby>が「きのう、<ruby>財布<rt>さいふ</rt></ruby>をなくしてしまったんだ」と<ruby>言<rt>い</rt></ruby>いました。どう<ruby>答<rt>こた</rt></ruby>えますか。",
+                sceneTitle: "Merespon Teman yang Kehilangan Dompet",
+                sceneSub: "Teman bercerita dengan wajah sedih bahwa dompetnya hilang kemarin.",
+                svgType: "sad_news",
+                dialogue: [
+                    { speaker: "友達", text: "「きのう、どこかで<ruby>財布<rt>さいふ</rt></ruby>をなくしちゃったんだ……。」", isBlank: false },
+                    { speaker: "あなた", text: "「えっ、( 　　　　　　　 )。」", isBlank: true }
+                ],
+                options: [
+                    "それは<ruby>大変<rt>たいへん</rt></ruby>ですね",
+                    "それはよかったですね",
+                    "おかげさまで"
+                ],
+                correct: 0,
+                explanation: "Ketika mendengar lawan bicara mengalami musibah atau kesulitan, respon empati yang tepat adalah <strong>「それは大変ですね」 (Wah, berat/repot sekali ya itu)</strong>."
+            },
+            {
+                id: 15,
+                category: "toko",
+                tag: "SS JFT Asli - Meminta Ulang Perkataan",
+                instruction: "<ruby>相手<rt>あいて</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>がよく<ruby>聞<rt>き</rt></ruby>こえませんでした。<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Suara Lawan Bicara Terlalu Cepat / Kurang Terdengar",
+                sceneSub: "Anda ingin meminta lawan bicara mengulangi ucapannya sekali lagi.",
+                svgType: "repeat_please",
+                dialogue: [
+                    { speaker: "店員", text: "「こちらの<ruby>書類<rt>しょるい</rt></ruby>に<ruby>ご記入<rt>きにゅう</rt></ruby>のうえ、３<ruby>番窓口<rt>ばんまどぐち</rt></ruby>へ……」", isBlank: false },
+                    { speaker: "あなた", text: "「すみません、( 　　　　　　　 )。」", isBlank: true }
+                ],
+                options: [
+                    "もう<ruby>一度<rt>いちど</rt></ruby><ruby>言<rt>い</rt></ruby>ってください",
+                    "もっと<ruby>速<rt>はや</rt></ruby>く<ruby>話<rt>はな</rt></ruby>してください",
+                    "よくわかります"
+                ],
+                correct: 0,
+                explanation: "Saat tidak menangkap ucapan lawan bicara, mintalah mengulang dengan <strong>「もう一度言ってください」 (Tolong katakan sekali lagi)</strong> atau 「もう少しゆっくり話してください」 (Tolong bicara lebih pelan)."
+            },
+            {
+                id: 16,
+                category: "aisatsu",
+                tag: "SS JFT Asli - Menyapa Setelah Lama",
+                instruction: "<ruby>長<rt>なが</rt></ruby>い<ruby>間<rt>あいだ</rt></ruby><ruby>会<rt>あ</rt></ruby>っていなかった<ruby>友達<rt>ともだち</rt></ruby>に<ruby>会<rt>あ</rt></ruby>いました。<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Bertemu Teman Lama yang Sudah Lama Tidak Berjumpa",
+                sceneSub: "Tidak sengaja bertemu teman lama di stasiun.",
+                svgType: "long_time",
+                dialogue: [
+                    { speaker: "あなた", text: "「あ、リーさん！( 　　　　　　　 )。<ruby>元気<rt>げんき</rt></ruby>だった？」", isBlank: true },
+                    { speaker: "リー", text: "「うん、おかげさまで元気だよ！」", isBlank: false }
+                ],
+                options: [
+                    "<ruby>ひさしぶり<rt></rt></ruby>だね",
+                    "はじめまして",
+                    "またあしたね"
+                ],
+                correct: 0,
+                explanation: "Saat bertemu seseorang setelah sekian lama tidak bertemu, ucapkan <strong>「久しぶりだね / お久しぶりです」 (Sudah lama tidak bertemu ya!)</strong>."
+            },
+            {
+                id: 17,
+                category: "situasi",
+                tag: "SS JFT Asli - Minta Maaf Terlambat",
+                instruction: "<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れて<ruby>着<rt>つ</rt></ruby>きました。<ruby>待<rt>ま</rt></ruby>っていた<ruby>友達<rt>ともだち</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Tiba Terlambat Saat Teman Sudah Menunggu",
+                sceneSub: "Anda berlari menghampiri teman yang sudah menunggu 15 menit.",
+                svgType: "late_run",
+                dialogue: [
+                    { speaker: "あなた", text: "「ごめん、ごめん！( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "友達", text: "「ううん、大丈夫だよ。今来たところだから。」", isBlank: false }
+                ],
+                options: [
+                    "<ruby>待<rt>ま</rt></ruby>った？ / お<ruby>待<rt>ま</rt></ruby>たせしました",
+                    "どういたしまして",
+                    "こちらこそ"
+                ],
+                correct: 0,
+                explanation: "Saat membuat orang lain menunggu, ucapkan <strong>「お待たせしました」 (Maaf telah membuat Anda menunggu)</strong> atau kepada teman akrab 「ごめん、待った？」 (Maaf, sudah nunggu lama?)."
+            },
+            {
+                id: 18,
+                category: "kondisi",
+                tag: "SS JFT Asli - Menanyakan Kabar",
+                instruction: "<ruby>先輩<rt>せんぱい</rt></ruby>が「<ruby>風邪<rt>かぜ</rt></ruby>はもうよくなりましたか」と<ruby>聞<rt>き</rt></ruby>きました。もう<ruby>元気<rt>げんき</rt></ruby>です。どう<ruby>答<rt>こた</rt></ruby>えますか。",
+                sceneTitle: "Menjawab Pertanyaan Tentang Kondisi Kesehatan yang Sudah Sembuh",
+                sceneSub: "Minggu lalu Anda flu, dan hari ini senior menanyakan kondisi Anda.",
+                svgType: "recovered",
+                dialogue: [
+                    { speaker: "先輩", text: "「先日の<ruby>風邪<rt>かぜ</rt></ruby>は、もうよくなりましたか。」", isBlank: false },
+                    { speaker: "あなた", text: "「はい、( 　　　　　　　 )、すっかり元気になりました。」", isBlank: true }
+                ],
+                options: [
+                    "おかげさまで",
+                    "お<ruby>大事<rt>だいじ</rt></ruby>に",
+                    "ごちそうさまでした"
+                ],
+                correct: 0,
+                explanation: "Ketika ditanya kabar atau kesembuhan, awali jawaban positif dengan <strong>「おかげさまで」 (Okagesama de - Berkat doa/bantuan Anda)</strong>."
+            },
+            {
+                id: 19,
+                category: "toko",
+                tag: "SS JFT Asli - Mencoba Pakaian",
+                instruction: "<ruby>服<rt>ふく</rt></ruby>の<ruby>店<rt>みせ</rt></ruby>で、シャツを<ruby>着<rt>き</rt></ruby>てみたいです。<ruby>店員<rt>てんいん</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Meminta Izin Mencoba Baju (Fitting Room) di Toko Pakaian",
+                sceneSub: "Anda memegang kemeja dan berbicara kepada staf toko.",
+                svgType: "fitting_room",
+                dialogue: [
+                    { speaker: "あなた", text: "「すみません、これ、( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "店員", text: "「はい、<ruby>試着室<rt>しちゃくしつ</rt></ruby>はこちらです。どうぞ。」", isBlank: false }
+                ],
+                options: [
+                    "<ruby>着<rt>き</rt></ruby>てみてもいいですか",
+                    "<ruby>着<rt>き</rt></ruby>なければなりませんか",
+                    "<ruby>着<rt>き</rt></ruby>たことがありますか"
+                ],
+                correct: 0,
+                explanation: "Mencoba melakukan sesuatu (Bab 40 ～てみます) + meminta izin (～てもいいですか) menjadi <strong>「着てみてもいいですか」 (Bolehkah saya mencoba memakainya?)</strong>."
+            },
+            {
+                id: 20,
+                category: "respon",
+                tag: "SS JFT Asli - Merendah Saat Dipuji",
+                instruction: "<ruby>日本人<rt>にほんじん</rt></ruby>の<ruby>同僚<rt>どうりょう</rt></ruby>に「<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>ですね」とほめられました。どう<ruby>答<rt>こた</rt></ruby>えますか。",
+                sceneTitle: "Merespon Pujian Bahasa Jepang dengan Sopan",
+                sceneSub: "Rekan kerja memuji kemampuan bahasa Jepang Anda.",
+                svgType: "praise_modest",
+                dialogue: [
+                    { speaker: "同僚", text: "「いつも<ruby>日本語<rt>にほんご</rt></ruby>がほんとうに<ruby>上手<rt>じょうず</rt></ruby>ですね。」", isBlank: false },
+                    { speaker: "あなた", text: "「いいえ、( 　　　　　　　 )。ありがとうございます。」", isBlank: true }
+                ],
+                options: [
+                    "まだまだです",
+                    "もちろん上手です",
+                    "どういたしまして"
+                ],
+                correct: 0,
+                explanation: "Saat dipuji dalam budaya Jepang, respon sopan yang merendah adalah <strong>「いいえ、まだまだです」 (Tidak, saya masih belum seberapa)</strong>."
+            },
+            {
+                id: 21,
+                category: "aisatsu",
+                tag: "SS JFT Asli - Memberi Oleh-oleh",
+                instruction: "<ruby>国<rt>くに</rt></ruby>のお<ruby>土産<rt>みやげ</rt></ruby>のお<ruby>菓子<rt>かし</rt></ruby>を<ruby>職場<rt>しょくば</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>にあげます。<ruby>渡<rt>わた</rt></ruby>すとき、<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Menyerahkan Oleh-Oleh kepada Rekan Kerja",
+                sceneSub: "Anda memberikan kotak kue oleh-oleh dari kampung halaman.",
+                svgType: "gift_give",
+                dialogue: [
+                    { speaker: "あなた", text: "「これ、<ruby>国<rt>くに</rt></ruby>のお<ruby>菓子<rt>かし</rt></ruby>です。( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "同僚", text: "「わあ、ありがとうございます！」", isBlank: false }
+                ],
+                options: [
+                    "よかったら、どうぞ",
+                    "ごちそうさまでした",
+                    "いただきます"
+                ],
+                correct: 0,
+                explanation: "Saat menawarkan makanan/oleh-oleh tanpa memaksa, ungkapan alami yang selalu keluar di JFT adalah <strong>「よかったら、どうぞ」 (Kalau berkenan, silakan)</strong> atau 「つまらないものですが」."
+            },
+            {
+                id: 22,
+                category: "situasi",
+                tag: "SS JFT Asli - Melewati Orang di Kereta",
+                instruction: "<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>混<rt>こ</rt></ruby>んでいます。<ruby>次<rt>つぎ</rt></ruby>の<ruby>駅<rt>えき</rt></ruby>で<ruby>降<rt>お</rt></ruby>りたいです。<ruby>前<rt>まえ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Permisi Mau Turun Saat Kereta Penuh Sesak",
+                sceneSub: "Pintu kereta terbuka tapi banyak penumpang berdiri menghalangi pintu.",
+                svgType: "train_exit",
+                dialogue: [
+                    { speaker: "あなた", text: "「すみません、( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "乗客", text: "「あ、どうぞ。」", isBlank: false }
+                ],
+                options: [
+                    "<ruby>降<rt>お</rt></ruby>ります",
+                    "<ruby>乗<rt>の</rt></ruby>ります",
+                    "<ruby>止<rt>と</rt></ruby>まります"
+                ],
+                correct: 0,
+                explanation: "Saat ingin lewat karena mau turun dari kereta/bus yang padat, cukup katakan <strong>「すみません、降ります」 (Permisi, saya mau turun)</strong>."
+            },
+            {
+                id: 23,
+                category: "toko",
+                tag: "SS JFT Asli - Meminta Bill / Bayar",
+                instruction: "レストランで<ruby>食事<rt>しょくじ</rt></ruby>が<ruby>終<rt>お</rt></ruby>わりました。お<ruby>金<rt>かね</rt></ruby>を<ruby>払<rt>はら</rt></ruby>いたいです。<ruby>店員<rt>てんいん</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Memanggil Pelayan untuk Membayar Tagihan Makan",
+                sceneSub: "Anda sudah selesai makan dan ingin meminta bon/pembayaran.",
+                svgType: "bill_pay",
+                dialogue: [
+                    { speaker: "あなた", text: "「すみません、( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "店員", text: "「はい、ありがとうございます。レジへどうぞ。」", isBlank: false }
+                ],
+                options: [
+                    "お<ruby>会計<rt>かいけい</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします",
+                    "ご<ruby>注文<rt>ちゅうもん</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします",
+                    "メニューをお<ruby>願<rt>ねが</rt></ruby>いします"
+                ],
+                correct: 0,
+                explanation: "Meminta pembayaran/bill di restoran menggunakan <strong>「お会計をお願いします」 (Okaikei o onegaishimasu)</strong> atau 「お勘定をお願いします」.<br>• 「ご注文」 = memesan makanan."
+            },
+            {
+                id: 24,
+                category: "kondisi",
+                tag: "SS JFT Asli - Peringatan Bahaya",
+                instruction: "<ruby>工事現場<rt>こうじげんば</rt></ruby>で、<ruby>上<rt>うえ</rt></ruby>から<ruby>物<rt>もの</rt></ruby>が<ruby>落<rt>お</rt></ruby>ちそうです。<ruby>下<rt>した</rt></ruby>にいる<ruby>人<rt>ひと</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Meneriakkan Peringatan Saat Ada Bahaya Mendadak",
+                sceneSub: "Di tempat kerja, ada barang yang hampir jatuh ke arah rekan kerja.",
+                svgType: "danger_warn",
+                dialogue: [
+                    { speaker: "あなた", text: "「 ( 　　　　　　　 )！<ruby>上<rt>うえ</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけて！」", isBlank: true },
+                    { speaker: "同僚", text: "「えっ！（よける）」", isBlank: false }
+                ],
+                options: [
+                    "あぶない",
+                    "うるさい",
+                    "きたない"
+                ],
+                correct: 0,
+                explanation: "Seruan darurat saat ada bahaya fisik (kendaraan mendekat, barang jatuh, mesin bergerak) adalah <strong>「あぶない！」 (Abunai! - Awas / Bahaya!)</strong>."
+            },
+            {
+                id: 25,
+                category: "aisatsu",
+                tag: "SS JFT Asli - Pamit Pulang dari Rumah Teman",
+                instruction: "<ruby>友達<rt>ともだち</rt></ruby>の<ruby>家<rt>いえ</rt></ruby>から<ruby>帰<rt>かえ</rt></ruby>ります。<ruby>玄関<rt>げんかん</rt></ruby>を<ruby>出<rt>で</rt></ruby>るとき、<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いますか。",
+                sceneTitle: "Berpamitan Setelah Selesai Bertamu di Rumah Teman",
+                sceneSub: "Anda sudah memakai sepatu di Genkan dan hendak keluar pintu.",
+                svgType: "house_leave",
+                dialogue: [
+                    { speaker: "あなた", text: "「今日は本当に楽しかったよ。( 　　　　　　　 )。」", isBlank: true },
+                    { speaker: "友達", text: "「ううん、またいつでも遊びに来てね。気をつけて帰ってね。」", isBlank: false }
+                ],
+                options: [
+                    "おじゃましました",
+                    "おじゃまします",
+                    "いってきます"
+                ],
+                correct: 0,
+                explanation: "Perhatikan bentuk lampau! Saat MASUK rumah orang ucapkan 「おじゃまします」, sedangkan saat PULANG/KELUAR dari rumah orang ucapkan bentuk lampau: <strong>「おじゃましました」 (Maaf telah mengganggu)</strong>."
+            }
+        ];
+
+        // =========================================================================
+        // 2. DATABASE BERURUTAN BUNPOU MINNA NO NIHONGO BAB 26 - 48
+        //    (Setiap variasi pola di tiap bab = tepat 1 soal sebagai reminder)
+        // =========================================================================
+        const BUNPOU_CHAPTERS = [
+            // BAB 26 (3 Variasi)
+            {
+                bab: 26, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "～んです / ～んですが (Menjelaskan alasan / meminta konfirmasi situasi)",
+                formula: "[KK/KS Biasa] + んです (KB / KS-Na pakai + なんです)",
+                question: "A：「どうしたんですか。」<br>B：「きのうから<ruby>少<rt>すこ</rt></ruby>しおなかが ( 　　　　 )。」",
+                options: ["<ruby>痛<rt>いた</rt></ruby>いんです", "<ruby>痛<rt>いた</rt></ruby>いなのですか", "<ruby>痛<rt>いた</rt></ruby>かったでしょう"],
+                correct: 0,
+                explanation: "<strong>Bab 26 Pola 1 (～んです):</strong> Digunakan saat menjawab pertanyaan 「どうしたんですか」 untuk memberi alasan/penjelasan kondisi. Kata sifat-i (痛い) langsung bertemu んです → <strong>痛いんです</strong>."
+            },
+            {
+                bab: 26, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～んですが、～ていただけませんか (Pendahuluan sopan sebelum meminta tolong)",
+                formula: "Kalimat pengantar + んですが、KK-ていただけませんか",
+                question: "「すみません、<ruby>漢字<rt>かんじ</rt></ruby>の<ruby>読<rt>よ</rt></ruby>み<ruby>方<rt>かた</rt></ruby>がわからないんですが、( 　　　　 )。」",
+                options: ["<ruby>教<rt>おし</rt></ruby>えていただけませんか", "<ruby>教<rt>おし</rt></ruby>えてあげませんか", "<ruby>教<rt>おし</rt></ruby>えてもいいですか"],
+                correct: 0,
+                explanation: "<strong>Bab 26 Pola 2 (～ていただけませんか):</strong> Setelah menjelaskan masalah dengan ～んですが, kita meminta tolong dengan sangat sopan memakai <strong>～ていただけませんか (Bisakah Anda tolong...?)</strong>."
+            },
+            {
+                bab: 26, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "Kata Tanya + KK-たらいいですか (Meminta saran harus berbuat apa)",
+                formula: "[Kata Tanya: どこ/なに/いつ/どう] + KK-たらいいですか",
+                question: "「ごみを<ruby>出<rt>だ</rt></ruby>したいんですが、どこに ( 　　　　 )。」",
+                options: ["<ruby>出<rt>だ</rt></ruby>したらいいですか", "<ruby>出<rt>だ</rt></ruby>すんですか", "<ruby>出<rt>だ</rt></ruby>したことがありますか"],
+                correct: 0,
+                explanation: "<strong>Bab 26 Pola 3 (Kata Tanya + ～たらいいですか):</strong> Digunakan ketika meminta saran/instruksi. 「どこに出したらいいですか」 = Sebaiknya saya buang di mana?"
+            },
+
+            // BAB 27 (3 Variasi)
+            {
+                bab: 27, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "Kata Kerja Potensial / 可能形 (Bisa / Mampu melakukan)",
+                formula: "Grup 1: u → eru | Grup 2: ru → rareru | する→できる | くる→こられる (Partikel を berubah jadi が)",
+                question: "「ミラーさんは<ruby>漢字<rt>かんじ</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>し ( 　　　　 )。」",
+                options: ["<ruby>読<rt>よ</rt></ruby>めます", "<ruby>読<rt>よ</rt></ruby>みます", "<ruby>読<rt>よ</rt></ruby>まれます"],
+                correct: 0,
+                explanation: "<strong>Bab 27 Pola 1 (Bentuk Potensial):</strong> Perhatikan partikel <strong>が</strong> setelah objek (漢字が). 読みます (Grup 1: mu → me) berubah menjadi <strong>読めます (Bisa membaca)</strong>."
+            },
+            {
+                bab: 27, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "見えます vs 聞こえます (Terlihat vs Terdengar secara alami)",
+                formula: "[KB] が 見えます (terlihat oleh mata) / 聞こえます (terdengar oleh telinga)",
+                question: "「この<ruby>部屋<rt>へや</rt></ruby>の<ruby>窓<rt>まど</rt></ruby>から、<ruby>富士山<rt>ふじさん</rt></ruby>がよく ( 　　　　 )。」",
+                options: ["<ruby>見<rt>み</rt></ruby>えます", "<ruby>見<rt>み</rt></ruby>られます", "<ruby>聞<rt>き</rt></ruby>こえます"],
+                correct: 0,
+                explanation: "<strong>Bab 27 Pola 2 (見えます / 聞こえます):</strong> Pemandangan Gunung Fuji masuk ke pandangan mata secara alami dari jendela, gunakan <strong>見えます (terlihat)</strong>. (見られます dipakai untuk menonton film/pameran dengan sengaja)."
+            },
+            {
+                bab: 27, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～しか ＋ Negatif (Hanya... tidak lebih)",
+                formula: "[Kata Benda / Ukuran] + しか + Kata Kerja Negatif (～ません)",
+                question: "「ローマ<ruby>字<rt>じ</rt></ruby> ( 　　　　 ) <ruby>書<rt>か</rt></ruby>けません。」",
+                options: ["しか", "だけ", "ばかり"],
+                correct: 0,
+                explanation: "<strong>Bab 27 Pola 3 (～しか...ません):</strong> Karena kata kerjanya bentuk negatif (書けません = tidak bisa menulis), maka pasangan wajibnya adalah <strong>しか</strong> (Hanya bisa menulis Romaji saja)."
+            },
+
+            // BAB 28 (3 Variasi)
+            {
+                bab: 28, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "～ながら (Melakukan 2 aksi bersamaan)",
+                formula: "[KK1-Masu (tanpa masu)] + ながら、[KK2 (Aksi Utama)]",
+                question: "「いつも<ruby>音楽<rt>おんがく</rt></ruby>を ( 　　　　 )、<ruby>勉強<rt>べんきょう</rt></ruby>します。」",
+                options: ["<ruby>聞<rt>き</rt></ruby>きながら", "<ruby>聞<rt>き</rt></ruby>いてながら", "<ruby>聞<rt>き</rt></ruby>くながら"],
+                correct: 0,
+                explanation: "<strong>Bab 28 Pola 1 (～ながら):</strong> Rumusnya adalah bentuk Masu dicoret ます + ながら. 聞きます → <strong>聞きながら</strong> (Belajar sambil mendengarkan musik)."
+            },
+            {
+                bab: 28, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～ています (Kebiasaan rutin yang berulang)",
+                formula: "Setiap hari/akhir pekan + KK-ています",
+                question: "「<ruby>健康<rt>けんこう</rt></ruby>のために、<ruby>毎朝<rt>まいあさ</rt></ruby>ジョギングを ( 　　　　 )。」",
+                options: ["しています", "しました", "してあります"],
+                correct: 0,
+                explanation: "<strong>Bab 28 Pola 2 (～ています Kebiasaan):</strong> Untuk rutinitas yang dilakukan terus-menerus (毎朝 = setiap pagi), gunakan <strong>～ています (しています)</strong>."
+            },
+            {
+                bab: 28, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～し、～し、～ (Menyebutkan beberapa alasan / kelebihan sekaligus)",
+                formula: "[Kalimat Bentuk Biasa] + し、[Kalimat Bentuk Biasa] + し、[Kesimpulan]",
+                question: "「あのスーパーは<ruby>値段<rt>ねだん</rt></ruby>も ( 　　　　 )、<ruby>魚<rt>さかな</rt></ruby>も<ruby>新<rt>あたら</rt></ruby>しいし、よく<ruby>行<rt>い</rt></ruby>きます。」",
+                options: ["<ruby>安<rt>やす</rt></ruby>いし", "<ruby>安<rt>やす</rt></ruby>くてし", "<ruby>安<rt>やす</rt></ruby>いだし"],
+                correct: 0,
+                explanation: "<strong>Bab 28 Pola 3 (～し、～し):</strong> Kata sifat-i (安い) langsung bertemu し tanpa だ → <strong>安いし</strong> (Harganya pun murah, ikannya pun segar...)."
+            },
+
+            // BAB 29 (3 Variasi)
+            {
+                bab: 29, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "KK Intransitif (自動詞) + ています (Keadaan hasil perubahan)",
+                formula: "[Benda] が + KK Intransitif-ています (開いています、閉まっています、壊れています、汚れています)",
+                question: "「すみません、そのいすは ( 　　　　 ) から、<ruby>使<rt>つか</rt></ruby>わないでください。」",
+                options: ["<ruby>壊<rt>こわ</rt></ruby>れています", "<ruby>壊<rt>こわ</rt></ruby>しています", "<ruby>壊<rt>こわ</rt></ruby>れてあります"],
+                correct: 0,
+                explanation: "<strong>Bab 29 Pola 1 (自動詞 + ています):</strong> Mendeskripsikan kondisi benda saat ini yang sedang rusak menggunakan kata kerja intransitif 壊れます → <strong>壊れています (sedang dalam keadaan rusak)</strong>."
+            },
+            {
+                bab: 29, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～てしまいました / ～ちゃった (Selesai tuntas / Penyesalan tak sengaja)",
+                formula: "[KK-Te] + しまいました (Percakapan akrab: ～てしまう → ～ちゃう、～でしまう → ～じゃう)",
+                question: "「あっ、<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>に<ruby>傘<rt>かさ</rt></ruby>を ( 　　　　 )！」",
+                options: ["<ruby>忘<rt>わす</rt></ruby>れてしまいました", "<ruby>忘<rt>わす</rt></ruby>れておきました", "<ruby>忘<rt>わす</rt></ruby>れてありました"],
+                correct: 0,
+                explanation: "<strong>Bab 29 Pola 2 (～てしまいました):</strong> Menunjukkan rasa menyesal karena tidak sengaja melakukan kesalahan (kelupaan payung di kereta) → <strong>忘れてしまいました</strong>."
+            },
+            {
+                bab: 29, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～ちゃった / ～じゃった (Bentuk kasual dari ～てしまいました)",
+                formula: "～てしまった → ～ちゃった | ～でしまった → ～じゃった",
+                question: "「きのう<ruby>買<rt>か</rt></ruby>ったケーキ、もう<ruby>全部<rt>ぜんぶ</rt></ruby> ( 　　　　 ) の？」",
+                options: ["<ruby>食<rt>た</rt></ruby>べちゃった", "<ruby>食<rt>た</rt></ruby>べといた", "<ruby>食<rt>た</rt></ruby>べてみた"],
+                correct: 0,
+                explanation: "<strong>Bab 29 Pola 3 (～ちゃった):</strong> Dalam percakapan JFT, 食べてしまいました sering disingkat menjadi <strong>食べちゃった (Sudah habis dimakan semua)</strong>."
+            },
+
+            // BAB 30 (3 Variasi)
+            {
+                bab: 30, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "KK Transitif (他動詞) + てあります (Keadaan hasil tindakan sengaja seseorang)",
+                formula: "[Benda] に [Benda] が + KK Transitif-てあります (書いてあります、貼ってあります、置いてあります)",
+                question: "「カレンダーに<ruby>今月<rt>こんげつ</rt></ruby>の<ruby>予定<rt>よてい</rt></ruby>が ( 　　　　 )。」",
+                options: ["<ruby>書<rt>か</rt></ruby>いてあります", "<ruby>書<rt>か</rt></ruby>いています", "<ruby>書<rt>か</rt></ruby>けています"],
+                correct: 0,
+                explanation: "<strong>Bab 30 Pola 1 (～てあります):</strong> Jadwal sengaja ditulis seseorang di kalender dan tulisannya masih tertera di sana → <strong>書いてあります (tertulis)</strong>."
+            },
+            {
+                bab: 30, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～ておきます / ～ときます (Persiapan sebelum sesuatu / Biarkan sementara)",
+                formula: "[KK-Te] + おきます (Percakapan: ～ておく → ～とく)",
+                question: "「<ruby>旅行<rt>りょこう</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に、ホテルを<ruby>予約<rt>よやく</rt></ruby> ( 　　　　 )。」",
+                options: ["しておきます", "してあります", "してみます"],
+                correct: 0,
+                explanation: "<strong>Bab 30 Pola 2 (～ておきます):</strong> Melakukan tindakan sebagai persiapan sebelum acara (旅行の前に = sebelum wisata) → <strong>予約しておきます</strong>."
+            },
+            {
+                bab: 30, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "まだ ＋ KK-ていません (Belum melakukan)",
+                formula: "まだ + KK-ていません",
+                question: "A：「もう<ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べましたか。」<br>B：「いいえ、まだ ( 　　　　 )。」",
+                options: ["<ruby>食<rt>た</rt></ruby>べていません", "<ruby>食<rt>た</rt></ruby>べませんでした", "<ruby>食<rt>た</rt></ruby>べないです"],
+                correct: 0,
+                explanation: "<strong>Bab 30 Pola 3 (まだ～ていません):</strong> Menjawab pertanyaan 「もう～ましたか」 jika belum dilakukan wajib memakai <strong>まだ食べていません</strong> (bukan 食べませんでした)."
+            },
+
+            // BAB 31 (3 Variasi)
+            {
+                bab: 31, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "Bentuk Maksud / 意向形 (～よう / ～おう : Ayo...)",
+                formula: "Grup 1: u → ou (行こう) | Grup 2: ru → you (食べよう) | する→しよう | くる→こよう",
+                question: "「もう<ruby>疲<rt>つか</rt></ruby>れたから、ちょっと ( 　　　　 )。」",
+                options: ["<ruby>休<rt>やす</rt></ruby>もう", "<ruby>休<rt>やす</rt></ruby>むよう", "<ruby>休<rt>やす</rt></ruby>みろう"],
+                correct: 0,
+                explanation: "<strong>Bab 31 Pola 1 (Bentuk Volitional / 意向形):</strong> Bentuk akrab dari 休みましょう adalah <strong>休もう (Ayo istirahat)</strong>."
+            },
+            {
+                bab: 31, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～ようと思っています (Berniat / Berencana melakukan)",
+                formula: "[KK Bentuk Maksud (～よう/～おう)] + と思っています",
+                question: "「<ruby>来年<rt>らいねん</rt></ruby>、<ruby>日本<rt>にほん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby> ( 　　　　 ) と<ruby>思<rt>おも</rt></ruby>っています。」",
+                options: ["こう", "くよう", "いた"],
+                correct: 0,
+                explanation: "<strong>Bab 31 Pola 2 (～ようと思っています):</strong> 働きます (Grup 1: ku → kou) menjadi <strong>働こうと思っています (Saya berniat bekerja di Jepang tahun depan)</strong>."
+            },
+            {
+                bab: 31, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～つもりです (Berencana kuat untuk melakukan / tidak melakukan)",
+                formula: "[KK-Kamus / KK-Nai] + つもりです",
+                question: "「あしたは<ruby>休<rt>やす</rt></ruby>みですから、どこへも ( 　　　　 ) つもりです。」",
+                options: ["<ruby>行<rt>い</rt></ruby>かない", "<ruby>行<rt>い</rt></ruby>かなかった", "<ruby>行<rt>い</rt></ruby>こう"],
+                correct: 0,
+                explanation: "<strong>Bab 31 Pola 3 (～つもりです):</strong> Di depan つもりです harus bentuk kamus atau bentuk Nai. Karena ada どこへも (ke mana pun), gunakan negatif: <strong>行かないつもりです (Berencana tidak pergi ke mana-mana)</strong>."
+            },
+
+            // BAB 32 (3 Variasi)
+            {
+                bab: 32, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "～たほうがいいです / ～ないほうがいいです (Saran: Sebaiknya...)",
+                formula: "[KK-Ta (Positif) / KK-Nai (Negatif)] + ほうがいいです",
+                question: "「<ruby>熱<rt>ねつ</rt></ruby>があるなら、お<ruby>風呂<rt>ふろ</rt></ruby>に ( 　　　　 ) ほうがいいですよ。」",
+                options: ["<ruby>入<rt>はい</rt></ruby>らない", "<ruby>入<rt>はい</rt></ruby>らなかった", "<ruby>入<rt>はい</rt></ruby>るない"],
+                correct: 0,
+                explanation: "<strong>Bab 32 Pola 1 (～ほうがいいです):</strong> Untuk saran positif pakai KK-Ta, sedangkan saran negatif memakai <strong>KK-Nai + ほうがいいです</strong> → <strong>入らないほうがいいですよ (Sebaiknya tidak berendam)</strong>."
+            },
+            {
+                bab: 32, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～でしょう (Prediksi kemungkinan besar / Cuaca)",
+                formula: "[Bentuk Biasa (KB/KS-Na tanpa だ)] + でしょう",
+                question: "「<ruby>天気予報<rt>てんきよほう</rt></ruby>によると、あしたの<ruby>午後<rt>ごご</rt></ruby>は<ruby>雨<rt>あめ</rt></ruby>が ( 　　　　 )。」",
+                options: ["<ruby>降<rt>ふ</rt></ruby>るでしょう", "<ruby>降<rt>ふ</rt></ruby>りでしょう", "<ruby>降<rt>ふ</rt></ruby>るだでしょう"],
+                correct: 0,
+                explanation: "<strong>Bab 32 Pola 2 (～でしょう):</strong> Menyatakan perkiraan (terutama prakiraan cuaca). Kata kerja bentuk biasa + でしょう → <strong>降るでしょう</strong>."
+            },
+            {
+                bab: 32, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～かもしれません (Mungkin saja... kepastian ~50%)",
+                formula: "[Bentuk Biasa (KB/KS-Na tanpa だ)] + かもしれません",
+                question: "「<ruby>道<rt>みち</rt></ruby>が<ruby>混<rt>こ</rt></ruby>んでいますから、<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>に ( 　　　　 )。」",
+                options: ["<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わないかもしれません", "<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わないつもりです", "<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わないほうがいいです"],
+                correct: 0,
+                explanation: "<strong>Bab 32 Pola 3 (～かもしれません):</strong> Menyatakan kemungkinan ada risiko terlambat karena jalanan macet → <strong>間に合わないかもしれません (Mungkin tidak keburu)</strong>."
+            },
+
+            // BAB 33 (3 Variasi)
+            {
+                bab: 33, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "Bentuk Perintah (命令形) & Larangan (禁止形)",
+                formula: "Larangan mutlak: [KK Bentuk Kamus] + な (入るな = Dilarang masuk!)",
+                question: "「あぶない！そこの<ruby>機械<rt>きかい</rt></ruby>に ( 　　　　 )！」",
+                options: ["<ruby>触<rt>さわ</rt></ruby>るな", "<ruby>触<rt>さわ</rt></ruby>らない", "<ruby>触<rt>さわ</rt></ruby>れ"],
+                correct: 0,
+                explanation: "<strong>Bab 33 Pola 1 (Bentuk Larangan ～な):</strong> Saat darurat/bahaya (あぶない！), larangan keras menggunakan KK-Kamus + な → <strong>触るな！ (Jangan sentuh!)</strong>."
+            },
+            {
+                bab: 33, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "「～」と書いてあります / と読みます (Arti rambu / tulisan)",
+                formula: "「Tulisan」と書いてあります (Tertulis '...') / ～という意味です (Artinya ...)",
+                question: "「あそこに『<ruby>立入禁止<rt>たちいりきんし</rt></ruby>』と<ruby>書<rt>か</rt></ruby>いてあります。どういう ( 　　　　 ) ですか。」",
+                options: ["<ruby>意味<rt>いみ</rt></ruby>", "<ruby>理由<rt>りゆう</rt></ruby>", "<ruby>連絡<rt>れんらく</rt></ruby>"],
+                correct: 0,
+                explanation: "<strong>Bab 33 Pola 2 (どういう意味ですか):</strong> Menanyakan arti dari suatu rambu/kata menggunakan <strong>「どういう意味ですか」 (Apa artinya?)</strong>."
+            },
+            {
+                bab: 33, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～と言っていました / ～と伝えていただけませんか (Menyampaikan pesan)",
+                formula: "[Orang] は [Kalimat Biasa] と言っていました (Berkata bahwa...) / ～と伝えていただけませんか (Tolong sampaikan...)",
+                question: "「すみません、<ruby>田中<rt>たなか</rt></ruby>さんに『あとで<ruby>電話<rt>でんわ</rt></ruby>します』と ( 　　　　 ) いただけませんか。」",
+                options: ["<ruby>伝<rt>つた</rt></ruby>えて", "<ruby>言<rt>い</rt></ruby>われて", "<ruby>聞<rt>き</rt></ruby>いて"],
+                correct: 0,
+                explanation: "<strong>Bab 33 Pola 3 (～と伝えていただけませんか):</strong> Meminta tolong menyampaikan pesan kepada orang lain menggunakan kata kerja 伝えます → <strong>伝えていただけませんか (Bisakah tolong sampaikan...)</strong>."
+            },
+
+            // BAB 34 (3 Variasi)
+            {
+                bab: 34, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "～とおりに (Melakukan persis sesuai contoh / instruksi)",
+                formula: "[KK-Kamus / KK-Ta / KB + の] + とおりに",
+                question: "「この<ruby>説明書<rt>せつめいしょ</rt></ruby> ( 　　　　 )、組み立ててください。」",
+                options: ["のとおりに", "のあとで", "のために"],
+                correct: 0,
+                explanation: "<strong>Bab 34 Pola 1 (～とおりに):</strong> Karena 説明書 adalah Kata Benda, tambahkan の → <strong>説明書のとおりに (Rakitlah sesuai dengan buku petunjuk ini)</strong>."
+            },
+            {
+                bab: 34, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～たあとで (Setelah selesai melakukan...)",
+                formula: "[KK-Ta / KB + の] + あとで、[Aksi berikutnya]",
+                question: "「<ruby>仕事<rt>しごと</rt></ruby>が ( 　　　　 ) あとで、みんなで<ruby>食事<rt>しょくじ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きませんか。」",
+                options: ["<ruby>終<rt>お</rt></ruby>わった", "<ruby>終<rt>お</rt></ruby>わる", "<ruby>終<rt>お</rt></ruby>わって"],
+                correct: 0,
+                explanation: "<strong>Bab 34 Pola 2 (～たあとで):</strong> Di depan あとで, kata kerja wajib berbentuk lampau (Ta-form) → <strong>終わったあとで (Setelah pekerjaan selesai)</strong>."
+            },
+            {
+                bab: 34, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～て / ～ないで (Melakukan aksi B dengan / tanpa melakukan aksi A)",
+                formula: "[KK1-ないで] 、[KK2] (Melakukan KK2 tanpa melakukan KK1)",
+                question: "「けさは<ruby>時間<rt>じかん</rt></ruby>がなかったので、<ruby>朝<rt>あさ</rt></ruby>ごはんを ( 　　　　 ) <ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ました。」",
+                options: ["<ruby>食<rt>た</rt></ruby>べないで", "<ruby>食<rt>た</rt></ruby>べなくて", "<ruby>食<rt>た</rt></ruby>べない"],
+                correct: 0,
+                explanation: "<strong>Bab 34 Pola 3 (～ないで):</strong> Arti 'tanpa melakukan' menggunakan <strong>～ないで</strong> → 朝ごはんを食べないで会社へ来ました (Datang ke kantor tanpa sarapan)."
+            },
+
+            // BAB 35 (3 Variasi)
+            {
+                bab: 35, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "Bentuk Pengandaian / 条件形 (～えば / ～なければ : Kalau...)",
+                formula: "Grup 1: u → eba | Grup 2: ru → reba | KS-i: い → ければ | Negatif: ～なければ",
+                question: "「ボタンを ( 　　　　 )、お<ruby>釣<rt>つ</rt></ruby>りが<ruby>出<rt>で</rt></ruby>ます。」",
+                options: ["<ruby>押<rt>お</rt></ruby>せば", "<ruby>押<rt>お</rt></ruby>すば", "<ruby>押<rt>お</rt></ruby>しれば"],
+                correct: 0,
+                explanation: "<strong>Bab 35 Pola 1 (Bentuk ～ば):</strong> 押します (Grup 1: su → seba) menjadi <strong>押せば (Kalau menekan tombol, uang kembalian akan keluar)</strong>."
+            },
+            {
+                bab: 35, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～なら (Kalau menyangkut topik yang baru disebut lawan bicara...)",
+                formula: "[KB / Bentuk Biasa] + なら、[Saran / Informasi]",
+                question: "A：「<ruby>安<rt>やす</rt></ruby>いパソコンを<ruby>買<rt>か</rt></ruby>いたいんですが……」<br>B：「パソコン ( 　　　　 )、<ruby>駅前<rt>えきまえ</rt></ruby>の『さくら<ruby>電気<rt>でんき</rt></ruby>』がいいですよ。」",
+                options: ["なら", "たら", "と"],
+                correct: 0,
+                explanation: "<strong>Bab 35 Pola 2 (～なら):</strong> Mengangkat kata benda yang baru saja disebut lawan bicara (パソコン) untuk memberikan rekomendasi → <strong>パソコンなら (Kalau soal laptop...)</strong>."
+            },
+            {
+                bab: 35, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～ば～ほど (Semakin... semakin...)",
+                formula: "[KK/KS Bentuk ～ば] + [KK/KS Bentuk Kamus] + ほど",
+                question: "「<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>勉強<rt>べんきょう</rt></ruby>すれ ( 　　　　 ) ほど、おもしろくなります。」",
+                options: ["ばする", "ばした", "たらする"],
+                correct: 0,
+                explanation: "<strong>Bab 35 Pola 3 (～ば～ほど):</strong> Mengulang kata yang sama dalam bentuk ～ば lalu bentuk kamus + ほど → <strong>勉強すればするほど (Semakin belajar, semakin menarik)</strong>."
+            },
+
+            // BAB 36 (3 Variasi)
+            {
+                bab: 36, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "～ように (Supaya / Agar tercapai suatu kondisi)",
+                formula: "[KK Potensial / KK Intransitif / KK-Nai] + ように、[Usaha]",
+                question: "「<ruby>忘<rt>わす</rt></ruby>れ ( 　　　　 ) ように、メモをしておきます。」",
+                options: ["ない", "ます", "た"],
+                correct: 0,
+                explanation: "<strong>Bab 36 Pola 1 (～ように):</strong> Menyatakan tujuan 'supaya tidak lupa' menggunakan bentuk Nai + ように → <strong>忘れないように (Supaya tidak lupa, saya catat terlebih dulu)</strong>."
+            },
+            {
+                bab: 36, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～ようになりました (Perubahan kemampuan: Sekarang sudah menjadi bisa...)",
+                formula: "[KK Bentuk Potensial / Kamus] + ようになりました",
+                question: "「<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>して、<ruby>自転車<rt>じてんしゃ</rt></ruby>に ( 　　　　 ) ようになりました。」",
+                options: ["<ruby>乗<rt>の</rt></ruby>れる", "<ruby>乗<rt>の</rt></ruby>った", "<ruby>乗<rt>の</rt></ruby>り"],
+                correct: 0,
+                explanation: "<strong>Bab 36 Pola 2 (～ようになりました):</strong> Menyatakan perubahan dari yang dulunya tidak bisa menjadi bisa menggunakan KK Potensial (乗れる) + ようになりました → <strong>乗れるようになりました</strong>."
+            },
+            {
+                bab: 36, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～ようにしています / ～ようにしてください (Berusaha rutin melakukan)",
+                formula: "[KK-Kamus / KK-Nai] + ようにしています (Berusaha rutin...) / ようにしてください (Tolong usahakan...)",
+                question: "「<ruby>健康<rt>けんこう</rt></ruby>のために、<ruby>毎日<rt>まいにち</rt></ruby><ruby>野菜<rt>やさい</rt></ruby>を<ruby>食<rt>た</rt></ruby>べる ( 　　　　 )。」",
+                options: ["ようにしています", "ようになっています", "ことにしています"],
+                correct: 0,
+                explanation: "<strong>Bab 36 Pola 3 (～ようにしています):</strong> Menyatakan kebiasaan yang terus diusahakan secara sadar demi kesehatan → <strong>食べるようにしています</strong>."
+            },
+
+            // BAB 37 (3 Variasi)
+            {
+                bab: 37, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "Kalimat Pasif / 受身形 (Subjek dikenai pekerjaan oleh orang lain)",
+                formula: "Grup 1: u → areru (踏まれる) | Grup 2: ru → rareru (褒められる) | する→される | くる→こられる",
+                question: "「けさ、満員電車で<ruby>隣<rt>となり</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>足<rt>あし</rt></ruby>を ( 　　　　 )。」",
+                options: ["<ruby>踏<rt>ふ</rt></ruby>まれました", "<ruby>踏<rt>ふ</rt></ruby>みました", "<ruby>踏<rt>ふ</rt></ruby>ませました"],
+                correct: 0,
+                explanation: "<strong>Bab 37 Pola 1 (Kalimat Pasif / 受身):</strong> Kaki saya diinjak oleh orang di sebelah (隣の人に足を～). 踏みます (Grup 1: mu → mareru) menjadi <strong>踏まれました (diinjak)</strong>."
+            },
+            {
+                bab: 37, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "Pasif Pemilik Barang (Barang milik saya dirusak/diambil orang)",
+                formula: "[Saya] は [Pelaku] に [Barang saya] を + KK Pasif",
+                question: "「わたしは<ruby>弟<rt>おとうと</rt></ruby>にパソコンを ( 　　　　 )。」",
+                options: ["<ruby>壊<rt>こわ</rt></ruby>されました", "<ruby>壊<rt>こわ</rt></ruby>れました", "<ruby>壊<rt>こわ</rt></ruby>させました"],
+                correct: 0,
+                explanation: "<strong>Bab 37 Pola 2 (Pasif Kerugian):</strong> Laptop saya dirusak oleh adik. 壊します (su → sareru) berubah menjadi <strong>壊されました (dirusak)</strong>."
+            },
+            {
+                bab: 37, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "Pasif Benda / Fakta Sejarah & Bahan Baku (～から作られます / ～で行われます)",
+                formula: "[Bahan] から / で 作られています | [Acara] は [Tempat] で 開かれます",
+                question: "「ビールは<ruby>麦<rt>むぎ</rt></ruby>から ( 　　　　 )。」",
+                options: ["<ruby>作<rt>つく</rt></ruby>られています", "<ruby>作<rt>つく</rt></ruby>っています", "<ruby>作<rt>つく</rt></ruby>らせています"],
+                correct: 0,
+                explanation: "<strong>Bab 37 Pola 3 (Pasif Non-Pelaku):</strong> Menyatakan produk dibuat dari bahan baku menggunakan bentuk pasif: <strong>作られています (dibuat dari gandum)</strong>."
+            },
+
+            // BAB 38 (3 Variasi)
+            {
+                bab: 38, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "KK-Kamus + のは + Kata Sifat です (Membendakan kata kerja sebagai subjek)",
+                formula: "[KK Bentuk Kamus] + のは + [楽しい / 難しい / 大変] です",
+                question: "「<ruby>外国語<rt>がいこくご</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>える ( 　　　　 ) は<ruby>簡単<rt>かんたん</rt></ruby>ではありません。」",
+                options: ["の", "こと", "もの"],
+                correct: 0,
+                explanation: "<strong>Bab 38 Pola 1 (～のは～です):</strong> Mengubah kata kerja 覚える menjadi kata benda subjek kalimat menggunakan partikel <strong>の</strong> → 覚えるのは (Hal menghafal bahasa asing itu tidak mudah)."
+            },
+            {
+                bab: 38, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "KK-Kamus + のが + 好き / 上手 / 下手 / 速い です",
+                formula: "[KK Bentuk Kamus] + のが + [好き / 嫌い / 上手 / 下手] です",
+                question: "「わたしは<ruby>星<rt>ほし</rt></ruby>を ( 　　　　 ) のが<ruby>好<rt>す</rt></ruby>きです。」",
+                options: ["<ruby>見<rt>み</rt></ruby>る", "<ruby>見<rt>み</rt></ruby>て", "<ruby>見<rt>み</rt></ruby>ます"],
+                correct: 0,
+                explanation: "<strong>Bab 38 Pola 2 (～のが好きです):</strong> Di depan のが好きです wajib menggunakan Kata Kerja Bentuk Kamus → <strong>見るのが好きです (Suka melihat bintang)</strong>."
+            },
+            {
+                bab: 38, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "KK + のを忘れました & ～のは [KB] です (Penekanan informasi)",
+                formula: "[KK-Kamus] + のを忘れました (Lupa melakukan...) | [Kalimat] のは [Fokus] です",
+                question: "「けさ、<ruby>家<rt>いえ</rt></ruby>の<ruby>窓<rt>まど</rt></ruby>を ( 　　　　 ) のを<ruby>忘<rt>わす</rt></ruby>れました。」",
+                options: ["<ruby>閉<rt>し</rt></ruby>める", "<ruby>閉<rt>し</rt></ruby>めた", "<ruby>閉<rt>し</rt></ruby>めて"],
+                correct: 0,
+                explanation: "<strong>Bab 38 Pola 3 (～のを忘れました):</strong> Menyatakan lupa melakukan suatu tindakan menggunakan KK-Kamus + のを忘れました → <strong>閉めるのを忘れました (Lupa menutup jendela)</strong>."
+            },
+
+            // BAB 39 (3 Variasi)
+            {
+                bab: 39, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "～て、～ (Sebab-akibat perasaan / kondisi tidak terkontrol)",
+                formula: "[KK-Te / KS-i(くて) / KS-na(で)] 、[Perasaan: 安心しました / びっくりしました / 困りました / 残念です]",
+                question: "「ニュースを ( 　　　　 )、びっくりしました。」",
+                options: ["<ruby>聞<rt>き</rt></ruby>いて", "<ruby>聞<rt>き</rt></ruby>きながら", "<ruby>聞<rt>き</rt></ruby>くために"],
+                correct: 0,
+                explanation: "<strong>Bab 39 Pola 1 (～て、Perasaan):</strong> Penyebab munculnya emosi/perasaan (びっくりしました = terkejut) dihubungkan dengan bentuk Te → <strong>ニュースを聞いて、びっくりしました</strong>."
+            },
+            {
+                bab: 39, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "Kata Benda + で (Penyebab bencana alam / kecelakaan / macet)",
+                formula: "[KB: 地震 / 台風 / 事故 / 雪] + で、[Akibat: 遅れました / 止まりました / 倒れました]",
+                question: "「<ruby>台風<rt>たいふう</rt></ruby> ( 　　　　 )、<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>止<rt>と</rt></ruby>まりました。」",
+                options: ["で", "に", "を"],
+                correct: 0,
+                explanation: "<strong>Bab 39 Pola 2 (KB + で Sebab):</strong> Menyatakan penyebab berupa fenomena alam atau kecelakaan menggunakan partikel <strong>で</strong> → 台風で (Gara-gara topan, kereta berhenti)."
+            },
+            {
+                bab: 39, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～ので (Karena... alasan sopan dan objektif)",
+                formula: "[Bentuk Biasa (KB / KS-Na pakai + な)] + ので、[Permintaan izin / Alasan sopan]",
+                question: "「きょうは<ruby>用事<rt>ようじ</rt></ruby>が ( 　　　　 )、お<ruby>先<rt>さき</rt></ruby>に<ruby>失礼<rt>しつれい</rt></ruby>します。」",
+                options: ["あるので", "あるからで", "あったら"],
+                correct: 0,
+                explanation: "<strong>Bab 39 Pola 3 (～ので):</strong> Menyampaikan alasan secara halus dan sopan menggunakan <strong>～ので</strong>. (Jika depan ので adalah KB atau KS-Na, wajib pakai なので, misalnya 静かなので / 雨なので)."
+            },
+
+            // BAB 40 (3 Variasi)
+            {
+                bab: 40, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "Kata Tanya + ～か (Kalimat tanya tidak langsung di dalam kalimat)",
+                formula: "[Kata Tanya] + [Bentuk Biasa (KB/KS-Na tanpa だ)] + か、わかりません / 教えてください",
+                question: "「<ruby>会議<rt>かいぎ</rt></ruby>が<ruby>何時<rt>なんじ</rt></ruby>に ( 　　　　 )、わかりません。」",
+                options: ["<ruby>終<rt>お</rt></ruby>わるか", "<ruby>終<rt>お</rt></ruby>わりますか", "<ruby>終<rt>お</rt></ruby>わるどうか"],
+                correct: 0,
+                explanation: "<strong>Bab 40 Pola 1 (Kata Tanya + ～か):</strong> Karena ada kata tanya 何時に (jam berapa), gunakan bentuk biasa + か → <strong>終わるか、わかりません (Saya tidak tahu rapat selesai jam berapa)</strong>."
+            },
+            {
+                bab: 40, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～かどうか (Apakah ... atau tidak)",
+                formula: "[Kalimat Tanpa Kata Tanya (Bentuk Biasa, tanpa だ)] + かどうか、調べてください / わかりません",
+                question: "「このお<ruby>弁当<rt>べんとう</rt></ruby>に<ruby>豚肉<rt>ぶたにく</rt></ruby>が ( 　　　　 )、<ruby>店員<rt>てんいん</rt></ruby>に<ruby>聞<rt>き</rt></ruby>きます。」",
+                options: ["<ruby>入<rt>はい</rt></ruby>っているかどうか", "<ruby>入<rt>はい</rt></ruby>っているか何", "<ruby>入<rt>はい</rt></ruby>っていますかどうか"],
+                correct: 0,
+                explanation: "<strong>Bab 40 Pola 2 (～かどうか):</strong> Kalimat tidak memiliki kata tanya (Apakah mengandung daging babi atau tidak), sehingga menggunakan Bentuk Biasa + <strong>かどうか</strong>."
+            },
+            {
+                bab: 40, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～てみます (Mencoba melakukan sesuatu untuk melihat hasilnya)",
+                formula: "[KK Bentuk Te] + みます",
+                question: "「この<ruby>靴<rt>くつ</rt></ruby>、サイズが<ruby>合<rt>あ</rt></ruby>うかどうか、ちょっと ( 　　　　 ) もいいですか。」",
+                options: ["はいてみて", "はいておいて", "はいてしまって"],
+                correct: 0,
+                explanation: "<strong>Bab 40 Pola 3 (～てみます):</strong> Mencoba memakai sepatu untuk mengecek ukurannya → はいてみます. Digabung dengan izin menjadi <strong>はいてみてもいいですか</strong>."
+            },
+
+            // BAB 41 (3 Variasi)
+            {
+                bab: 41, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "いただきます / くださいます / やります (Memberi & Menerima versi Keigo)",
+                formula: "Atasan memberi saya: くださいます | Saya menerima dari atasan: いただきます",
+                question: "「わたしは<ruby>部長<rt>ぶちょう</rt></ruby>にこの<ruby>辞書<rt>じしょ</rt></ruby>を ( 　　　　 )。」",
+                options: ["いただきました", "くださいました", "さしあげました"],
+                correct: 0,
+                explanation: "<strong>Bab 41 Pola 1 (いただきます vs くださいます):</strong> Subjeknya adalah <strong>わたしは</strong> (Saya menerima dari Buchou), sehingga bentuk merendah dari もらいました adalah <strong>いただきました</strong>. (Jika subjeknya 部長はわたしに..., baru pakai くださいました)."
+            },
+            {
+                bab: 41, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～ていただきます / ～てくださいます / ～てやります (Menerima/Memberi jasa)",
+                formula: "[Atasan] が KK-てくださいます | [Saya] は [Atasan] に KK-ていただきます",
+                question: "「<ruby>課長<rt>かちょう</rt></ruby>がレポートの<ruby>間違<rt>まちが</rt></ruby>いを ( 　　　　 )。」",
+                options: ["<ruby>直<rt>なお</rt></ruby>してくださいました", "<ruby>直<rt>なお</rt></ruby>していただきました", "<ruby>直<rt>なお</rt></ruby>してやりました"],
+                correct: 0,
+                explanation: "<strong>Bab 41 Pola 2 (～てくださいます):</strong> Subjeknya adalah atasan (課長が = Kepala seksi telah berbaik hati mengoreksi laporan saya), maka gunakan bentuk hormat dari ～てくれました yaitu <strong>直してくださいました</strong>."
+            },
+            {
+                bab: 41, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～に [KK-てくださいます] (Ungkapan sopan meminta petunjuk / bantuan)",
+                formula: "～に ＋ KB (Sebagai tanda peringatan / hadiah: お祝いに / お土産に)",
+                question: "「<ruby>友達<rt>ともだち</rt></ruby>の<ruby>結婚<rt>けっこん</rt></ruby>のお<ruby>祝<rt>いわ</rt></ruby>い ( 　　　　 )、時計をプレゼントしました。」",
+                options: ["に", "で", "を"],
+                correct: 0,
+                explanation: "<strong>Bab 41 Pola 3 (KB + に sebagai tanda/hadiah):</strong> Partikel <strong>に</strong> setelah お祝い / お土産 bermakna 'sebagai hadiah pernikahan'."
+            },
+
+            // BAB 42 (2 Variasi)
+            {
+                bab: 42, polaIndex: 1, polaTotalInBab: 2,
+                pattern: "～ために (Demi / Untuk tujuan yang disengaja)",
+                formula: "[KK Bentuk Kamus / KB + の] + ために、[Usaha sadar]",
+                question: "「<ruby>自分<rt>じぶん</rt></ruby>の<ruby>店<rt>みせ</rt></ruby>を ( 　　　　 ) ために、<ruby>毎月<rt>まいつき</rt></ruby><ruby>貯金<rt>ちょきん</rt></ruby>しています。」",
+                options: ["<ruby>持<rt>も</rt></ruby>つ", "<ruby>持<rt>も</rt></ruby>てる", "<ruby>持<rt>も</rt></ruby>った"],
+                correct: 0,
+                explanation: "<strong>Bab 42 Pola 1 (～ために):</strong> Tujuan yang berada di bawah kendali/kemauan sendiri menggunakan KK Bentuk Kamus (bukan potensial) + ために → <strong>持つために (Demi memiliki toko sendiri)</strong>."
+            },
+            {
+                bab: 42, polaIndex: 2, polaTotalInBab: 2,
+                pattern: "～のに (Fungsi / Kegunaan alat, waktu, atau biaya yang dibutuhkan)",
+                formula: "[KK Bentuk Kamus / KB] + のに、[便利です / 役に立ちます / かかります / 使います]",
+                question: "「このはさみは、<ruby>固<rt>かた</rt></ruby>いものを ( 　　　　 ) のに<ruby>使<rt>つか</rt></ruby>います。」",
+                options: ["<ruby>切<rt>き</rt></ruby>る", "<ruby>切<rt>き</rt></ruby>った", "<ruby>切<rt>き</rt></ruby>り"],
+                correct: 0,
+                explanation: "<strong>Bab 42 Pola 2 (～のに Kegunaan):</strong> Di depan 使います / 便利です / かかります, gunakan KK-Kamus + <strong>のに</strong> → <strong>切るのに使います (Dipakai untuk memotong benda keras)</strong>."
+            },
+
+            // BAB 43 (2 Variasi)
+            {
+                bab: 43, polaIndex: 1, polaTotalInBab: 2,
+                pattern: "～そうです (Kelihatannya akan segera terjadi / Tampak dari visual)",
+                formula: "KK-Masu(coret masu) + そうです | KS-i(coret い) + そうです | KS-na + そうです (Khusus: いい → よさそうです)",
+                question: "「<ruby>空<rt>そら</rt></ruby>が<ruby>暗<rt>くら</rt></ruby>くなりましたね。いまにも<ruby>雨<rt>あめ</rt></ruby>が ( 　　　　 ) です。」",
+                options: ["<ruby>降<rt>ふ</rt></ruby>りそう", "<ruby>降<rt>ふ</rt></ruby>るそう", "<ruby>降<rt>ふ</rt></ruby>ったそう"],
+                correct: 0,
+                explanation: "<strong>Bab 43 Pola 1 (～そうです Tampak visual):</strong> Melihat langit gelap dan menebak sebentar lagi hujan akan turun: 降ります (coret ます) + そうです → <strong>降りそうです</strong>. (Jangan tertukar dengan 降るそうです Bab 47 yang artinya 'katanya')."
+            },
+            {
+                bab: 43, polaIndex: 2, polaTotalInBab: 2,
+                pattern: "～て来ます (Pergi melakukan sesuatu sebentar lalu kembali ke tempat semula)",
+                formula: "[KK Bentuk Te] + 来ます (きってきます)",
+                question: "「ちょっとコンビニで<ruby>弁当<rt>べんとう</rt></ruby>を ( 　　　　 ) から、ここで<ruby>待<rt>ま</rt></ruby>っていてください。」",
+                options: ["<ruby>買<rt>か</rt></ruby>ってきます", "<ruby>買<rt>か</rt></ruby>っていきます", "<ruby>買<rt>か</rt></ruby>ってみます"],
+                correct: 0,
+                explanation: "<strong>Bab 43 Pola 2 (～てきます):</strong> Pergi ke konbini membeli bento lalu kembali lagi ke tempat lawan bicara menunggu → <strong>買ってきます</strong>."
+            },
+
+            // BAB 44 (4 Variasi)
+            {
+                bab: 44, polaIndex: 1, polaTotalInBab: 4,
+                pattern: "～すぎます (Terlalu / Berlebihan melakukan atau sifat)",
+                formula: "KK-Masu(coret masu) + すぎます | KS-i(coret い) + すぎます | KS-na + すぎます",
+                question: "「きのうの<ruby>晩<rt>ばん</rt></ruby>、お<ruby>酒<rt>さけ</rt></ruby>を ( 　　　　 )、<ruby>頭<rt>あたま</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>いです。」",
+                options: ["<ruby>飲<rt>の</rt></ruby>みすぎて", "<ruby>飲<rt>の</rt></ruby>むすぎて", "<ruby>飲<rt>の</rt></ruby>んですぎて"],
+                correct: 0,
+                explanation: "<strong>Bab 44 Pola 1 (～すぎます):</strong> 飲みます (coret ます) + すぎます → <strong>飲みすぎて (Karena terlalu banyak minum alkohol...)</strong>."
+            },
+            {
+                bab: 44, polaIndex: 2, polaTotalInBab: 4,
+                pattern: "～やすいです / ～にくいです (Mudah dilakukan / Sulit dilakukan)",
+                formula: "[KK-Masu (tanpa masu)] + やすいです (Mudah) / にくいです (Sulit)",
+                question: "「このペンは<ruby>細<rt>ほそ</rt></ruby>くて、とても ( 　　　　 ) です。」",
+                options: ["<ruby>書<rt>か</rt></ruby>きやすい", "<ruby>書<rt>か</rt></ruby>くやすい", "<ruby>書<rt>か</rt></ruby>いてやすい"],
+                correct: 0,
+                explanation: "<strong>Bab 44 Pola 2 (～やすい / ～にくい):</strong> 書きます (coret ます) + やすいです → <strong>書きやすいです (Sangat mudah/enak dipakai menulis)</strong>."
+            },
+            {
+                bab: 44, polaIndex: 3, polaTotalInBab: 4,
+                pattern: "～くします / ～にします (Mengubah keadaan benda menjadi...)",
+                formula: "KS-i(coret い) + くします | KS-na / KB + にします",
+                question: "「テレビの<ruby>音<rt>おと</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きいですから、もっと ( 　　　　 ) してください。」",
+                options: ["<ruby>小<rt>ちい</rt></ruby>さく", "<ruby>小<rt>ちい</rt></ruby>さいに", "<ruby>小<rt>ちい</rt></ruby>さくな"],
+                correct: 0,
+                explanation: "<strong>Bab 44 Pola 3 (～くします / ～にします):</strong> 小さい adalah Kata Sifat-i, ubah い menjadi く + します → <strong>小さくしてください (Tolong kecilkan volumenya)</strong>."
+            },
+            {
+                bab: 44, polaIndex: 4, polaTotalInBab: 4,
+                pattern: "[Kata Benda] にします (Memutuskan pilihan menu / jadwal)",
+                formula: "[Kata Benda Pilihan] + にします",
+                question: "A：「ご<ruby>注文<rt>ちゅうもん</rt></ruby>はお<ruby>決<rt>き</rt></ruby>まりですか。」<br>B：「わたしはカレーライス ( 　　　　 )。」",
+                options: ["にします", "くします", "になります"],
+                correct: 0,
+                explanation: "<strong>Bab 44 Pola 4 (KB + にします):</strong> Saat memesan makanan atau menentukan pilihan, gunakan <strong>KB + にします (Saya pilih nasi kari)</strong>."
+            },
+
+            // BAB 45 (2 Variasi)
+            {
+                bab: 45, polaIndex: 1, polaTotalInBab: 2,
+                pattern: "～場合は (Dalam kasus / Apabila terjadi situasi darurat)",
+                formula: "[KK-Kamus / KK-Ta / KK-Nai / KB + の] + 場合は、[Tindakan antisipasi]",
+                question: "「<ruby>火事<rt>かじ</rt></ruby>や<ruby>地震<rt>じしん</rt></ruby> ( 　　　　 )、エレベーターを<ruby>使<rt>つか</rt></ruby>わないでください。」",
+                options: ["の場合は", "のとおりは", "のためには"],
+                correct: 0,
+                explanation: "<strong>Bab 45 Pola 1 (～場合は):</strong> Karena 火事や地震 adalah Kata Benda, tambahkan の → <strong>火事や地震の場合は (Apabila terjadi kebakaran atau gempa bumi...)</strong>."
+            },
+            {
+                bab: 45, polaIndex: 2, polaTotalInBab: 2,
+                pattern: "～のに (Padahal... menyatakan kekecewaan / hasil di luar dugaan)",
+                formula: "[Bentuk Biasa (KB / KS-Na pakai + な)] + のに、[Kenyataan yang bertolak belakang]",
+                question: "「せっかく<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>んだ ( 　　　　 )、まだ<ruby>熱<rt>ねつ</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がりません。」",
+                options: ["のに", "から", "ので"],
+                correct: 0,
+                explanation: "<strong>Bab 45 Pola 2 (～のに Kontradiksi):</strong> Sudah minum obat, tetapi demam belum turun. Hubungan pertentangan penuh kecewa menggunakan <strong>のに (Padahal...)</strong>. (Jika depannya Minggu/KS-Na: 日曜日なのに)."
+            },
+
+            // BAB 46 (3 Variasi)
+            {
+                bab: 46, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "～るところです / ～ているところです / ～たところです (Tepat akan / sedang / baru saja)",
+                formula: "KK-Kamus + ところです (Baru akan) | KK-ている + ところです (Sedang) | KK-Ta + ところです (Baru saja beberapa detik lalu)",
+                question: "「たったいま、<ruby>駅<rt>えき</rt></ruby>に ( 　　　　 ) ところです。」",
+                options: ["<ruby>着<rt>つ</rt></ruby>いた", "<ruby>着<rt>つ</rt></ruby>く", "<ruby>着<rt>つ</rt></ruby>いている"],
+                correct: 0,
+                explanation: "<strong>Bab 46 Pola 1 (～ところです):</strong> Ada kata keterangan たったいま (baru saja detik ini), sehingga gunakan bentuk lampau + ところです → <strong>着いたところです (Baru saja tiba di stasiun)</strong>."
+            },
+            {
+                bab: 46, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "～たばかりです (Baru saja terjadi menurut perasaan pembicara, meski sudah lewat beberapa hari/bulan)",
+                formula: "[KK Bentuk Ta] + ばかりです",
+                question: "「<ruby>先月<rt>せんげつ</rt></ruby>、この<ruby>会社<rt>かいしゃ</rt></ruby>に ( 　　　　 ) ばかりなので、まだよくわかりません。」",
+                options: ["<ruby>入<rt>はい</rt></ruby>った", "<ruby>入<rt>はい</rt></ruby>る", "<ruby>入<rt>はい</rt></ruby>っている"],
+                correct: 0,
+                explanation: "<strong>Bab 46 Pola 2 (～たばかりです):</strong> Berbeda dengan ～たところです yang hitungan detik, <strong>～たばかりです</strong> bisa dipakai dengan 先月 (bulan lalu) karena bagi pembicara rasanya 'baru saja masuk perusahaan'."
+            },
+            {
+                bab: 46, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～はずです (Seharusnya / Pastilah begitu berdasarkan bukti logis)",
+                formula: "[Bentuk Biasa (KS-Na + な / KB + の)] + はずです",
+                question: "「リーさんは<ruby>日本<rt>にほん</rt></ruby>に５<ruby>年<rt>ねん</rt></ruby>住んでいましたから、<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby> ( 　　　　 ) です。」",
+                options: ["なはず", "のはず", "だはず"],
+                correct: 0,
+                explanation: "<strong>Bab 46 Pola 3 (～はずです):</strong> 上手 adalah Kata Sifat-Na, sehingga ketika bertemu はずです wajib menggunakan <strong>な</strong> → <strong>上手なはずです (Pastilah pandai bahasa Jepang)</strong>."
+            },
+
+            // BAB 47 (2 Variasi)
+            {
+                bab: 47, polaIndex: 1, polaTotalInBab: 2,
+                pattern: "～そうです (Katanya / Kabarnya... menyampaikan informasi dari sumber berita)",
+                formula: "[Kalimat Bentuk Biasa (lengkap dengan だ / た)] + そうです",
+                question: "「ニュースによると、あしたは<ruby>とても寒<rt>さむ</rt></ruby> ( 　　　　 )。」",
+                options: ["いそうです", "そうです", "さそうです"],
+                correct: 0,
+                explanation: "<strong>Bab 47 Pola 1 (～そうです Kabarnya):</strong> Ada ciri 「ニュースによると」 (Menurut berita...). Rumusnya adalah Bentuk Biasa UTUH + そうです. Jadi 寒い tidak dicoret い-nya → <strong>寒いそうです (Katanya besok sangat dingin)</strong>."
+            },
+            {
+                bab: 47, polaIndex: 2, polaTotalInBab: 2,
+                pattern: "～ようです (Sepertinya / Tampaknya... kesimpulan dari pancaindra & bukti)",
+                formula: "[Bentuk Biasa (KS-Na + な / KB + の)] + ようです",
+                question: "「<ruby>部屋<rt>へや</rt></ruby>の<ruby>電気<rt>でんき</rt></ruby>が<ruby>消<rt>き</rt></ruby>えていますね。<ruby>誰<rt>だれ</rt></ruby>も ( 　　　　 ) ようです。」",
+                options: ["いない", "いま", "いなくて"],
+                correct: 0,
+                explanation: "<strong>Bab 47 Pola 2 (～ようです):</strong> Menyimpulkan dari bukti bahwa lampu mati, tampaknya tidak ada siapa-siapa di dalam → <strong>誰もいないようです</strong>."
+            },
+
+            // BAB 48 (3 Variasi)
+            {
+                bab: 48, polaIndex: 1, polaTotalInBab: 3,
+                pattern: "Kalimat Kausatif / 使役形 (Menyuruh atau Mengizinkan bawahan/anak melakukan)",
+                formula: "Grup 1: u → aseru (行かせる) | Grup 2: ru → saseru (食べさせる) | する→させる | くる→こさせる",
+                question: "「<ruby>部長<rt>ぶちょう</rt></ruby>は<ruby>ミラー<rt></rt></ruby>さんを<ruby>大阪<rt>おおさか</rt></ruby>へ<ruby>出張<rt>しゅっちょう</rt></ruby> ( 　　　　 )。」",
+                options: ["させました", "されました", "しました"],
+                correct: 0,
+                explanation: "<strong>Bab 48 Pola 1 (Bentuk Kausatif / 使役):</strong> Kepala bagian menugaskan/menyuruh Miller dinas ke Osaka. 出張します (suru → saseru) menjadi <strong>出張させました</strong>."
+            },
+            {
+                bab: 48, polaIndex: 2, polaTotalInBab: 3,
+                pattern: "Kausatif KK Transitif (Partikel に untuk orang yang disuruh/diizinkan)",
+                formula: "[Orang Tua/Atasan] は [Anak/Bawahan] に [Objek] を + KK Kausatif",
+                question: "「<ruby>母<rt>はは</rt></ruby>は<ruby>毎日<rt>まいにち</rt></ruby>、<ruby>弟<rt>おとうと</rt></ruby>に<ruby>野菜<rt>やさい</rt></ruby>を ( 　　　　 )。」",
+                options: ["<ruby>食<rt>た</rt></ruby>べさせます", "<ruby>食<rt>た</rt></ruby>べられます", "<ruby>食<rt>た</rt></ruby>べすぎます"],
+                correct: 0,
+                explanation: "<strong>Bab 48 Pola 2 (Kausatif Transitif):</strong> Ibu menyuruh adik makan sayur. 食べます (Grup 2: + saseru) menjadi <strong>食べさせます</strong>."
+            },
+            {
+                bab: 48, polaIndex: 3, polaTotalInBab: 3,
+                pattern: "～させていただけませんか (Meminta izin dengan sangat sopan untuk melakukan sesuatu)",
+                formula: "[KK Bentuk Kausatif-Te (～させて)] + いただけませんか",
+                question: "「すみません、きょうは<ruby>少<rt>すこ</rt></ruby>し<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いので、<ruby>早<rt>はや</rt></ruby>く ( 　　　　 ) いただけませんか。」",
+                options: ["<ruby>帰<rt>かえ</rt></ruby>らせて", "<ruby>帰<rt>かえ</rt></ruby>られて", "<ruby>帰<rt>かえ</rt></ruby>りて"],
+                correct: 0,
+                explanation: "<strong>Bab 48 Pola 3 (～させていただけませんか):</strong> Pola puncak yang sangat sering keluar di JFT saat meminta izin pulang cepat atau cuti kepada atasan! 帰ります (ru → raseru → rasete) → <strong>帰らせていただけませんか (Bolehkah izinkan saya pulang lebih awal?)</strong>."
+            }
+        ];
+
+        // =========================================================================
+        // 3. DATA KAMUS HYOGEN PASTI KELUAR (CHEATSHEET)
+        // =========================================================================
+        const CHEATSHEET_DATA = [
+            {
+                group: "1. Salam & Etika Kerja di Kantor",
+                items: [
+                    { jp: "お先に失礼します", romaji: "Osaki ni shitsurei shimasu", id: "Permisi saya pulang duluan (saat rekan masih kerja)" },
+                    { jp: "お疲れ様でした", romaji: "Otsukaresama deshita", id: "Terima kasih atas kerja kerasnya (balasan saat rekan pulang)" },
+                    { jp: "失礼します", romaji: "Shitsurei shimasu", id: "Permisi (saat mengetuk & masuk ruangan atasan)" },
+                    { jp: "かしこまりました / 承知しました", romaji: "Kashikomarimashita", id: "Baik, saya mengerti (kepada atasan/pelanggan)" },
+                    { jp: "申し訳ありません", romaji: "Moushiwake arimasen", id: "Mohon maaf sebesar-besarnya (lebih sopan dari sumimasen)" }
+                ]
+            },
+            {
+                group: "2. Bertamu & Kehidupan Bertetangga",
+                items: [
+                    { jp: "ごめんください", romaji: "Gomen kudasai", id: "Permisi, apakah ada orang di dalam? (di depan pintu)" },
+                    { jp: "おじゃまします", romaji: "Ojama shimasu", id: "Permisi mengganggu (saat melangkah masuk rumah orang)" },
+                    { jp: "おじゃましました", romaji: "Ojama shimashita", id: "Maaf telah mengganggu (saat pamit pulang dari rumah orang)" },
+                    { jp: "つまらないものですが / よかったらどうぞ", romaji: "Yokattara douzo", id: "Silakan kalau berkenan (saat memberi oleh-oleh)" },
+                    { jp: "これからお世話になります", romaji: "Korekara osewa ni narimasu", id: "Mohon bantuannya mulai sekarang (saat pindah rumah/kerja baru)" }
+                ]
+            },
+            {
+                group: "3. Kesehatan, Empati & Perpisahan",
+                items: [
+                    { jp: "お大事に", romaji: "Odaiji ni", id: "Semoga lekas sembuh (KHUSUS untuk orang sakit/cedera)" },
+                    { jp: "お元気で", romaji: "Ogenki de", id: "Jaga diri baik-baik ya (KHUSUS perpisahan jangka panjang)" },
+                    { jp: "おかげさまで", romaji: "Okagesama de", id: "Berkat doa Anda (saat menjawab sudah sembuh/sehat)" },
+                    { jp: "それは大変ですね", romaji: "Sore wa taihen desu ne", id: "Wah, berat/repot sekali ya (empati kabar buruk)" },
+                    { jp: "残念ですね", romaji: "Zannen desu ne", id: "Sayang sekali ya (saat batal atau gagal)" }
+                ]
+            },
+            {
+                group: "4. Toko, Restoran & Layanan Publik",
+                items: [
+                    { jp: "何名様ですか", romaji: "Nan-mei-sama desu ka", id: "Untuk berapa orang? (ditanyakan staf restoran)" },
+                    { jp: "お弁当は温めますか", romaji: "Obentou wa atatamemasu ka", id: "Apakah bentonya mau dipanaskan? (di konbini)" },
+                    { jp: "お会計をお願いします", romaji: "Okaikei o onegaishimasu", id: "Minta bon / mau bayar (di restoran)" },
+                    { jp: "別々でお願いします", romaji: "Betsubetsu de onegaishimasu", id: "Tolong bayar sendiri-sendiri / pisah bon" },
+                    { jp: "袋にお入れしますか", romaji: "Fukuro ni o-ire shimasu ka", id: "Apakah mau dimasukkan ke kantong plastik?" }
+                ]
+            },
+            {
+                group: "5. Menolak Halus, Memuji & Izin",
+                items: [
+                    { jp: "今日はちょっと……また今度", romaji: "Kyou wa chotto... mata kondo", id: "Hari ini agak tidak bisa... lain kali ya (menolak halus)" },
+                    { jp: "いいえ、まだまだです", romaji: "Iie, madamada desu", id: "Tidak, saya masih belum seberapa (merendah saat dipuji)" },
+                    { jp: "～てもいいですか", romaji: "~temo ii desu ka", id: "Bolehkah saya melakukan...?" },
+                    { jp: "～ましょうか", romaji: "~mashou ka", id: "Mari saya bantu...? (menawarkan bantuan)" },
+                    { jp: "～させていただけませんか", romaji: "~sasete itadakemasen ka", id: "Bolehkah izinkan saya...? (izin sopan ke atasan)" }
+                ]
+            },
+            {
+                group: "6. Seruan Darurat & Transportasi",
+                items: [
+                    { jp: "あぶない！", romaji: "Abunai!", id: "Awas! / Bahaya!" },
+                    { jp: "すみません、降ります", romaji: "Sumimasen, orimasu", id: "Permisi, saya mau turun (di kereta penuh)" },
+                    { jp: "落としましたよ / 落ちましたよ", romaji: "Ochimashita yo", id: "Barang Anda terjatuh lho!" },
+                    { jp: "お待たせしました", romaji: "Omatase shimashita", id: "Maaf telah membuat Anda menunggu" },
+                    { jp: "もう一度言ってください", romaji: "Mou ichido itte kudasai", id: "Tolong katakan sekali lagi" }
+                ]
+            }
+        ];
+
+        // =========================================================================
+        // 4. APPLICATION STATE & RENDER LOGIC
+        // =========================================================================
+        let state = {
+            currentTab: 'hyogen',
+            furigana: true,
+            showFormula: true,
+
+            // Hyogen State
+            hyogenFilter: 'all',
+            filteredHyogen: [...HYOGEN_QUESTIONS],
+            hyogenIndex: 0,
+            hyogenAnswers: {}, // { questionId: selectedIndex }
+            hyogenFlags: {},
+
+            // Bunpou State
+            bunpouLayout: 'cbt', // 'cbt' or 'list'
+            bunpouIndex: 0,
+            bunpouAnswers: {}, // { seqIndex: selectedIndex }
+
+            // Mock State
+            mockQuestions: [],
+            mockIndex: 0,
+            mockAnswers: {},
+            mockTimerSec: 1800,
+            mockInterval: null
+        };
+
+        // SVG Scene Illustrations for Authentic JFT Feel
+        function getSceneSVG(type) {
+            const svgs = {
+                office_leave: `<svg class="w-12 h-12 text-blue-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/><path d="M9 17h6"/><path d="M9 13h6"/></svg>`,
+                house_enter: `<svg class="w-12 h-12 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+                decline_invite: `<svg class="w-12 h-12 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M8 15h8"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`,
+                sick_care: `<svg class="w-12 h-12 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`,
+                restaurant: `<svg class="w-12 h-12 text-orange-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>`,
+                default: `<svg class="w-12 h-12 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`
+            };
+            return svgs[type] || svgs.default;
+        }
+
+        // Switch Main Tabs
+        function switchTab(tab) {
+            state.currentTab = tab;
+            ['hyogen', 'bunpou', 'mock', 'cheatsheet'].forEach(t => {
+                const viewEl = document.getElementById(`view-${t}`);
+                const tabBtn = document.getElementById(`tab-${t}`);
+                if (t === tab) {
+                    viewEl.classList.remove('hidden');
+                    tabBtn.className = "px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition whitespace-nowrap bg-blue-600 text-white shadow";
+                } else {
+                    viewEl.classList.add('hidden');
+                    tabBtn.className = "px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition whitespace-nowrap text-blue-200 hover:text-white";
+                }
+            });
+        }
+
+        // Toggle Furigana Visibility
+        function toggleFurigana() {
+            state.furigana = !state.furigana;
+            document.body.classList.toggle('hide-furigana', !state.furigana);
+            document.getElementById('furigana-label').textContent = `Furigana: ${state.furigana ? 'ON' : 'OFF'}`;
+        }
+
+        // =========================================================================
+        // 5. HYOGEN RENDER & INTERACTION
+        // =========================================================================
+        function filterHyogenCategory(cat) {
+            state.hyogenFilter = cat;
+            if (cat === 'all') {
+                state.filteredHyogen = [...HYOGEN_QUESTIONS];
+            } else {
+                state.filteredHyogen = HYOGEN_QUESTIONS.filter(q => q.category === cat);
+            }
+            state.hyogenIndex = 0;
+            renderHyogenQuestion();
+        }
+
+        function renderHyogenQuestion() {
+            const list = state.filteredHyogen;
+            const q = list[state.hyogenIndex];
+            if (!q) return;
+
+            document.getElementById('hyogen-qnum').textContent = state.hyogenIndex + 1;
+            document.getElementById('hyogen-qtotal').textContent = list.length;
+            document.getElementById('hyogen-source-tag').textContent = `★ ${q.tag}`;
+            document.getElementById('hyogen-instruction').innerHTML = q.instruction;
+            document.getElementById('hyogen-scene-svg').innerHTML = getSceneSVG(q.svgType);
+            document.getElementById('hyogen-scene-desc').textContent = q.sceneTitle;
+            document.getElementById('hyogen-scene-sub').textContent = q.sceneSub;
+
+            // Render Dialogue Bubbles
+            const dlgContainer = document.getElementById('hyogen-dialogue-container');
+            dlgContainer.innerHTML = q.dialogue.map(line => `
+                <div class="flex items-start gap-3 ${line.isBlank ? 'bg-blue-50/90 border-2 border-blue-400' : 'bg-slate-50 border border-slate-200'} p-3 rounded-lg">
+                    <span class="text-xs font-extrabold px-2 py-1 rounded ${line.isBlank ? 'bg-blue-700 text-white' : 'bg-slate-200 text-slate-700'} whitespace-nowrap">
+                        ${line.speaker}
+                    </span>
+                    <div class="font-bold ${line.isBlank ? 'text-blue-900' : 'text-slate-800'}">
+                        ${line.text}
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Options A, B, C
+            const userAns = state.hyogenAnswers[q.id];
+            const labels = ['A', 'B', 'C'];
+            const optContainer = document.getElementById('hyogen-options');
+            optContainer.innerHTML = q.options.map((opt, idx) => {
+                let statusClass = '';
+                if (userAns !== undefined) {
+                    if (idx === q.correct) statusClass = 'correct';
+                    else if (idx === userAns && userAns !== q.correct) statusClass = 'wrong';
+                }
+                return `
+                    <button onclick="selectHyogenAnswer(${q.id}, ${idx})" class="cbt-option ${statusClass} w-full text-left p-3.5 rounded-xl flex items-center gap-3.5 shadow-sm">
+                        <span class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm border ${
+                            idx === q.correct && userAns !== undefined ? 'bg-emerald-700 text-white border-emerald-700' :
+                            idx === userAns && userAns !== q.correct ? 'bg-rose-700 text-white border-rose-700' :
+                            'bg-slate-100 text-slate-800 border-slate-300'
+                        }">
+                            ${labels[idx]}
+                        </span>
+                        <span class="text-base sm:text-lg font-bold text-slate-900 flex-1">${opt}</span>
+                    </button>
+                `;
+            }).join('');
+
+            // Explanation Box
+            const expBox = document.getElementById('hyogen-explanation');
+            if (userAns !== undefined) {
+                const isCorrect = userAns === q.correct;
+                expBox.className = `rounded-xl border-2 p-4 mt-2 ${isCorrect ? 'bg-emerald-50 border-emerald-300 text-emerald-950' : 'bg-rose-50 border-rose-300 text-rose-950'}`;
+                expBox.innerHTML = `
+                    <div class="font-extrabold text-sm mb-1 flex items-center gap-1.5">
+                        <span>${isCorrect ? '✅ Jawaban Tepat!' : '❌ Kurang Tepat!'}</span>
+                        <span>(Kunci: Pilihan ${labels[q.correct]})</span>
+                    </div>
+                    <div class="text-xs sm:text-sm leading-relaxed text-slate-800">${q.explanation}</div>
+                `;
+                expBox.classList.remove('hidden');
+            } else {
+                expBox.classList.add('hidden');
+            }
+
+            // Flag Button Status
+            const flagBtn = document.getElementById('hyogen-flag-btn');
+            if (state.hyogenFlags[q.id]) {
+                flagBtn.className = "bg-amber-400 text-slate-950 border border-amber-500 px-2.5 py-1 rounded text-xs font-bold flex items-center gap-1";
+            } else {
+                flagBtn.className = "bg-white hover:bg-amber-50 border border-slate-300 text-slate-700 px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1";
+            }
+
+            renderHyogenGrid();
+        }
+
+        function selectHyogenAnswer(qId, optIdx) {
+            state.hyogenAnswers[qId] = optIdx;
+            renderHyogenQuestion();
+        }
+
+        function revealHyogenExplanation() {
+            const q = state.filteredHyogen[state.hyogenIndex];
+            const expBox = document.getElementById('hyogen-explanation');
+            expBox.className = "rounded-xl border-2 p-4 mt-2 bg-amber-50 border-amber-300 text-slate-900";
+            expBox.innerHTML = `
+                <div class="font-extrabold text-sm mb-1 text-amber-900">💡 Pembahasan Soal:</div>
+                <div class="text-xs sm:text-sm leading-relaxed">${q.explanation}</div>
+            `;
+            expBox.classList.remove('hidden');
+        }
+
+        function toggleFlagCurrent(mode) {
+            if (mode === 'hyogen') {
+                const q = state.filteredHyogen[state.hyogenIndex];
+                state.hyogenFlags[q.id] = !state.hyogenFlags[q.id];
+                renderHyogenQuestion();
+            }
+        }
+
+        function renderHyogenGrid() {
+            const list = state.filteredHyogen;
+            const grid = document.getElementById('hyogen-grid');
+            const answeredCount = Object.keys(state.hyogenAnswers).length;
+            document.getElementById('hyogen-score-counter').textContent = `Terjawab: ${answeredCount}/${HYOGEN_QUESTIONS.length}`;
+
+            grid.innerHTML = list.map((q, idx) => {
+                const ans = state.hyogenAnswers[q.id];
+                const isCurrent = idx === state.hyogenIndex;
+                const isFlagged = state.hyogenFlags[q.id];
+
+                let color = "bg-slate-100 text-slate-700 border-slate-300";
+                if (ans !== undefined) {
+                    color = ans === q.correct
+                        ? "bg-emerald-600 text-white border-emerald-700"
+                        : "bg-rose-600 text-white border-rose-700";
+                }
+                if (isCurrent) {
+                    color += " ring-2 ring-blue-600 ring-offset-1 font-extrabold";
+                }
+                return `
+                    <button onclick="jumpHyogen(${idx})" class="relative h-8 rounded text-xs font-bold border ${color} flex items-center justify-center transition">
+                        ${idx + 1}
+                        ${isFlagged ? '<span class="absolute -top-1 -right-1 text-[10px]">🚩</span>' : ''}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function jumpHyogen(idx) {
+            state.hyogenIndex = idx;
+            renderHyogenQuestion();
+        }
+
+        // =========================================================================
+        // 6. BUNPOU BAB 26-48 SEQUENTIAL REMINDER LOGIC
+        // =========================================================================
+        function initBunpouDropdownAndPills() {
+            const select = document.getElementById('bunpou-chapter-select');
+            const pills = document.getElementById('bunpou-chapter-pills');
+
+            // Group count per chapter
+            const chapters = [];
+            for (let b = 26; b <= 48; b++) {
+                const count = BUNPOU_CHAPTERS.filter(item => item.bab === b).length;
+                chapters.push({ bab: b, count });
+            }
+
+            select.innerHTML = `<option value="all">Pilih Lompat ke Bab (Bab 26 - 48)</option>` +
+                chapters.map(c => `<option value="${c.bab}">Bab ${c.bab} (${c.count} Variasi Bunpou)</option>`).join('');
+
+            pills.innerHTML = chapters.map(c => {
+                const currentBab = BUNPOU_CHAPTERS[state.bunpouIndex]?.bab;
+                const isActive = currentBab === c.bab;
+                return `
+                    <button onclick="jumpToBunpouChapter(${c.bab})" class="px-2.5 py-1 rounded text-xs font-bold border transition ${
+                        isActive ? 'bg-blue-700 text-white border-blue-800 shadow-sm' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+                    }">
+                        Bab ${c.bab} <span class="text-[10px] opacity-75">(${c.count})</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function jumpToBunpouChapter(babVal) {
+            if (babVal === 'all') return;
+            const babNum = parseInt(babVal, 10);
+            if (state.bunpouLayout === 'cbt') {
+                const firstIdx = BUNPOU_CHAPTERS.findIndex(item => item.bab === babNum);
+                if (firstIdx !== -1) {
+                    state.bunpouIndex = firstIdx;
+                    renderBunpouQuestion();
+                }
+            } else {
+                const el = document.getElementById(`chapter-block-${babNum}`);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function setBunpouLayout(layout) {
+            state.bunpouLayout = layout;
+            const cbtBox = document.getElementById('bunpou-cbt-container');
+            const listBox = document.getElementById('bunpou-list-container');
+            const btnCbt = document.getElementById('btn-bunpou-cbt');
+            const btnList = document.getElementById('btn-bunpou-list');
+
+            if (layout === 'cbt') {
+                cbtBox.classList.remove('hidden');
+                listBox.classList.add('hidden');
+                btnCbt.className = "px-3 py-1.5 rounded bg-blue-600 text-white shadow";
+                btnList.className = "px-3 py-1.5 rounded text-slate-700 hover:bg-white";
+                renderBunpouQuestion();
+            } else {
+                cbtBox.classList.add('hidden');
+                listBox.classList.remove('hidden');
+                btnList.className = "px-3 py-1.5 rounded bg-blue-600 text-white shadow";
+                btnCbt.className = "px-3 py-1.5 rounded text-slate-700 hover:bg-white";
+                renderBunpouFullSequentialList();
+            }
+        }
+
+        function toggleFormulaVisibility() {
+            state.showFormula = !state.showFormula;
+            renderBunpouQuestion();
+        }
+
+        function renderBunpouQuestion() {
+            const item = BUNPOU_CHAPTERS[state.bunpouIndex];
+            if (!item) return;
+
+            document.getElementById('bunpou-bab-badge').textContent = `Bab ${item.bab} • Pola ${item.polaIndex}/${item.polaTotalInBab}`;
+            document.getElementById('bunpou-pattern-title').textContent = item.pattern;
+            document.getElementById('bunpou-seq-num').textContent = state.bunpouIndex + 1;
+            document.getElementById('bunpou-seq-total').textContent = BUNPOU_CHAPTERS.length;
+            document.getElementById('bunpou-footer-info').textContent = `Bab ${item.bab} (Variasi ${item.polaIndex} dari ${item.polaTotalInBab} di bab ini)`;
+
+            document.getElementById('bunpou-formula-hint').textContent = state.showFormula
+                ? `Rumus: ${item.formula}`
+                : `(Rumus disembunyikan — klik tombol di kanan untuk melihat)`;
+
+            document.getElementById('bunpou-question-text').innerHTML = item.question;
+
+            const userAns = state.bunpouAnswers[state.bunpouIndex];
+            const labels = ['A', 'B', 'C'];
+            const optBox = document.getElementById('bunpou-options');
+
+            optBox.innerHTML = item.options.map((opt, idx) => {
+                let statusClass = '';
+                if (userAns !== undefined) {
+                    if (idx === item.correct) statusClass = 'correct';
+                    else if (idx === userAns && userAns !== item.correct) statusClass = 'wrong';
+                }
+                return `
+                    <button onclick="selectBunpouAnswer(${state.bunpouIndex}, ${idx})" class="cbt-option ${statusClass} w-full text-left p-3.5 rounded-xl flex items-center gap-3.5 shadow-sm">
+                        <span class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm border bg-slate-100 text-slate-800 border-slate-300">
+                            ${labels[idx]}
+                        </span>
+                        <span class="text-base sm:text-lg font-bold text-slate-900 flex-1">${opt}</span>
+                    </button>
+                `;
+            }).join('');
+
+            const expBox = document.getElementById('bunpou-explanation');
+            if (userAns !== undefined) {
+                const isCorrect = userAns === item.correct;
+                expBox.className = `rounded-xl border-2 p-4 mt-2 ${isCorrect ? 'bg-emerald-50 border-emerald-300 text-emerald-950' : 'bg-rose-50 border-rose-300 text-rose-950'}`;
+                expBox.innerHTML = `
+                    <div class="font-extrabold text-sm mb-1">
+                        ${isCorrect ? '✅ Benar!' : '❌ Belum Tepat!'} (Kunci: ${labels[item.correct]})
+                    </div>
+                    <div class="text-xs sm:text-sm leading-relaxed text-slate-800">${item.explanation}</div>
+                `;
+                expBox.classList.remove('hidden');
+            } else {
+                expBox.classList.add('hidden');
+            }
+
+            document.getElementById('bunpou-progress-text').textContent = `Selesai: ${Object.keys(state.bunpouAnswers).length}/${BUNPOU_CHAPTERS.length}`;
+            initBunpouDropdownAndPills();
+        }
+
+        function selectBunpouAnswer(seqIdx, optIdx) {
+            state.bunpouAnswers[seqIdx] = optIdx;
+            if (state.bunpouLayout === 'cbt') {
+                renderBunpouQuestion();
+            } else {
+                renderBunpouFullSequentialList();
+            }
+        }
+
+        // Render All Chapters 26-48 in Sequential List View
+        function renderBunpouFullSequentialList() {
+            const container = document.getElementById('bunpou-list-container');
+            let html = '';
+
+            for (let b = 26; b <= 48; b++) {
+                const itemsInBab = BUNPOU_CHAPTERS
+                    .map((item, globalIdx) => ({ ...item, globalIdx }))
+                    .filter(item => item.bab === b);
+
+                html += `
+                    <div id="chapter-block-${b}" class="bg-white rounded-xl shadow-sm border border-slate-300 overflow-hidden">
+                        <div class="bg-slate-800 text-white px-4 py-3 flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <span class="bg-amber-400 text-slate-950 font-black px-2.5 py-0.5 rounded text-xs">BAB ${b}</span>
+                                <h3 class="font-bold text-sm sm:text-base">Minna no Nihongo Bab ${b} (${itemsInBab.length} Soal Reminder Berurutan)</h3>
+                            </div>
+                            <span class="text-xs text-slate-300">1 Pola = 1 Soal</span>
+                        </div>
+                        <div class="divide-y divide-slate-200">
+                            ${itemsInBab.map(q => {
+                                const ans = state.bunpouAnswers[q.globalIdx];
+                                const labels = ['A', 'B', 'C'];
+                                return `
+                                    <div class="p-4 sm:p-5 hover:bg-slate-50/70 transition">
+                                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                            <span class="text-xs font-extrabold text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded">
+                                                Bab ${q.bab} - Variasi ${q.polaIndex}/${q.polaTotalInBab}: ${q.pattern}
+                                            </span>
+                                            <span class="text-xs text-slate-500 font-medium">Rumus: ${q.formula}</span>
+                                        </div>
+                                        <div class="jp-text text-base sm:text-lg font-bold text-slate-900 mb-3 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                                            ${q.question}
+                                        </div>
+                                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 jp-text">
+                                            ${q.options.map((opt, oIdx) => {
+                                                let cls = 'cbt-option';
+                                                if (ans !== undefined) {
+                                                    if (oIdx === q.correct) cls += ' correct';
+                                                    else if (oIdx === ans) cls += ' wrong';
+                                                }
+                                                return `
+                                                    <button onclick="selectBunpouAnswer(${q.globalIdx}, ${oIdx})" class="${cls} p-2.5 rounded-lg text-left font-bold text-sm sm:text-base flex items-center gap-2">
+                                                        <span class="w-6 h-6 rounded bg-slate-100 border border-slate-300 flex items-center justify-center text-xs">${labels[oIdx]}</span>
+                                                        <span>${opt}</span>
+                                                    </button>
+                                                `;
+                                            }).join('')}
+                                        </div>
+                                        ${ans !== undefined ? `
+                                            <div class="mt-3 p-3 rounded-lg text-xs sm:text-sm ${ans === q.correct ? 'bg-emerald-50 text-emerald-950 border border-emerald-200' : 'bg-rose-50 text-rose-950 border border-rose-200'}">
+                                                ${q.explanation}
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Shared Prev / Next Navigation
+        function prevQuestion(mode) {
+            if (mode === 'hyogen') {
+                if (state.hyogenIndex > 0) {
+                    state.hyogenIndex--;
+                    renderHyogenQuestion();
+                }
+            } else if (mode === 'bunpou') {
+                if (state.bunpouIndex > 0) {
+                    state.bunpouIndex--;
+                    renderBunpouQuestion();
+                }
+            }
+        }
+
+        function nextQuestion(mode) {
+            if (mode === 'hyogen') {
+                if (state.hyogenIndex < state.filteredHyogen.length - 1) {
+                    state.hyogenIndex++;
+                    renderHyogenQuestion();
+                }
+            } else if (mode === 'bunpou') {
+                if (state.bunpouIndex < BUNPOU_CHAPTERS.length - 1) {
+                    state.bunpouIndex++;
+                    renderBunpouQuestion();
+                }
+            }
+        }
+
+        // Speech Synthesis for Japanese Dialogue
+        function speakCurrentDialogue(mode) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const q = state.filteredHyogen[state.hyogenIndex];
+            const cleanText = q.dialogue.map(d => d.text.replace(/<[^>]*>/g, '').replace(/\(.*\)/g, q.options[q.correct].replace(/<[^>]*>/g, ''))).join('。');
+            const utter = new SpeechSynthesisUtterance(cleanText);
+            utter.lang = 'ja-JP';
+            utter.rate = 0.92;
+            window.speechSynthesis.speak(utter);
+        }
+
+        // =========================================================================
+        // 7. JFT MOCK TEST ENGINE
+        // =========================================================================
+        function startMockTest(totalCount) {
+            const half = Math.floor(totalCount / 2);
+            const shuffledHyogen = [...HYOGEN_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, half).map(q => ({
+                type: 'hyogen',
+                sectionTitle: 'セクション 2 : 会話と表現 (Kaiwa to Hyōgen)',
+                prompt: q.instruction,
+                context: `<div class="text-xs font-bold text-slate-500 mb-2">Situasi: ${q.sceneTitle}</div>` +
+                         q.dialogue.map(d => `<div class="mb-1"><strong>${d.speaker}:</strong> ${d.text}</div>`).join(''),
+                options: q.options,
+                correct: q.correct,
+                explanation: q.explanation
+            }));
+
+            const shuffledBunpou = [...BUNPOU_CHAPTERS].sort(() => Math.random() - 0.5).slice(0, totalCount - half).map(b => ({
+                type: 'bunpou',
+                sectionTitle: `セクション 1 & 2 : 文法と表現 (Bab ${b.bab})`,
+                prompt: '（　　）に<ruby>入<rt>はい</rt></ruby>れるのに<ruby>最<rt>もっと</rt></ruby>もよいものを<ruby>選<rt>えら</rt></ruby>んでください。',
+                context: `<div class="font-bold text-lg">${b.question}</div>`,
+                options: b.options,
+                correct: b.correct,
+                explanation: b.explanation
+            }));
+
+            state.mockQuestions = [...shuffledHyogen, ...shuffledBunpou];
+            state.mockIndex = 0;
+            state.mockAnswers = {};
+            state.mockTimerSec = totalCount * 60;
+
+            document.getElementById('mock-start-screen').classList.add('hidden');
+            document.getElementById('mock-result-screen').classList.add('hidden');
+            document.getElementById('mock-exam-screen').classList.remove('hidden');
+
+            if (state.mockInterval) clearInterval(state.mockInterval);
+            state.mockInterval = setInterval(() => {
+                state.mockTimerSec--;
+                const m = String(Math.floor(state.mockTimerSec / 60)).padStart(2, '0');
+                const s = String(state.mockTimerSec % 60).padStart(2, '0');
+                document.getElementById('mock-timer').textContent = `${m}:${s}`;
+                if (state.mockTimerSec <= 0) {
+                    finishMockTest();
+                }
+            }, 1000);
+
+            renderMockQuestion();
+        }
+
+        function renderMockQuestion() {
+            const q = state.mockQuestions[state.mockIndex];
+            document.getElementById('mock-section-label').textContent = q.sectionTitle;
+            document.getElementById('mock-qnum').textContent = state.mockIndex + 1;
+            document.getElementById('mock-qtotal').textContent = state.mockQuestions.length;
+            document.getElementById('mock-prompt-box').innerHTML = q.prompt;
+            document.getElementById('mock-context-box').innerHTML = q.context;
+
+            const labels = ['A', 'B', 'C'];
+            const userAns = state.mockAnswers[state.mockIndex];
+            document.getElementById('mock-options-box').innerHTML = q.options.map((opt, idx) => `
+                <button onclick="selectMockAnswer(${idx})" class="cbt-option ${userAns === idx ? 'selected' : ''} w-full text-left p-3.5 rounded-xl flex items-center gap-3 font-bold">
+                    <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm border ${userAns === idx ? 'bg-blue-700 text-white border-blue-700' : 'bg-slate-100 text-slate-800 border-slate-300'}">${labels[idx]}</span>
+                    <span class="text-base sm:text-lg">${opt}</span>
+                </button>
+            `).join('');
+
+            document.getElementById('mock-grid').innerHTML = state.mockQuestions.map((_, idx) => {
+                const answered = state.mockAnswers[idx] !== undefined;
+                const current = idx === state.mockIndex;
+                return `
+                    <button onclick="state.mockIndex=${idx};renderMockQuestion();" class="h-8 rounded text-xs font-bold border ${
+                        answered ? 'bg-blue-600 text-white border-blue-700' : 'bg-slate-100 text-slate-700 border-slate-300'
+                    } ${current ? 'ring-2 ring-amber-400' : ''}">
+                        ${idx + 1}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectMockAnswer(optIdx) {
+            state.mockAnswers[state.mockIndex] = optIdx;
+            renderMockQuestion();
+        }
+
+        function mockNav(delta) {
+            const next = state.mockIndex + delta;
+            if (next >= 0 && next < state.mockQuestions.length) {
+                state.mockIndex = next;
+                renderMockQuestion();
+            }
+        }
+
+        function finishMockTest() {
+            if (state.mockInterval) clearInterval(state.mockInterval);
+            document.getElementById('mock-exam-screen').classList.add('hidden');
+            const resBox = document.getElementById('mock-result-screen');
+            resBox.classList.remove('hidden');
+
+            let correctCount = 0;
+            state.mockQuestions.forEach((q, idx) => {
+                if (state.mockAnswers[idx] === q.correct) correctCount++;
+            });
+
+            const scaledScore = Math.round((correctCount / state.mockQuestions.length) * 250);
+            const passed = scaledScore >= 200;
+
+            resBox.innerHTML = `
+                <div class="text-center border-b border-slate-200 pb-6">
+                    <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase ${passed ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                        ${passed ? '🎉 LULUS STANDAR JFT-BASIC (A2)' : '⚠️ BELUM MENCAPAI SKOR 200'}
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900 mt-2">Skor Simulasi: ${scaledScore} / 250</h2>
+                    <p class="text-sm text-slate-600 mt-1">Jawaban Benar: ${correctCount} dari ${state.mockQuestions.length} Soal</p>
+                    <button onclick="document.getElementById('mock-result-screen').classList.add('hidden');document.getElementById('mock-start-screen').classList.remove('hidden');" class="mt-4 bg-blue-700 hover:bg-blue-600 text-white font-bold px-5 py-2.5 rounded-lg text-xs sm:text-sm">
+                        Ulangi Mock Test Baru
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="font-bold text-base text-slate-800">Review Pembahasan Soal Mock Test:</h3>
+                    ${state.mockQuestions.map((q, idx) => {
+                        const uAns = state.mockAnswers[idx];
+                        const isRight = uAns === q.correct;
+                        const labels = ['A', 'B', 'C'];
+                        return `
+                            <div class="p-4 rounded-xl border ${isRight ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200'}">
+                                <div class="text-xs font-bold mb-1 ${isRight ? 'text-emerald-700' : 'text-rose-700'}">
+                                    Soal ${idx + 1} (${q.sectionTitle}) — ${isRight ? '✅ Benar' : `❌ Salah (Jawaban Anda: ${uAns !== undefined ? labels[uAns] : 'Kosong'}, Kunci: ${labels[q.correct]})`}
+                                </div>
+                                <div class="jp-text font-bold text-slate-900 mb-2">${q.context}</div>
+                                <div class="text-xs sm:text-sm text-slate-700 bg-white p-3 rounded border border-slate-200">${q.explanation}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        // =========================================================================
+        // 8. KAMUS CHEATSHEET & GEMINI AI QUESTION GENERATOR
+        // =========================================================================
+        function renderCheatsheet() {
+            const grid = document.getElementById('cheatsheet-grid');
+            grid.innerHTML = CHEATSHEET_DATA.map(section => `
+                <div class="bg-slate-50 rounded-xl border border-slate-200 p-4">
+                    <h4 class="font-bold text-sm text-blue-900 border-b border-slate-200 pb-2 mb-3">${section.group}</h4>
+                    <div class="space-y-2.5">
+                        ${section.items.map(it => `
+                            <div class="bg-white p-2.5 rounded-lg border border-slate-200 shadow-sm">
+                                <div class="font-bold text-sm text-slate-900 jp-text">${it.jp}</div>
+                                <div class="text-[11px] text-blue-600 font-medium">${it.romaji}</div>
+                                <div class="text-xs text-slate-600 mt-0.5">${it.id}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function generateAIQuestion() {
+            const btn = document.getElementById('btn-ai-gen');
+            const outBox = document.getElementById('ai-generated-result');
+            const topic = document.getElementById('ai-topic-select').value;
+
+            btn.disabled = true;
+            btn.innerHTML = `<span>⏳</span> <span>Sedang Membuat Soal...</span>`;
+            outBox.classList.remove('hidden');
+            outBox.innerHTML = `<div class="text-sm text-slate-600 animate-pulse">Merancang soal JFT-Basic kontekstual sesuai topik "${topic}"...</div>`;
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{
+                    parts: [{
+                        text: `Buatkan 1 soal JFT-Basic seksi Kaiwa to Hyogen (A2) dengan topik: "${topic}". Berikan situasi di Jepang, dialog pendek dengan bagian kosong, 3 opsi jawaban Jepang (A, B, C), indeks jawaban benar (0, 1, atau 2), dan pembahasan jelas dalam bahasa Indonesia.`
+                    }]
+                }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            instruction: { type: "STRING" },
+                            sceneTitle: { type: "STRING" },
+                            dialogueA: { type: "STRING" },
+                            dialogueB: { type: "STRING" },
+                            options: { type: "ARRAY", items: { type: "STRING" } },
+                            correct: { type: "INTEGER" },
+                            explanation: { type: "STRING" }
+                        },
+                        required: ["instruction", "sceneTitle", "dialogueA", "dialogueB", "options", "correct", "explanation"]
+                    }
+                }
+            };
+
+            try {
+                const res = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                const q = JSON.parse(data.candidates[0].content.parts[0].text);
+
+                // Also add to HYOGEN_QUESTIONS so user can practice it in main CBT screen
+                const newId = HYOGEN_QUESTIONS.length + 1;
+                HYOGEN_QUESTIONS.push({
+                    id: newId,
+                    category: "situasi",
+                    tag: "AI Variasi Baru JFT",
+                    instruction: q.instruction,
+                    sceneTitle: q.sceneTitle,
+                    sceneSub: `Topik: ${topic}`,
+                    svgType: "default",
+                    dialogue: [
+                        { speaker: "相手", text: q.dialogueA, isBlank: false },
+                        { speaker: "あなた", text: q.dialogueB, isBlank: true }
+                    ],
+                    options: q.options,
+                    correct: q.correct,
+                    explanation: q.explanation
+                });
+                state.filteredHyogen = [...HYOGEN_QUESTIONS];
+                renderHyogenQuestion();
+
+                const labels = ['A', 'B', 'C'];
+                outBox.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded">✅ Soal Baru Berhasil Ditambahkan ke Simulasi CBT (Nomor ${newId})</span>
+                    </div>
+                    <div class="font-bold text-slate-900 jp-text mb-2">${q.instruction}</div>
+                    <div class="text-xs text-slate-600 mb-2">Situasi: ${q.sceneTitle}</div>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 jp-text font-bold mb-3 space-y-1">
+                        <div>相手: ${q.dialogueA}</div>
+                        <div class="text-blue-800">あなた: ${q.dialogueB}</div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3 jp-text font-bold">
+                        ${q.options.map((o, idx) => `<div class="p-2.5 rounded border ${idx === q.correct ? 'bg-emerald-50 border-emerald-400 text-emerald-900' : 'bg-white border-slate-200'}">${labels[idx]}. ${o}</div>`).join('')}
+                    </div>
+                    <div class="text-xs sm:text-sm bg-amber-50 border border-amber-200 p-3 rounded-lg text-slate-800">
+                        <strong>Pembahasan:</strong> ${q.explanation}
+                    </div>
+                `;
+            } catch (e) {
+                outBox.innerHTML = `<div class="text-xs text-rose-600 font-semibold">Gagal membuat soal otomatis saat ini. Silakan gunakan 25 soal Hyōgen inti dan 69 soal Bunpou yang sudah tersedia.</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>✨</span> <span>Buat Soal Baru</span>`;
+            }
+        }
+
+        // INITIALIZE APP ON LOAD
+        window.onload = function () {
+            renderHyogenQuestion();
+            initBunpouDropdownAndPills();
+            renderBunpouQuestion();
+            renderCheatsheet();
+        };
+    </script>
+</body>
+</html>
