@@ -1,0 +1,2257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JFT-Basic Kotoba Master - Persiapan Ujian</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .jp-text {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        ruby {
+            ruby-align: center;
+        }
+        rt {
+            font-size: 0.55em;
+            color: #4f46e5;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+        .card-flip {
+            perspective: 1000px;
+        }
+        .card-inner {
+            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .card-flipped {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-800">
+
+    <!-- Top Header -->
+    <header class="sticky top-0 z-30 bg-indigo-600 text-white shadow-md">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center font-bold text-xl jp-text shadow-inner">
+                    合
+                </div>
+                <div>
+                    <h1 class="font-bold text-base sm:text-lg leading-tight flex items-center gap-2">
+                        JFT-Basic Kotoba Master
+                        <span class="text-xs bg-amber-400 text-slate-900 font-bold px-2 py-0.5 rounded-full">A2 Lulus!</span>
+                    </h1>
+                    <p class="text-xs text-indigo-100">Fokus Kotoba Sering Keluar & Jebakan JFT (Irodori)</p>
+                </div>
+            </div>
+
+            <!-- Progress Pill -->
+            <div class="flex items-center gap-2 bg-indigo-700/80 px-3 py-1.5 rounded-xl border border-indigo-400/30">
+                <div class="text-xs">
+                    <span class="text-indigo-200">Hafal:</span>
+                    <span id="headerMasteredCount" class="font-bold text-emerald-300">0</span>/<span id="headerTotalCount">0</span>
+                </div>
+                <div class="w-16 h-2 bg-indigo-950 rounded-full overflow-hidden">
+                    <div id="headerProgressBar" class="h-full bg-emerald-400 transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Display Mode Settings Bar (Kanji/Furigana/Romaji Toggles) -->
+        <div class="bg-indigo-700/90 border-t border-indigo-500/40 px-4 py-2">
+            <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div class="flex items-center gap-1.5 text-indigo-100 font-medium">
+                    <span>Tampilan Huruf JFT:</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button id="toggleKanjiBtn" onclick="toggleSetting('showKanji')" class="px-2.5 py-1 rounded-lg bg-white text-indigo-700 font-semibold shadow-sm transition flex items-center gap-1">
+                        <span>✓</span> Kanji + Furigana
+                    </button>
+                    <button id="toggleRomajiBtn" onclick="toggleSetting('showRomaji')" class="px-2.5 py-1 rounded-lg bg-white text-indigo-700 font-semibold shadow-sm transition flex items-center gap-1">
+                        <span>✓</span> Romaji
+                    </button>
+                    <button id="toggleMasuBtn" onclick="toggleSetting('preferMasu')" class="px-2.5 py-1 rounded-lg bg-indigo-800 text-indigo-100 font-medium transition flex items-center gap-1" title="Ubah tampilan utama kata kerja antara Bentuk -MASU dan Bentuk Kamus">
+                        Fokus: ~ます & Kamus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 sticky top-[96px] sm:top-[88px] z-20 shadow-sm">
+        <div class="max-w-4xl mx-auto px-2 flex overflow-x-auto no-scrollbar">
+            <button onclick="switchTab('flashcard')" id="tab-flashcard" class="tab-btn flex-1 min-w-[110px] py-3 px-3 text-xs sm:text-sm font-bold border-b-2 border-indigo-600 text-indigo-600 flex items-center justify-center gap-1.5">
+                <span>🗂️</span> Flashcard
+            </button>
+            <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn flex-1 min-w-[110px] py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center justify-center gap-1.5">
+                <span>⚡</span> Kuis JFT
+            </button>
+            <button onclick="switchTab('list')" id="tab-list" class="tab-btn flex-1 min-w-[110px] py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center justify-center gap-1.5">
+                <span>📖</span> Daftar (<span id="listCountBadge">0</span>)
+            </button>
+            <button onclick="switchTab('custom')" id="tab-custom" class="tab-btn flex-1 min-w-[115px] py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center justify-center gap-1.5">
+                <span>➕</span> Import/Tambah
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-5 space-y-5">
+
+        <!-- Category & Status Filter Bar (Shared between Flashcard & List) -->
+        <section id="filterBar" class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200/80 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex flex-wrap items-center gap-1.5" id="categoryButtons">
+                    <button onclick="setCategory('all')" data-cat="all" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm transition">
+                        Semua
+                    </button>
+                    <button onclick="setCategory('jebakan')" data-cat="jebakan" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        🔥 Sering Lupa / Asing
+                    </button>
+                    <button onclick="setCategory('tempat')" data-cat="tempat" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        📍 Nama Tempat (Rawan)
+                    </button>
+                    <button onclick="setCategory('kerja')" data-cat="kerja" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        🏃 Kata Kerja
+                    </button>
+                    <button onclick="setCategory('sifat')" data-cat="sifat" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        ✨ Kata Sifat
+                    </button>
+                    <button onclick="setCategory('benda')" data-cat="benda" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        🏢 Kehidupan & Benda
+                    </button>
+                    <button onclick="setCategory('ungkapan')" data-cat="ungkapan" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        💬 Keterangan & Ungkapan
+                    </button>
+                </div>
+
+                <!-- Filter Hafalan -->
+                <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs">
+                    <button onclick="setStatusFilter('all')" id="status-all" class="status-pill px-2.5 py-1 rounded-lg font-semibold bg-white text-slate-800 shadow-sm">Semua</button>
+                    <button onclick="setStatusFilter('unmastered')" id="status-unmastered" class="status-pill px-2.5 py-1 rounded-lg font-medium text-slate-600">Belum Hafal</button>
+                    <button onclick="setStatusFilter('mastered')" id="status-mastered" class="status-pill px-2.5 py-1 rounded-lg font-medium text-slate-600">Sudah Hafal</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 1: FLASHCARD ================= -->
+        <section id="view-flashcard" class="space-y-4">
+            <div class="flex items-center justify-between text-xs sm:text-sm text-slate-500 px-1">
+                <div>
+                    Kartu <span id="fcCurrentIndex" class="font-bold text-slate-800">1</span> dari <span id="fcTotalFiltered" class="font-bold text-slate-800">0</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="shuffleFlashcards()" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold shadow-sm flex items-center gap-1 active:scale-95 transition">
+                        <span>🔀</span> Acak Kartu
+                    </button>
+                </div>
+            </div>
+
+            <!-- Flashcard Box -->
+            <div id="flashcardContainer" class="card-flip w-full h-80 sm:h-96 cursor-pointer select-none" onclick="flipCard()">
+                <div id="flashcardInner" class="card-inner relative w-full h-full">
+                    
+                    <!-- FRONT OF CARD -->
+                    <div class="card-front absolute inset-0 bg-white rounded-3xl shadow-lg border-2 border-slate-200/90 p-6 flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <span id="fcCategoryBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
+                                🔥 Sering Muncul
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <span id="fcMasteredBadge" class="hidden px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
+                                    ✓ Sudah Hafal
+                                </span>
+                                <button onclick="speakCurrentWord(event)" class="w-10 h-10 rounded-full bg-indigo-50 hover:bg-indigo-100 text-indigo-600 flex items-center justify-center transition shadow-sm" title="Dengarkan Suara">
+                                    🔊
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="text-center my-auto space-y-3 px-2">
+                            <!-- Main Kana / Kanji with Furigana -->
+                            <div id="fcFrontJapanese" class="jp-text text-3xl sm:text-5xl font-bold text-slate-900 leading-relaxed tracking-wide">
+                                しらべます
+                            </div>
+                            <!-- Sub-form (Dictionary / Masu pair) -->
+                            <div id="fcFrontSubform" class="jp-text text-sm sm:text-base text-indigo-600 font-medium">
+                                Bentuk Kamus: しらべる
+                            </div>
+                            <!-- Romaji -->
+                            <div id="fcFrontRomaji" class="text-base sm:text-lg text-slate-400 font-medium tracking-wide">
+                                shirabemasu / shiraberu
+                            </div>
+                        </div>
+
+                        <div class="text-center text-xs text-slate-400 flex items-center justify-center gap-1.5">
+                            <span>👆 Ketuk kartu atau tekan Spasi untuk melihat arti & contoh JFT</span>
+                        </div>
+                    </div>
+
+                    <!-- BACK OF CARD -->
+                    <div class="card-back absolute inset-0 bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 text-white rounded-3xl shadow-lg p-6 flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <div id="fcBackWordSmall" class="jp-text text-sm font-bold text-indigo-200">
+                                しらべます (shirabemasu)
+                            </div>
+                            <button onclick="speakCurrentWord(event)" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+                                🔊
+                            </button>
+                        </div>
+
+                        <div class="my-auto space-y-4 text-center">
+                            <div>
+                                <div class="text-xs uppercase tracking-wider text-indigo-300 font-semibold mb-1">Arti Bahasa Indonesia</div>
+                                <div id="fcBackMeaning" class="text-2xl sm:text-3xl font-extrabold text-amber-300 leading-snug">
+                                    Memeriksa / Mencari tahu / Mengecek
+                                </div>
+                            </div>
+
+                            <!-- Context / Example Box -->
+                            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-3.5 text-left border border-white/15 space-y-1.5">
+                                <div class="text-[11px] font-bold text-indigo-200 uppercase tracking-wider flex items-center justify-between">
+                                    <span>💡 Konteks Kalimat JFT:</span>
+                                </div>
+                                <p id="fcBackExampleJP" class="jp-text text-sm sm:text-base font-medium text-white leading-relaxed">
+                                    わからない ことばを じしょで しらべます。
+                                </p>
+                                <p id="fcBackExampleID" class="text-xs sm:text-sm text-indigo-100">
+                                    Mencari kata yang tidak dimengerti di kamus.
+                                </p>
+                            </div>
+
+                            <!-- Tips / Antonym / Note -->
+                            <div id="fcBackNote" class="text-xs text-amber-200/90 font-medium bg-amber-500/10 border border-amber-400/20 rounded-xl px-3 py-1.5 inline-block">
+                                Sering keluar saat mencari jadwal kereta, arti kata, atau informasi di internet.
+                            </div>
+                        </div>
+
+                        <div class="text-center text-xs text-indigo-300">
+                            Ketuk kartu untuk kembali ke depan
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Action Controls Below Card -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+                <button onclick="prevCard()" class="py-3 px-4 rounded-2xl bg-white border border-slate-200 hover:bg-slate-100 font-bold text-slate-700 shadow-sm active:scale-95 transition flex items-center justify-center gap-1.5">
+                    <span>⬅️</span> Sebelumnya
+                </button>
+                <button onclick="markCurrentCard(false)" class="py-3 px-4 rounded-2xl bg-rose-50 border border-rose-200 hover:bg-rose-100 font-bold text-rose-700 shadow-sm active:scale-95 transition flex items-center justify-center gap-1.5">
+                    <span>⏳</span> Masih Lupa
+                </button>
+                <button onclick="markCurrentCard(true)" class="py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 font-bold text-white shadow-sm active:scale-95 transition flex items-center justify-center gap-1.5">
+                    <span>✅</span> Sudah Hafal!
+                </button>
+                <button onclick="nextCard()" class="py-3 px-4 rounded-2xl bg-white border border-slate-200 hover:bg-slate-100 font-bold text-slate-700 shadow-sm active:scale-95 transition flex items-center justify-center gap-1.5">
+                    Selanjutnya <span>➡️</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: QUIZ MODE ================= -->
+        <section id="view-quiz" class="hidden space-y-4">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-5">
+                <!-- Quiz Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">Simulasi Goi / Kotoba JFT</span>
+                        <h2 class="text-lg font-bold text-slate-800 mt-1">Latihan Cepat Pilihan Ganda</h2>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <div class="text-xs text-slate-400">Skor Benar</div>
+                            <div class="text-lg font-extrabold text-emerald-600"><span id="quizScore">0</span> / <span id="quizAnswered">0</span></div>
+                        </div>
+                        <button onclick="startNewQuiz()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 transition">
+                            🔄 Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Mode Selector -->
+                <div class="flex flex-wrap items-center gap-2 text-xs">
+                    <span class="text-slate-500 font-medium">Tipe Soal:</span>
+                    <button onclick="setQuizType('jp-to-id')" id="qtype-jp-to-id" class="px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white">Jepang ➔ Indonesia</button>
+                    <button onclick="setQuizType('id-to-jp')" id="qtype-id-to-jp" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 text-slate-700">Indonesia ➔ Jepang</button>
+                    <button onclick="setQuizType('context')" id="qtype-context" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 text-slate-700">Kalimat Konteks JFT</button>
+                </div>
+
+                <!-- Question Display -->
+                <div class="bg-slate-50 rounded-2xl p-5 text-center border border-slate-200/80 space-y-2">
+                    <div id="quizPromptLabel" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        Pilih arti yang tepat untuk kotoba berikut:
+                    </div>
+                    <div id="quizQuestionMain" class="jp-text text-2xl sm:text-4xl font-bold text-slate-900 py-2 leading-relaxed">
+                        しらべます
+                    </div>
+                    <div id="quizQuestionSub" class="text-sm text-indigo-600 font-medium">
+                        shirabemasu
+                    </div>
+                </div>
+
+                <!-- Options Grid -->
+                <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Populated via JS -->
+                </div>
+
+                <!-- Feedback & Explanation Box -->
+                <div id="quizFeedback" class="hidden rounded-2xl p-4 border text-sm space-y-2">
+                    <div id="quizFeedbackTitle" class="font-bold text-base"></div>
+                    <div id="quizFeedbackDetail" class="text-slate-600"></div>
+                    <button onclick="nextQuizQuestion()" class="mt-2 w-full sm:w-auto px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm transition">
+                        Soal Berikutnya ➔
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: FULL LIST & SEARCH ================= -->
+        <section id="view-list" class="hidden space-y-4">
+            <!-- Search Input -->
+            <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-3">
+                <span class="text-slate-400 text-lg">🔍</span>
+                <input type="text" id="searchInput" oninput="renderWordList()" placeholder="Cari kotoba (contoh: shirabemasu, kitanai, kotor, memeriksa, きたない)..." class="w-full text-sm bg-transparent focus:outline-none text-slate-800">
+                <button onclick="clearSearch()" id="clearSearchBtn" class="hidden text-xs text-slate-400 hover:text-slate-600 font-bold px-2">✕</button>
+            </div>
+
+            <!-- Info Banner about Kanji/Furigana -->
+            <div class="bg-amber-50 border border-amber-200/80 rounded-2xl p-3.5 text-xs text-amber-900 flex items-start gap-2.5">
+                <span class="text-base">💡</span>
+                <div>
+                    <strong>Tips JFT-Basic:</strong> Pada bagian <em>Moji/Goi</em> (Huruf & Kosakata), banyak soal ditulis langsung menggunakan <strong>Hiragana/Katakana</strong> atau Kanji dengan <strong>Furigana</strong>. Pastikan kamu mengenali bunyi Hiragana-nya (seperti <span class="jp-text font-bold">しらべます</span> dan <span class="jp-text font-bold">きたない</span>), bukan hanya menghafal bentuk kanjinya saja!
+                </div>
+            </div>
+
+            <!-- Word List Container -->
+            <div id="wordListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- ================= TAB 4: CUSTOM ADD / PASTE FROM FORM ================= -->
+        <section id="view-custom" class="hidden space-y-5">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">Tambah Kotoba dari Catatan / Google Form Temanmu</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                        Karena link skor Google Form bersifat privat/terkunci izin aksesnya, kamu bisa langsung menambahkan kotoba dari halaman skor tersebut ke sini (bisa satu per satu atau langsung *copy-paste* banyak baris sekaligus).
+                    </p>
+                </div>
+
+                <!-- Single Add Form -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Hiragana / Katakana *</label>
+                        <input id="customKana" type="text" placeholder="Contoh: しらべます" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-500 jp-text">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Romaji (Cara Baca)</label>
+                        <input id="customRomaji" type="text" placeholder="Contoh: shirabemasu" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Arti Bahasa Indonesia *</label>
+                        <input id="customMeaning" type="text" placeholder="Contoh: memeriksa / mencari tahu" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Kanji (Opsional)</label>
+                        <input id="customKanji" type="text" placeholder="Contoh: 調べます" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-500 jp-text">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Catatan / Contoh Kalimat (Opsional)</label>
+                        <input id="customNote" type="text" placeholder="Contoh: Lawan kata kirei" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+                <div>
+                    <button onclick="addSingleCustomWord()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-sm transition">
+                        ➕ Tambahkan ke Daftar Hafalan
+                    </button>
+                </div>
+
+                <hr class="border-slate-100 my-4">
+
+                <!-- Bulk Paste Import -->
+                <div class="space-y-2">
+                    <label class="block text-xs font-bold text-slate-700">
+                        📋 Import Cepat Banyak Kotoba Sekaligus (Copy-Paste dari Soal/Catatan)
+                    </label>
+                    <p class="text-xs text-slate-500">
+                        Ketik atau *paste* daftar kosakata (1 kotoba per baris) dengan format: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-indigo-600">jepang = arti</code> atau <code class="bg-slate-100 px-1.5 py-0.5 rounded text-indigo-600">jepang - romaji - arti</code>
+                    </p>
+                    <textarea id="bulkPasteInput" rows="4" placeholder="Contoh:&#10;しらべます - shirabemasu - memeriksa&#10;きたない - kitanai - kotor&#10;かたづけます = membereskan" class="w-full p-3.5 rounded-2xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:border-indigo-500 jp-text"></textarea>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <button onclick="importBulkWords()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition">
+                            📥 Import Semua Baris
+                        </button>
+                        <button onclick="resetAllProgress()" class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold text-xs transition">
+                            Reset Status Hafalan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toastBox" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-xs sm:text-sm font-semibold flex items-center gap-2 border border-slate-700">
+        <span id="toastMessage">Berhasil disimpan!</span>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        // ============================================================================
+        // DATABASE KOTOBA JFT-BASIC (Fokus Kotoba Sering Muncul, Mengecoh & Irodori A2)
+        // Termasuk shirabemasu, kitanai, dan kotoba dari paket tryout/form JFT populer
+        // ============================================================================
+        const INITIAL_KOTOBA = [
+            // --- KATEGORI: JEBAKAN / SERING LUPA DI JFT ---
+            {
+                id: "jft-1",
+                kana: "しらべます",
+                dictKana: "しらべる",
+                furiganaHtml: "<ruby>調<rt>しら</rt></ruby>べます",
+                romaji: "shirabemasu / shiraberu",
+                meaning: "Memeriksa / Mencari tahu (informasi)",
+                category: "jebakan",
+                exampleJP: "わからない ことばを じしょで しらべます。",
+                exampleID: "Mencari tahu kata yang tidak dimengerti di kamus.",
+                note: "🔥 Disebut temanmu! Sering muncul saat cari jadwal kereta, kata di kamus, atau info di internet."
+            },
+            {
+                id: "jft-2",
+                kana: "きたない",
+                dictKana: "きたない",
+                furiganaHtml: "<ruby>汚<rt>きたな</rt></ruby>い",
+                romaji: "kitanai",
+                meaning: "Kotor / Berantakan",
+                category: "jebakan",
+                exampleJP: "へやが きたないですから、そうじします。",
+                exampleID: "Karena kamarnya kotor, saya akan membersihkannya.",
+                note: "🔥 Disebut temanmu! Kata sifat-i. Lawan katanya adalah きれい (kirei = bersih/cantik)."
+            },
+            {
+                id: "jft-3",
+                kana: "かたづけます",
+                dictKana: "かたづける",
+                furiganaHtml: "<ruby>片<rt>かた</rt></ruby>づけます",
+                romaji: "katadzukemasu / katadzukeru",
+                meaning: "Membereskan / Merapikan",
+                category: "jebakan",
+                exampleJP: "つくえの うえを かたづけて ください。",
+                exampleID: "Tolong bereskan bagian atas meja.",
+                note: "Sering keluar bersama きたない (kotor) dan そうじします (membersihkan)."
+            },
+            {
+                id: "jft-4",
+                kana: "さがします",
+                dictKana: "さがす",
+                furiganaHtml: "<ruby>探<rt>さが</rt></ruby>します",
+                romaji: "sagashimasu / sagasu",
+                meaning: "Mencari (barang/orang yang hilang)",
+                category: "jebakan",
+                exampleJP: "なくした かぎを さがしています。",
+                exampleID: "Sedang mencari kunci yang hilang.",
+                note: "Awas tertukar! さがします = mencari benda/orang, sedangkan しらべます = mencari info/mengecek."
+            },
+            {
+                id: "jft-5",
+                kana: "えらびます",
+                dictKana: "えらぶ",
+                furiganaHtml: "<ruby>選<rt>えら</rt></ruby>びます",
+                romaji: "erabimasu / erabu",
+                meaning: "Memilih",
+                category: "jebakan",
+                exampleJP: "すきな メニューを えらんで ください。",
+                exampleID: "Silakan pilih menu yang Anda sukai.",
+                note: "Sering muncul di soal belanja atau memilih paket di restoran."
+            },
+            {
+                id: "jft-6",
+                kana: "きめます",
+                dictKana: "きめる",
+                furiganaHtml: "<ruby>決<rt>き</rt></ruby>めます",
+                romaji: "kimemasu / kimeru",
+                meaning: "Memutuskan / Menentukan",
+                category: "jebakan",
+                exampleJP: "りょこうの ひを きめましたか。",
+                exampleID: "Apakah sudah menentukan hari liburannya?",
+                note: "Pasangannya: きまります (kimarimasu = sudah ditentukan/diputuskan)."
+            },
+            {
+                id: "jft-7",
+                kana: "まにあいます",
+                dictKana: "まにあう",
+                furiganaHtml: "<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>います",
+                romaji: "maniaimasu / maniau",
+                meaning: "Tepat waktu / Keburu (tidak terlambat)",
+                category: "jebakan",
+                exampleJP: "タクシーに のれば、かいぎに まにあいます。",
+                exampleID: "Kalau naik taksi, akan keburu untuk rapat.",
+                note: "Lawan katanya di JFT: おくれます (okuremasu = terlambat)."
+            },
+            {
+                id: "jft-8",
+                kana: "おくれます",
+                dictKana: "おくれる",
+                furiganaHtml: "<ruby>遅<rt>おく</rt></ruby>れます",
+                romaji: "okuremasu / okureru",
+                meaning: "Terlambat",
+                category: "jebakan",
+                exampleJP: "でんしゃが 10ぷん おくれています。",
+                exampleID: "Keretanya terlambat 10 menit.",
+                note: "Wajib hafal! Sangat sering keluar di soal pengumuman kereta atau janji temu."
+            },
+            {
+                id: "jft-9",
+                kana: "まちがえます",
+                dictKana: "まちがえる",
+                furiganaHtml: "<ruby>間<rt>ま</rt></ruby><ruby>違<rt>ちが</rt></ruby>えます",
+                romaji: "machigaemasu / machigaeru",
+                meaning: "Melakukan kesalahan / Salah (nomor/jalan)",
+                category: "jebakan",
+                exampleJP: "でんわばんごうを まちがえました。",
+                exampleID: "Saya salah menekan nomor telepon.",
+                note: "Sering muncul dalam bentuk て-form: まちがえて (tidak sengaja salah)."
+            },
+            {
+                id: "jft-10",
+                kana: "こまります",
+                dictKana: "こまる",
+                furiganaHtml: "<ruby>困<rt>こま</rt></ruby>ります",
+                romaji: "komarimasu / komaru",
+                meaning: "Kesulitan / Bingung / Repot",
+                category: "jebakan",
+                exampleJP: "パスポートを なくして、こまっています。",
+                exampleID: "Saya sedang kesulitan karena kehilangan paspor.",
+                note: "Ungkapan populer JFT: こまりましたね (Wah, repot/bingung ya)."
+            },
+            {
+                id: "jft-11",
+                kana: "すてます",
+                dictKana: "すてる",
+                furiganaHtml: "<ruby>捨<rt>す</rt></ruby>てます",
+                romaji: "sutemasu / suteru",
+                meaning: "Membuang (sampah/barang)",
+                category: "jebakan",
+                exampleJP: "ここに ゴミを すてないで ください。",
+                exampleID: "Tolong jangan membuang sampah di sini.",
+                note: "Sering keluar bersama ゴミを だします (mengeluarkan sampah ke tempat pengumpulan)."
+            },
+            {
+                id: "jft-12",
+                kana: "ひろいます",
+                dictKana: "ひろう",
+                furiganaHtml: "<ruby>拾<rt>ひろ</rt></ruby>います",
+                romaji: "hiroimasu / hirou",
+                meaning: "Memungut / Mengambil dari bawah",
+                category: "jebakan",
+                exampleJP: "みちで さいふを ひろいました。",
+                exampleID: "Saya memungut dompet di jalan.",
+                note: "Lawan dari すてます (membuang) atau おとします (menjatuhkan)."
+            },
+            {
+                id: "jft-13",
+                kana: "かわきます",
+                dictKana: "かわく",
+                furiganaHtml: "<ruby>乾<rt>かわ</rt></ruby>きます",
+                romaji: "kawakimasu / kawaku",
+                meaning: "Mengering / Haus (のどが かわく)",
+                category: "jebakan",
+                exampleJP: "せんたくものが まだ かわいて いません。",
+                exampleID: "Jemuran cuciannya masih belum kering.",
+                note: "Jika のどが かわきました artinya 'Tenggorokan kering / Haus'."
+            },
+            {
+                id: "jft-14",
+                kana: "ぬれます",
+                dictKana: "ぬれる",
+                furiganaHtml: "<ruby>濡<rt>ぬ</rt></ruby>れます",
+                romaji: "nuremasu / nureru",
+                meaning: "Basah",
+                category: "jebakan",
+                exampleJP: "あめで ふくが ぬれました。",
+                exampleID: "Bajunya basah karena hujan.",
+                note: "Lawan kata dari かわきます (mengering)."
+            },
+            {
+                id: "jft-15",
+                kana: "こわれます",
+                dictKana: "こわれる",
+                furiganaHtml: "<ruby>壊<rt>こわ</rt></ruby>れます",
+                romaji: "kowaremasu / kowareru",
+                meaning: "Rusak (mesin/alat elektronik/kursi)",
+                category: "jebakan",
+                exampleJP: "エアコンが こわれて います。",
+                exampleID: "AC-nya sedang dalam keadaan rusak.",
+                note: "Sering keluar bersama コピーき (mesin fotokopi) atau パソコン (laptop)."
+            },
+            {
+                id: "jft-16",
+                kana: "よごれます",
+                dictKana: "よごれる",
+                furiganaHtml: "<ruby>汚<rt>よご</rt></ruby>れます",
+                romaji: "yogoremasu / yogoreru",
+                meaning: "Menjadi kotor / Terkena noda",
+                category: "jebakan",
+                exampleJP: "シャツが よごれて しまいました。",
+                exampleID: "Kemejanya tidak sengaja menjadi kotor.",
+                note: "Mirip dengan きたない (kotor), tapi よごれます adalah kata kerja (menjadi kotor)."
+            },
+            {
+                id: "jft-17",
+                kana: "たります",
+                dictKana: "たりる",
+                furiganaHtml: "<ruby>足<rt>た</rt></ruby>ります",
+                romaji: "tarimasu / tariru",
+                meaning: "Cukup",
+                category: "jebakan",
+                exampleJP: "おかねが たりません。",
+                exampleID: "Uangnya tidak cukup.",
+                note: "Sering keluar dalam bentuk negatif: たりない / たりません (kurang / tidak cukup)."
+            },
+            {
+                id: "jft-18",
+                kana: "かえます",
+                dictKana: "かえる",
+                furiganaHtml: "<ruby>変<rt>か</rt></ruby>えます / <ruby>換<rt>か</rt></ruby>えます",
+                romaji: "kaemasu / kaeru",
+                meaning: "Mengubah / Menukar / Mengganti",
+                category: "jebakan",
+                exampleJP: "よやくの じかんを かえても いいですか。",
+                exampleID: "Bolehkah saya mengubah waktu reservasinya?",
+                note: "Awas tertukar dengan かえります (pulang) dan かえします (mengembalikan)!"
+            },
+
+            // --- KATEGORI: KATA KERJA PENTING JFT ---
+            {
+                id: "jft-19",
+                kana: "むかえます",
+                dictKana: "むかえる",
+                furiganaHtml: "<ruby>迎<rt>むか</rt></ruby>えます",
+                romaji: "mukaemasu / mukaeru",
+                meaning: "Menjemput",
+                category: "kerja",
+                exampleJP: "くうこうへ ともだちを むかえに いきます。",
+                exampleID: "Pergi ke bandara untuk menjemput teman.",
+                note: "Sering keluar sebagai むかえに いきます (pergi menjemput)."
+            },
+            {
+                id: "jft-20",
+                kana: "おくります",
+                dictKana: "おくる",
+                furiganaHtml: "<ruby>送<rt>おく</rt></ruby>ります",
+                romaji: "okurimasu / okuru",
+                meaning: "Mengirim (barang/email) / Mengantar (orang)",
+                category: "kerja",
+                exampleJP: "あとで メールを おくります。",
+                exampleID: "Nanti saya akan mengirim email.",
+                note: "Bisa berarti mengirim paket/email atau mengantar seseorang sampai stasiun."
+            },
+            {
+                id: "jft-21",
+                kana: "かえします",
+                dictKana: "かえす",
+                furiganaHtml: "<ruby>返<rt>かえ</rt></ruby>します",
+                romaji: "kaeshimasu / kaesu",
+                meaning: "Mengembalikan (barang pinjaman)",
+                category: "kerja",
+                exampleJP: "としょかんに ほんを かえします。",
+                exampleID: "Mengembalikan buku ke perpustakaan.",
+                note: "Pasangan dari かります (meminjam)."
+            },
+            {
+                id: "jft-22",
+                kana: "かります",
+                dictKana: "かりる",
+                furiganaHtml: "<ruby>借<rt>か</rt></ruby>ります",
+                romaji: "karimasu / kariru",
+                meaning: "Meminjam",
+                category: "kerja",
+                exampleJP: "ペンを かりても いいですか。",
+                exampleID: "Bolehkah saya meminjam pulpen?",
+                note: "Awas tertukar dengan かします (kashimasu = meminjamkan)."
+            },
+            {
+                id: "jft-23",
+                kana: "かします",
+                dictKana: "かす",
+                furiganaHtml: "<ruby>貸<rt>か</rt></ruby>します",
+                romaji: "kashimasu / kasu",
+                meaning: "Meminjamkan / Memberi pinjam",
+                category: "kerja",
+                exampleJP: "かさを かして くださいませんか。",
+                exampleID: "Maukah Anda meminjamkan payung kepada saya?",
+                note: "かして ください = Tolong pinjami saya."
+            },
+            {
+                id: "jft-24",
+                kana: "なおします",
+                dictKana: "なおす",
+                furiganaHtml: "<ruby>直<rt>なお</rt></ruby>します",
+                romaji: "naoshimasu / naosu",
+                meaning: "Memperbaiki / Membetulkan",
+                category: "kerja",
+                exampleJP: "じてんしゃを なおして もらいました。",
+                exampleID: "Sepeda saya sudah diperbaiki (oleh orang lain).",
+                note: "Jika なおります (naorimasu) artinya sembuh dari sakit atau sudah kembali benar."
+            },
+            {
+                id: "jft-25",
+                kana: "てつだいます",
+                dictKana: "てつだう",
+                furiganaHtml: "<ruby>手<rt>て</rt></ruby><ruby>伝<rt>つだ</rt></ruby>います",
+                romaji: "tetsudaimasu / tetsudau",
+                meaning: "Membantu (pekerjaan)",
+                category: "kerja",
+                exampleJP: "ひっこしを てつだって ください。",
+                exampleID: "Tolong bantu pindahan rumah.",
+                note: "Partikel yang dipakai adalah を (contoh: しごとを てつだいます)."
+            },
+            {
+                id: "jft-26",
+                kana: "はこびます",
+                dictKana: "はこぶ",
+                furiganaHtml: "<ruby>運<rt>はこ</rt></ruby>びます",
+                romaji: "hakobimasu / hakobu",
+                meaning: "Mengangkut / Membawa (barang berat)",
+                category: "kerja",
+                exampleJP: "この はこを 2かいへ はこんで ください。",
+                exampleID: "Tolong angkut kotak ini ke lantai 2.",
+                note: "Sangat sering keluar di percakapan tempat kerja/pabrik."
+            },
+            {
+                id: "jft-27",
+                kana: "ならべます",
+                dictKana: "ならべる",
+                furiganaHtml: "<ruby>並<rt>なら</rt></ruby>べます",
+                romaji: "narabemasu / naraberu",
+                meaning: "Menyusun / Menjejerkan / Menata",
+                category: "kerja",
+                exampleJP: "いすを ならべて ください。",
+                exampleID: "Tolong jejerkan/susun kursinya.",
+                note: "Jika ならびます (narabimasu) artinya mengantre / berbaris."
+            },
+            {
+                id: "jft-28",
+                kana: "つたえます",
+                dictKana: "つたえる",
+                furiganaHtml: "<ruby>伝<rt>つた</rt></ruby>えます",
+                romaji: "tsutaemasu / tsutaeru",
+                meaning: "Menyampaikan (pesan)",
+                category: "kerja",
+                exampleJP: "たなかさんに よろしく おつたえください。",
+                exampleID: "Tolong sampaikan salam saya kepada Tanaka-san.",
+                note: "Sering muncul di soal pesan telepon atau izin kerja."
+            },
+            {
+                id: "jft-29",
+                kana: "しんぱいします",
+                dictKana: "しんぱいする",
+                furiganaHtml: "<ruby>心<rt>しん</rt></ruby><ruby>配<rt>ぱい</rt></ruby>します",
+                romaji: "shinpaishimasu / shinpaisuru",
+                meaning: "Khawatir / Cemas",
+                category: "kerja",
+                exampleJP: "しんぱいしないで ください。",
+                exampleID: "Tolong jangan khawatir.",
+                note: "Sering diucapkan saat teman sedang sakit atau ada masalah."
+            },
+            {
+                id: "jft-30",
+                kana: "さんかします",
+                dictKana: "さんかする",
+                furiganaHtml: "<ruby>参<rt>さん</rt></ruby><ruby>加<rt>か</rt></ruby>します",
+                romaji: "sankashimasu / sankasuru",
+                meaning: "Berpartisipasi / Ikut serta (acara/pesta)",
+                category: "kerja",
+                exampleJP: "らいしゅうの のみかいに さんかしますか。",
+                exampleID: "Apakah kamu ikut acara kumpul minum minggu depan?",
+                note: "Partikel pasangannya selalu に (～に さんかします)."
+            },
+            {
+                id: "jft-31",
+                kana: "よやくします",
+                dictKana: "よやくする",
+                furiganaHtml: "<ruby>予<rt>よ</rt></ruby><ruby>約<rt>やく</rt></ruby>します",
+                romaji: "yoyakushimasu / yoyakusuru",
+                meaning: "Memesan / Reservasi (hotel, restoran, dokter)",
+                category: "kerja",
+                exampleJP: "レストランを よやくしました。",
+                exampleID: "Sudah memesan tempat di restoran.",
+                note: "Awas tertukar dengan やくそく (yakusoku = janji temu)."
+            },
+            {
+                id: "jft-32",
+                kana: "じゅんびします",
+                dictKana: "じゅんびする",
+                furiganaHtml: "<ruby>準<rt>じゅん</rt></ruby><ruby>備<rt>び</rt></ruby>します",
+                romaji: "junbishimasu / junbisuru",
+                meaning: "Mempersiapkan / Siap-siap",
+                category: "kerja",
+                exampleJP: "かいぎの じゅんびを します。",
+                exampleID: "Melakukan persiapan rapat.",
+                note: "Sinonim yang sering keluar di JFT: よういします (youi shimasu = menyiapkan)."
+            },
+            {
+                id: "jft-33",
+                kana: "しょうかいします",
+                dictKana: "しょうかいする",
+                furiganaHtml: "<ruby>紹<rt>しょう</rt></ruby><ruby>介<rt>かい</rt></ruby>します",
+                romaji: "shoukaishimasu / shoukaisuru",
+                meaning: "Memperkenalkan",
+                category: "kerja",
+                exampleJP: "いい びょういんを しょうかいして ください。",
+                exampleID: "Tolong kenalkan/rekomendasikan rumah sakit yang bagus.",
+                note: "じこしょうかい (jikoshoukai) = perkenalan diri."
+            },
+            {
+                id: "jft-34",
+                kana: "せつめいします",
+                dictKana: "せつめいする",
+                furiganaHtml: "<ruby>説<rt>せつ</rt></ruby><ruby>明<rt>めい</rt></ruby>します",
+                romaji: "setsumeishimasu / setsumeisuru",
+                meaning: "Menjelaskan",
+                category: "kerja",
+                exampleJP: "つかいかたを せつめいします。",
+                exampleID: "Saya akan menjelaskan cara pakainya.",
+                note: "Sering muncul di instruksi kerja dan obat."
+            },
+            {
+                id: "jft-35",
+                kana: "うんどうします",
+                dictKana: "うんどうする",
+                furiganaHtml: "<ruby>運<rt>うん</rt></ruby><ruby>動<rt>どう</rt></ruby>します",
+                romaji: "undoushimasu / undousuru",
+                meaning: "Berolahraga",
+                category: "kerja",
+                exampleJP: "けんこうのために まいにち うんどうしています。",
+                exampleID: "Demi kesehatan, setiap hari saya berolahraga.",
+                note: "Jangan tertukar dengan うんてんします (untenshimasu = menyetir/mengemudi)."
+            },
+
+            // --- KATEGORI: KATA SIFAT PENTING & MENGECOH ---
+            {
+                id: "jft-36",
+                kana: "うるさい",
+                dictKana: "うるさい",
+                furiganaHtml: "うるさい",
+                romaji: "urusai",
+                meaning: "Berisik / Bising / Cerewet",
+                category: "sifat",
+                exampleJP: "そとが うるさくて、ねられません。",
+                exampleID: "Karena di luar berisik, saya tidak bisa tidur.",
+                note: "Lawan katanya: しずか (shizuka = tenang/sepi)."
+            },
+            {
+                id: "jft-37",
+                kana: "あぶない",
+                dictKana: "あぶない",
+                furiganaHtml: "<ruby>危<rt>あぶ</rt></ruby>ない",
+                romaji: "abunai",
+                meaning: "Berbahaya / Awas!",
+                category: "sifat",
+                exampleJP: "ここは あぶないですから、はいらないで ください。",
+                exampleID: "Karena di sini berbahaya, tolong jangan masuk.",
+                note: "Lawan katanya: あんぜん (anzen = aman)."
+            },
+            {
+                id: "jft-38",
+                kana: "ねむい",
+                dictKana: "ねむい",
+                furiganaHtml: "<ruby>眠<rt>ねむ</rt></ruby>い",
+                romaji: "nemui",
+                meaning: "Mengantuk",
+                category: "sifat",
+                exampleJP: "きのう あまり ねなかったので、ねむいです。",
+                exampleID: "Karena kemarin kurang tidur, saya mengantuk.",
+                note: "Sering muncul dalam soal kondisi tubuh."
+            },
+            {
+                id: "jft-39",
+                kana: "うすい",
+                dictKana: "うすい",
+                furiganaHtml: "<ruby>薄<rt>うす</rt></ruby>い",
+                romaji: "usui",
+                meaning: "Tipis (benda) / Hambar / Kurang pekat (rasa)",
+                category: "sifat",
+                exampleJP: "この スープは あじが うすいですね。",
+                exampleID: "Sup ini rasanya hambar/kurang terasa ya.",
+                note: "Lawan kata untuk rasa: こい (koi = pekat/kuat rasanya). Lawan kata benda: あつい (tebal)."
+            },
+            {
+                id: "jft-40",
+                kana: "こい",
+                dictKana: "こい",
+                furiganaHtml: "<ruby>濃<rt>こ</rt></ruby>い",
+                romaji: "koi",
+                meaning: "Pekat / Kental / Kuat (rasa/warna)",
+                category: "sifat",
+                exampleJP: "あじが こい りょうりが すきです。",
+                exampleID: "Saya suka masakan yang rasanya kuat/pekat.",
+                note: "Sering keluar di bab makanan Irodori (うすい vs こい)."
+            },
+            {
+                id: "jft-41",
+                kana: "かたい",
+                dictKana: "かたい",
+                furiganaHtml: "<ruby>硬<rt>かた</rt></ruby>い",
+                romaji: "katai",
+                meaning: "Keras / Alot",
+                category: "sifat",
+                exampleJP: "この パンは ちょっと かたいです。",
+                exampleID: "Roti ini agak keras.",
+                note: "Lawan katanya: やわらかい (yawarakai = empuk/lembut)."
+            },
+            {
+                id: "jft-42",
+                kana: "やわらかい",
+                dictKana: "やわらかい",
+                furiganaHtml: "<ruby>柔<rt>やわ</rt></ruby>らかい",
+                romaji: "yawarakai",
+                meaning: "Empuk / Lembut / Lunak",
+                category: "sifat",
+                exampleJP: "この にくは とても やわらかくて おいしいです。",
+                exampleID: "Daging ini sangat empuk dan enak.",
+                note: "Sering keluar saat mendeskripsikan tekstur makanan di JFT."
+            },
+            {
+                id: "jft-43",
+                kana: "きびしい",
+                dictKana: "きびしい",
+                furiganaHtml: "<ruby>厳<rt>きび</rt></ruby>しい",
+                romaji: "kibishii",
+                meaning: "Tegas / Disiplin / Ketat",
+                category: "sifat",
+                exampleJP: "ぶちょうは きびしいですが、やさしいです。",
+                exampleID: "Kepala bagian orangnya tegas, tapi baik hati.",
+                note: "Sering muncul untuk mendeskripsikan guru atau atasan."
+            },
+            {
+                id: "jft-44",
+                kana: "ふくざつ",
+                dictKana: "ふくざつ [な]",
+                furiganaHtml: "<ruby>複<rt>ふく</rt></ruby><ruby>雑<rt>ざつ</rt></ruby>",
+                romaji: "fukuzatsu (na)",
+                meaning: "Rumit / Kompleks",
+                category: "sifat",
+                exampleJP: "とうきょうの でんしゃは ふくざつです。",
+                exampleID: "Jalur kereta di Tokyo rumit.",
+                note: "Lawan katanya: かんたん (kantan = mudah/sederhana)."
+            },
+            {
+                id: "jft-45",
+                kana: "ふべん",
+                dictKana: "ふべん [な]",
+                furiganaHtml: "<ruby>不<rt>ふ</rt></ruby><ruby>便<rt>べん</rt></ruby>",
+                romaji: "fuben (na)",
+                meaning: "Tidak praktis / Repot (akses jauh)",
+                category: "sifat",
+                exampleJP: "えきから とおくて、ちょっと ふべんです。",
+                exampleID: "Karena jauh dari stasiun, agak tidak praktis.",
+                note: "Lawan katanya: べんり (benri = praktis/nyaman aksesnya)."
+            },
+            {
+                id: "jft-46",
+                kana: "ひま",
+                dictKana: "ひま [な]",
+                furiganaHtml: "<ruby>暇<rt>ひま</rt></ruby>",
+                romaji: "hima (na)",
+                meaning: "Senggang / Luang (tidak sibuk)",
+                category: "sifat",
+                exampleJP: "こんしゅうまつは ひまですか。",
+                exampleID: "Apakah akhir pekan ini kamu senggang?",
+                note: "Lawan katanya: いそがしい (isogashii = sibuk)."
+            },
+            {
+                id: "jft-47",
+                kana: "だいじ",
+                dictKana: "だいじ [な]",
+                furiganaHtml: "<ruby>大<rt>だい</rt></ruby><ruby>事<rt>じ</rt></ruby>",
+                romaji: "daiji (na)",
+                meaning: "Penting / Berharga",
+                category: "sifat",
+                exampleJP: "これは だいじな しりょうです。",
+                exampleID: "Ini adalah dokumen yang penting.",
+                note: "おだいじに (Odaijini) = Semoga cepat sembuh! Sinonim: たいせつ (taisetsu)."
+            },
+            {
+                id: "jft-48",
+                kana: "もったいない",
+                dictKana: "もったいない",
+                furiganaHtml: "もったいない",
+                romaji: "mottainai",
+                meaning: "Sayang sekali (jika dibuang / mubazir)",
+                category: "sifat",
+                exampleJP: "まだ つかえるから、すてるのは もったいないですよ。",
+                exampleID: "Karena masih bisa dipakai, sayang sekali (mubazir) kalau dibuang lho.",
+                note: "Kosakata khas Jepang yang sering muncul di percakapan Irodori!"
+            },
+
+            // --- KATEGORI: NAMA TEMPAT & FASILITAS UMUM RAWAN JFT ---
+            {
+                id: "jft-tempat-1",
+                kana: "たいいくかん",
+                dictKana: "たいいくかん",
+                furiganaHtml: "<ruby>体<rt>たい</rt></ruby><ruby>育<rt>いく</rt></ruby><ruby>館<rt>かん</rt></ruby>",
+                romaji: "taikukan",
+                meaning: "Gedung olahraga / GOR (Gymnasium)",
+                category: "tempat",
+                exampleJP: "にちようびに たいいくかんで バドミントンを します。",
+                exampleID: "Hari Minggu bermain bulu tangkis di gedung olahraga.",
+                note: "🔥 Rawan keluar! Sering muncul juga sebagai lokasi evakuasi bencana (ひなんばしょ) di JFT."
+            },
+            {
+                id: "jft-tempat-2",
+                kana: "おてら",
+                dictKana: "おてら / てら",
+                furiganaHtml: "お<ruby>寺<rt>てら</rt></ruby>",
+                romaji: "otera",
+                meaning: "Kuil Buddha",
+                category: "tempat",
+                exampleJP: "きょうとには ふるくて きれいな おてらが たくさん あります。",
+                exampleID: "Di Kyoto ada banyak kuil Buddha yang tua dan indah.",
+                note: "🔥 Awas tertukar dengan じんじゃ (jinja = Kuil Shinto yang ada gerbang merah Torii)."
+            },
+            {
+                id: "jft-tempat-3",
+                kana: "じんじゃ",
+                dictKana: "じんじゃ",
+                furiganaHtml: "<ruby>神<rt>じん</rt></ruby><ruby>社<rt>じゃ</rt></ruby>",
+                romaji: "jinja",
+                meaning: "Kuil Shinto",
+                category: "tempat",
+                exampleJP: "おしょうがつに じんじゃへ いきます。",
+                exampleID: "Saat tahun baru pergi ke kuil Shinto.",
+                note: "Sering keluar bersama おてら (kuil Buddha) dan おまつり (festival)."
+            },
+            {
+                id: "jft-tempat-4",
+                kana: "しやくしょ",
+                dictKana: "しやくしょ",
+                furiganaHtml: "<ruby>市<rt>し</rt></ruby><ruby>役<rt>やく</rt></ruby><ruby>所<rt>しょ</rt></ruby>",
+                romaji: "shiyakusho",
+                meaning: "Balai Kota / Kantor Pemerintahan Kota",
+                category: "tempat",
+                exampleJP: "しやくしょで じゅうみんひょうを もらいます。",
+                exampleID: "Mengambil surat keterangan domisili di Balai Kota.",
+                note: "Wajib hafal! Tempat mengurus alamat, pajak, dan administrasi warga di Jepang."
+            },
+            {
+                id: "jft-tempat-5",
+                kana: "はくぶつかん",
+                dictKana: "はくぶつかん",
+                furiganaHtml: "<ruby>博<rt>はく</rt></ruby><ruby>物<rt>ぶつ</rt></ruby><ruby>館<rt>かん</rt></ruby>",
+                romaji: "hakubutsukan",
+                meaning: "Museum (Sejarah / Sains / Budaya)",
+                category: "tempat",
+                exampleJP: "きのう、ともだちと はくぶつかんへ いきました。",
+                exampleID: "Kemarin saya pergi ke museum bersama teman.",
+                note: "Awas tertukar dengan びじゅつかん (bijutsukan = museum/galeri seni)!"
+            },
+            {
+                id: "jft-tempat-6",
+                kana: "びじゅつかん",
+                dictKana: "びじゅつかん",
+                furiganaHtml: "<ruby>美<rt>び</rt></ruby><ruby>術<rt>じゅつ</rt></ruby><ruby>館<rt>かん</rt></ruby>",
+                romaji: "bijutsukan",
+                meaning: "Museum Seni / Galeri Lukisan",
+                category: "tempat",
+                exampleJP: "びじゅつかんで ゆうめいな えを みました。",
+                exampleID: "Melihat lukisan terkenal di museum seni.",
+                note: "Ciri khas soal JFT: ada kata え (lukisan) atau しゃしん (foto), tapi dilarang memotret!"
+            },
+            {
+                id: "jft-tempat-7",
+                kana: "どうぶつえん",
+                dictKana: "どうぶつえん",
+                furiganaHtml: "<ruby>動<rt>どう</rt></ruby><ruby>物<rt>ぶつ</rt></ruby><ruby>園<rt>えん</rt></ruby>",
+                romaji: "doubutsuen",
+                meaning: "Kebun Binatang",
+                category: "tempat",
+                exampleJP: "どうぶつえんで パンダを みたいです。",
+                exampleID: "Ingin melihat panda di kebun binatang.",
+                note: "Pasangannya yang sering muncul: すいぞくかん (suizokukan = akuarium raksasa)."
+            },
+            {
+                id: "jft-tempat-8",
+                kana: "すいぞくかん",
+                dictKana: "すいぞくかん",
+                furiganaHtml: "<ruby>水<rt>すい</rt></ruby><ruby>族<rt>ぞく</rt></ruby><ruby>館<rt>かん</rt></ruby>",
+                romaji: "suizokukan",
+                meaning: "Akuarium Wisata (Sea World)",
+                category: "tempat",
+                exampleJP: "すいぞくかんで イルカの ショーを みました。",
+                exampleID: "Melihat pertunjukan lumba-lumba di akuarium wisata.",
+                note: "Sering keluar di bab liburan/kencan Irodori A2."
+            },
+            {
+                id: "jft-tempat-9",
+                kana: "ゆうびんきょく",
+                dictKana: "ゆうびんきょく",
+                furiganaHtml: "<ruby>郵<rt>ゆう</rt></ruby><ruby>便<rt>びん</rt></ruby><ruby>局<rt>きょく</rt></ruby>",
+                romaji: "yuubinkyoku",
+                meaning: "Kantor Pos",
+                category: "tempat",
+                exampleJP: "ゆうびんきょくで にもつを おくります。",
+                exampleID: "Mengirim paket di kantor pos.",
+                note: "Kata terkait: きって (perangko), はがき (kartu pos), にもつ (barang/paket)."
+            },
+            {
+                id: "jft-tempat-10",
+                kana: "こうばん",
+                dictKana: "こうばん",
+                furiganaHtml: "<ruby>交<rt>こう</rt></ruby><ruby>番<rt>ばん</rt></ruby>",
+                romaji: "kouban",
+                meaning: "Pos Polisi",
+                category: "tempat",
+                exampleJP: "さいふを なくしたので、こうばんへ いきました。",
+                exampleID: "Karena kehilangan dompet, saya pergi ke pos polisi.",
+                note: "Sering muncul bersama kata kerja ひろいます (memungut) dan なくします (kehilangan)."
+            },
+            {
+                id: "jft-tempat-11",
+                kana: "びよういん",
+                dictKana: "びよういん",
+                furiganaHtml: "<ruby>美<rt>び</rt></ruby><ruby>容<rt>よう</rt></ruby><ruby>院<rt>いん</rt></ruby>",
+                romaji: "biyouin",
+                meaning: "Salon Kecantikan / Potong Rambut",
+                category: "tempat",
+                exampleJP: "びよういんで かみを きりました。",
+                exampleID: "Potong rambut di salon.",
+                note: "🔥 JEBAKAN KLASIK JFT! びよういん (biyouin - ada 'yo' panjang) = SALON, sedangkan びょういん (byouin) = RUMAH SAKIT! Ada juga とこや (tokoya = pangkas rambut pria)."
+            },
+            {
+                id: "jft-tempat-12",
+                kana: "やっきょく",
+                dictKana: "やっきょく",
+                furiganaHtml: "<ruby>薬<rt>やっ</rt></ruby><ruby>局<rt>きょく</rt></ruby>",
+                romaji: "yakkyoku",
+                meaning: "Apotek / Toko Obat",
+                category: "tempat",
+                exampleJP: "やっきょくで かぜぐすりを かいました。",
+                exampleID: "Membeli obat flu di apotek.",
+                note: "Sinonim yang sering dipakai juga: くすりや (kusuriya) atau ドラッグストア (drugstore)."
+            },
+            {
+                id: "jft-tempat-13",
+                kana: "ちゅうしゃじょう",
+                dictKana: "ちゅうしゃじょう",
+                furiganaHtml: "<ruby>駐<rt>ちゅう</rt></ruby><ruby>車<rt>しゃ</rt></ruby><ruby>場<rt>じょう</rt></ruby>",
+                romaji: "chuushajou",
+                meaning: "Tempat Parkir Mobil",
+                category: "tempat",
+                exampleJP: "くるまは ちゅうしゃじょうに とめて ください。",
+                exampleID: "Tolong parkirkan mobil di tempat parkir mobil.",
+                note: "Awas! Kalau parkir sepeda namanya ちゅうりんじょう (chuurinjou) atau じてんしゃおきば."
+            },
+            {
+                id: "jft-tempat-14",
+                kana: "いりぐち / でぐち",
+                dictKana: "いりぐち ・ でぐち",
+                furiganaHtml: "<ruby>入<rt>い</rt></ruby>り<ruby>口<rt>ぐち</rt></ruby> ・ <ruby>出<rt>で</rt></ruby><ruby>口<rt>ぐち</rt></ruby>",
+                romaji: "iriguchi / deguchi",
+                meaning: "Pintu Masuk / Pintu Keluar",
+                category: "tempat",
+                exampleJP: "えきの にしぐち（でぐち）で あいましょう。",
+                exampleID: "Mari bertemu di pintu barat (pintu keluar) stasiun.",
+                note: "Tambahan penting: ひじょうぐち (hijouguchi = Pintu Darurat)."
+            },
+            {
+                id: "jft-tempat-15",
+                kana: "かいだん / おくじょう",
+                dictKana: "かいだん ・ おくじょう",
+                furiganaHtml: "<ruby>階<rt>かい</rt></ruby><ruby>段<rt>だん</rt></ruby> ・ <ruby>屋<rt>おく</rt></ruby><ruby>上<rt>じょう</rt></ruby>",
+                romaji: "kaidan / okujou",
+                meaning: "Tangga / Atap Gedung (Rooftop)",
+                category: "tempat",
+                exampleJP: "エレベーターが こわれているので、かいだんを つかいます。",
+                exampleID: "Karena liftnya rusak, saya menggunakan tangga.",
+                note: "ちか (chika) = lantai bawah tanah (basement)."
+            },
+            {
+                id: "jft-tempat-16",
+                kana: "りょかん",
+                dictKana: "りょかん",
+                furiganaHtml: "<ruby>旅<rt>りょ</rt></ruby><ruby>館<rt>かん</rt></ruby>",
+                romaji: "ryokan",
+                meaning: "Penginapan Tradisional Jepang",
+                category: "tempat",
+                exampleJP: "おんせんが ある りょかんに とまりました。",
+                exampleID: "Menginap di penginapan tradisional Jepang yang ada pemandian air panasnya.",
+                note: "Kata kerja pasangannya selalu とまります (tomarimasu = menginap)."
+            },
+            {
+                id: "jft-tempat-17",
+                kana: "かいぎしつ / しょくどう",
+                dictKana: "かいぎしつ ・ しょくどう",
+                furiganaHtml: "<ruby>会<rt>かい</rt></ruby><ruby>議<rt>ぎ</rt></ruby><ruby>室<rt>しつ</rt></ruby> ・ <ruby>食<rt>しょく</rt></ruby><ruby>堂<rt>どう</rt></ruby>",
+                romaji: "kaigishitsu / shokudou",
+                meaning: "Ruang Rapat / Kantin (Ruang Makan)",
+                category: "tempat",
+                exampleJP: "ひるごはんは かいしゃの しょくどうで たべます。",
+                exampleID: "Makan siang di kantin perusahaan.",
+                note: "きゅうけいしつ (kyuukeishitsu) = Ruang istirahat karyawan."
+            },
+            {
+                id: "jft-tempat-18",
+                kana: "こうえん / どうろ",
+                dictKana: "こうえん ・ どうろ",
+                furiganaHtml: "<ruby>公<rt>こう</rt></ruby><ruby>園<rt>えん</rt></ruby> ・ <ruby>道<rt>どう</rt></ruby><ruby>路<rt>ろ</rt></ruby>",
+                romaji: "kouen / douro",
+                meaning: "Taman Kota / Jalan Raya",
+                category: "tempat",
+                exampleJP: "どうろが こんでいますから、おくれます。",
+                exampleID: "Karena jalan rayanya macet, saya akan terlambat.",
+                note: "こうさてん (kousaten) = Perempatan lampu merah, かど (kado) = Belokan/pojok jalan."
+            },
+
+            // --- TAMBAHAN KATA KERJA & KATA SIFAT PASANGAN TEMPAT ---
+            {
+                id: "jft-kerja-add1",
+                kana: "とまります",
+                dictKana: "とまる",
+                furiganaHtml: "<ruby>泊<rt>と</rt></ruby>まります / <ruby>止<rt>と</rt></ruby>まります",
+                romaji: "tomarimasu / tomaru",
+                meaning: "Menginap (di hotel/ryokan) / Berhenti (kereta/mobil)",
+                category: "kerja",
+                exampleJP: "この でんしゃは つぎの えきに とまりません。",
+                exampleID: "Kereta ini tidak berhenti di stasiun berikutnya.",
+                note: "Jika ホテルに とまります = menginap di hotel. Jika くるまを とめます (tomemasu) = memarkir/menghentikan mobil."
+            },
+            {
+                id: "jft-kerja-add2",
+                kana: "まがります / わたります",
+                dictKana: "まがる ・ わたる",
+                furiganaHtml: "<ruby>曲<rt>ま</rt></ruby>がります ・ <ruby>渡<rt>わた</rt></ruby>ります",
+                romaji: "magarimasu / watarimasu",
+                meaning: "Belok ( di tikungan ) / Menyeberang ( jalan/jembatan )",
+                category: "kerja",
+                exampleJP: "あの しんごうを みぎへ まがって、はしを わたって ください。",
+                exampleID: "Tolong belok kanan di lampu merah itu, lalu seberangi jembatan.",
+                note: "Wajib hafal untuk soal Listening petunjuk jalan menuju たいいくかん / おてら / びょういん!"
+            },
+            {
+                id: "jft-kerja-add3",
+                kana: "あつまります",
+                dictKana: "あつまる",
+                furiganaHtml: "<ruby>集<rt>あつ</rt></ruby>まります",
+                romaji: "atsumarimasu / atsumaru",
+                meaning: "Berkumpul",
+                category: "kerja",
+                exampleJP: "あした 8じに えきの まえに あつまって ください。",
+                exampleID: "Besok tolong berkumpul di depan stasiun jam 8.",
+                note: "Jika あつめます (atsumemasu) = mengumpulkan (benda/sampah/dokumen)."
+            },
+            {
+                id: "jft-sifat-add1",
+                kana: "にぎやか / しずか",
+                dictKana: "にぎやか [な] ・ しずか [な]",
+                furiganaHtml: "にぎやか ・ <ruby>静<rt>しず</rt></ruby>か",
+                romaji: "nigiyaka (na) / shizuka (na)",
+                meaning: "Ramai & Hidup (suasana kota) / Tenang & Sepi",
+                category: "sifat",
+                exampleJP: "この まちは とても にぎやかで べんりです。",
+                exampleID: "Kota ini sangat ramai dan praktis.",
+                note: "Jika ramai karena penuh sesak/macet menggunakan: こんでいます (konde imasu)."
+            },
+            {
+                id: "jft-sifat-add2",
+                kana: "ひろい / せまい",
+                dictKana: "ひろい ・ せまい",
+                furiganaHtml: "<ruby>広<rt>ひろ</rt></ruby>い ・ <ruby>狭<rt>せま</rt></ruby>い",
+                romaji: "hiroi / semai",
+                meaning: "Luas / Sempit",
+                category: "sifat",
+                exampleJP: "あたらしい たいいくかんは とても ひろいです。",
+                exampleID: "Gedung olahraga yang baru sangat luas.",
+                note: "Sangat sering dipakai untuk mendeskripsikan kamar (へや), taman (こうえん), dan jalan (みち)."
+            },
+
+            // --- KATEGORI: KEHIDUPAN, KERJA & BENDA PENTING ---
+            {
+                id: "jft-49",
+                kana: "しりょう",
+                dictKana: "しりょう",
+                furiganaHtml: "<ruby>資<rt>し</rt></ruby><ruby>料<rt>りょう</rt></ruby>",
+                romaji: "shiryou",
+                meaning: "Dokumen / Data / Materi rapat",
+                category: "benda",
+                exampleJP: "かいぎの しりょうを コピーして ください。",
+                exampleID: "Tolong fotokopi dokumen rapat.",
+                note: "Sangat sering muncul di soal tempat kerja!"
+            },
+            {
+                id: "jft-50",
+                kana: "ひきだし",
+                dictKana: "ひきだし",
+                furiganaHtml: "<ruby>引<rt>ひ</rt></ruby>き<ruby>出<rt>だ</rt></ruby>し",
+                romaji: "hikidashi",
+                meaning: "Laci meja",
+                category: "benda",
+                exampleJP: "はさみは いちばん うえの ひきだしに あります。",
+                exampleID: "Gunting ada di dalam laci paling atas.",
+                note: "Sering keluar bersama たな (tana = rak) dan はこ (hako = kotak)."
+            },
+            {
+                id: "jft-51",
+                kana: "たな",
+                dictKana: "たな",
+                furiganaHtml: "<ruby>棚<rt>たな</rt></ruby>",
+                romaji: "tana",
+                meaning: "Rak / Lemari terbuka",
+                category: "benda",
+                exampleJP: "ファイルは あの たなに もどして ください。",
+                exampleID: "Tolong kembalikan map file ke rak itu.",
+                note: "Sering muncul di soal instruksi kantor/toko."
+            },
+            {
+                id: "jft-52",
+                kana: "せんめんじょ",
+                dictKana: "せんめんじょ",
+                furiganaHtml: "<ruby>洗<rt>せん</rt></ruby><ruby>面<rt>めん</rt></ruby><ruby>所<rt>じょ</rt></ruby>",
+                romaji: "senmenjo",
+                meaning: "Ruang wastafel / Tempat cuci muka",
+                category: "benda",
+                exampleJP: "せんめんじょの でんきが つきません。",
+                exampleID: "Lampu ruang wastafel tidak menyala.",
+                note: "Muncul di daftar kosakata khusus JFT (bagian rumah/apartemen)."
+            },
+            {
+                id: "jft-53",
+                kana: "しゅっちょう",
+                dictKana: "しゅっちょう",
+                furiganaHtml: "<ruby>出<rt>しゅっ</rt></ruby><ruby>張<rt>ちょう</rt></ruby>",
+                romaji: "shucchou",
+                meaning: "Perjalanan dinas (kerja luar kota)",
+                category: "benda",
+                exampleJP: "らいしゅう、おおさかへ しゅっちょうします。",
+                exampleID: "Minggu depan saya akan perjalanan dinas ke Osaka.",
+                note: "Sering muncul di soal pesan kantor."
+            },
+            {
+                id: "jft-54",
+                kana: "ちょうし",
+                dictKana: "ちょうし",
+                furiganaHtml: "<ruby>調<rt>ちょう</rt></ruby><ruby>子<rt>し</rt></ruby>",
+                romaji: "choushi",
+                meaning: "Kondisi (tubuh / mesin)",
+                category: "benda",
+                exampleJP: "きょうは おなかの ちょうしが わるいです。",
+                exampleID: "Hari ini kondisi perut saya sedang tidak enak.",
+                note: "Ungkapan: ちょうしが いい (kondisi bagus) / ちょうしが わるい (kondisi buruk/rusak)."
+            },
+            {
+                id: "jft-55",
+                kana: "もえるゴミ",
+                dictKana: "もえるゴミ",
+                furiganaHtml: "<ruby>燃<rt>も</rt></ruby>えるゴミ",
+                romaji: "moeru gomi",
+                meaning: "Sampah organik / Sampah yang bisa dibakar",
+                category: "benda",
+                exampleJP: "もえるゴミは かようびと きんようびに だします。",
+                exampleID: "Sampah bakar dikeluarkan pada hari Selasa dan Jumat.",
+                note: "Lawan katanya: もえないゴミ (moenai gomi = sampah tidak bisa dibakar)."
+            },
+            {
+                id: "jft-56",
+                kana: "りょうきん",
+                dictKana: "りょうきん",
+                furiganaHtml: "<ruby>料<rt>りょう</rt></ruby><ruby>金<rt>きん</rt></ruby>",
+                romaji: "ryoukin",
+                meaning: "Tarif / Biaya",
+                category: "benda",
+                exampleJP: "にゅうじょうりょうきんは 500えんです。",
+                exampleID: "Biaya masuknya adalah 500 yen.",
+                note: "Jika むりょう (muryou) = Gratis! ゆうりょう (yuuryou) = Berbayar."
+            },
+            {
+                id: "jft-57",
+                kana: "むりょう",
+                dictKana: "むりょう",
+                furiganaHtml: "<ruby>無<rt>む</rt></ruby><ruby>料<rt>りょう</rt></ruby>",
+                romaji: "muryou",
+                meaning: "Gratis / Bebas biaya",
+                category: "benda",
+                exampleJP: "こどもは むりょうです。",
+                exampleID: "Anak-anak gratis.",
+                note: "Sering sekali muncul di soal membaca poster/brosur JFT! Sinonim percakapan: ただ (tada)."
+            },
+            {
+                id: "jft-58",
+                kana: "うけつけ",
+                dictKana: "うけつけ",
+                furiganaHtml: "<ruby>受<rt>う</rt></ruby>け<ruby>付<rt>つ</rt></ruby>け",
+                romaji: "uketsuke",
+                meaning: "Resepsionis / Meja pendaftaran",
+                category: "benda",
+                exampleJP: "まず うけつけで なまえを かいて ください。",
+                exampleID: "Pertama-tama tolong tulis nama di meja resepsionis.",
+                note: "Sering muncul di soal rumah sakit, gedung kantor, dan acara komunitas."
+            },
+
+            // --- KATEGORI: KETERANGAN & UNGKAPAN JFT ---
+            {
+                id: "jft-59",
+                kana: "さきに",
+                dictKana: "さきに",
+                furiganaHtml: "<ruby>先<rt>さき</rt></ruby>に",
+                romaji: "saki ni",
+                meaning: "Duluan / Terlebih dahulu",
+                category: "ungkapan",
+                exampleJP: "おさきに しつれいします。",
+                exampleID: "Permisi saya pulang duluan.",
+                note: "さきに どうぞ = Silakan duluan."
+            },
+            {
+                id: "jft-60",
+                kana: "さいきん",
+                dictKana: "さいきん",
+                furiganaHtml: "<ruby>最<rt>さい</rt></ruby><ruby>近<rt>きん</rt></ruby>",
+                romaji: "saikin",
+                meaning: "Akhir-akhir ini / Belakangan ini",
+                category: "ungkapan",
+                exampleJP: "さいきん、すこし ふとりました。",
+                exampleID: "Akhir-akhir ini saya agak bertambah gemuk.",
+                note: "Sering muncul di pembuka percakapan JFT."
+            },
+            {
+                id: "jft-61",
+                kana: "ぜんぜん",
+                dictKana: "ぜんぜん (+ negatif)",
+                furiganaHtml: "<ruby>全<rt>ぜん</rt></ruby><ruby>然<rt>ぜん</rt></ruby>",
+                romaji: "zenzen",
+                meaning: "Sama sekali (tidak...)",
+                category: "ungkapan",
+                exampleJP: "かんじが ぜんぜん わかりません。",
+                exampleID: "Saya sama sekali tidak mengerti kanji.",
+                note: "Diikuti bentuk negatif. Jika あまり + negatif artinya 'tidak begitu...'."
+            },
+            {
+                id: "jft-62",
+                kana: "だんだん",
+                dictKana: "だんだん",
+                furiganaHtml: "だんだん",
+                romaji: "dandan",
+                meaning: "Lama-kelamaan / Berangsur-angsur",
+                category: "ungkapan",
+                exampleJP: "だんだん あたたかく なりましたね。",
+                exampleID: "Lama-kelamaan menjadi hangat ya.",
+                note: "Sering dipasangkan dengan ～なります (menjadi...)."
+            },
+            {
+                id: "jft-63",
+                kana: "やっと",
+                dictKana: "やっと",
+                furiganaHtml: "やっと",
+                romaji: "yatto",
+                meaning: "Akhirnya (setelah menunggu/berusaha lama)",
+                category: "ungkapan",
+                exampleJP: "やっと しごとが おわりました！",
+                exampleID: "Akhirnya pekerjaannya selesai!",
+                note: "Menunjukkan rasa lega setelah usaha panjang."
+            },
+            {
+                id: "jft-64",
+                kana: "かならず",
+                dictKana: "かならず",
+                furiganaHtml: "<ruby>必<rt>かなら</rt></ruby>ず",
+                romaji: "kanarazu",
+                meaning: "Pasti / Wajib (jangan sampai lupa)",
+                category: "ungkapan",
+                exampleJP: "あしたは かならず パスポートを もってきて ください。",
+                exampleID: "Besok wajib/pastikan membawa paspor ya.",
+                note: "Sering keluar di soal pengumuman aturan."
+            },
+            {
+                id: "jft-65",
+                kana: "じぶんで",
+                dictKana: "じぶんで",
+                furiganaHtml: "<ruby>自<rt>じ</rt></ruby><ruby>分<rt>ぶん</rt></ruby>で",
+                romaji: "jibun de",
+                meaning: "Sendiri (melakukan dengan tangan sendiri)",
+                category: "ungkapan",
+                exampleJP: "まいにち じぶんで りょうりを つくります。",
+                exampleID: "Setiap hari saya memasak sendiri.",
+                note: "Awas tertukar dengan ひとりで (hitori de = sendirian / tanpa teman)."
+            },
+            {
+                id: "jft-66",
+                kana: "かしこまりました",
+                dictKana: "かしこまりました",
+                furiganaHtml: "かしこまりました",
+                romaji: "kashikomarimashita",
+                meaning: "Baik, saya mengerti (sopan - kepada tamu/atasan)",
+                category: "ungkapan",
+                exampleJP: "ホットコーヒーを ふたつですね。かしこまりました。",
+                exampleID: "Kopi panasnya dua ya. Baik, saya mengerti.",
+                note: "Bentuk sopan dari わかりました. Sangat sering keluar di soal restoran/pelayanan!"
+            }
+        ];
+
+        // ============================================================================
+        // STATE MANAGEMENT
+        // ============================================================================
+        const STORAGE_KEY_MASTERED = "jft_kotoba_mastered_v1";
+        const STORAGE_KEY_CUSTOM = "jft_kotoba_custom_v1";
+
+        let state = {
+            words: [],
+            masteredIds: new Set(),
+            currentTab: "flashcard",
+            categoryFilter: "all",
+            statusFilter: "all",
+            cardIndex: 0,
+            isFlipped: false,
+            settings: {
+                showKanji: true,   // Jika true tampilkan Kanji+Furigana, jika false tampilkan Hiragana murni
+                showRomaji: true,
+                preferMasu: true
+            },
+            quiz: {
+                type: "jp-to-id",
+                score: 0,
+                answered: 0,
+                currentQuestion: null,
+                hasAnsweredCurrent: false
+            }
+        };
+
+        // ============================================================================
+        // INITIALIZATION
+        // ============================================================================
+        function initApp() {
+            // Load saved mastered IDs
+            try {
+                const savedMastered = localStorage.getItem(STORAGE_KEY_MASTERED);
+                if (savedMastered) {
+                    state.masteredIds = new Set(JSON.parse(savedMastered));
+                }
+            } catch (e) {
+                console.warn("Could not load mastered state:", e);
+            }
+
+            // Load custom words
+            let customWords = [];
+            try {
+                const savedCustom = localStorage.getItem(STORAGE_KEY_CUSTOM);
+                if (savedCustom) {
+                    customWords = JSON.parse(savedCustom);
+                }
+            } catch (e) {
+                console.warn("Could not load custom words:", e);
+            }
+
+            state.words = [...INITIAL_KOTOBA, ...customWords];
+            updateHeaderProgress();
+            renderFlashcard();
+            renderWordList();
+            startNewQuiz();
+
+            // Keyboard shortcuts for Flashcard
+            document.addEventListener("keydown", (e) => {
+                if (state.currentTab !== "flashcard") return;
+                if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+
+                if (e.code === "Space") {
+                    e.preventDefault();
+                    flipCard();
+                } else if (e.code === "ArrowRight") {
+                    nextCard();
+                } else if (e.code === "ArrowLeft") {
+                    prevCard();
+                }
+            });
+        }
+
+        function saveMasteredState() {
+            try {
+                localStorage.setItem(STORAGE_KEY_MASTERED, JSON.stringify([...state.masteredIds]));
+            } catch (e) {}
+            updateHeaderProgress();
+        }
+
+        function updateHeaderProgress() {
+            const total = state.words.length;
+            const mastered = state.words.filter(w => state.masteredIds.has(w.id)).length;
+            const pct = total > 0 ? Math.round((mastered / total) * 100) : 0;
+
+            document.getElementById("headerMasteredCount").textContent = mastered;
+            document.getElementById("headerTotalCount").textContent = total;
+            document.getElementById("headerProgressBar").style.width = `${pct}%`;
+            document.getElementById("listCountBadge").textContent = total;
+        }
+
+        // ============================================================================
+        // FILTERING HELPERS
+        // ============================================================================
+        function getFilteredWords() {
+            return state.words.filter(w => {
+                const catMatch = state.categoryFilter === "all" || w.category === state.categoryFilter;
+                const isMastered = state.masteredIds.has(w.id);
+                const statusMatch =
+                    state.statusFilter === "all" ||
+                    (state.statusFilter === "mastered" && isMastered) ||
+                    (state.statusFilter === "unmastered" && !isMastered);
+                return catMatch && statusMatch;
+            });
+        }
+
+        function setCategory(cat) {
+            state.categoryFilter = cat;
+            state.cardIndex = 0;
+            state.isFlipped = false;
+
+            document.querySelectorAll(".cat-pill").forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "cat-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm transition";
+                } else {
+                    btn.className = "cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
+                }
+            });
+
+            renderFlashcard();
+            renderWordList();
+        }
+
+        function setStatusFilter(status) {
+            state.statusFilter = status;
+            state.cardIndex = 0;
+            state.isFlipped = false;
+
+            ["all", "unmastered", "mastered"].forEach(s => {
+                const btn = document.getElementById(`status-${s}`);
+                if (s === status) {
+                    btn.className = "status-pill px-2.5 py-1 rounded-lg font-semibold bg-white text-slate-800 shadow-sm";
+                } else {
+                    btn.className = "status-pill px-2.5 py-1 rounded-lg font-medium text-slate-600";
+                }
+            });
+
+            renderFlashcard();
+            renderWordList();
+        }
+
+        // ============================================================================
+        // DISPLAY SETTINGS (KANJI/FURIGANA, ROMAJI, MASU/DICT)
+        // ============================================================================
+        function toggleSetting(key) {
+            state.settings[key] = !state.settings[key];
+
+            const kanjiBtn = document.getElementById("toggleKanjiBtn");
+            if (state.settings.showKanji) {
+                kanjiBtn.className = "px-2.5 py-1 rounded-lg bg-white text-indigo-700 font-semibold shadow-sm transition flex items-center gap-1";
+                kanjiBtn.innerHTML = "<span>✓</span> Kanji + Furigana";
+            } else {
+                kanjiBtn.className = "px-2.5 py-1 rounded-lg bg-indigo-800 text-indigo-100 font-medium transition flex items-center gap-1";
+                kanjiBtn.innerHTML = "Hiragana Saja (Tanpa Kanji)";
+            }
+
+            const romajiBtn = document.getElementById("toggleRomajiBtn");
+            if (state.settings.showRomaji) {
+                romajiBtn.className = "px-2.5 py-1 rounded-lg bg-white text-indigo-700 font-semibold shadow-sm transition flex items-center gap-1";
+                romajiBtn.innerHTML = "<span>✓</span> Romaji";
+            } else {
+                romajiBtn.className = "px-2.5 py-1 rounded-lg bg-indigo-800 text-indigo-100 font-medium transition flex items-center gap-1";
+                romajiBtn.innerHTML = "Romaji Disembunyikan";
+            }
+
+            const masuBtn = document.getElementById("toggleMasuBtn");
+            if (state.settings.preferMasu) {
+                masuBtn.innerHTML = "Fokus: ~ます & Kamus";
+            } else {
+                masuBtn.innerHTML = "Fokus: Bentuk Kamus";
+            }
+
+            renderFlashcard();
+            renderWordList();
+            renderQuizQuestionUI();
+        }
+
+        function formatJapaneseDisplay(word) {
+            if (!state.settings.showKanji) {
+                return state.settings.preferMasu ? word.kana : (word.dictKana || word.kana);
+            }
+            // Show Kanji with Furigana alongside Pure Kana if different
+            if (word.furiganaHtml && word.furiganaHtml !== word.kana) {
+                return `${word.kana} <span class="text-slate-400 font-normal mx-1">・</span> ${word.furiganaHtml}`;
+            }
+            return word.kana;
+        }
+
+        function getCategoryLabel(cat) {
+            const map = {
+                jebakan: "🔥 Sering Lupa / Jebakan JFT",
+                tempat: "📍 Nama Tempat & Fasilitas",
+                kerja: "🏃 Kata Kerja",
+                sifat: "✨ Kata Sifat",
+                benda: "🏢 Kehidupan & Benda",
+                ungkapan: "💬 Keterangan & Ungkapan"
+            };
+            return map[cat] || "📌 Kotoba Tambahan";
+        }
+
+        // ============================================================================
+        // TAB NAVIGATION
+        // ============================================================================
+        function switchTab(tab) {
+            state.currentTab = tab;
+            ["flashcard", "quiz", "list", "custom"].forEach(t => {
+                const view = document.getElementById(`view-${t}`);
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tab) {
+                    view.classList.remove("hidden");
+                    btn.className = "tab-btn flex-1 min-w-[110px] py-3 px-3 text-xs sm:text-sm font-bold border-b-2 border-indigo-600 text-indigo-600 flex items-center justify-center gap-1.5";
+                } else {
+                    view.classList.add("hidden");
+                    btn.className = "tab-btn flex-1 min-w-[110px] py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center justify-center gap-1.5";
+                }
+            });
+
+            const filterBar = document.getElementById("filterBar");
+            if (tab === "flashcard" || tab === "list") {
+                filterBar.classList.remove("hidden");
+            } else {
+                filterBar.classList.add("hidden");
+            }
+        }
+
+        // ============================================================================
+        // FLASHCARD LOGIC
+        // ============================================================================
+        function renderFlashcard() {
+            const list = getFilteredWords();
+            const total = list.length;
+
+            document.getElementById("fcTotalFiltered").textContent = total;
+
+            if (total === 0) {
+                document.getElementById("fcCurrentIndex").textContent = 0;
+                document.getElementById("fcFrontJapanese").innerHTML = "🎉 Semua kartu di filter ini sudah selesai!";
+                document.getElementById("fcFrontSubform").textContent = "Ubah filter di atas untuk melihat kotoba lainnya.";
+                document.getElementById("fcFrontRomaji").textContent = "";
+                document.getElementById("fcMasteredBadge").classList.add("hidden");
+                return;
+            }
+
+            if (state.cardIndex >= total) state.cardIndex = 0;
+            if (state.cardIndex < 0) state.cardIndex = total - 1;
+
+            const word = list[state.cardIndex];
+            document.getElementById("fcCurrentIndex").textContent = state.cardIndex + 1;
+
+            // Reset flip visual
+            const inner = document.getElementById("flashcardInner");
+            if (state.isFlipped) {
+                inner.classList.add("card-flipped");
+            } else {
+                inner.classList.remove("card-flipped");
+            }
+
+            // Category & Mastered Badges
+            document.getElementById("fcCategoryBadge").textContent = getCategoryLabel(word.category);
+            const masteredBadge = document.getElementById("fcMasteredBadge");
+            if (state.masteredIds.has(word.id)) {
+                masteredBadge.classList.remove("hidden");
+            } else {
+                masteredBadge.classList.add("hidden");
+            }
+
+            // Front Content
+            document.getElementById("fcFrontJapanese").innerHTML = formatJapaneseDisplay(word);
+            if (word.dictKana && word.dictKana !== word.kana) {
+                document.getElementById("fcFrontSubform").textContent = `Bentuk Kamus: ${word.dictKana}`;
+            } else {
+                document.getElementById("fcFrontSubform").textContent = "";
+            }
+
+            const romajiEl = document.getElementById("fcFrontRomaji");
+            romajiEl.textContent = state.settings.showRomaji ? word.romaji : "•••";
+
+            // Back Content
+            document.getElementById("fcBackWordSmall").textContent = `${word.kana} (${word.romaji})`;
+            document.getElementById("fcBackMeaning").textContent = word.meaning;
+            document.getElementById("fcBackExampleJP").textContent = word.exampleJP || "-";
+            document.getElementById("fcBackExampleID").textContent = word.exampleID || "";
+            document.getElementById("fcBackNote").textContent = word.note || "Pelajari bunyi Hiragana dan konteks kalimatnya.";
+        }
+
+        function flipCard() {
+            const list = getFilteredWords();
+            if (list.length === 0) return;
+            state.isFlipped = !state.isFlipped;
+            const inner = document.getElementById("flashcardInner");
+            inner.classList.toggle("card-flipped", state.isFlipped);
+        }
+
+        function nextCard() {
+            const list = getFilteredWords();
+            if (list.length === 0) return;
+            state.isFlipped = false;
+            state.cardIndex = (state.cardIndex + 1) % list.length;
+            renderFlashcard();
+        }
+
+        function prevCard() {
+            const list = getFilteredWords();
+            if (list.length === 0) return;
+            state.isFlipped = false;
+            state.cardIndex = (state.cardIndex - 1 + list.length) % list.length;
+            renderFlashcard();
+        }
+
+        function shuffleFlashcards() {
+            state.words.sort(() => Math.random() - 0.5);
+            state.cardIndex = 0;
+            state.isFlipped = false;
+            renderFlashcard();
+            renderWordList();
+            showToast("🔀 Urutan kartu berhasil diacak!");
+        }
+
+        function markCurrentCard(isMastered) {
+            const list = getFilteredWords();
+            if (list.length === 0) return;
+            const word = list[state.cardIndex];
+
+            if (isMastered) {
+                state.masteredIds.add(word.id);
+                showToast(`✅ "${word.kana}" ditandai Sudah Hafal!`);
+            } else {
+                state.masteredIds.delete(word.id);
+                showToast(`⏳ "${word.kana}" dimasukkan ke daftar perlu diulang.`);
+            }
+
+            saveMasteredState();
+            state.isFlipped = false;
+
+            // Advance to next card smoothly
+            const updatedList = getFilteredWords();
+            if (state.cardIndex >= updatedList.length) {
+                state.cardIndex = 0;
+            } else if (state.statusFilter === "all") {
+                state.cardIndex = (state.cardIndex + 1) % Math.max(1, updatedList.length);
+            }
+
+            renderFlashcard();
+            renderWordList();
+        }
+
+        // ============================================================================
+        // AUDIO (TEXT TO SPEECH JAPANESE)
+        // ============================================================================
+        function speakText(jpText) {
+            if (!("speechSynthesis" in window)) {
+                showToast("Browser ini belum mendukung fitur suara otomatis.");
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(jpText);
+            utter.lang = "ja-JP";
+            utter.rate = 0.9;
+            window.speechSynthesis.speak(utter);
+        }
+
+        function speakCurrentWord(event) {
+            if (event) event.stopPropagation();
+            const list = getFilteredWords();
+            if (list.length === 0) return;
+            const word = list[state.cardIndex];
+            speakText(word.kana);
+        }
+
+        // ============================================================================
+        // QUIZ LOGIC
+        // ============================================================================
+        function setQuizType(type) {
+            state.quiz.type = type;
+            ["jp-to-id", "id-to-jp", "context"].forEach(t => {
+                const btn = document.getElementById(`qtype-${t}`);
+                if (t === type) {
+                    btn.className = "px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-xl font-semibold bg-slate-100 text-slate-700";
+                }
+            });
+            nextQuizQuestion();
+        }
+
+        function startNewQuiz() {
+            state.quiz.score = 0;
+            state.quiz.answered = 0;
+            document.getElementById("quizScore").textContent = "0";
+            document.getElementById("quizAnswered").textContent = "0";
+            nextQuizQuestion();
+        }
+
+        function nextQuizQuestion() {
+            state.quiz.hasAnsweredCurrent = false;
+            document.getElementById("quizFeedback").classList.add("hidden");
+
+            // Prioritize unmastered words 70% of the time
+            const unmastered = state.words.filter(w => !state.masteredIds.has(w.id));
+            const pool = (unmastered.length >= 4 && Math.random() < 0.75) ? unmastered : state.words;
+
+            const correctWord = pool[Math.floor(Math.random() * pool.length)];
+
+            // Pick 3 distractors
+            const distractors = state.words
+                .filter(w => w.id !== correctWord.id)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+
+            const options = [correctWord, ...distractors].sort(() => Math.random() - 0.5);
+            state.quiz.currentQuestion = { correctWord, options };
+
+            renderQuizQuestionUI();
+        }
+
+        function renderQuizQuestionUI() {
+            if (!state.quiz.currentQuestion) return;
+            const { correctWord, options } = state.quiz.currentQuestion;
+            const qType = state.quiz.type;
+
+            const promptLabel = document.getElementById("quizPromptLabel");
+            const mainEl = document.getElementById("quizQuestionMain");
+            const subEl = document.getElementById("quizQuestionSub");
+            const optionsContainer = document.getElementById("quizOptions");
+
+            if (qType === "jp-to-id") {
+                promptLabel.textContent = "Pilih arti Bahasa Indonesia yang tepat:";
+                mainEl.innerHTML = formatJapaneseDisplay(correctWord);
+                subEl.textContent = state.settings.showRomaji ? correctWord.romaji : "";
+            } else if (qType === "id-to-jp") {
+                promptLabel.textContent = "Manakah kotoba Bahasa Jepang untuk arti berikut:";
+                mainEl.textContent = correctWord.meaning;
+                subEl.textContent = getCategoryLabel(correctWord.category);
+            } else {
+                promptLabel.textContent = "Pahami konteks kalimat JFT berikut & pilih arti kotoba yang digarisbawahi:";
+                const sentence = correctWord.exampleJP || correctWord.kana;
+                mainEl.innerHTML = `<span class="text-xl sm:text-2xl">${sentence}</span>`;
+                subEl.innerHTML = `Kata kunci: <strong class="underline">${correctWord.kana}</strong> ${state.settings.showRomaji ? `(${correctWord.romaji})` : ""}`;
+            }
+
+            optionsContainer.innerHTML = "";
+            options.forEach((opt, idx) => {
+                const btn = document.createElement("button");
+                btn.id = `quiz-opt-${opt.id}`;
+                btn.className = "w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-indigo-400 bg-white font-semibold text-sm sm:text-base text-slate-800 transition flex items-center justify-between gap-2 shadow-sm";
+
+                let labelHtml = "";
+                if (qType === "id-to-jp") {
+                    labelHtml = `<span class="jp-text text-lg font-bold">${opt.kana}</span> <span class="text-xs text-slate-400">${state.settings.showRomaji ? opt.romaji : ""}</span>`;
+                } else {
+                    labelHtml = `<span>${opt.meaning}</span>`;
+                }
+
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 font-bold text-xs flex items-center justify-center">${idx + 1}</span>
+                        <div>${labelHtml}</div>
+                    </div>
+                `;
+                btn.onclick = () => submitQuizAnswer(opt.id);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function submitQuizAnswer(selectedId) {
+            if (state.quiz.hasAnsweredCurrent) return;
+            state.quiz.hasAnsweredCurrent = true;
+
+            const { correctWord, options } = state.quiz.currentQuestion;
+            const isCorrect = selectedId === correctWord.id;
+
+            state.quiz.answered++;
+            if (isCorrect) {
+                state.quiz.score++;
+                speakText(correctWord.kana);
+            }
+
+            document.getElementById("quizScore").textContent = state.quiz.score;
+            document.getElementById("quizAnswered").textContent = state.quiz.answered;
+
+            options.forEach(opt => {
+                const btn = document.getElementById(`quiz-opt-${opt.id}`);
+                if (!btn) return;
+                if (opt.id === correctWord.id) {
+                    btn.className = "w-full text-left p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 font-bold text-sm sm:text-base text-emerald-900 flex items-center justify-between gap-2";
+                } else if (opt.id === selectedId && !isCorrect) {
+                    btn.className = "w-full text-left p-4 rounded-2xl border-2 border-rose-400 bg-rose-50 font-semibold text-sm sm:text-base text-rose-900 flex items-center justify-between gap-2";
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-2xl border border-slate-200 bg-slate-50 opacity-60 text-sm sm:text-base text-slate-500 flex items-center justify-between gap-2";
+                }
+            });
+
+            const fbBox = document.getElementById("quizFeedback");
+            const fbTitle = document.getElementById("quizFeedbackTitle");
+            const fbDetail = document.getElementById("quizFeedbackDetail");
+
+            fbBox.classList.remove("hidden");
+            if (isCorrect) {
+                fbBox.className = "rounded-2xl p-4 border border-emerald-200 bg-emerald-50/70 text-sm space-y-2";
+                fbTitle.className = "font-bold text-base text-emerald-800";
+                fbTitle.textContent = "✅ Tepat Sekali! (せいかい)";
+            } else {
+                fbBox.className = "rounded-2xl p-4 border border-rose-200 bg-rose-50/70 text-sm space-y-2";
+                fbTitle.className = "font-bold text-base text-rose-800";
+                fbTitle.textContent = `❌ Kurang Tepat. Jawaban: ${correctWord.kana} = ${correctWord.meaning}`;
+            }
+
+            fbDetail.innerHTML = `
+                <div class="jp-text font-bold text-slate-900">${correctWord.kana} (${correctWord.romaji}) — ${correctWord.meaning}</div>
+                <div class="text-xs text-slate-600 mt-1">Contoh: <span class="jp-text font-medium">${correctWord.exampleJP || "-"}</span> (${correctWord.exampleID || ""})</div>
+            `;
+        }
+
+        // ============================================================================
+        // FULL WORD LIST & SEARCH
+        // ============================================================================
+        function clearSearch() {
+            document.getElementById("searchInput").value = "";
+            renderWordList();
+        }
+
+        function toggleMasteredById(id) {
+            if (state.masteredIds.has(id)) {
+                state.masteredIds.delete(id);
+            } else {
+                state.masteredIds.add(id);
+            }
+            saveMasteredState();
+            renderWordList();
+            renderFlashcard();
+        }
+
+        function renderWordList() {
+            const query = (document.getElementById("searchInput")?.value || "").trim().toLowerCase();
+            const clearBtn = document.getElementById("clearSearchBtn");
+            if (clearBtn) {
+                clearBtn.classList.toggle("hidden", query.length === 0);
+            }
+
+            const baseList = getFilteredWords();
+            const filtered = baseList.filter(w => {
+                if (!query) return true;
+                return (
+                    w.kana.toLowerCase().includes(query) ||
+                    (w.dictKana && w.dictKana.toLowerCase().includes(query)) ||
+                    w.romaji.toLowerCase().includes(query) ||
+                    w.meaning.toLowerCase().includes(query) ||
+                    (w.note && w.note.toLowerCase().includes(query))
+                );
+            });
+
+            const container = document.getElementById("wordListContainer");
+            container.innerHTML = "";
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-white rounded-2xl p-8 text-center border border-slate-200 text-slate-500 text-sm">
+                        Tidak ada kotoba yang cocok dengan pencarian / filter saat ini.
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(word => {
+                const isMastered = state.masteredIds.has(word.id);
+                const card = document.createElement("div");
+                card.className = `bg-white rounded-2xl p-4 border transition shadow-sm flex flex-col justify-between gap-2 ${
+                    isMastered ? "border-emerald-200 bg-emerald-50/20" : "border-slate-200"
+                }`;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <div class="jp-text text-xl font-bold text-slate-900 leading-relaxed">
+                                    ${formatJapaneseDisplay(word)}
+                                </div>
+                                ${state.settings.showRomaji ? `<div class="text-xs font-medium text-indigo-600">${word.romaji}</div>` : ""}
+                            </div>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <button onclick="speakText('${word.kana}')" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-indigo-100 text-slate-700 flex items-center justify-center text-xs" title="Suara">
+                                    🔊
+                                </button>
+                                <button onclick="toggleMasteredById('${word.id}')" class="px-2.5 py-1 rounded-lg text-xs font-bold transition ${
+                                    isMastered
+                                        ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
+                                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                }">
+                                    ${isMastered ? "✓ Hafal" : "Tandai Hafal"}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-2 font-bold text-slate-800 text-sm sm:text-base">
+                            ${word.meaning}
+                        </div>
+                        ${word.exampleJP ? `
+                            <div class="mt-2 pt-2 border-t border-slate-100 text-xs text-slate-600 space-y-0.5">
+                                <div class="jp-text font-medium text-slate-800">${word.exampleJP}</div>
+                                <div class="text-slate-500">${word.exampleID || ""}</div>
+                            </div>
+                        ` : ""}
+                    </div>
+                    ${word.note ? `<div class="text-[11px] text-amber-800 bg-amber-50 px-2.5 py-1 rounded-lg">${word.note}</div>` : ""}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // ============================================================================
+        // CUSTOM ADD & BULK IMPORT
+        // ============================================================================
+        function saveCustomWordsToStorage() {
+            const customOnly = state.words.filter(w => String(w.id).startsWith("custom-"));
+            try {
+                localStorage.setItem(STORAGE_KEY_CUSTOM, JSON.stringify(customOnly));
+            } catch (e) {}
+        }
+
+        function addSingleCustomWord() {
+            const kana = document.getElementById("customKana").value.trim();
+            const romaji = document.getElementById("customRomaji").value.trim() || "-";
+            const meaning = document.getElementById("customMeaning").value.trim();
+            const kanji = document.getElementById("customKanji").value.trim();
+            const note = document.getElementById("customNote").value.trim();
+
+            if (!kana || !meaning) {
+                showToast("⚠️ Mohon isi minimal Hiragana/Katakana dan Arti Bahasa Indonesianya.");
+                return;
+            }
+
+            const newWord = {
+                id: "custom-" + Date.now(),
+                kana,
+                dictKana: kana,
+                furiganaHtml: kanji ? `${kanji} (${kana})` : kana,
+                romaji,
+                meaning,
+                category: "jebakan",
+                exampleJP: "",
+                exampleID: "",
+                note: note || "📌 Ditambahkan secara manual"
+            };
+
+            state.words.unshift(newWord);
+            saveCustomWordsToStorage();
+            updateHeaderProgress();
+            renderFlashcard();
+            renderWordList();
+
+            document.getElementById("customKana").value = "";
+            document.getElementById("customRomaji").value = "";
+            document.getElementById("customMeaning").value = "";
+            document.getElementById("customKanji").value = "";
+            document.getElementById("customNote").value = "";
+
+            showToast(`✅ Kotoba "${kana}" berhasil ditambahkan!`);
+        }
+
+        function importBulkWords() {
+            const raw = document.getElementById("bulkPasteInput").value.trim();
+            if (!raw) {
+                showToast("⚠️ Tempelkan daftar kotoba terlebih dahulu.");
+                return;
+            }
+
+            const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+            let addedCount = 0;
+
+            lines.forEach((line, idx) => {
+                // Support separators: =, -, :, or tab
+                let parts = line.split(/\s*(?:=|-|:|\t)\s*/).filter(Boolean);
+                if (parts.length >= 2) {
+                    const kana = parts[0];
+                    const romaji = parts.length >= 3 ? parts[1] : "-";
+                    const meaning = parts.length >= 3 ? parts.slice(2).join(" - ") : parts[1];
+
+                    state.words.unshift({
+                        id: `custom-${Date.now()}-${idx}`,
+                        kana,
+                        dictKana: kana,
+                        furiganaHtml: kana,
+                        romaji,
+                        meaning,
+                        category: "jebakan",
+                        exampleJP: "",
+                        exampleID: "",
+                        note: "📥 Diimport dari catatan pribadi"
+                    });
+                    addedCount++;
+                }
+            });
+
+            if (addedCount > 0) {
+                saveCustomWordsToStorage();
+                updateHeaderProgress();
+                renderFlashcard();
+                renderWordList();
+                document.getElementById("bulkPasteInput").value = "";
+                showToast(`🎉 Berhasil mengimport ${addedCount} kotoba baru!`);
+                switchTab("flashcard");
+            } else {
+                showToast("⚠️ Format baris belum sesuai. Gunakan pemisah '=' atau '-' (contoh: しらべます = memeriksa).");
+            }
+        }
+
+        function resetAllProgress() {
+            state.masteredIds.clear();
+            saveMasteredState();
+            renderFlashcard();
+            renderWordList();
+            showToast("🔄 Semua status hafalan telah di-reset.");
+        }
+
+        // ============================================================================
+        // TOAST HELPER
+        // ============================================================================
+        let toastTimeout = null;
+        function showToast(msg) {
+            const box = document.getElementById("toastBox");
+            const text = document.getElementById("toastMessage");
+            text.textContent = msg;
+            box.classList.remove("hidden");
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                box.classList.add("hidden");
+            }, 3000);
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
