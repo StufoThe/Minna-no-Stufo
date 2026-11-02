@@ -87,7 +87,7 @@
                 💍 Kalender Nikah & Kecocokan Tibo
             </button>
             <button type="button" id="tab-btn-weton" onclick="switchMainTab('weton')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition shrink-0 bg-stone-900 text-stone-300 border border-stone-700 hover:border-gold-400">
-                🎭 35 Weton: Wayang, Kelemahan & Media
+                🎭 7 Wayang Hari & Bedah 35 Weton Kitab
             </button>
             <button type="button" id="tab-btn-bab5" onclick="switchMainTab('bab5')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition shrink-0 bg-stone-900 text-red-300 border border-red-500/40 hover:border-red-400">
                 🔒 Bab 5: Rahasia 7 Titik, Combo & Mantra (Terkunci)
@@ -99,45 +99,46 @@
     <main class="max-w-6xl mx-auto w-full px-3 sm:px-4 py-4 sm:py-6 flex-1 space-y-5">
 
         <!-- ================================================================= -->
-        <!-- TAB 1: KALENDER PERNIKAHAN, TIBO PASANGAN & JAM AKAD              -->
+        <!-- TAB 1: KALENDER JAWA PERNIKAHAN & KECOCOKAN TIBO PASANGAN         -->
         <!-- ================================================================= -->
         <div id="tab-panel-rabi" class="space-y-5">
 
-            <!-- LANGKAH 1: PILIH WETON KEDUA CALON PENGANTIN -->
+            <!-- LANGKAH 1: PILIH WETON CALON SUAMI & CALON ISTRI -->
             <section class="card-royal rounded-2xl p-4 sm:p-6 space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800 pb-3">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-800 pb-3">
                     <div>
-                        <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Langkah 1 • Data Calon Pengantin</span>
-                        <h2 class="text-base sm:text-lg font-bold text-stone-100">Pilih Weton Calon Suami & Calon Istri</h2>
+                        <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Langkah 1 • Pencocokan Weton & Pewayangan</span>
+                        <h2 class="text-base sm:text-xl font-bold text-stone-100">Pilih Weton Calon Pengantin</h2>
                     </div>
-                    <div id="couple-total-badge" class="inline-flex items-center gap-2 bg-stone-900 border border-gold-400/30 px-3 py-1.5 rounded-xl text-xs font-bold text-gold-300 self-start sm:self-auto">
-                        Total Gabungan Neptu: 26
-                    </div>
+                    <span id="couple-total-badge" class="px-3 py-1 rounded-full bg-gold-500/20 border border-gold-400/40 text-gold-300 text-xs font-extrabold">
+                        Total Gabungan Neptu: 24
+                    </span>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                <!-- Pilihan Weton Suami & Istri -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Calon Suami -->
-                    <div class="bg-stone-950/80 border border-stone-800 rounded-xl p-3.5 space-y-2.5">
+                    <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 space-y-2.5">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">🤵 Weton Calon Suami</span>
-                            <span id="groom-neptu-info" class="text-xs font-bold text-stone-300">Jum'at Legi (Neptu 11)</span>
+                            <span class="text-xs font-extrabold text-sky-300">🤵 Calon Suami (Lanang)</span>
+                            <span id="groom-neptu-info" class="text-xs font-bold text-gold-300">Jum'at Legi (Neptu 11)</span>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="text-[11px] text-stone-400 block mb-1">Hari (Dino)</label>
-                                <select id="groom-dino" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold text-stone-100 focus:border-gold-400 outline-none">
-                                    <option value="Minggu">Minggu (5)</option>
-                                    <option value="Senin">Senin (4)</option>
-                                    <option value="Seloso">Seloso (3)</option>
-                                    <option value="Rebo">Rebo (7)</option>
-                                    <option value="Kamis">Kamis (8)</option>
-                                    <option value="Jum'at" selected>Jum'at (6)</option>
-                                    <option value="Sabtu">Sabtu (9)</option>
+                                <label class="text-[10px] text-stone-400 block mb-1">Hari (Dino)</label>
+                                <select id="groom-dino" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-2.5 py-2 text-xs font-bold text-stone-100 outline-none focus:border-gold-400">
+                                    <option value="Senin">Senin — Arjuna (4)</option>
+                                    <option value="Seloso">Seloso — Werkudoro (3)</option>
+                                    <option value="Rebo">Rebo — Semar (7)</option>
+                                    <option value="Kamis">Kamis — Hanoman (8)</option>
+                                    <option value="Jum'at" selected>Jum'at — Krisna (6)</option>
+                                    <option value="Sabtu">Sabtu — Nakula (9)</option>
+                                    <option value="Minggu">Minggu — Sadewa (5)</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[11px] text-stone-400 block mb-1">Pasaran</label>
-                                <select id="groom-pasaran" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold text-stone-100 focus:border-gold-400 outline-none">
+                                <label class="text-[10px] text-stone-400 block mb-1">Pasaran</label>
+                                <select id="groom-pasaran" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-2.5 py-2 text-xs font-bold text-stone-100 outline-none focus:border-gold-400">
                                     <option value="Legi" selected>Legi (5)</option>
                                     <option value="Paing">Paing (9)</option>
                                     <option value="Pon">Pon (7)</option>
@@ -146,31 +147,31 @@
                                 </select>
                             </div>
                         </div>
-                        <div id="groom-wayang-mini" class="text-[11px] text-stone-400 bg-stone-900/80 rounded-lg p-2 border border-stone-800/80"></div>
+                        <div id="groom-wayang-mini" class="text-[11px] bg-stone-900/80 border border-stone-800 rounded-lg p-2.5 leading-relaxed"></div>
                     </div>
 
                     <!-- Calon Istri -->
-                    <div class="bg-stone-950/80 border border-stone-800 rounded-xl p-3.5 space-y-2.5">
+                    <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 space-y-2.5">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-pink-400 uppercase tracking-wider">👰 Weton Calon Istri</span>
-                            <span id="bride-neptu-info" class="text-xs font-bold text-stone-300">Kamis Legi (Neptu 13)</span>
+                            <span class="text-xs font-extrabold text-pink-300">👰 Calon Istri (Wadon)</span>
+                            <span id="bride-neptu-info" class="text-xs font-bold text-gold-300">Kamis Legi (Neptu 13)</span>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="text-[11px] text-stone-400 block mb-1">Hari (Dino)</label>
-                                <select id="bride-dino" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold text-stone-100 focus:border-gold-400 outline-none">
-                                    <option value="Minggu">Minggu (5)</option>
-                                    <option value="Senin">Senin (4)</option>
-                                    <option value="Seloso">Seloso (3)</option>
-                                    <option value="Rebo">Rebo (7)</option>
-                                    <option value="Kamis" selected>Kamis (8)</option>
-                                    <option value="Jum'at">Jum'at (6)</option>
-                                    <option value="Sabtu">Sabtu (9)</option>
+                                <label class="text-[10px] text-stone-400 block mb-1">Hari (Dino)</label>
+                                <select id="bride-dino" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-2.5 py-2 text-xs font-bold text-stone-100 outline-none focus:border-gold-400">
+                                    <option value="Senin">Senin — Arjuna (4)</option>
+                                    <option value="Seloso">Seloso — Werkudoro (3)</option>
+                                    <option value="Rebo">Rebo — Semar (7)</option>
+                                    <option value="Kamis" selected>Kamis — Hanoman (8)</option>
+                                    <option value="Jum'at">Jum'at — Krisna (6)</option>
+                                    <option value="Sabtu">Sabtu — Nakula (9)</option>
+                                    <option value="Minggu">Minggu — Sadewa (5)</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[11px] text-stone-400 block mb-1">Pasaran</label>
-                                <select id="bride-pasaran" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold text-stone-100 focus:border-gold-400 outline-none">
+                                <label class="text-[10px] text-stone-400 block mb-1">Pasaran</label>
+                                <select id="bride-pasaran" onchange="onCoupleChange()" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-2.5 py-2 text-xs font-bold text-stone-100 outline-none focus:border-gold-400">
                                     <option value="Legi" selected>Legi (5)</option>
                                     <option value="Paing">Paing (9)</option>
                                     <option value="Pon">Pon (7)</option>
@@ -179,70 +180,36 @@
                                 </select>
                             </div>
                         </div>
-                        <div id="bride-wayang-mini" class="text-[11px] text-stone-400 bg-stone-900/80 rounded-lg p-2 border border-stone-800/80"></div>
+                        <div id="bride-wayang-mini" class="text-[11px] bg-stone-900/80 border border-stone-800 rounded-lg p-2.5 leading-relaxed"></div>
                     </div>
                 </div>
 
-                <!-- Hasil Status Kitab & Rincian TIBO Pertemuan Weton Pasangan -->
+                <!-- Hasil Evaluasi Pantangan Kitab -->
                 <div id="couple-status-card" class="rounded-xl p-4 border"></div>
 
-                <!-- 3 Kartu TIBO PERTEMUAN WETON -->
+                <!-- 3 Lapisan Tibo Pertemuan Weton -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div id="couple-tibo8-card" class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 space-y-1.5"></div>
                     <div id="couple-tibo7-card" class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 space-y-1.5"></div>
                     <div id="couple-tibo5-card" class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 space-y-1.5"></div>
                 </div>
 
-                <!-- Penjelasan Perbedaan Tibo Sri, Lungguh, dan Gedhong -->
-                <div class="bg-stone-950/70 border border-gold-400/25 rounded-xl p-3.5 sm:p-4 space-y-3">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                        <h3 class="text-xs sm:text-sm font-extrabold text-gold-300">
-                            💡 Apakah Hari "Tibo Sri", "Tibo Lungguh", dan "Tibo Gedhong" Sama Saja?
-                        </h3>
-                        <span class="text-[11px] text-stone-400">Ketiganya sama-sama baik, tetapi fokus tuah & berkahnya berbeda:</span>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
-                        <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-lg p-3 space-y-1">
-                            <div class="font-extrabold text-emerald-300">🌾 1. TIBO SRI (Sisa 1)</div>
-                            <div class="text-[11px] text-gold-200 font-semibold">Fokus: Sandang Pangan, Welas Asih & Ketenangan Batin</div>
-                            <p class="text-[11px] text-stone-300 leading-relaxed">
-                                Melambangkan Dewi Sri (kemakmuran pangan yang tak pernah putus, disayang banyak orang/tetangga, rumah tangga adem ayem). <strong>Cocok dipilih jika pasangan rawan cekcok (Tibo Padu/Sujanan).</strong>
-                            </p>
-                        </div>
-                        <div class="bg-sky-950/40 border border-sky-500/30 rounded-lg p-3 space-y-1">
-                            <div class="font-extrabold text-sky-300">👑 2. TIBO LUNGGUH (Sisa 2)</div>
-                            <div class="text-[11px] text-gold-200 font-semibold">Fokus: Derajat, Jabatan, Pangkat & Wibawa Sosial</div>
-                            <p class="text-[11px] text-stone-300 leading-relaxed">
-                                Melambangkan kedudukan tinggi dan kehormatan. Memudahkan karier, kepemimpinan, dan pengaruh sosial. <strong>Cocok bagi pasangan pegawai, pejabat, profesional, atau tokoh masyarakat.</strong>
-                            </p>
-                        </div>
-                        <div class="bg-amber-950/40 border border-amber-500/30 rounded-lg p-3 space-y-1">
-                            <div class="font-extrabold text-amber-300">🏛️ 3. TIBO GEDHONG (Sisa 3)</div>
-                            <div class="text-[11px] text-gold-200 font-semibold">Fokus: Harta Benda, Aset Besar, Tabungan & Bisnis</div>
-                            <p class="text-[11px] text-stone-300 leading-relaxed">
-                                Melambangkan gudang harta yang terkunci rapat (mudah membeli rumah, tanah, modal dagang, dan uang tidak mudah bocor). <strong>Sangat cocok jika pasangan jatuh pada Lebu Katiup Angin / Topo.</strong>
-                            </p>
-                        </div>
-                    </div>
-                    <div id="couple-best-tibo-advice" class="text-xs text-emerald-300 font-semibold bg-emerald-950/50 border border-emerald-500/30 rounded-lg px-3 py-2"></div>
-                </div>
+                <!-- Saran Pemilihan Tibo Hari Akad -->
+                <div id="couple-best-tibo-advice" class="bg-gold-500/10 border border-gold-400/30 rounded-xl p-3 text-xs text-gold-200 leading-relaxed"></div>
             </section>
 
             <!-- LANGKAH 2 & 3: KALENDER JAWA & DETAIL JAM AKAD -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
-                <!-- KOLOM KIRI (7 KOLOM): KALENDER JAWA PERNIKAHAN -->
-                <section class="lg:col-span-7 card-royal rounded-2xl p-4 sm:p-5 space-y-4">
+                <!-- LANGKAH 2: KALENDER JAWA PERNIKAHAN -->
+                <section class="lg:col-span-7 card-royal rounded-2xl p-4 sm:p-6 space-y-4">
                     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-800 pb-3">
                         <div>
                             <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Langkah 2 • Kalender Jawa Pernikahan</span>
-                            <h2 class="text-base sm:text-lg font-bold text-stone-100">Pilih Bulan & Klik Tanggal Rencana Akad</h2>
+                            <h2 class="text-base sm:text-xl font-bold text-stone-100">Pilih Bulan & Klik Tanggal Rencana Akad</h2>
                         </div>
-
                         <div class="flex items-center gap-1.5">
-                            <button type="button" onclick="changeMonth(-1)" class="px-2.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 text-xs font-bold transition">
-                                &larr;
-                            </button>
+                            <button type="button" onclick="changeMonth(-1)" class="px-2.5 py-1.5 rounded-lg bg-stone-900 border border-stone-700 hover:border-gold-400 text-xs font-bold">←</button>
                             <select id="cal-month-select" onchange="onMonthYearSelect()" class="bg-stone-900 border border-stone-700 rounded-lg px-2.5 py-1.5 text-xs font-bold text-gold-300 outline-none">
                                 <option value="0">Januari</option>
                                 <option value="1">Februari</option>
@@ -257,86 +224,69 @@
                                 <option value="10">November</option>
                                 <option value="11">Desember</option>
                             </select>
-                            <select id="cal-year-select" onchange="onMonthYearSelect()" class="bg-stone-900 border border-stone-700 rounded-lg px-2.5 py-1.5 text-xs font-bold text-stone-200 outline-none"></select>
-                            <button type="button" onclick="changeMonth(1)" class="px-2.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 text-xs font-bold transition">
-                                &rarr;
-                            </button>
-                            <button type="button" onclick="jumpToToday()" class="px-2.5 py-1.5 rounded-lg bg-gold-500/20 hover:bg-gold-500/30 border border-gold-400/40 text-gold-300 text-xs font-bold transition">
-                                Hari Ini
-                            </button>
+                            <select id="cal-year-select" onchange="onMonthYearSelect()" class="bg-stone-900 border border-stone-700 rounded-lg px-2.5 py-1.5 text-xs font-bold text-gold-300 outline-none"></select>
+                            <button type="button" onclick="changeMonth(1)" class="px-2.5 py-1.5 rounded-lg bg-stone-900 border border-stone-700 hover:border-gold-400 text-xs font-bold">→</button>
+                            <button type="button" onclick="jumpToToday()" class="px-2.5 py-1.5 rounded-lg bg-gold-500/20 border border-gold-400/40 text-gold-300 text-xs font-bold">Hari Ini</button>
                         </div>
                     </div>
 
-                    <!-- Info Bulan & Tahun Jawa Aktif -->
-                    <div id="cal-jawa-header-info" class="bg-stone-950/90 border border-stone-800 rounded-xl px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs"></div>
+                    <div id="cal-jawa-header-info" class="flex flex-wrap items-center justify-between gap-2 bg-stone-950/90 border border-stone-800 rounded-xl px-3.5 py-2 text-xs text-stone-300"></div>
 
-                    <!-- Rekomendasi Tanggal Terbaik Bulan Ini -->
+                    <!-- Deretan Rekomendasi Tanggal Terbaik Bulan Ini -->
                     <div class="space-y-1.5">
-                        <div class="text-xs font-bold text-emerald-400">
-                            🌟 Rekomendasi Tanggal Terbaik Bulan Ini (Klik untuk Lihat Jamnya):
-                        </div>
+                        <div class="text-xs font-bold text-emerald-300">🌟 Rekomendasi Tanggal Terbaik Bulan Ini (Klik untuk Lihat Jamnya):</div>
                         <div id="best-dates-chips" class="flex flex-wrap gap-1.5"></div>
                     </div>
 
-                    <!-- Grid Header Hari -->
-                    <div class="grid grid-cols-7 gap-1 sm:gap-1.5 text-center text-[11px] font-bold py-1.5 bg-stone-950 rounded-lg border border-stone-800">
-                        <div class="text-red-400">Min</div>
-                        <div class="text-stone-300">Sen</div>
-                        <div class="text-stone-300">Sel</div>
-                        <div class="text-stone-300">Rab</div>
-                        <div class="text-stone-300">Kam</div>
-                        <div class="text-emerald-400">Jum</div>
-                        <div class="text-amber-300">Sab</div>
+                    <!-- Header Nama Hari -->
+                    <div class="grid grid-cols-7 gap-1.5 text-center text-[11px] font-extrabold bg-stone-950/90 border border-stone-800 rounded-xl py-2">
+                        <span class="text-red-400">Min</span>
+                        <span class="text-stone-300">Sen</span>
+                        <span class="text-stone-300">Sel</span>
+                        <span class="text-stone-300">Rab</span>
+                        <span class="text-stone-300">Kam</span>
+                        <span class="text-emerald-400">Jum</span>
+                        <span class="text-amber-300">Sab</span>
                     </div>
 
                     <!-- Grid Tanggal Kalender -->
-                    <div id="calendar-grid" class="grid grid-cols-7 gap-1 sm:gap-1.5"></div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-1.5"></div>
 
-                    <!-- Keterangan Warna Kalender -->
-                    <div class="grid grid-cols-3 gap-2 pt-2 border-t border-stone-800 text-[11px]">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded bg-emerald-500/30 border border-emerald-400 inline-block shrink-0"></span>
-                            <span class="text-stone-300"><strong class="text-emerald-300">Hijau:</strong> Hari Terbaik (Sri/Lungguh/Gedhong)</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded bg-amber-500/25 border border-amber-400 inline-block shrink-0"></span>
-                            <span class="text-stone-300"><strong class="text-amber-300">Kuning:</strong> Cukup (Ada Catatan)</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded bg-red-500/25 border border-red-400 inline-block shrink-0"></span>
-                            <span class="text-stone-300"><strong class="text-red-300">Merah:</strong> Pantangan / Naas Kitab</span>
-                        </div>
+                    <!-- Legenda Warna Kalender -->
+                    <div class="flex flex-wrap items-center gap-4 pt-2 border-t border-stone-800 text-[11px] text-stone-300">
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500/30 border border-emerald-400 inline-block"></span> <strong class="text-emerald-300">Hijau (Sri/Lungguh/Gedhong):</strong> Hari Terbaik Menikah</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-red-500/30 border border-red-400 inline-block"></span> <strong class="text-red-300">Merah (Loro/Pati/Ba'as/Was):</strong> Pantangan / Hari Naas</span>
                     </div>
                 </section>
 
-                <!-- KOLOM KANAN (5 KOLOM): LANGKAH 3 DETAIL HARI, TIBO & JAM AKAD -->
-                <section id="step3-detail-panel" class="lg:col-span-5 card-royal rounded-2xl p-4 sm:p-5 space-y-4">
+                <!-- LANGKAH 3: DETAIL HARI, JAM SANGAT & ARAH HADAP AKAD -->
+                <section id="step3-detail-panel" class="lg:col-span-5 card-royal rounded-2xl p-4 sm:p-6 space-y-4">
                     <div class="border-b border-stone-800 pb-3">
                         <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Langkah 3 • Detail Hari & Jam Akad</span>
-                        <h2 id="selected-date-title" class="font-serif text-lg sm:text-xl font-extrabold text-stone-100 mt-0.5">-</h2>
-                        <p id="selected-date-sub" class="text-xs text-gold-300 font-semibold mt-0.5">-</p>
+                        <h2 id="selected-date-title" class="font-serif text-base sm:text-xl font-extrabold text-stone-100 mt-0.5">Pilih Tanggal</h2>
+                        <p id="selected-date-sub" class="text-xs text-gold-300 mt-0.5">-</p>
                     </div>
 
-                    <!-- Box Skor & Makna Tibo Hari Akad -->
-                    <div id="selected-date-verdict" class="rounded-xl p-3.5 border space-y-2"></div>
+                    <!-- Hasil Tibo Hari Akad -->
+                    <div id="selected-date-verdict" class="rounded-xl p-3.5 border"></div>
 
                     <!-- Tabel Jam Terbaik Ijab Qabul (Menit Sangat) -->
                     <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 space-y-2.5">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-xs font-extrabold uppercase tracking-wider text-gold-300">🕰️ Jam Terbaik Ijab Qabul / Akad Nikah</h3>
-                                <p class="text-[11px] text-stone-400">Sesuai Tabel <em>Menit Sangat</em> di Halaman 6–7 Kitab:</p>
+                                <h3 class="text-xs font-extrabold uppercase tracking-wider text-gold-300">🕰️ Jam Terbaik Ijab Qabul / Hajat</h3>
+                                <p class="text-[11px] text-stone-400">Diambil dari Tabel Menit Sangat Hal. 6 Kitab (Utamakan Ahmad Slamet & Yusuf Bagus):</p>
                             </div>
-                            <span id="selected-pasaran-badge" class="px-2 py-1 rounded-lg bg-stone-900 border border-stone-700 text-[11px] font-bold text-stone-200">Pasaran -</span>
+                            <span id="selected-pasaran-badge" class="px-2.5 py-1 rounded-lg bg-stone-900 border border-stone-700 text-[11px] font-bold text-gold-300 shrink-0">Pasaran -</span>
                         </div>
                         <div id="selected-sangat-list" class="space-y-1.5"></div>
                     </div>
 
-                    <!-- Panduan Arah Menghadap Saat Akad & Siasat Counter Nogo -->
-                    <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 space-y-2">
-                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-gold-300">🧭 Arah Kejayaan (Joyo) vs Pantangan (Nogo)</h3>
+                    <!-- Kompas Arah Joyo Dino vs Nogo Dino -->
+                    <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-3.5 space-y-2.5">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-gold-300">🧭 Arah Hadap / Keberangkatan Akad (Nogo vs Joyo)</h3>
                         <div id="selected-direction-box" class="grid grid-cols-2 gap-2 text-xs"></div>
-                        <p id="selected-direction-note" class="text-[11px] text-stone-300 leading-relaxed pt-1"></p>
+                        <p id="selected-direction-note" class="text-[11px] text-stone-300 leading-relaxed bg-stone-900/80 border border-stone-800 rounded-lg p-2.5"></p>
                     </div>
                 </section>
 
@@ -344,97 +294,86 @@
         </div> <!-- END TAB 1 -->
 
         <!-- ================================================================= -->
-        <!-- TAB 2: 35 WETON LENGKAP (WAYANG, KELEMAHAN & MEDIA SPESIFIK)      -->
+        <!-- TAB 2: 7 WAYANG HARI (DINO) & BEDAH 35 WETON MURNI SESUAI KITAB   -->
         <!-- ================================================================= -->
         <div id="tab-panel-weton" class="hidden space-y-5">
 
-            <!-- Panel Interaktif Bedah Fokus 35 Weton + Rumus Unsur Kitab -->
+            <!-- BAGIAN 1: PAKEM 7 WAYANG BERDASARKAN 7 HARI (DINO) DI KITAB -->
+            <section class="card-royal rounded-2xl p-4 sm:p-6 space-y-4">
+                <div class="border-b border-stone-800 pb-3">
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Patokan Utama Pewayangan • 7 Hari (Saptawara)</span>
+                    <h2 class="text-base sm:text-xl font-bold text-stone-100 mt-0.5">
+                        Pakem 7 Tokoh Wayang Berdasarkan Hari (Senin s/d Minggu) & Kelebihan/Kelemahannya di Kitab
+                    </h2>
+                    <p class="text-xs text-stone-300 mt-1 leading-relaxed">
+                        Dalam pakem ini, <strong>tokoh pewayangan melekat pada 7 Hari (Dino)</strong>. Ketika ke-7 Hari tersebut berpasangan dengan <strong>5 Pasaran (Legi, Paing, Pon, Wage, Kliwon)</strong>, barulah lahir <strong>35 Weton</strong> beserta kelebihan (<em>Joyo Dino</em>) dan kelemahan spesifiknya (<em>Nogo Dino, Ba'as Tanggal, Was Wulan, Wase Tahun, & Pertemon</em>) sebagaimana tertulis di dalam kitab.
+                    </p>
+                </div>
+
+                <!-- Grid 7 Kartu Wayang Hari (Senin - Minggu) -->
+                <div id="seven-days-wayang-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
+            </section>
+
+            <!-- BAGIAN 2: SOROTAN INTERAKTIF & FILTER 35 WETON BERDASARKAN KITAB -->
             <section class="card-royal rounded-2xl p-4 sm:p-6 space-y-4">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-stone-800 pb-3">
                     <div>
-                        <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Ensiklopedia Pewayangan Lengkap 35 Weton (No. 1–35 Kitab)</span>
-                        <h2 class="text-base sm:text-xl font-bold text-stone-100">Bedah Tokoh Wayang, Kelemahan Batin, Media & Penangkal Semua 35 Weton</h2>
-                        <p class="text-xs text-stone-300 mt-1 leading-relaxed">
-                            Pilih weton mana saja di bawah ini untuk melihat bedah mendalamnya, atau gulir ke bawah untuk membaca kartu lengkap <strong>seluruh 35 weton</strong> sesuai urutan halaman 1 & 3 kitab.
+                        <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Bedah Spesifik Per Weton (Hari Wayang + Pasaran)</span>
+                        <h2 class="text-base sm:text-xl font-bold text-stone-100">Cek Kelebihan & Kelemahan 35 Weton Berdasarkan Kitab</h2>
+                        <p class="text-xs text-stone-300 mt-1">
+                            Pilih kombinasi <strong>Hari (Wayang)</strong> dan <strong>Pasaran</strong> untuk melihat kelebihan (<em>Joyo</em>) dan titik kelemahan/pantangannya secara akurat sesuai halaman 1–8 kitab.
                         </p>
                     </div>
 
                     <!-- Pemilih Cepat Weton untuk Sorotan Utama -->
                     <div class="flex items-center gap-2 bg-stone-950 border border-gold-400/40 rounded-xl p-2 shrink-0">
                         <div>
-                            <label class="text-[10px] text-stone-400 block">Pilih Hari</label>
+                            <label class="text-[10px] text-stone-400 block">Pilih Hari (Wayang)</label>
                             <select id="spot-dino" onchange="renderWetonSpotlight()" class="bg-stone-900 border border-stone-700 rounded-lg px-2.5 py-1.5 text-xs font-bold text-gold-300 outline-none">
-                                <option value="Minggu">Minggu (5)</option>
-                                <option value="Senin" selected>Senin (4)</option>
-                                <option value="Seloso">Seloso (3)</option>
-                                <option value="Rebo">Rebo (7)</option>
-                                <option value="Kamis">Kamis (8)</option>
-                                <option value="Jum'at">Jum'at (6)</option>
-                                <option value="Sabtu">Sabtu (9)</option>
+                                <option value="Senin" selected>Senin — Arjuna (4)</option>
+                                <option value="Seloso">Seloso — Werkudoro (3)</option>
+                                <option value="Rebo">Rebo — Semar (7)</option>
+                                <option value="Kamis">Kamis — Hanoman (8)</option>
+                                <option value="Jum'at">Jum'at — Krisna (6)</option>
+                                <option value="Sabtu">Sabtu — Nakula (9)</option>
+                                <option value="Minggu">Minggu — Sadewa (5)</option>
                             </select>
                         </div>
                         <div>
                             <label class="text-[10px] text-stone-400 block">Pilih Pasaran</label>
                             <select id="spot-pasaran" onchange="renderWetonSpotlight()" class="bg-stone-900 border border-stone-700 rounded-lg px-2.5 py-1.5 text-xs font-bold text-gold-300 outline-none">
-                                <option value="Legi">Legi (5)</option>
-                                <option value="Paing">Paing (9)</option>
-                                <option value="Pon">Pon (7)</option>
-                                <option value="Wage" selected>Wage (4)</option>
-                                <option value="Kliwon">Kliwon (8)</option>
+                                <option value="Legi">Legi (5 - Wetan)</option>
+                                <option value="Paing">Paing (9 - Kidul)</option>
+                                <option value="Pon">Pon (7 - Kulon)</option>
+                                <option value="Wage" selected>Wage (4 - Lor)</option>
+                                <option value="Kliwon">Kliwon (8 - Tengah)</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <!-- Kartu Sorotan Dinamis (Bisa Menampilkan Semua 35 Weton) -->
+                <!-- Kartu Sorotan Dinamis 35 Weton -->
                 <div id="weton-spotlight-card" class="bg-gradient-to-br from-amber-950/40 via-stone-950 to-stone-950 border-2 border-gold-400/50 rounded-2xl p-4 sm:p-5"></div>
-
-                <!-- Rumus Dasar Media Berdasarkan Hari & Pasaran (Sesuai Hal. 1 & 5 Kitab) -->
-                <div class="bg-stone-950/90 border border-stone-800 rounded-xl p-4 space-y-2.5">
-                    <h3 class="text-xs sm:text-sm font-extrabold text-gold-300">🔬 Rumus Media Berdasarkan Unsur Hari (Dino) & Pasaran di Kitab (Hal. 1 & 5)</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 text-[11px]">
-                        <div class="bg-stone-900/90 border border-stone-800 rounded-lg p-2.5">
-                            <div class="font-bold text-stone-100">1. Unsur Wetan (Minggu + Legi)</div>
-                            <p class="text-stone-400 mt-1">Elemen Udara/Cahaya. Media peka: <strong>asap, wewangian, angin, dan foto/bayangan</strong>.</p>
-                        </div>
-                        <div class="bg-stone-900/90 border border-stone-800 rounded-lg p-2.5">
-                            <div class="font-bold text-red-300">2. Unsur Kidul (Sabtu + Paing)</div>
-                            <p class="text-stone-400 mt-1">Elemen Api/Bumi Merah. Media peka: <strong>makanan/minuman panas, tanah pekuburan/halaman, dan benda logam</strong>.</p>
-                        </div>
-                        <div class="bg-stone-900/90 border border-stone-800 rounded-lg p-2.5">
-                            <div class="font-bold text-amber-300">3. Unsur Kulon (Rebo + Pon)</div>
-                            <p class="text-stone-400 mt-1">Elemen Daun/Emas Barat. Media peka: <strong>uang logam/kertas, daun-daunan, dan air cucian/mandi</strong>.</p>
-                        </div>
-                        <div class="bg-stone-900/90 border border-stone-800 rounded-lg p-2.5">
-                            <div class="font-bold text-sky-300">4. Unsur Lor (Senin + Wage)</div>
-                            <p class="text-stone-400 mt-1">Elemen Air/Bunga Utara. Media peka: <strong>minuman manis, parfum, pakaian berkeringat, dan tatapan mata</strong>.</p>
-                        </div>
-                        <div class="bg-stone-900/90 border border-stone-800 rounded-lg p-2.5">
-                            <div class="font-bold text-emerald-300">5. Unsur Tengah (Kamis + Kliwon)</div>
-                            <p class="text-stone-400 mt-1">Elemen Pancer/Angin Pusar. Media peka: <strong>suara/mantra, tanah pijakan kaki, dan rambut/kuku</strong>.</p>
-                        </div>
-                    </div>
-                </div>
             </section>
 
-            <!-- Daftar & Pencarian Seluruh 35 Weton Lengkap -->
+            <!-- Daftar & Pencarian Seluruh 35 Weton Lengkap Berdasarkan Kitab -->
             <section class="card-royal rounded-2xl p-4 sm:p-6 space-y-4">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-stone-800 pb-3">
                     <div>
-                        <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Katalog Utuh 35 Weton Jawa (Urutan No. 1–35 di Kitab)</span>
-                        <h2 class="text-base sm:text-lg font-bold text-stone-100">Seluruh 35 Weton: Tokoh Wayang, Filosofi, Kelemahan, Media & Penangkal</h2>
+                        <span class="text-[11px] font-bold uppercase tracking-widest text-gold-400">Daftar Utuh No. 1–35 di Kitab (Hal. 1 & 3)</span>
+                        <h2 class="text-base sm:text-lg font-bold text-stone-100">Kelebihan & Kekurangan Seluruh 35 Weton Berdasarkan Kitab</h2>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
-                        <input id="weton-search-input" type="text" oninput="filterWetonCards()" placeholder="Cari weton / wayang / kelemahan..." class="bg-stone-950 border border-stone-700 rounded-xl px-3 py-2 text-xs text-stone-100 outline-none focus:border-gold-400 w-full sm:w-64">
+                        <input id="weton-search-input" type="text" oninput="filterWetonCards()" placeholder="Cari weton / wayang / arah / pantangan..." class="bg-stone-950 border border-stone-700 rounded-xl px-3 py-2 text-xs text-stone-100 outline-none focus:border-gold-400 w-full sm:w-64">
                         <select id="weton-filter-dino" onchange="filterWetonCards()" class="bg-stone-950 border border-stone-700 rounded-xl px-3 py-2 text-xs font-bold text-gold-300 outline-none">
                             <option value="ALL">Semua Hari (35 Weton)</option>
-                            <option value="Jum'at">Jum'at (5 Weton)</option>
-                            <option value="Sabtu">Sabtu (5 Weton)</option>
-                            <option value="Minggu">Minggu (5 Weton)</option>
-                            <option value="Senin">Senin (5 Weton)</option>
-                            <option value="Seloso">Seloso (5 Weton)</option>
-                            <option value="Rebo">Rebo (5 Weton)</option>
-                            <option value="Kamis">Kamis (5 Weton)</option>
+                            <option value="Senin">Senin — Arjuna</option>
+                            <option value="Seloso">Seloso — Werkudoro</option>
+                            <option value="Rebo">Rebo — Semar</option>
+                            <option value="Kamis">Kamis — Hanoman</option>
+                            <option value="Jum'at">Jum'at — Krisna</option>
+                            <option value="Sabtu">Sabtu — Nakula</option>
+                            <option value="Minggu">Minggu — Sadewa</option>
                         </select>
                         <select id="weton-filter-pasaran" onchange="filterWetonCards()" class="bg-stone-950 border border-stone-700 rounded-xl px-3 py-2 text-xs font-bold text-sky-300 outline-none">
                             <option value="ALL">Semua Pasaran</option>
@@ -866,323 +805,166 @@
             { no: 35, dino: "Kamis",  pasaran: "Kliwon", nogo: "Lor",   joyo: "Tengah, Kliwon Tengah" }
         ];
 
-        const PROFIL_35_WETON = {
-            "Jum'at Legi": {
-                wayang: "Prabu Puntadewa (Yudhistira) — Sanggar Waringin",
-                kisahWayang: "Raja Amarta berdarah putih yang terkenal paling jujur, suci hatinya, dan menjadi pohon beringin pengayom bagi keempat adiknya (Pandawa). Namun seperti Puntadewa yang pernah mempertaruhkan kerajaannya karena tak kuasa menolak undangan dadu Sengkuni, weton ini sering celaka karena terlalu sungkan menolak permintaan orang.",
-                watak: "Jujur, teduh, mengayomi banyak orang, doanya mudah terkabul, namun batinnya sangat sensitif bila dikhianati.",
-                kelemahan: "Terlalu mudah percaya pada ratapan orang lain, tidak tegaan (sulit berkata tidak), sehingga sering menanggung hutang atau masalah akibat ulah teman/saudara sendiri.",
-                media: "Wewangian/dupa, kain putih atau pakaian ibadah, dan air bening (perpaduan unsur Jum'at Wetan Kidul + Legi Wetan).",
-                pantanganKitab: "Urutan No. 1 di Kitab • Pantang berjodoh dengan Rebo Pon (Ketemu 25 / Tundunan Kebo Gerang).",
-                penangkal: "Jangan pernah menjadi penjamin hutang tanpa tertulis; kuatkan batin di jam Ahmad Slamet (07.00–08.59) sambil menghadap Wetan Kidul."
+        // =====================================================================
+        // PAKEM 7 WAYANG BERDASARKAN 7 HARI (DINO) SESUAI KITAB
+        // =====================================================================
+        const PAKEM_7_HARI_WAYANG = {
+            "Senin": {
+                wayang: "Raden Arjuna (Janaka)",
+                icon: "🏹",
+                neptu: 4,
+                arahDasar: "Lor (Utara)",
+                bojonePasaran: "Wage (4) — Senin Bojone Wage (Lor = 8)",
+                kelebihanKitab: "Penguasa kejayaan arah Lor (Utara). Seluruh 5 weton hari Senin di kitab memiliki Joyo Dino di Lor. Memiliki daya pikat alami (pengasihan Arjuna), fokus memanah target, cerdas, dan tangkas memikat relasi.",
+                kelemahanKitab: "1) Kelemahan utama pada godaan wanita/asmara & perasaan; 2) Di Hal. 2 Kitab terkena 'Kranjang Bejat & Ngruwat Segoro Getih' bila bertemu hari Sabtu (sebab Sabtu Kidul vs Senin Lor berlawanan 180°) serta 'Kolo Luang' bila bertemu Jum'at (selisih 2 hari); 3) Di Hal. 3 menjadi Was Wulan pada bulan Mulut, Bakdo Mulut, & Jumadilawal.",
+                mediaPeka: "Wewangian/parfum, pakaian bekas keringat, tatapan mata/foto, dan minuman manis (Unsur Lor)."
             },
-            "Sabtu Paing": {
-                wayang: "Prabu Baladewa (Kakrasana) — Lakuning Geni (Api Besar)",
-                kisahWayang: "Raja Mandura bersenjata Nanggala yang berwatak keras, blak-blakan, dan mudah sekali tersulut amarah oleh hasutan Kurawa, tetapi sejatinya berhati jujur dan cepat reda bila diingatkan oleh Kresna.",
-                watak: "Neptu tertinggi (9+9=18). Tegas, pemberani, berwibawa besar, bercita-cita tinggi, dan pantang mundur.",
-                kelemahan: "Amarah yang meledak-ledak saat diprovokasi, gengsi sangat tinggi, mudah dijatuhkan lewat tantangan adu ego, pujian semu, atau godaan asmara.",
-                media: "Makanan/minuman panas, benda logam/uang panas, dan tanah pijakan di arah Selatan/Kidul (Sabtu Bojone Paing sama-sama Kidul: 9+9=18).",
-                pantanganKitab: "Urutan No. 2 di Kitab • Dino Bojone Pasaran Kidul (18) • Pantang berjodoh dengan Seloso Wage (Ketemu 25).",
-                penangkal: "Redam emosi dengan air wudhu/minum air putih sebelum mengambil keputusan; hindari melangkah ke arah Kidul saat marah."
+            "Seloso": {
+                wayang: "Raden Werkudoro (Bima)",
+                icon: "⚔️",
+                neptu: 3,
+                arahDasar: "Kulon Lor (Barat Laut)",
+                bojonePasaran: "Paing (9) — Unsur Api/Perjuangan",
+                kelebihanKitab: "Memiliki daya dobrak dan keberanian Werkudoro dengan poros Joyo Dino di Kulon Lor (dan mendapat 3 arah kejayaan sekaligus pada Seloso Paing: Kulon Lor, Legi Wetan, Paing Kidul). Tegas, jujur apa adanya, dan pantang mundur menghadapi rintangan.",
+                kelemahanKitab: "1) Terlalu keras/blak-blakan hingga mudah terpancing adu emosi; 2) Memiliki pantangan 'Ketemu 25 (Tundunan Kebo Gerang)' terbanyak di kitab (4 pasang: Seloso Wage+Sabtu Paing, Seloso Pon+Jum'at Paing, Seloso Legi+Sabtu Kliwon, Seloso Legi+Kamis Paing); 3) Seloso Wage adalah urutan ke-1 Ba'as Tanggal & Seloso Paing adalah Wase Tahun Je; 4) Menjadi Was Wulan di bulan Mulut–Bakdo Mulut–Jumadilawal.",
+                mediaPeka: "Makanan panas/bakaran, benda tajam/logam, serta tanah pijakan saat sedang marah."
             },
-            "Minggu Pon": {
-                wayang: "Raden Gatotkaca — Aras Kembang & Bumi Kapethak",
-                kisahWayang: "Ksatria Pringgadani berotot kawat bertulang besi yang siap terbang membela keluarga kapan saja, namun di balik ketangguhannya memiliki sisi romantis (Aras Kembang) dan pernah gugur karena panah Konta yang mengincar pusar kelahirannya.",
-                watak: "Pekerja keras, tahan banting, memikat perhatian lawan jenis, dan berani pasang badan membela keluarga.",
-                kelemahan: "Kurang waspada terhadap pujian semu, mudah boros demi menjaga wibawa/penampilan di depan umum, dan rawan disergap lawan saat lengah.",
-                media: "Uang logam, perhiasan/barang berkilau, pakaian kebanggaan, dan daun-daunan (Minggu Wetan + Pon Kulon).",
-                pantanganKitab: "Urutan No. 3 di Kitab • Merupakan Wase Tahun Ehe (Hari Naas Tahunan pada Tahun Ehe) di Hal. 4 Kitab.",
-                penangkal: "Kunci tabungan dalam bentuk aset/emas dan jangan tergoda pujian saat bernegosiasi bisnis; arah kejayaan di Wetan & Kulon Bener."
+            "Rebo": {
+                wayang: "Kyai Lurah Semar Badranaya",
+                icon: "🌿",
+                neptu: 7,
+                arahDasar: "Kulon (Barat)",
+                bojonePasaran: "Pon (7) — Tertulis di Hal. 5: 'Rebo bojone Pon, Rebo iku Kulon Pon yo Kulon (7+7=14)'",
+                kelebihanKitab: "Seperti Semar yang menjadi pamomong agung, Rebo memegang kemantapan arah Kulon (Barat) dengan nilai neptu seimbang (7). Saat bertemu Pon (Rebo Pon = 14) menjadi poros rezeki dan pengayoman yang sangat kuat.",
+                kelemahanKitab: "1) Tidak tegaan/terlalu mengalah menolong orang hingga terkuras; 2) Di Hal. 2 Kitab, pertemuan Rebo + Minggu terkena 2 pantangan berat sekaligus: 'Ngruwat Segoro Getih' dan 'Kolo Luang' (sebab Minggu Wetan vs Rebo Kulon berlawanan arah & selisih 2 hari); 3) Rebo Legi adalah Ba'as Tanggal & Rebo Wage adalah Wase Tahun Alip; 4) Menjadi Was Wulan di bulan Jumadilakir–Rajab–Ruwah.",
+                mediaPeka: "Air minum/air cucian, uang/harta benda, dan daun pembungkus makanan (Unsur Kulon)."
             },
-            "Senin Wage": {
-                wayang: "Raden Arjuna (Janaka) — Lakuning Geni & Tunggak Semi",
-                kisahWayang: "Penengah Pandawa yang tampan/memikat, ahli memanah, dan dikelilingi banyak bidadari serta putri raja. Namun titik lengah Arjuna selalu berkaitan dengan urusan asmara/wanita dan rasa cemburu ketika harga dirinya disentuh.",
-                watak: "Memikat lawan jenis, cerdas, cekatan, setia menolong teman, namun api cemburu dan emosinya cepat menyala (Lakuning Geni).",
-                kelemahan: "Godaan lawan jenis/wanita (asmara), rayuan halus, dan emosi/cemburu sesaat yang dapat meruntuhkan karier maupun rumah tangganya.",
-                media: "Parfum/wewangian, pakaian bekas keringat, helai rambut, tatapan mata, dan minuman manis (Senin Bojone Wage sama-sama Lor: 4+4=8).",
-                pantanganKitab: "Urutan No. 4 di Kitab • Dino Bojone Pasaran Lor (8) • Pantang berjodoh dengan Kamis Paing (Ketemu 25).",
-                penangkal: "Jaga batas pergaulan dengan lawan jenis dan jangan meninggalkan pakaian berkeringat sembarangan; kunci kesadaran sebelum melangkah ke arah Lor."
+            "Kamis": {
+                wayang: "Begawan Anoman (Hanoman)",
+                icon: "🐒",
+                neptu: 8,
+                arahDasar: "Tengah (Pusat / Pancer)",
+                bojonePasaran: "Kliwon (8) — Tertulis di Hal. 5: 'Kamis bojone Kliwon, Kamis Tengah Kliwon Tengah (8+8=16)'",
+                kelebihanKitab: "Seperti Hanoman (kera putih penjaga Pancer/Tengah yang sakti), Kamis adalah SATU-SATUNYA hari di dalam kitab yang arah Joyo Dino-nya selalu berada di TENGAH (Pusat) pada kelima pasarannya! Artinya memiliki benteng batin alami di dalam diri sendiri dan kesetiaan mutlak.",
+                kelemahanKitab: "1) Karena kekuatannya terkunci di Tengah (Pancer), kelemahan utamanya adalah jika ia terpancing keluar dari ketenangan pusatnya (gelisah/marah/terprovokasi) maka langsung menabrak Nogo Dino di Wetan/Lor/Kulon; 2) Kamis Pon adalah Ba'as Tanggal & Kamis Legi adalah Wase Tahun Be; 3) Menjadi Was Wulan di bulan Jumadilakir–Rajab–Ruwah; 4) Memiliki 3 pantangan Ketemu 25.",
+                mediaPeka: "Suara/ucapan sumpah (sabdo), hembusan angin/asap, dan tanah pijakan tepat di bawah kaki (Unsur Tengah)."
             },
-            "Seloso Kliwon": {
-                wayang: "Bathara Guru / Prabu Matswapati — Aras Tuding (Anggoro Kasih)",
-                kisahWayang: "Penguasa Kahyangan Jonggring Saloka yang memiliki kesaktian tinggi dan dihormati para dewa, namun karena memegang kekuasaan tertinggi sering menjadi tumpuan tuntutan dan sasaran permohonan yang berat.",
-                watak: "Weton keramat Anggoro Kasih. Berjiwa spiritual kuat, pandai berbicara, memiliki daya tarik mistis, dan beruntung dalam rezeki.",
-                kelemahan: "Sering ditunjuk menjadi kambing hitam (Aras Tuding), pikiran mudah curiga berlebihan, serta kepekaan batinnya rawan dimasuki energi gaib saat fisik lelah.",
-                media: "Tanah perempatan/pijakan kaki, kuku/rambut, dan suara/ucapan sumpah malam hari (Seloso Kulon Lor + Kliwon Tengah).",
-                pantanganKitab: "Urutan No. 5 di Kitab • Hari Anggoro Kasih (Nogo Dino di Kulon, Joyo Dino di Kulon Lor & Tengah).",
-                penangkal: "Tidur dalam keadaan suci/berwudhu pada malam Anggoro Kasih dan gunakan jam Jobrail Kuwat untuk membentengi batin."
+            "Jum'at": {
+                wayang: "Sri Bathara Kresna (Krisna)",
+                icon: "👑",
+                neptu: 6,
+                arahDasar: "Wetan Kidul (Tenggara)",
+                bojonePasaran: "Legi (5) — Pembuka No. 1 di Kitab (Jum'at Legi)",
+                kelebihanKitab: "Seperti Prabu Kresna yang menjadi penuntun strategi dan pembuka jalan Pandawa, hari Jum'at ditempatkan sebagai pembuka urutan No. 1 di kitab (Jum'at Legi) dan menguasai poros arah Wetan Kidul (Tenggara) secara konsisten di seluruh 5 pasarannya. Cerdas, berwibawa, dan tajam membaca keadaan.",
+                kelemahanKitab: "1) Di Hal. 3 Kitab, Jum'at menanggung beban naas bulanan sendirian tanpa teman yang disebut 'Was Wulan Jum'ah Ngijeni' selama 3 bulan penuh (Poso–Sawal–Selo); 2) Menanggung 2 Wase Tahun sekaligus di Hal. 4 & 8 (Jum'at Pon di Tahun Jemawal & Jum'at Wage di Tahun Jemakir); 3) Terkena Kolo Luang bila bertemu Senin; 4) Jum'at Paing memiliki 3 pantangan Ketemu 25 sekaligus di Hal. 7.",
+                mediaPeka: "Wewangian/dupa, pakaian ibadah/kebesaran, serta makanan jamuan (Unsur Wetan Kidul)."
             },
-            "Rebo Legi": {
-                wayang: "Raden Werkudara (Bima) — Padangon Jagur & Waseso Segoro",
-                kisahWayang: "Ksatria Jodhipati yang tak pernah duduk membungkuk pada siapa pun, bicara apa adanya, membela kebenaran tanpa pandang bulu, dan selalu terjun menolong saudaranya meski harus masuk ke sarang raksasa.",
-                watak: "Jujur, tegas menjunjung keadilan, menghormati tata krama, berhati seluas lautan, dan sangat setia kawan.",
-                kelemahan: "Suka mencampuri urusan/masalah teman hingga ikut terseret kesulitan, terlalu blak-blakan hingga memancing musuh dalam selimut.",
-                media: "Air minum, daun pembungkus makanan, dan angin/hembusan asap (Rebo Kulon + Legi Wetan).",
-                pantanganKitab: "Urutan No. 6 di Kitab • Urutan ke-3 Ba'as Tanggal (Hari Naas Tanggal) • Pantang berjodoh dengan Senin Paing (Ketemu 25).",
-                penangkal: "Batasi ikut campur masalah rumah tangga/hutang orang lain, dan hindari memulai hajat besar tepat di hari weton sendiri (Ba'as Tanggal)."
+            "Sabtu": {
+                wayang: "Raden Nakula",
+                icon: "🛡️",
+                neptu: 9,
+                arahDasar: "Kidul (Selatan)",
+                bojonePasaran: "Paing (9) — Sabtu Bojone Paing (Kidul = 18, Neptu Tertinggi)",
+                kelebihanKitab: "Seperti Nakula (ksatria kembar penjaga perbendaharaan & ketertiban), Sabtu memegang nilai neptu hari tertinggi (9) dan menguasai arah Kidul (Selatan). Saat berpasangan dengan Paing mencapai puncak neptu 18. Tangguh menjaga aset dan wibawa keluarga.",
+                kelemahanKitab: "1) Di Hal. 2 Kitab terkena 'Kranjang Bejat & Ngruwat Segoro Getih' bila bertemu Senin (sebab Sabtu Kidul vs Senin Lor bertolak belakang); 2) Pada Sabtu Paing & Sabtu Legi, posisi Nogo Dino berada di Kidul (menempel langsung dengan arah Joyo Kidul-nya), sehingga bila lengah/sombong rezekinya langsung berbalik menjadi celaka; 3) Sabtu Kliwon adalah Ba'as Tanggal & Sabtu Legi adalah Wase Tahun Dal; 4) Bersama kembarannya (Minggu) menjadi Was Wulan di bulan Besar–Suro–Sapar.",
+                mediaPeka: "Tanah halaman/pekuburan, benda logam/perhiasan, dan makanan hangat (Unsur Kidul)."
             },
-            "Kamis Paing": {
-                wayang: "Patih Gajah Mada / Prabu Kresna — Lakuning Gunung",
-                kisahWayang: "Sosok negarawan dan panglima besar yang tegak kokoh seperti gunung, mampu menyatukan wilayah luas dan berpikir strategis, namun keagungannya membuat ia pantang direndahkan sedikit pun.",
-                watak: "Cerdas, bercita-cita tinggi, pelindung keluarga, berwibawa besar, dan berbakat menjadi pemimpin.",
-                kelemahan: "Haus pengakuan/kehormatan; bila tersinggung kata-katanya sangat tajam melukai hati, dan rawan dikhianati oleh orang kepercayaannya sendiri.",
-                media: "Makanan berunsur daging/pedas, kursi/tempat duduk jabatan, dan tanah halaman (Kamis Tengah + Paing Kidul).",
-                pantanganKitab: "Urutan No. 7 di Kitab • Memiliki 2 pantangan Ketemu 25 sekaligus: pantang bertemu Senin Wage maupun Seloso Legi.",
-                penangkal: "Jaga lisan saat menegur bawahan/pasangan dan selalu duduk menghadap arah Tengah atau Kidul saat memimpin rapat penting."
-            },
-            "Jum'at Pon": {
-                wayang: "Resi Bisma (Dewabrata) — Lakuning Lintang",
-                kisahWayang: "Sesepuh agung Hastinapura yang bijaksana, tenang, dan disegani semua pihak, namun karena sumpah kesetiaannya pada tahta, ia sering memendam kesedihan batin sendirian di tengah perpecahan keluarga.",
-                watak: "Tenang, bijaksana, berjiwa sosial tinggi, tutur katanya menyejukkan, namun lebih suka menyendiri seperti bintang malam.",
-                kelemahan: "Mudah terbawa arus pergaulan jika tidak punya prinsip kuat, serta kebiasaan memendam kesedihan sendirian hingga menggerogoti kesehatan.",
-                media: "Air cucian tangan, uang kembalian, dan pakaian tidur (Jum'at Wetan Kidul + Pon Kulon).",
-                pantanganKitab: "Urutan No. 8 di Kitab • Merupakan Wase Tahun Jemawal (Hari Naas Tahunan pada Tahun Jemawal) di Hal. 4 Kitab.",
-                penangkal: "Jangan memendam beban batin sendirian dan hindari menghadap arah Wetan saat bernegosiasi di hari Jum'at Pon."
-            },
-            "Sabtu Wage": {
-                wayang: "Raden Satyaki (Singamulangjaya) — Lakuning Lintang",
-                kisahWayang: "Ksatria Lesanpura yang bertubuh kecil namun bernyali singa, panglima paling setia di sisi Prabu Kresna yang pantang mundur selangkah pun ketika kehormatannya diusik.",
-                watak: "Mandiri, teguh pendirian, tidak suka bergantung pada orang lain, pandai mengatur rumah tangga, dan sangat setia.",
-                kelemahan: "Pencemburu berat, keras kepala, pendendam bila dikhianati, dan mudah terpancing fitnah yang menyangkut kesetiaan pasangan.",
-                media: "Air minum, tanah halaman rumah, dan alas kaki (Sabtu Kidul + Wage Lor — unsur Api Selatan bertemu Air Utara).",
-                pantanganKitab: "Urutan No. 9 di Kitab • Nogo Dino di Wetan, Joyo Dino di Kidul & Wage Lor.",
-                penangkal: "Tabayyun/periksa kebenaran kabar sebelum marah pada pasangan; seimbangkan unsur Api-Air dengan berdoa di jam Ahmad Slamet."
-            },
-            "Minggu Kliwon": {
-                wayang: "Kyai Lurah Semar Badranaya — Lakuning Lintang & Lebu Katiup Angin",
-                kisahWayang: "Penjelmaan Sang Hyang Ismaya yang tampak sederhana dan bersahaja di luar, namun sejatinya pamomong para ksatria yang menyimpan kesaktian dan kebijaksanaan tertinggi.",
-                watak: "Pendiam namun berwibawa besar, dermawan, pemaaf, pandai menyimpan rahasia, dan memiliki firasat batin yang sangat tajam.",
-                kelemahan: "Terlalu polos mempercayai janji manis orang baru, uangnya mudah habis untuk menolong orang (Lebu Katiup Angin), dan sering menyimpan beban di dada.",
-                media: "Benda pusaka/pegangan pribadi, tanah pijakan kaki, dan bisikan suara malam hari (Minggu Wetan + Kliwon Tengah).",
-                pantanganKitab: "Urutan No. 10 di Kitab • Nogo Dino di Wetan, Joyo Dino di Wetan & Kliwon Tengah.",
-                penangkal: "Kunci keuangan dalam tabungan tetap dan jangan mudah meminjamkan barang pribadi kepada orang yang baru dikenal."
-            },
-            "Senin Legi": {
-                wayang: "Raden Nakula & Sadewa — Lakuning Angin",
-                kisahWayang: "Ksatria kembar Pandawa yang santun, ahli pengobatan dan perhitungan bintang, dicintai banyak orang, serta gemar berkelana membawa kesejukan seperti hembusan angin.",
-                watak: "Sopan, murah hati, gemar merantau/berkelana, berani berdebat secara ilmiah, dan pandai bergaul.",
-                kelemahan: "Pendiriannya mudah goyah oleh hasutan teman dekat (seperti angin berubah arah) dan kurang fokus menyelesaikan satu usaha sampai tuntas.",
-                media: "Wewangian/angin, minuman manis, dan pakaian luar (Senin Lor + Legi Wetan).",
-                pantanganKitab: "Urutan No. 11 di Kitab • Nogo Dino di Wetan, Joyo Dino di Lor & Legi Wetan.",
-                penangkal: "Fokuskan energi pada satu bidang usaha utama dan hindari mengambil keputusan penting saat sedang dipengaruhi banyak orang."
-            },
-            "Seloso Paing": {
-                wayang: "Prabu Arjunasasrabahu / Bathara Rudra — Aras Kembang",
-                kisahWayang: "Raja Maespati yang memiliki pesona besar dan seribu tangan kesaktian (Tiwikrama), namun ketika murka berubah menjadi wujud Rudra yang mampu membakar apa saja di hadapannya.",
-                watak: "Berwibawa kuat, memikat lawan jenis (Aras Kembang), suka menolong, kreatif, namun memiliki hawa panas bila marah.",
-                kelemahan: "Amarah yang membara (membuat rezeki dan keberuntungan langsung menjauh saat emosi meledak) serta sifat pencemburu yang mengekang.",
-                media: "Makanan bakaran/panas, bara/asap rokok, dan barang berwarna merah (Seloso + Paing Kidul).",
-                pantanganKitab: "Urutan No. 12 di Kitab • Merupakan Wase Tahun Je (Hari Naas Tahunan pada Tahun Je) di Hal. 4 Kitab.",
-                penangkal: "Pantang mengucap sumpah atau memarahi pasangan saat perut lapar/emosi; tenangkan diri dengan menghadap arah Kulon Lor atau Kidul."
-            },
-            "Rebo Pon": {
-                wayang: "Raden Kumbakarna — Lakuning Rembulan",
-                kisahWayang: "Raksasa berjiwa ksatria dari Alengka yang jujur, mencintai tanah airnya, dan memiliki kekuatan luar biasa, namun sering disalahpahami karena penampilannya yang tampak santai.",
-                watak: "Penerang bagi sekitar (Lakuning Rembulan), santun, rezekinya mengalir kuat (14), dan berjiwa ksatria.",
-                kelemahan: "Haus pujian, suka memamerkan keberhasilan tanpa sadar (sehingga memancing iri dengki pesaing), dan mudah malas jika sudah nyaman.",
-                media: "Uang/harta benda, air minum dari arah Barat, dan foto diri (Rebo Bojone Pon sama-sama Kulon: 7+7=14).",
-                pantanganKitab: "Urutan No. 13 di Kitab • Dino Bojone Pasaran Kulon (14) • Pantang berjodoh dengan Jum'at Legi (Ketemu 25).",
-                penangkal: "Rahasiakan rencana bisnis dan jumlah tabungan sebelum benar-benar terwujud; arah kejayaan mutlak berada di Kulon."
-            },
-            "Kamis Wage": {
-                wayang: "Raden Antasena — Lakuning Lintang & Bumi Kapethak",
-                kisahWayang: "Putra Bima yang jujur polos, sakti mandraguna di darat maupun di dasar samudra, tidak suka basa-basi, dan selalu patuh pada petuah Sang Hyang Wenang.",
-                watak: "Jujur apa adanya, cekatan bekerja, tahan uji, berpegang teguh pada aturan, dan berhati penolong.",
-                kelemahan: "Mudah dibohongi rekan bisnis yang bermulut manis karena sifatnya yang menilai orang dari kejujuran dirinya sendiri, serta memendam dendam dalam diam.",
-                media: "Air hujan/air malam, suara/janji lisan, dan pakaian kerja (Kamis Tengah + Wage Lor).",
-                pantanganKitab: "Urutan No. 14 di Kitab • Nogo Dino di Lor, Joyo Dino di Tengah & Wage Lor.",
-                penangkal: "Gunakan kontrak tertulis dalam setiap urusan uang dan kunci batin di Pancer Tengah sebelum melangkah keluar rumah."
-            },
-            "Jum'at Kliwon": {
-                wayang: "Raden Wisanggeni / Begawan Anoman — Lakuning Rembulan",
-                kisahWayang: "Ksatria api kahyangan dan kera putih penjaga ketenteraman dunia yang memiliki daya magis luar biasa, tidak mempan senjata, disegani kawan maupun lawan, dan selalu menjadi penolong di saat genting.",
-                watak: "Berdaya tarik magis tinggi, cerdas, pandai berbicara, disegani banyak orang, dan berbakat spiritual alami.",
-                kelemahan: "Energi tubuhnya sangat terbuka terhadap benturan gaib (terutama pada pergantian hari Jum'at Kliwon) dan sifatnya yang pantang dikekang aturan kaku.",
-                media: "Bunga/wewangian malam, rambut/kuku, dan tanah pijakan di arah Kidul (Jum'at Wetan Kidul + Kliwon Tengah).",
-                pantanganKitab: "Urutan No. 15 di Kitab • Nogo Dino di Kidul, Joyo Dino di Wetan Kidul & Kliwon Tengah.",
-                penangkal: "Perbanyak doa perlindungan dan sedekah di malam Jum'at Kliwon; hindari melangkah ke arah Kidul tanpa mengunci niat di Tengah."
-            },
-            "Sabtu Legi": {
-                wayang: "Prabu Salya (Narasoma) — Lakuning Rembulan & Mantri Sinaroja",
-                kisahWayang: "Raja Mandaraka yang berwibawa bangsawan, memiliki Aji Candrabirawa, hidup dalam kemuliaan, namun kata-katanya yang tajam pernah membuat menantunya (Adipati Karna) tersinggung di medan laga.",
-                watak: "Cerdas berbicara, berjiwa bangsawan, menghargai keindahan/kemewahan, pandai mencari rezeki, dan disegani.",
-                kelemahan: "Gaya hidup boros demi gengsi bangsawan, kata-kata sindirannya sangat tajam, dan mudah berubah pikiran.",
-                media: "Perhiasan/pakaian bagus, wewangian, dan makanan manis (Sabtu Kidul + Legi Wetan).",
-                pantanganKitab: "Urutan No. 16 di Kitab • Merupakan Wase Tahun Dal (Hari Naas Tahunan pada Tahun Dal) di Hal. 4 Kitab.",
-                penangkal: "Jaga lisan dari kalimat meremehkan orang lain dan sisihkan penghasilan di awal bulan; arah kejayaan di Kidul & Legi Wetan."
-            },
-            "Minggu Paing": {
-                wayang: "Adipati Karna (Basukarna) — Lakuning Rembulan",
-                kisahWayang: "Ksatria Awangga putra Dewa Surya yang sangat dermawan, teguh memegang sumpah ksatria, dan berbakat memimpin, namun terjebak hutang budi kepada Duryudana hingga harus gugur membela pihak yang salah.",
-                watak: "Cerdas, berbakat pemimpin, teguh memegang janji, berwibawa, dan pandai menyembunyikan perasaan.",
-                kelemahan: "Mudah terjebak hutang budi/pemberian dari orang yang berniat mengikatnya, serta terlalu percaya diri hingga meremehkan celah kecil.",
-                media: "Barang pemberian/hadiah mengikat, makanan panas, dan cahaya/foto (Minggu Wetan + Paing Kidul).",
-                pantanganKitab: "Urutan No. 17 di Kitab • Urutan ke-4 Ba'as Tanggal (Hari Naas Tanggal) di Hal. 3 Kitab.",
-                penangkal: "Berhati-hati menerima hadiah besar atau pinjaman yang mengikat kebebasan keputusan Anda; arah baik di Wetan & Paing Kidul."
-            },
-            "Senin Pon": {
-                wayang: "Raden Abimanyu (Angkawijaya) — Aras Tuding & Sumur Sinobo",
-                kisahWayang: "Putra Arjuna yang tampan, cerdas, halus budi bahasanya namun pemberani di medan perang, serta membawa wahyu Cakraningrat (cikal bakal raja-raja tanah Jawa).",
-                watak: "Cerdas, lembut namun tegas bila prinsipnya diganggu, berbakat seni/diplomasi, dan dikagumi banyak orang.",
-                kelemahan: "Rawan menjadi sasaran fitnah/kecemburuan sosial (Aras Tuding) dan mudah lengah saat dikepung banyak masalah sekaligus.",
-                media: "Pakaian kesayangan, uang pemberian, dan air minum (Senin Lor + Pon Kulon).",
-                pantanganKitab: "Urutan No. 18 di Kitab • Nogo Dino di Kulon, Joyo Dino di Lor & Pon Kulon.",
-                penangkal: "Jangan maju sendirian tanpa perhitungan matang saat menghadapi pesaing; utamakan melangkah ke arah Lor pada jam Yusuf Bagus."
-            },
-            "Seloso Wage": {
-                wayang: "Resi Wisrawa / Raden Wibisana — Lakuning Bumi & Mantri Sinaroja",
-                kisahWayang: "Sosok pertapa dan ksatria bijak yang sabar, mengalah demi keselamatan bersama, serta tahan menjalani tirakat prihatin, namun Resi Wisrawa pernah tergelincir ketika diuji dengan godaan Dewi Sukesi.",
-                watak: "Neptu terkecil (3+4=7). Sabar, mengalah, tahan hidup prihatin, setia melindungi keluarga, dan suka menolong.",
-                kelemahan: "Pikiran mudah sempit/gelap saat tertekan beban ekonomi, mudah pesimis, dan cemburu yang dipendam.",
-                media: "Tanah halaman, air sumur/minum, dan alas tidur (Seloso Kulon Lor + Wage Lor).",
-                pantanganKitab: "Urutan No. 19 di Kitab • Urutan ke-1 Ba'as Tanggal (Hari Naas Tanggal) • Pantang berjodoh dengan Sabtu Paing (Ketemu 25).",
-                penangkal: "Perkuat tirakat dan sedekah bumi/makanan pada hari Seloso Wage; gunakan jam Jobrail Kuwat atau Ahmad Slamet saat memulai usaha."
-            },
-            "Rebo Kliwon": {
-                wayang: "Sri Bathara Kresna (Narayana) — Lakuning Srengenge (Matahari)",
-                kisahWayang: "Raja Dwarawati titisan Wisnu yang menjadi otak strategi kemenangan Pandawa, fasih berbicara, pandai membaca gelagat lawan, dan menerangi siapa saja di sekitarnya.",
-                watak: "Pemikir ulung, ahli strategi, komunikator hebat, berwibawa tinggi, dan mampu menjadi pengayom banyak orang.",
-                kelemahan: "Mudah tersinggung bila pendapat atau strateginya dibantah di depan umum, serta terkadang terlalu banyak menimbang hingga kehilangan momen.",
-                media: "Surat/dokumen perjanjian, tanah pijakan kaki, dan benda di meja kerja (Rebo Kulon + Kliwon Tengah).",
-                pantanganKitab: "Urutan No. 20 di Kitab • Nogo Dino di Kulon, Joyo Dino di Kulon & Kliwon Tengah.",
-                penangkal: "Dengarkan masukan orang terdekat dengan kepala dingin dan kunci posisi duduk di Tengah saat memimpin perundingan."
-            },
-            "Kamis Legi": {
-                wayang: "Begawan Abiyasa & Bima Suci — Lakuning Lintang & Tunggak Semi",
-                kisahWayang: "Sang maharsi leluhur Pandawa dan Bima saat mencapai kesempurnaan ilmu (Dewa Ruci): memiliki pandangan batin yang menembus masa depan, mandiri, tidak suka diatur, dan ucapannya sering menjadi nyata (sabdo dadi).",
-                watak: "Mandiri, berpandangan jauh ke depan, kharismatik, dermawan, memiliki wibawa spiritual, dan rezekinya selalu tumbuh kembali.",
-                kelemahan: "Harga diri sangat tinggi (pantang diperintah kasar), terlalu tidak tegaan pada teman (sering tertipu uang/piutang), pikiran sulit tidur di malam hari, dan bahaya jika mengucap sumpah saat marah.",
-                media: "Suara/ucapan sumpah, asap/wewangian udara, dan tanah bekas pijakan kaki kanan (Kamis Tengah + Legi Wetan).",
-                pantanganKitab: "Urutan No. 21 di Kitab • Merupakan Wase Tahun Be (Hari Naas Tahunan pada Tahun Be) di Hal. 4 & 8 Kitab.",
-                penangkal: "Jaga lisan saat emosi karena ucapan Kamis Legi bertuah (sabdo dadi); hindari arah Wetan pada hari naasnya dan kunci diri di Tengah."
-            },
-            "Jum'at Paing": {
-                wayang: "Prabu Drupada / Resi Seta — Lakuning Srengenge",
-                kisahWayang: "Raja Pancala dan panglima putih Wirata yang berwibawa, dermawan, disukai rakyatnya, namun ketika dikhianati (seperti Drupada oleh Durna) akan menyimpan tekad pembalasan yang luar biasa keras.",
-                watak: "Ramah, disukai banyak orang, pandai mencari rezeki, berwibawa hangat seperti matahari, dan berhati lembut.",
-                kelemahan: "Boros (uang cepat habis untuk menjamu/menolong orang), mudah dimanfaatkan orang bermulut manis, dan bila marah besar sangat sulit diredakan.",
-                media: "Makanan jamuan, uang tunai, dan pakaian yang sering dipakai (Jum'at Wetan Kidul + Paing Kidul).",
-                pantanganKitab: "Urutan No. 22 di Kitab • Memiliki 3 pantangan Ketemu 25 sekaligus di Hal. 7 Kitab: pantang bertemu Jum'at Wage, Seloso Pon, dan Minggu Legi.",
-                penangkal: "Wajib menyaring kecocokan weton pasangan/mitra bisnis dengan ketat dan jangan menghadap arah Kulon saat memulai hajat."
-            },
-            "Sabtu Pon": {
-                wayang: "Prabu Matswapati — Lakuning Banyu (Air Besar) & Waseso Segoro",
-                kisahWayang: "Raja Wirata yang kaya raya, sabar menampung Pandawa saat menyamar, berhati seluas samudra, dan mampu meredam gejolak dengan ketenangan air.",
-                watak: "Tenang, pemaaf, rezekinya sangat luas, dermawan, dan memiliki jiwa kepemimpinan yang mapan.",
-                kelemahan: "Suka menunda pekerjaan jika belum mendesak, terkadang memandang rendah orang yang lamban, dan mudah boros untuk kesenangan keluarga.",
-                media: "Air mandi/minum, perhiasan/logam, dan tanah di arah Utara/Lor (Sabtu Kidul + Pon Kulon).",
-                pantanganKitab: "Urutan No. 23 di Kitab • Nogo Dino di Lor, Joyo Dino di Kidul & Pon Kulon.",
-                penangkal: "Disiplinkan jadwal kerja dan hindari bepergian ke arah Lor (Utara) tanpa doa pembuka jalan."
-            },
-            "Minggu Wage": {
-                wayang: "Bathara Kamajaya — Lakuning Angin & Waseso Segoro",
-                kisahWayang: "Dewa ketampanan dan kasih sayang yang selalu berdampingan dengan Dewi Ratih, membawa kesejukan, kecerdasan, dan keharmonisan ke mana pun ia pergi.",
-                watak: "Pengasih, penyejuk suasana, cerdas, pekerja tekun, pemaaf, dan selalu ingin unggul dalam karya.",
-                kelemahan: "Sangat pencemburu pada pasangan, mudah gelisah bila keinginannya belum tercapai, dan rawan gangguan pencernaan/lambung saat stres pikiran.",
-                media: "Angin/hembusan parfum, air minum, dan pakaian dalam (Minggu Wetan + Wage Lor).",
-                pantanganKitab: "Urutan No. 24 di Kitab • Pantang berjodoh dengan Kamis Kliwon (Ketemu 25 / Tundunan Kebo Gerang) di Hal. 2 Kitab.",
-                penangkal: "Kelola kecemburuan dengan komunikasi terbuka dan utamakan arah Wetan atau Lor saat mencari rezeki."
-            },
-            "Senin Kliwon": {
-                wayang: "Raden Samba Wisnubrata — Aras Kembang & Satrio Wirang",
-                kisahWayang: "Putra Prabu Kresna yang sangat rupawan, ramah, dan amat menyayangi keluarganya, namun karena pesonanya sering memicu kecemburuan dan fitnah yang menjerumuskannya.",
-                watak: "Mempesona (Aras Kembang), sangat mengutamakan kehormatan keluarga, cekatan, dan berhati lembut.",
-                kelemahan: "Mudah panik/cemas, perasaannya terlalu peka terhadap omongan orang, dan rawan terkena fitnah asmara (Satrio Wirang).",
-                media: "Wewangian bunga, rambut/sisir, dan foto wajah (Senin Lor + Kliwon Tengah).",
-                pantanganKitab: "Urutan No. 25 di Kitab • Merupakan Wase Tahun Wan / Wawu (Hari Naas Tahunan pada Tahun Wan) di Hal. 4 & 8 Kitab.",
-                penangkal: "Jaga jarak dari urusan asmara yang meragukan dan kuatkan mental di Pancer Tengah pada jam Ahmad Slamet."
-            },
-            "Seloso Legi": {
-                wayang: "Bathara Kala / Raden Dursasana — Lakuning Geni",
-                kisahWayang: "Melambangkan energi api murni yang tak kenal takut, berani menerjang rintangan apa pun, giat mengejar keinginan, namun bila tidak dikendalikan dengan kesabaran akan membakar dirinya sendiri.",
-                watak: "Berani, blak-blakan, giat bekerja, mandiri, dan tak kenal takut menghadapi persaingan.",
-                kelemahan: "Emosi meledak-ledak, cemburu tinggi, sulit mengendalikan keinginan sesaat, dan pantang dipermalukan.",
-                media: "Makanan manis/hangat, pakaian warna merah/hitam, dan asap (Seloso + Legi Wetan).",
-                pantanganKitab: "Urutan No. 26 di Kitab • Memiliki 2 pantangan Ketemu 25 sekaligus di Hal. 2 Kitab: pantang bertemu Sabtu Kliwon maupun Kamis Paing.",
-                penangkal: "Kendalikan amarah dan nafsu tergesa-gesa; selalu melangkah ke arah Kulon Lor atau Legi Wetan saat mencari rezeki."
-            },
-            "Rebo Paing": {
-                wayang: "Bathara Indra — Lakuning Banyu & Tunggak Semi",
-                kisahWayang: "Raja para dewa di Kahyangan Suralaya yang tenang namun berwibawa besar, melimpahkan hujan kemakmuran ke bumi, dan menghargai keindahan serta ilmu pengetahuan.",
-                watak: "Tenang di luar namun sangat kuat di dalam (Lakuning Banyu), murah rezeki, fokus, dan berbakat memimpin.",
-                kelemahan: "Sering lengah saat dipuji berlebihan, kurang teliti memeriksa pengeluaran kecil, dan bila marah memendamnya cukup lama.",
-                media: "Air minum, makanan olahan, dan uang kertas (Rebo Kulon + Paing Kidul).",
-                pantanganKitab: "Urutan No. 27 di Kitab • Nogo Dino di Lor, Joyo Dino di Kulon Lor & Paing Kidul.",
-                penangkal: "Tetap waspada saat bisnis sedang berada di puncak dan hindari melangkah lurus ke arah Lor (Utara)."
-            },
-            "Kamis Pon": {
-                wayang: "Prabu Parikesit — Lakuning Srengenge & Satrio Wibowo",
-                kisahWayang: "Cucu Arjuna yang menjadi penerus tahta Hastinapura seusai Bharatayuddha: berpikiran luas, membawa fajar baru bagi kerajaannya, namun harus ekstra waspada terhadap kutukan Naga Taksaka.",
-                watak: "Berpikiran luas, berjiwa pemimpin masa depan, pendiam namun tegas, dan memiliki wibawa alami.",
-                kelemahan: "Cenderung tertutup memendam masalah sendirian dan rawan lengah terhadap bahaya tersembunyi di hari naasnya.",
-                media: "Logam/uang, surat berharga, dan tanah pijakan di arah Barat/Kulon (Kamis Tengah + Pon Kulon).",
-                pantanganKitab: "Urutan No. 28 di Kitab • Urutan ke-5 Ba'as Tanggal (Hari Naas Tanggal) di Hal. 3 Kitab.",
-                penangkal: "Seperti kisah Prabu Parikesit yang harus waspada pada Naga, pemilik Kamis Pon wajib menghindari arah Nogo Dino (Kulon) dan memperkuat doa di hari Kamis Pon."
-            },
-            "Jum'at Wage": {
-                wayang: "Prabu Pandu Dewanata — Aras Pepet & Sumur Sinobo",
-                kisahWayang: "Ayahanda para Pandawa yang jujur, berhati bersih, dan sakti, namun harus menanggung kutukan Resi Kindama akibat ketidaksengajaan saat berburu.",
-                watak: "Jujur, berhati bersih, suka bersedekah, menjadi tempat bertanya (Sumur Sinobo), dan sangat setia pada keluarga.",
-                kelemahan: "Sering mengalami kesialan atau kerugian akibat menanggung kesalahan orang lain, serta mudah sedih melihat penderitaan sesama.",
-                media: "Air wudhu/mandi, sedekah makanan, dan tanah di arah Selatan/Kidul (Jum'at Wetan Kidul + Wage Lor).",
-                pantanganKitab: "Urutan No. 29 di Kitab • Wase Tahun Jemakir (Hal. 8 Kitab) • Pantang berjodoh dengan Jum'at Paing (Ketemu 25).",
-                penangkal: "Rutin bersedekah air/makanan untuk menolak sengkolo dan hindari arah Kidul pada hari Jum'at Wage."
-            },
-            "Sabtu Kliwon": {
-                wayang: "Begawan Ciptoning / Sang Hyang Wenang — Lakuning Bumi",
-                kisahWayang: "Wujud pertapa suci yang menyatu dengan ketenangan bumi, sabar, menjadi muara kebijaksanaan spiritual, dan memiliki pagar gaib alami yang sangat tebal.",
-                watak: "Sabar, bijaksana, berhati dermawan seperti bumi, memiliki pagar spiritual alami yang kuat, dan dihormati.",
-                kelemahan: "Jika sudah kecewa berat akan pergi meninggalkan segalanya tanpa menoleh lagi, serta terkadang tampak angkuh saat diam.",
-                media: "Tanah pekuburan/halaman, dupa/kemenyan, dan kuku/rambut (Sabtu Kidul + Kliwon Tengah).",
-                pantanganKitab: "Urutan No. 30 di Kitab • Urutan ke-2 Ba'as Tanggal (Hal. 3) • Pantang berjodoh dengan Seloso Legi (Ketemu 25).",
-                penangkal: "Jaga kemurnian niat dan jangan mengucap kutukan saat disakiti; arah kejayaan di Kidul & Kliwon Tengah."
-            },
-            "Minggu Legi": {
-                wayang: "Raden Suteja (Prabu Bomanarakasura) — Sumur Sinobo",
-                kisahWayang: "Putra Prabu Kresna dan Dewi Pertiwi yang menguasai kesaktian bumi (Aji Pancasona), tenang, cerdas menggali rahasia terdalam, namun ambisinya yang besar harus dijaga agar tidak berbenturan dengan ayahandanya sendiri.",
-                watak: "Tenang, cerdas menggali ilmu rahasia, dermawan, tahan uji, dan memiliki intuisi bisnis/batin yang kuat.",
-                kelemahan: "Tertutup soal perasaan, tertarik pada hal-hal berisiko tinggi, dan bila berambisi sering melupakan batas.",
-                media: "Cahaya/api lilin, wewangian manis, dan pakaian sehari-hari (Minggu Bojone Legi sama-sama Wetan: 5+5=10).",
-                pantanganKitab: "Urutan No. 31 di Kitab • Dino Bojone Pasaran Wetan (10) • Pantang berjodoh dengan Jum'at Paing (Ketemu 25).",
-                penangkal: "Selalu minta restu orang tua dalam setiap langkah besar dan utamakan arah Wetan sebagai sumber kejayaan."
-            },
-            "Senin Paing": {
-                wayang: "Dewi Srikandi — Lakuning Lintang & Bumi Kapethak",
-                kisahWayang: "Prajurit wanita tangguh pemanah ulung yang jujur, disiplin, berani memimpin di garis depan, dan tidak suka bertele-tele dalam bertindak.",
-                watak: "Tegas, pekerja keras, jujur, berani membela kebenaran, disiplin tinggi, dan bercita-cita besar.",
-                kelemahan: "Keras kepala, bila tersakiti sangat sulit melupakan, dan sering kelelahan fisik karena terlalu memforsir tenaga.",
-                media: "Makanan hangat, pakaian kerja, dan tanah di arah Timur/Wetan (Senin Lor + Paing Kidul).",
-                pantanganKitab: "Urutan No. 32 di Kitab • Pantang berjodoh dengan Rebo Legi (Ketemu 25 / Tundunan Kebo Gerang) di Hal. 2 Kitab.",
-                penangkal: "Belajar memaafkan masa lalu agar batin tidak berat dan gunakan arah Lor atau Paing Kidul saat merintis usaha."
-            },
-            "Seloso Pon": {
-                wayang: "Raden Irawan — Sanggar Waringin & Satrio Wibowo",
-                kisahWayang: "Putra Arjuna dan Dewi Ulupi (putri bangsawan naga) yang santun, teduh hatinya, menghormati orang tua, dan rela berkorban demi kejayaan keluarganya.",
-                watak: "Teduh hatinya (Sanggar Waringin), jujur, menyukai keindahan, berwibawa, dan rezekinya selalu ada jalan.",
-                kelemahan: "Pencemburu, tertutup, mudah curiga pada pasangan, dan terkadang kurang tegas menolak ajakan teman yang merugikan.",
-                media: "Barang antik/perhiasan, air minum, dan daun-daunan (Seloso Kulon Lor + Pon Kulon).",
-                pantanganKitab: "Urutan No. 33 di Kitab • Pantang berjodoh dengan Jum'at Paing (Ketemu 25 / Tundunan Kebo Gerang) di Hal. 7 Kitab.",
-                penangkal: "Bangun kepercayaan dengan pasangan dan arahkan langkah usaha ke Kulon Lor atau Pon Kulon."
-            },
-            "Rebo Wage": {
-                wayang: "Raden Lesmana Mandrakumara / Pinten — Sumur Sinobo",
-                kisahWayang: "Melambangkan sosok yang hidup berkecukupan namun harus belajar mandiri sejak dini, ramah, berhati-hati dalam melangkah, dan memiliki wawasan luas.",
-                watak: "Ramah, hemat, berhati-hati dalam bertindak, pandai menimbang baik-buruk, dan menjunjung kejujuran.",
-                kelemahan: "Mudah ragu-ragu/bimbang saat harus mengambil keputusan cepat dan sensitif terhadap kritik.",
-                media: "Air minum, uang receh/tabungan, dan tanah di arah Barat/Kulon (Rebo Kulon + Wage Lor).",
-                pantanganKitab: "Urutan No. 34 di Kitab • Merupakan Wase Tahun Alip (Hari Naas Tahunan pada Tahun Alip) di Hal. 4 & 8 Kitab.",
-                penangkal: "Kuatkan keyakinan diri setelah berdoa di jam Ahmad Slamet dan utamakan menghadap arah Kulon atau Wage Lor."
-            },
-            "Kamis Kliwon": {
-                wayang: "Sang Hyang Tunggal / Prabu Jayabaya — Lakuning Banyu",
-                kisahWayang: "Poros tertinggi keseimbangan semesta (Pancer Tengah) dan raja besar yang memiliki tajamnya mata batin (Weruh Sakdurunge Winarah), mengayomi dengan kesejukan air namun tak tergoyahkan.",
-                watak: "Puncak neptu Tengah (8+8=16). Karisma sangat besar, batinnya tajam, tahan banting, ceria, dan disegani banyak orang.",
-                kelemahan: "Karena Hari & Pasarannya berjodoh tepat di Pancer Tengah, jika pikirannya goyah atau marah besar, seluruh keseimbangan raga dan rezekinya ikut terguncang.",
-                media: "Tanah pijakan tepat di bawah kaki (Tengah), rambut/kuku, dan sumpah lisan (Kamis Bojone Kliwon sama-sama Tengah: 8+8=16).",
-                pantanganKitab: "Urutan No. 35 (Penutup) di Kitab • Dino Bojone Pasaran Tengah (16) • Pantang berjodoh dengan Minggu Wage (Ketemu 25).",
-                penangkal: "Kunci kekuatan Kamis Kliwon ada pada ketenangan batin di Pancer Tengah; pantang melangkah ke arah Lor saat memulai hajat."
+            "Minggu": {
+                wayang: "Raden Sadewa",
+                icon: "☀️",
+                neptu: 5,
+                arahDasar: "Wetan (Timur)",
+                bojonePasaran: "Legi (5) — Minggu Bojone Legi (Wetan = 10)",
+                kelebihanKitab: "Seperti Sadewa (kembaran Nakula yang menguasai ilmu perbintangan/astronomi & cahaya timur), Minggu menguasai penuh arah Wetan (Timur) di seluruh 5 pasarannya. Cerdas melihat peluang baru, berwawasan luas, dan luwes bergaul.",
+                kelemahanKitab: "1) Di Hal. 2 Kitab terkena 2 pantangan sekaligus bila bertemu Rebo: 'Ngruwat Segoro Getih' dan 'Kolo Luang' (sebab Minggu Wetan vs Rebo Kulon berlawanan arah & selisih 2 hari); 2) Pada Minggu Kliwon & Minggu Wage, posisi Nogo Dino berada di Wetan (menutupi arah Joyo Wetan-nya sendiri); 3) Minggu Pahing adalah Ba'as Tanggal & Minggu Pon adalah Wase Tahun Ehe; 4) Bersama kembarannya (Sabtu) menjadi Was Wulan di bulan Besar–Suro–Sapar.",
+                mediaPeka: "Cahaya/foto bayangan, wewangian pagi, dan angin/hembusan udara dari Timur (Unsur Wetan)."
             }
         };
+
+        // =====================================================================
+        // FUNGSI PEMBANGUN PROFIL 35 WETON MURNI BERDASARKAN KITAB + 7 WAYANG HARI
+        // =====================================================================
+        function build35WetonFromKitab() {
+            const map = {};
+            KITAB_35_WETON.forEach(item => {
+                const key = `${item.dino} ${item.pasaran}`;
+                const h = PAKEM_7_HARI_WAYANG[item.dino];
+                const nDino = NEPTU_DINO[item.dino].neptu;
+                const nPas = NEPTU_PASARAN[item.pasaran].neptu;
+                const total = nDino + nPas;
+                const arahPas = NEPTU_PASARAN[item.pasaran].arah;
+
+                // Cek apakah Dino Bojone Pasaran (Hal. 1 & 5)
+                const isBojone = (NEPTU_DINO[item.dino].jodohPasaran === item.pasaran);
+
+                // Cek apakah Joyo & Nogo bertabrakan di arah yang sama
+                const nogoLower = item.nogo.toLowerCase();
+                const joyoLower = item.joyo.toLowerCase();
+                const isTabrakanArah = joyoLower.includes(nogoLower);
+
+                // Cek Ba'as Tanggal (Hal. 3)
+                const idxBaas = BAAS_TANGGAL.indexOf(key);
+                const isBaas = idxBaas !== -1;
+
+                // Cek Wase Tahun (Hal. 4 & 8)
+                const waseObj = SIKLUS_TAHUN_JAWA.find(t => t.wase === key);
+
+                // Cek Pantangan Ketemu 25 (Hal. 2 & 7)
+                const lawan25 = [];
+                PANTANGAN_25.forEach(pair => {
+                    if (pair[0] === key) lawan25.push(pair[1]);
+                    else if (pair[1] === key) lawan25.push(pair[0]);
+                });
+
+                // Cek Was Wulan berdasarkan Hari (Hal. 3)
+                let wasWulanText = "";
+                if (item.dino === "Jum'at") wasWulanText = "Was Wulan Jum'ah Ngijeni pada bulan Poso – Sawal – Selo";
+                else if (item.dino === "Sabtu" || item.dino === "Minggu") wasWulanText = "Was Wulan Sabtu–Minggu pada bulan Besar – Suro – Sapar";
+                else if (item.dino === "Senin" || item.dino === "Seloso") wasWulanText = "Was Wulan Senin–Seloso pada bulan Mulut – Bakdo Mulut – Jumadilawal";
+                else if (item.dino === "Rebo" || item.dino === "Kamis") wasWulanText = "Was Wulan Rebo–Kamis pada bulan Jumadilakir – Rajab – Ruwah";
+
+                // Susun Kelebihan Spesifik Berdasarkan Kitab
+                let kelebihanArr = [];
+                kelebihanArr.push(`Dinaungi watak hari <strong>${item.dino} (${h.wayang})</strong> yang berpadu dengan pasaran <strong>${item.pasaran} (${arahPas})</strong>, menghasilkan Neptu <strong>${total}</strong>.`);
+                kelebihanArr.push(`<strong>Pintu Kejayaan (Joyo Dino No. ${item.no} di Kitab):</strong> Kuat mencari rezeki, hajat, atau kemenangan di arah <strong>${item.joyo}</strong>.`);
+                if (isBojone) {
+                    kelebihanArr.push(`<strong>Istimewa — Dino Bojone Pasaran (Hal. 1 & 5 Kitab):</strong> Hari ${item.dino} (${nDino}) berjodoh murni dengan Pasaran ${item.pasaran} (${nPas}) di arah yang sama, sehingga daya batin dan kuncian rezekinya berlipat ganda.`);
+                }
+                const sangatArr = TABEL_SANGAT[item.pasaran];
+                const idxSlamet = sangatArr.indexOf("Ahmad Slamet");
+                const idxRejeki = sangatArr.indexOf("Idjrail Rejeki");
+                kelebihanArr.push(`<strong>Jam Kejayaan (Tabel Menit Sangat Hal. 6):</strong> Paling kuat bergerak pada jam <em>Ahmad Slamet</em> (${SANGAT_SLOTS[idxSlamet].jamPagi}) & <em>Idjrail Rejeki</em> (${SANGAT_SLOTS[idxRejeki].jamPagi}).`);
+
+                // Susun Kelemahan Spesifik Berdasarkan Kitab
+                let kelemahanArr = [];
+                kelemahanArr.push(`<strong>Kelemahan Watak ${h.wayang} (${item.dino}):</strong> ${h.kelemahanKitab.split(';')[0].replace('1) ', '')}.`);
+                kelemahanArr.push(`<strong>Titik Mati Arah (Nogo Dino No. ${item.no}):</strong> Pantang melangkah atau memulai hajat menghadap arah <strong>${item.nogo}</strong>.`);
+                if (isTabrakanArah) {
+                    kelemahanArr.push(`<strong>⚠️ Rawan Tabrakan Arah (Nogo = Joyo di ${item.nogo}):</strong> Di kitab tertulis Nogo Dino berada di <em>${item.nogo}</em> padahal salah satu Joyo-nya juga menyebut <em>${item.nogo}</em>. Artinya jika melangkah ke ${item.nogo} dengan niat sombong/emosi akan langsung menabrak mulut Naga!`);
+                }
+                if (isBaas) {
+                    kelemahanArr.push(`<strong>⛔ Termasuk 5 Weton "Ba'as Tanggal" (Urutan ke-${idxBaas + 1} di Hal. 3 Kitab):</strong> Merupakan hari pecahnya perisai tanggal (naas tanggal), sehingga pemilik weton ini rawan lengah pada hari wetonnya sendiri.`);
+                }
+                if (waseObj) {
+                    kelemahanArr.push(`<strong>⛔ Termasuk "Wase Tahun" (Hal. 4 & 8 Kitab):</strong> Merupakan hari naas tahunan pada <strong>Tahun ${waseObj.nama}</strong>.`);
+                }
+                if (lawan25.length > 0) {
+                    kelemahanArr.push(`<strong>💔 Pantangan Jodoh "Ketemu 25 / Tundunan Kebo Gerang" (Hal. 2 & 7 Kitab):</strong> Pantang keras berjodoh/bermitra dengan weton <strong>${lawan25.join(' / ')}</strong>.`);
+                }
+                kelemahanArr.push(`<strong>📅 Kelemahan Bulanan (${wasWulanText})</strong> & rawan di jam <em>Brahim Blahi</em> (${SANGAT_SLOTS[sangatArr.indexOf("Brahim Blahi")].jamPagi} / malam).`);
+
+                map[key] = {
+                    wayang: `${h.wayang} (Patokan Hari ${item.dino})`,
+                    kisahWayang: `Berpatokan pada Hari ${item.dino} (${h.wayang}) yang bertemu Pasaran ${item.pasaran} (${arahPas}). ${h.kelebihanKitab}`,
+                    watak: kelebihanArr.join(' '),
+                    kelemahan: kelemahanArr.join(' '),
+                    media: `${h.mediaPeka} + Unsur Pasaran ${item.pasaran} (${arahPas}).`,
+                    pantanganKitab: `Urutan No. ${item.no} di Kitab • ${isBaas ? "Termasuk Ba'as Tanggal • " : ""}${waseObj ? "Wase Tahun " + waseObj.nama + " • " : ""}${lawan25.length > 0 ? "Pantang Ketemu 25 dengan: " + lawan25.join(", ") : "Bebas Pantangan Ketemu 25"}`,
+                    penangkal: `Hadap arah Joyo (${item.joyo}), hindari arah Nogo (${item.nogo}), dan kunci langkah di jam Ahmad Slamet (${SANGAT_SLOTS[idxSlamet].jamPagi}).`
+                };
+            });
+            return map;
+        }
 
         const PANTANGAN_25 = [
             ["Jum'at Wage", "Jum'at Paing"],
@@ -1240,6 +1022,8 @@
             { kode: "Jam 1+2+24",   jamPagi: "13:00 – 14:59 Siang", jamMalam: "01:00 – 02:59 Dini Hari" },
             { kode: "Jam 3+4+24",   jamPagi: "15:00 – 16:59 Sore",  jamMalam: "03:00 – 04:59 Subuh" }
         ];
+
+        const PROFIL_35_WETON = build35WetonFromKitab();
 
         const TIBO_8_JODOH = {
             1: { nama: "PEGAT", warna: "red", icon: "⚠️", arti: "Rawan menghadapi ujian perpisahan, masalah ekonomi, atau perselisihan di awal rumah tangga.", saran: "Pilih hari akad Tibo SRI atau Tibo GEDHONG untuk mengikat kerukunan dan kemapanan." },
@@ -1427,10 +1211,10 @@
             const bMini = document.getElementById('bride-wayang-mini');
 
             if (gMini && gProfile) {
-                gMini.innerHTML = `<div class="text-sky-300 font-bold">🎭 ${gProfile.wayang}</div><div class="mt-0.5 text-stone-300"><strong>Kisah Wayang:</strong> ${gProfile.kisahWayang}</div><div class="mt-0.5 text-red-300"><strong>Kelemahan:</strong> ${gProfile.kelemahan}</div><div class="mt-0.5 text-amber-300/90"><strong>Media Peka:</strong> ${gProfile.media}</div>`;
+                gMini.innerHTML = `<div class="text-sky-300 font-bold">🎭 ${gProfile.wayang}</div><div class="mt-1 text-emerald-300"><strong>✅ Kelebihan Kitab:</strong> ${gProfile.watak}</div><div class="mt-1 text-red-300"><strong>⚠️ Kelemahan Kitab:</strong> ${gProfile.kelemahan}</div><div class="mt-1 text-amber-300/90"><strong>🧪 Media Peka:</strong> ${gProfile.media}</div>`;
             }
             if (bMini && bProfile) {
-                bMini.innerHTML = `<div class="text-pink-300 font-bold">🎭 ${bProfile.wayang}</div><div class="mt-0.5 text-stone-300"><strong>Kisah Wayang:</strong> ${bProfile.kisahWayang}</div><div class="mt-0.5 text-red-300"><strong>Kelemahan:</strong> ${bProfile.kelemahan}</div><div class="mt-0.5 text-amber-300/90"><strong>Media Peka:</strong> ${bProfile.media}</div>`;
+                bMini.innerHTML = `<div class="text-pink-300 font-bold">🎭 ${bProfile.wayang}</div><div class="mt-1 text-emerald-300"><strong>✅ Kelebihan Kitab:</strong> ${bProfile.watak}</div><div class="mt-1 text-red-300"><strong>⚠️ Kelemahan Kitab:</strong> ${bProfile.kelemahan}</div><div class="mt-1 text-amber-300/90"><strong>🧪 Media Peka:</strong> ${bProfile.media}</div>`;
             }
 
             let isKetemu25 = false;
@@ -1627,8 +1411,59 @@
         }
 
         // =====================================================================
-        // 7. RENDER DAFTAR LENGKAP 35 WETON & SOROTAN PEWAYANGAN (TAB 2)
+        // 7. RENDER 7 WAYANG HARI & DAFTAR 35 WETON BERDASARKAN KITAB (TAB 2)
         // =====================================================================
+        function renderSevenDaysWayang() {
+            const grid = document.getElementById('seven-days-wayang-grid');
+            if (!grid) return;
+
+            const order7 = ["Senin", "Seloso", "Rebo", "Kamis", "Jum'at", "Sabtu", "Minggu"];
+            grid.innerHTML = order7.map(dino => {
+                const d = PAKEM_7_HARI_WAYANG[dino];
+                return `
+                    <div class="bg-stone-950/95 border border-stone-800 hover:border-gold-400/50 rounded-2xl p-4 space-y-2.5 flex flex-col justify-between transition">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-lg">${d.icon}</span>
+                                    <div>
+                                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-gold-400 block">Hari ${dino} (Neptu ${d.neptu})</span>
+                                        <h3 class="text-sm sm:text-base font-extrabold text-stone-100">${d.wayang}</h3>
+                                    </div>
+                                </div>
+                                <span class="px-2 py-0.5 rounded bg-stone-900 border border-stone-700 text-[10px] font-bold text-sky-300">${d.arahDasar}</span>
+                            </div>
+
+                            <div class="text-[11px] bg-stone-900/80 border border-stone-800 rounded-lg px-2.5 py-1.5 text-gold-200">
+                                <strong>Pasangan Kembar (Hal. 1 & 5 Kitab):</strong> ${d.bojonePasaran}
+                            </div>
+
+                            <div class="text-xs space-y-1.5 leading-relaxed">
+                                <p class="text-stone-200"><strong class="text-emerald-300">✅ Kelebihan Berdasarkan Kitab:</strong> ${d.kelebihanKitab}</p>
+                                <p class="text-stone-200"><strong class="text-red-300">⚠️ Kelemahan Berdasarkan Kitab:</strong> ${d.kelemahanKitab}</p>
+                                <p class="text-stone-300"><strong class="text-amber-300">🧪 Media Unsur Hari:</strong> ${d.mediaPeka}</p>
+                            </div>
+                        </div>
+
+                        <button type="button" onclick="filterBySpecificDay('${dino}')" class="w-full mt-2 py-1.5 px-3 rounded-xl bg-gold-500/15 hover:bg-gold-500/25 border border-gold-400/30 text-gold-300 text-[11px] font-bold transition">
+                            🔍 Lihat 5 Weton Hari ${dino} (${d.wayang})
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterBySpecificDay(dino) {
+            const filterDinoEl = document.getElementById('weton-filter-dino');
+            if (filterDinoEl) filterDinoEl.value = dino;
+            const spotDinoEl = document.getElementById('spot-dino');
+            if (spotDinoEl) spotDinoEl.value = dino;
+            renderWetonSpotlight();
+            renderAll35WetonCards();
+            const gridEl = document.getElementById('all-35-weton-grid');
+            if (gridEl) gridEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
         function renderWetonSpotlight() {
             const box = document.getElementById('weton-spotlight-card');
             if (!box) return;
@@ -1663,13 +1498,13 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 text-xs leading-relaxed">
                     <div class="lg:col-span-7 space-y-2.5">
                         <div class="bg-stone-900/90 border border-sky-500/30 rounded-xl p-3">
-                            <div class="text-[11px] font-extrabold uppercase tracking-wider text-sky-300">🎭 Tokoh Pewayangan & Naungan Watak</div>
+                            <div class="text-[11px] font-extrabold uppercase tracking-wider text-sky-300">🎭 Patokan Wayang Hari (${dino}) & Pasaran (${pasaran})</div>
                             <div class="text-sm sm:text-base font-extrabold text-stone-100 mt-0.5">${prof.wayang}</div>
                             <p class="text-stone-300 mt-1">${prof.kisahWayang}</p>
                         </div>
-                        <div class="bg-stone-900/90 border border-stone-800 rounded-xl p-3 space-y-1.5">
-                            <div><strong class="text-gold-300">✨ Watak Dasar:</strong> <span class="text-stone-200">${prof.watak}</span></div>
-                            <div><strong class="text-red-300">⚠️ Titik Kelemahan Utama:</strong> <span class="text-stone-200">${prof.kelemahan}</span></div>
+                        <div class="bg-stone-900/90 border border-stone-800 rounded-xl p-3 space-y-2">
+                            <div><strong class="text-emerald-300">✅ Kelebihan Berdasarkan Kitab:</strong> <div class="text-stone-200 mt-0.5">${prof.watak}</div></div>
+                            <div class="pt-1.5 border-t border-stone-800"><strong class="text-red-300">⚠️ Kelemahan & Pantangan Berdasarkan Kitab:</strong> <div class="text-stone-200 mt-0.5">${prof.kelemahan}</div></div>
                         </div>
                     </div>
 
@@ -1681,13 +1516,13 @@
                         </div>
 
                         <div class="grid grid-cols-2 gap-2">
-                            <div class="bg-emerald-950/45 border border-emerald-500/40 rounded-xl p-2.5">
-                                <span class="text-[10px] font-extrabold uppercase text-emerald-400 block">✅ Joyo Dino (Arah Kejayaan)</span>
-                                <span class="text-xs font-bold text-stone-100">${item.joyo}</span>
-                            </div>
-                            <div class="bg-red-950/45 border border-red-500/40 rounded-xl p-2.5">
-                                <span class="text-[10px] font-extrabold uppercase text-red-400 block">⛔ Nogo Dino (Pantangan)</span>
-                                <span class="text-xs font-bold text-stone-100">Arah ${item.nogo}</span>
+                            <!-- Detail Kelebihan, Kelemahan, Media, Catatan Kitab & Penangkal -->
+                            <div class="text-xs text-stone-300 space-y-2 leading-relaxed bg-stone-900/60 rounded-xl p-3 border border-stone-800/80">
+                                <div><strong class="text-emerald-300">✅ Kelebihan Berdasarkan Kitab:</strong> <div class="mt-0.5">${prof.watak}</div></div>
+                                <div class="pt-1.5 border-t border-stone-800"><strong class="text-red-300">⚠️ Kelemahan Berdasarkan Kitab:</strong> <div class="mt-0.5">${prof.kelemahan}</div></div>
+                                <p class="pt-1.5 border-t border-stone-800"><strong class="text-amber-300">🧪 Media Spesifik (${item.dino} + ${item.pasaran}):</strong> ${prof.media}</p>
+                                <p><strong class="text-purple-300">📜 Ringkasan Status Kitab:</strong> ${prof.pantanganKitab}</p>
+                                <p><strong class="text-sky-300">🛡️ Kunci Counter / Penangkal:</strong> ${prof.penangkal}</p>
                             </div>
                         </div>
                     </div>
@@ -2150,6 +1985,7 @@
         window.filterWetonCards = filterWetonCards;
         window.renderWetonSpotlight = renderWetonSpotlight;
         window.selectWetonToSpotlight = selectWetonToSpotlight;
+        window.filterBySpecificDay = filterBySpecificDay;
 
         function updateLiveHeaderClock() {
             try {
@@ -2197,6 +2033,7 @@
                 evaluateCoupleCompatibility();
                 renderCalendar();
                 renderSelectedDateDetail();
+                renderSevenDaysWayang();
                 renderWetonSpotlight();
                 renderAll35WetonCards();
                 renderComboVulnerability();
