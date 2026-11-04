@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hafalan Kotoba Pengolahan Makanan (Hal. 2–7)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans JP', sans-serif;
+      background-color: #f8fafc;
+    }
+    .jp-font {
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .perspective {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    /* Efek Red Sheet / Tutup Kolom */
+    .blurred-cell {
+      filter: blur(6px);
+      user-select: none;
+      transition: filter 0.2s ease;
+      cursor: pointer;
+    }
+    .blurred-cell:hover, .blurred-cell.revealed {
+      filter: blur(0);
+    }
+  </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-sky-600 to-blue-700 text-white shadow-md sticky top-0 z-30">
+    <div class="max-w-5xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center text-xl font-bold jp-font shadow-inner">
+          食
+        </div>
+        <div>
+          <h1 class="text-lg font-bold leading-tight">Kotoba Pengolahan Makanan</h1>
+          <p class="text-xs text-sky-100">Modul Pengolahan Makanan 2024 • Halaman & Nomor 2–7</p>
+        </div>
+      </div>
+
+      <!-- Progress Ringkas -->
+      <div class="flex items-center gap-3 bg-white/10 px-3.5 py-2 rounded-xl backdrop-blur-sm self-start sm:self-auto">
+        <div class="text-xs">
+          <span class="text-sky-100 block">Progres Hafalan</span>
+          <span class="font-bold text-sm"><span id="headerMasteredCount">0</span> / <span id="headerTotalCount">0</span> Kata</span>
+        </div>
+        <div class="w-24 h-2.5 bg-sky-950/40 rounded-full overflow-hidden">
+          <div id="headerProgressBar" class="h-full bg-emerald-400 transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-5xl w-full mx-auto px-4 py-5 flex-1 flex flex-col gap-5">
+
+    <!-- Filter Halaman & Nomor -->
+    <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
+        <div>
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Pilih Cakupan Materi (Halaman / Nomor)</h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <label class="inline-flex items-center gap-1.5 text-xs font-medium text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-amber-100 transition">
+            <input type="checkbox" id="onlyNo2to7Toggle" class="rounded text-amber-600 focus:ring-amber-500" onchange="applyFilters()">
+            <span>Khusus Nomor Urut 2–7 Saja</span>
+          </label>
+          <label class="inline-flex items-center gap-1.5 text-xs font-medium text-rose-700 bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-rose-100 transition">
+            <input type="checkbox" id="onlyUnmasteredToggle" class="rounded text-rose-600 focus:ring-rose-500" onchange="applyFilters()">
+            <span>Hanya yang Belum Hafal</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Tombol Filter Halaman -->
+      <div class="flex flex-wrap gap-2" id="pageFilterContainer">
+        <button onclick="setPageFilter('ALL_2_7')" data-page="ALL_2_7" class="page-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-sky-600 text-white shadow-sm">
+          Semua Hal. 2–7 (60)
+        </button>
+        <button onclick="setPageFilter('2')" data-page="2" class="page-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-700 hover:bg-slate-200">
+          Hal. 2 (No. 1–14)
+        </button>
+        <button onclick="setPageFilter('3')" data-page="3" class="page-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-700 hover:bg-slate-200">
+          Hal. 3 (No. 15–30)
+        </button>
+        <button onclick="setPageFilter('5')" data-page="5" class="page-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-700 hover:bg-slate-200">
+          Hal. 5 (No. 1–14)
+        </button>
+        <button onclick="setPageFilter('6')" data-page="6" class="page-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-700 hover:bg-slate-200">
+          Hal. 6 (No. 1–4)
+        </button>
+        <button onclick="setPageFilter('7')" data-page="7" class="page-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-700 hover:bg-slate-200">
+          Hal. 7 (No. 1–28)
+        </button>
+        <button onclick="setPageFilter('8')" data-page="8" class="page-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-700 hover:bg-slate-200">
+          + Bagian Bawah (No. 1–11)
+        </button>
+      </div>
+    </section>
+
+    <!-- Navigasi Mode Belajar -->
+    <nav class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-200/70 p-1.5 rounded-2xl">
+      <button onclick="switchMode('flashcard')" id="tab-flashcard" class="mode-tab flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold bg-white text-sky-700 shadow-sm transition">
+        <span>🗂️</span> Flashcard
+      </button>
+      <button onclick="switchMode('quiz')" id="tab-quiz" class="mode-tab flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition">
+        <span>🎯</span> Kuis Pilihan
+      </button>
+      <button onclick="switchMode('match')" id="tab-match" class="mode-tab flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition">
+        <span>🧩</span> Cocokkan Kata
+      </button>
+      <button onclick="switchMode('table')" id="tab-table" class="mode-tab flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition">
+        <span>📋</span> Tabel Modul
+      </button>
+    </nav>
+
+    <!-- ==================== MODE 1: FLASHCARD ==================== -->
+    <section id="view-flashcard" class="flex-1 flex flex-col items-center justify-center gap-4">
+      <!-- Pengaturan Flashcard -->
+      <div class="w-full max-w-xl flex flex-wrap items-center justify-between gap-2 bg-white px-4 py-2.5 rounded-xl border border-slate-200/80 text-xs">
+        <div class="flex items-center gap-3">
+          <label class="inline-flex items-center gap-1.5 cursor-pointer font-medium text-slate-700">
+            <input type="checkbox" id="fcHideFurigana" class="rounded text-sky-600" onchange="renderFlashcard()">
+            <span>Sembunyikan Furigana</span>
+          </label>
+          <label class="inline-flex items-center gap-1.5 cursor-pointer font-medium text-slate-700">
+            <input type="checkbox" id="fcReverseMode" class="rounded text-sky-600" onchange="renderFlashcard()">
+            <span>Balik (Indo → Jepang)</span>
+          </label>
+        </div>
+        <button onclick="shuffleFlashcards()" class="text-sky-600 hover:text-sky-800 font-semibold flex items-center gap-1">
+          🔀 Acak Kartu
+        </button>
+      </div>
+
+      <!-- Area Kartu 3D -->
+      <div class="w-full max-w-xl">
+        <div id="flashcardEmptyState" class="hidden bg-white rounded-3xl p-10 text-center border border-slate-200 shadow-sm">
+          <p class="text-3xl mb-2">🎉</p>
+          <h3 class="font-bold text-slate-800 text-base">Tidak ada kata pada filter ini!</h3>
+          <p class="text-xs text-slate-500 mt-1">Semua kata sudah ditandai hafal atau filter terlalu spesifik.</p>
+        </div>
+
+        <div id="flashcardWrapper" class="perspective w-full h-72 sm:h-80 cursor-pointer select-none" onclick="flipCard()">
+          <div id="flashcardInner" class="relative w-full h-full transform-style-3d">
+            
+            <!-- Sisi Depan -->
+            <div class="absolute inset-0 bg-white rounded-3xl shadow-md border border-slate-200/90 p-6 flex flex-col justify-between backface-hidden">
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <span id="fcBadgeFront" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-semibold">Hal. 2 • No. 2</span>
+                <div class="flex items-center gap-2">
+                  <span id="fcStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-medium"></span>
+                  <button onclick="event.stopPropagation(); speakCurrentCard()" title="Dengarkan Audio Jepang" class="w-8 h-8 rounded-full bg-sky-50 hover:bg-sky-100 text-sky-600 flex items-center justify-center transition">
+                    🔊
+                  </button>
+                </div>
+              </div>
+
+              <div class="my-auto text-center px-2">
+                <p id="fcSubTopFront" class="text-base sm:text-lg text-sky-600 font-medium jp-font mb-1"></p>
+                <h3 id="fcMainFront" class="text-3xl sm:text-5xl font-bold text-slate-800 jp-font tracking-wide leading-tight"></h3>
+                <p id="fcRomajiFront" class="text-xs text-slate-400 mt-2"></p>
+              </div>
+
+              <div class="text-center text-xs text-slate-400 flex items-center justify-center gap-1">
+                <span>👆 Ketuk kartu atau tekan Spasi untuk membalik</span>
+              </div>
+            </div>
+
+            <!-- Sisi Belakang -->
+            <div class="absolute inset-0 bg-gradient-to-br from-sky-600 to-blue-700 text-white rounded-3xl shadow-md p-6 flex flex-col justify-between backface-hidden rotate-y-180">
+              <div class="flex items-center justify-between text-xs text-sky-100">
+                <span id="fcBadgeBack" class="px-2.5 py-1 rounded-full bg-white/15 font-semibold">Hal. 2 • No. 2</span>
+                <button onclick="event.stopPropagation(); speakCurrentCard()" class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition">
+                  🔊
+                </button>
+              </div>
+
+              <div class="my-auto text-center px-2">
+                <p id="fcBackJp" class="text-lg sm:text-xl font-bold jp-font text-sky-100 mb-1"></p>
+                <p id="fcBackFurigana" class="text-xs sm:text-sm text-sky-200 jp-font mb-3"></p>
+                <div class="w-12 h-0.5 bg-white/30 mx-auto mb-3 rounded-full"></div>
+                <h3 id="fcBackMeaning" class="text-2xl sm:text-3xl font-bold leading-snug"></h3>
+              </div>
+
+              <div class="text-center text-xs text-sky-200">
+                <span>Ketuk kembali untuk melihat sisi depan</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Kontrol Navigasi & Tandai Hafal -->
+      <div class="w-full max-w-xl flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-2">
+          <button onclick="prevCard()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 font-semibold text-xs sm:text-sm text-slate-700 shadow-sm transition">
+            ← Sebelumnya
+          </button>
+
+          <span id="fcCounter" class="text-xs sm:text-sm font-bold text-slate-600">1 / 60</span>
+
+          <button onclick="nextCard()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 font-semibold text-xs sm:text-sm text-slate-700 shadow-sm transition">
+            Selanjutnya →
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="markCurrentCard(false)" class="py-3 px-4 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition shadow-sm">
+            <span>⏳</span> Belum Hafal (Ulangi)
+          </button>
+          <button onclick="markCurrentCard(true)" class="py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition shadow-sm">
+            <span>✅</span> Sudah Hafal!
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODE 2: KUIS PILIHAN GANDA ==================== -->
+    <section id="view-quiz" class="hidden flex-1 flex flex-col items-center gap-4">
+      <div class="w-full max-w-xl bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2 text-xs">
+          <span class="font-semibold text-slate-500">Tipe Soal:</span>
+          <select id="quizTypeSelect" onchange="startQuiz()" class="bg-slate-100 border-0 rounded-lg px-2.5 py-1.5 font-semibold text-slate-700 focus:ring-2 focus:ring-sky-500">
+            <option value="jp_to_id">Jepang → Arti Indonesia</option>
+            <option value="id_to_jp">Arti Indonesia → Jepang</option>
+            <option value="kanji_to_furi">Tebak Cara Baca (Kanji → Furigana)</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-4 text-xs font-semibold">
+          <span class="text-emerald-600">Benar: <b id="quizScoreCorrect">0</b></span>
+          <span class="text-rose-600">Salah: <b id="quizScoreWrong">0</b></span>
+          <span class="text-amber-600">🔥 Streak: <b id="quizStreak">0</b></span>
+        </div>
+      </div>
+
+      <div id="quizCard" class="w-full max-w-xl bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-4">
+          <span id="quizQuestionMeta" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-semibold">Soal 1 / 10</span>
+          <button onclick="speakQuizWord()" class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-600 hover:bg-sky-100 font-medium">
+            🔊 Audio
+          </button>
+        </div>
+
+        <div class="text-center py-6 border-b border-slate-100 mb-5">
+          <p id="quizPromptSub" class="text-sm text-sky-600 jp-font mb-1"></p>
+          <h3 id="quizPromptMain" class="text-3xl sm:text-4xl font-bold text-slate-800 jp-font"></h3>
+        </div>
+
+        <!-- Pilihan Jawaban -->
+        <div id="quizOptions" class="grid grid-cols-1 gap-2.5"></div>
+
+        <!-- Feedback & Tombol Lanjut -->
+        <div id="quizFeedbackBox" class="hidden mt-4 p-3.5 rounded-xl text-xs sm:text-sm flex items-center justify-between">
+          <span id="quizFeedbackText" class="font-semibold"></span>
+          <button onclick="nextQuizQuestion()" class="px-4 py-2 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition">
+            Soal Berikutnya →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODE 3: COCOKKAN KATA (MATCH GAME) ==================== -->
+    <section id="view-match" class="hidden flex-1 flex flex-col items-center gap-4">
+      <div class="w-full max-w-3xl bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
+        <div class="text-xs sm:text-sm">
+          <span class="font-bold text-slate-700">Pasangkan Kotoba Jepang dengan Artinya!</span>
+          <p class="text-xs text-slate-400">Ketuk 1 kartu bahasa Jepang dan 1 kartu arti bahasa Indonesia yang cocok.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-bold px-3 py-1.5 rounded-lg bg-sky-50 text-sky-700">⏱️ <span id="matchTimer">0</span>d</span>
+          <button onclick="initMatchGame()" class="px-3.5 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-semibold transition">
+            🔄 Ronde Baru
+          </button>
+        </div>
+      </div>
+
+      <div id="matchGrid" class="w-full max-w-3xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5"></div>
+    </section>
+
+    <!-- ==================== MODE 4: TABEL MODUL ==================== -->
+    <section id="view-table" class="hidden flex-1 flex flex-col gap-4">
+      <!-- Bar Pencarian & Mode Tutup Kolom (Red Sheet) -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="relative flex-1">
+          <input
+            type="text"
+            id="searchInput"
+            oninput="renderTable()"
+            placeholder="Cari kanji, furigana, romaji, atau arti Indonesia..."
+            class="w-full pl-9 pr-4 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500"
+          />
+          <span class="absolute left-3 top-2.5 text-slate-400 text-sm">🔍</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="text-slate-400 font-medium">Mode Tes Tutup Kolom:</span>
+          <button onclick="toggleColumnBlur('kanji')" id="blurBtn-kanji" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 font-medium text-slate-700 transition">
+            🙈 Tutup Kanji
+          </button>
+          <button onclick="toggleColumnBlur('furigana')" id="blurBtn-furigana" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 font-medium text-slate-700 transition">
+            🙈 Tutup Furigana
+          </button>
+          <button onclick="toggleColumnBlur('meaning')" id="blurBtn-meaning" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 font-medium text-slate-700 transition">
+            🙈 Tutup Arti
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabel Kotoba -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-600 text-xs uppercase border-b border-slate-200">
+                <th class="py-3 px-3 text-center w-14">ページ</th>
+                <th class="py-3 px-3 text-center w-14">番号</th>
+                <th class="py-3 px-4">漢字 (Kanji)</th>
+                <th class="py-3 px-4">ふりがな (Cara Baca)</th>
+                <th class="py-3 px-4">意味 (Arti Indonesia)</th>
+                <th class="py-3 px-3 text-center w-16">Audio</th>
+                <th class="py-3 px-3 text-center w-20">Hafal</th>
+              </tr>
+            </thead>
+            <tbody id="kotobaTableBody" class="divide-y divide-slate-200/70 text-xs sm:text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-5xl w-full mx-auto px-4 py-4 text-center text-xs text-slate-400 border-t border-slate-200/60 mt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+    <span>Sumber Materi: Modul Pengolahan Makanan 2024 (Halaman 2–7)</span>
+    <button onclick="resetAllProgress()" class="text-rose-500 hover:underline font-medium">Reset Status Hafalan</button>
+  </footer>
+
+  <script>
+    // ==================== DATA KOTOBA LENGKAP SESUAI GAMBAR MODUL ====================
+    const KOTOBA_DATA = [
+      // HALAMAN 2 (Nomor 1 - 14)
+      { id: "p2_1", page: "2", no: 1, kanji: "飲料", furigana: "いんりょう", romaji: "inryou", meaning: "minuman", highlight: "blue" },
+      { id: "p2_2", page: "2", no: 2, kanji: "食料品", furigana: "しょくりょうひん", romaji: "shokuryouhin", meaning: "bahan makanan" },
+      { id: "p2_3", page: "2", no: 3, kanji: "欠かせません", furigana: "かかせません", romaji: "kakasemasen", meaning: "ini penting" },
+      { id: "p2_4", page: "2", no: 4, kanji: "製造する", furigana: "せいぞうする", romaji: "seizou suru", meaning: "pembuatan" },
+      { id: "p2_5", page: "2", no: 5, kanji: "飲食料品製造業", furigana: "いんしょくりょうひんせいぞうぎょう", romaji: "inshokuryouhin seizougyou", meaning: "industri manufaktur makanan dan minuman" },
+      { id: "p2_6", page: "2", no: 6, kanji: "ハムソーセージ", furigana: "ハムソーセージ", romaji: "hamu sooseeji", meaning: "sosis daging" },
+      { id: "p2_7", page: "2", no: 7, kanji: "魚の缶詰", furigana: "さかなのかんづめ", romaji: "sakana no kandzume", meaning: "ikan kaleng" },
+      { id: "p2_8", page: "2", no: 8, kanji: "惣菜", furigana: "そうざい", romaji: "souzai", meaning: "makanan pendamping" },
+      { id: "p2_9", page: "2", no: 9, kanji: "冷凍食品", furigana: "れいとうしょくひん", romaji: "reitou shokuhin", meaning: "makanan beku" },
+      { id: "p2_10", page: "2", no: 10, kanji: "農林水産省", furigana: "のうりんすいさんしょう", romaji: "nourin suisanshou", meaning: "Kementerian Pertanian, Kehutanan dan Perikanan" },
+      { id: "p2_11", page: "2", no: 11, kanji: "統計", furigana: "とうけい", romaji: "toukei", meaning: "statistik" },
+      { id: "p2_12", page: "2", no: 12, kanji: "国内生産額", furigana: "こくないせいさんがく", romaji: "kokunai seisangaku", meaning: "jumlah produksi dalam negeri" },
+      { id: "p2_13", page: "2", no: 13, kanji: "数年", furigana: "すうねん", romaji: "suunen", meaning: "beberapa tahun" },
+      { id: "p2_14", page: "2", no: 14, kanji: "兆円", furigana: "ちょうえん", romaji: "chouen", meaning: "triliun yen" },
+
+      // HALAMAN 3 (Nomor 15 - 30)
+      { id: "p3_15", page: "3", no: 15, kanji: "特定技能1号", furigana: "とくていぎのう1ごう", romaji: "tokutei ginou ichi gou", meaning: "keahlian khusus tingkat 1" },
+      { id: "p3_16", page: "3", no: 16, kanji: "在留資格者", furigana: "ざいりゅうしかくしゃ", romaji: "zairyuu shikakusha", meaning: "orang berstatus penduduk" },
+      { id: "p3_17", page: "3", no: 17, kanji: "業種", furigana: "ぎょうしゅ", romaji: "gyoushu", meaning: "industri" },
+      { id: "p3_18", page: "3", no: 18, kanji: "食品衛生", furigana: "しょくひんえいせい", romaji: "shokuhin eisei", meaning: "kebersihan makanan" },
+      { id: "p3_19", page: "3", no: 19, kanji: "労働安全", furigana: "ろうどうあんぜん", romaji: "roudou anzen", meaning: "keselamatan kerja" },
+      { id: "p3_20", page: "3", no: 20, kanji: "知識", furigana: "ちしき", romaji: "chishiki", meaning: "pengetahuan" },
+      { id: "p3_21", page: "3", no: 21, kanji: "技能", furigana: "ぎのう", romaji: "ginou", meaning: "keahlian" },
+      { id: "p3_22", page: "3", no: 22, kanji: "必要", furigana: "ひつよう", romaji: "hitsuyou", meaning: "membutuhkan" },
+      { id: "p3_23", page: "3", no: 23, kanji: "命", furigana: "いのち", romaji: "inochi", meaning: "kehidupan" },
+      { id: "p3_24", page: "3", no: 24, kanji: "生命", furigana: "せいめい", romaji: "seimei", meaning: "kehidupan" },
+      { id: "p3_25", page: "3", no: 25, kanji: "守る", furigana: "まもる", romaji: "mamoru", meaning: "melindungi" },
+      { id: "p3_26", page: "3", no: 26, kanji: "信用", furigana: "しんよう", romaji: "shinyou", meaning: "kredibilitas" },
+      { id: "p3_27", page: "3", no: 27, kanji: "安全保護具", furigana: "あんぜんほごぐ", romaji: "anzen hogogu", meaning: "peralatan perlindungan keselamatan" },
+      { id: "p3_28", page: "3", no: 28, kanji: "着用", furigana: "ちゃくよう", romaji: "chakuyou", meaning: "memakai" },
+      { id: "p3_29", page: "3", no: 29, kanji: "作業者", furigana: "さぎょうしゃ", romaji: "sagyousha", meaning: "pekerja" },
+      { id: "p3_30", page: "3", no: 30, kanji: "健康", furigana: "けんこう", romaji: "kenkou", meaning: "kesehatan" },
+
+      // HALAMAN 5 (Nomor 1 - 14)
+      { id: "p5_1", page: "5", no: 1, kanji: "基本", furigana: "きほん", romaji: "kihon", meaning: "dasar", highlight: "blue" },
+      { id: "p5_2", page: "5", no: 2, kanji: "行動", furigana: "こうどう", romaji: "koudou", meaning: "tindakan" },
+      { id: "p5_3", page: "5", no: 3, kanji: "清潔", furigana: "せいけつ", romaji: "seiketsu", meaning: "kebersihan" },
+      { id: "p5_4", page: "5", no: 4, kanji: "設備", furigana: "せつび", romaji: "setsubi", meaning: "fasilitas" },
+      { id: "p5_5", page: "5", no: 5, kanji: "保管", furigana: "ほかん", romaji: "hokan", meaning: "penyimpanan" },
+      { id: "p5_6", page: "5", no: 6, kanji: "共通する", furigana: "きょうつうする", romaji: "kyoutsuu suru", meaning: "memiliki kesamaan" },
+      { id: "p5_7", page: "5", no: 7, kanji: "一般", furigana: "いっぱん", romaji: "ippan", meaning: "umum" },
+      { id: "p5_8", page: "5", no: 8, kanji: "重要", furigana: "じゅうよう", romaji: "juuyou", meaning: "penting" },
+      { id: "p5_9", page: "5", no: 9, kanji: "施設", furigana: "しせつ", romaji: "shisetsu", meaning: "fasilitas" },
+      { id: "p5_10", page: "5", no: 10, kanji: "種類", furigana: "しゅるい", romaji: "shurui", meaning: "jenis" },
+      { id: "p5_11", page: "5", no: 11, kanji: "特徴", furigana: "とくちょう", romaji: "tokuchou", meaning: "fitur" },
+      { id: "p5_12", page: "5", no: 12, kanji: "応じて", furigana: "おうじて", romaji: "oujite", meaning: "bergantung kepada" },
+      { id: "p5_13", page: "5", no: 13, kanji: "工程", furigana: "こうてい", romaji: "koutei", meaning: "proses" },
+      { id: "p5_14", page: "5", no: 14, kanji: "組み合わせて", furigana: "くみあわせて", romaji: "kumiawasete", meaning: "dalam kombinasi" },
+
+      // HALAMAN 6 (Nomor 1 - 4)
+      { id: "p6_1", page: "6", no: 1, kanji: "危害要因", furigana: "きがいよういん", romaji: "kigai youin", meaning: "faktor bahaya", highlight: "gray" },
+      { id: "p6_2", page: "6", no: 2, kanji: "含まれない", furigana: "ふくまれない", romaji: "fukumarenai", meaning: "tidak termasuk" },
+      { id: "p6_3", page: "6", no: 3, kanji: "活動", furigana: "かつどう", romaji: "katsudou", meaning: "aktivitas" },
+      { id: "p6_4", page: "6", no: 4, kanji: "学習する", furigana: "がくしゅうする", romaji: "gakushuu suru", meaning: "mempelajari" },
+
+      // HALAMAN 7 (Nomor 1 - 28)
+      { id: "p7_1", page: "7", no: 1, kanji: "物理的危害要因", furigana: "ぶつりてききがいよういん", romaji: "butsuriteki kigai youin", meaning: "bahaya fisik", highlight: "gray" },
+      { id: "p7_2", page: "7", no: 2, kanji: "化学的危害要因", furigana: "かがくてききがいよういん", romaji: "kagakuteki kigai youin", meaning: "bahaya kimia", highlight: "gray" },
+      { id: "p7_3", page: "7", no: 3, kanji: "生物的危害要因", furigana: "せいぶつてききがいよういん", romaji: "seibutsuteki kigai youin", meaning: "bahaya biologis", highlight: "gray" },
+      { id: "p7_4", page: "7", no: 4, kanji: "硬い", furigana: "かたい", romaji: "katai", meaning: "keras" },
+      { id: "p7_5", page: "7", no: 5, kanji: "歯が欠ける", furigana: "はがかける", romaji: "ha ga kakeru", meaning: "gigi terkelupas" },
+      { id: "p7_6", page: "7", no: 6, kanji: "尖って", furigana: "とがって", romaji: "togatte", meaning: "Lancip" },
+      { id: "p7_7", page: "7", no: 7, kanji: "傷", furigana: "きず", romaji: "kizu", meaning: "menggores/tergores" },
+      { id: "p7_8", page: "7", no: 8, kanji: "代表的な", furigana: "だいひょうてき", romaji: "daihyouteki", meaning: "perwakilan" },
+      { id: "p7_9", page: "7", no: 9, kanji: "金属片", furigana: "きんぞくへん", romaji: "kinzokuhen", meaning: "serpihan logam" },
+      { id: "p7_10", page: "7", no: 10, kanji: "ガラス片", furigana: "ガラスへん", romaji: "garasuhen", meaning: "sepotong kaca" },
+      { id: "p7_11", page: "7", no: 11, kanji: "プラスチック片", furigana: "プラスチックへん", romaji: "purasuchikkuhen", meaning: "potongan plastik" },
+      { id: "p7_12", page: "7", no: 12, kanji: "石", furigana: "いし", romaji: "ishi", meaning: "batu" },
+      { id: "p7_13", page: "7", no: 13, kanji: "原材料", furigana: "げんざいりょう", romaji: "genzairyou", meaning: "bahan baku" },
+      { id: "p7_14", page: "7", no: 14, kanji: "取り除く", furigana: "とりのぞく", romaji: "torinozoku", meaning: "menghapus" },
+      { id: "p7_15", page: "7", no: 15, kanji: "異物", furigana: "いぶつ", romaji: "ibutsu", meaning: "benda asing" },
+      { id: "p7_16", page: "7", no: 16, kanji: "卵の殻", furigana: "たまごのから", romaji: "tamago no kara", meaning: "kulit telur" },
+      { id: "p7_17", page: "7", no: 17, kanji: "硬質異物", furigana: "こうしついぶつ", romaji: "koushitsui butsu", meaning: "benda asing yang keras" },
+      { id: "p7_18", page: "7", no: 18, kanji: "混入", furigana: "こんにゅう", romaji: "konnyuu", meaning: "kontaminasi" },
+      { id: "p7_19", page: "7", no: 19, kanji: "防止", furigana: "ぼうし", romaji: "boushi", meaning: "pencegahan" },
+      { id: "p7_20", page: "7", no: 20, kanji: "土", furigana: "つち", romaji: "tsuchi", meaning: "tanah" },
+      { id: "p7_21", page: "7", no: 21, kanji: "小石", furigana: "こいし", romaji: "koishi", meaning: "kerikil" },
+      { id: "p7_22", page: "7", no: 22, kanji: "洗浄", furigana: "せんじょう", romaji: "senjou", meaning: "Pencucian" },
+      { id: "p7_23", page: "7", no: 23, kanji: "選別", furigana: "せんべつ", romaji: "senbetsu", meaning: "penyortiran" },
+      { id: "p7_24", page: "7", no: 24, kanji: "下処理", furigana: "したしょり", romaji: "shitashori", meaning: "persiapan" },
+      { id: "p7_25", page: "7", no: 25, kanji: "野菜の根の部分", furigana: "やさいのねのぶぶん", romaji: "yasai no ne no bubun", meaning: "bagian akar sayuran" },
+      { id: "p7_26", page: "7", no: 26, kanji: "貝の殻", furigana: "かいのから", romaji: "kai no kara", meaning: "kerang laut" },
+      { id: "p7_27", page: "7", no: 27, kanji: "魚のエラ", furigana: "さかなのえら", romaji: "sakana no era", meaning: "insang ikan" },
+      { id: "p7_28", page: "7", no: 28, kanji: "骨", furigana: "ほね", romaji: "hone", meaning: "tulang" },
+
+      // BAGIAN BAWAH HALAMAN 7 / HALAMAN 8 (Nomor 1 - 11 di Gambar 2)
+      { id: "p8_1", page: "8", no: 1, kanji: "蓋", furigana: "ふた", romaji: "futa", meaning: "tutup" },
+      { id: "p8_2", page: "8", no: 2, kanji: "紙片", furigana: "しへん", romaji: "shihen", meaning: "selembar kertas" },
+      { id: "p8_3", page: "8", no: 3, kanji: "不潔", furigana: "ふけつ", romaji: "fuketsu", meaning: "kekotoran" },
+      { id: "p8_4", page: "8", no: 4, kanji: "不衛生", furigana: "ふえいせい", romaji: "fueisei", meaning: "tidak sehat" },
+      { id: "p8_5", page: "8", no: 5, kanji: "苦情(クレーム)", furigana: "くじょう", romaji: "kujou (kureemu)", meaning: "keluhan (klaim)" },
+      { id: "p8_6", page: "8", no: 6, kanji: "返品", furigana: "へんぴん", romaji: "henpin", meaning: "kembali" },
+      { id: "p8_7", page: "8", no: 7, kanji: "会社の信用", furigana: "かいしゃのしんよう", romaji: "kaisha no shinyou", meaning: "kepercayaan perusahaan" },
+      { id: "p8_8", page: "8", no: 8, kanji: "落とす", furigana: "おとす", romaji: "otosu", meaning: "menjatuhkan" },
+      { id: "p8_9", page: "8", no: 9, kanji: "物質", furigana: "ぶっしつ", romaji: "busshitsu", meaning: "bahan" },
+      { id: "p8_10", page: "8", no: 10, kanji: "ヒスタミン", furigana: "ヒスタミン", romaji: "hisutamin", meaning: "histamin" },
+      { id: "p8_11", page: "8", no: 11, kanji: "じゃがいもの芽", furigana: "じゃがいものめ", romaji: "jagaimo no me", meaning: "kecambah kentang" }
+    ];
+
+    // ==================== STATE MANAGEMENT ====================
+    let masteredIds = JSON.parse(localStorage.getItem("kotoba_pengolahan_mastered") || "[]");
+    let currentPageFilter = "ALL_2_7";
+    let filteredList = [];
+    let currentMode = "flashcard";
+
+    // Flashcard state
+    let fcIndex = 0;
+    let isFlipped = false;
+
+    // Quiz state
+    let currentQuizItem = null;
+    let quizCorrect = 0;
+    let quizWrong = 0;
+    let quizStreak = 0;
+    let quizAnswered = false;
+
+    // Match state
+    let matchSelected = [];
+    let matchSolvedIds = [];
+    let matchTimerInterval = null;
+    let matchSeconds = 0;
+
+    // Table blur state
+    let blurState = { kanji: false, furigana: false, meaning: false };
+
+    // ==================== FILTER & PROGRESS ====================
+    function saveMastered() {
+      localStorage.setItem("kotoba_pengolahan_mastered", JSON.stringify(masteredIds));
+      updateHeaderProgress();
+    }
+
+    function updateHeaderProgress() {
+      const basePool = getBasePoolByPageFilter();
+      const masteredInPool = basePool.filter(item => masteredIds.includes(item.id)).length;
+      document.getElementById("headerMasteredCount").textContent = masteredInPool;
+      document.getElementById("headerTotalCount").textContent = basePool.length;
+      const pct = basePool.length > 0 ? Math.round((masteredInPool / basePool.length) * 100) : 0;
+      document.getElementById("headerProgressBar").style.width = pct + "%";
+    }
+
+    function getBasePoolByPageFilter() {
+      const only2to7 = document.getElementById("onlyNo2to7Toggle").checked;
+      return KOTOBA_DATA.filter(item => {
+        const pageMatch = currentPageFilter === "ALL_2_7"
+          ? ["2", "3", "5", "6", "7"].includes(item.page)
+          : item.page === currentPageFilter;
+        const numMatch = only2to7 ? (item.no >= 2 && item.no <= 7) : true;
+        return pageMatch && numMatch;
+      });
+    }
+
+    function setPageFilter(page) {
+      currentPageFilter = page;
+      document.querySelectorAll(".page-btn").forEach(btn => {
+        if (btn.dataset.page === page) {
+          btn.className = "page-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-sky-600 text-white shadow-sm";
+        } else {
+          btn.className = "page-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-700 hover:bg-slate-200";
+        }
+      });
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const onlyUnmastered = document.getElementById("onlyUnmasteredToggle").checked;
+      const basePool = getBasePoolByPageFilter();
+
+      filteredList = basePool.filter(item => {
+        if (onlyUnmastered && masteredIds.includes(item.id)) return false;
+        return true;
+      });
+
+      fcIndex = 0;
+      isFlipped = false;
+      updateHeaderProgress();
+      refreshActiveView();
+    }
+
+    function switchMode(mode) {
+      currentMode = mode;
+      ["flashcard", "quiz", "match", "table"].forEach(m => {
+        const view = document.getElementById("view-" + m);
+        const tab = document.getElementById("tab-" + m);
+        if (m === mode) {
+          view.classList.remove("hidden");
+          tab.className = "mode-tab flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold bg-white text-sky-700 shadow-sm transition";
+        } else {
+          view.classList.add("hidden");
+          tab.className = "mode-tab flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition";
+        }
+      });
+      refreshActiveView();
+    }
+
+    function refreshActiveView() {
+      if (currentMode === "flashcard") renderFlashcard();
+      if (currentMode === "quiz") startQuiz();
+      if (currentMode === "match") initMatchGame();
+      if (currentMode === "table") renderTable();
+    }
+
+    // ==================== AUDIO TTS JEPANG ====================
+    function speakJapanese(text) {
+      if (!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "ja-JP";
+      utter.rate = 0.9;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function speakCurrentCard() {
+      if (!filteredList.length) return;
+      const item = filteredList[fcIndex];
+      speakJapanese(item.furigana || item.kanji);
+    }
+
+    // ==================== FLASHCARD LOGIC ====================
+    function renderFlashcard() {
+      const emptyEl = document.getElementById("flashcardEmptyState");
+      const wrapEl = document.getElementById("flashcardWrapper");
+
+      if (filteredList.length === 0) {
+        emptyEl.classList.remove("hidden");
+        wrapEl.classList.add("hidden");
+        document.getElementById("fcCounter").textContent = "0 / 0";
+        return;
+      }
+
+      emptyEl.classList.add("hidden");
+      wrapEl.classList.remove("hidden");
+
+      if (fcIndex >= filteredList.length) fcIndex = 0;
+      const item = filteredList[fcIndex];
+      const hideFuri = document.getElementById("fcHideFurigana").checked;
+      const reverse = document.getElementById("fcReverseMode").checked;
+
+      // Reset flip
+      isFlipped = false;
+      document.getElementById("flashcardInner").classList.remove("rotate-y-180");
+
+      const badgeText = `Hal. ${item.page} • No. ${item.no}`;
+      document.getElementById("fcBadgeFront").textContent = badgeText;
+      document.getElementById("fcBadgeBack").textContent = badgeText;
+
+      const isMastered = masteredIds.includes(item.id);
+      const statusBadge = document.getElementById("fcStatusBadge");
+      if (isMastered) {
+        statusBadge.textContent = "✓ Sudah Hafal";
+        statusBadge.className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700";
+      } else {
+        statusBadge.textContent = "Belum Hafal";
+        statusBadge.className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700";
+      }
+
+      if (!reverse) {
+        document.getElementById("fcSubTopFront").textContent = hideFuri ? "" : item.furigana;
+        document.getElementById("fcMainFront").textContent = item.kanji;
+        document.getElementById("fcRomajiFront").textContent = hideFuri ? "" : item.romaji;
+
+        document.getElementById("fcBackJp").textContent = item.kanji;
+        document.getElementById("fcBackFurigana").textContent = `${item.furigana} (${item.romaji})`;
+        document.getElementById("fcBackMeaning").textContent = item.meaning;
+      } else {
+        document.getElementById("fcSubTopFront").textContent = "Bahasa Indonesia:";
+        document.getElementById("fcMainFront").textContent = item.meaning;
+        document.getElementById("fcRomajiFront").textContent = "";
+
+        document.getElementById("fcBackJp").textContent = item.furigana;
+        document.getElementById("fcBackFurigana").textContent = item.romaji;
+        document.getElementById("fcBackMeaning").textContent = item.kanji;
+      }
+
+      document.getElementById("fcCounter").textContent = `${fcIndex + 1} / ${filteredList.length}`;
+    }
+
+    function flipCard() {
+      isFlipped = !isFlipped;
+      document.getElementById("flashcardInner").classList.toggle("rotate-y-180", isFlipped);
+    }
+
+    function nextCard() {
+      if (!filteredList.length) return;
+      fcIndex = (fcIndex + 1) % filteredList.length;
+      renderFlashcard();
+    }
+
+    function prevCard() {
+      if (!filteredList.length) return;
+      fcIndex = (fcIndex - 1 + filteredList.length) % filteredList.length;
+      renderFlashcard();
+    }
+
+    function shuffleFlashcards() {
+      for (let i = filteredList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [filteredList[i], filteredList[j]] = [filteredList[j], filteredList[i]];
+      }
+      fcIndex = 0;
+      renderFlashcard();
+    }
+
+    function markCurrentCard(mastered) {
+      if (!filteredList.length) return;
+      const item = filteredList[fcIndex];
+      if (mastered && !masteredIds.includes(item.id)) {
+        masteredIds.push(item.id);
+      } else if (!mastered && masteredIds.includes(item.id)) {
+        masteredIds = masteredIds.filter(id => id !== item.id);
+      }
+      saveMastered();
+
+      const onlyUnmastered = document.getElementById("onlyUnmasteredToggle").checked;
+      if (onlyUnmastered && mastered) {
+        applyFilters();
+      } else {
+        nextCard();
+      }
+    }
+
+    // Keyboard navigation
+    window.addEventListener("keydown", (e) => {
+      if (currentMode !== "flashcard" || ["INPUT", "SELECT"].includes(document.activeElement.tagName)) return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        flipCard();
+      } else if (e.code === "ArrowRight") {
+        nextCard();
+      } else if (e.code === "ArrowLeft") {
+        prevCard();
+      }
+    });
+
+    // ==================== QUIZ LOGIC ====================
+    function startQuiz() {
+      nextQuizQuestion();
+    }
+
+    function nextQuizQuestion() {
+      const pool = filteredList.length >= 4 ? filteredList : KOTOBA_DATA.slice(0, 14);
+      const qType = document.getElementById("quizTypeSelect").value;
+      quizAnswered = false;
+      document.getElementById("quizFeedbackBox").classList.add("hidden");
+
+      currentQuizItem = pool[Math.floor(Math.random() * pool.length)];
+      document.getElementById("quizQuestionMeta").textContent = `Hal. ${currentQuizItem.page} • No. ${currentQuizItem.no}`;
+
+      if (qType === "jp_to_id") {
+        document.getElementById("quizPromptSub").textContent = currentQuizItem.furigana;
+        document.getElementById("quizPromptMain").textContent = currentQuizItem.kanji;
+      } else if (qType === "id_to_jp") {
+        document.getElementById("quizPromptSub").textContent = "Pilih Kotoba Jepang yang tepat:";
+        document.getElementById("quizPromptMain").textContent = currentQuizItem.meaning;
+      } else {
+        document.getElementById("quizPromptSub").textContent = `Arti: ${currentQuizItem.meaning}`;
+        document.getElementById("quizPromptMain").textContent = currentQuizItem.kanji;
+      }
+
+      // Generate 3 distractors
+      const others = KOTOBA_DATA.filter(x => x.id !== currentQuizItem.id);
+      const shuffledOthers = others.sort(() => 0.5 - Math.random()).slice(0, 3);
+      const options = [...shuffledOthers, currentQuizItem].sort(() => 0.5 - Math.random());
+
+      const optionsContainer = document.getElementById("quizOptions");
+      optionsContainer.innerHTML = "";
+
+      options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-sky-400 hover:bg-sky-50/40 font-medium text-sm sm:text-base transition flex items-center justify-between";
+        let label = "";
+        if (qType === "jp_to_id") label = opt.meaning;
+        else if (qType === "id_to_jp") label = `${opt.kanji} (${opt.furigana})`;
+        else label = `${opt.furigana} (${opt.romaji})`;
+
+        btn.innerHTML = `<span class="jp-font">${label}</span>`;
+        btn.onclick = () => checkQuizAnswer(opt, btn);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function checkQuizAnswer(selectedOpt, btnEl) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+
+      const isCorrect = selectedOpt.id === currentQuizItem.id;
+      const fbBox = document.getElementById("quizFeedbackBox");
+      const fbText = document.getElementById("quizFeedbackText");
+      fbBox.classList.remove("hidden");
+
+      if (isCorrect) {
+        quizCorrect++;
+        quizStreak++;
+        btnEl.className = "w-full text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-sm sm:text-base flex items-center justify-between";
+        fbBox.className = "mt-4 p-3.5 rounded-xl text-xs sm:text-sm flex items-center justify-between bg-emerald-50 text-emerald-800 border border-emerald-200";
+        fbText.textContent = `✅ Tepat sekali! ${currentQuizItem.kanji} (${currentQuizItem.furigana}) = ${currentQuizItem.meaning}`;
+        speakJapanese(currentQuizItem.furigana);
+      } else {
+        quizWrong++;
+        quizStreak = 0;
+        btnEl.className = "w-full text-left p-3.5 rounded-xl border-2 border-rose-500 bg-rose-50 text-rose-900 font-bold text-sm sm:text-base flex items-center justify-between";
+        fbBox.className = "mt-4 p-3.5 rounded-xl text-xs sm:text-sm flex items-center justify-between bg-rose-50 text-rose-800 border border-rose-200";
+        fbText.textContent = `❌ Kurang tepat. Jawaban: ${currentQuizItem.kanji} (${currentQuizItem.furigana}) = ${currentQuizItem.meaning}`;
+      }
+
+      document.getElementById("quizScoreCorrect").textContent = quizCorrect;
+      document.getElementById("quizScoreWrong").textContent = quizWrong;
+      document.getElementById("quizStreak").textContent = quizStreak;
+    }
+
+    function speakQuizWord() {
+      if (currentQuizItem) speakJapanese(currentQuizItem.furigana);
+    }
+
+    // ==================== MATCH GAME LOGIC ====================
+    function initMatchGame() {
+      clearInterval(matchTimerInterval);
+      matchSeconds = 0;
+      document.getElementById("matchTimer").textContent = "0";
+      matchSelected = [];
+      matchSolvedIds = [];
+
+      const source = filteredList.length >= 6 ? filteredList : KOTOBA_DATA.slice(0, 14);
+      const picked = [...source].sort(() => 0.5 - Math.random()).slice(0, 6);
+
+      const cards = [];
+      picked.forEach(item => {
+        cards.push({ uid: item.id + "_jp", pairId: item.id, text: item.kanji, sub: item.furigana, type: "jp" });
+        cards.push({ uid: item.id + "_id", pairId: item.id, text: item.meaning, sub: `Hal.${item.page}#${item.no}`, type: "id" });
+      });
+
+      cards.sort(() => 0.5 - Math.random());
+
+      const grid = document.getElementById("matchGrid");
+      grid.innerHTML = "";
+
+      cards.forEach(card => {
+        const el = document.createElement("button");
+        el.dataset.uid = card.uid;
+        el.dataset.pairId = card.pairId;
+        el.className = "match-card h-24 p-3 rounded-2xl bg-white border-2 border-slate-200 hover:border-sky-400 shadow-sm flex flex-col items-center justify-center text-center transition";
+        el.innerHTML = `
+          <span class="text-xs text-slate-400 jp-font mb-0.5">${card.sub}</span>
+          <span class="font-bold text-slate-800 text-sm sm:text-base jp-font line-clamp-2">${card.text}</span>
+        `;
+        el.onclick = () => onMatchCardClick(card, el, picked.length);
+        grid.appendChild(el);
+      });
+
+      matchTimerInterval = setInterval(() => {
+        matchSeconds++;
+        document.getElementById("matchTimer").textContent = matchSeconds;
+      }, 1000);
+    }
+
+    function onMatchCardClick(card, el, totalPairs) {
+      if (matchSolvedIds.includes(card.pairId)) return;
+      if (matchSelected.find(s => s.card.uid === card.uid)) return;
+      if (matchSelected.length >= 2) return;
+
+      el.classList.add("border-sky-600", "bg-sky-50");
+      matchSelected.push({ card, el });
+
+      if (matchSelected.length === 2) {
+        const [first, second] = matchSelected;
+        if (first.card.pairId === second.card.pairId && first.card.uid !== second.card.uid) {
+          matchSolvedIds.push(first.card.pairId);
+          first.el.className = "h-24 p-3 rounded-2xl bg-emerald-50 border-2 border-emerald-500 text-emerald-800 flex flex-col items-center justify-center text-center opacity-70 cursor-default";
+          second.el.className = "h-24 p-3 rounded-2xl bg-emerald-50 border-2 border-emerald-500 text-emerald-800 flex flex-col items-center justify-center text-center opacity-70 cursor-default";
+          matchSelected = [];
+
+          if (matchSolvedIds.length === totalPairs) {
+            clearInterval(matchTimerInterval);
+          }
+        } else {
+          first.el.classList.add("border-rose-500", "bg-rose-50");
+          second.el.classList.add("border-rose-500", "bg-rose-50");
+          setTimeout(() => {
+            first.el.classList.remove("border-sky-600", "bg-sky-50", "border-rose-500", "bg-rose-50");
+            second.el.classList.remove("border-sky-600", "bg-sky-50", "border-rose-500", "bg-rose-50");
+            matchSelected = [];
+          }, 550);
+        }
+      }
+    }
+
+    // ==================== TABLE LOGIC ====================
+    function toggleColumnBlur(col) {
+      blurState[col] = !blurState[col];
+      const btn = document.getElementById("blurBtn-" + col);
+      if (blurState[col]) {
+        btn.className = "px-2.5 py-1.5 rounded-lg border border-sky-600 bg-sky-600 text-white font-semibold transition";
+      } else {
+        btn.className = "px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 font-medium text-slate-700 transition";
+      }
+      renderTable();
+    }
+
+    function renderTable() {
+      const query = (document.getElementById("searchInput").value || "").toLowerCase().trim();
+      const tbody = document.getElementById("kotobaTableBody");
+      tbody.innerHTML = "";
+
+      const rows = filteredList.filter(item => {
+        if (!query) return true;
+        return (
+          item.kanji.toLowerCase().includes(query) ||
+          item.furigana.toLowerCase().includes(query) ||
+          item.romaji.toLowerCase().includes(query) ||
+          item.meaning.toLowerCase().includes(query) ||
+          String(item.no) === query
+        );
+      });
+
+      rows.forEach(item => {
+        const isMastered = masteredIds.includes(item.id);
+        const tr = document.createElement("tr");
+
+        if (item.highlight === "blue") {
+          tr.className = "bg-sky-500/15 hover:bg-sky-500/25 transition";
+        } else if (item.highlight === "gray") {
+          tr.className = "bg-slate-200/70 hover:bg-slate-200 transition";
+        } else {
+          tr.className = "hover:bg-slate-50 transition";
+        }
+
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 text-center font-semibold text-slate-500">${item.page}</td>
+          <td class="py-2.5 px-3 text-center font-bold text-slate-700">${item.no}</td>
+          <td onclick="this.classList.toggle('revealed')" class="py-2.5 px-4 font-bold text-slate-900 jp-font text-base ${blurState.kanji ? 'blurred-cell' : ''}">${item.kanji}</td>
+          <td onclick="this.classList.toggle('revealed')" class="py-2.5 px-4 text-slate-700 jp-font ${blurState.furigana ? 'blurred-cell' : ''}">
+            <div>${item.furigana}</div>
+            <div class="text-[11px] text-slate-400 font-sans">${item.romaji}</div>
+          </td>
+          <td onclick="this.classList.toggle('revealed')" class="py-2.5 px-4 font-medium text-slate-800 ${blurState.meaning ? 'blurred-cell' : ''}">${item.meaning}</td>
+          <td class="py-2.5 px-3 text-center">
+            <button onclick="speakJapanese('${item.furigana}')" class="w-7 h-7 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-600 inline-flex items-center justify-center">🔊</button>
+          </td>
+          <td class="py-2.5 px-3 text-center">
+            <input type="checkbox" ${isMastered ? "checked" : ""} onchange="toggleRowMastered('${item.id}', this.checked)" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer" />
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function toggleRowMastered(id, checked) {
+      if (checked && !masteredIds.includes(id)) {
+        masteredIds.push(id);
+      } else if (!checked && masteredIds.includes(id)) {
+        masteredIds = masteredIds.filter(x => x !== id);
+      }
+      saveMastered();
+    }
+
+    function resetAllProgress() {
+      if (confirm("Reset semua tanda hafalan kotoba?")) {
+        masteredIds = [];
+        saveMastered();
+        applyFilters();
+      }
+    }
+
+    // Init
+    applyFilters();
+  </script>
+</body>
+</html>
