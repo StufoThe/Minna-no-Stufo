@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5-Second Brain Hack • Kotoba Hal. 13–20</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans JP', sans-serif;
+      background-color: #090d16;
+      color: #e2e8f0;
+    }
+    .jp-font {
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    .scene-emoji {
+      animation: pulseGlow 3s infinite ease-in-out;
+    }
+    .blind-blur {
+      filter: blur(8px);
+      user-select: none;
+      transition: filter 0.2s ease;
+      cursor: pointer;
+    }
+    .blind-blur:hover, .blind-blur.revealed {
+      filter: blur(0);
+    }
+    /* Custom scrollbar dark */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#090d16] text-slate-100 selection:bg-emerald-500 selection:text-slate-950">
+
+  <!-- TOP BAR: SIMPEL & FOKUS -->
+  <header class="border-b border-slate-800/80 bg-[#0d1322]/90 backdrop-blur sticky top-0 z-30">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-emerald-500/20">
+          ⚡
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white">5-Second Brain Hack</h1>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Hal. 13–20</span>
+          </div>
+          <p class="text-xs text-slate-400">Sistem Jembatan Bunyi + Ilustrasi Bayangan Absurd (Sekali Baca Langsung Nempel)</p>
+        </div>
+      </div>
+
+      <!-- Progress Otak Terkunci -->
+      <div class="flex items-center gap-3 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl">
+        <div class="text-xs">
+          <span class="text-slate-400 block">Terkunci di Otak</span>
+          <span class="font-extrabold text-emerald-400"><span id="lockedCount">0</span> / <span id="totalCount">110</span> Kata</span>
+        </div>
+        <div class="w-20 h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div id="lockedBar" class="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-4xl w-full mx-auto px-4 py-4 flex-1 flex flex-col gap-4">
+
+    <!-- PILIH HALAMAN (13 SAMPAI 20) + FILTER BELUM HAPAL -->
+    <section class="bg-[#111827] border border-slate-800/90 rounded-2xl p-3.5 flex flex-col gap-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Pilih Halaman Modul:</span>
+        <div class="flex items-center gap-3">
+          <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-lg cursor-pointer hover:bg-amber-500/20 transition">
+            <input type="checkbox" id="onlyUnlockedToggle" class="rounded bg-slate-900 border-amber-500/50 text-amber-500 focus:ring-0" onchange="applyFilter()">
+            <span>Hanya yang Belum Terkunci</span>
+          </label>
+          <button onclick="shuffleWords()" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded-lg transition">
+            🔀 Acak Urutan
+          </button>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-1.5" id="pageTabs">
+        <button onclick="selectPage('ALL')" data-page="ALL" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-emerald-500 text-slate-950 shadow-sm">
+          Semua 13–20 (110)
+        </button>
+        <button onclick="selectPage('13')" data-page="13" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800/80 text-slate-300 hover:bg-slate-700">
+          Hal. 13 (15)
+        </button>
+        <button onclick="selectPage('14')" data-page="14" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800/80 text-slate-300 hover:bg-slate-700">
+          Hal. 14 (22)
+        </button>
+        <button onclick="selectPage('15')" data-page="15" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800/80 text-slate-300 hover:bg-slate-700">
+          Hal. 15 (18)
+        </button>
+        <button onclick="selectPage('16')" data-page="16" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800/80 text-slate-300 hover:bg-slate-700">
+          Hal. 16 (14)
+        </button>
+        <button onclick="selectPage('17')" data-page="17" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800/80 text-slate-300 hover:bg-slate-700">
+          Hal. 17 (14)
+        </button>
+        <button onclick="selectPage('18')" data-page="18" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800/80 text-slate-300 hover:bg-slate-700">
+          Hal. 18 (7)
+        </button>
+        <button onclick="selectPage('19')" data-page="19" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800/80 text-slate-300 hover:bg-slate-700">
+          Hal. 19 (14)
+        </button>
+        <button onclick="selectPage('20')" data-page="20" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800/80 text-slate-300 hover:bg-slate-700">
+          Hal. 20 (10)
+        </button>
+      </div>
+    </section>
+
+    <!-- 3 MODE SIMPEL & GOD-TIER -->
+    <nav class="grid grid-cols-3 gap-2 bg-[#111827] p-1.5 rounded-2xl border border-slate-800">
+      <button onclick="setMode('hack')" id="modeBtn-hack" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow transition flex items-center justify-center gap-1.5">
+        <span>🧠</span> 1. Suntik Bayangan (5s)
+      </button>
+      <button onclick="setMode('list')" id="modeBtn-list" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
+        <span>📜</span> 2. Baca Cepat Semua Trik
+      </button>
+      <button onclick="setMode('drill')" id="modeBtn-drill" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
+        <span>⚡</span> 3. Tes Refleks Kilat
+      </button>
+    </nav>
+
+    <!-- ==================== MODE 1: SUNTIK BAYANGAN 5 DETIK ==================== -->
+    <section id="section-hack" class="flex-1 flex flex-col gap-4">
+      
+      <!-- Bar Kontrol Hipnotis 5 Detik & Mode Tes Mata -->
+      <div class="bg-[#111827] border border-slate-800 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="flex items-center gap-3">
+          <button onclick="toggleAutoFiveSec()" id="autoTimerBtn" class="px-3 py-1.5 rounded-lg bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 hover:bg-indigo-500/30 font-bold flex items-center gap-1.5 transition">
+            <span>⏱️</span> <span id="autoTimerText">Mulai Auto-Suntik 5 Detik</span>
+          </button>
+          <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-300 font-medium">
+            <input type="checkbox" id="blindTestToggle" class="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0" onchange="renderHackCard()">
+            <span>🙈 Sembunyikan Arti (Tes Ingatan)</span>
+          </label>
+        </div>
+        <span id="cardCounterText" class="font-bold text-slate-400">Kata 1 dari 110</span>
+      </div>
+
+      <!-- KARTU UTAMA BRAIN-HACK -->
+      <div id="hackEmptyBox" class="hidden bg-[#111827] border border-slate-800 rounded-3xl p-10 text-center">
+        <div class="text-4xl mb-2">🏆</div>
+        <h3 class="text-lg font-bold text-white">Semua Kotoba di Halaman Ini Sudah Terkunci!</h3>
+        <p class="text-xs text-slate-400 mt-1">Matikan filter "Hanya yang Belum Terkunci" atau pindah ke halaman lain.</p>
+      </div>
+
+      <div id="hackCardBox" class="bg-[#111827] border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
+        <!-- Progress Bar 5 Detik -->
+        <div class="w-full h-1.5 bg-slate-900">
+          <div id="fiveSecBar" class="h-full bg-gradient-to-r from-amber-400 via-emerald-400 to-cyan-400 transition-all duration-100" style="width: 100%"></div>
+        </div>
+
+        <div class="p-5 sm:p-7 flex flex-col gap-5">
+          <!-- Baris Atas: Info Halaman & Audio -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span id="hkPageBadge" class="px-3 py-1 rounded-lg bg-slate-800 text-cyan-400 font-bold text-xs border border-slate-700">Hal. 13 • No. 1</span>
+              <span id="hkStatusBadge" class="px-2.5 py-1 rounded-lg text-xs font-bold"></span>
+            </div>
+            <button onclick="speakCurrentWord()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold text-xs flex items-center gap-1.5 border border-slate-700 transition">
+              🔊 Dengarkan Bunyi
+            </button>
+          </div>
+
+          <!-- INTI KATA: KANJI + BUNYI + ARTI -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-[#0b101b] p-5 rounded-2xl border border-slate-800/80">
+            <div class="text-center md:text-left">
+              <div id="hkFurigana" class="text-lg sm:text-xl font-bold text-cyan-400 jp-font tracking-wide">きびしい</div>
+              <div id="hkKanji" class="text-4xl sm:text-5xl font-black text-white jp-font my-1 tracking-tight">厳しい</div>
+              <div id="hkRomaji" class="text-xs font-bold uppercase tracking-widest text-slate-400">KIBISHII</div>
+            </div>
+
+            <div id="hkMeaningBox" onclick="this.classList.toggle('revealed')" class="bg-emerald-950/30 border border-emerald-500/30 rounded-2xl p-4 text-center md:text-right flex flex-col justify-center">
+              <span class="text-[11px] uppercase tracking-wider text-emerald-400/80 font-bold">Arti Indonesia</span>
+              <div id="hkMeaning" class="text-2xl sm:text-3xl font-black text-emerald-300 mt-0.5">ketat</div>
+            </div>
+          </div>
+
+          <!-- KOTAK SUNTIK OTAK: JEMBATAN BUNYI + ILUSTRASI BAYANGAN -->
+          <div id="hkTrickContainer" onclick="this.classList.toggle('revealed')" class="bg-gradient-to-br from-indigo-950/50 via-[#131c31] to-slate-900 border-2 border-indigo-500/40 rounded-2xl p-5 flex flex-col gap-4 relative overflow-hidden">
+            
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-indigo-500/20 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-md bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider">⚡ Jembatan Bunyi</span>
+                <span id="hkSoundHook" class="text-base sm:text-lg font-extrabold text-amber-300">KIBISHII ≈ KIPAS BESI</span>
+              </div>
+              <span class="text-[11px] text-indigo-300 font-medium">Bayangkan adegan ini selama 3 detik 👇</span>
+            </div>
+
+            <!-- Panggung Visualisasi Bayangan -->
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+              <div id="hkSceneEmoji" class="scene-emoji w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-[#090d16] border border-indigo-500/30 flex items-center justify-center text-4xl sm:text-5xl shrink-0 shadow-inner">
+                🪭🔨😡
+              </div>
+              <div class="flex-1 text-center sm:text-left">
+                <div class="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-1">🎬 Ilustrasi Bayangan di Otak:</div>
+                <p id="hkStory" class="text-sm sm:text-base text-slate-100 leading-relaxed font-medium">
+                  Bayangkan bos pabrik yang aturannya super <b class="text-emerald-400 underline">KETAT</b> memegang <b class="text-amber-300">KIPAS BESI (KIBISHII)</b> raksasa untuk menghukum siapa pun yang telat 1 detik!
+                </p>
+              </div>
+            </div>
+
+            <!-- Bedah DNA Kanji -->
+            <div class="bg-[#090d16]/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-300 flex items-center gap-2">
+              <span class="text-amber-400 font-bold shrink-0">🔍 Petunjuk Visual Kanji:</span>
+              <span id="hkKanjiTip" class="text-slate-300">Huruf 厳 punya banyak goresan rapat & padat seperti penjagaan yang super KETAT.</span>
+            </div>
+          </div>
+
+          <!-- TOMBOL NAVIGASI & KUNCI INGATAN -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+            <button onclick="prevWord()" class="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs sm:text-sm transition">
+              ← Sebelumnya
+            </button>
+            <button onclick="markLocked(false)" class="py-3 px-4 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-bold text-xs sm:text-sm transition">
+              ⏳ Masih Lupa
+            </button>
+            <button onclick="markLocked(true)" class="py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition">
+              🔒 Sudah Nempel!
+            </button>
+            <button onclick="nextWord()" class="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs sm:text-sm transition">
+              Selanjutnya →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-center text-xs text-slate-500">
+        💡 Tips: Tekan tombol <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">→</kbd> / <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">←</kbd> di keyboard untuk pindah kata, atau <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">Enter</kbd> jika sudah nempel di otak.
+      </p>
+    </section>
+
+    <!-- ==================== MODE 2: BACA CEPAT SEMUA TRIK (CHEAT SHEET) ==================== -->
+    <section id="section-list" class="hidden flex-1 flex flex-col gap-3">
+      <div class="bg-[#111827] border border-slate-800 rounded-2xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sticky top-16 z-20 shadow-lg">
+        <input
+          type="text"
+          id="listSearch"
+          oninput="renderCheatList()"
+          placeholder="Cari kanji, cara baca, arti, atau kata kunci jembatan keledai..."
+          class="flex-1 bg-[#090d16] border border-slate-700 rounded-xl px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+        />
+        <div class="flex items-center gap-2">
+          <button onclick="toggleListBlind('meaning')" id="btnBlindMeaning" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition">
+            🙈 Tutup Arti (Tes Baca)
+          </button>
+          <button onclick="toggleListBlind('furigana')" id="btnBlindFurigana" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition">
+            🙈 Tutup Cara Baca
+          </button>
+        </div>
+      </div>
+
+      <div id="cheatListContainer" class="grid grid-cols-1 gap-3"></div>
+    </section>
+
+    <!-- ==================== MODE 3: TES REFLEKS KILAT ==================== -->
+    <section id="section-drill" class="hidden flex-1 flex flex-col items-center gap-4">
+      <div class="w-full bg-[#111827] border border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-slate-400 font-bold">Mode Pertanyaan:</span>
+          <select id="drillModeSelect" onchange="nextDrill()" class="bg-[#090d16] border border-slate-700 text-white rounded-lg px-3 py-1.5 font-bold">
+            <option value="jp_id">Kanji & Bunyi → Tebak Arti</option>
+            <option value="kanji_only">Hanya Kanji (Tanpa Furigana) → Tebak Arti</option>
+            <option value="id_jp">Arti Indonesia → Tebak Kotoba</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-4 text-xs font-bold">
+          <span class="text-emerald-400">Benar: <b id="drillRight">0</b></span>
+          <span class="text-rose-400">Salah: <b id="drillWrong">0</b></span>
+          <span class="text-amber-400">🔥 Combo: <b id="drillStreak">0</b></span>
+        </div>
+      </div>
+
+      <div class="w-full bg-[#111827] border border-slate-800 rounded-3xl p-6 shadow-xl">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+          <span id="drillMeta" class="px-2.5 py-1 rounded-lg bg-slate-800 text-cyan-400 font-bold">Hal. 13 • No. 1</span>
+          <button onclick="speakDrillWord()" class="px-3 py-1 rounded-lg bg-slate-800 text-emerald-400 font-bold hover:bg-slate-700">🔊 Bunyi</button>
+        </div>
+
+        <!-- Pertanyaan -->
+        <div class="text-center py-6 bg-[#090d16] rounded-2xl border border-slate-800/80 mb-4 px-3">
+          <div id="drillSub" class="text-base text-cyan-400 font-bold jp-font mb-1"></div>
+          <div id="drillMain" class="text-4xl sm:text-5xl font-black text-white jp-font"></div>
+        </div>
+
+        <!-- 4 Pilihan -->
+        <div id="drillOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+
+        <!-- Box Pengingat Jembatan Keledai Saat Menjawab -->
+        <div id="drillHackReveal" class="hidden mt-4 p-4 rounded-2xl border bg-[#0b1120] flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <span id="drillResultTitle" class="font-extrabold text-sm"></span>
+            <button onclick="nextDrill()" class="px-4 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs hover:bg-emerald-400 transition">
+              Lanjut Soal →
+            </button>
+          </div>
+          <div id="drillResultTrick" class="text-xs sm:text-sm text-slate-200 bg-slate-900/90 p-3 rounded-xl border border-slate-800"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="max-w-4xl w-full mx-auto px-4 py-4 text-center text-xs text-slate-500 border-t border-slate-800/60 mt-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+    <span>Modul Pengolahan Makanan 2024 • Fokus Halaman 13–20 (110 Kotoba Lengkap)</span>
+    <button onclick="resetLocked()" class="text-rose-400 hover:underline font-semibold">Reset Data Hafalan</button>
+  </footer>
+
+  <script>
+    // ==================== DATABASE 110 KOTOBA HALAMAN 13 SAMPAI 20 + BRAIN HACK ====================
+    const KOTOBA_13_20 = [
+      // ==================== HALAMAN 13 (1 - 15) ====================
+      {
+        id: "p13_1", page: "13", no: 1, kanji: "厳しい", furigana: "きびしい", romaji: "kibishii", meaning: "ketat",
+        emoji: "🪭🔨😡", hook: "KIBISHII ≈ KIPAS BESI",
+        story: "Bayangkan pengawas pabrik yang aturannya super <b>KETAT</b> memegang <b>KIPAS BESI (KIBISHII)</b> raksasa untuk memukul meja siapa pun yang telat!",
+        kanjiTip: "Huruf 厳 penuh goresan rapat seperti penjagaan yang sangat KETAT."
+      },
+      {
+        id: "p13_2", page: "13", no: 2, kanji: "濃度の薬剤", furigana: "のうどのやくざい", romaji: "noudo no yakuzai", meaning: "obat konsentrasi",
+        emoji: "🧪🕵️‍♂️💊", hook: "NOUDO ≈ NODA + YAKUZAI ≈ YAKUZA",
+        story: "Anggota <b>YAKUZA (Yakuzai)</b> membersihkan <b>NODA (Noudo)</b> darah pakai cairan <b>OBAT KONSENTRASI</b> tinggi sampai berasap!",
+        kanjiTip: "濃度 (kepekatan/konsentrasi) + 薬剤 (obat kimia)."
+      },
+      {
+        id: "p13_3", page: "13", no: 3, kanji: "食品全体", furigana: "しょくひんぜんたい", romaji: "shokuhin zentai", meaning: "semua makanan",
+        emoji: "🍱🧘‍♂️✨", hook: "SHOKUHIN (Makanan) + ZENTAI ≈ SANTAI",
+        story: "Setelah <b>SEMUA MAKANAN (Shokuhin Zentai)</b> selesai diperiksa di pabrik, barulah kita boleh duduk <b>SANTAI (Zentai)</b>!",
+        kanjiTip: "食品 (makanan) + 全体 (seluruh bodi/semua)."
+      },
+      {
+        id: "p13_4", page: "13", no: 4, kanji: "冷やす", furigana: "ひやす", romaji: "hiyasu", meaning: "dingin (mendinginkan)",
+        emoji: "🎂🧊🥶", hook: "HIYASU ≈ HIAS",
+        story: "Kue pabrik di-<b>HIAS (HIYASU)</b> pakai balok es batu raksasa supaya cepat <b>DINGIN</b>!",
+        kanjiTip: "Ada titik dua es (冫) di sebelah kiri huruf 冷 = Dingin."
+      },
+      {
+        id: "p13_5", page: "13", no: 5, kanji: "代表的", furigana: "だいひょうてき", romaji: "daihyouteki", meaning: "perwakilan (contoh utama)",
+        emoji: "🎤👔🏆", hook: "DAIHYOUTEKI ≈ DAI (Ustadz) + HYO",
+        story: "Pak <b>DAI (DAIhyou)</b> maju ke panggung sebagai <b>PERWAKILAN</b> utama seluruh karyawan pabrik!",
+        kanjiTip: "代 (mewakili) + 表 (tampil di depan) = Perwakilan."
+      },
+      {
+        id: "p13_6", page: "13", no: 6, kanji: "牡蠣", furigana: "かき", romaji: "kaki", meaning: "tiram",
+        emoji: "🦪🦶😱", hook: "KAKI ≈ KAKI",
+        story: "Bayangkan saat kamu membuka cangkang kerang <b>TIRAM</b>, isinya bukan mutiara tapi jempol <b>KAKI (KAKI)</b> yang goyang-goyang!",
+        kanjiTip: "Kanji 蠣 punya radikal 虫 (hewan bercangkang/kerang) = Tiram."
+      },
+      {
+        id: "p13_7", page: "13", no: 7, kanji: "汚染", furigana: "おせん", romaji: "osen", meaning: "polusi / kontaminasi",
+        emoji: "☣️🤢😤", hook: "OSEN ≈ BOSEN",
+        story: "Karyawan sudah <b>BOSEN (OSEN)</b> menghirup udara pabrik yang kena <b>POLUSI / KONTAMINASI</b> bau busuk!",
+        kanjiTip: "汚 (kotor) + 染 (menular/mewarnai) = Polusi/Tercemar."
+      },
+      {
+        id: "p13_8", page: "13", no: 8, kanji: "大便", furigana: "だいべん", romaji: "daiben", meaning: "kotoran (BAB)",
+        emoji: "💩🚗💥", hook: "DAIBEN ≈ DAIhatsu BENsin",
+        story: "Mobil <b>DAI</b>hatsu kehabisan <b>BEN</b>sin (<b>DAIBEN</b>) gara-gara bannya selip menginjak <b>KOTORAN (BAB)</b> raksasa!",
+        kanjiTip: "大 (Besar) + 便 (Buang hajat) = Hajat Besar alias KOTORAN (BAB)."
+      },
+      {
+        id: "p13_9", page: "13", no: 9, kanji: "吐いた", furigana: "はいた", romaji: "haita", meaning: "muntah",
+        emoji: "🙋‍♂️🤮💦", hook: "HAITA ≈ HAI TA!",
+        story: "Baru menyapa teman <b>'HAI TA! (HAITA)'</b>, eh dia malah langsung <b>MUNTAH</b> muncrat di depan muka!",
+        kanjiTip: "口 (mulut) + 土 (tanah) = Mulut mengeluarkan sesuatu ke tanah = Muntah."
+      },
+      {
+        id: "p13_10", page: "13", no: 10, kanji: "次亜塩素酸ナトリウム", furigana: "じあえんそさんナトリウム", romaji: "jiaensosan natoriumu", meaning: "Natrium hipoklorit",
+        emoji: "🧴🧪🦠", hook: "JIA-ENSO-SAN + NATRIUM",
+        story: "Si <b>JIA (Jiaensosan)</b> menyiram cairan pemutih disinfektan <b>NATRIUM HIPOKLORIT</b> untuk membunuh virus Norovirus!",
+        kanjiTip: "Ujungnya sudah tertulis jelas ナトリウム = Natrium (Hipoklorit)."
+      },
+      {
+        id: "p13_11", page: "13", no: 11, kanji: "溶液", furigana: "ようえき", romaji: "youeki", meaning: "larutan",
+        emoji: "🥽🧪💧", hook: "YOUEKI ≈ YOW EKSPERIMEN",
+        story: "<b>'YOW EK-sperimen (YOUEKI)!'</b> teriak ilmuwan sambil mengaduk cairan <b>LARUTAN</b> kimia berwarna hijau menyala!",
+        kanjiTip: "Kedua huruf 溶液 punya radikal tiga titik air (氵) = Cairan Larutan."
+      },
+      {
+        id: "p13_12", page: "13", no: 12, kanji: "布巾", furigana: "ふきん", romaji: "fukin", meaning: "kain untuk pencuci piring (lap)",
+        emoji: "🧽🍽️💨", hook: "FUKIN ≈ PUK-IN (Tepuk)",
+        story: "Piring yang basah di-<b>PUK-IN (FUKIN)</b> pakai <b>KAIN LAP PENCUCI PIRING</b> sampai kering mengkilap!",
+        kanjiTip: "布 (kain) + 巾 (handuk/lap) = Kain lap piring/meja."
+      },
+      {
+        id: "p13_13", page: "13", no: 13, kanji: "原則", furigana: "げんそく", romaji: "gensoku", meaning: "prinsip",
+        emoji: "📜⚡🛑", hook: "GENSOKU ≈ GENG SOKU",
+        story: "<b>GENG SOKU (GENSOKU)</b> punya <b>PRINSIP</b> harga mati: tidak boleh melanggar aturan pabrik sedikit pun!",
+        kanjiTip: "原 (dasar/asal) + 則 (aturan) = Aturan dasar / Prinsip."
+      },
+      {
+        id: "p13_14", page: "13", no: 14, kanji: "対策", furigana: "たいさく", romaji: "taisaku", meaning: "tindakan (penanggulangan)",
+        emoji: "🛡️🎒🚀", hook: "TAISAKU ≈ TAS SAKU",
+        story: "Saat darurat, segera ambil <b>TINDAKAN (TAISAKU)</b> cepat dengan mengeluarkan alat rahasia dari dalam <b>TAS SAKU</b>!",
+        kanjiTip: "対 (menghadapi) + 策 (strategi) = Tindakan penanggulangan."
+      },
+      {
+        id: "p13_15", page: "13", no: 15, kanji: "有効", furigana: "ゆうこう", romaji: "yuukou", meaning: "efektif",
+        emoji: "🎯⚡👍", hook: "YUUKOU ≈ YUK KAU!",
+        story: "<b>'YUK KAU (YUUKOU) coba cara ini, dijamin paling EFEKTIF!'</b> kata mandor sambil mengacungkan jempol.",
+        kanjiTip: "有 (ada) + 効 (efek/manjur) = Ada efeknya = Efektif."
+      },
+
+      // ==================== HALAMAN 14 (1 - 22) ====================
+      {
+        id: "p14_1", page: "14", no: 1, kanji: "食品製造工場", furigana: "しょくひんせいぞうこうじょう", romaji: "shokuhin seizou koujou", meaning: "pabrik pembuatan makanan",
+        emoji: "🏭🍱🤖", hook: "SHOKUHIN (Makanan) + SEIZOU (Buat) + KOUJOU (Pabrik)",
+        story: "Bayangkan <b>PABRIK PEMBUATAN MAKANAN</b> raksasa di mana ribuan bento dibuat oleh robot super cepat!",
+        kanjiTip: "食品 (makanan) + 製造 (produksi) + 工場 (pabrik)."
+      },
+      {
+        id: "p14_2", page: "14", no: 2, kanji: "持ち込まない", furigana: "もちこまない", romaji: "mochikomanai", meaning: "jangan membawanya masuk",
+        emoji: "🍡🚫🚪", hook: "MOCHIKOMANAI ≈ MOCHI KOMA-NAI",
+        story: "Satpam berteriak di pintu pabrik: <b>'Kue MOCHI penuh KOMA-n (MOCHIKOMANAI) JANGAN DIBAWA MASUK!'</b>",
+        kanjiTip: "持ち (bawa) + 込まない (tidak memasukkan) = Jangan bawa masuk."
+      },
+      {
+        id: "p14_3", page: "14", no: 3, kanji: "感染", furigana: "かんせん", romaji: "kansen", meaning: "infeksi (tertular)",
+        emoji: "🧟‍♂️🦠🏥", hook: "KANSEN ≈ KANGEN",
+        story: "Gara-gara <b>KANGEN (KANSEN)</b> nekat pelukan sama teman yang lagi flu berat, akhirnya langsung ketularan <b>INFEKSI</b>!",
+        kanjiTip: "感 (merasakan/terkena) + 染 (menular) = Infeksi."
+      },
+      {
+        id: "p14_4", page: "14", no: 4, kanji: "消毒", furigana: "しょうどく", romaji: "shoudoku", meaning: "desinfeksi",
+        emoji: "🔫🧴🦠", hook: "SHOUDOKU ≈ SODOK RACUN",
+        story: "Kuman dan racun di meja langsung di-<b>SODOK (SHOUDOKU)</b> pakai semprotan alkohol <b>DESINFEKSI</b> sampai mati!",
+        kanjiTip: "消 (menghapus) + 毒 (racun/kuman) = Menghapus racun = Desinfeksi."
+      },
+      {
+        id: "p14_5", page: "14", no: 5, kanji: "おう吐物", furigana: "おうとぶつ", romaji: "outobutsu", meaning: "muntah (muntahan)",
+        emoji: "🚗🤮🧹", hook: "OUTOBUTSU ≈ AUTO BUSUK",
+        story: "Bekas <b>MUNTAHAN (OUTOBUTSU)</b> di lantai baunya <b>AUTO BUSUK</b>, harus segera dibersihkan pakai alat khusus!",
+        kanjiTip: "おう吐 (muntah) + 物 (benda/kotoran) = Muntahan."
+      },
+      {
+        id: "p14_6", page: "14", no: 6, kanji: "専門用具", furigana: "せんもんようぐ", romaji: "senmon yougu", meaning: "alat khusus",
+        emoji: "🧰🦸‍♂️✨", hook: "SENMON ≈ DORAEMON + YOUGU",
+        story: "Kantong ajaib Dora-<b>EMON (SENMON YOUGU)</b> mengeluarkan <b>ALAT KHUSUS</b> pembersih virus paling canggih!",
+        kanjiTip: "専門 (spesialis/khusus) + 用具 (peralatan) = Alat khusus."
+      },
+      {
+        id: "p14_7", page: "14", no: 7, kanji: "処理する", furigana: "しょりする", romaji: "shori suru", meaning: "proses (menangani)",
+        emoji: "🙇‍♂️⚙️🗑️", hook: "SHORI SURU ≈ SORRY SURUH",
+        story: "<b>'SORRY (SHORI) nih, aku SURUH kamu yang PROSES & tangani sampah ini ya!'</b>",
+        kanjiTip: "処理 = Menangani / Memproses / Membereskan."
+      },
+      {
+        id: "p14_8", page: "14", no: 8, kanji: "広げない", furigana: "ひろげない", romaji: "hirogenai", meaning: "jangan menyebar",
+        emoji: "🦸‍♂️🛑🦠", hook: "HIROGENAI ≈ HERO GAK NAIK",
+        story: "Para <b>HERO (HIROgenai)</b> menahan kuman di dalam kubah kaca agar <b>JANGAN MENYEBAR</b> ke mana-mana!",
+        kanjiTip: "広げる (menyebarkan/meluaskan) -> 広げない (jangan menyebar)."
+      },
+      {
+        id: "p14_9", page: "14", no: 9, kanji: "カビ", furigana: "カビ", romaji: "kabi", meaning: "jamur (kapang)",
+        emoji: "🍞🍄🟢", hook: "KABI ≈ KAMBING JAMURAN",
+        story: "Roti yang disimpan kelamaan ditumbuhi <b>JAMUR (KABI)</b> hijau tebal berbentuk jenggot <b>KA-BI</b>ng!",
+        kanjiTip: "Ditulis dengan Katakana カビ (Kabi) = Jamur pada makanan/dinding."
+      },
+      {
+        id: "p14_10", page: "14", no: 10, kanji: "増殖", furigana: "ぞうしょく", romaji: "zoushoku", meaning: "berkembang biak",
+        emoji: "🦠📈💥", hook: "ZOUSHOKU ≈ ZOO SYOK!",
+        story: "Petugas <b>ZOO (Kebun Binatang) langsung SYOK (ZOUSHOKU)</b> melihat bakteri <b>BERKEMBANG BIAK</b> jadi jutaan dalam semalam!",
+        kanjiTip: "増 (bertambah) + 殖 (berbiak) = Berkembang biak."
+      },
+      {
+        id: "p14_11", page: "14", no: 11, kanji: "胞子", furigana: "ほうし", romaji: "houshi", meaning: "spora",
+        emoji: "🍄💨🫧", hook: "HOUSHI ≈ HOSHI (Bintang)",
+        story: "Jamur menembakkan butiran <b>SPORA (HOUSHI)</b> yang beterbangan di udara berkilau seperti bintang (Hoshi)!",
+        kanjiTip: "胞 (sel/bungkus) + 子 (anak/biji kecil) = Spora."
+      },
+      {
+        id: "p14_12", page: "14", no: 12, kanji: "存在", furigana: "そんざい", romaji: "sonzai", meaning: "adanya (keberadaan)",
+        emoji: "👻📡👀", hook: "SONZAI ≈ SON-GOKU ZAI",
+        story: "Radar mendeteksi <b>ADANYA / KEBERADAAN (SONZAI)</b> bakteri tersembunyi di balik meja!",
+        kanjiTip: "存 (ada) + 在 (berada) = Keberadaan / Adanya."
+      },
+      {
+        id: "p14_13", page: "14", no: 13, kanji: "完全", furigana: "かんぜん", romaji: "kanzen", meaning: "sempurna",
+        emoji: "💎💯👑", hook: "KANZEN ≈ KANG ZEN",
+        story: "Hasil kerjaan <b>KANG ZEN (KANZEN)</b> selalu 100% bersih dan <b>SEMPURNA</b> tanpa cacat sedikit pun!",
+        kanjiTip: "完 (tuntas) + 全 (seluruhnya) = Sempurna total."
+      },
+      {
+        id: "p14_14", page: "14", no: 14, kanji: "豆", furigana: "まめ", romaji: "mame", meaning: "kacang polong (kacang-kacangan)",
+        emoji: "🫛👵😁", hook: "MAME ≈ MAMI MAKAN KACANG",
+        story: "<b>MAMI (MAME)</b> hobi ngemil <b>KACANG POLONG</b> sambil nonton TV!",
+        kanjiTip: "Bentuk Kanji 豆 persis seperti biji kacang di atas mangkuk."
+      },
+      {
+        id: "p14_15", page: "14", no: 15, kanji: "穀類", furigana: "こくるい", romaji: "kokurui", meaning: "biji-bijian (serealia)",
+        emoji: "🌾🐓🍚", hook: "KOKURUI ≈ Kukuruyuk!",
+        story: "Ayam berkokok <b>'KUKURUYUK (KOKURUI)!'</b> saat diberi makan <b>BIJI-BIJIAN</b> gandum dan jagung!",
+        kanjiTip: "穀 (padi/gandum) + 類 (jenis) = Jenis biji-bijian."
+      },
+      {
+        id: "p14_16", page: "14", no: 16, kanji: "生えた", furigana: "はえた", romaji: "haeta", meaning: "dewasa / tumbuh (jamur/tunas)",
+        emoji: "🌱🍄😲", hook: "HAETA ≈ HAI TAHU TUMBUH!",
+        story: "<b>'HAI TA (HAETA), lihat!'</b> jamurnya sudah <b>TUMBUH / DEWASA</b> tinggi di atas roti!",
+        kanjiTip: "生える (haeru) = tumbuh (untuk jamur, rumput, gigi, rambut)."
+      },
+      {
+        id: "p14_17", page: "14", no: 17, kanji: "寄生虫", furigana: "きせいちゅう", romaji: "kiseichuu", meaning: "parasit (cacing parasit)",
+        emoji: "🪱🐟😱", hook: "KISEICHUU ≈ KASI CU-ma-cuma",
+        story: "Cacing <b>PARASIT (KISEICHUU)</b> numpang makan <b>KASI CU-ma-cuma</b> di dalam perut ikan!",
+        kanjiTip: "寄生 (menumpang hidup) + 虫 (cacing/serangga) = Parasit."
+      },
+      {
+        id: "p14_18", page: "14", no: 18, kanji: "表面", furigana: "ひょうめん", romaji: "hyoumen", meaning: "permukaan",
+        emoji: "🪞🌊✨", hook: "HYOUMEN ≈ YO MEN!",
+        story: "<b>'YO MEN (HYOUMEN)!'</b> sapa temenmu sambil mengelap <b>PERMUKAAN</b> meja sampai licin seperti kaca!",
+        kanjiTip: "表 (bagian luar) + 面 (wajah/bidang) = Permukaan luar."
+      },
+      {
+        id: "p14_19", page: "14", no: 19, kanji: "体内", furigana: "たいない", romaji: "tainai", meaning: "di dalam tubuh",
+        emoji: "🩻🫀🦠", hook: "TAINAI ≈ TAI-NAI",
+        story: "Kalau makan makanan kotor, kuman akan masuk ke <b>DI DALAM TUBUH (TAINAI)</b> dan bikin sakit perut!",
+        kanjiTip: "体 (tubuh) + 内 (dalam) = Di dalam tubuh."
+      },
+      {
+        id: "p14_20", page: "14", no: 20, kanji: "アニサキス", furigana: "アニサキス", romaji: "anisakisu", meaning: "anisakis (cacing parasit ikan)",
+        emoji: "🍣🪱😭", hook: "ANISAKISU ≈ ANISA KISS CACING",
+        story: "Si <b>ANISA</b> mau <b>KISS (ANISAKISU)</b> sashimi ikan mentah, eh ada cacing <b>ANISAKIS</b> nongol melambai!",
+        kanjiTip: "アニサキス = Cacing parasit pada ikan laut mentah (Saba, Salmon, Cumi)."
+      },
+      {
+        id: "p14_21", page: "14", no: 21, kanji: "魚介類", furigana: "ぎょかいるい", romaji: "gyokairui", meaning: "makanan laut (seafood)",
+        emoji: "🦐🦀🐟", hook: "GYOKAIRUI ≈ GOYANG KAKI Liat Seafood",
+        story: "Melihat pesta <b>MAKANAN LAUT / SEAFOOD (GYOKAIRUI)</b> udang dan kepiting, langsung senang <b>GOYANG KAKI</b>!",
+        kanjiTip: "魚 (ikan) + 介 (kerang) + 類 (jenis) = Hasil laut / Seafood."
+      },
+      {
+        id: "p14_22", page: "14", no: 22, kanji: "生", furigana: "なま", romaji: "nama", meaning: "mentah",
+        emoji: "🥩🐟🔥", hook: "NAMA ≈ NAMA SAYA MENTAH",
+        story: "Ikan itu berteriak: <b>'Jangan makan saya dulu, NAMA saya masih MENTAH (NAMA)!'</b>",
+        kanjiTip: "生 dibaca NAMA artinya Mentah / Segar belum dimasak."
+      },
+
+      // ==================== HALAMAN 15 (1 - 18) ====================
+      {
+        id: "p15_1", page: "15", no: 1, kanji: "共通", furigana: "きょうつう", romaji: "kyoutsuu", meaning: "umum / memiliki kesamaan",
+        emoji: "🤝🌐✨", hook: "KYOUTSUU ≈ KYO-TSU (Kompak Satu)",
+        story: "Aturan 5S itu bersifat <b>UMUM / SAMA (KYOUTSUU)</b> dan wajib dikerjakan kompak di semua pabrik!",
+        kanjiTip: "共 (bersama) + 通 (berlaku/tembus) = Berlaku umum."
+      },
+      {
+        id: "p15_2", page: "15", no: 2, kanji: "整理", furigana: "せいり", romaji: "seiri", meaning: "meringkas (memilah - 5S)",
+        emoji: "📦🗑️✂️", hook: "SEIRI ≈ SERI-ng Pilah Barang",
+        story: "<b>SEIRI (S1)</b>: Barang yang tidak perlu di-<b>SERI-ng (SEIRI)</b> dan dibuang untuk <b>MERINGKAS</b> isi ruangan!",
+        kanjiTip: "5S ke-1: 整理 (Seiri) = Ringkas (Singkirkan barang tidak perlu)."
+      },
+      {
+        id: "p15_3", page: "15", no: 3, kanji: "整頓", furigana: "せいとん", romaji: "seiton", meaning: "merapikan (menata - 5S)",
+        emoji: "🗄️📏🏷️", hook: "SEITON ≈ SETAN RAPI",
+        story: "<b>SEITON (S2)</b>: Sampai <b>SETAN (SEITON)</b> pun kagum karena semua alat ditata dan di-<b>RAPIKAN</b> lurus sesuai garis!",
+        kanjiTip: "5S ke-2: 整頓 (Seiton) = Rapi (Susun agar mudah diambil)."
+      },
+      {
+        id: "p15_4", page: "15", no: 4, kanji: "清掃", furigana: "せいそう", romaji: "seisou", meaning: "pembersihan (menyapu - 5S)",
+        emoji: "🧹🪣✨", hook: "SEISOU ≈ SAPU Sapu (Seisou)",
+        story: "<b>SEISOU (S3)</b>: Pegang sapu untuk melakukan <b>PEMBERSIHAN (SEISOU)</b> lantai sampai kinclong!",
+        kanjiTip: "5S ke-3: 清 (bersih) + 掃 (menyapu) = Pembersihan."
+      },
+      {
+        id: "p15_5", page: "15", no: 5, kanji: "清潔", furigana: "せいけつ", romaji: "seiketsu", meaning: "merawat (menjaga kebersihan - 5S)",
+        emoji: "🧼💎🛡️", hook: "SEIKETSU ≈ SIKAT Terus!",
+        story: "<b>SEIKETSU (S4)</b>: <b>SIKAT (SEIKETSU)</b> terus setiap hari untuk <b>MERAWAT</b> kebersihan yang sudah dicapai!",
+        kanjiTip: "5S ke-4: 清潔 (Seiketsu) = Rawat / Menjaga tetap higienis."
+      },
+      {
+        id: "p15_6", page: "15", no: 6, kanji: "習慣付", furigana: "しゅうかんづけ", romaji: "shuukanzuke", meaning: "membiasakan",
+        emoji: "🔁⏰🧠", hook: "SHUUKANZUKÉ ≈ SUKA-KAN Dulu",
+        story: "Cara <b>MEMBIASAKAN (SHUUKANZUKÉ)</b> diri bangun pagi adalah <b>SUKA-KAN</b> dulu rutinitasnya!",
+        kanjiTip: "習慣 (kebiasaan) + 付 (menempelkan) = Membiasakan."
+      },
+      {
+        id: "p15_7", page: "15", no: 7, kanji: "しつけ", furigana: "しつけ", romaji: "shitsuke", meaning: "disiplin (5S)",
+        emoji: "🫡🎖️⚡", hook: "SHITSUKE ≈ SIT-U OKE (Disiplin!)",
+        story: "<b>SHITSUKE (S5)</b>: Sikap militer <b>DISIPLIN (SHITSUKE)</b> mematuhi aturan pabrik tanpa perlu disuruh!",
+        kanjiTip: "5S ke-5: しつけ (Shitsuke) = Rajin / Disiplin."
+      },
+      {
+        id: "p15_8", page: "15", no: 8, kanji: "取出せる", furigana: "とりだせる", romaji: "toridaseru", meaning: "bisa dikeluarkan (diambil)",
+        emoji: "📤🖐️⚡", hook: "TORIDASERU ≈ TARIK DARI SERU",
+        story: "Kalau barang rapi, kapan pun dibutuhkan langsung <b>TARIK (TORIdaseru)</b> dan <b>BISA DIKELUARKAN</b> dengan cepat!",
+        kanjiTip: "取 (ambil) + 出せる (bisa keluar) = Bisa diambil/dikeluarkan."
+      },
+      {
+        id: "p15_9", page: "15", no: 9, kanji: "順序", furigana: "じゅんじょ", romaji: "junjo", meaning: "urutan",
+        emoji: "1️⃣2️⃣3️⃣", hook: "JUNJO ≈ JUNI - JULI (Berurutan)",
+        story: "Bulan <b>JUN-i</b> ke <b>JU-li (JUNJO)</b> itu harus sesuai <b>URUTAN</b>, tidak boleh lompat!",
+        kanjiTip: "順 (urut) + 序 (tahap) = Urutan."
+      },
+      {
+        id: "p15_10", page: "15", no: 10, kanji: "数量", furigana: "すうりょう", romaji: "suuryou", meaning: "kuantitas / jumlah",
+        emoji: "🔢⚖️📊", hook: "SUURYOU ≈ SURUH Hitung Jumlah",
+        story: "Mandor <b>SURUH (SUURYOU)</b> hitung berapa total <b>KUANTITAS / JUMLAH</b> barang di gudang!",
+        kanjiTip: "数 (angka/hitungan) + 量 (takaran) = Kuantitas / Jumlah."
+      },
+      {
+        id: "p15_11", page: "15", no: 11, kanji: "表示", furigana: "ひょうじ", romaji: "hyouji", meaning: "menampilkan (label/petunjuk)",
+        emoji: "🏷️🖥️👀", hook: "HYOUJI ≈ YO UJI Tampilannya!",
+        story: "Setiap rak wajib <b>MENAMPILKAN (HYOUJI)</b> label nama barang yang jelas!",
+        kanjiTip: "表 (tampil luar) + 示 (menunjukkan) = Menampilkan label."
+      },
+      {
+        id: "p15_12", page: "15", no: 12, kanji: "磨く", furigana: "みがく", romaji: "migaku", meaning: "menggosok (menyikat)",
+        emoji: "🪥✨🫧", hook: "MIGAKU ≈ MUKA GUE DIGOSOK",
+        story: "Jangan salah ambil sikat lantai buat <b>MENGGOSOK (MIGAKU) MUKA GUE</b>!",
+        kanjiTip: "磨く = Menggosok / Menyikat sampai mengkilap."
+      },
+      {
+        id: "p15_13", page: "15", no: 13, kanji: "拭いたり", furigana: "ふいたり", romaji: "fuitari", meaning: "mengelap",
+        emoji: "🧻🪟💃", hook: "FUITARI ≈ FUIH... TARI Sambil Ngelap",
+        story: "Sambil menari <b>TARI (FUITARI)</b>, tangannya sibuk <b>MENGELAP</b> meja dapur sampai kering!",
+        kanjiTip: "拭く (fuku) punya radikal tangan (扌) + kain (巾) = Mengelap pakai kain."
+      },
+      {
+        id: "p15_14", page: "15", no: 14, kanji: "見た目", furigana: "みため", romaji: "mitame", meaning: "terlihat (tampilan luar)",
+        emoji: "👀✨👔", hook: "MITAME ≈ MATA ME-lihat",
+        story: "Dari <b>MATA ME-lihat (MITAME)</b> saja sudah <b>TERLIHAT</b> kalau seragamnya sangat bersih!",
+        kanjiTip: "見 (lihat) + 目 (mata) = Apa yang terlihat oleh mata (Tampilan)."
+      },
+      {
+        id: "p15_15", page: "15", no: 15, kanji: "とおりに", furigana: "とおりに", romaji: "toori ni", meaning: "sesuai / berdasarkan",
+        emoji: "📖✅🛤️", hook: "TOORI NI ≈ TEORI NI!",
+        story: "Kerjakan semuanya <b>SESUAI / BERDASARKAN (TOORI NI) TEORI NI</b> yang ada di buku manual!",
+        kanjiTip: "とおりに = Sesuai dengan / Persis seperti."
+      },
+      {
+        id: "p15_16", page: "15", no: 16, kanji: "実行", furigana: "じっこう", romaji: "jikkou", meaning: "eksekusi (pelaksanaan)",
+        emoji: "🚀⚡👊", hook: "JIKKOU ≈ JIKO (Jagoan Eksekusi)",
+        story: "Jangan cuma rencana, langsung <b>EKSEKUSI (JIKKOU)</b> sekarang juga!",
+        kanjiTip: "実 (nyata) + 行 (melakukan) = Melakukan nyata = Eksekusi."
+      },
+      {
+        id: "p15_17", page: "15", no: 17, kanji: "保つ", furigana: "たもつ", romaji: "tamotsu", meaning: "menjaga (mempertahankan)",
+        emoji: "🛡️🤲🌡️", hook: "TAMOTSU ≈ TAMU TSU",
+        story: "Kita wajib <b>MENJAGA (TAMOTSU)</b> kebersihan ruang pabrik sebelum <b>TAMU</b> datang memeriksa!",
+        kanjiTip: "保つ = Menjaga / Memelihara kondisi."
+      },
+      {
+        id: "p15_18", page: "15", no: 18, kanji: "手指", furigana: "てゆび", romaji: "teyubi", meaning: "jari (tangan dan jari)",
+        emoji: "🖐️☝️🧼", hook: "TEYUBI ≈ TE (Tangan) + YUBI (Jari)",
+        story: "Cuci bersih seluruh sela-sela <b>TANGAN DAN JARI (TEYUBI)</b> sebelum menyentuh makanan!",
+        kanjiTip: "手 (tangan) + 指 (jari) = Jari-jemari tangan."
+      },
+
+      // ==================== HALAMAN 16 (1 - 14) ====================
+      {
+        id: "p16_1", page: "16", no: 1, kanji: "役立ちます", furigana: "やくだちます", romaji: "yakudachimasu", meaning: "bermanfaat (berguna)",
+        emoji: "💡🌟👍", hook: "YAKUDACHIMASU ≈ YAKULT DASI MAS",
+        story: "Minum <b>YAKULT (YAKUdachimasu)</b> tiap pagi sangat <b>BERMANFAAT</b> buat kesehatan usus!",
+        kanjiTip: "役 (peran/guna) + 立つ (berdiri) = Berguna / Bermanfaat."
+      },
+      {
+        id: "p16_2", page: "16", no: 2, kanji: "触れる", furigana: "ふれる", romaji: "fureru", meaning: "menyentuh",
+        emoji: "👉⚡🚫", hook: "FURERU ≈ FURE (Pure/Murni Jangan Disentuh)",
+        story: "Jangan sembarangan <b>MENYENTUH (FURERU)</b> makanan matang dengan tangan kotor!",
+        kanjiTip: "触れる = Menyentuh / Bersentuhan."
+      },
+      {
+        id: "p16_3", page: "16", no: 3, kanji: "交差汚染", furigana: "こうさおせん", romaji: "kousa osen", meaning: "kontaminasi silang",
+        emoji: "⚔️🥩🥬", hook: "KOUSA (Silang/Kaos) + OSEN (Polusi)",
+        story: "Pisau bekas daging mentah dipakai potong sayur = <b>KONTAMINASI SILANG (KOUSA OSEN)</b>!",
+        kanjiTip: "交差 (persilangan X) + 汚染 (pencemaran) = Kontaminasi silang."
+      },
+      {
+        id: "p16_4", page: "16", no: 4, kanji: "使い分け", furigana: "つかいわけ", romaji: "tsukaiwake", meaning: "penggunaan yang tepat (pemisahan alat)",
+        emoji: "🔪🟦🟥", hook: "TSUKAI (Pakai) + WAKE (Bagi/Pisah)",
+        story: "Pisau biru buat ikan, pisau merah buat daging: itulah <b>PENGGUNAAN YANG TEPAT / PEMISAHAN ALAT (TSUKAIWAKE)</b>!",
+        kanjiTip: "使い (pakai) + 分け (membedakan/membagi) = Membedakan pemakaian alat."
+      },
+      {
+        id: "p16_5", page: "16", no: 5, kanji: "通常", furigana: "つうじょう", romaji: "tsuujou", meaning: "biasanya (normalnya)",
+        emoji: "📅😌👌", hook: "TSUUJOU ≈ TUJUH Hari Biasanya",
+        story: "<b>BIASANYA (TSUUJOU)</b> seminggu itu ada <b>TUJUH (Tsuujou)</b> hari kerja normal!",
+        kanjiTip: "通 (umum) + 常 (selalu/biasa) = Biasanya."
+      },
+      {
+        id: "p16_6", page: "16", no: 6, kanji: "清潔作業区域", furigana: "せいけつさぎょうくいき", romaji: "seiketsu sagyou kuiki", meaning: "area kerja yang bersih",
+        emoji: "✨🏥🍱", hook: "SEIKETSU (Bersih) + SAGYOU (Kerja) + KUIKI (Area)",
+        story: "Ruang pengemasan makanan matang adalah <b>AREA KERJA YANG BERSIH (SEIKETSU SAGYOU KUIKI)</b> paling steril!",
+        kanjiTip: "清潔 (bersih) + 作業 (kerja) + 区域 (zona/area)."
+      },
+      {
+        id: "p16_7", page: "16", no: 7, kanji: "準清潔作業区域", furigana: "じゅんせいけつさぎょうくいき", romaji: "jun-seiketsu sagyou kuiki", meaning: "area kerja semi-bersih",
+        emoji: "🍳🍲🛡️", hook: "JUN (Semi/Runner-up) + SEIKETSU (Bersih)",
+        story: "Ada huruf <b>JUN (準)</b> di depan artinya <b>SEMI</b>: <b>AREA KERJA SEMI-BERSIH</b> (tempat memasak/mengolah)!",
+        kanjiTip: "Ingat: 準 (Jun) = Semi / Setara -> Area kerja semi-bersih."
+      },
+      {
+        id: "p16_8", page: "16", no: 8, kanji: "汚染作業区域", furigana: "おせんさぎょうくいき", romaji: "osen sagyou kuiki", meaning: "area kerja yang terkontaminasi",
+        emoji: "🐟💩🥾", hook: "OSEN (Polusi/Kotor) + SAGYOU KUIKI",
+        story: "Ruang bongkar bahan baku mentah penuh tanah adalah <b>AREA KERJA YANG TERKONTAMINASI (OSEN SAGYOU KUIKI)</b>!",
+        kanjiTip: "汚染 (Osen = kotor/tercemar) + 作業区域 (area kerja)."
+      },
+      {
+        id: "p16_9", page: "16", no: 9, kanji: "ゾーニング", furigana: "ゾーニング", romaji: "zooningu", meaning: "zonasi",
+        emoji: "🗺️🚧🟩", hook: "ZOONINGU ≈ ZONING (Zona)",
+        story: "Dari bahasa Inggris <b>ZONING (ZOONINGU)</b> yaitu pembagian <b>ZONASI</b> ruangan bersih dan kotor di pabrik!",
+        kanjiTip: "Katakana ゾーニング = Zoning / Zonasi."
+      },
+      {
+        id: "p16_10", page: "16", no: 10, kanji: "区分衛生管理", furigana: "くぶんえいせいかんり", romaji: "kubun eisei kanri", meaning: "manajemen kebersihan terpisah",
+        emoji: "🧱🧼📋", hook: "KUBUN (Pisah/Kubu) + EISEI KANRI",
+        story: "Bikin <b>KUBU-KUBU (KUBUN)</b> ruangan agar <b>MANAJEMEN KEBERSIHAN TERPISAH</b> antara area kotor & bersih!",
+        kanjiTip: "区分 (pembagian/pemisahan) + 衛生 (kebersihan) + 管理 (manajemen)."
+      },
+      {
+        id: "p16_11", page: "16", no: 11, kanji: "取り扱い", furigana: "とりあつかい", romaji: "toriatsukai", meaning: "penanganan",
+        emoji: "🤲📦⚠️", hook: "TORIATSUKAI ≈ TARIK AJA SUKA-I",
+        story: "Cara <b>PENANGANAN (TORIATSUKAI)</b> barang mudah pecah harus hati-hati, jangan asal tarik!",
+        kanjiTip: "取 (ambil) + 扱い (perlakuan) = Penanganan."
+      },
+      {
+        id: "p16_12", page: "16", no: 12, kanji: "下処理", furigana: "したしょり", romaji: "shitashori", meaning: "persiapan (pengolahan awal)",
+        emoji: "🥕🔪🚿", hook: "SHITA (Bawah/Awal) + SHORI (Proses)",
+        story: "Mencuci sayur dan membuang sisik ikan di awal disebut <b>PERSIAPAN / PENGOLAHAN AWAL (SHITASHORI)</b>!",
+        kanjiTip: "下 (bawah/dasar) + 処理 (proses) = Proses dasar sebelum dimasak."
+      },
+      {
+        id: "p16_13", page: "16", no: 13, kanji: "出荷", furigana: "しゅっか", romaji: "shukka", meaning: "pengiriman (barang keluar)",
+        emoji: "🚚📦💨", hook: "SHUKKA ≈ SUKA Kirim Barang",
+        story: "Truk pabrik paling <b>SUKA (SHUKKA)</b> melakukan <b>PENGIRIMAN</b> produk jadi ke toko-toko!",
+        kanjiTip: "出 (keluar) + 荷 (muatan/barang) = Mengeluarkan muatan (Pengiriman)."
+      },
+      {
+        id: "p16_14", page: "16", no: 14, kanji: "詰めた", furigana: "つめた", romaji: "tsumeta", meaning: "diisi (dikemas ke wadah)",
+        emoji: "🍱🥢📦", hook: "TSUMETA ≈ SUMBAt / PADAT",
+        story: "Kotak bento <b>DIISI (TSUMETA)</b> penuh sampai padat dengan lauk-pauk lezat!",
+        kanjiTip: "詰める (tsumeru) = Mengisi penuh / Mengemas ke dalam wadah."
+      },
+
+      // ==================== HALAMAN 17 (1 - 14) ====================
+      {
+        id: "p17_1", page: "17", no: 1, kanji: "通らない", furigana: "とおらない", romaji: "tooranai", meaning: "tidak melewati",
+        emoji: "🚫🚶‍♂️🚧", hook: "TOORANAI ≈ TOR-TOR Gak Lewat Sini",
+        story: "Karyawan dari ruang kotor dilarang masuk dan <b>TIDAK MELEWATI (TOORANAI)</b> ruang bersih!",
+        kanjiTip: "通る (melewati) -> 通らない (tidak melewati)."
+      },
+      {
+        id: "p17_2", page: "17", no: 2, kanji: "ほこり", furigana: "ほこり", romaji: "hokori", meaning: "debu",
+        emoji: "💨🤧🧹", hook: "HOKORI ≈ HOKBEN KOTOR DEBU",
+        story: "Meja yang jarang dilap penuh <b>DEBU (HOKORI)</b> sampai bikin bersin-bersin!",
+        kanjiTip: "ほこり (Hokori) = Debu halus yang menempel."
+      },
+      {
+        id: "p17_3", page: "17", no: 3, kanji: "不要", furigana: "ふよう", romaji: "fuyou", meaning: "tidak perlu",
+        emoji: "🗑️🙅‍♂️❌", hook: "FUYOU ≈ PUYENG Gak Perlu!",
+        story: "Barang yang bikin <b>PUYENG (FUYOU)</b> dan <b>TIDAK PERLU</b> langsung buang saja dari ruang kerja!",
+        kanjiTip: "不 (tidak) + 要 (perlu/penting) = Tidak perlu."
+      },
+      {
+        id: "p17_4", page: "17", no: 4, kanji: "通路", furigana: "つうろ", romaji: "tsuuro", meaning: "lorong (jalan lewat)",
+        emoji: "🛣️🚶‍♂️🏭", hook: "TSUURO ≈ SURUH Lewat Lorong",
+        story: "Jangan taruh kardus di tengah <b>LORONG / JALAN (TSUURO)</b> pabrik!",
+        kanjiTip: "通 (lewat) + 路 (jalan) = Jalan lewat / Lorong."
+      },
+      {
+        id: "p17_5", page: "17", no: 5, kanji: "定期的", furigana: "ていきてき", romaji: "teikiteki", meaning: "secara teratur (berkala)",
+        emoji: "🗓️⏰🔁", hook: "TEIKITEKI ≈ TEKI-TEKI Teratur",
+        story: "Bunyi jarum jam <b>TEKI-TEKI (TEIKITEKI)</b> mengingatkan jadwal pembersihan <b>SECARA TERATUR / BERKALA</b>!",
+        kanjiTip: "定 (tetap) + 期 (periode) + 的 = Secara berkala/teratur."
+      },
+      {
+        id: "p17_6", page: "17", no: 6, kanji: "ネズミ", furigana: "ネズミ", romaji: "nezumi", meaning: "tikus",
+        emoji: "🐀🧀😱", hook: "NEZUMI ≈ NEZUKO LIHAT TIKUS",
+        story: "Si <b>NEZUKO (NEZUMI)</b> teriak histeris melihat <b>TIKUS</b> lari di dekat saluran air pabrik!",
+        kanjiTip: "ネズミ (Nezumi) = Tikus."
+      },
+      {
+        id: "p17_7", page: "17", no: 7, kanji: "虫", furigana: "むし", romaji: "mushi", meaning: "serangga",
+        emoji: "🪲🦟🕸️", hook: "MUSHI ≈ MUSUH (Serangga)",
+        story: "Segala jenis <b>SERANGGA (MUSHI)</b> seperti lalat dan kecoa adalah <b>MUSUH</b> utama pabrik makanan!",
+        kanjiTip: "Bentuk Kanji 虫 mirip kepala dan badan serangga/ulat."
+      },
+      {
+        id: "p17_8", page: "17", no: 8, kanji: "状況", furigana: "じょうきょう", romaji: "joukyou", meaning: "situasi (keadaan)",
+        emoji: "📡🧐📋", hook: "JOUKYOU ≈ JOKOWI Cek Situasi",
+        story: "Bos datang meninjau langsung bagaimana <b>SITUASI / KEADAAN (JOUKYOU)</b> kebersihan di pabrik!",
+        kanjiTip: "状 (kondisi) + 況 (keadaan) = Situasi."
+      },
+      {
+        id: "p17_9", page: "17", no: 9, kanji: "排水溝", furigana: "はいすいこう", romaji: "haisuikou", meaning: "saluran pembuangan air (got/mengeringkan)",
+        emoji: "🕳️🌊🧹", hook: "HAISUI (Air Buangan) + KOU (Selokan)",
+        story: "Sikat bersih <b>SALURAN PEMBUANGAN AIR / GOT (HAISUIKOU)</b> agar tidak jadi sarang kecoa dan bau!",
+        kanjiTip: "排 (buang) + 水 (air) + 溝 (parit/got) = Saluran pembuangan air."
+      },
+      {
+        id: "p17_10", page: "17", no: 10, kanji: "ミキサー", furigana: "ミキサー", romaji: "mikisaa", meaning: "mixer (mesin pengaduk)",
+        emoji: "🥣🌀⚙️", hook: "MIKISAA ≈ MIXER",
+        story: "Bunyinya persis bahasa Inggris: <b>MIKISAA = MIXER</b> pengaduk adonan!",
+        kanjiTip: "Katakana ミキサー = Mixer."
+      },
+      {
+        id: "p17_11", page: "17", no: 11, kanji: "スライサー", furigana: "スライサー", romaji: "suraisaa", meaning: "alat pengiris (slicer)",
+        emoji: "🥩🔪💿", hook: "SURAISAA ≈ SLICER",
+        story: "Dari bahasa Inggris <b>SLICER (SURAISAA)</b> yaitu mesin <b>ALAT PENGIRIS</b> daging tipis-tipis!",
+        kanjiTip: "Katakana スライサー = Slicer (alat pengiris)."
+      },
+      {
+        id: "p17_12", page: "17", no: 12, kanji: "分解", furigana: "ぶんかい", romaji: "bunkai", meaning: "membongkar",
+        emoji: "🔧⚙️🔩", hook: "BUNKAI ≈ BONGKAR!",
+        story: "Bunyinya mirip banget: <b>BUNKAI = BONGKAR!</b> Mesin pengiris harus di-<b>BONGKAR</b> bagian-bagiannya saat dicuci!",
+        kanjiTip: "分 (bagi/pisah) + 解 (lepas) = Membongkar komponen."
+      },
+      {
+        id: "p17_13", page: "17", no: 13, kanji: "目立つ", furigana: "めだつ", romaji: "medatsu", meaning: "menonjol / mencolok",
+        emoji: "👀🌟🚨", hook: "MEDATSU ≈ MATA (ME) + DATSU",
+        story: "Kotoran yang <b>MENONJOL / MENCOLOK (MEDATSU)</b> langsung terlihat berdiri di depan <b>MATA (ME)</b>!",
+        kanjiTip: "目 (mata) + 立つ (berdiri) = Berdiri di depan mata = Mencolok."
+      },
+      {
+        id: "p17_14", page: "17", no: 14, kanji: "直接", furigana: "ちょくせつ", romaji: "chokusetsu", meaning: "secara langsung",
+        emoji: "⚡👉🥩", hook: "CHOKUSETSU ≈ COLOK LANGSUNG",
+        story: "Bagian mesin yang menyentuh makanan <b>SECARA LANGSUNG (CHOKUSETSU)</b> wajib disterilkan ekstra!",
+        kanjiTip: "直 (lurus/langsung) + 接 (menyentuh) = Secara langsung."
+      },
+
+      // ==================== HALAMAN 18 (1 - 7) ====================
+      {
+        id: "p18_1", page: "18", no: 1, kanji: "乾燥する", furigana: "かんそうする", romaji: "kansou suru", meaning: "pengeringan (mengeringkan)",
+        emoji: "☀️💨🏜️", hook: "KANSOU ≈ Kering kerontang sampai KACAU",
+        story: "Setelah alat dicuci, wajib dilakukan <b>PENGERINGAN (KANSOU SURU)</b> sampai kering kerontang agar kuman mati!",
+        kanjiTip: "乾 (kering) + 燥 (kering panas) = Pengeringan."
+      },
+      {
+        id: "p18_2", page: "18", no: 2, kanji: "たわし", furigana: "たわし", romaji: "tawashi", meaning: "penggosok (sikat cuci)",
+        emoji: "🧽🪥🫧", hook: "TAWASHI ≈ TAWAS Sikat Penggosok",
+        story: "Panci yang gosong digosok kuat-kuat pakai sikat <b>PENGGOSOK (TAWASHI)</b>!",
+        kanjiTip: "たわし (Tawashi) = Sikat sabut/plastik penggosok alat dapur."
+      },
+      {
+        id: "p18_3", page: "18", no: 3, kanji: "濡れる", furigana: "ぬれる", romaji: "nureru", meaning: "menjadi basah",
+        emoji: "🌧️💦👕", hook: "NURERU ≈ Nelen Air Basah",
+        story: "Kalau alat dibiarkan <b>MENJADI BASAH (NURERU)</b> terus, bakteri bakal pesta pora berkembang biak!",
+        kanjiTip: "Ada radikal air (氵) + 需 = Menjadi basah."
+      },
+      {
+        id: "p18_4", page: "18", no: 4, kanji: "発生", furigana: "はっせい", romaji: "hassei", meaning: "kejadian / timbulnya (muncul)",
+        emoji: "💥🦠🚨", hook: "HASSEI ≈ HASEK Muncul Kejadian!",
+        story: "Lantai basah memicu <b>TIMBULNYA / KEJADIAN (HASSEI)</b> jamur dan bakteri berbahaya!",
+        kanjiTip: "発 (muncul/meletus) + 生 (lahir/hidup) = Timbul / Muncul kejadian."
+      },
+      {
+        id: "p18_5", page: "18", no: 5, kanji: "皮膚", furigana: "ひふ", romaji: "hifu", meaning: "kulit",
+        emoji: "🤚🩹🧴", hook: "HIFU ≈ HI-FU (Tiup Kulit Luka)",
+        story: "Saat <b>KULIT (HIFU)</b> tangan terluka atau lecet, kita tiup <b>'HI-FU, HI-FU!'</b> karena perih!",
+        kanjiTip: "皮 (kulit luar) + 膚 (kulit daging) = Kulit."
+      },
+      {
+        id: "p18_6", page: "18", no: 6, kanji: "保管庫", furigana: "ほかんこ", romaji: "hokanko", meaning: "gudang / lemari penyimpanan",
+        emoji: "🗄️🔐📦", hook: "HOKANKO ≈ HOKBEN KOKO di Lemari",
+        story: "Semua alat bersih dimasukkan ke dalam <b>LEMARI PENYIMPANAN / GUDANG (HOKANKO)</b> tertutup!",
+        kanjiTip: "保管 (penyimpanan) + 庫 (gudang/lemari) = Lemari penyimpanan."
+      },
+      {
+        id: "p18_7", page: "18", no: 7, kanji: "名称", furigana: "めいしょう", romaji: "meishou", meaning: "nama (sebutan barang)",
+        emoji: "🏷️📛✍️", hook: "MEISHOU ≈ MEI-MEI SHOW Nama",
+        story: "Tempelkan stiker <b>NAMA (MEISHOU)</b> di setiap botol deterjen agar tidak tertukar dengan bumbu!",
+        kanjiTip: "名 (nama) + 称 (sebutan) = Nama barang."
+      },
+
+      // ==================== HALAMAN 19 (1 - 14) ====================
+      {
+        id: "p19_1", page: "19", no: 1, kanji: "健康", furigana: "けんこう", romaji: "kenkou", meaning: "kesehatan",
+        emoji: "💪🍎❤️", hook: "KENKOU ≈ KENCENG & KOKOH (Sehat)",
+        story: "Badan yang <b>KENCENG & KOKOH (KENKOU)</b> adalah tanda <b>KESEHATAN</b> pekerja yang prima!",
+        kanjiTip: "健 (kuat/sehat) + 康 (sejahtera) = Kesehatan."
+      },
+      {
+        id: "p19_2", page: "19", no: 2, kanji: "職場", furigana: "しょくば", romaji: "shokuba", meaning: "tempat kerja",
+        emoji: "🏭👷‍♂️🏢", hook: "SHOKUBA ≈ SYOK BARENG di Tempat Kerja",
+        story: "Seluruh teman di <b>TEMPAT KERJA (SHOKUBA)</b> kompak menjaga kebersihan pabrik!",
+        kanjiTip: "職 (pekerjaan) + 場 (tempat) = Tempat kerja."
+      },
+      {
+        id: "p19_3", page: "19", no: 3, kanji: "定期的", furigana: "ていきてき", romaji: "teikiteki", meaning: "secara teratur (berkala)",
+        emoji: "📅🔁🩺", hook: "TEIKITEKI ≈ Detak Jam TEKI-TEKI",
+        story: "Cek kesehatan wajib dilakukan <b>SECARA TERATUR / BERKALA (TEIKITEKI)</b> sesuai jadwal!",
+        kanjiTip: "定期的 = Berkala / Rutin terjadwal."
+      },
+      {
+        id: "p19_4", page: "19", no: 4, kanji: "健康診断", furigana: "けんこうしんだん", romaji: "kenkou shindan", meaning: "cek kesehatan (medical check-up)",
+        emoji: "🩺👨‍⚕️📋", hook: "KENKOU (Sehat) + SHINDAN (Diagnosa)",
+        story: "Setiap pekerja pabrik makanan wajib ikut <b>CEK KESEHATAN (KENKOU SHINDAN)</b> ke dokter!",
+        kanjiTip: "健康 (kesehatan) + 診断 (pemeriksaan medis)."
+      },
+      {
+        id: "p19_5", page: "19", no: 5, kanji: "検便", furigana: "けんべん", romaji: "kenben", meaning: "tes tinja (pemeriksaan feses)",
+        emoji: "💩🧪🔬", hook: "KENBEN ≈ KENA DAIBEN (Tes Tinja)",
+        story: "Ingat <i>Daiben</i> (BAB)! <b>KENBEN</b> artinya <b>TES TINJA / PEMERIKSAAN BAB</b> untuk mengecek bakteri perut!",
+        kanjiTip: "検 (periksa/tes) + 便 (tinja/BAB) = Tes tinja."
+      },
+      {
+        id: "p19_6", page: "19", no: 6, kanji: "汚れ", furigana: "よごれ", romaji: "yogore", meaning: "kotor (noda kotoran)",
+        emoji: "👕💩🤢", hook: "YOGORE ≈ YOGURT Celemotan Kotor",
+        story: "Baju seragam ketumpahan <b>YOGURT (YOGORE)</b> sampai penuh noda <b>KOTOR</b>!",
+        kanjiTip: "汚れ (Yogore) = Noda / Kotoran yang menempel."
+      },
+      {
+        id: "p19_7", page: "19", no: 7, kanji: "異物", furigana: "いぶつ", romaji: "ibutsu", meaning: "benda asing",
+        emoji: "🍱🔩😱", hook: "IBUTSU ≈ IBU-TSU Nemu Baut di Nasi",
+        story: "<b>IBU-TSU (IBUTSU)</b> kaget menemukan <b>BENDA ASING</b> berupa rambut dan baut di dalam makanannya!",
+        kanjiTip: "異 (berbeda/asing) + 物 (benda) = Benda asing."
+      },
+      {
+        id: "p19_8", page: "19", no: 8, kanji: "更衣室", furigana: "こういしつ", romaji: "kouishitsu", meaning: "ruang ganti (pakaian)",
+        emoji: "🚪👕🔄", hook: "KOUISHITSU ≈ KOKO ISI Baju di Ruang Ganti",
+        story: "Sebelum masuk pabrik, ganti baju rumah dengan seragam kerja di <b>RUANG GANTI (KOUISHITSU)</b>!",
+        kanjiTip: "更 (ganti) + 衣 (pakaian) + 室 (ruangan) = Ruang ganti pakaian."
+      },
+      {
+        id: "p19_9", page: "19", no: 9, kanji: "つけ爪", furigana: "つけづめ", romaji: "tsukezume", meaning: "kuku palsu",
+        emoji: "💅🚫🍱", hook: "TSUKE (Pasang) + ZUME (Kuku)",
+        story: "Dilarang keras memakai <b>KUKU PALSU (TSUKEZUME)</b> ke pabrik karena bisa copot jatuh ke makanan!",
+        kanjiTip: "つけ (tempel/pasang) + 爪 (kuku) = Kuku tempel / Kuku palsu."
+      },
+      {
+        id: "p19_10", page: "19", no: 10, kanji: "イヤリング", furigana: "イヤリング", romaji: "iyaringu", meaning: "anting-anting",
+        emoji: "👂💍🚫", hook: "IYARINGU ≈ EARRING (Anting)",
+        story: "Dari bahasa Inggris <b>EARRING (IYARINGU)</b> = <b>ANTING-ANTING</b>, haram dibawa masuk ke ruang produksi!",
+        kanjiTip: "Katakana イヤリング = Earring (Anting)."
+      },
+      {
+        id: "p19_11", page: "19", no: 11, kanji: "ネックレス", furigana: "ネックレス", romaji: "nekkuresu", meaning: "kalung",
+        emoji: "📿🚫👷‍♀️", hook: "NEKKURESU ≈ NECKLACE (Kalung)",
+        story: "Dari bahasa Inggris <b>NECKLACE (NEKKURESU)</b> = <b>KALUNG</b> leher!",
+        kanjiTip: "Katakana ネックレス = Necklace (Kalung)."
+      },
+      {
+        id: "p19_12", page: "19", no: 12, kanji: "ピアス", furigana: "ピアス", romaji: "piasu", meaning: "anting tindik (piercing)",
+        emoji: "👂💎🚫", hook: "PIASU ≈ PIERCING (Tindik)",
+        story: "Dari kata <b>PIERCING (PIASU)</b> = <b>ANTING TINDIK</b>, wajib dilepas di ruang ganti!",
+        kanjiTip: "Katakana ピアス = Piercing / Anting tindik."
+      },
+      {
+        id: "p19_13", page: "19", no: 13, kanji: "鏡", furigana: "かがみ", romaji: "kagami", meaning: "cermin",
+        emoji: "🪞👀✨", hook: "KAGAMI ≈ KAGUM Ngaca di Cermin",
+        story: "Berdiri di depan <b>CERMIN (KAGAMI)</b> sambil <b>KAGUM</b> memeriksa kerapian seragam kerja!",
+        kanjiTip: "鏡 (Kagami) punya radikal logam (金) karena cermin zaman dulu dari logam dipoles."
+      },
+      {
+        id: "p19_14", page: "19", no: 14, kanji: "衣服", furigana: "いふく", romaji: "ifuku", meaning: "pakaian",
+        emoji: "👕👖🧼", hook: "IFUKU ≈ INI FUKU (Pakaianku)",
+        story: "<b>'INI FUKU (IFUKU) pakaian kerjaku, selalu bersih tanpa debu!'</b>",
+        kanjiTip: "衣 (baju) + 服 (pakaian) = Pakaian."
+      },
+
+      // ==================== HALAMAN 20 (1 - 10) ====================
+      {
+        id: "p20_1", page: "20", no: 1, kanji: "順序", furigana: "じゅんじょ", romaji: "junjo", meaning: "urutan",
+        emoji: "1️⃣2️⃣3️⃣", hook: "JUNJO ≈ JUNI-JULI (Urutan)",
+        story: "Memakai seragam kerja harus sesuai <b>URUTAN (JUNJO)</b> dari atas (topi) ke bawah!",
+        kanjiTip: "順序 = Urutan langkah."
+      },
+      {
+        id: "p20_2", page: "20", no: 2, kanji: "頭髪", furigana: "とうはつ", romaji: "touhatsu", meaning: "rambut kepala",
+        emoji: "💇‍♂️🪮🧢", hook: "TOUHATSU ≈ TOPI HATS Tutup Rambut",
+        story: "Seluruh helai <b>RAMBUT KEPALA (TOUHATSU)</b> wajib masuk ke dalam topi HATS agar tidak rontok ke makanan!",
+        kanjiTip: "頭 (kepala) + 髪 (rambut) = Rambut kepala."
+      },
+      {
+        id: "p20_3", page: "20", no: 3, kanji: "ブラッシング", furigana: "ブラッシング", romaji: "burasshingu", meaning: "menyisir (rambut)",
+        emoji: "🪮💇‍♀️✨", hook: "BURASSHINGU ≈ BRUSHING (Menyikat/Menyisir)",
+        story: "Sebelum pakai penutup kepala, lakukan <b>BRUSHING / MENYISIR RAMBUT (BURASSHINGU)</b> agar rambut rontok jatuh dulu!",
+        kanjiTip: "Katakana ブラッシング = Brushing (Menyisir)."
+      },
+      {
+        id: "p20_4", page: "20", no: 4, kanji: "かぶります", furigana: "かぶります", romaji: "kaburimasu", meaning: "memakai (di kepala / topi)",
+        emoji: "🧢👷‍♂️😊", hook: "KABURIMASU ≈ KABUR Pakai Helm/Topi",
+        story: "Sebelum <b>KABUR (KABURIMASU)</b> naik motor atau masuk pabrik, wajib <b>MEMAKAI TOPI/PENUTUP KEPALA</b>!",
+        kanjiTip: "かぶります khusus untuk memakai benda di kepala (topi, tudung, helm)."
+      },
+      {
+        id: "p20_5", page: "20", no: 5, kanji: "留めます", furigana: "とめます", romaji: "tomemasu", meaning: "mengancingkan (merekatkan)",
+        emoji: "🧥🧷🔒", hook: "TOMEMASU ≈ TOME (Stop/Kunci Kancing)",
+        story: "Resleting dan kancing seragam wajib di-<b>KANCINGKAN / DIREKATKAN (TOMEMASU)</b> rapat-rapat sampai leher!",
+        kanjiTip: "留める (tomeru) = Mengancingkan / Mengikat / Menghentikan agar tidak lepas."
+      },
+      {
+        id: "p20_6", page: "20", no: 6, kanji: "服装", furigana: "ふくそう", romaji: "fukusou", meaning: "pakaian (seragam lengkap)",
+        emoji: "🥽🥼🧤", hook: "FUKUSOU ≈ FOKUS Cek Pakaian Seragam",
+        story: "Berdiri di depan cermin dan <b>FOKUS (FUKUSOU)</b> memeriksa kelengkapan <b>PAKAIAN SERAGAM</b> kerja!",
+        kanjiTip: "服 (baju) + 装 (perlengkapan) = Pakaian / Kostum seragam."
+      },
+      {
+        id: "p20_7", page: "20", no: 7, kanji: "粘着ローラ", furigana: "ねんちゃくローラ", romaji: "nenchaku roora", meaning: "rol perekat (pembersih debu baju)",
+        emoji: "🧻👕✨", hook: "NENCHAKU (Lengket) + ROORA (Roller)",
+        story: "Giling seluruh badan pakai <b>ROL PEREKAT (NENCHAKU ROORA)</b> agar rambut dan debu menempel terangkat!",
+        kanjiTip: "粘着 (lengket/perekat) + ローラ (roller)."
+      },
+      {
+        id: "p20_8", page: "20", no: 8, kanji: "エアーシャワー", furigana: "エアーシャワー", romaji: "eaashawaa", meaning: "pancuran udara (air shower)",
+        emoji: "🌬️🚿🚪", hook: "EAASHAWAA ≈ AIR SHOWER",
+        story: "Masuk ke bilik <b>AIR SHOWER / PANCURAN UDARA (EAASHAWAA)</b> dan angkat kedua tangan agar angin kencang meniup sisa debu!",
+        kanjiTip: "Katakana エアーシャワー = Air Shower."
+      },
+      {
+        id: "p20_9", page: "20", no: 9, kanji: "履き物", furigana: "はきもの", romaji: "hakimono", meaning: "alas kaki (sepatu/sandal)",
+        emoji: "🥾👟🦶", hook: "HAKIMONO ≈ KAKI MONO (Alas Kaki)",
+        story: "Benda yang dipakai di <b>KAKI (HAKI-mono)</b> namanya <b>ALAS KAKI / SEPATU KERJA</b>!",
+        kanjiTip: "履く (memakai di kaki) + 物 (benda) = Alas kaki."
+      },
+      {
+        id: "p20_10", page: "20", no: 10, kanji: "履き替える", furigana: "はきかえる", romaji: "hakikaeru", meaning: "mengganti alas kaki (sepatu)",
+        emoji: "👟🔄🥾", hook: "HAKI (Pakai Sepatu) + KAERU (Tukar/Ganti)",
+        story: "Sebelum masuk ruang produksi, wajib <b>MENGGANTI ALAS KAKI / SEPATU (HAKIKAERU)</b> dengan sepatu bot khusus pabrik!",
+        kanjiTip: "履き (alas kaki) + 替える (menukar/mengganti) = Mengganti sepatu."
+      }
+    ];
+
+    // ==================== STATE ====================
+    let lockedIds = JSON.parse(localStorage.getItem("kotoba_13_20_locked") || "[]");
+    let currentPage = "ALL";
+    let currentMode = "hack";
+    let activeList = [];
+    let currentIndex = 0;
+
+    // Auto 5-sec timer state
+    let autoTimer = null;
+    let fiveSecProgress = 100;
+
+    // List blind state
+    let listBlind = { meaning: false, furigana: false };
+
+    // Drill state
+    let currentDrillWord = null;
+    let drillRightCount = 0;
+    let drillWrongCount = 0;
+    let drillCombo = 0;
+    let drillAnswered = false;
+
+    // ==================== AUDIO TTS JEPANG ====================
+    function speakJP(text) {
+      if (!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "ja-JP";
+      u.rate = 0.92;
+      window.speechSynthesis.speak(u);
+    }
+
+    function speakCurrentWord() {
+      if (!activeList.length) return;
+      const w = activeList[currentIndex];
+      speakJP(w.furigana || w.kanji);
+    }
+
+    // ==================== FILTER & PROGRESS ====================
+    function saveLocked() {
+      localStorage.setItem("kotoba_13_20_locked", JSON.stringify(lockedIds));
+      updateTopProgress();
+    }
+
+    function updateTopProgress() {
+      const pagePool = currentPage === "ALL"
+        ? KOTOBA_13_20
+        : KOTOBA_13_20.filter(x => x.page === currentPage);
+      const lockedInPool = pagePool.filter(x => lockedIds.includes(x.id)).length;
+
+      document.getElementById("lockedCount").textContent = lockedInPool;
+      document.getElementById("totalCount").textContent = pagePool.length;
+      const pct = pagePool.length ? Math.round((lockedInPool / pagePool.length) * 100) : 0;
+      document.getElementById("lockedBar").style.width = pct + "%";
+    }
+
+    function selectPage(page) {
+      currentPage = page;
+      document.querySelectorAll(".page-pill").forEach(btn => {
+        if (btn.dataset.page === page) {
+          btn.className = "page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-emerald-500 text-slate-950 shadow-sm";
+        } else {
+          btn.className = "page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800/80 text-slate-300 hover:bg-slate-700";
+        }
+      });
+      applyFilter();
+    }
+
+    function applyFilter() {
+      const onlyUnlocked = document.getElementById("onlyUnlockedToggle").checked;
+      activeList = KOTOBA_13_20.filter(item => {
+        const matchPage = currentPage === "ALL" ? true : item.page === currentPage;
+        const matchLock = onlyUnlocked ? !lockedIds.includes(item.id) : true;
+        return matchPage && matchLock;
+      });
+      currentIndex = 0;
+      updateTopProgress();
+      refreshCurrentMode();
+    }
+
+    function shuffleWords() {
+      for (let i = activeList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [activeList[i], activeList[j]] = [activeList[j], activeList[i]];
+      }
+      currentIndex = 0;
+      refreshCurrentMode();
+    }
+
+    function setMode(mode) {
+      stopAutoFiveSec();
+      currentMode = mode;
+      ["hack", "list", "drill"].forEach(m => {
+        const sec = document.getElementById("section-" + m);
+        const btn = document.getElementById("modeBtn-" + m);
+        if (m === mode) {
+          sec.classList.remove("hidden");
+          btn.className = "py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow transition flex items-center justify-center gap-1.5";
+        } else {
+          sec.classList.add("hidden");
+          btn.className = "py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5";
+        }
+      });
+      refreshCurrentMode();
+    }
+
+    function refreshCurrentMode() {
+      if (currentMode === "hack") renderHackCard();
+      if (currentMode === "list") renderCheatList();
+      if (currentMode === "drill") nextDrill();
+    }
+
+    // ==================== MODE 1: SUNTIK BAYANGAN 5 DETIK ====================
+    function renderHackCard() {
+      const emptyBox = document.getElementById("hackEmptyBox");
+      const cardBox = document.getElementById("hackCardBox");
+
+      if (!activeList.length) {
+        emptyBox.classList.remove("hidden");
+        cardBox.classList.add("hidden");
+        document.getElementById("cardCounterText").textContent = "0 / 0";
+        stopAutoFiveSec();
+        return;
+      }
+
+      emptyBox.classList.add("hidden");
+      cardBox.classList.remove("hidden");
+
+      if (currentIndex >= activeList.length) currentIndex = 0;
+      const w = activeList[currentIndex];
+      const isLocked = lockedIds.includes(w.id);
+      const isBlind = document.getElementById("blindTestToggle").checked;
+
+      document.getElementById("hkPageBadge").textContent = `Hal. ${w.page} • No. ${w.no}`;
+      document.getElementById("cardCounterText").textContent = `Kata ${currentIndex + 1} dari ${activeList.length}`;
+
+      const statusBadge = document.getElementById("hkStatusBadge");
+      if (isLocked) {
+        statusBadge.textContent = "🔒 Terkunci di Otak";
+        statusBadge.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+      } else {
+        statusBadge.textContent = "⚡ Belum Terkunci";
+        statusBadge.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30";
+      }
+
+      document.getElementById("hkFurigana").textContent = w.furigana;
+      document.getElementById("hkKanji").textContent = w.kanji;
+      document.getElementById("hkRomaji").textContent = w.romaji;
+      document.getElementById("hkMeaning").textContent = w.meaning;
+
+      document.getElementById("hkSoundHook").textContent = w.hook;
+      document.getElementById("hkSceneEmoji").textContent = w.emoji;
+      document.getElementById("hkStory").innerHTML = w.story;
+      document.getElementById("hkKanjiTip").textContent = w.kanjiTip;
+
+      const meaningBox = document.getElementById("hkMeaningBox");
+      const trickBox = document.getElementById("hkTrickContainer");
+      meaningBox.classList.remove("revealed");
+      trickBox.classList.remove("revealed");
+
+      if (isBlind) {
+        meaningBox.classList.add("blind-blur");
+        trickBox.classList.add("blind-blur");
+      } else {
+        meaningBox.classList.remove("blind-blur");
+        trickBox.classList.remove("blind-blur");
+      }
+    }
+
+    function nextWord() {
+      if (!activeList.length) return;
+      currentIndex = (currentIndex + 1) % activeList.length;
+      fiveSecProgress = 100;
+      renderHackCard();
+      if (autoTimer) speakCurrentWord();
+    }
+
+    function prevWord() {
+      if (!activeList.length) return;
+      currentIndex = (currentIndex - 1 + activeList.length) % activeList.length;
+      fiveSecProgress = 100;
+      renderHackCard();
+    }
+
+    function markLocked(locked) {
+      if (!activeList.length) return;
+      const w = activeList[currentIndex];
+      if (locked && !lockedIds.includes(w.id)) {
+        lockedIds.push(w.id);
+      } else if (!locked && lockedIds.includes(w.id)) {
+        lockedIds = lockedIds.filter(id => id !== w.id);
+      }
+      saveLocked();
+
+      const onlyUnlocked = document.getElementById("onlyUnlockedToggle").checked;
+      if (onlyUnlocked && locked) {
+        applyFilter();
+      } else {
+        nextWord();
+      }
+    }
+
+    // Auto 5-Second Injector
+    function toggleAutoFiveSec() {
+      if (autoTimer) {
+        stopAutoFiveSec();
+      } else {
+        startAutoFiveSec();
+      }
+    }
+
+    function startAutoFiveSec() {
+      if (!activeList.length) return;
+      fiveSecProgress = 100;
+      speakCurrentWord();
+      const btn = document.getElementById("autoTimerBtn");
+      btn.className = "px-3 py-1.5 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-300 font-bold flex items-center gap-1.5 transition";
+      document.getElementById("autoTimerText").textContent = "Hentikan Auto-Suntik (5s Berjalan)";
+
+      autoTimer = setInterval(() => {
+        fiveSecProgress -= 2; // 50 ticks x 100ms = 5000ms (5 detik)
+        document.getElementById("fiveSecBar").style.width = Math.max(0, fiveSecProgress) + "%";
+        if (fiveSecProgress <= 0) {
+          nextWord();
+        }
+      }, 100);
+    }
+
+    function stopAutoFiveSec() {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+      fiveSecProgress = 100;
+      const bar = document.getElementById("fiveSecBar");
+      if (bar) bar.style.width = "100%";
+      const btn = document.getElementById("autoTimerBtn");
+      if (btn) {
+        btn.className = "px-3 py-1.5 rounded-lg bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 hover:bg-indigo-500/30 font-bold flex items-center gap-1.5 transition";
+        document.getElementById("autoTimerText").textContent = "Mulai Auto-Suntik 5 Detik";
+      }
+    }
+
+    // Keyboard shortcuts
+    window.addEventListener("keydown", (e) => {
+      if (currentMode !== "hack" || ["INPUT", "SELECT"].includes(document.activeElement.tagName)) return;
+      if (e.code === "ArrowRight") nextWord();
+      if (e.code === "ArrowLeft") prevWord();
+      if (e.code === "Enter") {
+        e.preventDefault();
+        markLocked(true);
+      }
+      if (e.code === "Space") {
+        e.preventDefault();
+        speakCurrentWord();
+      }
+    });
+
+    // ==================== MODE 2: CHEAT SHEET SEMUA TRIK ====================
+    function toggleListBlind(field) {
+      listBlind[field] = !listBlind[field];
+      const btnM = document.getElementById("btnBlindMeaning");
+      const btnF = document.getElementById("btnBlindFurigana");
+
+      btnM.className = listBlind.meaning
+        ? "px-3 py-2 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950 transition"
+        : "px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition";
+
+      btnF.className = listBlind.furigana
+        ? "px-3 py-2 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950 transition"
+        : "px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition";
+
+      renderCheatList();
+    }
+
+    function renderCheatList() {
+      const q = (document.getElementById("listSearch").value || "").toLowerCase().trim();
+      const container = document.getElementById("cheatListContainer");
+      container.innerHTML = "";
+
+      const rows = activeList.filter(w => {
+        if (!q) return true;
+        return (
+          w.kanji.toLowerCase().includes(q) ||
+          w.furigana.toLowerCase().includes(q) ||
+          w.romaji.toLowerCase().includes(q) ||
+          w.meaning.toLowerCase().includes(q) ||
+          w.hook.toLowerCase().includes(q) ||
+          w.story.toLowerCase().includes(q)
+        );
+      });
+
+      rows.forEach(w => {
+        const isLocked = lockedIds.includes(w.id);
+        const card = document.createElement("div");
+        card.className = "bg-[#111827] border border-slate-800 hover:border-slate-700 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition";
+
+        card.innerHTML = `
+          <div class="flex items-center gap-3.5 min-w-[240px]">
+            <button onclick="speakJP('${w.furigana}')" class="w-12 h-12 rounded-2xl bg-[#090d16] border border-slate-800 hover:border-emerald-500/50 flex items-center justify-center text-2xl shrink-0" title="Putar Audio">
+              ${w.emoji.slice(0, 2)}
+            </button>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-800 text-cyan-400">Hal.${w.page}#${w.no}</span>
+                <span onclick="this.classList.toggle('revealed')" class="text-xs font-bold text-slate-400 jp-font ${listBlind.furigana ? 'blind-blur' : ''}">${w.furigana} (${w.romaji})</span>
+              </div>
+              <div class="text-2xl font-black text-white jp-font mt-0.5">${w.kanji}</div>
+              <div onclick="this.classList.toggle('revealed')" class="text-base font-extrabold text-emerald-400 ${listBlind.meaning ? 'blind-blur' : ''}">= ${w.meaning}</div>
+            </div>
+          </div>
+
+          <div onclick="this.classList.toggle('revealed')" class="flex-1 bg-[#0b101b] border border-indigo-500/25 rounded-xl p-3 text-xs sm:text-sm ${listBlind.meaning ? 'blind-blur' : ''}">
+            <div class="font-extrabold text-amber-300 mb-0.5">⚡ ${w.hook}</div>
+            <div class="text-slate-300 leading-relaxed">${w.story}</div>
+          </div>
+
+          <div class="flex md:flex-col items-center gap-2 self-end md:self-center shrink-0">
+            <button onclick="speakJP('${w.furigana}')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-cyan-300">🔊</button>
+            <button onclick="toggleLockFromList('${w.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition ${isLocked ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}">
+              ${isLocked ? '🔒 Hafal' : 'Tandai'}
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function toggleLockFromList(id) {
+      if (lockedIds.includes(id)) {
+        lockedIds = lockedIds.filter(x => x !== id);
+      } else {
+        lockedIds.push(id);
+      }
+      saveLocked();
+      renderCheatList();
+    }
+
+    // ==================== MODE 3: TES REFLEKS KILAT ====================
+    function nextDrill() {
+      const pool = activeList.length >= 4 ? activeList : KOTOBA_13_20;
+      const mode = document.getElementById("drillModeSelect").value;
+      drillAnswered = false;
+      document.getElementById("drillHackReveal").classList.add("hidden");
+
+      currentDrillWord = pool[Math.floor(Math.random() * pool.length)];
+      document.getElementById("drillMeta").textContent = `Hal. ${currentDrillWord.page} • No. ${currentDrillWord.no}`;
+
+      if (mode === "jp_id") {
+        document.getElementById("drillSub").textContent = `${currentDrillWord.furigana} (${currentDrillWord.romaji})`;
+        document.getElementById("drillMain").textContent = currentDrillWord.kanji;
+      } else if (mode === "kanji_only") {
+        document.getElementById("drillSub").textContent = "Ingat bentuk Kanji & Jembatan Bunyinya:";
+        document.getElementById("drillMain").textContent = currentDrillWord.kanji;
+      } else {
+        document.getElementById("drillSub").textContent = "Pilih Kotoba Jepang yang tepat:";
+        document.getElementById("drillMain").textContent = currentDrillWord.meaning;
+      }
+
+      const distractors = KOTOBA_13_20
+        .filter(x => x.id !== currentDrillWord.id)
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 3);
+
+      const options = [...distractors, currentDrillWord].sort(() => 0.5 - Math.random());
+      const optBox = document.getElementById("drillOptions");
+      optBox.innerHTML = "";
+
+      options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "p-4 rounded-2xl bg-[#090d16] border-2 border-slate-800 hover:border-cyan-500/60 text-left font-bold text-sm sm:text-base text-slate-100 transition flex items-center justify-between";
+        btn.innerHTML = mode === "id_jp"
+          ? `<span class="jp-font">${opt.kanji} <span class="text-cyan-400 text-xs">(${opt.furigana})</span></span>`
+          : `<span>${opt.meaning}</span>`;
+        btn.onclick = () => checkDrill(opt, btn);
+        optBox.appendChild(btn);
+      });
+    }
+
+    function checkDrill(selected, btnEl) {
+      if (drillAnswered) return;
+      drillAnswered = true;
+
+      const isCorrect = selected.id === currentDrillWord.id;
+      const revealBox = document.getElementById("drillHackReveal");
+      const titleEl = document.getElementById("drillResultTitle");
+      const trickEl = document.getElementById("drillResultTrick");
+      revealBox.classList.remove("hidden");
+
+      if (isCorrect) {
+        drillRightCount++;
+        drillCombo++;
+        btnEl.className = "p-4 rounded-2xl bg-emerald-500/20 border-2 border-emerald-400 text-left font-extrabold text-sm sm:text-base text-emerald-200 flex items-center justify-between";
+        revealBox.className = "mt-4 p-4 rounded-2xl border border-emerald-500/40 bg-emerald-950/20 flex flex-col gap-2";
+        titleEl.className = "font-extrabold text-sm text-emerald-400";
+        titleEl.textContent = `✅ TEPAT! ${currentDrillWord.kanji} (${currentDrillWord.furigana}) = ${currentDrillWord.meaning}`;
+        speakJP(currentDrillWord.furigana);
+      } else {
+        drillWrongCount++;
+        drillCombo = 0;
+        btnEl.className = "p-4 rounded-2xl bg-rose-500/20 border-2 border-rose-500 text-left font-extrabold text-sm sm:text-base text-rose-200 flex items-center justify-between";
+        revealBox.className = "mt-4 p-4 rounded-2xl border border-rose-500/40 bg-rose-950/20 flex flex-col gap-2";
+        titleEl.className = "font-extrabold text-sm text-rose-400";
+        titleEl.textContent = `❌ Salah! Jawaban: ${currentDrillWord.kanji} (${currentDrillWord.furigana}) = ${currentDrillWord.meaning}`;
+      }
+
+      trickEl.innerHTML = `
+        <div class="font-extrabold text-amber-300 mb-1">${currentDrillWord.emoji} Jembatan Otak: ${currentDrillWord.hook}</div>
+        <div>${currentDrillWord.story}</div>
+      `;
+
+      document.getElementById("drillRight").textContent = drillRightCount;
+      document.getElementById("drillWrong").textContent = drillWrongCount;
+      document.getElementById("drillStreak").textContent = drillCombo;
+    }
+
+    function speakDrillWord() {
+      if (currentDrillWord) speakJP(currentDrillWord.furigana);
+    }
+
+    function resetLocked() {
+      lockedIds = [];
+      saveLocked();
+      applyFilter();
+    }
+
+    // Init
+    applyFilter();
+  </script>
+</body>
+</html>
