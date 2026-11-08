@@ -55,14 +55,28 @@
         </div>
       </div>
 
-      <!-- Progress Otak Terkunci -->
-      <div class="flex items-center gap-3 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl">
-        <div class="text-xs">
-          <span class="text-slate-400 block">Terkunci di Otak</span>
-          <span class="font-extrabold text-emerald-400"><span id="lockedCount">0</span> / <span id="totalCount">110</span> Kata</span>
+      <!-- Kontrol Audio & Progress Otak Terkunci -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <div class="flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 px-2.5 py-1.5 rounded-xl">
+          <button onclick="testAudioSystem()" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-bold text-xs flex items-center gap-1 transition" title="Klik untuk menguji dan memancing suara">
+            🔊 Tes Suara
+          </button>
+          <select id="audioEngineSelect" onchange="changeAudioEngine(this.value)" class="bg-[#090d16] border border-slate-700 text-slate-200 text-[11px] font-semibold rounded-lg px-2 py-1 focus:outline-none focus:border-emerald-500" title="Pilih Mesin Suara jika perangkat tidak punya voice Jepang">
+            <option value="auto">Mode Suara: Otomatis Pintar</option>
+            <option value="cloud">Mode Suara: Cloud Jepang (Online)</option>
+            <option value="native">Mode Suara: Sistem Jepang (ja-JP)</option>
+            <option value="phonetic">Mode Suara: Fonetik Romaji (Anti-Bisu)</option>
+          </select>
         </div>
-        <div class="w-20 h-2 bg-slate-800 rounded-full overflow-hidden">
-          <div id="lockedBar" class="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 transition-all duration-300" style="width: 0%"></div>
+
+        <div class="flex items-center gap-3 bg-slate-900/90 border border-slate-800 px-3.5 py-2 rounded-xl">
+          <div class="text-xs">
+            <span class="text-slate-400 block">Terkunci di Otak</span>
+            <span class="font-extrabold text-emerald-400"><span id="lockedCount">0</span> / <span id="totalCount">110</span> Kata</span>
+          </div>
+          <div class="w-20 h-2 bg-slate-800 rounded-full overflow-hidden">
+            <div id="lockedBar" class="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 transition-all duration-300" style="width: 0%"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -122,11 +136,11 @@
       <button onclick="setMode('hack')" id="modeBtn-hack" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow transition flex items-center justify-center gap-1.5">
         <span>🧠</span> 1. Suntik Bayangan (5s)
       </button>
-      <button onclick="setMode('list')" id="modeBtn-list" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
-        <span>📜</span> 2. Baca Cepat Semua Trik
-      </button>
       <button onclick="setMode('drill')" id="modeBtn-drill" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
-        <span>⚡</span> 3. Tes Refleks Kilat
+        <span>💀</span> 2. Ketik Gauntlet (Reset #1)
+      </button>
+      <button onclick="setMode('list')" id="modeBtn-list" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
+        <span>📜</span> 3. Baca Cepat Semua Trik
       </button>
     </nav>
 
@@ -263,48 +277,148 @@
       <div id="cheatListContainer" class="grid grid-cols-1 gap-3"></div>
     </section>
 
-    <!-- ==================== MODE 3: TES REFLEKS KILAT ==================== -->
-    <section id="section-drill" class="hidden flex-1 flex flex-col items-center gap-4">
+    <!-- ==================== MODE 2: KETIK GAUNTLET (SALAH = 7 DETIK + 3X AUDIO + RESET KE AWAL) ==================== -->
+    <section id="section-drill" class="hidden flex-1 flex flex-col gap-4">
+      <!-- Bar Pengaturan & Statistik Gauntlet -->
       <div class="w-full bg-[#111827] border border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
-        <div class="flex items-center gap-2 text-xs">
-          <span class="text-slate-400 font-bold">Mode Pertanyaan:</span>
-          <select id="drillModeSelect" onchange="nextDrill()" class="bg-[#090d16] border border-slate-700 text-white rounded-lg px-3 py-1.5 font-bold">
-            <option value="jp_id">Kanji & Bunyi → Tebak Arti</option>
-            <option value="kanji_only">Hanya Kanji (Tanpa Furigana) → Tebak Arti</option>
-            <option value="id_jp">Arti Indonesia → Tebak Kotoba</option>
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="text-slate-400 font-bold">arah Tebakan:</span>
+          <select id="drillModeSelect" onchange="resetGauntletToStart()" class="bg-[#090d16] border border-slate-700 text-white rounded-xl px-3 py-1.5 font-bold focus:outline-none focus:border-emerald-500">
+            <option value="mixed">🎲 Acak (Ketik Jepang & Indo Bergantian)</option>
+            <option value="to_jp">🇯🇵 Tampil Indo → Ketik Jepang (Romaji/Kana/Kanji)</option>
+            <option value="to_id">🇮🇩 Tampil Jepang → Ketik Arti Indonesia</option>
           </select>
         </div>
-        <div class="flex items-center gap-4 text-xs font-bold">
-          <span class="text-emerald-400">Benar: <b id="drillRight">0</b></span>
-          <span class="text-rose-400">Salah: <b id="drillWrong">0</b></span>
-          <span class="text-amber-400">🔥 Combo: <b id="drillStreak">0</b></span>
+
+        <div class="flex items-center gap-3 text-xs font-bold">
+          <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+            Posisi: <b id="gauntletPosText">1 / 15</b>
+          </span>
+          <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300">
+            🏆 Rekor: <b id="gauntletBestText">0</b>
+          </span>
+          <span class="px-2.5 py-1 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400">
+            💀 Reset: <b id="gauntletResetCount">0x</b>
+          </span>
         </div>
       </div>
 
-      <div class="w-full bg-[#111827] border border-slate-800 rounded-3xl p-6 shadow-xl">
-        <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
-          <span id="drillMeta" class="px-2.5 py-1 rounded-lg bg-slate-800 text-cyan-400 font-bold">Hal. 13 • No. 1</span>
-          <button onclick="speakDrillWord()" class="px-3 py-1 rounded-lg bg-slate-800 text-emerald-400 font-bold hover:bg-slate-700">🔊 Bunyi</button>
+      <!-- Jejak Rantai Kotoba (Visual Progress 1 -> Akhir) -->
+      <div class="w-full bg-[#111827] border border-slate-800 rounded-2xl p-3.5 flex flex-col gap-2">
+        <div class="flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+          <span>🔥 Rantai Ingatan (Salah 1x = Wajib Ulang Ketik dari Kotoba #1!)</span>
+          <span id="gauntletWarningTag" class="text-cyan-400 font-bold">Ketik jawaban lalu tekan Enter ↵</span>
+        </div>
+        <div id="gauntletChainDots" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <!-- Kartu Utama Ketik Gauntlet -->
+      <div class="w-full bg-[#111827] border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
+        <!-- Bar Countdown 7 Detik Saat Salah -->
+        <div class="w-full h-2 bg-slate-900">
+          <div id="penaltySevenSecBar" class="h-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-400 transition-all duration-100" style="width: 0%"></div>
         </div>
 
-        <!-- Pertanyaan -->
-        <div class="text-center py-6 bg-[#090d16] rounded-2xl border border-slate-800/80 mb-4 px-3">
-          <div id="drillSub" class="text-base text-cyan-400 font-bold jp-font mb-1"></div>
-          <div id="drillMain" class="text-4xl sm:text-5xl font-black text-white jp-font"></div>
-        </div>
-
-        <!-- 4 Pilihan -->
-        <div id="drillOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
-
-        <!-- Box Pengingat Jembatan Keledai Saat Menjawab -->
-        <div id="drillHackReveal" class="hidden mt-4 p-4 rounded-2xl border bg-[#0b1120] flex flex-col gap-2">
-          <div class="flex items-center justify-between">
-            <span id="drillResultTitle" class="font-extrabold text-sm"></span>
-            <button onclick="nextDrill()" class="px-4 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs hover:bg-emerald-400 transition">
-              Lanjut Soal →
+        <div class="p-5 sm:p-7 flex flex-col gap-5">
+          <!-- Meta & Tombol Bantuan -->
+          <div class="flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2">
+              <span id="drillMeta" class="px-3 py-1 rounded-lg bg-slate-800 text-cyan-400 font-bold border border-slate-700">Kotoba #1 • Hal. 13 No. 1</span>
+              <span id="drillPromptBadge" class="px-2.5 py-1 rounded-lg font-extrabold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">KETIK JEPANGNYA</span>
+            </div>
+            <button onclick="speakDrillQuestion()" id="drillAudioBtn" class="px-3 py-1.5 rounded-xl bg-slate-800 text-emerald-400 font-bold hover:bg-slate-700 border border-slate-700 transition">
+              🔊 Ulangi Suara Soal
             </button>
           </div>
-          <div id="drillResultTrick" class="text-xs sm:text-sm text-slate-200 bg-slate-900/90 p-3 rounded-xl border border-slate-800"></div>
+
+          <!-- Soal yang Ditampilkan -->
+          <div class="text-center py-6 px-4 bg-[#090d16] rounded-2xl border border-slate-800/90 flex flex-col items-center justify-center gap-1.5">
+            <div id="drillSub" class="text-xs sm:text-sm text-slate-400 font-bold uppercase tracking-wider"></div>
+            <div id="drillMain" class="text-3xl sm:text-5xl font-black text-white jp-font tracking-tight"></div>
+            <div id="drillHintText" class="text-xs text-amber-300/90 font-semibold mt-1 hidden"></div>
+          </div>
+
+          <!-- Area Input Ketik -->
+          <form id="gauntletForm" onsubmit="submitGauntletAnswer(event)" class="flex flex-col sm:flex-row gap-2.5">
+            <input
+              type="text"
+              id="gauntletInput"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="Ketik jawabanmu di sini lalu tekan Enter..."
+              class="flex-1 bg-[#090d16] border-2 border-slate-700 focus:border-emerald-400 rounded-2xl px-4 py-3.5 text-base sm:text-lg font-bold text-white placeholder-slate-500 focus:outline-none transition"
+            />
+            <div class="flex gap-2">
+              <button type="submit" id="gauntletSubmitBtn" class="flex-1 sm:flex-initial px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-black text-sm shadow-lg shadow-emerald-500/20 transition">
+                Cek ↵
+              </button>
+              <button type="button" onclick="triggerGauntletGiveUp()" id="gauntletGiveUpBtn" class="px-4 py-3.5 rounded-2xl bg-slate-800 hover:bg-rose-500/20 hover:text-rose-300 border border-slate-700 text-slate-300 font-bold text-xs transition" title="Lupa? Lihat jawaban & ulang dari #1">
+                🏳️ Lupa
+              </button>
+            </div>
+          </form>
+
+          <!-- Feedback Kilat Saat BENAR -->
+          <div id="gauntletSuccessToast" class="hidden p-3.5 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm font-bold flex items-center justify-between">
+            <span id="gauntletSuccessText">✅ Mantap! Lanjut ke kotoba berikutnya...</span>
+            <span class="text-emerald-400 font-black">LANJUT →</span>
+          </div>
+
+          <!-- BOX HUKUMAN 7 DETIK + 3X AUDIO NATIVE SAAT SALAH -->
+          <div id="drillHackReveal" class="hidden p-5 rounded-2xl border-2 border-rose-500/60 bg-gradient-to-br from-rose-950/40 via-[#101726] to-[#090d16] flex flex-col gap-3.5 shadow-2xl">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-rose-500/30 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-rose-500 text-slate-950 font-black text-xs uppercase">💀 SALAH! MENGULANG KE #1</span>
+                <span id="audioRepeatBadge" class="px-2.5 py-1 rounded-lg bg-amber-400/20 border border-amber-400/40 text-amber-300 font-extrabold text-xs">
+                  🔊 Audio Native: 1 / 3
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold text-rose-300">
+                  Reset otomatis dalam <b id="penaltyCountdownNum" class="text-white text-sm">7.0</b> dtk
+                </span>
+                <button type="button" onclick="finishPenaltyAndResetNow()" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-600">
+                  Langsung Ulang #1 ↻
+                </button>
+              </div>
+            </div>
+
+            <!-- Jawaban Lengkap yang Wajib Direkam Otak Selama 7 Detik -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#090d16]/90 p-4 rounded-xl border border-slate-800">
+              <div>
+                <div class="text-xs text-slate-400 font-bold">Kotoba Jepang (Cara Baca):</div>
+                <div id="penaltyJpText" class="text-2xl sm:text-3xl font-black text-white jp-font mt-0.5"></div>
+                <div id="penaltyRomajiText" class="text-sm font-extrabold text-cyan-400"></div>
+              </div>
+              <div class="sm:text-right flex flex-col justify-center">
+                <div class="text-xs text-slate-400 font-bold">Arti Indonesia:</div>
+                <div id="penaltyIdText" class="text-xl sm:text-2xl font-black text-emerald-400 mt-0.5"></div>
+                <div id="penaltyUserTyped" class="text-xs text-rose-400 mt-1"></div>
+              </div>
+            </div>
+
+            <!-- Jembatan Keledai Pengingat -->
+            <div id="drillResultTrick" class="text-xs sm:text-sm text-slate-200 bg-indigo-950/30 p-3.5 rounded-xl border border-indigo-500/30"></div>
+          </div>
+
+          <!-- Box Menang Tamat 1 Halaman/Set -->
+          <div id="gauntletVictoryBox" class="hidden p-6 rounded-2xl border-2 border-emerald-400 bg-emerald-950/20 text-center flex flex-col items-center gap-3">
+            <div class="text-5xl">👑⚡</div>
+            <h3 class="text-xl font-black text-white">LUAR BIASA! Anda Menamatkan Seluruh Rantai Tanpa Salah!</h3>
+            <p class="text-xs sm:text-sm text-slate-300 max-w-md">
+              Semua kotoba di halaman ini sudah berhasil Anda ketik dari #1 sampai selesai tanpa satu pun kesalahan.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-1">
+              <button onclick="lockAllInActivePool()" class="px-4 py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs sm:text-sm hover:bg-emerald-400 transition">
+                🔒 Tandai Semua Sudah Hafal
+              </button>
+              <button onclick="shuffleAndRestartGauntlet()" class="px-4 py-2.5 rounded-xl bg-slate-800 text-white font-bold text-xs sm:text-sm hover:bg-slate-700 border border-slate-700 transition">
+                🔀 Acak Urutan & Main Lagi
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1035,27 +1149,409 @@
     // List blind state
     let listBlind = { meaning: false, furigana: false };
 
-    // Drill state
+    // ==================== STATE KETIK GAUNTLET (SUDDEN DEATH) ====================
     let currentDrillWord = null;
-    let drillRightCount = 0;
-    let drillWrongCount = 0;
-    let drillCombo = 0;
-    let drillAnswered = false;
+    let gauntletIndex = 0;
+    let gauntletBest = 0;
+    let gauntletResets = 0;
+    let currentPromptDirection = "to_jp"; // "to_jp" atau "to_id"
+    let penaltyInterval = null;
+    let penaltyTimeLeft = 0;
+    let audioRepeatTimeouts = [];
+    let isInPenalty = false;
 
-    // ==================== AUDIO TTS JEPANG ====================
-    function speakJP(text) {
+    // ==================== MESIN AUDIO ANTI-BISU (MULTI-ENGINE + EFEK SUARA) ====================
+    let selectedAudioEngine = "auto";
+    let availableVoices = [];
+    let activeUtterances = []; // Mencegah garbage-collection bug di Chrome/Android
+    let currentHtmlAudio = null;
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) audioCtx = new AudioCtx();
+      }
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Efek bunyi sintetis (Web Audio API) yang dijamin 100% bunyi tanpa file eksternal
+    function playToneBeep(type) {
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+        if (type === "correct") {
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(587.33, now); // D5
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.14); // A5
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.start(now);
+          osc.stop(now + 0.18);
+        } else if (type === "wrong") {
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.linearRampToValueAtTime(130, now + 0.25);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+          osc.start(now);
+          osc.stop(now + 0.28);
+        } else if (type === "ping") {
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(740, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          osc.start(now);
+          osc.stop(now + 0.1);
+        }
+      } catch (e) {
+        // Abaikan jika browser memblokir
+      }
+    }
+
+    function loadSpeechVoices() {
       if (!("speechSynthesis" in window)) return;
+      availableVoices = window.speechSynthesis.getVoices() || [];
+    }
+
+    if ("speechSynthesis" in window) {
+      loadSpeechVoices();
+      window.speechSynthesis.onvoiceschanged = loadSpeechVoices;
+    }
+
+    function findWordObject(textOrWord) {
+      if (textOrWord && typeof textOrWord === "object") return textOrWord;
+      const found = KOTOBA_13_20.find(
+        w => w.furigana === textOrWord || w.kanji === textOrWord || w.id === textOrWord
+      );
+      if (found) return found;
+      return { kanji: String(textOrWord), furigana: String(textOrWord), romaji: String(textOrWord) };
+    }
+
+    function changeAudioEngine(val) {
+      selectedAudioEngine = val;
+      testAudioSystem();
+    }
+
+    function testAudioSystem() {
+      playToneBeep("correct");
+      const sample = activeList[currentIndex] || KOTOBA_13_20[0];
+      speakJP(sample);
+    }
+
+    function stopAllAudioPlayback() {
+      if (currentHtmlAudio) {
+        try {
+          currentHtmlAudio.pause();
+          currentHtmlAudio.currentTime = 0;
+        } catch (e) {}
+        currentHtmlAudio = null;
+      }
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+      activeUtterances = [];
+    }
+
+    // Bersihkan teks arti Indonesia agar dibaca natural oleh TTS Indonesia
+    function formatIndoForSpeech(meaningText) {
+      return (meaningText || "")
+        .replace(/\//g, " atau ")
+        .replace(/[()]/g, ", ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    // Putar via Cloud TTS (mendukung bahasa Jepang 'ja' maupun Indonesia 'id')
+    function playViaCloudTTS(text, langCode, fallbackFn, onDone) {
+      try {
+        const tl = langCode || "ja";
+        const url = `https://translate.googleapis.com/translate_tts?client=gtx&ie=UTF-8&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`;
+        const audio = new Audio();
+        audio.referrerPolicy = "no-referrer";
+        audio.src = url;
+        currentHtmlAudio = audio;
+
+        let settled = false;
+        const safetyTimer = setTimeout(() => {
+          if (!settled) {
+            settled = true;
+            fallbackFn(onDone);
+          }
+        }, 1200);
+
+        audio.onplaying = () => {
+          settled = true;
+          clearTimeout(safetyTimer);
+        };
+        audio.onended = () => {
+          clearTimeout(safetyTimer);
+          if (onDone) onDone();
+        };
+        audio.onerror = () => {
+          clearTimeout(safetyTimer);
+          if (!settled) {
+            settled = true;
+            fallbackFn(onDone);
+          }
+        };
+
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            clearTimeout(safetyTimer);
+            if (!settled) {
+              settled = true;
+              fallbackFn(onDone);
+            }
+          });
+        }
+      } catch (e) {
+        fallbackFn(onDone);
+      }
+    }
+
+    // Putar suara Bahasa Indonesia Native (id-ID)
+    function playViaWebSpeechID(indoText, onDone) {
+      if (!("speechSynthesis" in window)) {
+        playToneBeep("ping");
+        if (onDone) setTimeout(onDone, 500);
+        return;
+      }
+
+      loadSpeechVoices();
+      const idVoice = availableVoices.find(v => v.lang && (v.lang.toLowerCase().startsWith("id") || v.lang.toLowerCase().startsWith("ms")));
+      const defaultVoice = availableVoices[0] || null;
+
       window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = "ja-JP";
-      u.rate = 0.92;
-      window.speechSynthesis.speak(u);
+      window.speechSynthesis.resume();
+
+      setTimeout(() => {
+        const cleanText = formatIndoForSpeech(indoText);
+        const u = new SpeechSynthesisUtterance(cleanText);
+        activeUtterances.push(u);
+
+        if (idVoice) {
+          u.voice = idVoice;
+          u.lang = idVoice.lang || "id-ID";
+        } else if (defaultVoice) {
+          u.voice = defaultVoice;
+          u.lang = "id-ID";
+        } else {
+          u.lang = "id-ID";
+        }
+        u.rate = 0.98;
+
+        let finished = false;
+        const watchdog = setTimeout(() => {
+          if (!finished) {
+            finished = true;
+            if (onDone) onDone();
+          }
+        }, 2200);
+
+        u.onend = () => {
+          if (!finished) {
+            finished = true;
+            clearTimeout(watchdog);
+            activeUtterances = activeUtterances.filter(item => item !== u);
+            if (onDone) onDone();
+          }
+        };
+
+        u.onerror = () => {
+          if (!finished) {
+            finished = true;
+            clearTimeout(watchdog);
+            if (onDone) onDone();
+          }
+        };
+
+        window.speechSynthesis.resume();
+        window.speechSynthesis.speak(u);
+      }, 50);
+    }
+
+    function speakID(textOrWord, onDone) {
+      const wordObj = findWordObject(textOrWord);
+      const rawIndo = wordObj.meaning || String(textOrWord);
+      const cleanIndo = formatIndoForSpeech(rawIndo);
+
+      stopAllAudioPlayback();
+      playToneBeep("ping");
+
+      if (selectedAudioEngine === "cloud") {
+        playViaCloudTTS(cleanIndo, "id", (doneCb) => playViaWebSpeechID(cleanIndo, doneCb), onDone);
+      } else {
+        loadSpeechVoices();
+        const hasNativeID = availableVoices.some(v => v.lang && (v.lang.toLowerCase().startsWith("id") || v.lang.toLowerCase().startsWith("ms")));
+        if (hasNativeID || selectedAudioEngine === "native" || selectedAudioEngine === "phonetic") {
+          playViaWebSpeechID(cleanIndo, onDone);
+        } else {
+          playViaCloudTTS(cleanIndo, "id", (doneCb) => playViaWebSpeechID(cleanIndo, doneCb), onDone);
+        }
+      }
+    }
+
+    // Putar via Web Speech API dengan perbaikan bug Chrome cancel() + fallback Romaji jika voice Jepang tidak ada
+    function playViaWebSpeech(wordObj, forcePhonetic, onDone) {
+      if (!("speechSynthesis" in window)) {
+        playToneBeep("ping");
+        if (onDone) setTimeout(onDone, 500);
+        return;
+      }
+
+      loadSpeechVoices();
+      const jpVoice = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith("ja"));
+      const idVoice = availableVoices.find(v => v.lang && v.lang.toLowerCase().startsWith("id"));
+      const defaultVoice = availableVoices[0] || null;
+
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.resume();
+
+      // Delay 50ms setelah cancel() wajib di Chrome/Android agar kalimat baru tidak ikut terhapus
+      setTimeout(() => {
+        const usePhonetic = forcePhonetic || (!jpVoice && selectedAudioEngine !== "native");
+        const textToRead = usePhonetic
+          ? (wordObj.romaji || wordObj.furigana)
+          : (wordObj.furigana || wordObj.kanji);
+
+        const u = new SpeechSynthesisUtterance(textToRead);
+        activeUtterances.push(u);
+
+        if (!usePhonetic && jpVoice) {
+          u.voice = jpVoice;
+          u.lang = jpVoice.lang || "ja-JP";
+          u.rate = 0.92;
+        } else if (!usePhonetic && selectedAudioEngine === "native") {
+          u.lang = "ja-JP";
+          u.rate = 0.92;
+        } else {
+          // Gunakan voice Indonesia / default untuk membaca Romaji (pelafalan Romaji Jepang = fonetik Indonesia)
+          if (idVoice) {
+            u.voice = idVoice;
+            u.lang = idVoice.lang;
+          } else if (defaultVoice) {
+            u.voice = defaultVoice;
+            u.lang = defaultVoice.lang;
+          } else {
+            u.lang = "id-ID";
+          }
+          u.rate = 0.9;
+        }
+
+        let started = false;
+        let finished = false;
+
+        // Jika dalam 600ms voice ja-JP gagal mulai (karena voice pack belum terinstal di HP/Windows), paksa baca Romaji
+        const watchdog = setTimeout(() => {
+          if (!started && !usePhonetic) {
+            playViaWebSpeech(wordObj, true, onDone);
+          } else if (!finished) {
+            finished = true;
+            if (onDone) onDone();
+          }
+        }, 1800);
+
+        u.onstart = () => {
+          started = true;
+        };
+
+        u.onend = () => {
+          if (!finished) {
+            finished = true;
+            clearTimeout(watchdog);
+            activeUtterances = activeUtterances.filter(item => item !== u);
+            if (onDone) onDone();
+          }
+        };
+
+        u.onerror = () => {
+          clearTimeout(watchdog);
+          if (!usePhonetic && !finished) {
+            finished = true;
+            playViaWebSpeech(wordObj, true, onDone);
+          } else if (!finished) {
+            finished = true;
+            if (onDone) onDone();
+          }
+        };
+
+        window.speechSynthesis.resume();
+        window.speechSynthesis.speak(u);
+      }, 50);
+    }
+
+    function speakJP(textOrWord, onDone) {
+      const wordObj = findWordObject(textOrWord);
+      stopAllAudioPlayback();
+      playToneBeep("ping");
+
+      const jpText = wordObj.furigana || wordObj.kanji;
+
+      if (selectedAudioEngine === "cloud") {
+        playViaCloudTTS(jpText, "ja", (doneCb) => playViaWebSpeech(wordObj, false, doneCb), onDone);
+      } else if (selectedAudioEngine === "phonetic") {
+        playViaWebSpeech(wordObj, true, onDone);
+      } else if (selectedAudioEngine === "native") {
+        playViaWebSpeech(wordObj, false, onDone);
+      } else {
+        // Mode Otomatis Pintar:
+        // 1. Jika perangkat punya voice Jepang asli (ja-JP), gunakan langsung
+        // 2. Jika tidak ada, coba Cloud Jepang dulu, lalu otomatis fallback ke Fonetik Romaji
+        loadSpeechVoices();
+        const hasNativeJP = availableVoices.some(v => v.lang && v.lang.toLowerCase().startsWith("ja"));
+        if (hasNativeJP) {
+          playViaWebSpeech(wordObj, false, onDone);
+        } else {
+          playViaCloudTTS(jpText, "ja", (doneCb) => playViaWebSpeech(wordObj, true, doneCb), onDone);
+        }
+      }
+    }
+
+    // Putar audio 3 kali berturut-turut sesuai konteks bahasa jawaban yang salah (Jepang atau Indonesia)
+    function speakPenaltyThreeTimes(textOrWord, targetLang) {
+      clearAudioRepeatTimeouts();
+      stopAllAudioPlayback();
+
+      const wordObj = findWordObject(textOrWord);
+      const badge = document.getElementById("audioRepeatBadge");
+      const langLabel = targetLang === "id" ? "Audio Indo" : "Audio Jepang";
+
+      const playStep = (step) => {
+        if (!isInPenalty) return;
+        if (badge) badge.textContent = `🔊 ${langLabel}: ${step} / 3`;
+        if (targetLang === "id") {
+          speakID(wordObj);
+        } else {
+          speakJP(wordObj);
+        }
+      };
+
+      playStep(1);
+      audioRepeatTimeouts.push(setTimeout(() => playStep(2), 2100));
+      audioRepeatTimeouts.push(setTimeout(() => playStep(3), 4200));
+    }
+
+    function clearAudioRepeatTimeouts() {
+      audioRepeatTimeouts.forEach(t => clearTimeout(t));
+      audioRepeatTimeouts = [];
+      stopAllAudioPlayback();
     }
 
     function speakCurrentWord() {
       if (!activeList.length) return;
       const w = activeList[currentIndex];
-      speakJP(w.furigana || w.kanji);
+      speakJP(w);
     }
 
     // ==================== FILTER & PROGRESS ====================
@@ -1111,6 +1607,7 @@
 
     function setMode(mode) {
       stopAutoFiveSec();
+      clearPenaltyTimers();
       currentMode = mode;
       ["hack", "list", "drill"].forEach(m => {
         const sec = document.getElementById("section-" + m);
@@ -1129,7 +1626,7 @@
     function refreshCurrentMode() {
       if (currentMode === "hack") renderHackCard();
       if (currentMode === "list") renderCheatList();
-      if (currentMode === "drill") nextDrill();
+      if (currentMode === "drill") resetGauntletToStart();
     }
 
     // ==================== MODE 1: SUNTIK BAYANGAN 5 DETIK ====================
@@ -1358,86 +1855,307 @@
       renderCheatList();
     }
 
-    // ==================== MODE 3: TES REFLEKS KILAT ====================
-    function nextDrill() {
-      const pool = activeList.length >= 4 ? activeList : KOTOBA_13_20;
-      const mode = document.getElementById("drillModeSelect").value;
-      drillAnswered = false;
-      document.getElementById("drillHackReveal").classList.add("hidden");
+    // ==================== MODE 2: KETIK GAUNTLET (SALAH = 7 DETIK + 3X AUDIO + RESET KE #1) ====================
+    function getGauntletPool() {
+      return activeList.length > 0 ? activeList : KOTOBA_13_20;
+    }
 
-      currentDrillWord = pool[Math.floor(Math.random() * pool.length)];
-      document.getElementById("drillMeta").textContent = `Hal. ${currentDrillWord.page} • No. ${currentDrillWord.no}`;
+    function clearPenaltyTimers() {
+      if (penaltyInterval) {
+        clearInterval(penaltyInterval);
+        penaltyInterval = null;
+      }
+      clearAudioRepeatTimeouts();
+      isInPenalty = false;
+      const bar = document.getElementById("penaltySevenSecBar");
+      if (bar) bar.style.width = "0%";
+    }
 
-      if (mode === "jp_id") {
+    function resetGauntletToStart() {
+      clearPenaltyTimers();
+      gauntletIndex = 0;
+      renderGauntletStep();
+    }
+
+    function shuffleAndRestartGauntlet() {
+      shuffleWords();
+      gauntletIndex = 0;
+      renderGauntletStep();
+    }
+
+    function renderGauntletChain() {
+      const pool = getGauntletPool();
+      const dotsContainer = document.getElementById("gauntletChainDots");
+      if (!dotsContainer) return;
+      dotsContainer.innerHTML = "";
+
+      pool.forEach((w, idx) => {
+        const dot = document.createElement("div");
+        if (idx < gauntletIndex) {
+          dot.className = "w-6 h-6 rounded-lg bg-emerald-500 text-slate-950 font-black text-[11px] flex items-center justify-center shadow-sm";
+          dot.textContent = "✓";
+        } else if (idx === gauntletIndex) {
+          dot.className = "w-6 h-6 rounded-lg bg-cyan-400 text-slate-950 font-black text-[11px] flex items-center justify-center ring-2 ring-white animate-pulse";
+          dot.textContent = idx + 1;
+        } else {
+          dot.className = "w-6 h-6 rounded-lg bg-slate-800/90 text-slate-400 font-bold text-[11px] flex items-center justify-center border border-slate-700/60";
+          dot.textContent = idx + 1;
+        }
+        dot.title = `Kotoba #${idx + 1}`;
+        dotsContainer.appendChild(dot);
+      });
+
+      document.getElementById("gauntletPosText").textContent = `${Math.min(gauntletIndex + 1, pool.length)} / ${pool.length}`;
+      document.getElementById("gauntletBestText").textContent = `${gauntletBest} / ${pool.length}`;
+      document.getElementById("gauntletResetCount").textContent = `${gauntletResets}x`;
+    }
+
+    function renderGauntletStep() {
+      clearPenaltyTimers();
+      const pool = getGauntletPool();
+      const victoryBox = document.getElementById("gauntletVictoryBox");
+      const revealBox = document.getElementById("drillHackReveal");
+      const formEl = document.getElementById("gauntletForm");
+      const inputEl = document.getElementById("gauntletInput");
+
+      revealBox.classList.add("hidden");
+
+      if (gauntletIndex >= pool.length) {
+        victoryBox.classList.remove("hidden");
+        formEl.classList.add("hidden");
+        renderGauntletChain();
+        return;
+      }
+
+      victoryBox.classList.add("hidden");
+      formEl.classList.remove("hidden");
+
+      currentDrillWord = pool[gauntletIndex];
+      const modeSelect = document.getElementById("drillModeSelect").value;
+      if (modeSelect === "mixed") {
+        currentPromptDirection = Math.random() < 0.55 ? "to_jp" : "to_id";
+      } else {
+        currentPromptDirection = modeSelect;
+      }
+
+      document.getElementById("drillMeta").textContent = `Kotoba #${gauntletIndex + 1} • Hal. ${currentDrillWord.page} No. ${currentDrillWord.no}`;
+      const badge = document.getElementById("drillPromptBadge");
+      const audioBtn = document.getElementById("drillAudioBtn");
+
+      if (currentPromptDirection === "to_jp") {
+        badge.textContent = "🇯🇵 SOAL INDO → KETIK JEPANGNYA";
+        badge.className = "px-2.5 py-1 rounded-lg font-extrabold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30";
+        document.getElementById("drillSub").textContent = "Dengar & Terjemahkan ke Bahasa Jepang (Romaji / Kana / Kanji):";
+        document.getElementById("drillMain").textContent = currentDrillWord.meaning;
+        inputEl.placeholder = "Ketik Romaji (misal: kibishii) atau Jepang...";
+        if (audioBtn) audioBtn.innerHTML = "🔊 Ulangi Soal (Indo)";
+      } else {
+        badge.textContent = "🇮🇩 SOAL JEPANG → KETIK ARTI INDO";
+        badge.className = "px-2.5 py-1 rounded-lg font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
         document.getElementById("drillSub").textContent = `${currentDrillWord.furigana} (${currentDrillWord.romaji})`;
         document.getElementById("drillMain").textContent = currentDrillWord.kanji;
-      } else if (mode === "kanji_only") {
-        document.getElementById("drillSub").textContent = "Ingat bentuk Kanji & Jembatan Bunyinya:";
-        document.getElementById("drillMain").textContent = currentDrillWord.kanji;
-      } else {
-        document.getElementById("drillSub").textContent = "Pilih Kotoba Jepang yang tepat:";
-        document.getElementById("drillMain").textContent = currentDrillWord.meaning;
+        inputEl.placeholder = "Ketik arti Bahasa Indonesianya...";
+        if (audioBtn) audioBtn.innerHTML = "🔊 Ulangi Soal (Jepang)";
       }
 
-      const distractors = KOTOBA_13_20
-        .filter(x => x.id !== currentDrillWord.id)
-        .sort(() => 0.5 - Math.random())
-        .slice(0, 3);
+      inputEl.disabled = false;
+      inputEl.value = "";
+      inputEl.focus();
+      renderGauntletChain();
 
-      const options = [...distractors, currentDrillWord].sort(() => 0.5 - Math.random());
-      const optBox = document.getElementById("drillOptions");
-      optBox.innerHTML = "";
-
-      options.forEach(opt => {
-        const btn = document.createElement("button");
-        btn.className = "p-4 rounded-2xl bg-[#090d16] border-2 border-slate-800 hover:border-cyan-500/60 text-left font-bold text-sm sm:text-base text-slate-100 transition flex items-center justify-between";
-        btn.innerHTML = mode === "id_jp"
-          ? `<span class="jp-font">${opt.kanji} <span class="text-cyan-400 text-xs">(${opt.furigana})</span></span>`
-          : `<span>${opt.meaning}</span>`;
-        btn.onclick = () => checkDrill(opt, btn);
-        optBox.appendChild(btn);
-      });
+      // Otomatis bacakan soal setiap kali soal tampil / pindah nomor (jika sedang di mode Ketik Gauntlet)
+      if (currentMode === "drill") {
+        setTimeout(() => {
+          if (!isInPenalty && currentMode === "drill") {
+            speakDrillQuestion();
+          }
+        }, 120);
+      }
     }
 
-    function checkDrill(selected, btnEl) {
-      if (drillAnswered) return;
-      drillAnswered = true;
+    // Normalisasi string agar adil saat mengetik romaji (vokal panjang uu/ou/aa/ii/ee, spasi, tanda baca)
+    function normalizeRomaji(str) {
+      return (str || "")
+        .toLowerCase()
+        .replace(/[\s\-_'".,()/]/g, "")
+        .replace(/ou/g, "o")
+        .replace(/uu/g, "u")
+        .replace(/aa/g, "a")
+        .replace(/ii/g, "i")
+        .replace(/ee/g, "e")
+        .replace(/oo/g, "o")
+        .replace(/tsu/g, "tu")
+        .replace(/shi/g, "si")
+        .replace(/chi/g, "ti")
+        .replace(/fu/g, "hu")
+        .replace(/j/g, "z");
+    }
 
-      const isCorrect = selected.id === currentDrillWord.id;
-      const revealBox = document.getElementById("drillHackReveal");
-      const titleEl = document.getElementById("drillResultTitle");
-      const trickEl = document.getElementById("drillResultTrick");
-      revealBox.classList.remove("hidden");
+    function cleanIndoText(str) {
+      return (str || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function isGauntletAnswerCorrect(userRaw, word, direction) {
+      const raw = (userRaw || "").trim();
+      if (!raw) return false;
+
+      if (direction === "to_jp") {
+        // Cek Kanji atau Furigana langsung
+        if (raw === word.kanji || raw === word.furigana) return true;
+
+        // Cek Romaji eksak atau tanpa spasi
+        const userNorm = normalizeRomaji(raw);
+        const targetNorm = normalizeRomaji(word.romaji);
+        if (userNorm && (userNorm === targetNorm)) return true;
+
+        // Untuk kata panjang seperti "jiaensosan natoriumu", "jiaensosan" saja juga diterima sesuai furigana modul
+        const firstPartRomaji = normalizeRomaji(word.romaji.split(" ")[0]);
+        if (word.romaji.includes("natoriumu") && userNorm === firstPartRomaji) return true;
+
+        return false;
+      } else {
+        // Cek Arti Indonesia: pecah alternatif arti berdasarkan "/", "(", ")", ","
+        const userClean = cleanIndoText(raw);
+        if (!userClean || userClean.length < 2) return false;
+
+        const fullMeaningClean = cleanIndoText(word.meaning);
+        if (userClean === fullMeaningClean) return true;
+
+        // Pecah bagian arti di luar dan di dalam kurung atau garis miring
+        const segments = word.meaning
+          .toLowerCase()
+          .split(/[\/(),\-]/)
+          .map(s => cleanIndoText(s))
+          .filter(Boolean);
+
+        for (const seg of segments) {
+          if (userClean === seg) return true;
+          // Jika user mengetik kata inti (misal "kain lap", "lap", "mendinginkan", "dingin", "benda asing")
+          if (seg.split(" ").length > 1 && userClean.length >= 4 && seg.includes(userClean)) {
+            return true;
+          }
+          if (userClean.includes(seg) && seg.length >= 3) {
+            return true;
+          }
+        }
+        return false;
+      }
+    }
+
+    function submitGauntletAnswer(e) {
+      if (e) e.preventDefault();
+      if (isInPenalty) return;
+
+      const inputEl = document.getElementById("gauntletInput");
+      const userAns = inputEl.value.trim();
+      if (!userAns) return;
+
+      const isCorrect = isGauntletAnswerCorrect(userAns, currentDrillWord, currentPromptDirection);
 
       if (isCorrect) {
-        drillRightCount++;
-        drillCombo++;
-        btnEl.className = "p-4 rounded-2xl bg-emerald-500/20 border-2 border-emerald-400 text-left font-extrabold text-sm sm:text-base text-emerald-200 flex items-center justify-between";
-        revealBox.className = "mt-4 p-4 rounded-2xl border border-emerald-500/40 bg-emerald-950/20 flex flex-col gap-2";
-        titleEl.className = "font-extrabold text-sm text-emerald-400";
-        titleEl.textContent = `✅ TEPAT! ${currentDrillWord.kanji} (${currentDrillWord.furigana}) = ${currentDrillWord.meaning}`;
-        speakJP(currentDrillWord.furigana);
+        // Bunyikan efek benar, lalu lanjut ke soal berikutnya (soal berikutnya akan otomatis dibacakan audionya)
+        playToneBeep("correct");
+        gauntletIndex++;
+        if (gauntletIndex > gauntletBest) {
+          gauntletBest = gauntletIndex;
+        }
+
+        const toast = document.getElementById("gauntletSuccessToast");
+        document.getElementById("gauntletSuccessText").textContent =
+          `✅ TEPAT! ${currentDrillWord.kanji} (${currentDrillWord.furigana} / ${currentDrillWord.romaji}) = ${currentDrillWord.meaning}`;
+        toast.classList.remove("hidden");
+        setTimeout(() => toast.classList.add("hidden"), 1400);
+
+        renderGauntletStep();
       } else {
-        drillWrongCount++;
-        drillCombo = 0;
-        btnEl.className = "p-4 rounded-2xl bg-rose-500/20 border-2 border-rose-500 text-left font-extrabold text-sm sm:text-base text-rose-200 flex items-center justify-between";
-        revealBox.className = "mt-4 p-4 rounded-2xl border border-rose-500/40 bg-rose-950/20 flex flex-col gap-2";
-        titleEl.className = "font-extrabold text-sm text-rose-400";
-        titleEl.textContent = `❌ Salah! Jawaban: ${currentDrillWord.kanji} (${currentDrillWord.furigana}) = ${currentDrillWord.meaning}`;
+        triggerSevenSecPenalty(userAns);
       }
-
-      trickEl.innerHTML = `
-        <div class="font-extrabold text-amber-300 mb-1">${currentDrillWord.emoji} Jembatan Otak: ${currentDrillWord.hook}</div>
-        <div>${currentDrillWord.story}</div>
-      `;
-
-      document.getElementById("drillRight").textContent = drillRightCount;
-      document.getElementById("drillWrong").textContent = drillWrongCount;
-      document.getElementById("drillStreak").textContent = drillCombo;
     }
 
-    function speakDrillWord() {
-      if (currentDrillWord) speakJP(currentDrillWord.furigana);
+    function triggerGauntletGiveUp() {
+      if (isInPenalty) return;
+      triggerSevenSecPenalty("(Menyerah / Lupa)");
+    }
+
+    function triggerSevenSecPenalty(userTypedText) {
+      isInPenalty = true;
+      gauntletResets++;
+      playToneBeep("wrong");
+
+      const inputEl = document.getElementById("gauntletInput");
+      inputEl.disabled = true;
+
+      const toast = document.getElementById("gauntletSuccessToast");
+      toast.classList.add("hidden");
+
+      // Tampilkan Box Penalti 7 Detik
+      const revealBox = document.getElementById("drillHackReveal");
+      revealBox.classList.remove("hidden");
+
+      document.getElementById("penaltyJpText").textContent = `${currentDrillWord.kanji} (${currentDrillWord.furigana})`;
+      document.getElementById("penaltyRomajiText").textContent = `Ketik Romaji: ${currentDrillWord.romaji.toUpperCase()}`;
+      document.getElementById("penaltyIdText").textContent = currentDrillWord.meaning;
+      document.getElementById("penaltyUserTyped").textContent = `Ketikan Anda: "${userTypedText}"`;
+
+      document.getElementById("drillResultTrick").innerHTML = `
+        <div class="font-extrabold text-amber-300 mb-1">${currentDrillWord.emoji} ⚡ Jembatan Otak: ${currentDrillWord.hook}</div>
+        <div class="leading-relaxed">${currentDrillWord.story}</div>
+        <div class="text-xs text-cyan-300 mt-1.5 font-semibold">🔍 Visual Kanji: ${currentDrillWord.kanjiTip}</div>
+      `;
+
+      // Putar Audio 3 Kali Berturut-turut sesuai konteks jawaban yang seharusnya diketik!
+      // - Jika soalnya Jepang -> Indo (to_id) dan salah, putar Native Indonesia 3x
+      // - Jika soalnya Indo -> Jepang (to_jp) dan salah, putar Native Jepang 3x
+      const penaltyTargetLang = currentPromptDirection === "to_id" ? "id" : "jp";
+      speakPenaltyThreeTimes(currentDrillWord, penaltyTargetLang);
+
+      // Jalankan Countdown 7.0 Detik -> Lalu Otomatis Reset ke Kotoba #1
+      penaltyTimeLeft = 7.0;
+      const bar = document.getElementById("penaltySevenSecBar");
+      const numEl = document.getElementById("penaltyCountdownNum");
+      bar.style.width = "100%";
+      numEl.textContent = "7.0";
+
+      penaltyInterval = setInterval(() => {
+        penaltyTimeLeft -= 0.1;
+        if (penaltyTimeLeft <= 0) {
+          finishPenaltyAndResetNow();
+        } else {
+          numEl.textContent = penaltyTimeLeft.toFixed(1);
+          bar.style.width = Math.max(0, (penaltyTimeLeft / 7.0) * 100) + "%";
+        }
+      }, 100);
+
+      renderGauntletChain();
+    }
+
+    function finishPenaltyAndResetNow() {
+      clearPenaltyTimers();
+      gauntletIndex = 0; // Mengulang kembali ke Kotoba #1 (awal)!
+      renderGauntletStep();
+    }
+
+    function lockAllInActivePool() {
+      const pool = getGauntletPool();
+      pool.forEach(w => {
+        if (!lockedIds.includes(w.id)) lockedIds.push(w.id);
+      });
+      saveLocked();
+      renderGauntletStep();
+    }
+
+    // Membacakan soal sesuai arah tebakan saat ini (Indo jika tebak Jepang, Jepang jika tebak Indo)
+    function speakDrillQuestion() {
+      if (!currentDrillWord) return;
+      if (currentPromptDirection === "to_jp") {
+        speakID(currentDrillWord);
+      } else {
+        speakJP(currentDrillWord);
+      }
     }
 
     function resetLocked() {
