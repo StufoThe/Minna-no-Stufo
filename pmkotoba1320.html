@@ -137,7 +137,7 @@
         <span>🧠</span> 1. Suntik Bayangan (5s)
       </button>
       <button onclick="setMode('drill')" id="modeBtn-drill" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
-        <span>💀</span> 2. Ketik Gauntlet (Reset #1)
+        <span>🚩</span> 2. Ketik Gauntlet (Checkpoint)
       </button>
       <button onclick="setMode('list')" id="modeBtn-list" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
         <span>📜</span> 3. Baca Cepat Semua Trik
@@ -277,39 +277,61 @@
       <div id="cheatListContainer" class="grid grid-cols-1 gap-3"></div>
     </section>
 
-    <!-- ==================== MODE 2: KETIK GAUNTLET (SALAH = 7 DETIK + 3X AUDIO + RESET KE AWAL) ==================== -->
+    <!-- ==================== MODE 2: KETIK GAUNTLET (DENGAN CHECKPOINT HALAMAN) ==================== -->
     <section id="section-drill" class="hidden flex-1 flex flex-col gap-4">
       <!-- Bar Pengaturan & Statistik Gauntlet -->
       <div class="w-full bg-[#111827] border border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
         <div class="flex flex-wrap items-center gap-2 text-xs">
-          <span class="text-slate-400 font-bold">arah Tebakan:</span>
-          <select id="drillModeSelect" onchange="resetGauntletToStart()" class="bg-[#090d16] border border-slate-700 text-white rounded-xl px-3 py-1.5 font-bold focus:outline-none focus:border-emerald-500">
-            <option value="mixed">🎲 Acak (Ketik Jepang & Indo Bergantian)</option>
-            <option value="to_jp">🇯🇵 Tampil Indo → Ketik Jepang (Romaji/Kana/Kanji)</option>
-            <option value="to_id">🇮🇩 Tampil Jepang → Ketik Arti Indonesia</option>
-          </select>
+          <div class="flex items-center gap-1.5">
+            <span class="text-slate-400 font-bold">Tebakan:</span>
+            <select id="drillModeSelect" onchange="resetGauntletToCheckpoint()" class="bg-[#090d16] border border-slate-700 text-white rounded-xl px-2.5 py-1.5 font-bold focus:outline-none focus:border-emerald-500">
+              <option value="mixed">🎲 Acak (Jepang & Indo)</option>
+              <option value="to_jp">🇯🇵 Indo → Ketik Jepang</option>
+              <option value="to_id">🇮🇩 Jepang → Ketik Indo</option>
+            </select>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <span class="text-slate-400 font-bold">Sistem Reset:</span>
+            <select id="checkpointModeSelect" onchange="renderGauntletChain()" class="bg-[#090d16] border border-emerald-500/40 text-emerald-300 rounded-xl px-2.5 py-1.5 font-bold focus:outline-none focus:border-emerald-500">
+              <option value="page">🚩 Checkpoint per Halaman (Default)</option>
+              <option value="five">⚡ Mini-Checkpoint Tiap 5 Kata</option>
+              <option value="hardcore">💀 Hardcore (Reset Jauh ke #1 Awal)</option>
+            </select>
+          </div>
         </div>
 
-        <div class="flex items-center gap-3 text-xs font-bold">
+        <div class="flex items-center gap-2.5 text-xs font-bold">
           <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-            Posisi: <b id="gauntletPosText">1 / 15</b>
+            Total: <b id="gauntletPosText">1 / 15</b>
           </span>
           <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300">
             🏆 Rekor: <b id="gauntletBestText">0</b>
           </span>
           <span class="px-2.5 py-1 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400">
-            💀 Reset: <b id="gauntletResetCount">0x</b>
+            💀 Ulang: <b id="gauntletResetCount">0x</b>
           </span>
         </div>
       </div>
 
-      <!-- Jejak Rantai Kotoba (Visual Progress 1 -> Akhir) -->
-      <div class="w-full bg-[#111827] border border-slate-800 rounded-2xl p-3.5 flex flex-col gap-2">
-        <div class="flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-          <span>🔥 Rantai Ingatan (Salah 1x = Wajib Ulang Ketik dari Kotoba #1!)</span>
-          <span id="gauntletWarningTag" class="text-cyan-400 font-bold">Ketik jawaban lalu tekan Enter ↵</span>
+      <!-- Jejak Checkpoint Halaman & Rantai Kotoba Halaman Aktif -->
+      <div class="w-full bg-[#111827] border border-slate-800 rounded-2xl p-3.5 flex flex-col gap-3">
+        <!-- Daftar Stage Checkpoint Halaman -->
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+            <span>🚩 Stage Checkpoint Halaman (Klik halaman untuk lompat ke checkpoint tersebut):</span>
+            <span id="activeCheckpointLabel" class="text-emerald-400 font-extrabold">Checkpoint Aktif: Hal. 13 (#1)</span>
+          </div>
+          <div id="gauntletPageStages" class="flex flex-wrap gap-1.5"></div>
         </div>
-        <div id="gauntletChainDots" class="flex flex-wrap gap-1.5"></div>
+
+        <div class="border-t border-slate-800/80 pt-2.5 flex flex-col gap-2">
+          <div class="flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+            <span id="gauntletCurrentStageTitle">🔥 Rantai Kotoba di Checkpoint Ini (Salah = Ulang dari #1 di Checkpoint ini saja):</span>
+            <span id="gauntletWarningTag" class="text-cyan-400 font-bold">Ketik jawaban lalu tekan Enter ↵</span>
+          </div>
+          <div id="gauntletChainDots" class="flex flex-wrap gap-1.5"></div>
+        </div>
       </div>
 
       <!-- Kartu Utama Ketik Gauntlet -->
@@ -370,17 +392,17 @@
           <div id="drillHackReveal" class="hidden p-5 rounded-2xl border-2 border-rose-500/60 bg-gradient-to-br from-rose-950/40 via-[#101726] to-[#090d16] flex flex-col gap-3.5 shadow-2xl">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-rose-500/30 pb-3">
               <div class="flex items-center gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-rose-500 text-slate-950 font-black text-xs uppercase">💀 SALAH! MENGULANG KE #1</span>
+                <span id="penaltyResetBadge" class="px-2.5 py-1 rounded-lg bg-rose-500 text-slate-950 font-black text-xs uppercase">💀 SALAH! ULANG KE CHECKPOINT</span>
                 <span id="audioRepeatBadge" class="px-2.5 py-1 rounded-lg bg-amber-400/20 border border-amber-400/40 text-amber-300 font-extrabold text-xs">
                   🔊 Audio Native: 1 / 3
                 </span>
               </div>
               <div class="flex items-center gap-2">
                 <span class="text-xs font-extrabold text-rose-300">
-                  Reset otomatis dalam <b id="penaltyCountdownNum" class="text-white text-sm">7.0</b> dtk
+                  Reset ke Checkpoint dlm <b id="penaltyCountdownNum" class="text-white text-sm">7.0</b> dtk
                 </span>
                 <button type="button" onclick="finishPenaltyAndResetNow()" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-600">
-                  Langsung Ulang #1 ↻
+                  Ulang Checkpoint 🚩
                 </button>
               </div>
             </div>
@@ -1597,10 +1619,18 @@
     }
 
     function shuffleWords() {
-      for (let i = activeList.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [activeList[i], activeList[j]] = [activeList[j], activeList[i]];
-      }
+      // Acak urutan kotoba di dalam masing-masing halaman agar sistem Checkpoint per Halaman tetap rapi & tidak loncat-loncat halaman
+      const pages = [...new Set(activeList.map(w => w.page))];
+      let groupedShuffled = [];
+      pages.forEach(p => {
+        const group = activeList.filter(w => w.page === p);
+        for (let i = group.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [group[i], group[j]] = [group[j], group[i]];
+        }
+        groupedShuffled = groupedShuffled.concat(group);
+      });
+      activeList = groupedShuffled;
       currentIndex = 0;
       refreshCurrentMode();
     }
@@ -1855,9 +1885,54 @@
       renderCheatList();
     }
 
-    // ==================== MODE 2: KETIK GAUNTLET (SALAH = 7 DETIK + 3X AUDIO + RESET KE #1) ====================
+    // ==================== MODE 2: KETIK GAUNTLET (DENGAN CHECKPOINT SETIAP HALAMAN) ====================
     function getGauntletPool() {
       return activeList.length > 0 ? activeList : KOTOBA_13_20;
+    }
+
+    // Menghitung index awal dari Checkpoint yang sedang aktif
+    function getCheckpointStartIndex(pool, idx) {
+      if (!pool.length) return 0;
+      const safeIdx = Math.min(Math.max(0, idx), pool.length - 1);
+      const cpModeEl = document.getElementById("checkpointModeSelect");
+      const cpMode = cpModeEl ? cpModeEl.value : "page";
+
+      if (cpMode === "hardcore") {
+        return 0;
+      }
+      if (cpMode === "five") {
+        return Math.floor(safeIdx / 5) * 5;
+      }
+      // Default: "page" -> Cari kotoba pertama yang memiliki halaman sama dengan kata saat ini
+      const currentWordPage = pool[safeIdx].page;
+      const firstIdxOfPage = pool.findIndex(w => w.page === currentWordPage);
+      return firstIdxOfPage >= 0 ? firstIdxOfPage : 0;
+    }
+
+    // Menghitung batas akhir dari Checkpoint yang sedang aktif (untuk tampilan rantai per halaman)
+    function getCheckpointEndIndex(pool, idx) {
+      if (!pool.length) return 0;
+      const safeIdx = Math.min(Math.max(0, idx), pool.length - 1);
+      const cpModeEl = document.getElementById("checkpointModeSelect");
+      const cpMode = cpModeEl ? cpModeEl.value : "page";
+
+      if (cpMode === "hardcore") {
+        return pool.length - 1;
+      }
+      if (cpMode === "five") {
+        const start = Math.floor(safeIdx / 5) * 5;
+        return Math.min(pool.length - 1, start + 4);
+      }
+      const currentWordPage = pool[safeIdx].page;
+      let lastIdx = safeIdx;
+      for (let i = safeIdx; i < pool.length; i++) {
+        if (pool[i].page === currentWordPage) {
+          lastIdx = i;
+        } else {
+          break;
+        }
+      }
+      return lastIdx;
     }
 
     function clearPenaltyTimers() {
@@ -1877,33 +1952,113 @@
       renderGauntletStep();
     }
 
+    function resetGauntletToCheckpoint() {
+      clearPenaltyTimers();
+      const pool = getGauntletPool();
+      gauntletIndex = getCheckpointStartIndex(pool, gauntletIndex);
+      renderGauntletStep();
+    }
+
+    function jumpToPageCheckpoint(pageStr) {
+      clearPenaltyTimers();
+      const pool = getGauntletPool();
+      const targetIdx = pool.findIndex(w => w.page === pageStr);
+      if (targetIdx >= 0) {
+        gauntletIndex = targetIdx;
+        renderGauntletStep();
+      }
+    }
+
     function shuffleAndRestartGauntlet() {
+      const pool = getGauntletPool();
+      const cpStart = getCheckpointStartIndex(pool, gauntletIndex < pool.length ? gauntletIndex : 0);
+      const activePage = pool[cpStart] ? pool[cpStart].page : null;
       shuffleWords();
-      gauntletIndex = 0;
+      const newPool = getGauntletPool();
+      const newStart = activePage ? newPool.findIndex(w => w.page === activePage) : 0;
+      gauntletIndex = newStart >= 0 ? newStart : 0;
       renderGauntletStep();
     }
 
     function renderGauntletChain() {
       const pool = getGauntletPool();
       const dotsContainer = document.getElementById("gauntletChainDots");
-      if (!dotsContainer) return;
-      dotsContainer.innerHTML = "";
+      const stagesContainer = document.getElementById("gauntletPageStages");
+      if (!dotsContainer || !stagesContainer) return;
 
-      pool.forEach((w, idx) => {
+      dotsContainer.innerHTML = "";
+      stagesContainer.innerHTML = "";
+
+      const safeIdx = Math.min(gauntletIndex, pool.length - 1);
+      const cpStart = getCheckpointStartIndex(pool, safeIdx);
+      const cpEnd = getCheckpointEndIndex(pool, safeIdx);
+      const activeWord = pool[safeIdx];
+      const cpMode = document.getElementById("checkpointModeSelect")?.value || "page";
+
+      // 1. Render Stage Checkpoint per Halaman
+      const uniquePages = [...new Set(pool.map(w => w.page))];
+      uniquePages.forEach(p => {
+        const firstIdx = pool.findIndex(w => w.page === p);
+        const pageWords = pool.filter(w => w.page === p);
+        const lastIdx = firstIdx + pageWords.length - 1;
+
+        const isCompleted = gauntletIndex > lastIdx;
+        const isCurrent = activeWord && activeWord.page === p && gauntletIndex < pool.length;
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.onclick = () => jumpToPageCheckpoint(p);
+
+        if (isCompleted) {
+          btn.className = "px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 font-extrabold text-xs flex items-center gap-1 hover:bg-emerald-500/30 transition";
+          btn.innerHTML = `✅ Hal. ${p} <span class="text-[10px] opacity-80">(${pageWords.length})</span>`;
+        } else if (isCurrent) {
+          btn.className = "px-2.5 py-1 rounded-lg bg-cyan-400 text-slate-950 font-black text-xs flex items-center gap-1 shadow-md ring-2 ring-cyan-300/60";
+          btn.innerHTML = `🚩 Hal. ${p} <span class="text-[10px] font-bold">(${pageWords.length})</span>`;
+        } else {
+          btn.className = "px-2.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-400 font-bold text-xs flex items-center gap-1 hover:text-white hover:bg-slate-700 transition";
+          btn.innerHTML = `🔒 Hal. ${p} <span class="text-[10px] opacity-75">(${pageWords.length})</span>`;
+        }
+        stagesContainer.appendChild(btn);
+      });
+
+      // Update label informasi Checkpoint Aktif
+      const cpLabel = document.getElementById("activeCheckpointLabel");
+      const stageTitle = document.getElementById("gauntletCurrentStageTitle");
+      if (activeWord) {
+        if (cpMode === "page") {
+          const posInPage = (safeIdx - cpStart) + 1;
+          const totalInPage = (cpEnd - cpStart) + 1;
+          cpLabel.textContent = `🚩 Checkpoint Aktif: Awal Hal. ${activeWord.page} (Kata ${posInPage}/${totalInPage})`;
+          stageTitle.textContent = `🔥 Rantai Hal. ${activeWord.page} (Salah = Hanya ulang ke #1 Hal. ${activeWord.page}, tidak balik ke halaman sebelumnya!):`;
+        } else if (cpMode === "five") {
+          cpLabel.textContent = `⚡ Mini-Checkpoint Aktif: Kata #${cpStart + 1} s/d #${cpEnd + 1}`;
+          stageTitle.textContent = `🔥 Rantai 5 Kata Saat Ini (Salah = Ulang ke Kata #${cpStart + 1}):`;
+        } else {
+          cpLabel.textContent = `💀 Mode Hardcore: Tanpa Checkpoint (Reset ke #1 Awal)`;
+          stageTitle.textContent = `🔥 Seluruh Rantai Kotoba (Salah 1x = Wajib Ulang Jauh dari #1):`;
+        }
+      }
+
+      // 2. Render titik-titik nomor untuk Checkpoint yang sedang aktif (agar fokus & tidak terlalu panjang)
+      for (let idx = cpStart; idx <= cpEnd; idx++) {
+        const w = pool[idx];
+        const localNum = (idx - cpStart) + 1;
         const dot = document.createElement("div");
+
         if (idx < gauntletIndex) {
-          dot.className = "w-6 h-6 rounded-lg bg-emerald-500 text-slate-950 font-black text-[11px] flex items-center justify-center shadow-sm";
+          dot.className = "w-7 h-7 rounded-lg bg-emerald-500 text-slate-950 font-black text-xs flex items-center justify-center shadow-sm";
           dot.textContent = "✓";
         } else if (idx === gauntletIndex) {
-          dot.className = "w-6 h-6 rounded-lg bg-cyan-400 text-slate-950 font-black text-[11px] flex items-center justify-center ring-2 ring-white animate-pulse";
-          dot.textContent = idx + 1;
+          dot.className = "w-7 h-7 rounded-lg bg-cyan-400 text-slate-950 font-black text-xs flex items-center justify-center ring-2 ring-white animate-pulse";
+          dot.textContent = localNum;
         } else {
-          dot.className = "w-6 h-6 rounded-lg bg-slate-800/90 text-slate-400 font-bold text-[11px] flex items-center justify-center border border-slate-700/60";
-          dot.textContent = idx + 1;
+          dot.className = "w-7 h-7 rounded-lg bg-slate-800/90 text-slate-400 font-bold text-xs flex items-center justify-center border border-slate-700/60";
+          dot.textContent = localNum;
         }
-        dot.title = `Kotoba #${idx + 1}`;
+        dot.title = `Hal. ${w.page} No. ${w.no}`;
         dotsContainer.appendChild(dot);
-      });
+      }
 
       document.getElementById("gauntletPosText").textContent = `${Math.min(gauntletIndex + 1, pool.length)} / ${pool.length}`;
       document.getElementById("gauntletBestText").textContent = `${gauntletBest} / ${pool.length}`;
@@ -1931,6 +2086,11 @@
       formEl.classList.remove("hidden");
 
       currentDrillWord = pool[gauntletIndex];
+      const cpStart = getCheckpointStartIndex(pool, gauntletIndex);
+      const cpEnd = getCheckpointEndIndex(pool, gauntletIndex);
+      const localNum = (gauntletIndex - cpStart) + 1;
+      const localTotal = (cpEnd - cpStart) + 1;
+
       const modeSelect = document.getElementById("drillModeSelect").value;
       if (modeSelect === "mixed") {
         currentPromptDirection = Math.random() < 0.55 ? "to_jp" : "to_id";
@@ -1938,7 +2098,7 @@
         currentPromptDirection = modeSelect;
       }
 
-      document.getElementById("drillMeta").textContent = `Kotoba #${gauntletIndex + 1} • Hal. ${currentDrillWord.page} No. ${currentDrillWord.no}`;
+      document.getElementById("drillMeta").textContent = `🚩 Hal. ${currentDrillWord.page} (Kata ${localNum}/${localTotal}) • No. Modul ${currentDrillWord.no}`;
       const badge = document.getElementById("drillPromptBadge");
       const audioBtn = document.getElementById("drillAudioBtn");
 
@@ -2059,16 +2219,29 @@
       if (isCorrect) {
         // Bunyikan efek benar, lalu lanjut ke soal berikutnya (soal berikutnya akan otomatis dibacakan audionya)
         playToneBeep("correct");
+        const pool = getGauntletPool();
+        const prevPage = currentDrillWord.page;
+        const prevCpStart = getCheckpointStartIndex(pool, gauntletIndex);
+
         gauntletIndex++;
         if (gauntletIndex > gauntletBest) {
           gauntletBest = gauntletIndex;
         }
 
+        const nextWordObj = pool[gauntletIndex];
+        const newCpStart = gauntletIndex < pool.length ? getCheckpointStartIndex(pool, gauntletIndex) : -1;
+        const reachedNewCheckpoint = nextWordObj && (newCpStart !== prevCpStart);
+
         const toast = document.getElementById("gauntletSuccessToast");
-        document.getElementById("gauntletSuccessText").textContent =
-          `✅ TEPAT! ${currentDrillWord.kanji} (${currentDrillWord.furigana} / ${currentDrillWord.romaji}) = ${currentDrillWord.meaning}`;
+        if (reachedNewCheckpoint) {
+          document.getElementById("gauntletSuccessText").innerHTML =
+            `🚩 <b>CHECKPOINT BARU TERCAPAI!</b> Hal. ${prevPage} Tamat! Sekarang progresmu aman terkunci di Checkpoint Hal. ${nextWordObj.page}!`;
+        } else {
+          document.getElementById("gauntletSuccessText").textContent =
+            `✅ TEPAT! ${currentDrillWord.kanji} (${currentDrillWord.furigana} / ${currentDrillWord.romaji}) = ${currentDrillWord.meaning}`;
+        }
         toast.classList.remove("hidden");
-        setTimeout(() => toast.classList.add("hidden"), 1400);
+        setTimeout(() => toast.classList.add("hidden"), reachedNewCheckpoint ? 2800 : 1400);
 
         renderGauntletStep();
       } else {
@@ -2095,6 +2268,22 @@
       // Tampilkan Box Penalti 7 Detik
       const revealBox = document.getElementById("drillHackReveal");
       revealBox.classList.remove("hidden");
+
+      const pool = getGauntletPool();
+      const cpStart = getCheckpointStartIndex(pool, gauntletIndex);
+      const cpWord = pool[cpStart] || currentDrillWord;
+      const cpMode = document.getElementById("checkpointModeSelect")?.value || "page";
+      const resetBadge = document.getElementById("penaltyResetBadge");
+
+      if (resetBadge) {
+        if (cpMode === "page") {
+          resetBadge.textContent = `💀 SALAH! ULANG KE #1 HAL. ${cpWord.page}`;
+        } else if (cpMode === "five") {
+          resetBadge.textContent = `💀 SALAH! ULANG KE MINI-CHECKPOINT #${cpStart + 1}`;
+        } else {
+          resetBadge.textContent = `💀 SALAH! ULANG JAUH KE #1 AWAL`;
+        }
+      }
 
       document.getElementById("penaltyJpText").textContent = `${currentDrillWord.kanji} (${currentDrillWord.furigana})`;
       document.getElementById("penaltyRomajiText").textContent = `Ketik Romaji: ${currentDrillWord.romaji.toUpperCase()}`;
@@ -2134,8 +2323,10 @@
     }
 
     function finishPenaltyAndResetNow() {
+      const pool = getGauntletPool();
+      const targetCheckpointIndex = getCheckpointStartIndex(pool, gauntletIndex);
       clearPenaltyTimers();
-      gauntletIndex = 0; // Mengulang kembali ke Kotoba #1 (awal)!
+      gauntletIndex = targetCheckpointIndex; // Mengulang hanya ke awal Checkpoint halaman/grup saat ini!
       renderGauntletStep();
     }
 
