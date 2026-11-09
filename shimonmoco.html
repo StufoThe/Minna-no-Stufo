@@ -1,0 +1,2351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Shimon Moco - Belajar Baca Aksara Jawa Mudah</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans untuk UI & Noto Sans Javanese untuk Aksara Jawa yang Jelas di Android/iOS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Javanese:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        :root {
+            --font-scale: 1;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #1c1917;
+            color: #292524;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .aksara-font {
+            font-family: 'Noto Sans Javanese', sans-serif;
+            line-height: 1.45 !important;
+            padding-top: 0.1em;
+            padding-bottom: 0.1em;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        /* Skala huruf khusus Mode Perbesar Teks */
+        .scale-normal {
+            font-size: 100%;
+        }
+        .scale-besar {
+            font-size: 112%;
+        }
+        .scale-super {
+            font-size: 124%;
+        }
+        /* Pola Batik Halus untuk Header */
+        .batik-pattern {
+            background-color: #78350f;
+            background-image: radial-gradient(#b45309 1.5px, transparent 1.5px), radial-gradient(#92400e 1.5px, #78350f 1.5px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+        }
+        /* Tombol 3D Empuk khas Game/Aplikasi Ramah Bapak-Bapak */
+        .btn-3d-amber {
+            background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 5px 0 #92400e, 0 8px 15px rgba(0,0,0,0.15);
+            transition: all 0.12s ease;
+        }
+        .btn-3d-amber:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #92400e, 0 2px 5px rgba(0,0,0,0.15);
+        }
+        .btn-3d-green {
+            background: linear-gradient(180deg, #16a34a 0%, #15803d 100%);
+            box-shadow: 0 5px 0 #14532d, 0 8px 15px rgba(0,0,0,0.15);
+            transition: all 0.12s ease;
+        }
+        .btn-3d-green:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #14532d, 0 2px 5px rgba(0,0,0,0.15);
+        }
+        .btn-3d-cream {
+            background: #fffbeb;
+            border: 2px solid #d6d3d1;
+            box-shadow: 0 4px 0 #d6d3d1;
+            transition: all 0.12s ease;
+        }
+        .btn-3d-cream:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #d6d3d1;
+        }
+        /* Animasi Halus */
+        @keyframes popIn {
+            0% { transform: scale(0.92); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop {
+            animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes pulseGentle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+        .pulse-gentle {
+            animation: pulseGentle 2s infinite ease-in-out;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex justify-center bg-stone-900">
+
+    <!-- Container Utama Layar HP (Android / iOS Friendly) -->
+    <div id="app-shell" class="w-full max-w-md min-h-screen bg-[#FDFBF7] flex flex-col justify-between relative shadow-2xl overflow-x-hidden border-x border-stone-800 scale-normal">
+
+        <!-- ================= HEADER ATAS ================= -->
+        <header id="top-header" class="batik-pattern text-amber-50 pt-3 pb-3 px-4 sticky top-0 z-30 shadow-md border-b-4 border-amber-600">
+            <div class="flex items-center justify-between gap-2">
+                <!-- Logo & Nama Aplikasi -->
+                <div class="flex items-center gap-2.5">
+                    <div class="w-11 h-11 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center shadow-inner border-2 border-amber-400 shrink-0 overflow-hidden">
+                        <span class="aksara-font text-2xl font-bold leading-none whitespace-nowrap">ꦲ</span>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <h1 class="font-extrabold text-lg tracking-tight text-white leading-none">SHIMON MOCO</h1>
+                            <span id="cloud-badge" class="text-[10px] bg-emerald-600/90 text-white px-2 py-0.5 rounded-full font-semibold flex items-center gap-1">
+                                <i class="ph-fill ph-check-circle"></i> Tersimpan
+                            </span>
+                        </div>
+                        <p id="header-subtitle" class="text-xs text-amber-200 font-medium mt-0.5">Metode Praktis Membaca Aksara Jawa</p>
+                    </div>
+                </div>
+
+                <!-- Tombol Ukuran Huruf -->
+                <button onclick="window.toggleFontScale()" class="bg-amber-950/80 hover:bg-amber-900 active:scale-95 text-amber-100 border border-amber-500/50 rounded-xl px-2.5 py-1.5 flex flex-col items-center justify-center shrink-0 transition" title="Perbesar Ukuran Huruf">
+                    <i class="ph-fill ph-eyeglasses text-lg text-amber-300 leading-none"></i>
+                    <span id="font-scale-label" class="text-[10px] font-bold mt-0.5">Huruf: Normal</span>
+                </button>
+            </div>
+
+            <!-- Bar Info Pengguna Aktif (Muncul Setelah Login) -->
+            <div id="user-status-bar" class="hidden mt-2.5 pt-2 border-t border-amber-700/70 flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2 truncate">
+                    <span class="bg-amber-500 text-amber-950 font-extrabold px-2 py-0.5 rounded-lg flex items-center gap-1">
+                        <i class="ph-fill ph-user-circle text-sm"></i>
+                        <span id="active-username-display">Pengguna</span>
+                    </span>
+                    <span id="active-mastery-count" class="text-amber-100 font-semibold">0/29 Aksara Hafal</span>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <!-- Toggle Logat Jawa -->
+                    <button onclick="window.toggleDialect()" id="dialect-btn" class="bg-amber-800/90 text-amber-100 border border-amber-500/40 px-2 py-1 rounded-lg font-bold text-[11px] flex items-center gap-1">
+                        <i class="ph-fill ph-speaker-high text-amber-300"></i>
+                        <span id="dialect-label">Logat: Jawa (Å)</span>
+                    </button>
+                    <!-- Ganti Akun -->
+                    <button onclick="window.showLoginModal()" class="bg-stone-800/80 text-amber-200 border border-stone-600 px-2 py-1 rounded-lg font-bold text-[11px] flex items-center gap-1">
+                        <i class="ph-bold ph-arrows-left-right"></i> Ganti Nama
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- ================= KONTEN UTAMA ================= -->
+        <main id="main-content" class="flex-1 px-4 py-4 pb-28 overflow-y-auto">
+            <!-- Diisi secara dinamis oleh JavaScript -->
+        </main>
+
+        <!-- ================= NAVIGASI BAWAH (RAMAH JEMPOL BAPAK-BAPAK) ================= -->
+        <nav id="bottom-nav" class="hidden fixed bottom-0 w-full max-w-md bg-white border-t-2 border-stone-200 px-2 py-2 z-30 shadow-[0_-6px_20px_rgba(0,0,0,0.08)]">
+            <div class="grid grid-cols-3 gap-2">
+                <button onclick="window.switchTab('belajar')" id="nav-belajar" class="flex flex-col items-center justify-center py-2 px-1 rounded-2xl font-bold transition bg-amber-100 text-amber-900 border-2 border-amber-500">
+                    <i class="ph-fill ph-path text-2xl"></i>
+                    <span class="text-xs mt-0.5">1. Belajar Urut</span>
+                </button>
+                <button onclick="window.switchTab('kamus')" id="nav-kamus" class="flex flex-col items-center justify-center py-2 px-1 rounded-2xl font-bold transition text-stone-600 hover:bg-stone-100 border-2 border-transparent">
+                    <i class="ph-fill ph-book-open-text text-2xl"></i>
+                    <span class="text-xs mt-0.5">2. Kamus Trik</span>
+                </button>
+                <button onclick="window.switchTab('warung')" id="nav-warung" class="flex flex-col items-center justify-center py-2 px-1 rounded-2xl font-bold transition text-stone-600 hover:bg-stone-100 border-2 border-transparent">
+                    <i class="ph-fill ph-coffee text-2xl"></i>
+                    <span class="text-xs mt-0.5">3. Warung Baca</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- ================= MODAL NOTIFIKASI / PESAN RAMAH ================= -->
+        <div id="toast-box" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 hidden max-w-xs w-11/12 bg-stone-900/95 text-amber-100 px-4 py-3 rounded-2xl shadow-xl border-2 border-amber-500 text-center font-bold text-sm">
+            <span id="toast-text">Pesan</span>
+        </div>
+
+    </div>
+
+    <!-- ================= SCRIPT APLIKASI & FIREBASE CLOUD SAVE ================= -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // ============================================================================
+        // 1. DATABASE KURIKULUM "MENGAKALI OTAK" (JEMBATAN INGATAN BAPAK-BAPAK)
+        // ============================================================================
+        // Setiap aksara memiliki:
+        // - aksara: simbol Jawa
+        // - latin: nama standar (Ha, Na, Ca...)
+        // - jawa: bunyi logat Jawa Mataraman/Timuran (Hå, Nå, Cå...)
+        // - ttsTextJawa: ejaan fonetik agar mesin suara HP membaca logat Jawa dengan pas
+        // - ttsTextIndo: ejaan fonetik standar
+        // - benda: asosiasi visual benda sehari-hari bapak-bapak
+        // - trikOtak: kalimat kunci pengait memori jangka panjang
+        // - ciriKhas: pembeda visual cepat supaya tidak tertukar
+        const AKSARA_DB = {
+            // BAB 1: HA NA CA RA KA
+            'ha': {
+                id: 'ha', aksara: 'ꦲ', latin: 'Ha', jawa: 'Hå',
+                ttsJawa: 'Ho', ttsIndo: 'Ha',
+                benda: 'Kursi Goyang Santai',
+                ikon: '🪑',
+                trikOtak: 'Bentuknya persis KURSI GOYANG lengkap dengan sandaran belakang & depan. Habis kerja duduk di kursi: "HAA... nikmatnya!"',
+                ciriKhas: 'Punya 3 lengkungan kaki & ekor naik di kanan.',
+                contoh: 'ꦲꦤ (Hana / Ono = Ada)'
+            },
+            'na': {
+                id: 'na', aksara: 'ꦤ', latin: 'Na', jawa: 'Nå',
+                ttsJawa: 'No', ttsIndo: 'Na',
+                benda: 'Meja Makan Kecil',
+                ikon: '🍽️',
+                trikOtak: 'Mirip MEJA KECIL berkaki dua dengan tudung saji di tengah. Ingat meja makan: "NAsi hangat sudah siap!"',
+                ciriKhas: 'Depannya melengkung satu, tengahnya ada perut menggantung.',
+                contoh: 'ꦤꦩ (Nama)'
+            },
+            'ca': {
+                id: 'ca', aksara: 'ꦕ', latin: 'Ca', jawa: 'Cå',
+                ttsJawa: 'Co', ttsIndo: 'Ca',
+                benda: 'Paruh / Cucuk Burung',
+                ikon: '🐦',
+                trikOtak: 'Lihat bagian atasnya! Ada CUCUK (Paruh Burung) yang lancip menghadap ke kiri. Ingat: "CA-pek burung berkicau."',
+                ciriKhas: 'Satu-satunya di kelompok awal yang punya ujung lancip (cucuk) di atas.',
+                contoh: 'ꦕꦫ (Cara)'
+            },
+            'ra': {
+                id: 'ra', aksara: 'ꦫ', latin: 'Ra', jawa: 'Rå',
+                ttsJawa: 'Ro', ttsIndo: 'Ra',
+                benda: 'Tudung Caping Sawah',
+                ikon: '👒',
+                trikOtak: 'PALING GAMPANG! Bentuknya paling ramping cuma seperti TUDUNG CAPING atau gagang pancing. "RA-jin ke sawah."',
+                ciriKhas: 'Sangat simpel, hanya 1 lengkungan naik dan turun (2 kaki saja).',
+                contoh: 'ꦫꦏ (Raka / Kakak)'
+            },
+            'ka': {
+                id: 'ka', aksara: 'ꦏ', latin: 'Ka', jawa: 'Kå',
+                ttsJawa: 'Ko', ttsIndo: 'Ka',
+                benda: 'Meja (Na) + Tambah Kaki',
+                ikon: '🦵',
+                trikOtak: 'Perhatikan! Bentuk depannya persis huruf NA (Meja), tapi ditambah KAKI EKSTRA di sebelah kanan. Tambah KA-ki jadi KA!',
+                ciriKhas: 'Seperti huruf Na (ꦤ) tapi buntut kanannya punya 2 tiang kaki.',
+                contoh: 'ꦏꦕ (Kaca)'
+            },
+
+            // BAB 2: DA TA SA WA LA
+            'da': {
+                id: 'da', aksara: 'ꦢ', latin: 'Da', jawa: 'Då',
+                ttsJawa: 'Do', ttsIndo: 'Da',
+                benda: 'Bedug / Drum Bulat',
+                ikon: '🥁',
+                trikOtak: 'Bagian bawah kirinya melengkung bulat ke dalam seperti BEDUG atau DADA yang membusung. Ingat: "DA-da membusung."',
+                ciriKhas: 'Kaki kirinya melipat bulat di bagian bawah.',
+                contoh: 'ꦢꦫ (Dara / Burung Dara)'
+            },
+            'ta': {
+                id: 'ta', aksara: 'ꦠ', latin: 'Ta', jawa: 'Tå',
+                ttsJawa: 'To', ttsIndo: 'Ta',
+                benda: 'Talang Air Bergelombang',
+                ikon: '🌊',
+                trikOtak: 'Kaki kanannya bergelombang naik-turun seperti TALANG AIR. Ingat: "TA-lang air mengalir."',
+                ciriKhas: 'Mirip Ha (ꦲ), tapi bagian kanannya ada lekukan gelombang kecil.',
+                contoh: 'ꦠꦮ (Tawa / Tawar)'
+            },
+            'sa': {
+                id: 'sa', aksara: 'ꦱ', latin: 'Sa', jawa: 'Så',
+                ttsJawa: 'So', ttsIndo: 'Sa',
+                benda: 'Cangkir Kopi Berasap',
+                ikon: '☕',
+                trikOtak: 'Simpel seperti huruf Ra, tapi bagian depannya punya gulungan seperti CANGKIR SATE / KOPI. "SA-tu cangkir kopi."',
+                ciriKhas: 'Punya 2 tiang sederhana dengan lengkungan bulat di kiri atas.',
+                contoh: 'ꦱꦥ (Sapa / Siapa)'
+            },
+            'wa': {
+                id: 'wa', aksara: 'ꦮ', latin: 'Wa', jawa: 'Wå',
+                ttsJawa: 'Wo', ttsIndo: 'Wa',
+                benda: 'Wadah / Mangkuk Bakso',
+                ikon: '🥣',
+                trikOtak: 'Tengahnya cekung lebar terbuka ke atas seperti WADAH atau mangkuk. Ingat: "WA-dah bakso."',
+                ciriKhas: 'Ada cucuk lancip kecil di kiri dalam, tengahnya terbuka seperti huruf W.',
+                contoh: 'ꦮꦤ (Wana / Hutan)'
+            },
+            'la': {
+                id: 'la', aksara: 'ꦭ', latin: 'La', jawa: 'Lå',
+                ttsJawa: 'Lo', ttsIndo: 'La',
+                benda: 'Gelombang Laut Lebar',
+                ikon: '⛵',
+                trikOtak: 'Bentuknya seperti huruf M diikuti huruf N (3 bukit gelombang). Seperti ombak LA-ut yang berbaris rapi!',
+                ciriKhas: 'Mirip Ha (ꦲ) tapi terbalik: 2 bukit di kiri, 1 bukit di kanan.',
+                contoh: 'ꦭꦫ (Lara / Loro = Sakit)'
+            },
+
+            // BAB 3: PA DHA JA YA NYA
+            'pa': {
+                id: 'pa', aksara: 'ꦥ', latin: 'Pa', jawa: 'På',
+                ttsJawa: 'Po', ttsIndo: 'Pa',
+                benda: 'Pagar Rumah Pendek',
+                ikon: '🏡',
+                trikOtak: 'Sangat rapi! Cuma 2 bukit sejajar seperti PAGAR halaman rumah. Kalau WA tadi ada lancipnya, kalau PA mulus seperti PA-gar!',
+                ciriKhas: '2 bukit mulus dihubungkan lembah di tengah.',
+                contoh: 'ꦥꦢ (Pada / Sama)'
+            },
+            'dha': {
+                id: 'dha', aksara: 'ꦝ', latin: 'Dha', jawa: 'Dhå',
+                ttsJawa: 'Dho', ttsIndo: 'Dha',
+                benda: 'Batu Kali di Tengah Mangkuk',
+                ikon: '🪨',
+                trikOtak: 'Mirip wadah WA, tapi di bagian lembah tengahnya ada benjolan bulat seperti batu. Lidah ditekuk mantap: "DHA-dha!"',
+                ciriKhas: 'Lembah tengahnya punya bulatan/gulungan ekstra.',
+                contoh: 'ꦝꦝ (Dhadha / Dada)'
+            },
+            'ja': {
+                id: 'ja', aksara: 'ꦗ', latin: 'Ja', jawa: 'Jå',
+                ttsJawa: 'Jo', ttsIndo: 'Ja',
+                benda: 'Kursi Jati Tinggi (Huruf R Besar)',
+                ikon: '👑',
+                trikOtak: 'Bagian kanannya persis huruf "R" kapital Latin! Ingat: "JA-lan-jalan naik kereta R-aja."',
+                ciriKhas: 'Tengahnya berdiri tinggi membentuk mirip huruf R besar.',
+                contoh: 'ꦗꦪ (Jaya)'
+            },
+            'ya': {
+                id: 'ya', aksara: 'ꦪ', latin: 'Ya', jawa: 'Yå',
+                ttsJawa: 'Yo', ttsIndo: 'Ya',
+                benda: 'Ayunan Tiga Bukit (Huruf U-U)',
+                ikon: '🎢',
+                trikOtak: 'Punya 2 lembah ayunan berjejer (naik-turun-naik-turun-naik). Kalau setuju kita mengangguk: "YA, betul!"',
+                ciriKhas: 'Terdiri dari 3 tiang sejajar yang dihubungkan dari bawah (mirip huruf W lebar).',
+                contoh: 'ꦏꦪ (Kaya / Seperti)'
+            },
+            'nya': {
+                id: 'nya', aksara: 'ꦚ', latin: 'Nya', jawa: 'Nyå',
+                ttsJawa: 'Nyo', ttsIndo: 'Nya',
+                benda: 'Kacamata Baca + Gagang',
+                ikon: '👓',
+                trikOtak: 'Lihat bagian tengah-kanannya! Ada dua bulatan gantung persis KACAMATA. Pakai kacamata: "NYA-ta jelasnya!"',
+                ciriKhas: 'Lebar dan punya 2 perut menggantung seperti lensa kacamata.',
+                contoh: 'ꦚꦠ (Nyata)'
+            },
+
+            // BAB 4: MA GA BA THA NGA
+            'ma': {
+                id: 'ma', aksara: 'ꦩ', latin: 'Ma', jawa: 'Må',
+                ttsJawa: 'Mo', ttsIndo: 'Ma',
+                benda: 'Kumis Melengkung Tebal',
+                ikon: '🧔',
+                trikOtak: 'Bagian depannya melengkung tajam ke dalam seperti KUMIS melintang waktu sedang MA-kan enak!',
+                ciriKhas: 'Sisi kiri punya lengkungan melipat ke dalam seperti kail/kumis.',
+                contoh: 'ꦩꦠ (Mata)'
+            },
+            'ga': {
+                id: 'ga', aksara: 'ꦒ', latin: 'Ga', jawa: 'Gå',
+                ttsJawa: 'Go', ttsIndo: 'Ga',
+                benda: 'Gawang Sepak Bola (Huruf m)',
+                ikon: '🥅',
+                trikOtak: 'Persis huruf "m" kecil Latin! Ingat waktu nonton bola teriak: "GA-wang... GOOOL!"',
+                ciriKhas: 'Bentuknya seperti huruf m (3 kaki turun ke bawah).',
+                contoh: 'ꦗꦒ (Jaga)'
+            },
+            'ba': {
+                id: 'ba', aksara: 'ꦧ', latin: 'Ba', jawa: 'Bå',
+                ttsJawa: 'Bo', ttsIndo: 'Ba',
+                benda: 'Barisan Bukit Bergandeng',
+                ikon: '⛰️',
+                trikOtak: 'Kiri ada 1 lengkung, kanan ada 2 lengkung (mirip huruf n gandeng m). Ingat: "BA-risan bukit berdampingan."',
+                ciriKhas: 'Kebalikan dari La (ꦭ): Ba punya 1 bukit di kiri, 2 bukit di kanan.',
+                contoh: 'ꦧꦠ (Bata / Batu Bata)'
+            },
+            'tha': {
+                id: 'tha', aksara: 'ꦛ', latin: 'Tha', jawa: 'Thå',
+                ttsJawa: 'Tho', ttsIndo: 'Tha',
+                benda: 'Kentongan Kayu Berpita',
+                ikon: '🔔',
+                trikOtak: 'Mirip huruf Nga tapi di bawah perut kirinya ada ikatan simpul pita. Bunyinya mantap di langit-langit mulut: "THA-thit!"',
+                ciriKhas: 'Punya simpul melingkar di ujung bawah kiri.',
+                contoh: 'ꦧꦛ (Batha / Batu Bata)'
+            },
+            'nga': {
+                id: 'nga', aksara: 'ꦔ', latin: 'Nga', jawa: 'Ngå',
+                ttsJawa: 'Ngo', ttsIndo: 'Nga',
+                benda: 'Mulut Menganga (Ngantuk)',
+                ikon: '🥱',
+                trikOtak: 'Bagian kirinya terbuka lebar menghadap ke kanan seperti mulut sedang NGA-ntuk / menganga!',
+                ciriKhas: 'Kiri melengkung seperti huruf C menghadap tiang kanan.',
+                contoh: 'ꦔꦗꦶ (Ngaji)'
+            },
+
+            // BAB 5: SANDHANGAN VOKAL (TOPI & SEPATU PENGUBAH BUNYI)
+            'wulu': {
+                id: 'wulu', aksara: 'ꦏꦶ', latin: 'Ki (Wulu = i)', jawa: 'Wulu (Bunyi -i)',
+                ttsJawa: 'Ki', ttsIndo: 'Ki',
+                benda: 'Topi Kecil di Atas (Bunyi I)',
+                ikon: '🧢',
+                trikOtak: 'Bulatan kecil di ATAS huruf disebut WULU. Begitu dikasih topi kecil di atas, bunyi "-A" langsung berubah jadi "-I"! Contoh: ꦏ (Ka) -> ꦏꦶ (Ki).',
+                ciriKhas: 'Lingkaran kecil tepat di atas aksara.',
+                contoh: 'ꦱꦶꦗꦶ (Siji = Satu)'
+            },
+            'suku': {
+                id: 'suku', aksara: 'ꦏꦸ', latin: 'Ku (Suku = u)', jawa: 'Suku (Bunyi -u)',
+                ttsJawa: 'Ku', ttsIndo: 'Ku',
+                benda: 'Sepatu Melengkung di Bawah (Bunyi U)',
+                ikon: '👞',
+                trikOtak: 'Garis melengkung di BAWAH kaki kanan disebut SUKU (artinya Kaki). Pakai sepatu di kaki, bunyinya langsung jadi "-U"! Contoh: ꦏ (Ka) -> ꦏꦸ (Ku).',
+                ciriKhas: 'Ekor kaki kanan memanjang turun lalu naik sedikit.',
+                contoh: 'ꦧꦸꦏꦸ (Buku) / ꦱꦸꦱꦸ (Susu)'
+            },
+            'taling': {
+                id: 'taling', aksara: 'ꦱꦺ', latin: 'Sé (Taling = é/è)', jawa: 'Taling (Bunyi -é)',
+                ttsJawa: 'Se', ttsIndo: 'Se',
+                benda: 'Tiang Bendera di Depan (Bunyi É)',
+                ikon: '🚩',
+                trikOtak: 'Tanda tiang berjambul yang ditaruh SEBELUM huruf disebut TALING. Mengubah bunyi jadi "-É" (seperti Saté / Lélé). Contoh: ꦱ (Sa) -> ꦱꦺ (Sé).',
+                ciriKhas: 'Berdiri di sebelah KIRI (depan) aksara yang diubah.',
+                contoh: 'ꦱꦠꦺ (Sate) / ꦭꦺꦭꦺ (Lele)'
+            },
+            'taling_tarung': {
+                id: 'taling_tarung', aksara: 'ꦱꦺꦴ', latin: 'So (Taling Tarung = o)', jawa: 'Taling Tarung (Bunyi -o)',
+                ttsJawa: 'So', ttsIndo: 'So',
+                benda: 'Dijepit Gawang Depan-Belakang (Bunyi O)',
+                ikon: '🥪',
+                trikOtak: 'Kalau hurufnya DIJEPIT tiang depan (Taling) dan tiang belakang (Tarung), bunyinya bulat jadi "-O"! Contoh: ꦱ (Sa) dijepit jadi ꦱꦺꦴ (So).',
+                ciriKhas: 'Mengapit aksara di kiri dan kanan.',
+                contoh: 'ꦱꦺꦴꦠꦺꦴ (Soto) / ꦏꦺꦴꦥꦶ (Kopi)'
+            },
+            'pepet': {
+                id: 'pepet', aksara: 'ꦱꦼ', latin: 'Se (Pepet = e lemah)', jawa: 'Pepet (Bunyi -e sega)',
+                ttsJawa: 'Se', ttsIndo: 'Se',
+                benda: 'Topi Besar di Atas (Bunyi E)',
+                ikon: '🎩',
+                trikOtak: 'Mirip topi Wulu (i), tapi ukurannya JAUH LEBIH BESAR di atas huruf! Bunyinya "E" lemah seperti kata "Sega" (Nasi) atau "Enak".',
+                ciriKhas: 'Kubah besar melengkung di atas aksara.',
+                contoh: 'ꦱꦼꦒ (Sega = Nasi)'
+            },
+
+            // BAB 6: SANDHANGAN PENUTUP SUKU KATA (-NG, -R, -H, PANGKON)
+            'cecak': {
+                id: 'cecak', aksara: 'ꦏꦁ', latin: 'Kang (Cecak = -ng)', jawa: 'Cecak (Akhiran -ng)',
+                ttsJawa: 'Kang', ttsIndo: 'Kang',
+                benda: 'Cicak Nempel di Plafon Atas (-NG)',
+                ikon: '🦎',
+                trikOtak: 'Tanda koma melengkung di ATAS kanan disebut CECAK. Ingat cicak di atas plafon: tambahkan bunyi "-NG" di akhir! ꦏ (Ka) -> ꦏꦁ (Kang).',
+                ciriKhas: 'Tanda kecil mirip bulan sabit/koma di atas aksara.',
+                contoh: 'ꦮꦪꦁ (Wayang) / ꦩꦭꦁ (Malang)'
+            },
+            'layar': {
+                id: 'layar', aksara: 'ꦥꦱꦂ', latin: 'Pasar (Layar = -r)', jawa: 'Layar (Akhiran -r)',
+                ttsJawa: 'Pasar', ttsIndo: 'Pasar',
+                benda: 'Layar Perahu Miring di Atas (-R)',
+                ikon: '⛵',
+                trikOtak: 'Garis miring tegas di ATAS huruf disebut LAYAR. Seperti la-yaR perahu tertiup angin: tambahkan bunyi "-R" di akhir! ꦱ (Sa) -> ꦱꦂ (Sar).',
+                ciriKhas: 'Garis coretan miring di kanan atas aksara.',
+                contoh: 'ꦥꦱꦂ (Pasar) / ꦱꦧꦂ (Sabar)'
+            },
+            'wignyan': {
+                id: 'wignyan', aksara: 'ꦱꦮꦃ', latin: 'Sawah (Wignyan = -h)', jawa: 'Wignyan (Akhiran -h)',
+                ttsJawa: 'Sawah', ttsIndo: 'Sawah',
+                benda: 'Angka 2 Berbuntut di Samping (-H)',
+                ikon: '😮‍💨',
+                trikOtak: 'Tanda mirip angka 2 berekor panjang di SAMPING kanan disebut WIGNYAN. Menghembuskan napas "-H" di akhir! ꦮ (Wa) -> ꦮꦃ (Wah).',
+                ciriKhas: 'Berada di sebelah kanan aksara dengan ekor menjuntai ke bawah.',
+                contoh: 'ꦱꦮꦃ (Sawah) / ꦒꦗꦃ (Gajah)'
+            },
+            'pangkon': {
+                id: 'pangkon', aksara: 'ꦩꦔꦤ꧀', latin: 'Mangan (Pangkon = Mati)', jawa: 'Pangkon (Pemati Vokal)',
+                ttsJawa: 'Mangan', ttsIndo: 'Mangan',
+                benda: 'Pangkuan Pemati Bunyi A',
+                ikon: '🛑',
+                trikOtak: 'Tanda ekor melengkung besar di akhir kata disebut PANGKON. Tugasnya MEMATIKAN bunyi vokal A! Jadi ꦤ (Na) dipangku menjadi "N" saja -> ꦩꦔꦤ꧀ (Ma-nga-n).',
+                ciriKhas: 'Selalu di akhir kata untuk mematikan huruf terakhir.',
+                contoh: 'ꦩꦔꦤ꧀ (Mangan = Makan)'
+            }
+        };
+
+        // ============================================================================
+        // 2. KURIKULUM 7 BAB "SHIMON MOCO" (MENGAKALI OTAK STEP-BY-STEP)
+        // ============================================================================
+        const CHAPTERS = [
+            {
+                id: 1,
+                title: 'Bab 1: Lima Sekawan Pertama',
+                subtitle: 'Ha - Na - Ca - Ra - Ka (ꦲ ꦤ ꦕ ꦫ ꦏ)',
+                desc: 'Mengenal 5 aksara pertama dengan asosiasi benda sehari-hari (Kursi, Meja, Burung, Caping, Kaki Meja).',
+                aksaraIds: ['ha', 'na', 'ca', 'ra', 'ka'],
+                steps: [
+                    // Step 1-5: Kenalan Visual & Suara
+                    { type: 'learn', aksaraId: 'ha' },
+                    { type: 'learn', aksaraId: 'na' },
+                    { type: 'learn', aksaraId: 'ca' },
+                    // Kuis sela 3 huruf pertama agar otak langsung mengunci!
+                    {
+                        type: 'quiz_shape',
+                        question: 'Trik Otak: Mana huruf "CA" yang punya CUCUK (Paruh Burung) lancip di atas?',
+                        targetAksara: 'ꦕ',
+                        tts: 'Ca',
+                        options: [
+                            { aksara: 'ꦕ', label: 'Pilihan A', correct: true, hint: 'Betul! Ada cucuk lancip di kiri atas = CA.' },
+                            { aksara: 'ꦲ', label: 'Pilihan B', correct: false, hint: 'Ini Ha (Kursi Goyang).' },
+                            { aksara: 'ꦤ', label: 'Pilihan C', correct: false, hint: 'Ini Na (Meja Makan).' }
+                        ]
+                    },
+                    { type: 'learn', aksaraId: 'ra' },
+                    { type: 'learn', aksaraId: 'ka' },
+                    // Trik Otak Membedakan Na vs Ka
+                    {
+                        type: 'quiz_shape',
+                        question: 'Awas Tertukar! Meja (Na) kalau ditambah KAKI EKSTRA di kanan menjadi huruf "KA". Mana huruf KA?',
+                        targetAksara: 'ꦏ',
+                        tts: 'Ka',
+                        options: [
+                            { aksara: 'ꦤ', label: 'Kakinya 1 di kanan', correct: false, hint: 'Itu huruf Na (Meja biasa).' },
+                            { aksara: 'ꦏ', label: 'Kakinya 2 di kanan', correct: true, hint: 'Mantap! Tambah KA-ki di kanan jadi KA!' },
+                            { aksara: 'ꦫ', label: 'Paling ramping', correct: false, hint: 'Itu huruf Ra (Caping Sawah).' }
+                        ]
+                    },
+                    // Trik Otak Konteks (Kalimat Campuran)
+                    {
+                        type: 'hybrid_read',
+                        title: 'Trik Otak: Membaca Campuran',
+                        sentenceBefore: 'Kita bercermin di depan ',
+                        aksaraWord: 'ꦏꦕ',
+                        sentenceAfter: ' kamar.',
+                        breakdown: 'ꦏ (Ka) + ꦕ (Ca)',
+                        tts: 'Kaca',
+                        question: 'Apa bunyi kata Aksara Jawa di atas?',
+                        options: [
+                            { text: 'KA - CA (Kaca)', correct: true },
+                            { text: 'RA - KA (Raka)', correct: false },
+                            { text: 'HA - NA (Hana)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦕꦫ',
+                        breakdown: 'ꦕ (Ca: Paruh Burung) + ꦫ (Ra: Caping Ramping)',
+                        tts: 'Cara',
+                        meaning: 'Artinya: Cara / Metode',
+                        options: [
+                            { text: 'CA - RA', correct: true },
+                            { text: 'KA - NA', correct: false },
+                            { text: 'HA - RA', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦫꦏ',
+                        breakdown: 'ꦫ (Ra: Caping) + ꦏ (Ka: Meja Tambah Kaki)',
+                        tts: 'Raka',
+                        meaning: 'Artinya: Raka (Kakak)',
+                        options: [
+                            { text: 'RA - KA', correct: true },
+                            { text: 'NA - CA', correct: false },
+                            { text: 'CA - KA', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: 'Bab 2: Lima Sekawan Kedua',
+                subtitle: 'Da - Ta - Sa - Wa - La (ꦢ ꦠ ꦱ ꦮ ꦭ)',
+                desc: 'Menguasai Da, Ta, Sa, Wa, La dan langsung menggabungkannya dengan huruf Bab 1.',
+                aksaraIds: ['da', 'ta', 'sa', 'wa', 'la'],
+                steps: [
+                    { type: 'learn', aksaraId: 'da' },
+                    { type: 'learn', aksaraId: 'ta' },
+                    { type: 'learn', aksaraId: 'sa' },
+                    {
+                        type: 'quiz_shape',
+                        question: 'Mana huruf "DA" yang punya lipatan bulat seperti BEDUG / DADA di bawah kiri?',
+                        targetAksara: 'ꦢ',
+                        tts: 'Da',
+                        options: [
+                            { aksara: 'ꦢ', label: 'Pilihan A', correct: true, hint: 'Tepat sekali! Lengkungan bulat di bawah = DA.' },
+                            { aksara: 'ꦠ', label: 'Pilihan B', correct: false, hint: 'Itu Ta (Talang air bergelombang di kanan).' },
+                            { aksara: 'ꦱ', label: 'Pilihan C', correct: false, hint: 'Itu Sa (Satu cangkir kopi).' }
+                        ]
+                    },
+                    { type: 'learn', aksaraId: 'wa' },
+                    { type: 'learn', aksaraId: 'la' },
+                    {
+                        type: 'hybrid_read',
+                        title: 'Trik Otak: Tebak dari Kalimat',
+                        sentenceBefore: 'Kalau badan meriang rasanya ',
+                        aksaraWord: 'ꦭꦫ',
+                        sentenceAfter: ' (sakit / loro).',
+                        breakdown: 'ꦭ (La: Laut 3 bukit) + ꦫ (Ra: Caping)',
+                        tts: 'Loro',
+                        question: 'Bagaimana bunyi tulisan ꦭꦫ di atas?',
+                        options: [
+                            { text: 'LA - RA (Dibaca: Loro / Sakit)', correct: true },
+                            { text: 'SA - DA (Sada)', correct: false },
+                            { text: 'TA - WA (Tawa)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦫꦱ',
+                        breakdown: 'ꦫ (Ra) + ꦱ (Sa)',
+                        tts: 'Roso',
+                        meaning: 'Artinya: Rasa (Dibaca Jawa: Råså / Roso)',
+                        options: [
+                            { text: 'RA - SA (Råså)', correct: true },
+                            { text: 'DA - RA (Dårå)', correct: false },
+                            { text: 'LA - WA (Låwå)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦢꦫ',
+                        breakdown: 'ꦢ (Da: Bulat di bawah) + ꦫ (Ra: Caping)',
+                        tts: 'Doro',
+                        meaning: 'Artinya: Burung Dara (Manuk Dårå)',
+                        options: [
+                            { text: 'DA - RA (Dårå)', correct: true },
+                            { text: 'TA - RA (Tårå)', correct: false },
+                            { text: 'SA - KA (Såkå)', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: 'Bab 3: Lima Sekawan Ketiga',
+                subtitle: 'Pa - Dha - Ja - Ya - Nya (ꦥ ꦝ ꦗ ꦪ ꦚ)',
+                desc: 'Trik Pagar (Pa), Huruf R Besar (Ja), Ayunan (Ya), dan Kacamata (Nya).',
+                aksaraIds: ['pa', 'dha', 'ja', 'ya', 'nya'],
+                steps: [
+                    { type: 'learn', aksaraId: 'pa' },
+                    { type: 'learn', aksaraId: 'dha' },
+                    { type: 'learn', aksaraId: 'ja' },
+                    {
+                        type: 'quiz_shape',
+                        question: 'Trik Otak: Huruf mana yang bagian tengah-kanannya persis huruf "R" kapital Latin dan berbunyi "JA"?',
+                        targetAksara: 'ꦗ',
+                        tts: 'Ja',
+                        options: [
+                            { aksara: 'ꦗ', label: 'Ada bentuk R besar', correct: true, hint: 'Hebat! Mirip R besar = JA (Jaya).' },
+                            { aksara: 'ꦥ', label: 'Pagar 2 bukit mulus', correct: false, hint: 'Itu huruf Pa (Pagar).' },
+                            { aksara: 'ꦝ', label: 'Ada batu di tengah', correct: false, hint: 'Itu huruf Dha.' }
+                        ]
+                    },
+                    { type: 'learn', aksaraId: 'ya' },
+                    { type: 'learn', aksaraId: 'nya' },
+                    {
+                        type: 'hybrid_read',
+                        title: 'Trik Otak: Kalimat Sehari-hari',
+                        sentenceBefore: 'Ada tamu mengetuk pintu, kita bertanya: ',
+                        aksaraWord: 'ꦱꦥ',
+                        sentenceAfter: ' itu? (Siapa?)',
+                        breakdown: 'ꦱ (Sa: Cangkir) + ꦥ (Pa: Pagar Mulus)',
+                        tts: 'Sopo',
+                        question: 'Apa bacaan dari kata ꦱꦥ ?',
+                        options: [
+                            { text: 'SA - PA (Dibaca: Såpå / Siapa)', correct: true },
+                            { text: 'JA - YA (Jaya)', correct: false },
+                            { text: 'PA - DA (Pada)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦗꦪ',
+                        breakdown: 'ꦗ (Ja: Huruf R) + ꦪ (Ya: Ayunan Lebar)',
+                        tts: 'Jaya',
+                        meaning: 'Artinya: Jaya / Menang',
+                        options: [
+                            { text: 'JA - YA', correct: true },
+                            { text: 'NYA - TA', correct: false },
+                            { text: 'KA - YA', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦚꦠ',
+                        breakdown: 'ꦚ (Nya: Kacamata) + ꦠ (Ta: Talang Bergelombang)',
+                        tts: 'Nyata',
+                        meaning: 'Artinya: Nyata / Jelas',
+                        options: [
+                            { text: 'NYA - TA', correct: true },
+                            { text: 'PA - DA', correct: false },
+                            { text: 'JA - GA', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 4,
+                title: 'Bab 4: Lima Sekawan Terakhir',
+                subtitle: 'Ma - Ga - Ba - Tha - Nga (ꦩ ꦒ ꦧ ꦛ ꦔ)',
+                desc: 'Menuntaskan 20 Aksara Dasar! Kumis (Ma), Gawang m (Ga), Bukit Gandeng (Ba), dan Mulut Menganga (Nga).',
+                aksaraIds: ['ma', 'ga', 'ba', 'tha', 'nga'],
+                steps: [
+                    { type: 'learn', aksaraId: 'ma' },
+                    { type: 'learn', aksaraId: 'ga' },
+                    { type: 'learn', aksaraId: 'ba' },
+                    {
+                        type: 'quiz_shape',
+                        question: 'Trik Otak: Mana huruf "GA" yang bentuknya paling mirip huruf "m" kecil (Gawang Bola)?',
+                        targetAksara: 'ꦒ',
+                        tts: 'Ga',
+                        options: [
+                            { aksara: 'ꦒ', label: 'Mirip huruf m', correct: true, hint: 'Luar biasa! Bentuk m = GA (Gawang).' },
+                            { aksara: 'ꦩ', label: 'Ada lipatan kumis', correct: false, hint: 'Itu huruf Ma (Kumis melengkung).' },
+                            { aksara: 'ꦧ', label: '3 bukit gandeng', correct: false, hint: 'Itu huruf Ba (Bukit gandeng).' }
+                        ]
+                    },
+                    { type: 'learn', aksaraId: 'tha' },
+                    { type: 'learn', aksaraId: 'nga' },
+                    {
+                        type: 'hybrid_read',
+                        title: 'Trik Otak: Membaca Kata Utuh',
+                        sentenceBefore: 'Dinding rumah itu dibangun dari batu ',
+                        aksaraWord: 'ꦧꦠ',
+                        sentenceAfter: ' merah.',
+                        breakdown: 'ꦧ (Ba: Bukit Gandeng) + ꦠ (Ta: Talang Gelombang)',
+                        tts: 'Boto',
+                        question: 'Apa bunyi kata ꦧꦠ di atas?',
+                        options: [
+                            { text: 'BA - TA (Batu Bata / Båtå)', correct: true },
+                            { text: 'MA - TA (Mata)', correct: false },
+                            { text: 'JA - GA (Jaga)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦩꦠ',
+                        breakdown: 'ꦩ (Ma: Kumis) + ꦠ (Ta: Gelombang)',
+                        tts: 'Moto',
+                        meaning: 'Artinya: Mata (Måtå)',
+                        options: [
+                            { text: 'MA - TA (Måtå)', correct: true },
+                            { text: 'BA - CA (Båcå)', correct: false },
+                            { text: 'GA - MA (Gåmå)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦗꦒ',
+                        breakdown: 'ꦗ (Ja: Huruf R) + ꦒ (Ga: Gawang m)',
+                        tts: 'Jogo',
+                        meaning: 'Artinya: Jaga / Menjaga (Jågå)',
+                        options: [
+                            { text: 'JA - GA (Jågå)', correct: true },
+                            { text: 'NA - MA (Nama)', correct: false },
+                            { text: 'MA - JA (Måjå)', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 5,
+                title: 'Bab 5: Topi & Sepatu Vokal (i, u, é, o, e)',
+                subtitle: 'Rahasia Membaca Kopi, Susu, Sate, Soto, Sega!',
+                desc: '20 aksara tadi semuanya berbunyi "-A". Sekarang kita pasang Topi & Sepatu supaya bisa bunyi I, U, É, O, dan E!',
+                aksaraIds: ['wulu', 'suku', 'taling', 'taling_tarung', 'pepet'],
+                steps: [
+                    { type: 'learn', aksaraId: 'wulu' },
+                    { type: 'learn', aksaraId: 'suku' },
+                    {
+                        type: 'quiz_shape',
+                        question: 'Kalau huruf ꦱ (Sa) diberi SEPATU di bawah (ꦱꦸ) dan ꦱ (Sa) lagi diberi SEPATU (ꦱꦸ), jadinya minuman apa?',
+                        targetAksara: 'ꦱꦸꦱꦸ',
+                        tts: 'Susu',
+                        options: [
+                            { aksara: 'ꦱꦸꦱꦸ', label: 'SU - SU (Susu)', correct: true, hint: 'Benar! Sepatu di bawah mengubah A menjadi U -> SUSU!' },
+                            { aksara: 'ꦱꦶꦗꦶ', label: 'SI - JI (Siji)', correct: false, hint: 'Siji memakai topi kecil (Wulu) di atas.' },
+                            { aksara: 'ꦱꦥ', label: 'SA - PA (Sapa)', correct: false, hint: 'Sapa tidak memakai sepatu Suku.' }
+                        ]
+                    },
+                    { type: 'learn', aksaraId: 'taling' },
+                    { type: 'learn', aksaraId: 'taling_tarung' },
+                    { type: 'learn', aksaraId: 'pepet' },
+                    {
+                        type: 'hybrid_read',
+                        title: 'Trik Otak: Menu Warung Favorit',
+                        sentenceBefore: 'Pagi-pagi paling nikmat minum ',
+                        aksaraWord: 'ꦏꦺꦴꦥꦶ',
+                        sentenceAfter: ' hangat.',
+                        breakdown: 'ꦏꦺꦴ (Ka dijepit Taling-Tarung = KO) + ꦥꦶ (Pa pakai topi kecil Wulu = PI)',
+                        tts: 'Kopi',
+                        question: 'Apa bacaan dari ꦏꦺꦴꦥꦶ ?',
+                        options: [
+                            { text: 'KO - PI (Kopi)', correct: true },
+                            { text: 'SU - SU (Susu)', correct: false },
+                            { text: 'BU - KU (Buku)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦱꦺꦴꦠꦺꦴ',
+                        breakdown: 'ꦱꦺꦴ (Sa dijepit = SO) + ꦠꦺꦴ (Ta dijepit = TO)',
+                        tts: 'Soto',
+                        meaning: 'Artinya: Soto Hangat!',
+                        options: [
+                            { text: 'SO - TO (Soto)', correct: true },
+                            { text: 'SA - TE (Sate)', correct: false },
+                            { text: 'SE - GA (Sega)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦱꦼꦒ',
+                        breakdown: 'ꦱꦼ (Sa pakai Topi Besar Pepet = SE) + ꦒ (Ga = GA)',
+                        tts: 'Sego',
+                        meaning: 'Artinya: Sega / Sego (Nasi)',
+                        options: [
+                            { text: 'SE - GA (Sega / Nasi)', correct: true },
+                            { text: 'SA - TE (Sate)', correct: false },
+                            { text: 'SI - JI (Siji / Satu)', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 6,
+                title: 'Bab 6: Bumbu Penutup Kata (-ng, -r, -h, Mati)',
+                subtitle: 'Membaca Pasar, Sawah, Wayang, dan Mangan',
+                desc: '4 tanda sakti untuk menutup suku kata: Cicak (-ng), Layar (-r), Wignyan (-h), dan Pangkon (pemati huruf).',
+                aksaraIds: ['cecak', 'layar', 'wignyan', 'pangkon'],
+                steps: [
+                    { type: 'learn', aksaraId: 'cecak' },
+                    { type: 'learn', aksaraId: 'layar' },
+                    { type: 'learn', aksaraId: 'wignyan' },
+                    { type: 'learn', aksaraId: 'pangkon' },
+                    {
+                        type: 'hybrid_read',
+                        title: 'Trik Otak: Bacaan Lengkap',
+                        sentenceBefore: 'Belanja sayur segar di ',
+                        aksaraWord: 'ꦥꦱꦂ',
+                        sentenceAfter: ' pagi tadi.',
+                        breakdown: 'ꦥ (Pa) + ꦱꦂ (Sa + garis miring Layar -r = SAR)',
+                        tts: 'Pasar',
+                        question: 'Apa bunyi kata ꦥꦱꦂ ?',
+                        options: [
+                            { text: 'PA - SAR (Pasar)', correct: true },
+                            { text: 'SA - WAH (Sawah)', correct: false },
+                            { text: 'WA - YANG (Wayang)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦮꦪꦁ',
+                        breakdown: 'ꦮ (Wa) + ꦪꦁ (Ya + tanda Cecak di atas -ng = YANG)',
+                        tts: 'Wayang',
+                        meaning: 'Artinya: Wayang Kulit',
+                        options: [
+                            { text: 'WA - YANG (Wayang)', correct: true },
+                            { text: 'GA - JAH (Gajah)', correct: false },
+                            { text: 'KA - MAR (Kamar)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦱꦮꦃ',
+                        breakdown: 'ꦱ (Sa) + ꦮꦃ (Wa + Wignyan -h = WAH)',
+                        tts: 'Sawah',
+                        meaning: 'Artinya: Sawah Padi',
+                        options: [
+                            { text: 'SA - WAH (Sawah)', correct: true },
+                            { text: 'SA - BAR (Sabar)', correct: false },
+                            { text: 'PA - SAR (Pasar)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦩꦔꦤ꧀',
+                        breakdown: 'ꦩ (Ma) + ꦔ (Nga) + ꦤ꧀ (Na dipangku mati = N)',
+                        tts: 'Mangan',
+                        meaning: 'Artinya: Makan (Mangan)',
+                        options: [
+                            { text: 'MA - NGAN (Makan)', correct: true },
+                            { text: 'SA - BAR (Sabar)', correct: false },
+                            { text: 'WE - DANG (Wedang)', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 7,
+                title: 'Bab 7: Tantangan Akhir (Membaca Kalimat)',
+                subtitle: 'Praktek Membaca Kalimat Utuh Aksara Jawa!',
+                desc: 'Selamat! Sekarang saatnya membuktikan bahwa otak Anda sudah otomatis bisa membaca kalimat Aksara Jawa!',
+                aksaraIds: [],
+                steps: [
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦱꦼꦒ ꦱꦺꦴꦠꦺꦴ',
+                        breakdown: 'ꦱꦼꦒ (Se-ga) + ꦱꦺꦴꦠꦺꦴ (So-to)',
+                        tts: 'Sego Soto',
+                        meaning: 'Kalimat Menu 1: Makanan berkuah hangat favorit',
+                        options: [
+                            { text: 'SEGA SOTO (Nasi Soto)', correct: true },
+                            { text: 'SATE AYAM (Sate Ayam)', correct: false },
+                            { text: 'KOPI SUSU (Kopi Susu)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦏꦺꦴꦥꦶ ꦱꦸꦱꦸ',
+                        breakdown: 'ꦏꦺꦴꦥꦶ (Ko-pi) + ꦱꦸꦱꦸ (Su-su)',
+                        tts: 'Kopi Susu',
+                        meaning: 'Kalimat Menu 2: Minuman hangat teman bersantai',
+                        options: [
+                            { text: 'KOPI SUSU', correct: true },
+                            { text: 'WEDANG JAHE', correct: false },
+                            { text: 'SINAU NGAJI', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦩꦔꦤ꧀ ꦱꦠꦺ',
+                        breakdown: 'ꦩꦔꦤ꧀ (Ma-nga-n) + ꦱꦠꦺ (Sa-te)',
+                        tts: 'Mangan Sate',
+                        meaning: 'Kalimat 3: Menikmati hidangan sate',
+                        options: [
+                            { text: 'MANGAN SATE (Makan Sate)', correct: true },
+                            { text: 'TUKU KOPI (Beli Kopi)', correct: false },
+                            { text: 'JAGA SAWAH (Jaga Sawah)', correct: false }
+                        ]
+                    },
+                    {
+                        type: 'word_read',
+                        aksaraWord: 'ꦠꦸꦏꦸ ꦱꦠꦺ ꦭꦺꦭꦺ',
+                        breakdown: 'ꦠꦸꦏꦸ (Tu-ku) + ꦱꦠꦺ (Sa-te) + ꦭꦺꦭꦺ (Le-le)',
+                        tts: 'Tuku Sate Lele',
+                        meaning: 'Kalimat Terakhir Kelulusan: Membaca 3 kata sekaligus!',
+                        options: [
+                            { text: 'TUKU SATE LELE (Beli Sate Lele)', correct: true },
+                            { text: 'TUKU SEGA SOTO (Beli Nasi Soto)', correct: false },
+                            { text: 'MANGAN SATE SAPI (Makan Sate Sapi)', correct: false }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // Daftar Menu & Papan Bacaan di "Warung Baca" (Latihan Bebas Tanpa Tekanan)
+        const WARUNG_ITEMS = [
+            { aksara: 'ꦏꦺꦴꦥꦶ ꦱꦸꦱꦸ', latin: 'Kopi Susu', arti: 'Minuman kopi dicampur susu manis', pecah: 'ꦏꦺꦴ (Ko) - ꦥꦶ (Pi)   ꦱꦸ (Su) - ꦱꦸ (Su)', kategori: 'Minuman Warung' },
+            { aksara: 'ꦮꦺꦢꦁ ꦗꦲꦺ', latin: 'Wedang Jahe', arti: 'Minuman jahe hangat penghangat badan', pecah: 'ꦮꦺ (We) - ꦢꦁ (dang)   ꦗ (Ja) - ꦲꦺ (he)', kategori: 'Minuman Warung' },
+            { aksara: 'ꦱꦼꦒ ꦱꦺꦴꦠꦺꦴ', latin: 'Sega Soto', arti: 'Nasi kuah soto hangat', pecah: 'ꦱꦼ (Se) - ꦒ (ga)   ꦱꦺꦴ (So) - ꦠꦺꦴ (to)', kategori: 'Makanan Warung' },
+            { aksara: 'ꦱꦠꦺ ꦒꦗꦃ', latin: 'Sate Gajah', arti: 'Sate ukuran potongan besar', pecah: 'ꦱ (Sa) - ꦠꦺ (te)   ꦒ (Ga) - ꦗꦃ (jah)', kategori: 'Makanan Warung' },
+            { aksara: 'ꦲꦠꦶ ꦱꦧꦂ', latin: 'Ati Sabar', arti: 'Hati yang selalu sabar dan tenang', pecah: 'ꦲ (Ha/A) - ꦠꦶ (ti)   ꦱ (Sa) - ꦧꦂ (bar)', kategori: 'Kalimat Harian' },
+            { aksara: 'ꦗꦒ ꦱꦮꦃ', latin: 'Jaga Sawah', arti: 'Menjaga padi di sawah dari burung', pecah: 'ꦗ (Ja) - ꦒ (ga)   ꦱ (Sa) - ꦮꦃ (wah)', kategori: 'Kalimat Harian' },
+            { aksara: 'ꦠꦸꦏꦸ ꦧꦸꦏꦸ', latin: 'Tuku Buku', arti: 'Membeli buku bacaan', pecah: 'ꦠꦸ (Tu) - ꦏꦸ (ku)   ꦧꦸ (Bu) - ꦏꦸ (ku)', kategori: 'Kalimat Harian' },
+            { aksara: 'ꦥꦱꦂ ꦩꦭꦁ', latin: 'Pasar Malang', arti: 'Pasar di Kota Malang', pecah: 'ꦥ (Pa) - ꦱꦂ (sar)   ꦩ (Ma) - ꦭꦁ (lang)', kategori: 'Papan Jalan' }
+        ];
+
+        // ============================================================================
+        // 3. STATE APLIKASI & PENYIMPANAN CLOUD (TANPA PASSWORD)
+        // ============================================================================
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let allCloudUsers = {}; // Menyimpan daftar username yang pernah login agar tinggal klik
+
+        let state = {
+            username: '',           // Nama panggilan Bapak (contoh: "Pak Budi")
+            normalizedId: '',       // ID dokumen: "pak_budi"
+            completedChapters: [],  // Array ID bab yang sudah tamat [1, 2, ...]
+            masteredAksara: [],     // Array ID aksara yang sudah dipelajari
+            xp: 0,                  // Poin semangat
+            dialect: 'jawa',        // 'jawa' (Hå Nå Cå Rå Kå) atau 'indo' (Ha Na Ca Ra Ka)
+            fontScaleIndex: 0,      // 0: Normal, 1: Besar, 2: Super Besar (Mode Kacamata)
+            activeTab: 'belajar',   // 'belajar' | 'kamus' | 'warung'
+            // State sesi belajar aktif
+            activeChapterId: null,
+            activeStepIndex: 0,
+            quizAnswered: false,
+            quizFeedback: null,
+            // State kamus & latihan kilat
+            flashcardMode: false,
+            flashcardData: null,
+            // State Warung Baca (buka/tutup bocoran arti)
+            revealedWarung: {}
+        };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'shimon-moco-jawa';
+
+        // Inisialisasi Firebase sesuai aturan ketat
+        async function initFirebase() {
+            try {
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    const firebaseConfig = JSON.parse(__firebase_config);
+                    const app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, (user) => {
+                        currentUser = user;
+                        if (user) {
+                            listenToSavedUsernames();
+                        }
+                    });
+                }
+            } catch (err) {
+                console.warn("Mode Offline Aktif:", err);
+            }
+        }
+
+        // Mendengarkan daftar nama Bapak-Bapak yang pernah tersimpan di Cloud
+        function listenToSavedUsernames() {
+            if (!currentUser || !db) return;
+            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'shimon_moco_users');
+            onSnapshot(colRef, (snapshot) => {
+                const map = {};
+                snapshot.forEach((docSnap) => {
+                    map[docSnap.id] = docSnap.data();
+                });
+                allCloudUsers = map;
+                // Jika sedang di layar login, perbarui tombol nama cepat
+                if (!state.username) {
+                    renderMain();
+                }
+            }, (error) => {
+                console.warn("Gagal memuat daftar profil:", error);
+            });
+        }
+
+        // Fungsi Login / Load Otomatis Berdasarkan Username (Tanpa Password)
+        window.loginWithUsername = async function(rawName) {
+            const cleanName = (rawName || '').trim();
+            if (!cleanName) {
+                showToast("⚠️ Mohon ketik Nama Panggilan Anda terlebih dahulu!");
+                return;
+            }
+            const normId = cleanName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+            if (!normId) {
+                showToast("⚠️ Gunakan huruf atau angka untuk nama panggilan.");
+                return;
+            }
+
+            playGamelanNote(523.25, 0.2); // Bunyi kenong sambutan
+
+            // Cek apakah profil sudah ada di Cloud
+            let loadedData = allCloudUsers[normId] || null;
+            if (!loadedData && currentUser && db) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'shimon_moco_users', normId);
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        loadedData = snap.data();
+                    }
+                } catch (e) {
+                    console.warn("Load fallback:", e);
+                }
+            }
+
+            if (loadedData) {
+                state.username = loadedData.username || cleanName;
+                state.normalizedId = normId;
+                state.completedChapters = Array.isArray(loadedData.completedChapters) ? loadedData.completedChapters : [];
+                state.masteredAksara = Array.isArray(loadedData.masteredAksara) ? loadedData.masteredAksara : [];
+                state.xp = loadedData.xp || 0;
+                state.dialect = loadedData.dialect || 'jawa';
+                showToast(`🎉 Sugeng Rawuh kembali, ${state.username}! Progres belajar berhasil dilanjutkan.`);
+            } else {
+                // Buat profil baru
+                state.username = cleanName;
+                state.normalizedId = normId;
+                state.completedChapters = [];
+                state.masteredAksara = [];
+                state.xp = 0;
+                await saveProgressToCloud();
+                showToast(`🙌 Sugeng Rawuh, ${state.username}! Progres otomatis disimpan.`);
+            }
+
+            state.activeChapterId = null;
+            updateHeaderUI();
+            renderMain();
+            speakJavanese(`Sugeng rawuh ${state.username}`);
+        };
+
+        // Fungsi Simpan Progres Otomatis ke Cloud setiap ada kemajuan
+        async function saveProgressToCloud() {
+            if (!state.normalizedId) return;
+            const payload = {
+                username: state.username,
+                normalizedId: state.normalizedId,
+                completedChapters: state.completedChapters,
+                masteredAksara: state.masteredAksara,
+                xp: state.xp,
+                dialect: state.dialect,
+                updatedAt: Date.now()
+            };
+            allCloudUsers[state.normalizedId] = payload;
+            updateHeaderUI();
+
+            if (!currentUser || !db) return;
+            try {
+                const badge = document.getElementById('cloud-badge');
+                if (badge) badge.innerHTML = `<i class="ph-bold ph-arrows-clockwise animate-spin"></i> Menyimpan...`;
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'shimon_moco_users', state.normalizedId);
+                await setDoc(docRef, payload);
+                if (badge) badge.innerHTML = `<i class="ph-fill ph-check-circle"></i> Tersimpan`;
+            } catch (e) {
+                console.warn("Gagal simpan ke cloud:", e);
+            }
+        }
+
+        // ============================================================================
+        // 4. SISTEM AUDIO NATIVE JAWA + EFEK GAMELAN HALUS (WEB AUDIO & SPEECH API)
+        // ============================================================================
+        let audioCtx = null;
+        function getAudioCtx() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        // Bunyi Denting Kenong / Saron Gamelan Halus
+        function playGamelanNote(freq = 493.88, duration = 0.45) {
+            try {
+                const ctx = getAudioCtx();
+                const osc = ctx.createOscillator();
+                const osc2 = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                // Karakter suara metalofon gamelan (sine + overtone lembut)
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                osc2.type = 'triangle';
+                osc2.frequency.setValueAtTime(freq * 2.75, ctx.currentTime);
+
+                const gain2 = ctx.createGain();
+                gain2.gain.setValueAtTime(0.06, ctx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration * 0.5);
+
+                gain.gain.setValueAtTime(0.25, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+                osc.connect(gain);
+                osc2.connect(gain2);
+                gain2.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start();
+                osc2.start();
+                osc.stop(ctx.currentTime + duration);
+                osc2.stop(ctx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        // Bunyi Gamelan Sukses (Laras Pelog / Slendro Naik)
+        function playSuccessGamelan() {
+            playGamelanNote(440, 0.25);
+            setTimeout(() => playGamelanNote(554.37, 0.25), 110);
+            setTimeout(() => playGamelanNote(659.25, 0.5), 220);
+        }
+
+        // Bunyi Ketukan Kendhang Halus saat jawaban kurang tepat
+        function playGentleRetrySound() {
+            playGamelanNote(220, 0.3);
+        }
+
+        // Pelafalan Suara Lisan Jawa / Indonesia (Ramah Android & iOS)
+        window.speakJavanese = function(text, forceAksaraId = null) {
+            playGamelanNote(587.33, 0.15);
+            if (!('speechSynthesis' in window)) {
+                showToast(`🔊 Bunyi: "${text}"`);
+                return;
+            }
+            try {
+                window.speechSynthesis.cancel();
+                let spokenText = text;
+                if (forceAksaraId && AKSARA_DB[forceAksaraId]) {
+                    const item = AKSARA_DB[forceAksaraId];
+                    spokenText = state.dialect === 'jawa' ? item.ttsJawa : item.ttsIndo;
+                }
+
+                const utter = new SpeechSynthesisUtterance(spokenText);
+                const voices = window.speechSynthesis.getVoices();
+                // Prioritaskan suara Jawa (jv-ID) jika tersedia di HP Android, lalu Indonesia (id-ID)
+                const jvVoice = voices.find(v => v.lang && v.lang.toLowerCase().includes('jv'));
+                const idVoice = voices.find(v => v.lang && v.lang.toLowerCase().includes('id'));
+                if (jvVoice) {
+                    utter.voice = jvVoice;
+                    utter.lang = 'jv-ID';
+                } else if (idVoice) {
+                    utter.voice = idVoice;
+                    utter.lang = 'id-ID';
+                } else {
+                    utter.lang = 'id-ID';
+                }
+
+                // Kecepatan agak pelan dan jelas khusus untuk pendengaran Bapak-Bapak
+                utter.rate = 0.82;
+                utter.pitch = 0.96;
+                window.speechSynthesis.speak(utter);
+            } catch (e) {
+                console.warn("TTS error:", e);
+            }
+        };
+
+        // ============================================================================
+        // 5. PENGATURAN FITUR BAPAK-BAPAK (MODE KACAMATA & LOGAT SUARA)
+        // ============================================================================
+        window.toggleFontScale = function() {
+            state.fontScaleIndex = (state.fontScaleIndex + 1) % 3;
+            const shell = document.getElementById('app-shell');
+            const label = document.getElementById('font-scale-label');
+            shell.classList.remove('scale-normal', 'scale-besar', 'scale-super');
+
+            if (state.fontScaleIndex === 0) {
+                shell.classList.add('scale-normal');
+                label.textContent = 'Huruf: Normal';
+                showToast('👓 Ukuran Huruf: Normal');
+            } else if (state.fontScaleIndex === 1) {
+                shell.classList.add('scale-besar');
+                label.textContent = 'Huruf: Besar';
+                showToast('👓 Mode Kacamata: Huruf Diperbesar!');
+            } else {
+                shell.classList.add('scale-super');
+                label.textContent = 'Huruf: Super';
+                showToast('👓 Mode Kacamata: Huruf SUPER BESAR!');
+            }
+        };
+
+        window.toggleDialect = function() {
+            state.dialect = state.dialect === 'jawa' ? 'indo' : 'jawa';
+            updateHeaderUI();
+            saveProgressToCloud();
+            if (state.dialect === 'jawa') {
+                showToast('🔊 Logat Suara: Jawa Mataraman/Timuran (Hå Nå Cå Rå Kå)');
+                speakJavanese('Ho No Co Ro Ko');
+            } else {
+                showToast('🔊 Logat Suara: Standar (Ha Na Ca Ra Ka)');
+                speakJavanese('Ha Na Ca Ra Ka');
+            }
+            renderMain();
+        };
+
+        window.showLoginModal = function() {
+            state.username = '';
+            state.activeChapterId = null;
+            updateHeaderUI();
+            renderMain();
+        };
+
+        window.switchTab = function(tabName) {
+            playGamelanNote(523.25, 0.12);
+            state.activeTab = tabName;
+            state.activeChapterId = null;
+            state.flashcardMode = false;
+            updateNavUI();
+            renderMain();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        function showToast(msg) {
+            const box = document.getElementById('toast-box');
+            const text = document.getElementById('toast-text');
+            if (!box || !text) return;
+            text.textContent = msg;
+            box.classList.remove('hidden');
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => {
+                box.classList.add('hidden');
+            }, 3000);
+        }
+
+        function updateHeaderUI() {
+            const statusBar = document.getElementById('user-status-bar');
+            const bottomNav = document.getElementById('bottom-nav');
+            const nameDisplay = document.getElementById('active-username-display');
+            const masteryCount = document.getElementById('active-mastery-count');
+            const dialectLabel = document.getElementById('dialect-label');
+
+            if (state.username) {
+                statusBar.classList.remove('hidden');
+                bottomNav.classList.remove('hidden');
+                nameDisplay.textContent = state.username;
+                masteryCount.textContent = `${state.masteredAksara.length}/29 Aksara & Tanda Hafal`;
+                dialectLabel.textContent = state.dialect === 'jawa' ? 'Logat: Jawa (Å)' : 'Logat: Biasa (A)';
+            } else {
+                statusBar.classList.add('hidden');
+                bottomNav.classList.add('hidden');
+            }
+        }
+
+        function updateNavUI() {
+            const tabs = ['belajar', 'kamus', 'warung'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`nav-${t}`);
+                if (!btn) return;
+                if (state.activeTab === t) {
+                    btn.className = "flex flex-col items-center justify-center py-2 px-1 rounded-2xl font-bold transition bg-amber-100 text-amber-900 border-2 border-amber-500 shadow-sm";
+                } else {
+                    btn.className = "flex flex-col items-center justify-center py-2 px-1 rounded-2xl font-bold transition text-stone-600 hover:bg-stone-100 border-2 border-transparent";
+                }
+            });
+        }
+
+        // ============================================================================
+        // 6. RENDER LAYAR UTAMA (LOGIN, PETA BELAJAR, SESI TRIK OTAK, KAMUS, WARUNG)
+        // ============================================================================
+        function renderMain() {
+            const container = document.getElementById('main-content');
+            if (!container) return;
+
+            // 1. Jika belum login -> Tampilkan Layar Masuk Tanpa Password yang Super Mudah
+            if (!state.username) {
+                container.innerHTML = renderLoginScreen();
+                return;
+            }
+
+            // 2. Jika sedang di dalam Bab Belajar -> Tampilkan Langkah Belajar Interaktif
+            if (state.activeChapterId !== null) {
+                container.innerHTML = renderActiveLesson();
+                return;
+            }
+
+            // 3. Render sesuai Tab Bawah
+            if (state.activeTab === 'belajar') {
+                container.innerHTML = renderBelajarHome();
+            } else if (state.activeTab === 'kamus') {
+                container.innerHTML = renderKamusTab();
+            } else if (state.activeTab === 'warung') {
+                container.innerHTML = renderWarungTab();
+            }
+        }
+
+        // ----------------------------------------------------------------------------
+        // LAYAR 1: LOGIN USERNAME TANPA PASSWORD
+        // ----------------------------------------------------------------------------
+        function renderLoginScreen() {
+            const savedUserList = Object.values(allCloudUsers)
+                .sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0))
+                .slice(0, 6);
+
+            let savedUsersHTML = '';
+            if (savedUserList.length > 0) {
+                savedUsersHTML = `
+                    <div class="mt-6 bg-amber-50/90 border-2 border-amber-300 rounded-3xl p-4">
+                        <p class="text-xs font-extrabold uppercase tracking-wider text-amber-900 mb-2.5 flex items-center gap-1.5">
+                            <i class="ph-fill ph-clock-counter-clockwise text-base"></i>
+                            Atau Sentuh Nama Anda untuk Langsung Lanjut:
+                        </p>
+                        <div class="grid grid-cols-1 gap-2.5">
+                            ${savedUserList.map(u => {
+                                const babCount = Array.isArray(u.completedChapters) ? u.completedChapters.length : 0;
+                                const aksCount = Array.isArray(u.masteredAksara) ? u.masteredAksara.length : 0;
+                                return `
+                                    <button onclick="window.loginWithUsername('${u.username.replace(/'/g, "\\'")}')"
+                                        class="btn-3d-cream w-full text-left px-4 py-3 rounded-2xl flex items-center justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-extrabold text-lg">
+                                                ${u.username.charAt(0).toUpperCase()}
+                                            </div>
+                                            <div>
+                                                <div class="font-extrabold text-stone-900 text-base">${u.username}</div>
+                                                <div class="text-xs font-semibold text-stone-600">Lulus ${babCount}/7 Bab • ${aksCount} Aksara Hafal</div>
+                                            </div>
+                                        </div>
+                                        <span class="bg-amber-600 text-white text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1">
+                                            Lanjut <i class="ph-bold ph-arrow-right"></i>
+                                        </span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="animate-pop py-2">
+                    <!-- Kartu Sambutan Hangat -->
+                    <div class="bg-white rounded-3xl p-6 shadow-lg border-2 border-amber-200 text-center">
+                        <div class="inline-flex items-center justify-center px-6 py-3 min-h-[4.5rem] max-w-full overflow-hidden rounded-3xl bg-amber-100 border-4 border-amber-400 shadow-inner mb-3">
+                            <span class="aksara-font text-3xl font-bold text-amber-900 whitespace-nowrap leading-none">ꦲꦤꦕꦫꦏ</span>
+                        </div>
+                        <div class="block">
+                            <span class="inline-block bg-amber-100 text-amber-900 font-extrabold text-xs px-3 py-1 rounded-full border border-amber-300 mb-2">
+                                METODE CEPAT & MUDAH • TANPA MENULIS
+                            </span>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-stone-900 leading-tight">
+                            Sugeng Rawuh di <span class="text-amber-700">Shimon Moco!</span>
+                        </h2>
+                        <p class="text-sm text-stone-600 mt-2 leading-relaxed">
+                            Belajar membaca Aksara Jawa dengan <strong>Trik Mengakali Otak</strong>. Tidak perlu menghafal mati, cukup lihat gambarnya, dengar suaranya, tahu-tahu langsung bisa baca!
+                        </p>
+
+                        <!-- Input Username Tanpa Password -->
+                        <div class="mt-6 text-left bg-stone-50 p-4 rounded-2xl border-2 border-stone-200">
+                            <label for="username-input" class="block font-extrabold text-stone-800 text-sm mb-2">
+                                👤 Ketik Nama Panggilan Anda:
+                            </label>
+                            <input
+                                id="username-input"
+                                type="text"
+                                placeholder="Contoh: Budi / Joko / Sari"
+                                class="w-full px-4 py-3.5 text-lg font-bold text-stone-900 bg-white border-2 border-amber-500 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-300"
+                                onkeydown="if(event.key === 'Enter') window.submitLoginInput()"
+                            />
+                            <p class="text-xs text-stone-500 font-medium mt-2 flex items-center gap-1">
+                                <i class="ph-fill ph-lock-key-open text-amber-600 text-sm"></i>
+                                <span><strong>Tanpa Password!</strong> Besok kalau mau lanjut, cukup ketik nama yang sama.</span>
+                            </p>
+                        </div>
+
+                        <button onclick="window.submitLoginInput()" class="btn-3d-amber w-full mt-4 py-4 px-6 rounded-2xl text-white font-extrabold text-lg flex items-center justify-center gap-2">
+                            <span>MASUK & MULAI BELAJAR</span>
+                            <i class="ph-bold ph-arrow-circle-right text-2xl"></i>
+                        </button>
+                    </div>
+
+                    ${savedUsersHTML}
+
+                    <!-- Penjelasan 3 Rahasia Metode Shimon Moco -->
+                    <div class="mt-6 bg-stone-100 rounded-3xl p-5 border border-stone-300">
+                        <h3 class="font-extrabold text-stone-800 text-sm uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                            <i class="ph-fill ph-lightbulb text-amber-600 text-lg"></i>
+                            Kenapa Belajar di Sini Cepat Bisa Baca?
+                        </h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-start gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-amber-600 text-white font-extrabold flex items-center justify-center shrink-0">1</span>
+                                <div>
+                                    <strong class="text-stone-900">Jembatan Ingatan Benda Harian:</strong>
+                                    <p class="text-stone-600 text-xs mt-0.5">Bentuk aksara disamakan dengan Kursi Goyang, Meja, Paruh Burung, Kacamata, & Cangkir Kopi.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-amber-600 text-white font-extrabold flex items-center justify-center shrink-0">2</span>
+                                <div>
+                                    <strong class="text-stone-900">Trik Bacaan Campuran Otomatis:</strong>
+                                    <p class="text-stone-600 text-xs mt-0.5">Baru hafal 3-5 huruf, otak langsung diajak membaca kata nyata sehingga hafal tanpa terasa.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-amber-600 text-white font-extrabold flex items-center justify-center shrink-0">3</span>
+                                <div>
+                                    <strong class="text-stone-900">Suara Lisan Jawa Asli:</strong>
+                                    <p class="text-stone-600 text-xs mt-0.5">Tinggal sentuh hurufnya, langsung terdengar cara bacanya dengan jelas.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.submitLoginInput = function() {
+            const input = document.getElementById('username-input');
+            if (input) {
+                window.loginWithUsername(input.value);
+            }
+        };
+
+        // ----------------------------------------------------------------------------
+        // LAYAR 2: BERANDA BELAJAR BERTAHAP (PETA 7 BAB)
+        // ----------------------------------------------------------------------------
+        function renderBelajarHome() {
+            const completedCount = state.completedChapters.length;
+            const totalChapters = CHAPTERS.length;
+            const progressPercent = Math.round((completedCount / totalChapters) * 100);
+
+            // Tentukan bab berikutnya yang disarankan
+            let nextChapter = CHAPTERS.find(c => !state.completedChapters.includes(c.id)) || CHAPTERS[CHAPTERS.length - 1];
+
+            // Kartu Sertifikat Kelulusan jika semua 7 bab sudah tamat!
+            let graduationBanner = '';
+            if (completedCount === totalChapters) {
+                graduationBanner = `
+                    <div class="mb-5 bg-gradient-to-br from-amber-500 via-amber-600 to-amber-800 text-white rounded-3xl p-5 shadow-xl border-4 border-amber-300 text-center animate-pop">
+                        <div class="text-4xl mb-1">🏆🎓☕</div>
+                        <div class="text-xs font-extrabold uppercase tracking-widest text-amber-200">SERTIFIKAT KELULUSAN SHIMON MOCO</div>
+                        <h3 class="text-xl font-extrabold mt-1">Selamat, ${state.username}!</h3>
+                        <p class="text-xs text-amber-100 mt-1 leading-relaxed">
+                            Anda telah menamatkan seluruh 7 Bab Aksara Jawa beserta Sandhangan! Sekarang Anda sudah resmi bisa membaca Aksara Jawa!
+                        </p>
+                        <div class="mt-3 bg-white/95 text-amber-950 rounded-2xl p-3 font-bold">
+                            <div class="aksara-font text-2xl">ꦱꦸꦒꦼꦁ ꦩꦕ ꦲꦏ꧀ꦱꦫ ꦗꦮ</div>
+                            <div class="text-xs text-stone-600 mt-0.5">"Sugeng Maca Aksara Jawa"</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="animate-pop space-y-5">
+                    ${graduationBanner}
+
+                    <!-- Kartu Ringkasan Progres & Tombol Jalan Pintas Bab Berikutnya -->
+                    <div class="bg-white rounded-3xl p-5 shadow-md border-2 border-amber-300">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 flex items-center gap-1">
+                                <i class="ph-fill ph-chart-line-up text-base"></i> Progres Belajar Anda
+                            </span>
+                            <span class="bg-amber-100 text-amber-900 font-extrabold text-xs px-2.5 py-1 rounded-full border border-amber-300">
+                                ${completedCount} dari ${totalChapters} Bab Tamat (${progressPercent}%)
+                            </span>
+                        </div>
+
+                        <!-- Progress Bar Besar -->
+                        <div class="w-full h-4 bg-stone-200 rounded-full overflow-hidden p-0.5 border border-stone-300">
+                            <div class="h-full bg-gradient-to-r from-amber-500 to-emerald-600 rounded-full transition-all duration-500" style="width: ${Math.max(progressPercent, 6)}%"></div>
+                        </div>
+
+                        <!-- Tombol Langsung Lanjut -->
+                        <div class="mt-4 pt-4 border-t border-stone-200">
+                            <div class="text-xs font-bold text-stone-500">Langkah Selanjutnya:</div>
+                            <div class="font-extrabold text-stone-900 text-base mt-0.5">${nextChapter.title}</div>
+                            <div class="text-xs font-semibold text-amber-800 mb-3">${nextChapter.subtitle}</div>
+                            <button onclick="window.startChapter(${nextChapter.id})" class="btn-3d-amber w-full py-3.5 px-5 rounded-2xl text-white font-extrabold text-base flex items-center justify-center gap-2 pulse-gentle">
+                                <i class="ph-fill ph-play-circle text-2xl"></i>
+                                <span>MULAI / LANJUTKAN ${nextChapter.title.toUpperCase()}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Daftar Lengkap 7 Bab Perjalanan -->
+                    <div>
+                        <h3 class="font-extrabold text-stone-800 text-base mb-3 px-1 flex items-center gap-2">
+                            <i class="ph-fill ph-signpost text-amber-700 text-xl"></i>
+                            <span>Urutan Bab Belajar (Bisa Diulang Kapan Saja)</span>
+                        </h3>
+
+                        <div class="space-y-3.5">
+                            ${CHAPTERS.map((chap) => {
+                                const isDone = state.completedChapters.includes(chap.id);
+                                const isCurrent = chap.id === nextChapter.id && !isDone;
+                                const previewAksara = chap.aksaraIds.map(id => AKSARA_DB[id]?.aksara || '').join(' ');
+
+                                return `
+                                    <div class="bg-white rounded-3xl p-4 shadow-sm border-2 ${isDone ? 'border-emerald-500 bg-emerald-50/30' : isCurrent ? 'border-amber-500 ring-2 ring-amber-200' : 'border-stone-200'}">
+                                        <div class="flex items-start justify-between gap-3">
+                                            <div class="flex items-center gap-2.5">
+                                                <div class="w-10 h-10 rounded-2xl font-extrabold text-base flex items-center justify-center shrink-0 ${isDone ? 'bg-emerald-600 text-white' : isCurrent ? 'bg-amber-500 text-white' : 'bg-stone-200 text-stone-700'}">
+                                                    ${isDone ? '<i class="ph-bold ph-check text-xl"></i>' : chap.id}
+                                                </div>
+                                                <div>
+                                                    <div class="flex items-center gap-2 flex-wrap">
+                                                        <h4 class="font-extrabold text-stone-900 text-base">${chap.title}</h4>
+                                                        ${isDone ? '<span class="bg-emerald-100 text-emerald-800 text-[11px] font-extrabold px-2 py-0.5 rounded-full border border-emerald-300">✅ Sudah Tamat</span>' : ''}
+                                                    </div>
+                                                    <div class="text-xs font-bold text-amber-800 mt-0.5">${chap.subtitle}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <p class="text-xs text-stone-600 mt-2.5 leading-relaxed">${chap.desc}</p>
+
+                                        ${previewAksara ? `
+                                            <div class="mt-3 bg-amber-50/80 border border-amber-200 rounded-2xl py-2 px-3 flex items-center justify-between">
+                                                <span class="aksara-font text-2xl font-bold text-stone-800 tracking-widest">${previewAksara}</span>
+                                                <span class="text-[11px] font-bold text-amber-900 bg-amber-200/70 px-2.5 py-1 rounded-xl">${chap.steps.length} Langkah Mudah</span>
+                                            </div>
+                                        ` : ''}
+
+                                        <button onclick="window.startChapter(${chap.id})"
+                                            class="mt-3 w-full py-3 px-4 rounded-2xl font-extrabold text-sm flex items-center justify-center gap-2 ${isDone ? 'btn-3d-cream text-emerald-900' : 'btn-3d-amber text-white'}">
+                                            <i class="ph-bold ${isDone ? 'ph-arrows-clockwise' : 'ph-book-open'} text-lg"></i>
+                                            <span>${isDone ? 'ULANGI BAB INI AGAR MAKIN LANCAR' : 'BUKA & PELAJARI BAB INI'}</span>
+                                        </button>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================================================
+        // 7. MESIN PELAJARAN INTERAKTIF ("MENGAKALI OTAK" STEP-BY-STEP)
+        // ============================================================================
+        window.startChapter = function(chapterId) {
+            playGamelanNote(523.25, 0.2);
+            state.activeChapterId = chapterId;
+            state.activeStepIndex = 0;
+            state.quizAnswered = false;
+            state.quizFeedback = null;
+            renderMain();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            autoSpeakCurrentStep();
+        };
+
+        window.exitChapter = function() {
+            state.activeChapterId = null;
+            renderMain();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        function autoSpeakCurrentStep() {
+            const chap = CHAPTERS.find(c => c.id === state.activeChapterId);
+            if (!chap) return;
+            const step = chap.steps[state.activeStepIndex];
+            if (!step) return;
+
+            setTimeout(() => {
+                if (step.type === 'learn') {
+                    speakJavanese('', step.aksaraId);
+                } else if (step.tts) {
+                    speakJavanese(step.tts);
+                }
+            }, 250);
+        }
+
+        function renderActiveLesson() {
+            const chap = CHAPTERS.find(c => c.id === state.activeChapterId);
+            if (!chap) return '';
+
+            const totalSteps = chap.steps.length;
+            const step = chap.steps[state.activeStepIndex];
+
+            // Jika seluruh langkah di bab ini selesai -> Layar Perayaan Bab Tamat!
+            if (!step) {
+                return renderChapterComplete(chap);
+            }
+
+            const stepPercent = Math.round(((state.activeStepIndex + 1) / totalSteps) * 100);
+
+            let stepContentHTML = '';
+
+            // TIPE 1: KENALAN VISUAL & TRIK OTAK
+            if (step.type === 'learn') {
+                const item = AKSARA_DB[step.aksaraId];
+                const displaySound = state.dialect === 'jawa' ? `${item.jawa} (atau ${item.latin})` : item.latin;
+
+                stepContentHTML = `
+                    <div class="bg-white rounded-3xl p-5 shadow-lg border-2 border-amber-300 animate-pop">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-amber-100 text-amber-900 font-extrabold text-xs px-3 py-1 rounded-full border border-amber-300">
+                                🧠 TRIK INGATAN VISUAL
+                            </span>
+                            <span class="text-xs font-bold text-stone-500">Sentuh kotak untuk dengar suara</span>
+                        </div>
+
+                        <!-- Kotak Aksara Raksasa (Bisa Disentuh untuk Bunyi) -->
+                        <div onclick="window.speakJavanese('', '${item.id}')"
+                            class="mt-3 bg-gradient-to-b from-amber-50 to-orange-50 border-4 border-amber-400 rounded-3xl p-5 text-center cursor-pointer active:scale-98 transition relative shadow-inner overflow-hidden">
+                            <div class="aksara-font text-6xl sm:text-7xl font-bold text-stone-900 select-all whitespace-nowrap">${item.aksara}</div>
+                            <div class="mt-2 inline-flex items-center gap-2 bg-amber-600 text-white font-extrabold text-xl px-5 py-1.5 rounded-2xl shadow">
+                                <i class="ph-fill ph-speaker-high text-2xl"></i>
+                                <span>Bunyi: "${displaySound}"</span>
+                            </div>
+                            <div class="text-xs font-bold text-amber-800 mt-2">👆 Sentuh untuk mendengar suaranya lagi</div>
+                        </div>
+
+                        <!-- Jembatan Ingatan Benda Sehari-hari -->
+                        <div class="mt-4 bg-stone-50 border-2 border-stone-200 rounded-2xl p-4">
+                            <div class="flex items-center gap-3">
+                                <div class="text-4xl bg-white w-14 h-14 rounded-2xl flex items-center justify-center border border-stone-300 shadow-sm shrink-0">
+                                    ${item.ikon}
+                                </div>
+                                <div>
+                                    <div class="text-xs font-extrabold uppercase text-amber-800">Bayangkan Benda Ini:</div>
+                                    <div class="text-lg font-extrabold text-stone-900">${item.benda}</div>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 pt-3 border-t border-stone-200 text-sm text-stone-700 leading-relaxed font-medium">
+                                💡 <strong>Trik Otak:</strong> ${item.trikOtak}
+                            </div>
+
+                            <div class="mt-2.5 bg-amber-100/70 text-amber-950 px-3 py-2 rounded-xl text-xs font-bold">
+                                🔍 <strong>Ciri Pembeda:</strong> ${item.ciriKhas}
+                            </div>
+                        </div>
+
+                        <!-- Contoh Kata -->
+                        <div onclick="window.speakJavanese('${item.contoh.split('(')[0]}')"
+                            class="mt-3 bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-3 flex items-center justify-between cursor-pointer">
+                            <div>
+                                <span class="text-xs font-extrabold text-emerald-800 block">Contoh Pemakaian:</span>
+                                <span class="aksara-font text-lg font-bold text-stone-900">${item.contoh}</span>
+                            </div>
+                            <span class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1">
+                                <i class="ph-fill ph-speaker-high"></i> Dengar
+                            </span>
+                        </div>
+
+                        <!-- Navigasi Lanjut -->
+                        <div class="mt-5 flex gap-2.5">
+                            ${state.activeStepIndex > 0 ? `
+                                <button onclick="window.prevLessonStep()" class="btn-3d-cream px-4 py-4 rounded-2xl font-extrabold text-stone-700 text-sm flex items-center gap-1 shrink-0">
+                                    <i class="ph-bold ph-arrow-left text-lg"></i> Mundur
+                                </button>
+                            ` : ''}
+                            <button onclick="window.completeLearnStep('${item.id}')" class="btn-3d-green flex-1 py-4 px-5 rounded-2xl text-white font-extrabold text-base flex items-center justify-center gap-2">
+                                <span>PAHAM, LANJUT!</span>
+                                <i class="ph-bold ph-arrow-right text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // TIPE 2: TEBAK BENTUK AKSARA (MENGUNCI MEMORI VISUAL)
+            else if (step.type === 'quiz_shape') {
+                stepContentHTML = `
+                    <div class="bg-white rounded-3xl p-5 shadow-lg border-2 border-amber-300 animate-pop">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="bg-purple-100 text-purple-900 font-extrabold text-xs px-3 py-1 rounded-full border border-purple-300">
+                                🎯 LATIHAN MATA & TELINGA
+                            </span>
+                            <button onclick="window.speakJavanese('${step.tts}')" class="bg-amber-100 text-amber-900 px-3 py-1 rounded-xl text-xs font-extrabold flex items-center gap-1 border border-amber-300">
+                                <i class="ph-fill ph-speaker-high"></i> Bunyikan Soal
+                            </button>
+                        </div>
+
+                        <h3 class="text-base font-extrabold text-stone-900 leading-snug mt-2">
+                            ${step.question}
+                        </h3>
+
+                        <!-- Pilihan Jawaban Besar -->
+                        <div class="mt-4 space-y-3">
+                            ${step.options.map((opt, idx) => `
+                                <button onclick="window.answerQuiz(${idx})"
+                                    class="w-full p-4 rounded-2xl border-2 text-left flex items-center justify-between transition ${
+                                        state.quizAnswered && opt.correct
+                                            ? 'bg-emerald-100 border-emerald-600 ring-2 ring-emerald-300'
+                                            : state.quizAnswered && state.quizFeedback?.selectedIndex === idx && !opt.correct
+                                            ? 'bg-red-50 border-red-400'
+                                            : 'btn-3d-cream hover:border-amber-500'
+                                    }">
+                                    <div class="flex items-center gap-4">
+                                        <span class="aksara-font text-3xl font-bold text-stone-900 bg-amber-50 px-4 py-1.5 rounded-2xl border border-amber-200 whitespace-nowrap">${opt.aksara}</span>
+                                        <span class="font-extrabold text-stone-800 text-base">${opt.label}</span>
+                                    </div>
+                                    <i class="ph-bold ph-hand-tap text-2xl text-amber-700"></i>
+                                </button>
+                            `).join('')}
+                        </div>
+
+                        ${renderQuizFeedbackBox()}
+                    </div>
+                `;
+            }
+
+            // TIPE 3: BACAAN CAMPURAN OTOMATIS (HYBRID DIGLOT WEAVE - MENGAKALI OTAK!)
+            else if (step.type === 'hybrid_read') {
+                stepContentHTML = `
+                    <div class="bg-white rounded-3xl p-5 shadow-lg border-2 border-amber-300 animate-pop">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="bg-emerald-100 text-emerald-900 font-extrabold text-xs px-3 py-1 rounded-full border border-emerald-300">
+                                ⚡ TRIK OTAK: BACA KALIMAT CAMPURAN
+                            </span>
+                            <button onclick="window.speakJavanese('${step.tts}')" class="bg-amber-600 text-white px-3 py-1 rounded-xl text-xs font-extrabold flex items-center gap-1">
+                                <i class="ph-fill ph-speaker-high"></i> Dengar Suara
+                            </button>
+                        </div>
+
+                        <p class="text-xs text-stone-600 font-semibold">
+                            Otak kita otomatis bisa menebak dan membaca kata Aksara Jawa di dalam kalimat ini:
+                        </p>
+
+                        <!-- Kalimat Campuran -->
+                        <div onclick="window.speakJavanese('${step.tts}')"
+                            class="mt-3 bg-amber-50 border-2 border-amber-400 rounded-3xl p-4 text-center cursor-pointer">
+                            <p class="text-base font-bold text-stone-800 leading-relaxed">
+                                "${step.sentenceBefore}
+                                <span class="inline-flex items-center justify-center bg-white border-2 border-amber-500 px-3.5 py-1 rounded-2xl mx-1 shadow-sm">
+                                    <span class="aksara-font text-2xl sm:text-3xl font-bold text-amber-950 whitespace-nowrap">${step.aksaraWord}</span>
+                                </span>
+                                ${step.sentenceAfter}"
+                            </p>
+                            <div class="mt-2 text-xs font-extrabold text-amber-900 bg-amber-200/70 inline-block px-3 py-1 rounded-xl">
+                                🧩 Kupasan Huruf: ${step.breakdown}
+                            </div>
+                        </div>
+
+                        <h4 class="font-extrabold text-stone-900 text-base mt-4 mb-2.5">${step.question}</h4>
+
+                        <div class="space-y-2.5">
+                            ${step.options.map((opt, idx) => `
+                                <button onclick="window.answerQuiz(${idx})"
+                                    class="w-full p-4 rounded-2xl border-2 text-left font-extrabold text-base flex items-center justify-between transition ${
+                                        state.quizAnswered && opt.correct
+                                            ? 'bg-emerald-100 border-emerald-600 text-emerald-950 ring-2 ring-emerald-300'
+                                            : state.quizAnswered && state.quizFeedback?.selectedIndex === idx && !opt.correct
+                                            ? 'bg-red-50 border-red-400 text-red-900'
+                                            : 'btn-3d-cream text-stone-900'
+                                    }">
+                                    <span>${opt.text}</span>
+                                    <i class="ph-bold ph-check-circle text-xl text-amber-700"></i>
+                                </button>
+                            `).join('')}
+                        </div>
+
+                        ${renderQuizFeedbackBox()}
+                    </div>
+                `;
+            }
+
+            // TIPE 4: LATIHAN MEMBACA KATA JAWA UTUH
+            else if (step.type === 'word_read') {
+                stepContentHTML = `
+                    <div class="bg-white rounded-3xl p-5 shadow-lg border-2 border-amber-300 animate-pop">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="bg-amber-100 text-amber-900 font-extrabold text-xs px-3 py-1 rounded-full border border-amber-300">
+                                📖 PRAKTEK MEMBACA KATA
+                            </span>
+                            <button onclick="window.speakJavanese('${step.tts}')" class="bg-amber-600 text-white px-3 py-1 rounded-xl text-xs font-extrabold flex items-center gap-1">
+                                <i class="ph-fill ph-speaker-high"></i> Dengar Bunyi
+                            </button>
+                        </div>
+
+                        <p class="text-xs font-bold text-stone-600">Mari baca tulisan Aksara Jawa di bawah ini pelan-pelan:</p>
+
+                        <!-- Kartu Kata Aksara Jawa -->
+                        <div onclick="window.speakJavanese('${step.tts}')"
+                            class="mt-3 bg-gradient-to-b from-amber-50 to-orange-50 border-4 border-amber-400 rounded-3xl p-5 text-center cursor-pointer shadow-inner overflow-hidden">
+                            <div class="aksara-font text-4xl sm:text-5xl font-bold text-stone-900">${step.aksaraWord}</div>
+                            <div class="mt-2 text-xs font-bold text-amber-900">${step.meaning}</div>
+                            <!-- Tombol Bantuan Kupas Huruf -->
+                            <div class="mt-2.5 bg-white/90 border border-amber-300 rounded-xl px-3 py-1.5 text-xs font-extrabold text-stone-700 inline-block">
+                                💡 Petunjuk: ${step.breakdown}
+                            </div>
+                        </div>
+
+                        <h4 class="font-extrabold text-stone-900 text-base mt-4 mb-2.5">Bagaimana cara membacanya?</h4>
+
+                        <div class="space-y-2.5">
+                            ${step.options.map((opt, idx) => `
+                                <button onclick="window.answerQuiz(${idx})"
+                                    class="w-full p-4 rounded-2xl border-2 text-left font-extrabold text-base flex items-center justify-between transition ${
+                                        state.quizAnswered && opt.correct
+                                            ? 'bg-emerald-100 border-emerald-600 text-emerald-950 ring-2 ring-emerald-300'
+                                            : state.quizAnswered && state.quizFeedback?.selectedIndex === idx && !opt.correct
+                                            ? 'bg-red-50 border-red-400 text-red-900'
+                                            : 'btn-3d-cream text-stone-900'
+                                    }">
+                                    <span>${opt.text}</span>
+                                    <i class="ph-bold ph-speaker-high text-xl text-amber-700"></i>
+                                </button>
+                            `).join('')}
+                        </div>
+
+                        ${renderQuizFeedbackBox()}
+                    </div>
+                `;
+            }
+
+            return `
+                <div>
+                    <!-- Bar Atas Pelajaran (Tombol Kembali & Indikator Langkah) -->
+                    <div class="flex items-center justify-between gap-2 mb-3">
+                        <button onclick="window.exitChapter()" class="bg-stone-200 hover:bg-stone-300 text-stone-800 font-extrabold text-xs px-3 py-2 rounded-xl flex items-center gap-1">
+                            <i class="ph-bold ph-arrow-left"></i> Daftar Bab
+                        </button>
+                        <div class="text-xs font-extrabold text-stone-700 truncate">
+                            ${chap.title} • Langkah ${state.activeStepIndex + 1}/${totalSteps}
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar Langkah Bab -->
+                    <div class="w-full h-3 bg-stone-200 rounded-full overflow-hidden mb-4 border border-stone-300">
+                        <div class="h-full bg-amber-500 transition-all duration-300" style="width: ${stepPercent}%"></div>
+                    </div>
+
+                    ${stepContentHTML}
+                </div>
+            `;
+        }
+
+        function renderQuizFeedbackBox() {
+            if (!state.quizFeedback) return '';
+            const isCorrect = state.quizFeedback.correct;
+
+            return `
+                <div class="mt-4 p-4 rounded-2xl border-2 animate-pop ${isCorrect ? 'bg-emerald-50 border-emerald-500 text-emerald-950' : 'bg-amber-50 border-amber-500 text-amber-950'}">
+                    <div class="font-extrabold text-base flex items-center gap-2">
+                        <span class="text-2xl">${isCorrect ? '🎉' : '💡'}</span>
+                        <span>${isCorrect ? 'MANTAP SEKALI! Jawaban Benar!' : 'Belum Tepat, Mari Kita Ingat Triknya:'}</span>
+                    </div>
+                    <p class="text-xs font-semibold mt-1 leading-relaxed">
+                        ${state.quizFeedback.message}
+                    </p>
+                    ${isCorrect ? `
+                        <button onclick="window.nextLessonStep()" class="btn-3d-green w-full mt-3 py-3.5 px-5 rounded-2xl text-white font-extrabold text-base flex items-center justify-center gap-2">
+                            <span>LANJUT LANGKAH BERIKUTNYA</span>
+                            <i class="ph-bold ph-arrow-right text-xl"></i>
+                        </button>
+                    ` : `
+                        <p class="text-xs font-extrabold text-amber-800 mt-2">👆 Silakan sentuh jawaban yang benar di atas.</p>
+                    `}
+                </div>
+            `;
+        }
+
+        window.completeLearnStep = async function(aksaraId) {
+            if (aksaraId && !state.masteredAksara.includes(aksaraId)) {
+                state.masteredAksara.push(aksaraId);
+                state.xp += 10;
+                await saveProgressToCloud();
+            } else {
+                playGamelanNote(587.33, 0.2);
+            }
+            window.nextLessonStep();
+        };
+
+        window.answerQuiz = async function(optionIndex) {
+            const chap = CHAPTERS.find(c => c.id === state.activeChapterId);
+            if (!chap) return;
+            const step = chap.steps[state.activeStepIndex];
+            if (!step || !step.options) return;
+
+            const chosen = step.options[optionIndex];
+            if (!chosen) return;
+
+            if (chosen.correct) {
+                playSuccessGamelan();
+                state.quizAnswered = true;
+                state.quizFeedback = {
+                    correct: true,
+                    selectedIndex: optionIndex,
+                    message: chosen.hint || `Bacaan yang tepat adalah "${chosen.text || chosen.label}". Ingatan Anda makin kuat!`
+                };
+                if (step.tts) {
+                    speakJavanese(step.tts);
+                }
+                state.xp += 15;
+                await saveProgressToCloud();
+            } else {
+                playGentleRetrySound();
+                state.quizFeedback = {
+                    correct: false,
+                    selectedIndex: optionIndex,
+                    message: chosen.hint || `Coba perhatikan lagi petunjuk bentuk huruf di atas, pasti ketemu!`
+                };
+            }
+            renderMain();
+        };
+
+        window.nextLessonStep = function() {
+            state.activeStepIndex += 1;
+            state.quizAnswered = false;
+            state.quizFeedback = null;
+            renderMain();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            autoSpeakCurrentStep();
+        };
+
+        window.prevLessonStep = function() {
+            if (state.activeStepIndex > 0) {
+                state.activeStepIndex -= 1;
+                state.quizAnswered = false;
+                state.quizFeedback = null;
+                renderMain();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
+
+        function renderChapterComplete(chap) {
+            // Simpan bahwa bab ini sudah tamat
+            if (!state.completedChapters.includes(chap.id)) {
+                state.completedChapters.push(chap.id);
+                chap.aksaraIds.forEach(id => {
+                    if (!state.masteredAksara.includes(id)) {
+                        state.masteredAksara.push(id);
+                    }
+                });
+                state.xp += 50;
+                saveProgressToCloud();
+                playSuccessGamelan();
+            }
+
+            const nextChap = CHAPTERS.find(c => c.id === chap.id + 1);
+
+            return `
+                <div class="bg-white rounded-3xl p-6 shadow-xl border-4 border-emerald-500 text-center animate-pop my-2">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-5xl shadow-inner mb-3">
+                        🎉
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-900 font-extrabold text-xs px-3 py-1 rounded-full border border-emerald-300">
+                        OTOMATIS TERSIMPAN DI AKUN ${state.username.toUpperCase()}
+                    </span>
+                    <h2 class="text-2xl font-extrabold text-stone-900 mt-2">
+                        Luar Biasa, ${state.username}!
+                    </h2>
+                    <p class="text-sm font-bold text-emerald-800 mt-1">
+                        ${chap.title} Berhasil Ditamatkan!
+                    </p>
+                    <p class="text-xs text-stone-600 mt-2 leading-relaxed">
+                        Otak Anda sekarang sudah merekam bentuk dan bunyi huruf di bab ini. Mari lanjutkan agar semakin lancar membaca!
+                    </p>
+
+                    <div class="mt-6 space-y-3">
+                        ${nextChap ? `
+                            <button onclick="window.startChapter(${nextChap.id})" class="btn-3d-amber w-full py-4 px-5 rounded-2xl text-white font-extrabold text-base flex items-center justify-center gap-2">
+                                <span>LANJUT KE ${nextChap.title.toUpperCase()}</span>
+                                <i class="ph-bold ph-arrow-right text-xl"></i>
+                            </button>
+                        ` : ''}
+                        <button onclick="window.exitChapter()" class="btn-3d-cream w-full py-3.5 px-5 rounded-2xl text-stone-800 font-extrabold text-sm flex items-center justify-center gap-2">
+                            <i class="ph-bold ph-house text-lg"></i>
+                            <span>KEMBALI KE HALAMAN UTAMA</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================================================
+        // 8. TAB 2: KAMUS TRIK OTAK (20 AKSARA + SANDHANGAN + TEBAK KARTU CEPAT)
+        // ============================================================================
+        function renderKamusTab() {
+            if (state.flashcardMode) {
+                return renderFlashcardDrill();
+            }
+
+            const carakanIds = [
+                'ha','na','ca','ra','ka',
+                'da','ta','sa','wa','la',
+                'pa','dha','ja','ya','nya',
+                'ma','ga','ba','tha','nga'
+            ];
+            const sandhanganIds = [
+                'wulu','suku','taling','taling_tarung','pepet',
+                'cecak','layar','wignyan','pangkon'
+            ];
+
+            return `
+                <div class="animate-pop space-y-5">
+                    <!-- Kartu Latihan Tebak Cepat -->
+                    <div class="bg-gradient-to-r from-amber-700 to-amber-900 text-white rounded-3xl p-5 shadow-md border-2 border-amber-400">
+                        <div class="flex items-center justify-between gap-3">
+                            <div>
+                                <span class="text-[11px] bg-amber-400 text-amber-950 font-extrabold px-2.5 py-0.5 rounded-full">ASAH INGATAN</span>
+                                <h3 class="text-lg font-extrabold mt-1">Tebak Kartu Kilat</h3>
+                                <p class="text-xs text-amber-100 mt-0.5">Uji seberapa cepat mata Anda mengenali huruf yang sudah dipelajari.</p>
+                            </div>
+                            <button onclick="window.startFlashcardDrill()" class="btn-3d-amber px-4 py-3 rounded-2xl font-extrabold text-sm shrink-0 flex items-center gap-1.5">
+                                <i class="ph-fill ph-lightning text-lg"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tabel 20 Aksara Dasar (Sentuh untuk Dengar & Lihat Trik) -->
+                    <div class="bg-white rounded-3xl p-4 shadow-sm border-2 border-stone-200">
+                        <h3 class="font-extrabold text-stone-900 text-base flex items-center gap-2">
+                            <i class="ph-fill ph-grid-four text-amber-700 text-xl"></i>
+                            <span>20 Aksara Jawa Dasar (Carakan)</span>
+                        </h3>
+                        <p class="text-xs text-stone-600 mt-0.5 mb-3">
+                            👆 <strong>Sentuh kotak huruf mana saja</strong> untuk mendengar suaranya dan melihat Trik Otak-nya:
+                        </p>
+
+                        <div class="grid grid-cols-2 gap-2.5">
+                            ${carakanIds.map(id => {
+                                const item = AKSARA_DB[id];
+                                const isMastered = state.masteredAksara.includes(id);
+                                const soundLabel = state.dialect === 'jawa' ? item.jawa : item.latin;
+                                return `
+                                    <div onclick="window.showKamusDetail('${id}')"
+                                        class="btn-3d-cream p-3 rounded-2xl cursor-pointer flex items-center gap-3 relative ${isMastered ? 'border-emerald-400 bg-emerald-50/40' : ''}">
+                                        <div class="w-14 h-14 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0 overflow-hidden">
+                                            <span class="aksara-font text-2xl font-bold text-stone-900 whitespace-nowrap leading-none">${item.aksara}</span>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <div class="flex items-center gap-1">
+                                                <span class="font-extrabold text-stone-900 text-base">${soundLabel}</span>
+                                                <i class="ph-fill ph-speaker-high text-amber-700 text-sm"></i>
+                                            </div>
+                                            <div class="text-xs font-bold text-stone-600 truncate">${item.ikon} ${item.benda}</div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Tabel Sandhangan (Topi, Sepatu, & Bumbu Akhir Kata) -->
+                    <div class="bg-white rounded-3xl p-4 shadow-sm border-2 border-stone-200">
+                        <h3 class="font-extrabold text-stone-900 text-base flex items-center gap-2">
+                            <i class="ph-fill ph-magic-wand text-amber-700 text-xl"></i>
+                            <span>9 Tanda Pengubah Bunyi (Sandhangan)</span>
+                        </h3>
+                        <p class="text-xs text-stone-600 mt-0.5 mb-3">
+                            Tanda untuk mengubah vokal jadi I, U, É, O, E dan akhiran -NG, -R, -H, Mati:
+                        </p>
+
+                        <div class="space-y-2.5">
+                            ${sandhanganIds.map(id => {
+                                const item = AKSARA_DB[id];
+                                return `
+                                    <div onclick="window.showKamusDetail('${id}')"
+                                        class="btn-3d-cream p-3.5 rounded-2xl cursor-pointer flex items-center justify-between gap-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="min-w-[4.2rem] px-3 py-2 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0 overflow-hidden">
+                                                <span class="aksara-font text-xl font-bold text-stone-900 whitespace-nowrap leading-none">${item.aksara}</span>
+                                            </div>
+                                            <div>
+                                                <div class="font-extrabold text-stone-900 text-sm">${item.latin}</div>
+                                                <div class="text-xs font-semibold text-stone-600">${item.ikon} ${item.benda}</div>
+                                            </div>
+                                        </div>
+                                        <span class="bg-amber-600 text-white px-2.5 py-1.5 rounded-xl text-xs font-bold shrink-0 flex items-center gap-1">
+                                            <i class="ph-fill ph-speaker-high"></i> Trik
+                                        </span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Modal Detail Kamus jika salah satu huruf diklik -->
+                    <div id="kamus-detail-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+                        <div id="kamus-detail-body" class="bg-white w-full max-w-sm rounded-3xl p-5 border-4 border-amber-400 shadow-2xl animate-pop"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.showKamusDetail = function(id) {
+            const item = AKSARA_DB[id];
+            if (!item) return;
+            speakJavanese('', id);
+            const modal = document.getElementById('kamus-detail-modal');
+            const body = document.getElementById('kamus-detail-body');
+            if (!modal || !body) return;
+
+            const soundLabel = state.dialect === 'jawa' ? `${item.jawa} (${item.latin})` : item.latin;
+
+            body.innerHTML = `
+                <div class="flex items-center justify-between mb-2">
+                    <span class="bg-amber-100 text-amber-900 font-extrabold text-xs px-3 py-1 rounded-full">DETAIL TRIK OTAK</span>
+                    <button onclick="document.getElementById('kamus-detail-modal').classList.add('hidden')" class="w-8 h-8 rounded-full bg-stone-200 text-stone-800 font-extrabold flex items-center justify-center">✕</button>
+                </div>
+                <div onclick="window.speakJavanese('', '${item.id}')" class="bg-amber-50 border-2 border-amber-400 rounded-2xl p-4 text-center cursor-pointer">
+                    <div class="aksara-font text-6xl font-bold text-stone-900">${item.aksara}</div>
+                    <div class="mt-2 inline-flex items-center gap-1.5 bg-amber-600 text-white font-extrabold text-base px-4 py-1 rounded-xl">
+                        <i class="ph-fill ph-speaker-high"></i> ${soundLabel}
+                    </div>
+                </div>
+                <div class="mt-3 bg-stone-50 p-3.5 rounded-2xl border border-stone-200 text-sm space-y-2">
+                    <div class="font-extrabold text-stone-900">${item.ikon} ${item.benda}</div>
+                    <p class="text-xs text-stone-700 leading-relaxed">${item.trikOtak}</p>
+                    <div class="text-xs font-bold text-amber-900 bg-amber-100 px-2.5 py-1.5 rounded-xl">Contoh: <span class="aksara-font">${item.contoh}</span></div>
+                </div>
+                <button onclick="document.getElementById('kamus-detail-modal').classList.add('hidden')" class="btn-3d-amber w-full mt-4 py-3 rounded-2xl text-white font-extrabold text-sm">
+                    TUTUP & KEMBALI KE KAMUS
+                </button>
+            `;
+            modal.classList.remove('hidden');
+        };
+
+        // Fitur Tebak Kartu Kilat di dalam Tab Kamus
+        window.startFlashcardDrill = function() {
+            state.flashcardMode = true;
+            generateNextFlashcard();
+            renderMain();
+        };
+
+        function generateNextFlashcard() {
+            const keys = Object.keys(AKSARA_DB);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            const target = AKSARA_DB[randomKey];
+
+            // Ambil 2 pengecoh acak
+            const distractors = keys
+                .filter(k => k !== randomKey)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 2)
+                .map(k => AKSARA_DB[k]);
+
+            const choices = [target, ...distractors].sort(() => 0.5 - Math.random());
+            state.flashcardData = {
+                target,
+                choices,
+                answered: false,
+                correct: false
+            };
+        }
+
+        window.answerFlashcard = function(chosenId) {
+            if (!state.flashcardData) return;
+            const isCorrect = chosenId === state.flashcardData.target.id;
+            state.flashcardData.answered = true;
+            state.flashcardData.correct = isCorrect;
+
+            if (isCorrect) {
+                playSuccessGamelan();
+                speakJavanese('', state.flashcardData.target.id);
+                state.xp += 10;
+                saveProgressToCloud();
+            } else {
+                playGentleRetrySound();
+            }
+            renderMain();
+        };
+
+        window.nextFlashcard = function() {
+            generateNextFlashcard();
+            renderMain();
+        };
+
+        function renderFlashcardDrill() {
+            const fc = state.flashcardData;
+            if (!fc) return '';
+
+            return `
+                <div class="animate-pop">
+                    <div class="flex items-center justify-between mb-3">
+                        <button onclick="state.flashcardMode = false; renderMain();" class="bg-stone-200 text-stone-800 font-extrabold text-xs px-3 py-2 rounded-xl flex items-center gap-1">
+                            <i class="ph-bold ph-arrow-left"></i> Kembali ke Kamus
+                        </button>
+                        <span class="text-xs font-extrabold text-amber-800">⚡ Latihan Tebak Kartu Kilat</span>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-5 shadow-lg border-2 border-amber-300 text-center">
+                        <p class="text-xs font-bold text-stone-500">Ingat bentuk bendanya! Apa bunyi aksara di bawah ini?</p>
+
+                        <div onclick="window.speakJavanese('', '${fc.target.id}')"
+                            class="mt-3 bg-amber-50 border-4 border-amber-400 rounded-3xl p-6 cursor-pointer overflow-hidden">
+                            <div class="aksara-font text-6xl font-bold text-stone-900 whitespace-nowrap">${fc.target.aksara}</div>
+                            <div class="text-xs font-bold text-amber-800 mt-2">💡 Petunjuk Benda: ${fc.target.ikon} ${fc.target.benda}</div>
+                        </div>
+
+                        <div class="mt-4 space-y-2.5">
+                            ${fc.choices.map(c => {
+                                const label = state.dialect === 'jawa' ? `${c.jawa} (${c.benda})` : `${c.latin} (${c.benda})`;
+                                return `
+                                    <button onclick="window.answerFlashcard('${c.id}')"
+                                        class="w-full p-4 rounded-2xl border-2 font-extrabold text-base flex items-center justify-between ${
+                                            fc.answered && c.id === fc.target.id
+                                                ? 'bg-emerald-100 border-emerald-600 text-emerald-950'
+                                                : 'btn-3d-cream text-stone-900'
+                                        }">
+                                        <span>${label}</span>
+                                        <i class="ph-bold ph-hand-tap text-xl text-amber-700"></i>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        ${fc.answered ? `
+                            <div class="mt-4 p-4 rounded-2xl ${fc.correct ? 'bg-emerald-50 border-2 border-emerald-500' : 'bg-amber-50 border-2 border-amber-500'} text-left">
+                                <div class="font-extrabold text-sm">${fc.correct ? '✅ Tepat Sekali!' : '💡 Jawabannya: ' + fc.target.latin}</div>
+                                <p class="text-xs text-stone-700 mt-1">${fc.target.trikOtak}</p>
+                                <button onclick="window.nextFlashcard()" class="btn-3d-green w-full mt-3 py-3 rounded-2xl text-white font-extrabold text-sm">
+                                    KARTU BERIKUTNYA ➡️
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================================================
+        // 9. TAB 3: WARUNG BACA (LATIHAN MEMBACA MENU & KALIMAT SEHARI-HARI)
+        // ============================================================================
+        function renderWarungTab() {
+            return `
+                <div class="animate-pop space-y-4">
+                    <div class="bg-amber-900 text-amber-50 rounded-3xl p-5 shadow-md border-2 border-amber-600">
+                        <div class="flex items-center gap-3">
+                            <div class="text-4xl">☕</div>
+                            <div>
+                                <h2 class="text-lg font-extrabold text-white">Warung Baca "Shimon Moco"</h2>
+                                <p class="text-xs text-amber-200 leading-relaxed mt-0.5">
+                                    Tempat melatih mata membaca papan menu warung dan kalimat Jawa sehari-hari. Coba eja dulu dalam hati, lalu sentuh <strong>"Lihat Cara Baca & Suara"</strong>!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3.5">
+                        ${WARUNG_ITEMS.map((item, index) => {
+                            const isRevealed = !!state.revealedWarung[index];
+                            return `
+                                <div class="bg-white rounded-3xl p-4 shadow-sm border-2 border-stone-200">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="bg-amber-100 text-amber-900 font-extrabold text-[11px] px-2.5 py-0.5 rounded-full border border-amber-300">
+                                            ${item.kategori}
+                                        </span>
+                                        <button onclick="window.speakJavanese('${item.latin}')" class="bg-amber-600 text-white px-3 py-1 rounded-xl text-xs font-extrabold flex items-center gap-1">
+                                            <i class="ph-fill ph-speaker-high"></i> Bunyikan
+                                        </button>
+                                    </div>
+
+                                    <!-- Tulisan Aksara Jawa Besar -->
+                                    <div onclick="window.toggleWarungReveal(${index}, '${item.latin}')"
+                                        class="bg-amber-50/70 border-2 border-amber-300 rounded-2xl p-4 text-center cursor-pointer">
+                                        <div class="aksara-font text-4xl font-bold text-stone-900">${item.aksara}</div>
+                                    </div>
+
+                                    <!-- Tombol Buka/Tutup Cara Baca -->
+                                    <button onclick="window.toggleWarungReveal(${index}, '${item.latin}')"
+                                        class="mt-3 w-full py-2.5 px-4 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1.5 ${isRevealed ? 'bg-emerald-100 text-emerald-900 border border-emerald-400' : 'btn-3d-cream text-stone-800'}">
+                                        <i class="ph-bold ${isRevealed ? 'ph-eye-slash' : 'ph-eye'} text-base"></i>
+                                        <span>${isRevealed ? 'SEMBUNYIKAN CARA BACA' : 'SENTUH UNTUK LIHAT CARA BACA & SUARA'}</span>
+                                    </button>
+
+                                    ${isRevealed ? `
+                                        <div class="mt-3 p-3.5 bg-emerald-50 border-2 border-emerald-400 rounded-2xl animate-pop">
+                                            <div class="text-lg font-extrabold text-emerald-950 flex items-center justify-between">
+                                                <span>📖 Dibaca: "${item.latin}"</span>
+                                            </div>
+                                            <div class="text-xs font-bold text-amber-900 mt-1 bg-white px-2.5 py-1.5 rounded-xl border border-emerald-200">
+                                                🧩 Ejaan Per Suku Kata: <span class="aksara-font">${item.pecah}</span>
+                                            </div>
+                                            <div class="text-xs text-stone-600 font-semibold mt-1.5">
+                                                Artinya: ${item.arti}
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        window.toggleWarungReveal = function(index, latinText) {
+            state.revealedWarung[index] = !state.revealedWarung[index];
+            if (state.revealedWarung[index]) {
+                speakJavanese(latinText);
+            } else {
+                playGamelanNote(440, 0.1);
+            }
+            renderMain();
+        };
+
+        // Jalankan Aplikasi saat halaman selesai dimuat
+        window.onload = async function() {
+            // Preload daftar suara TTS pada Android/iOS
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices();
+            }
+            renderMain();
+            await initFirebase();
+        };
+    </script>
+</body>
+</html>
