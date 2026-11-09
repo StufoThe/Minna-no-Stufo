@@ -102,7 +102,10 @@
 
       <div class="flex flex-wrap gap-1.5" id="pageTabs">
         <button onclick="selectPage('ALL')" data-page="ALL" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-emerald-500 text-slate-950 shadow-sm">
-          Semua 13–20 (110)
+          Semua Kata
+        </button>
+        <button onclick="selectPage('2-3')" data-page="2-3" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30">
+          ⭐ Hal. 2–3 Awal (30)
         </button>
         <button onclick="selectPage('13')" data-page="13" class="page-pill px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-800/80 text-slate-300 hover:bg-slate-700">
           Hal. 13 (15)
@@ -131,130 +134,959 @@
       </div>
     </section>
 
-    <!-- 3 MODE SIMPEL & GOD-TIER -->
-    <nav class="grid grid-cols-3 gap-2 bg-[#111827] p-1.5 rounded-2xl border border-slate-800">
-      <button onclick="setMode('hack')" id="modeBtn-hack" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow transition flex items-center justify-center gap-1.5">
-        <span>🧠</span> 1. Suntik Bayangan (5s)
+    <!-- 4 MODE FOKUS (TANPA KARTU 5 DETIK) -->
+    <nav class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-[#111827] p-1.5 rounded-2xl border border-slate-800">
+      <button onclick="setMode('sensei')" id="modeBtn-sensei" class="py-2.5 px-3 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow transition flex items-center justify-center gap-1.5">
+        <span>👨‍🏫</span> 1. Papan Tulis Sensei
       </button>
-      <button onclick="setMode('drill')" id="modeBtn-drill" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
-        <span>🚩</span> 2. Ketik Gauntlet (Checkpoint)
+      <button onclick="setMode('senseidrill')" id="modeBtn-senseidrill" class="py-2.5 px-3 rounded-xl text-xs font-bold text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition flex items-center justify-center gap-1.5">
+        <span>⚡</span> 2. Gauntlet Papan Sensei
       </button>
-      <button onclick="setMode('list')" id="modeBtn-list" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
-        <span>📜</span> 3. Baca Cepat Semua Trik
+      <button onclick="setMode('drill')" id="modeBtn-drill" class="py-2.5 px-3 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
+        <span>🚩</span> 3. Gauntlet Kotoba
+      </button>
+      <button onclick="setMode('list')" id="modeBtn-list" class="py-2.5 px-3 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
+        <span>📜</span> 4. Semua Trik Kotoba
       </button>
     </nav>
 
-    <!-- ==================== MODE 1: SUNTIK BAYANGAN 5 DETIK ==================== -->
-    <section id="section-hack" class="flex-1 flex flex-col gap-4">
-      
-      <!-- Bar Kontrol Hipnotis 5 Detik & Mode Tes Mata -->
-      <div class="bg-[#111827] border border-slate-800 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
-        <div class="flex items-center gap-3">
-          <button onclick="toggleAutoFiveSec()" id="autoTimerBtn" class="px-3 py-1.5 rounded-lg bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 hover:bg-indigo-500/30 font-bold flex items-center gap-1.5 transition">
-            <span>⏱️</span> <span id="autoTimerText">Mulai Auto-Suntik 5 Detik</span>
-          </button>
-          <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-300 font-medium">
-            <input type="checkbox" id="blindTestToggle" class="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0" onchange="renderHackCard()">
-            <span>🙈 Sembunyikan Arti (Tes Ingatan)</span>
-          </label>
-        </div>
-        <span id="cardCounterText" class="font-bold text-slate-400">Kata 1 dari 110</span>
-      </div>
-
-      <!-- KARTU UTAMA BRAIN-HACK -->
-      <div id="hackEmptyBox" class="hidden bg-[#111827] border border-slate-800 rounded-3xl p-10 text-center">
-        <div class="text-4xl mb-2">🏆</div>
-        <h3 class="text-lg font-bold text-white">Semua Kotoba di Halaman Ini Sudah Terkunci!</h3>
-        <p class="text-xs text-slate-400 mt-1">Matikan filter "Hanya yang Belum Terkunci" atau pindah ke halaman lain.</p>
-      </div>
-
-      <div id="hackCardBox" class="bg-[#111827] border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
-        <!-- Progress Bar 5 Detik -->
-        <div class="w-full h-1.5 bg-slate-900">
-          <div id="fiveSecBar" class="h-full bg-gradient-to-r from-amber-400 via-emerald-400 to-cyan-400 transition-all duration-100" style="width: 100%"></div>
-        </div>
-
-        <div class="p-5 sm:p-7 flex flex-col gap-5">
-          <!-- Baris Atas: Info Halaman & Audio -->
-          <div class="flex items-center justify-between">
+    <!-- ==================== MODE 1: PAPAN TULIS SENSEI (MURNI GAYA RINGKAS SENSEI) ==================== -->
+    <section id="section-sensei" class="flex-1 flex flex-col gap-4">
+      <!-- Bar Kontrol Papan Tulis Sensei -->
+      <div class="bg-[#111827] border border-slate-800 rounded-2xl p-4 flex flex-col gap-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
             <div class="flex items-center gap-2">
-              <span id="hkPageBadge" class="px-3 py-1 rounded-lg bg-slate-800 text-cyan-400 font-bold text-xs border border-slate-700">Hal. 13 • No. 1</span>
-              <span id="hkStatusBadge" class="px-2.5 py-1 rounded-lg text-xs font-bold"></span>
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[11px] font-black uppercase">
+                おぼえてください！ • せつめいしてください (日本語で)
+              </span>
             </div>
-            <button onclick="speakCurrentWord()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold text-xs flex items-center gap-1.5 border border-slate-700 transition">
-              🔊 Dengarkan Bunyi
+            <h2 class="text-sm sm:text-base font-extrabold text-white mt-1">
+              Catatan Papan Tulis Sensei (Gaya Ringkas Utuh: Pengertian + Contoh Industri Makanan & Minuman)
+            </h2>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="toggleSenseiCloze()" id="btnSenseiCloze" class="px-3 py-1.5 rounded-xl text-xs font-extrabold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 transition">
+              🙈 Tutup Kata Kunci (Tes Lisan Sensei)
+            </button>
+            <button onclick="toggleSenseiRomaji()" id="btnSenseiRomaji" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 transition">
+              🔤 Romaji: ON
+            </button>
+            <button onclick="setMode('senseidrill')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition shadow">
+              ⚡ Mulai Hafalan Papan Sensei →
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab Pilih Papan 0, 1, 2, 3 -->
+        <div class="flex flex-wrap gap-1.5 pt-1 border-t border-slate-800/80">
+          <button onclick="filterSenseiBoard('ALL')" data-board="ALL" class="board-pill px-3 py-1.5 rounded-xl text-xs font-extrabold bg-emerald-500 text-slate-950 transition">
+            📋 Semua Papan (0–3)
+          </button>
+          <button onclick="filterSenseiBoard('0')" data-board="0" class="board-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition">
+            ⭐ Papan 0: いんしょくりょうひんせいぞうぎょう & Contoh Industri
+          </button>
+          <button onclick="filterSenseiBoard('1')" data-board="1" class="board-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+            🖼️ Papan 1: 食品えいせい & ろうどうあんぜん
+          </button>
+          <button onclick="filterSenseiBoard('2')" data-board="2" class="board-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+            🖼️ Papan 2: Bab 2 (きほん・いっぱんえいせい・HACCP)
+          </button>
+          <button onclick="filterSenseiBoard('3')" data-board="3" class="board-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+            🖼️ Papan 3: ぶつりてききがいよういん & こうしついぶつ
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= PAPAN TULIS 0: GAYA RINGKAS SENSEI UNTUK BAB 1 (HAL. 1 - 2) ================= -->
+      <div id="senseiBoard-0" class="sensei-board-card bg-[#111827] border-2 border-amber-500/40 rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+        <div class="bg-gradient-to-r from-amber-950/90 via-slate-900 to-slate-900 px-5 py-3.5 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="px-2.5 py-1 rounded-lg bg-amber-400 text-slate-950 font-black text-xs">PAPAN TULIS 0 (GAYA SENSEI)</span>
+            <h3 class="text-sm sm:text-base font-extrabold text-white">
+              BAB 1 (だい1しょう • Hal. 1–2): いんしょくりょうひんせいぞうぎょう & Contoh Industri
+            </h3>
+          </div>
+          <button onclick="speakSenseiSentence('いんしょくりょうひんせいぞうぎょうは、いんりょうやしょくりょうひんを、こうじょうでせいぞうするしごとです。しょくりょうひんせいぞうぎょうは、ハム、ソーセージ、さかなのかんづめ、ちょうみりょう、パンやおかし、べんとうやそうざい、れいとうしょくひんなどがあります。いんりょうせいぞうぎょうは、ジュースやおちゃ、コーヒーなどがあります。')" class="px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 font-black text-xs hover:bg-amber-300 transition">
+            🔊 Putar Semua Papan 0
+          </button>
+        </div>
+
+        <div class="p-5 flex flex-col gap-5">
+          <!-- BAGAN UTAMA GAYA PAPAN TULIS SENSEI: PENGERTIAN + CABANG MAKANAN & MINUMAN -->
+          <div class="bg-[#090d16] border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col gap-4">
+            <!-- Baris Pengertian Utama (Persis Gaya Sensei: ☆ [Topik] は 〜〜〜 です。) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Kotak 1: Pengertian いんしょくりょうひん -->
+              <div class="bg-[#111827] border border-slate-800 rounded-2xl p-4 flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-black text-cyan-400">☆ Pengertian 1 (Hal. 1 & 2)</span>
+                  <button onclick="speakSenseiSentence('いんしょくりょうひんは、いんりょうとしょくりょうひんのことです。わたしたちのせいかつにかかせません。')" class="text-xs text-emerald-400 font-bold hover:underline">🔊 Putar</button>
+                </div>
+                <div class="text-base sm:text-lg font-black text-white jp-font leading-relaxed">
+                  ☆ <span class="text-cyan-300 underline">いんしょくりょうひん（飲食料品）</span> は<br>
+                  <span class="sensei-key text-emerald-300 underline">いんりょう（飲料）</span> と <span class="sensei-key text-emerald-300 underline">しょくりょうひん（食料品）</span> の ことです。<br>
+                  ☆ わたしたちの せいかつに <span class="sensei-key text-amber-300 underline">かかせません</span>。
+                </div>
+                <div class="sensei-romaji text-xs text-cyan-400 font-bold">
+                  ☆ Inshokuryouhin wa <b>inryou</b> to <b>shokuryouhin</b> no koto desu.<br>
+                  ☆ Watashitachi no seikatsu ni <b>kakasemasen</b>.
+                </div>
+                <div class="text-xs text-slate-300 bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                  <b>Arti Ringkas Sensei:</b><br>
+                  • <b>Inshokuryouhin</b> adalah <b>minuman (inryou)</b> dan <b>bahan makanan (shokuryouhin)</b>.<br>
+                  • Sangat penting / tidak terpisahkan (<b>kakasemasen</b>) dalam kehidupan kita.
+                </div>
+              </div>
+
+              <!-- Kotak 2: Pengertian いんしょくりょうひんせいぞうぎょう -->
+              <div class="bg-[#111827] border-2 border-amber-500/40 rounded-2xl p-4 flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-black text-amber-300">⭐ Pengertian Wajib (Hal. 2)</span>
+                  <button onclick="speakSenseiSentence('いんしょくりょうひんせいぞうぎょうは、いんりょうやしょくりょうひんを、こうじょうでせいぞうするしごとです。')" class="text-xs text-emerald-400 font-bold hover:underline">🔊 Putar</button>
+                </div>
+                <div class="text-base sm:text-lg font-black text-white jp-font leading-relaxed">
+                  ☆ <span class="text-amber-300 underline">いんしょくりょうひんせいぞうぎょう</span> は<br>
+                  <span class="sensei-key text-cyan-300 underline">いんりょう や しょくりょうひん</span> を <span class="sensei-key text-emerald-300 underline">こうじょうで せいぞうする しごと</span> です。
+                </div>
+                <div class="sensei-romaji text-xs text-cyan-400 font-bold">
+                  ☆ Inshokuryouhin seizougyou wa, <b>inryou ya shokuryouhin wo koujou de seizou suru shigoto</b> desu.
+                </div>
+                <div class="text-xs text-slate-300 bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                  <b>Arti Ringkas Sensei:</b><br>
+                  • <b>Inshokuryouhin seizougyou</b> adalah <b>pekerjaan memproduksi minuman dan bahan makanan di pabrik</b>.
+                </div>
+              </div>
+            </div>
+
+            <!-- BAGAN CABANG (PERSIS GAYA PAPAN TULIS 2 SENSEI): CONTOH INDUSTRI MAKANAN & MINUMAN -->
+            <div class="bg-[#111827] border border-slate-800 rounded-2xl p-4 flex flex-col gap-4">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+                <div>
+                  <span class="text-[11px] font-black uppercase text-emerald-400">Bagan Cabang Papan Tulis (Hal. 2 Modul)</span>
+                  <h4 class="text-base sm:text-lg font-black text-white jp-font">
+                    ① いろいろな いんしょくりょうひんせいぞうぎょう（Contoh Industri Makanan & Minuman）
+                  </h4>
+                </div>
+                <span class="text-xs text-amber-300 font-bold">👇 Klik tiap contoh untuk dengar suaranya</span>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Cabang 1: ① しょくりょうひんせいぞうぎょう (Contoh Industri Makanan - 6 Contoh di Modul) -->
+                <div class="bg-[#090d16] border border-emerald-500/40 rounded-2xl p-4 flex flex-col gap-3">
+                  <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <div>
+                      <span class="text-[11px] font-black text-emerald-400">├──► Cabang ① (Industri Makanan)</span>
+                      <div class="text-base sm:text-lg font-black text-white jp-font">① しょくりょうひんせいぞうぎょう</div>
+                      <div class="sensei-romaji text-xs text-cyan-400 font-bold">Shokuryouhin seizougyou (6 Contoh di Modul)</div>
+                    </div>
+                    <button onclick="speakSenseiSentence('しょくりょうひんせいぞうぎょうは、ハム、ソーセージ、さかなのかんづめ、ちょうみりょう、パンやおかし、べんとうやそうざい、れいとうしょくひんなどがあります。')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-bold">🔊 Semua</button>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+                    <button onclick="speakSenseiSentence('ハム・ソーセージ')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 text-left transition flex items-center justify-between">
+                      <div>
+                        <div class="font-black text-white jp-font">① <span class="sensei-key text-emerald-300 underline">ハム・ソーセージ</span></div>
+                        <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">hamu / sooseeji</div>
+                        <div class="text-xs text-slate-400">Ham & sosis daging</div>
+                      </div>
+                      <span class="text-emerald-400 text-xs">🔊</span>
+                    </button>
+
+                    <button onclick="speakSenseiSentence('さかなのかんづめ')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 text-left transition flex items-center justify-between">
+                      <div>
+                        <div class="font-black text-white jp-font">② <span class="sensei-key text-emerald-300 underline">さかなの かんづめ</span></div>
+                        <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">sakana no kanzume</div>
+                        <div class="text-xs text-slate-400">Ikan kaleng (魚の缶詰)</div>
+                      </div>
+                      <span class="text-emerald-400 text-xs">🔊</span>
+                    </button>
+
+                    <button onclick="speakSenseiSentence('ちょうみりょう')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 text-left transition flex items-center justify-between">
+                      <div>
+                        <div class="font-black text-white jp-font">③ <span class="sensei-key text-emerald-300 underline">ちょうみりょう</span></div>
+                        <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">choumiryou</div>
+                        <div class="text-xs text-slate-400">Bumbu / penyedap (調味料)</div>
+                      </div>
+                      <span class="text-emerald-400 text-xs">🔊</span>
+                    </button>
+
+                    <button onclick="speakSenseiSentence('パンやおかし')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 text-left transition flex items-center justify-between">
+                      <div>
+                        <div class="font-black text-white jp-font">④ <span class="sensei-key text-emerald-300 underline">パンや おかし</span></div>
+                        <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">pan ya okashi</div>
+                        <div class="text-xs text-slate-400">Roti & kue/cemilan (お菓子)</div>
+                      </div>
+                      <span class="text-emerald-400 text-xs">🔊</span>
+                    </button>
+
+                    <button onclick="speakSenseiSentence('べんとうやそうざい')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 text-left transition flex items-center justify-between">
+                      <div>
+                        <div class="font-black text-white jp-font">⑤ <span class="sensei-key text-emerald-300 underline">べんとうや そうざい</span></div>
+                        <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">bentou ya souzai</div>
+                        <div class="text-xs text-slate-400">Nasi kotak & lauk (弁当・惣菜)</div>
+                      </div>
+                      <span class="text-emerald-400 text-xs">🔊</span>
+                    </button>
+
+                    <button onclick="speakSenseiSentence('れいとうしょくひん')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 text-left transition flex items-center justify-between">
+                      <div>
+                        <div class="font-black text-white jp-font">⑥ <span class="sensei-key text-emerald-300 underline">れいとうしょくひん</span></div>
+                        <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">reitou shokuhin</div>
+                        <div class="text-xs text-slate-400">Makanan beku (冷凍食品)</div>
+                      </div>
+                      <span class="text-emerald-400 text-xs">🔊</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Cabang 2: ② いんりょうせいぞうぎょう (Contoh Industri Minuman - 3 Contoh) + Nilai Produksi -->
+                <div class="flex flex-col gap-3">
+                  <div class="bg-[#090d16] border border-cyan-500/40 rounded-2xl p-4 flex flex-col gap-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                      <div>
+                        <span class="text-[11px] font-black text-cyan-400">└──► Cabang ② (Industri Minuman)</span>
+                        <div class="text-base sm:text-lg font-black text-white jp-font">② いんりょうせいぞうぎょう</div>
+                        <div class="sensei-romaji text-xs text-cyan-400 font-bold">Inryou seizougyou (3 Contoh di Modul)</div>
+                      </div>
+                      <button onclick="speakSenseiSentence('いんりょうせいぞうぎょうは、ジュースやおちゃ、コーヒーなどがあります。')" class="px-2.5 py-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 text-xs font-bold">🔊 Semua</button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-xs sm:text-sm">
+                      <button onclick="speakSenseiSentence('ジュース')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 text-left transition">
+                        <div class="font-black text-white jp-font">① <span class="sensei-key text-cyan-300 underline">ジュース</span></div>
+                        <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">juusu</div>
+                        <div class="text-xs text-slate-400">Jus</div>
+                      </button>
+
+                      <button onclick="speakSenseiSentence('おちゃ')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 text-left transition">
+                        <div class="font-black text-white jp-font">② <span class="sensei-key text-cyan-300 underline">おちゃ（お茶）</span></div>
+                        <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">ocha</div>
+                        <div class="text-xs text-slate-400">Teh</div>
+                      </button>
+
+                      <button onclick="speakSenseiSentence('コーヒー')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-800 text-left transition">
+                        <div class="font-black text-white jp-font">③ <span class="sensei-key text-cyan-300 underline">コーヒー</span></div>
+                        <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">koohii</div>
+                        <div class="text-xs text-slate-400">Kopi</div>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Catatan Statistik & Tokutei Ginou 1 Gou (Hal. 2 & 3) -->
+                  <div class="bg-[#090d16] border border-amber-500/30 rounded-2xl p-4 flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs font-black text-amber-300">☆ のうりんすいさんしょうの とうけい (Statistik Hal. 2):</span>
+                      <button onclick="speakSenseiSentence('にほんのしょくひんせいぞうぎょうのこくないせいさんがくは、ここすうねん、やくさんじゅうろくからさんじゅうはっちょうえんです。')" class="text-xs text-emerald-400 font-bold">🔊 Putar</button>
+                    </div>
+                    <div class="text-sm sm:text-base font-black text-white jp-font leading-relaxed">
+                      日本の しょくひんせいぞうぎょうの <span class="sensei-key text-amber-300 underline">こくないせいさんがく</span> は、ここ すうねん <span class="sensei-key text-emerald-300 underline">やく 36〜38ちょうえん（兆円）</span> です。
+                    </div>
+                    <div class="sensei-romaji text-xs text-cyan-400 font-bold">
+                      Nihon no shokuhin seizougyou no <b>kokunai seisangaku</b> wa, koko suunen <b>yaku 36~38 chouen</b> desu. (Jumlah produksi dalam negeri sekitar 36–38 Triliun Yen).
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BAGIAN BAWAH PAPAN 0: JAWABAN TUGAS POJOK KIRI ATAS PAPAN 1 (① おもな ろうどうさいがい) -->
+            <div class="bg-[#111827] border border-rose-500/40 rounded-2xl p-4 flex flex-col gap-3">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
+                <div>
+                  <span class="text-[11px] font-black text-rose-400 uppercase">Jawaban Perintah Sensei di Pojok Kiri Atas Papan 1</span>
+                  <h4 class="text-base sm:text-lg font-black text-white jp-font">
+                    ① おもな ろうどうさいがい ➔ せつめいしてください（日本語で）
+                  </h4>
+                </div>
+                <button onclick="speakSenseiSentence('しょくひんせいぞうこうじょうでおきる、おもなろうどうさいがいは、おおいじゅんに、いち、てんとう。に、はさまれ、まきこまれ。さん、きれ、こすれ、です。')" class="px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-300 text-xs font-bold">🔊 Putar Jawaban Lisan</button>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs sm:text-sm">
+                <div class="bg-[#090d16] p-3.5 rounded-xl border border-rose-500/30 flex flex-col gap-1">
+                  <div class="flex items-center justify-between">
+                    <span class="font-black text-rose-300 jp-font text-base">① <span class="sensei-key underline">てんとう（転倒）</span></span>
+                    <button onclick="speakSenseiSentence('てんとうは、はしってすべったり、ものにつまずいたりするときにおこります。')" class="text-emerald-400 font-bold">🔊</button>
+                  </div>
+                  <div class="sensei-romaji text-xs text-cyan-400 font-bold">Tentou (Terjatuh/Terpeleset - 31.3%)</div>
+                  <div class="text-white jp-font font-bold mt-1">
+                    ➔ <span class="sensei-key text-amber-200">はしって すべったり、ものに つまずいたり</span> するときに おこります。
+                  </div>
+                  <div class="text-xs text-slate-400">Terjadi saat berlari lalu terpeleset, atau tersandung barang.</div>
+                </div>
+
+                <div class="bg-[#090d16] p-3.5 rounded-xl border border-amber-500/30 flex flex-col gap-1">
+                  <div class="flex items-center justify-between">
+                    <span class="font-black text-amber-300 jp-font text-base">② <span class="sensei-key underline">はさまれ・まきこまれ</span></span>
+                    <button onclick="speakSenseiSentence('はさまれ、まきこまれは、きかいに、てをいれるときや、コンベアをそうじしているときにおこります。')" class="text-emerald-400 font-bold">🔊</button>
+                  </div>
+                  <div class="sensei-romaji text-xs text-cyan-400 font-bold">Hasamare / Makikomare (Terjepit/Tergulung - 19.2%)</div>
+                  <div class="text-white jp-font font-bold mt-1">
+                    ➔ <span class="sensei-key text-amber-200">きかいに 手を いれるとき</span>、コンベアを そうじしているときに おこります。
+                  </div>
+                  <div class="text-xs text-slate-400">Terjadi saat memasukkan tangan ke mesin atau membersihkan konveyor.</div>
+                </div>
+
+                <div class="bg-[#090d16] p-3.5 rounded-xl border border-cyan-500/30 flex flex-col gap-1">
+                  <div class="flex items-center justify-between">
+                    <span class="font-black text-cyan-300 jp-font text-base">③ <span class="sensei-key underline">きれ・こすれ</span></span>
+                    <button onclick="speakSenseiSentence('きれ、こすれは、ほうちょうや、きるきかいをつかっているときにおこります。')" class="text-emerald-400 font-bold">🔊</button>
+                  </div>
+                  <div class="sensei-romaji text-xs text-cyan-400 font-bold">Kire / Kosure (Teriris/Tergores - 10.8%)</div>
+                  <div class="text-white jp-font font-bold mt-1">
+                    ➔ <span class="sensei-key text-amber-200">ほうちょうや きる きかい</span> を つかっているときに おこります。
+                  </div>
+                  <div class="text-xs text-slate-400">Terjadi saat memakai pisau (houchou) atau mesin pemotong.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= PAPAN TULIS 1 ================= -->
+      <div id="senseiBoard-1" class="sensei-board-card bg-[#111827] border-2 border-emerald-500/30 rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+        <div class="bg-gradient-to-r from-emerald-950/80 via-slate-900 to-slate-900 px-5 py-3.5 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-500 text-slate-950 font-black text-xs">PAPAN TULIS 1</span>
+            <h3 class="text-sm sm:text-base font-extrabold text-white">
+              Bab 1 (Hal. 3): 食品衛生 (Kebersihan Pangan) & 労働安全 (Keselamatan Kerja)
+            </h3>
+          </div>
+          <span class="text-[11px] font-bold text-amber-300 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-lg">
+            🎯 Tugas Sensei: せつめいしてください (Jelaskan dlm Bhs Jepang!)
+          </span>
+        </div>
+
+        <div class="p-5 flex flex-col gap-5">
+          <!-- Catatan Pojok Kiri Atas Papan 1 -->
+          <div class="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div class="text-xs font-black uppercase text-amber-400">📌 Pojok Kiri Atas Papan 1: Perintah Wajib Sensei</div>
+              <div class="text-base sm:text-lg font-black text-white jp-font mt-0.5">
+                おぼえてください！ ① おもな ろうどうさいがい ➔ せつめいしてください（日本語で）
+              </div>
+              <div class="sensei-romaji text-xs font-bold text-cyan-400 mt-0.5">
+                Oboete kudasai! (1) Omo na roudou saigai ➔ Setsumei shite kudasai (Nihongo de)
+              </div>
+              <div class="text-xs text-slate-300 mt-1">
+                <b>Arti:</b> "Tolong hafalkan! (1) Kecelakaan kerja utama ➔ Tolong jelaskan dengan Bahasa Jepang!"
+              </div>
+            </div>
+            <button onclick="speakSenseiSentence('おもなろうどうさいがいを、にほんごでせつめいしてください')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold text-xs shrink-0 border border-slate-700">
+              🔊 Dengar
             </button>
           </div>
 
-          <!-- INTI KATA: KANJI + BUNYI + ARTI -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-[#0b101b] p-5 rounded-2xl border border-slate-800/80">
-            <div class="text-center md:text-left">
-              <div id="hkFurigana" class="text-lg sm:text-xl font-bold text-cyan-400 jp-font tracking-wide">きびしい</div>
-              <div id="hkKanji" class="text-4xl sm:text-5xl font-black text-white jp-font my-1 tracking-tight">厳しい</div>
-              <div id="hkRomaji" class="text-xs font-bold uppercase tracking-widest text-slate-400">KIBISHII</div>
+          <!-- Grid 2 Kolom Papan 1: (1) Shokuhin Eisei vs (2) Roudou Anzen -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- BAGIAN KANAN PAPAN 1: ① 食品えいせい と えいせいかんり -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-2xl p-4 flex flex-col gap-3.5">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                <div>
+                  <span class="text-[11px] font-bold text-emerald-400 uppercase">Topik ① (Kanan Papan)</span>
+                  <h4 class="text-lg font-black text-white jp-font">① 食品えいせい と えいせいかんり</h4>
+                  <p class="sensei-romaji text-xs text-cyan-400 font-bold">Shokuhin eisei to Eisei kanri</p>
+                  <p class="text-xs text-slate-400">Kebersihan Makanan & Manajemen Kebersihan</p>
+                </div>
+                <button onclick="speakSenseiSentence('しょくひんえいせいと、えいせいかんり')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-emerald-400 font-bold">🔊</button>
+              </div>
+
+              <!-- Kalimat 1A: Definisi -->
+              <div class="bg-[#111827] border border-slate-800/90 rounded-xl p-3.5 flex flex-col gap-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-extrabold text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded">A. Pengertian Dasar:</span>
+                  <button onclick="speakSenseiSentence('たべたひとが、びょうきにならないこと、けがをしないことです')" class="text-xs font-bold text-emerald-400 hover:underline">🔊 Putar Kalimat</button>
+                </div>
+                <div class="text-base sm:text-lg font-black text-white jp-font leading-relaxed mt-1">
+                  食べた人が <span class="sensei-key underline decoration-emerald-400 decoration-2 text-emerald-300">びょうきにならない</span>こと、<span class="sensei-key underline decoration-emerald-400 decoration-2 text-emerald-300">ケガをしないこと</span>です。
+                </div>
+                <div class="sensei-romaji text-xs font-bold text-cyan-400">
+                  Tabeta hito ga <b class="text-emerald-300">byouki ni naranai</b> koto, <b class="text-emerald-300">kega wo shinai koto</b> desu.
+                </div>
+                <div class="text-xs text-slate-300 bg-slate-900/90 p-2 rounded-lg border border-slate-800 mt-1">
+                  💡 <b>Arti Potongan:</b> 食べた人が (Orang yg makan) • びょうきにならないこと (tidak menjadi sakit) • ケガをしないことです (dan tidak terluka).
+                </div>
+              </div>
+
+              <!-- Kalimat 1B: Jika tidak cukup (じゅうぶんではないなら) -->
+              <div class="bg-rose-950/15 border border-rose-500/30 rounded-xl p-3.5 flex flex-col gap-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-extrabold text-rose-300 bg-rose-500/15 px-2 py-0.5 rounded">
+                    B. じゅうぶんではないなら (Jika tidak memadai):
+                  </span>
+                  <button onclick="speakSenseiSentence('じゅうぶんではないなら、たべたひとがびょうきになって、けがをします。そして、かいしゃのしんようをなくします')" class="text-xs font-bold text-rose-300 hover:underline">🔊 Putar Kalimat</button>
+                </div>
+                <div class="text-base sm:text-lg font-black text-white jp-font leading-relaxed mt-1">
+                  ➔ <span class="sensei-key text-amber-300 underline">じゅうぶんではないなら</span>、<br>
+                  食べた人が <span class="sensei-key text-rose-300">びょうきになって、ケガをします</span>。<br>
+                  そして、<span class="sensei-key underline decoration-rose-400 decoration-2 text-rose-300">かいしゃの しんようを なくします</span>。
+                </div>
+                <div class="sensei-romaji text-xs font-bold text-cyan-400">
+                  ➔ Juubun dewa nai nara, tabeta hito ga byouki ni natte, kega wo shimasu. Soshite, <b class="text-rose-300">kaisha no shinyou wo nakushimasu</b>.
+                </div>
+                <div class="text-xs text-slate-300 bg-slate-900/90 p-2 rounded-lg border border-slate-800 mt-1">
+                  💡 <b>Arti:</b> Jika tidak cukup/memadai ➔ Orang yang makan menjadi sakit dan terluka. Lalu, <b>menghilangkan kepercayaan (kredibilitas) perusahaan</b>.
+                </div>
+              </div>
             </div>
 
-            <div id="hkMeaningBox" onclick="this.classList.toggle('revealed')" class="bg-emerald-950/30 border border-emerald-500/30 rounded-2xl p-4 text-center md:text-right flex flex-col justify-center">
-              <span class="text-[11px] uppercase tracking-wider text-emerald-400/80 font-bold">Arti Indonesia</span>
-              <div id="hkMeaning" class="text-2xl sm:text-3xl font-black text-emerald-300 mt-0.5">ketat</div>
+            <!-- BAGIAN TENGAH PAPAN 1: ② ろうどうあんぜん は -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-2xl p-4 flex flex-col gap-3.5">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                <div>
+                  <span class="text-[11px] font-bold text-cyan-400 uppercase">Topik ② (Tengah Papan)</span>
+                  <h4 class="text-lg font-black text-white jp-font">② ろうどうあんぜん は（労働安全は）</h4>
+                  <p class="sensei-romaji text-xs text-cyan-400 font-bold">Roudou anzen wa</p>
+                  <p class="text-xs text-slate-400">Keselamatan Kerja adalah...</p>
+                </div>
+                <button onclick="speakSenseiSentence('ろうどうあんぜんは')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-emerald-400 font-bold">🔊</button>
+              </div>
+
+              <!-- Poin Bintang 1 -->
+              <div class="bg-[#111827] border border-slate-800/90 rounded-xl p-3.5 flex flex-col gap-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-extrabold text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded">☆ Poin 1 (Tujuan Utama):</span>
+                  <button onclick="speakSenseiSentence('さぎょうしゃのあんぜんと、けんこうをまもることです')" class="text-xs font-bold text-emerald-400 hover:underline">🔊 Putar Kalimat</button>
+                </div>
+                <div class="text-base sm:text-lg font-black text-white jp-font leading-relaxed mt-1">
+                  ☆ <span class="sensei-key text-emerald-300 underline">さぎょうしゃ</span>の <span class="sensei-key text-cyan-300 underline">あんぜんと けんこうを まもる</span>ことです。
+                </div>
+                <div class="sensei-romaji text-xs font-bold text-cyan-400">
+                  Sagyousha no anzen to kenkou wo mamoru koto desu.
+                </div>
+                <div class="text-xs text-slate-300 bg-slate-900/90 p-2 rounded-lg border border-slate-800 mt-1">
+                  💡 <b>Arti Potongan:</b> さぎょうしゃの (Pekerja punya) • あんぜんとけんこうを (keselamatan & kesehatan) • まもることです (melindungi).
+                </div>
+              </div>
+
+              <!-- Poin Bintang 2 -->
+              <div class="bg-[#111827] border border-slate-800/90 rounded-xl p-3.5 flex flex-col gap-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-extrabold text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded">☆ Poin 2 (Cara Mencegah Luka):</span>
+                  <button onclick="speakSenseiSentence('さぎょうじょうでけがをしないためには、さぎょうふくとあんぜんほごぐをただしくちゃくようします')" class="text-xs font-bold text-emerald-400 hover:underline">🔊 Putar Kalimat</button>
+                </div>
+                <div class="text-base sm:text-lg font-black text-white jp-font leading-relaxed mt-1">
+                  ☆ さぎょうじょうで ケガを しないためには、<span class="sensei-key underline decoration-amber-400 decoration-2 text-amber-300">さぎょうふく</span>と <span class="sensei-key underline decoration-amber-400 decoration-2 text-amber-300">あんぜんほごぐ</span>を ただしく ちゃくようします。
+                </div>
+                <div class="sensei-romaji text-xs font-bold text-cyan-400">
+                  Sagyoujou de kega wo shinai tame ni wa, <b class="text-amber-300">sagyoufuku</b> to <b class="text-amber-300">anzen hogogu</b> wo tadashiku chakuyou shimasu.
+                </div>
+                <div class="text-xs text-slate-300 bg-slate-900/90 p-2 rounded-lg border border-slate-800 mt-1">
+                  💡 <b>Arti Potongan:</b> さぎょうじょうで (Di tempat kerja) • ケガをしないためには (agar tidak terluka) • さぎょうふく (baju kerja) • あんぜんほごぐ (alat pelindung keselamatan) • ただしくちゃくようします (memakai dgn benar).
+                </div>
+              </div>
+
+              <!-- Trik Otak Papan 1 -->
+              <div class="bg-indigo-950/40 border border-indigo-500/40 rounded-xl p-3 text-xs text-slate-200">
+                <div class="font-black text-amber-300 mb-1">⚡ TRIK HAFAL 5 DETIK PAPAN 1:</div>
+                • <b>食品衛生 (Shokuhin Eisei)</b> = Fokus ke <b>"食べた人 (Orang yg makan)"</b> ➔ <i>Byouki ni naranai, Kega wo shinai</i>. Kalau gagal ➔ <i>Kaisha no shinyou wo nakushimasu</i> (Hilang kepercayaan PT).<br>
+                • <b>労働安全 (Roudou Anzen)</b> = Fokus ke <b>"さぎょうしゃ (Pekerja)"</b> ➔ Jaga <i>Anzen & Kenkou</i> dengan pakai <i>Sagyoufuku + Anzen Hogogu</i>!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= PAPAN TULIS 2 ================= -->
+      <div id="senseiBoard-2" class="sensei-board-card bg-[#111827] border-2 border-cyan-500/30 rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+        <div class="bg-gradient-to-r from-cyan-950/80 via-slate-900 to-slate-900 px-5 py-3.5 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="px-2.5 py-1 rounded-lg bg-cyan-400 text-slate-950 font-black text-xs">PAPAN TULIS 2</span>
+            <h3 class="text-sm sm:text-base font-extrabold text-white">
+              BAB 2 / だい2しょう (Hal. 5–6): 食品衛生の基本・一般衛生管理・HACCP
+            </h3>
+          </div>
+          <span class="text-[11px] font-bold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-1 rounded-lg">
+            4 Isi Bab 2: ①食品衛生 ②危害要因 ③一般衛生管理 ④HACCP
+          </span>
+        </div>
+
+        <div class="p-5 flex flex-col gap-5">
+          <!-- BAGAN ATAS PAPAN 2: 2 Cabang dari ① 食品えいせい -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Cabang 1: ① 食品えいせいの きほん (4 Tindakan Dasar) -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-2xl p-4 flex flex-col gap-3">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <div>
+                  <span class="text-[11px] font-bold text-emerald-400 uppercase">Cabang Atas ①</span>
+                  <h4 class="text-base sm:text-lg font-black text-white jp-font">① 食品えいせいの きほん (4 Dasar)</h4>
+                  <p class="sensei-romaji text-xs text-cyan-400 font-bold">Shokuhin eisei no kihon</p>
+                </div>
+                <button onclick="speakSenseiSentence('しょくひんえいせいのきほんは、いち、てあらいをする。に、さぎょうふくやてぶくろをただしくちゃくようします。さん、せいけつなせつび、きかいときぐなどをつかう。よん、しょくひんやげんざいりょうをきまったおんどでほかんする。')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-emerald-400 font-bold">🔊 Semua</button>
+              </div>
+
+              <div class="flex flex-col gap-2 text-xs sm:text-sm">
+                <div class="bg-[#111827] p-3 rounded-xl border border-slate-800 flex items-start justify-between gap-2">
+                  <div>
+                    <div class="font-black text-white jp-font">① <span class="sensei-key text-emerald-300 underline">手洗い</span>を する</div>
+                    <div class="sensei-romaji text-xs text-cyan-400 font-bold">Tearai wo suru</div>
+                    <div class="text-xs text-slate-400">1. Mencuci tangan</div>
+                  </div>
+                  <button onclick="speakSenseiSentence('てあらいをする')" class="text-emerald-400 text-xs font-bold">🔊</button>
+                </div>
+
+                <div class="bg-[#111827] p-3 rounded-xl border border-slate-800 flex items-start justify-between gap-2">
+                  <div>
+                    <div class="font-black text-white jp-font">② <span class="sensei-key text-emerald-300 underline">さぎょうふくや 手ぶくろ</span>を ただしく ちゃくようします</div>
+                    <div class="sensei-romaji text-xs text-cyan-400 font-bold">Sagyoufuku ya tebukuro wo tadashiku chakuyou shimasu</div>
+                    <div class="text-xs text-slate-400">2. Memakai pakaian kerja & sarung tangan dengan benar</div>
+                  </div>
+                  <button onclick="speakSenseiSentence('さぎょうふくやてぶくろをただしくちゃくようします')" class="text-emerald-400 text-xs font-bold">🔊</button>
+                </div>
+
+                <div class="bg-[#111827] p-3 rounded-xl border border-slate-800 flex items-start justify-between gap-2">
+                  <div>
+                    <div class="font-black text-white jp-font">③ <span class="sensei-key text-emerald-300 underline">せいけつな せつび・きかいと きぐ</span>などを 使う</div>
+                    <div class="sensei-romaji text-xs text-cyan-400 font-bold">Seiketsu na setsubi, kikai to kigu nado wo tsukau</div>
+                    <div class="text-xs text-slate-400">3. Menggunakan fasilitas, mesin, dan peralatan yang bersih</div>
+                  </div>
+                  <button onclick="speakSenseiSentence('せいけつなせつび、きかいときぐなどをつかう')" class="text-emerald-400 text-xs font-bold">🔊</button>
+                </div>
+
+                <div class="bg-[#111827] p-3 rounded-xl border border-slate-800 flex items-start justify-between gap-2">
+                  <div>
+                    <div class="font-black text-white jp-font">④ 食品や げんざいりょうを <span class="sensei-key text-emerald-300 underline">きまった おんどで ほかん</span>する</div>
+                    <div class="sensei-romaji text-xs text-cyan-400 font-bold">Shokuhin ya genzairyou wo kimatta ondo de hokan suru</div>
+                    <div class="text-xs text-slate-400">4. Menyimpan makanan & bahan baku pada suhu yang ditentukan</div>
+                  </div>
+                  <button onclick="speakSenseiSentence('しょくひんやげんざいりょうをきまったおんどでほかんする')" class="text-emerald-400 text-xs font-bold">🔊</button>
+                </div>
+              </div>
+
+              <div class="bg-emerald-950/30 border border-emerald-500/30 rounded-xl p-2.5 text-xs text-emerald-200">
+                ⚡ <b>Jembatan Otak 4 Dasar:</b> <b>Tangan</b> (手洗い) ➔ <b>Baju</b> (作業服) ➔ <b>Mesin Bersih</b> (清潔な機械) ➔ <b>Suhu Simpan</b> (決まった温度で保管)!
+              </div>
+            </div>
+
+            <!-- Cabang 2: ② いっぱんえいせいかんりの じゅうようなことは (4 Pilar) -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-2xl p-4 flex flex-col gap-3">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <div>
+                  <span class="text-[11px] font-bold text-cyan-400 uppercase">Cabang Tengah ②</span>
+                  <h4 class="text-base sm:text-lg font-black text-white jp-font">② いっぱんえいせいかんりの じゅうようなことは</h4>
+                  <p class="sensei-romaji text-xs text-cyan-400 font-bold">Ippan eisei kanri no juuyou na koto wa (4 Hal Penting)</p>
+                </div>
+                <button onclick="speakSenseiSentence('いっぱんえいせいかんりのじゅうようなことは、いち、ごえす。に、しせつ、せつび、きぐなどのえいせいかんり。さん、さぎょうしゃのえいせいかんり。よん、げんざいりょう、しょくひんのえいせいかんり。')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-emerald-400 font-bold">🔊 Semua</button>
+              </div>
+
+              <div class="flex flex-col gap-2 text-xs sm:text-sm">
+                <div class="bg-[#111827] p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <div>
+                    <div class="font-black text-white jp-font">① <span class="sensei-key text-amber-300 underline">5S（ごエス）</span></div>
+                    <div class="text-xs text-slate-400">Seiri, Seiton, Seisou, Seiketsu, Shitsuke (Shuukanzuke)</div>
+                  </div>
+                  <button onclick="speakSenseiSentence('ごえす')" class="text-emerald-400 text-xs font-bold">🔊</button>
+                </div>
+
+                <div class="bg-[#111827] p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <div>
+                    <div class="font-black text-white jp-font">② <span class="sensei-key text-cyan-300 underline">しせつ・せつび、きぐ</span>などの えいせいかんり</div>
+                    <div class="sensei-romaji text-xs text-cyan-400 font-bold">Shisetsu, setsubi, kigu nado no eisei kanri</div>
+                    <div class="text-xs text-slate-400">Manajemen kebersihan fasilitas, peralatan & perkakas</div>
+                  </div>
+                  <button onclick="speakSenseiSentence('しせつ、せつび、きぐなどのえいせいかんり')" class="text-emerald-400 text-xs font-bold">🔊</button>
+                </div>
+
+                <div class="bg-[#111827] p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <div>
+                    <div class="font-black text-white jp-font">③ <span class="sensei-key text-cyan-300 underline">さぎょうしゃ</span>の えいせいかんり</div>
+                    <div class="sensei-romaji text-xs text-cyan-400 font-bold">Sagyousha no eisei kanri</div>
+                    <div class="text-xs text-slate-400">Manajemen kebersihan pekerja</div>
+                  </div>
+                  <button onclick="speakSenseiSentence('さぎょうしゃのえいせいかんり')" class="text-emerald-400 text-xs font-bold">🔊</button>
+                </div>
+
+                <div class="bg-[#111827] p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <div>
+                    <div class="font-black text-white jp-font">④ <span class="sensei-key text-cyan-300 underline">げんざいりょう・食品</span>の えいせいかんり</div>
+                    <div class="sensei-romaji text-xs text-cyan-400 font-bold">Genzairyou, shokuhin no eisei kanri</div>
+                    <div class="text-xs text-slate-400">Manajemen kebersihan bahan baku & makanan</div>
+                  </div>
+                  <button onclick="speakSenseiSentence('げんざいりょう、しょくひんのえいせいかんり')" class="text-emerald-400 text-xs font-bold">🔊</button>
+                </div>
+              </div>
+
+              <!-- Catatan Lingkaran Kanan Papan 2 -->
+              <div class="bg-amber-950/25 border border-amber-500/30 rounded-xl p-3 text-xs flex items-center justify-between gap-2">
+                <div>
+                  <span class="font-black text-amber-300">⭕ Lingkaran Kanan Papan 2: きがいよういん (Faktor Bahaya)</span>
+                  <div class="text-slate-200 mt-0.5">
+                    Setiap menjelaskan <b>きがいよういん</b>, wajib sebutkan 2 hal:<br>
+                    1. <b>げんいん (Penyebab)</b> &nbsp;|&nbsp; 2. <b>ふせぐために (Untuk Mencegahnya)</b>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- KOTAK SUNTIK OTAK: JEMBATAN BUNYI + ILUSTRASI BAYANGAN -->
-          <div id="hkTrickContainer" onclick="this.classList.toggle('revealed')" class="bg-gradient-to-br from-indigo-950/50 via-[#131c31] to-slate-900 border-2 border-indigo-500/40 rounded-2xl p-5 flex flex-col gap-4 relative overflow-hidden">
-            
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-indigo-500/20 pb-3">
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-1 rounded-md bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider">⚡ Jembatan Bunyi</span>
-                <span id="hkSoundHook" class="text-base sm:text-lg font-extrabold text-amber-300">KIBISHII ≈ KIPAS BESI</span>
-              </div>
-              <span class="text-[11px] text-indigo-300 font-medium">Bayangkan adegan ini selama 3 detik 👇</span>
+          <!-- BAGIAN BAWAH PAPAN 2 (TULISAN SPIDOL BIRU SENSEI): 一般衛生管理 + HACCP -->
+          <div class="bg-gradient-to-br from-blue-950/40 via-[#0b1222] to-[#090d16] border-2 border-blue-500/40 rounded-2xl p-4 sm:p-5 flex flex-col gap-3.5">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-blue-500/30 pb-2.5">
+              <span class="px-2.5 py-1 rounded-md bg-blue-500 text-slate-950 font-black text-xs uppercase">
+                ⭐ Rangkuman Spidol Biru (Bawah Papan 2): Hubungan 一般衛生管理 & HACCP
+              </span>
+              <button onclick="speakSenseiSentence('いっぱんえいせいかんりは、しょくひんのあんぜんをまもるために、きほんてきなえいせいかんりです。ハサップは、しょくひんをあんぜんにつくるためには、きがいよういんをぶんせきしてかんりするシステムです。あんぜんなしょくひんをつくるためには、このりょうほうをいっしょにおこなうことがたいせつです。')" class="px-3 py-1.5 rounded-xl bg-blue-500/20 border border-blue-400/40 text-blue-200 font-bold text-xs hover:bg-blue-500/30 transition">
+                🔊 Putar Seluruh Paragraf Biru
+              </button>
             </div>
 
-            <!-- Panggung Visualisasi Bayangan -->
-            <div class="flex flex-col sm:flex-row items-center gap-4">
-              <div id="hkSceneEmoji" class="scene-emoji w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-[#090d16] border border-indigo-500/30 flex items-center justify-center text-4xl sm:text-5xl shrink-0 shadow-inner">
-                🪭🔨😡
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <!-- Kalimat Bintang 1 -->
+              <div class="bg-[#090d16]/90 border border-slate-800 rounded-xl p-3.5 flex flex-col justify-between gap-2">
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[11px] font-bold text-cyan-400">☆ 1. 一般衛生管理</span>
+                    <button onclick="speakSenseiSentence('いっぱんえいせいかんりは、しょくひんのあんぜんをまもるために、きほんてきなえいせいかんりです')" class="text-xs text-emerald-400 font-bold">🔊</button>
+                  </div>
+                  <p class="text-sm sm:text-base font-black text-white jp-font leading-relaxed">
+                    <span class="text-cyan-300">いっぱんえいせいかんり</span> は 食品の あんぜんを まもるために <span class="sensei-key underline decoration-emerald-400 text-emerald-300">きほんてきな えいせいかんり</span>です。
+                  </p>
+                  <p class="sensei-romaji text-xs text-cyan-400 font-semibold mt-1">
+                    Ippan eisei kanri wa shokuhin no anzen wo mamoru tame ni <b>kihonteki na eisei kanri</b> desu.
+                  </p>
+                </div>
+                <p class="text-xs text-slate-400 border-t border-slate-800 pt-2">
+                  = Manajemen kebersihan umum adalah <b>manajemen kebersihan dasar</b> untuk menjaga keamanan makanan.
+                </p>
               </div>
-              <div class="flex-1 text-center sm:text-left">
-                <div class="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-1">🎬 Ilustrasi Bayangan di Otak:</div>
-                <p id="hkStory" class="text-sm sm:text-base text-slate-100 leading-relaxed font-medium">
-                  Bayangkan bos pabrik yang aturannya super <b class="text-emerald-400 underline">KETAT</b> memegang <b class="text-amber-300">KIPAS BESI (KIBISHII)</b> raksasa untuk menghukum siapa pun yang telat 1 detik!
+
+              <!-- Kalimat Bintang 2 -->
+              <div class="bg-[#090d16]/90 border border-slate-800 rounded-xl p-3.5 flex flex-col justify-between gap-2">
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[11px] font-bold text-amber-400">☆ 2. HACCP (ハサップ)</span>
+                    <button onclick="speakSenseiSentence('ハサップは、しょくひんをあんぜんにつくるためには、きがいよういんをぶんせきしてかんりするシステムです')" class="text-xs text-emerald-400 font-bold">🔊</button>
+                  </div>
+                  <p class="text-sm sm:text-base font-black text-white jp-font leading-relaxed">
+                    <span class="text-amber-300">HACCP</span> は 食品を あんぜんに 作るためには、<span class="sensei-key underline decoration-amber-400 text-amber-300">きがいよういんを ぶんせきして かんりする システム</span>です。
+                  </p>
+                  <p class="sensei-romaji text-xs text-cyan-400 font-semibold mt-1">
+                    HACCP wa shokuhin wo anzen ni tsukuru tame ni wa, <b>kigai youin wo bunseki shite kanri suru shisutemu</b> desu.
+                  </p>
+                </div>
+                <p class="text-xs text-slate-400 border-t border-slate-800 pt-2">
+                  = HACCP adalah <b>sistem yang menganalisis & mengelola faktor bahaya</b> untuk membuat makanan dengan aman.
+                </p>
+              </div>
+
+              <!-- Kalimat Gabungan Panah Biru -->
+              <div class="bg-blue-950/30 border border-blue-500/40 rounded-xl p-3.5 flex flex-col justify-between gap-2">
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[11px] font-bold text-blue-300">➔ Kesimpulan (Gabungan)</span>
+                    <button onclick="speakSenseiSentence('あんぜんなしょくひんをつくるためには、このりょうほうをいっしょにおこなうことがたいせつです')" class="text-xs text-emerald-400 font-bold">🔊</button>
+                  </div>
+                  <p class="text-sm sm:text-base font-black text-white jp-font leading-relaxed">
+                    あんぜんな 食品を 作るためには、<span class="sensei-key underline decoration-blue-400 text-blue-300">この りょうほうを いっしょに おこなうこと</span>が たいせつです。
+                  </p>
+                  <p class="sensei-romaji text-xs text-cyan-400 font-semibold mt-1">
+                    Anzen na shokuhin wo tsukuru tame ni wa, <b>kono ryouhou wo issho ni okonau koto</b> ga taisetsu desu.
+                  </p>
+                </div>
+                <p class="text-xs text-blue-200 border-t border-blue-500/20 pt-2">
+                  = Untuk membuat makanan yang aman, <b>melakukan kedua hal ini (一般衛生管理 + HACCP) bersama-sama</b> sangatlah penting.
                 </p>
               </div>
             </div>
-
-            <!-- Bedah DNA Kanji -->
-            <div class="bg-[#090d16]/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-300 flex items-center gap-2">
-              <span class="text-amber-400 font-bold shrink-0">🔍 Petunjuk Visual Kanji:</span>
-              <span id="hkKanjiTip" class="text-slate-300">Huruf 厳 punya banyak goresan rapat & padat seperti penjagaan yang super KETAT.</span>
-            </div>
-          </div>
-
-          <!-- TOMBOL NAVIGASI & KUNCI INGATAN -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-            <button onclick="prevWord()" class="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs sm:text-sm transition">
-              ← Sebelumnya
-            </button>
-            <button onclick="markLocked(false)" class="py-3 px-4 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-bold text-xs sm:text-sm transition">
-              ⏳ Masih Lupa
-            </button>
-            <button onclick="markLocked(true)" class="py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition">
-              🔒 Sudah Nempel!
-            </button>
-            <button onclick="nextWord()" class="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs sm:text-sm transition">
-              Selanjutnya →
-            </button>
           </div>
         </div>
       </div>
 
-      <p class="text-center text-xs text-slate-500">
-        💡 Tips: Tekan tombol <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">→</kbd> / <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">←</kbd> di keyboard untuk pindah kata, atau <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">Enter</kbd> jika sudah nempel di otak.
-      </p>
+      <!-- ================= PAPAN TULIS 3 ================= -->
+      <div id="senseiBoard-3" class="sensei-board-card bg-[#111827] border-2 border-amber-500/30 rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+        <div class="bg-gradient-to-r from-amber-950/80 via-slate-900 to-slate-900 px-5 py-3.5 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="px-2.5 py-1 rounded-lg bg-amber-400 text-slate-950 font-black text-xs">PAPAN TULIS 3</span>
+            <h3 class="text-sm sm:text-base font-extrabold text-white">
+              Bab 2 (Hal. 7–8): きがいよういん ➔ ① ぶつりてききがいよういん (Faktor Bahaya Fisik)
+            </h3>
+          </div>
+          <button onclick="speakSenseiSentence('ぶつりてききがいよういん。げんいんは、かたいものがしょくひんのなかにはいって、かたくてはがかける、とがっていてくちのなかにきずができます。ふせぐためには、ただしくせんじょうしたり、せんべつしたり、したしょりによってとりのぞきます。')" class="px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs hover:bg-amber-500/30 transition">
+            🔊 Putar Penjelasan Lengkap Papan 3
+          </button>
+        </div>
+
+        <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- KIRI PAPAN 3: Penyebab (げんいん) & Pencegahan (ふせぐためには) -->
+          <div class="bg-[#090d16] border border-slate-800 rounded-2xl p-4 flex flex-col gap-3.5">
+            <div class="border-b border-slate-800 pb-2">
+              <span class="text-[11px] font-bold text-amber-400 uppercase">Kiri Papan 3</span>
+              <h4 class="text-lg font-black text-white jp-font">① ぶつりてききがいよういん（物理的危害要因）</h4>
+              <p class="sensei-romaji text-xs text-cyan-400 font-bold">Butsuriteki kigai youin = Faktor Bahaya Fisik</p>
+            </div>
+
+            <!-- Cabang 1: げんいん (Penyebab) -->
+            <div class="bg-[#111827] border border-rose-500/30 rounded-xl p-3.5 flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-black text-xs">1. げんいん (Penyebab):</span>
+                <button onclick="speakSenseiSentence('かたいものがしょくひんのなかにはいって、かたくてはがかける、とがっていてくちのなかにきずができます')" class="text-xs font-bold text-emerald-400 hover:underline">🔊 Putar</button>
+              </div>
+              <div class="text-base sm:text-lg font-black text-white jp-font leading-relaxed mt-1">
+                <span class="sensei-key text-amber-300 underline">かたい もの</span>が 食品の 中に 入って、<br>
+                ➔ <span class="sensei-key text-rose-300 underline">かたくて はが かける</span>、<br>
+                ➔ <span class="sensei-key text-rose-300 underline">とがっていて 口の 中に きずが できます</span>。
+              </div>
+              <div class="sensei-romaji text-xs font-bold text-cyan-400">
+                <b>Katai mono</b> ga shokuhin no naka ni haitte, <b>katakute ha ga kakeru</b>, <b>togatte ite kuchi no naka ni kizu ga dekimasu</b>.
+              </div>
+              <div class="text-xs text-slate-300 bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 mt-1">
+                💡 <b>Arti & Catatan Koreksi Halus:</b><br>
+                • Di papan tertulis <i>"かたいものを食品の中に入いて"</i>, bentuk tata bahasa Jepang yang tepat sesuai modul adalah <b>「かたいものが食品の中に入って」</b> (Benda keras masuk ke dalam makanan).<br>
+                • <b>かたくて はが かける</b> = Karena keras, gigi menjadi patah/terkelupas.<br>
+                • <b>とがっていて 口の 中に きずが できます</b> = Karena runcing/lancip, timbul luka di dalam mulut.
+              </div>
+            </div>
+
+            <!-- Cabang 2: ふせぐためには (Cara Mencegah) -->
+            <div class="bg-[#111827] border border-emerald-500/30 rounded-xl p-3.5 flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-black text-xs">2. ふせぐためには (Untuk Mencegahnya):</span>
+                <button onclick="speakSenseiSentence('ふせぐためには、ただしくせんじょうしたり、せんべつしたり、したしょりによってとりのぞきます')" class="text-xs font-bold text-emerald-400 hover:underline">🔊 Putar</button>
+              </div>
+              <div class="text-base sm:text-lg font-black text-white jp-font leading-relaxed mt-1">
+                ただしく <span class="sensei-key text-emerald-300 underline">せんじょう</span>したり、<span class="sensei-key text-emerald-300 underline">せんべつ</span>したり、<span class="sensei-key text-emerald-300 underline">したしょり</span>に よって <span class="sensei-key text-cyan-300 underline">とりのぞきます</span>。
+              </div>
+              <div class="sensei-romaji text-xs font-bold text-cyan-400">
+                Tadashiku <b>senjou</b> shitari, <b>senbetsu</b> shitari, <b>shitashori</b> ni yotte <b>torinozokimasu</b>.
+              </div>
+              <div class="text-xs text-slate-300 bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 mt-1">
+                💡 <b>Rumus 3S + 1T:</b><br>
+                • <b>せんじょう (洗浄 / Senjou)</b> = Mencuci<br>
+                • <b>せんべつ (選別 / Senbetsu)</b> = Menyortir / Memilih<br>
+                • <b>したしょり (下処理 / Shitashori)</b> = Persiapan awal (buang akar, cangkang, tulang)<br>
+                • <b>とりのぞきます (取り除きます / Torinozokimasu)</b> = Menghilangkan / Menyingkirkannya!
+              </div>
+            </div>
+          </div>
+
+          <!-- KANAN PAPAN 3: Perbandingan 2 Lingkaran (こうしついぶつ vs いぶつ) -->
+          <div class="bg-[#090d16] border border-slate-800 rounded-2xl p-4 flex flex-col gap-3.5">
+            <div class="border-b border-slate-800 pb-2">
+              <span class="text-[11px] font-bold text-cyan-400 uppercase">Kanan Papan 3 (2 Lingkaran Sensei)</span>
+              <h4 class="text-lg font-black text-white jp-font">Perbedaan こうしついぶつ vs いぶつ Biasa</h4>
+              <p class="text-xs text-slate-400">Sering keluar di ujian & pertanyaan lisan Sensei!</p>
+            </div>
+
+            <!-- Lingkaran Besar: こうしついぶつ (Benda Asing Keras) -->
+            <div class="bg-amber-950/20 border-2 border-amber-500/40 rounded-2xl p-4 flex flex-col gap-2.5">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xs font-black text-amber-300 uppercase">⭕ Lingkaran 1: Benda Asing Keras (Bahaya Fisik)</span>
+                  <div class="text-xl font-black text-white jp-font">こうしついぶつ（硬質異物）</div>
+                  <div class="sensei-romaji text-xs text-cyan-400 font-bold">Koushitsui-butsu</div>
+                </div>
+                <button onclick="speakSenseiSentence('こうしついぶつは、いし、こいし、きんぞくへん、ガラスへん、プラスチックへんです')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-emerald-400 text-xs font-bold">🔊 Semua</button>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+                <button onclick="speakSenseiSentence('いし')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-700 text-left transition">
+                  <div class="font-black text-white jp-font text-sm">🪨 いし (石)</div>
+                  <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">ishi</div>
+                  <div class="text-xs text-emerald-300 font-bold">= Batu</div>
+                </button>
+                <button onclick="speakSenseiSentence('こいし')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-700 text-left transition">
+                  <div class="font-black text-white jp-font text-sm"> pebbles こいし (小石)</div>
+                  <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">koishi</div>
+                  <div class="text-xs text-emerald-300 font-bold">= Kerikil</div>
+                </button>
+                <button onclick="speakSenseiSentence('きんぞくへん')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-amber-500/50 text-left transition">
+                  <div class="font-black text-amber-300 jp-font text-sm">🔩 きんぞくへん</div>
+                  <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">kinzokuhen</div>
+                  <div class="text-xs text-emerald-300 font-bold">= Serpihan logam</div>
+                </button>
+                <button onclick="speakSenseiSentence('ガラスへん')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-amber-500/50 text-left transition">
+                  <div class="font-black text-amber-300 jp-font text-sm">🍷 ガラスへん</div>
+                  <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">garasuhen</div>
+                  <div class="text-xs text-emerald-300 font-bold">= Pecahan kaca</div>
+                </button>
+                <button onclick="speakSenseiSentence('プラスチックへん')" class="bg-[#111827] hover:bg-slate-800 p-2.5 rounded-xl border border-slate-700 text-left transition col-span-2 sm:col-span-1">
+                  <div class="font-black text-white jp-font text-sm">🥤 プラスチックへん</div>
+                  <div class="sensei-romaji text-[11px] text-cyan-400 font-bold">purasuchikkuhen</div>
+                  <div class="text-xs text-emerald-300 font-bold">= Potongan plastik</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Lingkaran Kecil Kanan Atas: いぶつ (Benda Asing Tidak Keras) -->
+            <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-4 flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xs font-black text-slate-300 uppercase">⭕ Lingkaran 2 (Pojok Kanan Atas): いぶつ (Benda Asing Lunak)</span>
+                  <div class="text-lg font-black text-white jp-font">
+                    いぶつ（異物）➔ <span class="sensei-key text-cyan-300 underline">かみのけ（髪の毛 = Rambut）</span>
+                  </div>
+                  <div class="sensei-romaji text-xs text-cyan-400 font-bold">Ibutsu ➔ Kami no ke (Rambut) / Mushi (Serangga) / Shihen (Kertas)</div>
+                </div>
+                <button onclick="speakSenseiSentence('いぶつ、かみのけ')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-emerald-400 text-xs font-bold">🔊</button>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                ⚠️ <b>Kenapa dipisah oleh Sensei?</b> Karena <b>かみのけ (Rambut)</b> itu <u>tidak keras</u> (bukan <i>koushitsui-butsu</i> dan tidak melukai mulut/gigi), tapi tetap termasuk <b>いぶつ (Benda Asing)</b> yang membuat makanan dianggap kotor (不潔・不衛生) dan memicu klaim/retur (苦情・返品)!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- ==================== MODE 2: BACA CEPAT SEMUA TRIK (CHEAT SHEET) ==================== -->
+    <!-- ==================== MODE 2: GAUNTLET PAPAN SENSEI (HAFAL PENGERTIAN & CONTOH INDUSTRI) ==================== -->
+    <section id="section-senseidrill" class="hidden flex-1 flex flex-col gap-4">
+      <!-- Header Kontrol Gauntlet Papan Sensei -->
+      <div class="bg-[#111827] border border-amber-500/40 rounded-2xl p-4 flex flex-col gap-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 font-black text-[11px] uppercase">
+              ⚡ Gauntlet Papan Tulis Sensei (Salah 1x = Muncul Jawaban 7 Detik + Audio 3x + Ulang Checkpoint Papan!)
+            </span>
+            <h2 class="text-sm sm:text-base font-extrabold text-white mt-1">
+              Hafalkan Pengertian Modul & Contoh Industri Makanan/Minuman Persis Gaya Ringkas Papan Tulis Sensei!
+            </h2>
+          </div>
+
+          <div class="flex items-center gap-2 text-xs font-bold">
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+              Progres: <b id="sdPosText">1 / 16</b>
+            </span>
+            <span class="px-2.5 py-1 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-300">
+              💀 Ulang Checkpoint: <b id="sdResetText">0x</b>
+            </span>
+          </div>
+        </div>
+
+        <!-- Stage Checkpoint per Papan Tulis (Papan 0, Papan 1, Papan 2, Papan 3) -->
+        <div class="flex flex-col gap-2 pt-2 border-t border-slate-800">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span class="text-slate-400 font-bold">🚩 Pilih Checkpoint Papan Tulis Sensei:</span>
+            <div class="flex items-center gap-2">
+              <span class="text-slate-400 font-bold">Cara Jawab:</span>
+              <select id="sdInputModeSelect" onchange="renderSenseiGauntletStep()" class="bg-[#090d16] border border-amber-500/40 text-amber-300 rounded-xl px-2.5 py-1 font-bold text-xs focus:outline-none">
+                <option value="both">🎯 Susun Kalimat Utuh + Bisa Ketik Langsung</option>
+                <option value="type">⌨️ Ketik Langsung Saja (Romaji / Jepang)</option>
+              </select>
+            </div>
+          </div>
+          <div id="sdStageButtons" class="flex flex-wrap gap-1.5"></div>
+          <div id="sdChainDots" class="flex flex-wrap gap-1.5 pt-1"></div>
+        </div>
+      </div>
+
+      <!-- KARTU UTAMA GAUNTLET PAPAN SENSEI -->
+      <div class="bg-[#111827] border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
+        <!-- Bar Countdown 7 Detik Saat Salah -->
+        <div class="w-full h-2 bg-slate-900">
+          <div id="sdPenaltyBar" class="h-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-400 transition-all duration-100" style="width: 0%"></div>
+        </div>
+
+        <div class="p-5 sm:p-7 flex flex-col gap-5">
+          <!-- Info Soal & Audio -->
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2">
+              <span id="sdMetaBadge" class="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-black border border-amber-500/30">Papan 0 • Soal #1</span>
+              <span id="sdTopicBadge" class="px-2.5 py-1 rounded-lg bg-slate-800 text-cyan-300 font-bold">Pengertian & Contoh</span>
+            </div>
+            <button onclick="speakCurrentSenseiDrillAnswer()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold border border-slate-700 transition">
+              🔊 Dengar Suara Jawaban Sensei
+            </button>
+          </div>
+
+          <!-- Pertanyaan Sensei -->
+          <div class="bg-[#090d16] border border-slate-800 rounded-2xl p-5 flex flex-col gap-1.5">
+            <div class="text-xs font-extrabold uppercase tracking-wider text-amber-400">👨‍🏫 Pertanyaan Sensei (せつめいしてください):</div>
+            <div id="sdQuestionJp" class="text-xl sm:text-2xl font-black text-white jp-font leading-snug"></div>
+            <div id="sdQuestionId" class="text-xs sm:text-sm font-bold text-slate-300 mt-0.5"></div>
+            <div id="sdPromptTemplate" class="mt-2 pt-2 border-t border-slate-800/80 text-xs sm:text-sm font-bold text-cyan-300 jp-font"></div>
+          </div>
+
+          <!-- OPSI 1: SUSUN KALIMAT UTUH SENSEI (KLIK BERURUTAN TANPA TERPOTONG) -->
+          <div id="sdBuilderContainer" class="flex flex-col gap-3">
+            <div class="text-xs text-slate-400 font-bold flex items-center justify-between">
+              <span>👇 Klik potongan kalimat di bawah secara berurutan (Awas: Salah klik 1x langsung kena penalti 7 detik & ulang checkpoint papan!):</span>
+              <span id="sdChunkCounter" class="text-emerald-400 font-extrabold">0 / 3 Potongan</span>
+            </div>
+
+            <!-- Kotak Kalimat yang Sedang Disusun -->
+            <div id="sdBuiltZone" class="min-h-[60px] bg-[#090d16] border-2 border-dashed border-slate-700 rounded-2xl p-3.5 flex flex-wrap items-center gap-2"></div>
+
+            <!-- Pilihan Potongan Kalimat + Pengecoh -->
+            <div id="sdChunkChoices" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- OPSI 2: KETIK LANGSUNG KATA KUNCI (ROMAJI / JEPANG / INDO) -->
+          <form id="sdTypeForm" onsubmit="submitSenseiDrillType(event)" class="flex flex-col sm:flex-row gap-2.5 pt-1 border-t border-slate-800/80">
+            <input
+              type="text"
+              id="sdTypeInput"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="Atau ketik langsung jawaban Romaji / Jepangnya di sini lalu Enter..."
+              class="flex-1 bg-[#090d16] border-2 border-slate-700 focus:border-emerald-400 rounded-2xl px-4 py-3 text-sm sm:text-base font-bold text-white placeholder-slate-500 focus:outline-none transition"
+            />
+            <div class="flex gap-2">
+              <button type="submit" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-black text-xs sm:text-sm shadow">
+                Cek Ketikan ↵
+              </button>
+              <button type="button" onclick="triggerSenseiDrillPenalty('(Lupa / Menyerah)')" class="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-rose-500/20 hover:text-rose-300 text-slate-300 font-bold text-xs border border-slate-700">
+                🏳️ Lupa
+              </button>
+            </div>
+          </form>
+
+          <!-- Toast Benar -->
+          <div id="sdSuccessToast" class="hidden p-3.5 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm font-bold flex items-center justify-between">
+            <span id="sdSuccessText">✅ Sempurna! Lanjut ke poin papan tulis berikutnya...</span>
+            <span class="font-black">LANJUT →</span>
+          </div>
+
+          <!-- BOX HUKUMAN 7 DETIK + 3X AUDIO SAAT SALAH DI PAPAN SENSEI -->
+          <div id="sdPenaltyBox" class="hidden p-5 rounded-2xl border-2 border-rose-500/60 bg-gradient-to-br from-rose-950/40 via-[#101726] to-[#090d16] flex flex-col gap-3.5 shadow-2xl">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-rose-500/30 pb-3">
+              <div class="flex items-center gap-2">
+                <span id="sdPenaltyBadge" class="px-2.5 py-1 rounded-lg bg-rose-500 text-slate-950 font-black text-xs uppercase">
+                  💀 SALAH! ULANG KE AWAL PAPAN INI
+                </span>
+                <span id="sdAudioRepeatBadge" class="px-2.5 py-1 rounded-lg bg-amber-400/20 border border-amber-400/40 text-amber-300 font-extrabold text-xs">
+                  🔊 Audio Sensei: 1 / 3
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold text-rose-300">
+                  Reset ke #1 Papan dlm <b id="sdPenaltyTimerNum" class="text-white text-sm">7.0</b> dtk
+                </span>
+                <button type="button" onclick="finishSenseiDrillPenaltyNow()" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-600">
+                  Ulang Sekarang 🚩
+                </button>
+              </div>
+            </div>
+
+            <!-- Kalimat Utuh Sensei yang Wajib Dibaca & Didengar Selama 7 Detik -->
+            <div class="bg-[#090d16] p-4 rounded-xl border border-slate-800 flex flex-col gap-1.5">
+              <div class="text-xs font-bold text-amber-400">📌 Jawaban Ringkas Papan Tulis Sensei (Baca & Dengarkan 3x!):</div>
+              <div id="sdPenaltyFullJp" class="text-lg sm:text-2xl font-black text-white jp-font leading-relaxed"></div>
+              <div id="sdPenaltyRomaji" class="text-xs sm:text-sm font-extrabold text-cyan-400"></div>
+              <div id="sdPenaltyMeaning" class="text-xs sm:text-sm font-bold text-emerald-300 mt-1"></div>
+              <div id="sdPenaltyWrongInfo" class="text-xs text-rose-400 mt-1"></div>
+            </div>
+          </div>
+
+          <!-- Box Tamat Seluruh Papan Sensei -->
+          <div id="sdVictoryBox" class="hidden p-6 rounded-2xl border-2 border-emerald-400 bg-emerald-950/20 text-center flex flex-col items-center gap-3">
+            <div class="text-5xl">👨‍🏫👑</div>
+            <h3 class="text-xl font-black text-white">LUAR BIASA! Anda Hafal Seluruh Ringkasan Papan Tulis Sensei!</h3>
+            <p class="text-xs sm:text-sm text-slate-300 max-w-md">
+              Mulai dari pengertian <b>いんしょくりょうひんせいぞうぎょう</b>, contoh makanan & minuman, hingga papan tulis Bab 1 & Bab 2 sudah di luar kepala!
+            </p>
+            <button onclick="resetSenseiDrillToStart()" class="px-5 py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs sm:text-sm hover:bg-emerald-400 transition">
+              🔄 Ulangi dari Papan 0
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODE 4: BACA CEPAT SEMUA TRIK (CHEAT SHEET) ==================== -->
     <section id="section-list" class="hidden flex-1 flex flex-col gap-3">
       <div class="bg-[#111827] border border-slate-800 rounded-2xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sticky top-16 z-20 shadow-lg">
         <input
@@ -294,14 +1126,17 @@
           <div class="flex items-center gap-1.5">
             <span class="text-slate-400 font-bold">Sistem Reset:</span>
             <select id="checkpointModeSelect" onchange="renderGauntletChain()" class="bg-[#090d16] border border-emerald-500/40 text-emerald-300 rounded-xl px-2.5 py-1.5 font-bold focus:outline-none focus:border-emerald-500">
-              <option value="page">🚩 Checkpoint per Halaman (Default)</option>
-              <option value="five">⚡ Mini-Checkpoint Tiap 5 Kata</option>
+              <option value="five" selected>⚡ Checkpoint Tiap 5 Kata (Optimal God-Tier)</option>
+              <option value="page">🚩 Checkpoint per Halaman</option>
               <option value="hardcore">💀 Hardcore (Reset Jauh ke #1 Awal)</option>
             </select>
           </div>
         </div>
 
         <div class="flex items-center gap-2.5 text-xs font-bold">
+          <button type="button" onclick="toggleCheckpointPreview()" id="btnCheckpointPreview" class="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 font-extrabold transition flex items-center gap-1">
+            ⚡ Intip Kotoba Checkpoint Ini
+          </button>
           <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
             Total: <b id="gauntletPosText">1 / 15</b>
           </span>
@@ -312,6 +1147,20 @@
             💀 Ulang: <b id="gauntletResetCount">0x</b>
           </span>
         </div>
+      </div>
+
+      <!-- Panel Intip Cepat Kotoba di Checkpoint Saat Ini (Otomatis Tertutup Saat Mulai Mengetik) -->
+      <div id="checkpointPreviewBox" class="hidden w-full bg-[#111827] border-2 border-amber-500/40 rounded-2xl p-4 flex flex-col gap-3 shadow-xl">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <div>
+            <span class="text-xs font-black uppercase text-amber-300">⚡ SUNTIK OTAK SEBELUM KETIK (KHUSUS CHECKPOINT INI)</span>
+            <p class="text-[11px] text-slate-400">Baca jembatan keledainya 10 detik, lalu langsung hajar ketik tanpa salah!</p>
+          </div>
+          <button type="button" onclick="toggleCheckpointPreview(false)" class="px-3 py-1 rounded-lg bg-emerald-500 text-slate-950 font-black text-xs">
+            Siap Ketik! ✕
+          </button>
+        </div>
+        <div id="checkpointPreviewList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
       </div>
 
       <!-- Jejak Checkpoint Halaman & Rantai Kotoba Halaman Aktif -->
@@ -454,8 +1303,190 @@
   </footer>
 
   <script>
-    // ==================== DATABASE 110 KOTOBA HALAMAN 13 SAMPAI 20 + BRAIN HACK ====================
+    // ==================== DATABASE KOTOBA HALAMAN AWAL (2–3) + HALAMAN 13 SAMPAI 20 ====================
     const KOTOBA_13_20 = [
+      // ==================== HALAMAN AWAL 2 & 3 (1 - 30): INSHOKURYOUHIN SEIZOUGYOU ====================
+      {
+        id: "p2_1", page: "2-3", no: 1, kanji: "飲料", furigana: "いんりょう", romaji: "inryou", meaning: "minuman",
+        emoji: "🍹🧊😋", hook: "INRYOU ≈ IN (Masuk) Tenggorokan Minuman",
+        story: "Minuman segar langsung <b>IN (INRYOU)</b> masuk ke tenggorokan saat haus!",
+        kanjiTip: "飲 (minum) + 料 (bahan/produk) = Minuman."
+      },
+      {
+        id: "p2_2", page: "2-3", no: 2, kanji: "食料品", furigana: "しょくりょうひん", romaji: "shokuryouhin", meaning: "bahan makanan",
+        emoji: "🍱🥩🥬", hook: "SHOKU (Makan) + RYOU + HIN (Barang)",
+        story: "Semua barang yang bisa di-<b>SHOKU (Makan)</b> di supermarket disebut <b>BAHAN MAKANAN (SHOKURYOUHIN)</b>!",
+        kanjiTip: "食料 (makanan) + 品 (barang/produk) = Bahan makanan."
+      },
+      {
+        id: "p2_3", page: "2-3", no: 3, kanji: "欠かせません", furigana: "かかせません", romaji: "kakasemasen", meaning: "ini penting (tidak bisa dipisahkan)",
+        emoji: "👑💧🍱", hook: "KAKASEMASEN ≈ KAKAK SEMAkin Penting",
+        story: "Makanan & minuman itu <b>INI PENTING / WAJIB ADA (KAKASEMASEN)</b> dalam hidup kita!",
+        kanjiTip: "欠 (kurang/hilang) -> 欠かせません (tidak boleh hilang/sangat penting)."
+      },
+      {
+        id: "p2_4", page: "2-3", no: 4, kanji: "製造する", furigana: "せいぞうする", romaji: "seizou suru", meaning: "pembuatan (memproduksi)",
+        emoji: "🏭⚙️🤖", hook: "SEIZOU ≈ SE-ZONA Pabrik Memproduksi",
+        story: "Mesin raksasa di pabrik sibuk melakukan <b>PEMBUATAN / PRODUKSI (SEIZOU SURU)</b> makanan!",
+        kanjiTip: "製 (membuat produk) + 造 (menciptakan) = Memproduksi."
+      },
+      {
+        id: "p2_5", page: "2-3", no: 5, kanji: "飲食料品製造業", furigana: "いんしょくりょうひんせいぞうぎょう", romaji: "inshokuryouhin seizougyou", meaning: "industri manufaktur makanan dan minuman",
+        emoji: "🏭🍹🍱", hook: "IN (Minum) + SHOKURYOUHIN (Makanan) + SEIZOU (Produksi) + GYOU (Industri)",
+        story: "Gabungan 4 Lego: <b>IN (Minuman) + SHOKURYOUHIN (Makanan) + SEIZOU (Pembuatan) + GYOU (Industri)</b> = <b>INDUSTRI MANUFAKTUR MAKANAN & MINUMAN</b>!",
+        kanjiTip: "飲食料品 (makanan & minuman) + 製造業 (industri manufaktur)."
+      },
+      {
+        id: "p2_6", page: "2-3", no: 6, kanji: "ハムソーセージ", furigana: "ハムソーセージ", romaji: "hamu sooseeji", meaning: "sosis daging (ham & sosis)",
+        emoji: "🌭🥓😋", hook: "HAMU SOOSEEJI ≈ HAM & SAUSAGE",
+        story: "Dari bahasa Inggris langsung: <b>HAM & SAUSAGE (HAMU SOOSEEJI)</b> = <b>SOSIS DAGING</b>!",
+        kanjiTip: "Katakana ハム (Ham) + ソーセージ (Sausage)."
+      },
+      {
+        id: "p2_7", page: "2-3", no: 7, kanji: "魚の缶詰", furigana: "さかなのかんづめ", romaji: "sakana no kanzume", meaning: "ikan kaleng",
+        emoji: "🐟🥫✨", hook: "SAKANA (Ikan) + KANZUME (Kaleng)",
+        story: "Ikan (<b>SAKANA</b>) yang dimasukkan penuh ke dalam kaleng (<b>KAN-zume</b>) = <b>IKAN KALENG</b>!",
+        kanjiTip: "魚 (ikan) + 缶 (kaleng) + 詰 (diisi padat) = Ikan kaleng."
+      },
+      {
+        id: "p2_8", page: "2-3", no: 8, kanji: "惣菜", furigana: "そうざい", romaji: "souzai", meaning: "makanan pendamping (lauk pauk)",
+        emoji: "🍤🥗🍱", hook: "SOUZAI ≈ SO-ZAI (Lauk Bento)",
+        story: "Di minimarket Jepang banyak dijual <b>SOUZAI</b> yaitu <b>LAUK PAUK / MAKANAN PENDAMPING</b> siap santap!",
+        kanjiTip: "惣菜 (Souzai) = Lauk pauk pendamping nasi."
+      },
+      {
+        id: "p2_9", page: "2-3", no: 9, kanji: "冷凍食品", furigana: "れいとうしょくひん", romaji: "reitou shokuhin", meaning: "makanan beku",
+        emoji: "🧊🥟❄️", hook: "REITOU (Beku) + SHOKUHIN (Makanan)",
+        story: "Nugget yang disimpan di freezer sampai beku disebut <b>MAKANAN BEKU (REITOU SHOKUHIN)</b>!",
+        kanjiTip: "冷凍 (beku) + 食品 (makanan)."
+      },
+      {
+        id: "p2_10", page: "2-3", no: 10, kanji: "農林水産省", furigana: "のうりんすいさんしょう", romaji: "nourin suisanshou", meaning: "Kementerian Pertanian, Kehutanan dan Perikanan",
+        emoji: "🌾🌲🐟", hook: "NOU (Tani) + RIN (Hutan) + SUISAN (Laut) + SHOU (Kementerian)",
+        story: "Pecah 4 kata: <b>NOU (Pertanian) + RIN (Kehutanan) + SUISAN (Perikanan) + SHOU (Kementerian)</b>!",
+        kanjiTip: "農 (tani) + 林 (hutan) + 水産 (perikanan) + 省 (kementerian)."
+      },
+      {
+        id: "p2_11", page: "2-3", no: 11, kanji: "統計", furigana: "とうけい", romaji: "toukei", meaning: "statistik",
+        emoji: "📊📈📋", hook: "TOUKEI ≈ TOKE (Tauke) Cek Statistik",
+        story: "Bos <b>TOKE (TOUKEI)</b> mengecek grafik data <b>STATISTIK</b> penjualan pabrik!",
+        kanjiTip: "統 (keseluruhan) + 計 (hitungan/angka) = Statistik."
+      },
+      {
+        id: "p2_12", page: "2-3", no: 12, kanji: "国内生産額", furigana: "こくないせいさんがく", romaji: "kokunai seisangaku", meaning: "jumlah produksi dalam negeri",
+        emoji: "🇯🇵🏭💴", hook: "KOKUNAI (Dlm Negeri) + SEISAN (Produksi) + GAKU (Jumlah Nilai)",
+        story: "Total nilai uang dari hasil pabrik di Jepang disebut <b>JUMLAH PRODUKSI DALAM NEGERI (KOKUNAI SEISANGAKU)</b>!",
+        kanjiTip: "国内 (dalam negeri) + 生産 (produksi) + 額 (jumlah nilai uang)."
+      },
+      {
+        id: "p2_13", page: "2-3", no: 13, kanji: "数年", furigana: "すうねん", romaji: "suunen", meaning: "beberapa tahun",
+        emoji: "🗓️⏳🔄", hook: "SUUNEN ≈ SUU (Beberapa) + NEN (Tahun)",
+        story: "Sudah <b>BEBERAPA TAHUN (SUUNEN)</b> bekerja di Jepang sampai mahir!",
+        kanjiTip: "数 (beberapa/angka) + 年 (tahun) = Beberapa tahun."
+      },
+      {
+        id: "p2_14", page: "2-3", no: 14, kanji: "兆円", furigana: "ちょうえん", romaji: "chouen", meaning: "triliun yen",
+        emoji: "💴💰🤯", hook: "CHOU (Triliun) + EN (Yen)",
+        story: "Nilai produksi makanan Jepang mencapai 38 <b>CHOU-EN (TRILIUN YEN)</b>!",
+        kanjiTip: "兆 (Triliun) + 円 (Yen)."
+      },
+      {
+        id: "p3_15", page: "2-3", no: 15, kanji: "特定技能1号", furigana: "とくていぎのう1ごう", romaji: "tokutei ginou ichigou", meaning: "keahlian khusus tingkat 1",
+        emoji: "🪪🇯🇵👷", hook: "TOKUTEI (Khusus) + GINOU (Keahlian) + 1 GOU",
+        story: "Visa kerja kebanggaan kita: <b>TOKUTEI GINOU ICHIGOU (KEAHLIAN KHUSUS TINGKAT 1)</b>!",
+        kanjiTip: "特定 (khusus) + 技能 (keahlian) + 1号 (nomor/tingkat 1)."
+      },
+      {
+        id: "p3_16", page: "2-3", no: 16, kanji: "在留資格者", furigana: "ざいりゅうしかくしゃ", romaji: "zairyuu shikakusha", meaning: "orang berstatus penduduk (pemegang izin tinggal)",
+        emoji: "💳🧑‍💼🇯🇵", hook: "ZAIRYUU (Tinggal) + SHIKAKU (Status) + SHA (Orang)",
+        story: "Ingat <i>Zairyuu Card</i>! <b>ZAIRYUU SHIKAKUSHA</b> adalah <b>ORANG BERSTATUS PENDUDUK / PEMEGANG IZIN TINGGAL</b>!",
+        kanjiTip: "在留 (tinggal) + 資格 (status/kualifikasi) + 者 (orang)."
+      },
+      {
+        id: "p3_17", page: "2-3", no: 17, kanji: "業種", furigana: "ぎょうしゅ", romaji: "gyoushu", meaning: "industri (jenis bidang usaha)",
+        emoji: "🏭🏢🛠️", hook: "GYOU (Usaha/Industri) + SHU (Jenis)",
+        story: "Ada banyak jenis bidang <b>INDUSTRI (GYOUSHU)</b> tempat pemegang Tokutei Ginou bekerja!",
+        kanjiTip: "業 (bisnis/industri) + 種 (jenis) = Jenis industri."
+      },
+      {
+        id: "p3_18", page: "2-3", no: 18, kanji: "食品衛生", furigana: "しょくひんえいせい", romaji: "shokuhin eisei", meaning: "kebersihan makanan (sanitasi pangan)",
+        emoji: "🍱🧼🛡️", hook: "SHOKUHIN (Makanan) + EISEI (Kebersihan/Sanitasi)",
+        story: "Menjaga <b>KEBERSIHAN MAKANAN (SHOKUHIN EISEI)</b> agar orang yang makan tidak sakit dan tidak terluka!",
+        kanjiTip: "食品 (makanan) + 衛生 (melindungi nyawa/higienis)."
+      },
+      {
+        id: "p3_19", page: "2-3", no: 19, kanji: "労働安全", furigana: "ろうどうあんぜん", romaji: "roudou anzen", meaning: "keselamatan kerja",
+        emoji: "👷‍♂️⛑️🛡️", hook: "ROUDOU (Kerja) + ANZEN (Aman/Selamat)",
+        story: "Menjaga <b>KESELAMATAN KERJA (ROUDOU ANZEN)</b> agar pekerja tidak celaka di pabrik!",
+        kanjiTip: "労働 (kerja) + 安全 (keselamatan)."
+      },
+      {
+        id: "p3_20", page: "2-3", no: 20, kanji: "知識", furigana: "ちしき", romaji: "chishiki", meaning: "pengetahuan",
+        emoji: "🧠📚💡", hook: "CHISHIKI ≈ ISI Otak dgn Pengetahuan",
+        story: "Belajar modul untuk mengisi otak dengan <b>PENGETAHUAN (CHISHIKI)</b>!",
+        kanjiTip: "知 (tahu) + 識 (wawasan) = Pengetahuan."
+      },
+      {
+        id: "p3_21", page: "2-3", no: 21, kanji: "技能", furigana: "ぎのう", romaji: "ginou", meaning: "keahlian (keterampilan)",
+        emoji: "👐⚡🏆", hook: "GINOU ≈ Tokutei GINOU (Keahlian)",
+        story: "Kata <b>GINOU</b> di Tokutei Ginou artinya adalah <b>KEAHLIAN / SKILL</b>!",
+        kanjiTip: "技 (teknik) + 能 (kemampuan) = Keahlian."
+      },
+      {
+        id: "p3_22", page: "2-3", no: 22, kanji: "必要", furigana: "ひつよう", romaji: "hitsuyou", meaning: "membutuhkan (perlu/penting)",
+        emoji: "❗🔑👍", hook: "HITSUYOU ≈ HITS YO! (Penting/Perlu)",
+        story: "Pengetahuan kebersihan dan keselamatan kerja sangat <b>DIBUTUHKAN / PERLU (HITSUYOU)</b>!",
+        kanjiTip: "必 (pasti) + 要 (perlu) = Membutuhkan / Perlu."
+      },
+      {
+        id: "p3_23", page: "2-3", no: 23, kanji: "命", furigana: "いのち", romaji: "inochi", meaning: "kehidupan (nyawa)",
+        emoji: "❤️🫀✨", hook: "INOCHI ≈ INI NYAWA (Inochi)",
+        story: "Sanitasi pangan bertujuan melindungi <b>NYAWA / KEHIDUPAN (INOCHI)</b> manusia!",
+        kanjiTip: "命 dibaca Inochi = Nyawa / Kehidupan."
+      },
+      {
+        id: "p3_24", page: "2-3", no: 24, kanji: "生命", furigana: "せいめい", romaji: "seimei", meaning: "kehidupan (jiwa/hayat)",
+        emoji: "🌱❤️🌏", hook: "SEIMEI ≈ SEI (Hidup) + MEI (Nyawa)",
+        story: "Arti huruf 衛 (Ei) pada Eisei adalah melindungi <b>KEHIDUPAN (SEIMEI / INOCHI)</b>!",
+        kanjiTip: "生 (hidup) + 命 (nyawa) = Kehidupan."
+      },
+      {
+        id: "p3_25", page: "2-3", no: 25, kanji: "守る", furigana: "まもる", romaji: "mamoru", meaning: "melindungi (mematuhi)",
+        emoji: "🛡️🦸‍♂️🤝", hook: "MAMORU ≈ MAMA Melindungi",
+        story: "Seperti <b>MAMA (MAMORU)</b> yang selalu <b>MELINDUNGI</b> anaknya dan mematuhi aturan!",
+        kanjiTip: "守る (Mamoru) = Melindungi / Menjaga / Mematuhi aturan."
+      },
+      {
+        id: "p3_26", page: "2-3", no: 26, kanji: "信用", furigana: "しんよう", romaji: "shinyou", meaning: "kredibilitas (kepercayaan)",
+        emoji: "🤝🏢💎", hook: "SHINYOU ≈ SHIN-ta Percaya Kamu",
+        story: "Kalau makanan pabrik bikin orang sakit, perusahaan akan kehilangan <b>KEPERCAYAAN / KREDIBILITAS (SHINYOU)</b>!",
+        kanjiTip: "信 (percaya) + 用 (guna) = Kepercayaan / Kredibilitas."
+      },
+      {
+        id: "p3_27", page: "2-3", no: 27, kanji: "安全保護具", furigana: "あんぜんほごぐ", romaji: "anzen hogogu", meaning: "peralatan perlindungan keselamatan (APD)",
+        emoji: "⛑️🥽🧤", hook: "ANZEN (Selamat) + HOGO (Lindung) + GU (Alat)",
+        story: "Helm, kacamata pelindung, dan sepatu safety adalah <b>ALAT PELINDUNG KESELAMATAN (ANZEN HOGOGU)</b>!",
+        kanjiTip: "安全 (aman) + 保護 (perlindungan) + 具 (alat)."
+      },
+      {
+        id: "p3_28", page: "2-3", no: 28, kanji: "着用", furigana: "ちゃくよう", romaji: "chakuyou", meaning: "memakai (mengenakan pakaian/APD)",
+        emoji: "🥼👷‍♂️✅", hook: "CHAKUYOU ≈ CAKep YO Pakai Seragam!",
+        story: "Kelihatan <b>CAKep YO (CHAKUYOU)</b> saat <b>MEMAKAI</b> seragam kerja dan helm dengan benar!",
+        kanjiTip: "着 (pakai baju) + 用 (gunakan) = Mengenakan / Memakai."
+      },
+      {
+        id: "p3_29", page: "2-3", no: 29, kanji: "作業者", furigana: "さぎょうしゃ", romaji: "sagyousha", meaning: "pekerja",
+        emoji: "👷‍♂️👷‍♀️🏭", hook: "SAGYOU (Kerja) + SHA (Orang)",
+        story: "Orang (<b>SHA</b>) yang melakukan pekerjaan (<b>SAGYOU</b>) di pabrik adalah <b>PEKERJA (SAGYOUSHA)</b>!",
+        kanjiTip: "作業 (pekerjaan) + 者 (orang) = Pekerja."
+      },
+      {
+        id: "p3_30", page: "2-3", no: 30, kanji: "健康", furigana: "けんこう", romaji: "kenkou", meaning: "kesehatan",
+        emoji: "💪🍎❤️", hook: "KENKOU ≈ KENCENG & KOKOH (Sehat)",
+        story: "Badan yang <b>KENCENG & KOKOH (KENKOU)</b> adalah bukti <b>KESEHATAN</b> pekerja terjaga!",
+        kanjiTip: "健康 (Kenkou) = Kesehatan."
+      },
+
       // ==================== HALAMAN 13 (1 - 15) ====================
       {
         id: "p13_1", page: "13", no: 1, kanji: "厳しい", furigana: "きびしい", romaji: "kibishii", meaning: "ketat",
@@ -919,268 +1950,607 @@
         id: "p17_7", page: "17", no: 7, kanji: "虫", furigana: "むし", romaji: "mushi", meaning: "serangga",
         emoji: "🪲🦟🕸️", hook: "MUSHI ≈ MUSUH (Serangga)",
         story: "Segala jenis <b>SERANGGA (MUSHI)</b> seperti lalat dan kecoa adalah <b>MUSUH</b> utama pabrik makanan!",
-        kanjiTip: "Bentuk Kanji 虫 mirip kepala dan badan serangga/ulat."
+        kanjiTip: "虫 (Mushi) = Serangga / Ulat."
       },
       {
         id: "p17_8", page: "17", no: 8, kanji: "状況", furigana: "じょうきょう", romaji: "joukyou", meaning: "situasi (keadaan)",
-        emoji: "📡🧐📋", hook: "JOUKYOU ≈ JOKOWI Cek Situasi",
-        story: "Bos datang meninjau langsung bagaimana <b>SITUASI / KEADAAN (JOUKYOU)</b> kebersihan di pabrik!",
+        emoji: "📡👀📊", hook: "JOUKYOU ≈ JOKOWI Cek Situasi",
+        story: "Bos memantau <b>SITUASI / KEADAAN (JOUKYOU)</b> kebersihan pabrik lewat CCTV!",
         kanjiTip: "状 (kondisi) + 況 (keadaan) = Situasi."
       },
       {
-        id: "p17_9", page: "17", no: 9, kanji: "排水溝", furigana: "はいすいこう", romaji: "haisuikou", meaning: "saluran pembuangan air (got/mengeringkan)",
-        emoji: "🕳️🌊🧹", hook: "HAISUI (Air Buangan) + KOU (Selokan)",
-        story: "Sikat bersih <b>SALURAN PEMBUANGAN AIR / GOT (HAISUIKOU)</b> agar tidak jadi sarang kecoa dan bau!",
-        kanjiTip: "排 (buang) + 水 (air) + 溝 (parit/got) = Saluran pembuangan air."
+        id: "p17_9", page: "17", no: 9, kanji: "排水溝", furigana: "はいすいこう", romaji: "haisuikou", meaning: "saluran pembuangan air (selokan)",
+        emoji: "🕳️🌊🧹", hook: "HAISUI (Buang Air) + KOU (Selokan)",
+        story: "Tutup <b>SALURAN PEMBUANGAN AIR (HAISUIKOU)</b> harus dibuka dan disikat agar tidak jadi sarang serangga!",
+        kanjiTip: "排水 (pembuangan air) + 溝 (parit/selokan)."
       },
       {
         id: "p17_10", page: "17", no: 10, kanji: "ミキサー", furigana: "ミキサー", romaji: "mikisaa", meaning: "mixer (mesin pengaduk)",
-        emoji: "🥣🌀⚙️", hook: "MIKISAA ≈ MIXER",
-        story: "Bunyinya persis bahasa Inggris: <b>MIKISAA = MIXER</b> pengaduk adonan!",
+        emoji: "🥣🔄⚙️", hook: "MIKISAA ≈ MIXER",
+        story: "Dari bahasa Inggris <b>MIXER (MIKISAA)</b> = Mesin pencampur/pengaduk adonan!",
         kanjiTip: "Katakana ミキサー = Mixer."
       },
       {
         id: "p17_11", page: "17", no: 11, kanji: "スライサー", furigana: "スライサー", romaji: "suraisaa", meaning: "alat pengiris (slicer)",
-        emoji: "🥩🔪💿", hook: "SURAISAA ≈ SLICER",
-        story: "Dari bahasa Inggris <b>SLICER (SURAISAA)</b> yaitu mesin <b>ALAT PENGIRIS</b> daging tipis-tipis!",
-        kanjiTip: "Katakana スライサー = Slicer (alat pengiris)."
+        emoji: "🔪🥩⚡", hook: "SURAISAA ≈ SLICER (Pengiris)",
+        story: "Dari bahasa Inggris <b>SLICER (SURAISAA)</b> = <b>ALAT PENGIRIS</b> daging dan roti otomatis!",
+        kanjiTip: "Katakana スライサー = Slicer."
       },
       {
         id: "p17_12", page: "17", no: 12, kanji: "分解", furigana: "ぶんかい", romaji: "bunkai", meaning: "membongkar",
         emoji: "🔧⚙️🔩", hook: "BUNKAI ≈ BONGKAR!",
-        story: "Bunyinya mirip banget: <b>BUNKAI = BONGKAR!</b> Mesin pengiris harus di-<b>BONGKAR</b> bagian-bagiannya saat dicuci!",
-        kanjiTip: "分 (bagi/pisah) + 解 (lepas) = Membongkar komponen."
+        story: "Bunyinya mirip banget: <b>BUNKAI = BONGKAR</b>! Bagian mesin yang bisa dilepas wajib di-<b>BONGKAR</b> dan dicuci!",
+        kanjiTip: "分 (pisah) + 解 (lepas) = Membongkar bagian mesin."
       },
       {
         id: "p17_13", page: "17", no: 13, kanji: "目立つ", furigana: "めだつ", romaji: "medatsu", meaning: "menonjol / mencolok",
         emoji: "👀🌟🚨", hook: "MEDATSU ≈ MATA (ME) + DATSU",
-        story: "Kotoran yang <b>MENONJOL / MENCOLOK (MEDATSU)</b> langsung terlihat berdiri di depan <b>MATA (ME)</b>!",
-        kanjiTip: "目 (mata) + 立つ (berdiri) = Berdiri di depan mata = Mencolok."
+        story: "Walau kotorannya tidak <b>MENONJOL / MENCOLOK (MEDATSU)</b> di mata, mesin wajib dicuci tiap hari!",
+        kanjiTip: "目 (mata) + 立つ (berdiri) = Mencolok di mata."
       },
       {
         id: "p17_14", page: "17", no: 14, kanji: "直接", furigana: "ちょくせつ", romaji: "chokusetsu", meaning: "secara langsung",
-        emoji: "⚡👉🥩", hook: "CHOKUSETSU ≈ COLOK LANGSUNG",
-        story: "Bagian mesin yang menyentuh makanan <b>SECARA LANGSUNG (CHOKUSETSU)</b> wajib disterilkan ekstra!",
-        kanjiTip: "直 (lurus/langsung) + 接 (menyentuh) = Secara langsung."
+        emoji: "👉🥩⚡", hook: "CHOKUSETSU ≈ COKlat SETUju Langsung",
+        story: "Mata pisau yang menyentuh makanan <b>SECARA LANGSUNG (CHOKUSETSU)</b> wajib didesinfeksi!",
+        kanjiTip: "直 (langsung) + 接 (kontak/menyentuh) = Secara langsung."
       },
 
       // ==================== HALAMAN 18 (1 - 7) ====================
       {
         id: "p18_1", page: "18", no: 1, kanji: "乾燥する", furigana: "かんそうする", romaji: "kansou suru", meaning: "pengeringan (mengeringkan)",
-        emoji: "☀️💨🏜️", hook: "KANSOU ≈ Kering kerontang sampai KACAU",
-        story: "Setelah alat dicuci, wajib dilakukan <b>PENGERINGAN (KANSOU SURU)</b> sampai kering kerontang agar kuman mati!",
-        kanjiTip: "乾 (kering) + 燥 (kering panas) = Pengeringan."
+        emoji: "☀️💨🍽️", hook: "KANSOU ≈ KAIN SO-bek Dijemur Kering",
+        story: "Habis dicuci, alat makan wajib di-<b>KANSOU SURU (PENGERINGAN)</b> sampai tidak ada air tersisa!",
+        kanjiTip: "乾 (kering) + 燥 (kering/panas) = Pengeringan."
       },
       {
-        id: "p18_2", page: "18", no: 2, kanji: "たわし", furigana: "たわし", romaji: "tawashi", meaning: "penggosok (sikat cuci)",
-        emoji: "🧽🪥🫧", hook: "TAWASHI ≈ TAWAS Sikat Penggosok",
-        story: "Panci yang gosong digosok kuat-kuat pakai sikat <b>PENGGOSOK (TAWASHI)</b>!",
-        kanjiTip: "たわし (Tawashi) = Sikat sabut/plastik penggosok alat dapur."
+        id: "p18_2", page: "18", no: 2, kanji: "たわし", furigana: "たわし", romaji: "tawashi", meaning: "penggosok (sikat sabut)",
+        emoji: "🧽🪣🫧", hook: "TAWASHI ≈ TAWAS Sikat Penggosok",
+        story: "Pakai sikat <b>TAWASHI</b> untuk <b>MENGGOSOK</b> panci yang gosong!",
+        kanjiTip: "たわし (Tawashi) = Sikat sabut penggosok."
       },
       {
         id: "p18_3", page: "18", no: 3, kanji: "濡れる", furigana: "ぬれる", romaji: "nureru", meaning: "menjadi basah",
-        emoji: "🌧️💦👕", hook: "NURERU ≈ Nelen Air Basah",
-        story: "Kalau alat dibiarkan <b>MENJADI BASAH (NURERU)</b> terus, bakteri bakal pesta pora berkembang biak!",
-        kanjiTip: "Ada radikal air (氵) + 需 = Menjadi basah."
+        emoji: "🌧️💦🧽", hook: "NURERU ≈ NURUL Kehujanan Basah",
+        story: "Si <b>NURUL (NURERU)</b> lupa bawa payung sampai bajunya <b>MENJADI BASAH</b> kuyup!",
+        kanjiTip: "Ada radikal air (氵) di kiri 濡 = Menjadi basah."
       },
       {
-        id: "p18_4", page: "18", no: 4, kanji: "発生", furigana: "はっせい", romaji: "hassei", meaning: "kejadian / timbulnya (muncul)",
-        emoji: "💥🦠🚨", hook: "HASSEI ≈ HASEK Muncul Kejadian!",
-        story: "Lantai basah memicu <b>TIMBULNYA / KEJADIAN (HASSEI)</b> jamur dan bakteri berbahaya!",
-        kanjiTip: "発 (muncul/meletus) + 生 (lahir/hidup) = Timbul / Muncul kejadian."
+        id: "p18_4", page: "18", no: 4, kanji: "発生", furigana: "はっせい", romaji: "hassei", meaning: "kejadian (timbul/muncul)",
+        emoji: "💥🦠🚨", hook: "HASSEI ≈ HAA.. SE-karang Muncul!",
+        story: "Kalau lantai dibiarkan basah, akan memicu <b>KEJADIAN / MUNCULNYA (HASSEI)</b> kuman dan serangga!",
+        kanjiTip: "発 (muncul) + 生 (timbul) = Kejadian / Timbul."
       },
       {
         id: "p18_5", page: "18", no: 5, kanji: "皮膚", furigana: "ひふ", romaji: "hifu", meaning: "kulit",
-        emoji: "🤚🩹🧴", hook: "HIFU ≈ HI-FU (Tiup Kulit Luka)",
-        story: "Saat <b>KULIT (HIFU)</b> tangan terluka atau lecet, kita tiup <b>'HI-FU, HI-FU!'</b> karena perih!",
-        kanjiTip: "皮 (kulit luar) + 膚 (kulit daging) = Kulit."
+        emoji: "🖐️🧴🔥", hook: "HIFU ≈ HI.. PU-tih Kulitnya",
+        story: "Hati-hati saat pakai obat kimia keras, kalau kena <b>KULIT (HIFU)</b> bisa melepuh!",
+        kanjiTip: "皮 (kulit) + 膚 (kulit ari) = Kulit."
       },
       {
         id: "p18_6", page: "18", no: 6, kanji: "保管庫", furigana: "ほかんこ", romaji: "hokanko", meaning: "gudang / lemari penyimpanan",
-        emoji: "🗄️🔐📦", hook: "HOKANKO ≈ HOKBEN KOKO di Lemari",
-        story: "Semua alat bersih dimasukkan ke dalam <b>LEMARI PENYIMPANAN / GUDANG (HOKANKO)</b> tertutup!",
-        kanjiTip: "保管 (penyimpanan) + 庫 (gudang/lemari) = Lemari penyimpanan."
+        emoji: "🗄️🔐🧪", hook: "HOKAN (Simpan) + KO (Gudang/Lemari)",
+        story: "Obat kimia wajib dikunci di dalam <b>LEMARI PENYIMPANAN / GUDANG (HOKANKO)</b> khusus!",
+        kanjiTip: "保管 (penyimpanan) + 庫 (gudang/lemari)."
       },
       {
-        id: "p18_7", page: "18", no: 7, kanji: "名称", furigana: "めいしょう", romaji: "meishou", meaning: "nama (sebutan barang)",
-        emoji: "🏷️📛✍️", hook: "MEISHOU ≈ MEI-MEI SHOW Nama",
-        story: "Tempelkan stiker <b>NAMA (MEISHOU)</b> di setiap botol deterjen agar tidak tertukar dengan bumbu!",
-        kanjiTip: "名 (nama) + 称 (sebutan) = Nama barang."
+        id: "p18_7", page: "18", no: 7, kanji: "名称", furigana: "めいしょう", romaji: "meishou", meaning: "nama (sebutan resmi)",
+        emoji: "🏷️📝🧴", hook: "MEISHOU ≈ MEI-MEI Show Nama",
+        story: "Setiap botol obat wajib ditempel label <b>NAMA (MEISHOU)</b> yang jelas agar tidak tertukar!",
+        kanjiTip: "名 (nama) + 称 (sebutan) = Nama."
       },
 
       // ==================== HALAMAN 19 (1 - 14) ====================
       {
         id: "p19_1", page: "19", no: 1, kanji: "健康", furigana: "けんこう", romaji: "kenkou", meaning: "kesehatan",
-        emoji: "💪🍎❤️", hook: "KENKOU ≈ KENCENG & KOKOH (Sehat)",
-        story: "Badan yang <b>KENCENG & KOKOH (KENKOU)</b> adalah tanda <b>KESEHATAN</b> pekerja yang prima!",
-        kanjiTip: "健 (kuat/sehat) + 康 (sejahtera) = Kesehatan."
+        emoji: "💪❤️🩺", hook: "KENKOU ≈ KENCENG & KOKOH (Sehat)",
+        story: "Sebelum masuk pabrik wajib cek <b>KESEHATAN (KENKOU)</b>: tidak boleh diare atau demam!",
+        kanjiTip: "健康 (Kenkou) = Kesehatan."
       },
       {
         id: "p19_2", page: "19", no: 2, kanji: "職場", furigana: "しょくば", romaji: "shokuba", meaning: "tempat kerja",
-        emoji: "🏭👷‍♂️🏢", hook: "SHOKUBA ≈ SYOK BARENG di Tempat Kerja",
-        story: "Seluruh teman di <b>TEMPAT KERJA (SHOKUBA)</b> kompak menjaga kebersihan pabrik!",
+        emoji: "🏭👷‍♂️📍", hook: "SHOKU (Kerja) + BA (Tempat)",
+        story: "Ikuti semua aturan yang berlaku di <b>TEMPAT KERJA (SHOKUBA)</b>!",
         kanjiTip: "職 (pekerjaan) + 場 (tempat) = Tempat kerja."
       },
       {
         id: "p19_3", page: "19", no: 3, kanji: "定期的", furigana: "ていきてき", romaji: "teikiteki", meaning: "secara teratur (berkala)",
-        emoji: "📅🔁🩺", hook: "TEIKITEKI ≈ Detak Jam TEKI-TEKI",
-        story: "Cek kesehatan wajib dilakukan <b>SECARA TERATUR / BERKALA (TEIKITEKI)</b> sesuai jadwal!",
-        kanjiTip: "定期的 = Berkala / Rutin terjadwal."
+        emoji: "🗓️🔁✅", hook: "TEIKITEKI ≈ TEKI-TEKI Teratur",
+        story: "Pemeriksaan kesehatan wajib diikuti <b>SECARA TERATUR / BERKALA (TEIKITEKI)</b>!",
+        kanjiTip: "定期的 = Secara berkala/teratur."
       },
       {
         id: "p19_4", page: "19", no: 4, kanji: "健康診断", furigana: "けんこうしんだん", romaji: "kenkou shindan", meaning: "cek kesehatan (medical check-up)",
         emoji: "🩺👨‍⚕️📋", hook: "KENKOU (Sehat) + SHINDAN (Diagnosa)",
-        story: "Setiap pekerja pabrik makanan wajib ikut <b>CEK KESEHATAN (KENKOU SHINDAN)</b> ke dokter!",
-        kanjiTip: "健康 (kesehatan) + 診断 (pemeriksaan medis)."
+        story: "Setahun sekali seluruh pekerja wajib menjalani <b>CEK KESEHATAN (KENKOU SHINDAN)</b>!",
+        kanjiTip: "健康 (kesehatan) + 診断 (pemeriksaan dokter)."
       },
       {
         id: "p19_5", page: "19", no: 5, kanji: "検便", furigana: "けんべん", romaji: "kenben", meaning: "tes tinja (pemeriksaan feses)",
-        emoji: "💩🧪🔬", hook: "KENBEN ≈ KENA DAIBEN (Tes Tinja)",
-        story: "Ingat <i>Daiben</i> (BAB)! <b>KENBEN</b> artinya <b>TES TINJA / PEMERIKSAAN BAB</b> untuk mengecek bakteri perut!",
-        kanjiTip: "検 (periksa/tes) + 便 (tinja/BAB) = Tes tinja."
+        emoji: "🧪💩🔬", hook: "KEN (Periksa) + BEN (Daiben/Tinja)",
+        story: "Pekerja pengolahan makanan wajib ikut <b>TES TINJA (KENBEN)</b> untuk memastikan bebas bakteri & virus!",
+        kanjiTip: "検 (periksa) + 便 (tinja/BAB) = Pemeriksaan tinja."
       },
       {
-        id: "p19_6", page: "19", no: 6, kanji: "汚れ", furigana: "よごれ", romaji: "yogore", meaning: "kotor (noda kotoran)",
-        emoji: "👕💩🤢", hook: "YOGORE ≈ YOGURT Celemotan Kotor",
-        story: "Baju seragam ketumpahan <b>YOGURT (YOGORE)</b> sampai penuh noda <b>KOTOR</b>!",
-        kanjiTip: "汚れ (Yogore) = Noda / Kotoran yang menempel."
+        id: "p19_6", page: "19", no: 6, kanji: "汚れ", furigana: "よごれ", romaji: "yogore", meaning: "kotor (kotoran/noda)",
+        emoji: "👕💩🚫", hook: "YOGORE ≈ YOGURT Tumpah Kotor",
+        story: "Jangan membawa <b>KOTORAN / NODA (YOGORE)</b> ke dalam ruang produksi!",
+        kanjiTip: "汚れ (Yogore) = Noda / Kotoran."
       },
       {
         id: "p19_7", page: "19", no: 7, kanji: "異物", furigana: "いぶつ", romaji: "ibutsu", meaning: "benda asing",
-        emoji: "🍱🔩😱", hook: "IBUTSU ≈ IBU-TSU Nemu Baut di Nasi",
-        story: "<b>IBU-TSU (IBUTSU)</b> kaget menemukan <b>BENDA ASING</b> berupa rambut dan baut di dalam makanannya!",
+        emoji: "🔩🪲😱", hook: "IBUTSU ≈ IBU TSU Kaget Ada Benda Asing",
+        story: "Rambut, kerikil, dan serpihan logam yang masuk ke makanan disebut <b>BENDA ASING (IBUTSU)</b>!",
         kanjiTip: "異 (berbeda/asing) + 物 (benda) = Benda asing."
       },
       {
-        id: "p19_8", page: "19", no: 8, kanji: "更衣室", furigana: "こういしつ", romaji: "kouishitsu", meaning: "ruang ganti (pakaian)",
-        emoji: "🚪👕🔄", hook: "KOUISHITSU ≈ KOKO ISI Baju di Ruang Ganti",
-        story: "Sebelum masuk pabrik, ganti baju rumah dengan seragam kerja di <b>RUANG GANTI (KOUISHITSU)</b>!",
-        kanjiTip: "更 (ganti) + 衣 (pakaian) + 室 (ruangan) = Ruang ganti pakaian."
+        id: "p19_8", page: "19", no: 8, kanji: "更衣室", furigana: "こういしつ", romaji: "kouishitsu", meaning: "ruang ganti",
+        emoji: "🚪👕🥼", hook: "KOUISHITSU ≈ KOKO ISI Baju di Ruang Ganti",
+        story: "Baju kerja wajib dipakai di dalam <b>RUANG GANTI (KOUISHITSU)</b>!",
+        kanjiTip: "更 (ganti) + 衣 (pakaian) + 室 (ruangan) = Ruang ganti."
       },
       {
         id: "p19_9", page: "19", no: 9, kanji: "つけ爪", furigana: "つけづめ", romaji: "tsukezume", meaning: "kuku palsu",
-        emoji: "💅🚫🍱", hook: "TSUKE (Pasang) + ZUME (Kuku)",
-        story: "Dilarang keras memakai <b>KUKU PALSU (TSUKEZUME)</b> ke pabrik karena bisa copot jatuh ke makanan!",
-        kanjiTip: "つけ (tempel/pasang) + 爪 (kuku) = Kuku tempel / Kuku palsu."
+        emoji: "💅🚫✋", hook: "TSUKE (Pasang) + TSUME (Kuku)",
+        story: "Dilarang keras memakai <b>KUKU PALSU (TSUKEZUME)</b> atau kuteks ke ruang kerja!",
+        kanjiTip: "つけ (tempel/pasang) + 爪 (kuku) = Kuku palsu."
       },
       {
-        id: "p19_10", page: "19", no: 10, kanji: "イヤリング", furigana: "イヤリング", romaji: "iyaringu", meaning: "anting-anting",
+        id: "p19_10", page: "19", no: 10, kanji: "イヤリング", furigana: "イヤリング", romaji: "iyaringu", meaning: "anting-anting (earring)",
         emoji: "👂💍🚫", hook: "IYARINGU ≈ EARRING (Anting)",
-        story: "Dari bahasa Inggris <b>EARRING (IYARINGU)</b> = <b>ANTING-ANTING</b>, haram dibawa masuk ke ruang produksi!",
-        kanjiTip: "Katakana イヤリング = Earring (Anting)."
+        story: "Dari bahasa Inggris <b>EARRING (IYARINGU)</b> = <b>ANTING-ANTING</b>, dilarang dipakai di pabrik!",
+        kanjiTip: "Katakana イヤリング = Earring."
       },
       {
-        id: "p19_11", page: "19", no: 11, kanji: "ネックレス", furigana: "ネックレス", romaji: "nekkuresu", meaning: "kalung",
-        emoji: "📿🚫👷‍♀️", hook: "NEKKURESU ≈ NECKLACE (Kalung)",
-        story: "Dari bahasa Inggris <b>NECKLACE (NEKKURESU)</b> = <b>KALUNG</b> leher!",
-        kanjiTip: "Katakana ネックレス = Necklace (Kalung)."
+        id: "p19_11", page: "19", no: 11, kanji: "ネックレス", furigana: "ネックレス", romaji: "nekkuresu", meaning: "kalung (necklace)",
+        emoji: "📿🚫👷", hook: "NEKKURESU ≈ NECKLACE (Kalung)",
+        story: "Dari bahasa Inggris <b>NECKLACE (NEKKURESU)</b> = <b>KALUNG</b>, dilarang dibawa masuk ruang kerja!",
+        kanjiTip: "Katakana ネックレス = Necklace."
       },
       {
         id: "p19_12", page: "19", no: 12, kanji: "ピアス", furigana: "ピアス", romaji: "piasu", meaning: "anting tindik (piercing)",
-        emoji: "👂💎🚫", hook: "PIASU ≈ PIERCING (Tindik)",
-        story: "Dari kata <b>PIERCING (PIASU)</b> = <b>ANTING TINDIK</b>, wajib dilepas di ruang ganti!",
-        kanjiTip: "Katakana ピアス = Piercing / Anting tindik."
+        emoji: "👂💎🚫", hook: "PIASU ≈ PIERCING (Tindik/Anting)",
+        story: "Dari kata <b>PIERCING (PIASU)</b> = <b>ANTING TINDIK</b>, wajib dilepas sebelum masuk pabrik!",
+        kanjiTip: "Katakana ピアス = Piercing / Anting."
       },
       {
         id: "p19_13", page: "19", no: 13, kanji: "鏡", furigana: "かがみ", romaji: "kagami", meaning: "cermin",
-        emoji: "🪞👀✨", hook: "KAGAMI ≈ KAGUM Ngaca di Cermin",
-        story: "Berdiri di depan <b>CERMIN (KAGAMI)</b> sambil <b>KAGUM</b> memeriksa kerapian seragam kerja!",
-        kanjiTip: "鏡 (Kagami) punya radikal logam (金) karena cermin zaman dulu dari logam dipoles."
+        emoji: "🪞👀✅", hook: "KAGAMI ≈ KAGUM Ngaca di Cermin",
+        story: "Setelah memakai seragam lengkap, periksa kerapianmu di depan <b>CERMIN (KAGAMI)</b>!",
+        kanjiTip: "鏡 (Kagami) = Cermin."
       },
       {
         id: "p19_14", page: "19", no: 14, kanji: "衣服", furigana: "いふく", romaji: "ifuku", meaning: "pakaian",
-        emoji: "👕👖🧼", hook: "IFUKU ≈ INI FUKU (Pakaianku)",
-        story: "<b>'INI FUKU (IFUKU) pakaian kerjaku, selalu bersih tanpa debu!'</b>",
-        kanjiTip: "衣 (baju) + 服 (pakaian) = Pakaian."
+        emoji: "👕🧥👖", hook: "IFUKU ≈ INI FUKU (Pakaian)",
+        story: "Pastikan <b>PAKAIAN (IFUKU)</b> bagian dalam tidak menyembul keluar dari seragam kerja!",
+        kanjiTip: "衣 (sandang) + 服 (baju) = Pakaian."
       },
 
       // ==================== HALAMAN 20 (1 - 10) ====================
       {
         id: "p20_1", page: "20", no: 1, kanji: "順序", furigana: "じゅんじょ", romaji: "junjo", meaning: "urutan",
-        emoji: "1️⃣2️⃣3️⃣", hook: "JUNJO ≈ JUNI-JULI (Urutan)",
-        story: "Memakai seragam kerja harus sesuai <b>URUTAN (JUNJO)</b> dari atas (topi) ke bawah!",
-        kanjiTip: "順序 = Urutan langkah."
+        emoji: "1️⃣2️⃣3️⃣", hook: "JUNJO ≈ JUNI - JULI (Urutan)",
+        story: "Pakailah seragam kerja sesuai <b>URUTAN (JUNJO)</b> dari atas (sisir rambut) ke bawah!",
+        kanjiTip: "順序 (Junjo) = Urutan."
       },
       {
         id: "p20_2", page: "20", no: 2, kanji: "頭髪", furigana: "とうはつ", romaji: "touhatsu", meaning: "rambut kepala",
-        emoji: "💇‍♂️🪮🧢", hook: "TOUHATSU ≈ TOPI HATS Tutup Rambut",
-        story: "Seluruh helai <b>RAMBUT KEPALA (TOUHATSU)</b> wajib masuk ke dalam topi HATS agar tidak rontok ke makanan!",
+        emoji: "💇‍♂️🪮✨", hook: "TOU (Kepala) + HATSU (Rambut)",
+        story: "Sebelum memakai hairnet, sisir dulu <b>RAMBUT KEPALA (TOUHATSU)</b> agar rontokannya lepas!",
         kanjiTip: "頭 (kepala) + 髪 (rambut) = Rambut kepala."
       },
       {
-        id: "p20_3", page: "20", no: 3, kanji: "ブラッシング", furigana: "ブラッシング", romaji: "burasshingu", meaning: "menyisir (rambut)",
-        emoji: "🪮💇‍♀️✨", hook: "BURASSHINGU ≈ BRUSHING (Menyikat/Menyisir)",
-        story: "Sebelum pakai penutup kepala, lakukan <b>BRUSHING / MENYISIR RAMBUT (BURASSHINGU)</b> agar rambut rontok jatuh dulu!",
-        kanjiTip: "Katakana ブラッシング = Brushing (Menyisir)."
+        id: "p20_3", page: "20", no: 3, kanji: "ブラッシング", furigana: "ブラッシング", romaji: "burasshingu", meaning: "menyisir (brushing)",
+        emoji: "🪮💇‍♀️✨", hook: "BURASSHINGU ≈ BRUSHING (Menyisir)",
+        story: "Langkah pertama memakai seragam adalah <b>MENYISIR RAMBUT (BURASSHINGU)</b>!",
+        kanjiTip: "Katakana ブラッシング = Brushing (menyisir rambut)."
       },
       {
-        id: "p20_4", page: "20", no: 4, kanji: "かぶります", furigana: "かぶります", romaji: "kaburimasu", meaning: "memakai (di kepala / topi)",
-        emoji: "🧢👷‍♂️😊", hook: "KABURIMASU ≈ KABUR Pakai Helm/Topi",
-        story: "Sebelum <b>KABUR (KABURIMASU)</b> naik motor atau masuk pabrik, wajib <b>MEMAKAI TOPI/PENUTUP KEPALA</b>!",
-        kanjiTip: "かぶります khusus untuk memakai benda di kepala (topi, tudung, helm)."
+        id: "p20_4", page: "20", no: 4, kanji: "かぶります", furigana: "かぶります", romaji: "kaburimasu", meaning: "memakai (di kepala: topi/hairnet)",
+        emoji: "🧢👷‍♂️✅", hook: "KABURIMASU ≈ KABUR Pakai Topi",
+        story: "Hairnet dan topi wajib di-<b>KABURIMASU (DIPAKAI DI KEPALA)</b> dalam-dalam agar rambut tidak keluar!",
+        kanjiTip: "かぶります = Memakai sesuatu di kepala (topi, helm, hairnet)."
       },
       {
-        id: "p20_5", page: "20", no: 5, kanji: "留めます", furigana: "とめます", romaji: "tomemasu", meaning: "mengancingkan (merekatkan)",
-        emoji: "🧥🧷🔒", hook: "TOMEMASU ≈ TOME (Stop/Kunci Kancing)",
-        story: "Resleting dan kancing seragam wajib di-<b>KANCINGKAN / DIREKATKAN (TOMEMASU)</b> rapat-rapat sampai leher!",
-        kanjiTip: "留める (tomeru) = Mengancingkan / Mengikat / Menghentikan agar tidak lepas."
+        id: "p20_5", page: "20", no: 5, kanji: "留めます", furigana: "とめます", romaji: "tomemasu", meaning: "mengancingkan (menutup resleting/kancing)",
+        emoji: "🧥🤐🔒", hook: "TOMEMASU ≈ TOME (Stop/Kunci Resleting)",
+        story: "Kancing dan resleting baju kerja wajib di-<b>TOMEMASU (DIKANCINGKAN / DITUTUP RAPAT)</b> sampai atas!",
+        kanjiTip: "留めます = Mengancingkan / Mengunci rapat."
       },
       {
-        id: "p20_6", page: "20", no: 6, kanji: "服装", furigana: "ふくそう", romaji: "fukusou", meaning: "pakaian (seragam lengkap)",
-        emoji: "🥽🥼🧤", hook: "FUKUSOU ≈ FOKUS Cek Pakaian Seragam",
-        story: "Berdiri di depan cermin dan <b>FOKUS (FUKUSOU)</b> memeriksa kelengkapan <b>PAKAIAN SERAGAM</b> kerja!",
-        kanjiTip: "服 (baju) + 装 (perlengkapan) = Pakaian / Kostum seragam."
+        id: "p20_6", page: "20", no: 6, kanji: "服装", furigana: "ふくそう", romaji: "fukusou", meaning: "pakaian (kelengkapan berpakaian)",
+        emoji: "🥼🧤⛑️", hook: "FUKUSOU ≈ FOKUS Cek Pakaian",
+        story: "Terakhir, <b>FOKUS (FUKUSOU)</b> periksa apakah seluruh <b>PAKAIAN</b> kerja sudah benar!",
+        kanjiTip: "服 (baju) + 装 (perlengkapan) = Pakaian lengkap."
       },
       {
-        id: "p20_7", page: "20", no: 7, kanji: "粘着ローラ", furigana: "ねんちゃくローラ", romaji: "nenchaku roora", meaning: "rol perekat (pembersih debu baju)",
-        emoji: "🧻👕✨", hook: "NENCHAKU (Lengket) + ROORA (Roller)",
-        story: "Giling seluruh badan pakai <b>ROL PEREKAT (NENCHAKU ROORA)</b> agar rambut dan debu menempel terangkat!",
-        kanjiTip: "粘着 (lengket/perekat) + ローラ (roller)."
+        id: "p20_7", page: "20", no: 7, kanji: "粘着ローラー", furigana: "ねんちゃくローラー", romaji: "nenchaku rooraa", meaning: "rol perekat (lint roller)",
+        emoji: "🧻🧹🥼", hook: "NENCHAKU (Lengket) + ROLLER",
+        story: "Gunakan <b>ROL PEREKAT (NENCHAKU ROORAA)</b> untuk mengangkat debu dan rambut di baju kerja!",
+        kanjiTip: "粘着 (lengket/perekat) + ローラー (roller)."
       },
       {
-        id: "p20_8", page: "20", no: 8, kanji: "エアーシャワー", furigana: "エアーシャワー", romaji: "eaashawaa", meaning: "pancuran udara (air shower)",
-        emoji: "🌬️🚿🚪", hook: "EAASHAWAA ≈ AIR SHOWER",
-        story: "Masuk ke bilik <b>AIR SHOWER / PANCURAN UDARA (EAASHAWAA)</b> dan angkat kedua tangan agar angin kencang meniup sisa debu!",
+        id: "p20_8", page: "20", no: 8, kanji: "エアーシャワー", furigana: "エアーシャワー", romaji: "eaa shawaa", meaning: "pancuran udara (air shower)",
+        emoji: "🌬️🚿🚪", hook: "EAA SHAWAA ≈ AIR SHOWER",
+        story: "Masuk ke bilik <b>PANCURAN UDARA (EAA SHAWAA)</b> untuk meniup bersih debu sebelum masuk ruang produksi!",
         kanjiTip: "Katakana エアーシャワー = Air Shower."
       },
       {
         id: "p20_9", page: "20", no: 9, kanji: "履き物", furigana: "はきもの", romaji: "hakimono", meaning: "alas kaki (sepatu/sandal)",
-        emoji: "🥾👟🦶", hook: "HAKIMONO ≈ KAKI MONO (Alas Kaki)",
-        story: "Benda yang dipakai di <b>KAKI (HAKI-mono)</b> namanya <b>ALAS KAKI / SEPATU KERJA</b>!",
+        emoji: "👟🥾🩴", hook: "HAKIMONO ≈ KAKI MONO (Alas Kaki)",
+        story: "Gunakan <b>ALAS KAKI (HAKIMONO)</b> yang bersih dan khusus untuk area kerja!",
         kanjiTip: "履く (memakai di kaki) + 物 (benda) = Alas kaki."
       },
       {
-        id: "p20_10", page: "20", no: 10, kanji: "履き替える", furigana: "はきかえる", romaji: "hakikaeru", meaning: "mengganti alas kaki (sepatu)",
-        emoji: "👟🔄🥾", hook: "HAKI (Pakai Sepatu) + KAERU (Tukar/Ganti)",
-        story: "Sebelum masuk ruang produksi, wajib <b>MENGGANTI ALAS KAKI / SEPATU (HAKIKAERU)</b> dengan sepatu bot khusus pabrik!",
-        kanjiTip: "履き (alas kaki) + 替える (menukar/mengganti) = Mengganti sepatu."
+        id: "p20_10", page: "20", no: 10, kanji: "履き替える", furigana: "はきかえる", romaji: "hakikaeru", meaning: "mengganti sepatu / alas kaki",
+        emoji: "🚽🩴🔄", hook: "HAKI (Pakai Sepatu) + KAERU (Ganti)",
+        story: "Saat masuk ke toilet, wajib <b>MENGGANTI ALAS KAKI (HAKIKAERU)</b> dengan sandal khusus toilet!",
+        kanjiTip: "履き (alas kaki) + 替える (menukar/mengganti)."
       }
     ];
 
-    // ==================== STATE ====================
+    // ==================== STATE GLOBAL APLIKASI ====================
     let lockedIds = JSON.parse(localStorage.getItem("kotoba_13_20_locked") || "[]");
     let currentPage = "ALL";
-    let currentMode = "hack";
-    let activeList = [];
+    let activeList = [...KOTOBA_13_20];
     let currentIndex = 0;
-
-    // Auto 5-sec timer state
-    let autoTimer = null;
-    let fiveSecProgress = 100;
-
-    // List blind state
+    let currentMode = "sensei";
     let listBlind = { meaning: false, furigana: false };
-
-    // ==================== STATE KETIK GAUNTLET (SUDDEN DEATH) ====================
-    let currentDrillWord = null;
+    let senseiClozeActive = false;
+    let senseiRomajiVisible = true;
     let gauntletIndex = 0;
     let gauntletBest = 0;
     let gauntletResets = 0;
-    let currentPromptDirection = "to_jp"; // "to_jp" atau "to_id"
+    let isInPenalty = false;
     let penaltyInterval = null;
     let penaltyTimeLeft = 0;
     let audioRepeatTimeouts = [];
-    let isInPenalty = false;
+    let currentDrillWord = null;
+    let currentPromptDirection = "to_jp";
+    let checkpointPreviewOpen = false;
+
+    // ==================== STATE SUSUN KALIMAT SENSEI & GAUNTLET PAPAN SENSEI ====================
+    const SENSEI_BOARD_GAUNTLET = [
+      // ===== CHECKPOINT PAPAN 0: BAB 1 (PENGERTIAN & CONTOH INDUSTRI MAKANAN/MINUMAN + ROUDOU SAIGAI) =====
+      {
+        board: "0",
+        boardTitle: "Papan 0 (Industri & Kecelakaan)",
+        topic: "Pengertian 飲食料品",
+        qJp: "☆ 「いんしょくりょうひん（飲食料品）」は 何ですか？",
+        qId: "Apa pengertian いんしょくりょうひん (Inshokuryouhin) sesuai gaya ringkas Sensei?",
+        template: "☆ いんしょくりょうひん は ＿＿＿＿＿＿＿＿＿＿ です。",
+        chunks: [
+          "いんりょう（飲料）と",
+          "しょくりょうひん（食料品）の",
+          "ことです。"
+        ],
+        distractors: ["こうじょうで せいぞうする", "きかいや きぐの"],
+        fullJp: "いんしょくりょうひん は いんりょう と しょくりょうひん の ことです。",
+        audioJp: "いんしょくりょうひんは、いんりょうとしょくりょうひんのことです",
+        romaji: "Inshokuryouhin wa inryou to shokuryouhin no koto desu.",
+        meaning: "Inshokuryouhin adalah minuman (inryou) dan bahan makanan (shokuryouhin).",
+        acceptKeys: ["inryou to shokuryouhin", "inryou to shokuryouhin no koto desu", "いんりょうとしょくりょうひん"]
+      },
+      {
+        board: "0",
+        boardTitle: "Papan 0 (Industri & Kecelakaan)",
+        topic: "Pengertian 飲食料品製造業",
+        qJp: "☆ 「いんしょくりょうひんせいぞうぎょう」は どんな しごと ですか？",
+        qId: "Apa pengertian いんしょくりょうひんせいぞうぎょう (Industri Manufaktur Makanan & Minuman)?",
+        template: "☆ いんしょくりょうひんせいぞうぎょう は ＿＿＿＿＿＿＿＿＿＿ です。",
+        chunks: [
+          "いんりょう や しょくりょうひん を",
+          "こうじょうで せいぞうする",
+          "しごと です。"
+        ],
+        distractors: ["きまった おんどで ほかんする", "びょうきに ならない"],
+        fullJp: "いんりょう や しょくりょうひん を こうじょうで せいぞうする しごと です。",
+        audioJp: "いんりょうやしょくりょうひんを、こうじょうでせいぞうするしごとです",
+        romaji: "Inryou ya shokuryouhin wo koujou de seizou suru shigoto desu.",
+        meaning: "Pekerjaan memproduksi minuman dan bahan makanan di pabrik.",
+        acceptKeys: ["inryou ya shokuryouhin wo koujou de seizou suru shigoto", "koujou de seizou suru shigoto", "いんりょうやしょくりょうひんをこうじょうでせいぞうするしごと"]
+      },
+      {
+        board: "0",
+        boardTitle: "Papan 0 (Industri & Kecelakaan)",
+        topic: "Contoh Industri Makanan (Bagian 1)",
+        qJp: "① 「しょくりょうひんせいぞうぎょう（Industri Makanan）」の れい（Contoh 1–3）は？",
+        qId: "Sebutkan contoh Industri Makanan (食料品製造業) kelompok pertama di modul Hal. 2!",
+        template: "├──► ① しょくりょうひんせいぞうぎょう（1〜3）：",
+        chunks: [
+          "① ハム・ソーセージ、",
+          "② さかなの かんづめ、",
+          "③ ちょうみりょう"
+        ],
+        distractors: ["ジュース・おちゃ・コーヒー", "いし・ガラスへん"],
+        fullJp: "① ハム・ソーセージ、② さかなの かんづめ（魚の缶詰）、③ ちょうみりょう（調味料）",
+        audioJp: "ハム、ソーセージ、さかなのかんづめ、ちょうみりょう",
+        romaji: "Hamu / sooseeji, sakana no kanzume (ikan kaleng), choumiryou (bumbu).",
+        meaning: "1. Ham & sosis, 2. Ikan kaleng, 3. Bumbu/penyedap.",
+        acceptKeys: ["hamu sooseeji sakana no kanzume choumiryou", "sakana no kanzume", "ハムソーセージさかなのかんづめちょうみりょう"]
+      },
+      {
+        board: "0",
+        boardTitle: "Papan 0 (Industri & Kecelakaan)",
+        topic: "Contoh Industri Makanan (Bagian 2)",
+        qJp: "① 「しょくりょうひんせいぞうぎょう（Industri Makanan）」の れい（Contoh 4–6）は？",
+        qId: "Sebutkan contoh Industri Makanan (食料品製造業) kelompok kedua di modul Hal. 2!",
+        template: "├──► ① しょくりょうひんせいぞうぎょう（4〜6）：",
+        chunks: [
+          "④ パンや おかし、",
+          "⑤ べんとうや そうざい、",
+          "⑥ れいとうしょくひん などです。"
+        ],
+        distractors: ["ジュース・おちゃ・コーヒー", "さぎょうふく・あんぜんほごぐ"],
+        fullJp: "④ パンや おかし、⑤ べんとうや そうざい、⑥ れいとうしょくひん などです。",
+        audioJp: "パンやおかし、べんとうやそうざい、れいとうしょくひんなどです",
+        romaji: "Pan ya okashi, bentou ya souzai, reitou shokuhin nado desu.",
+        meaning: "4. Roti & kue, 5. Bento & lauk pauk (souzai), 6. Makanan beku (reitou shokuhin).",
+        acceptKeys: ["pan ya okashi bentou ya souzai reitou shokuhin", "bentou ya souzai", "reitou shokuhin"]
+      },
+      {
+        board: "0",
+        boardTitle: "Papan 0 (Industri & Kecelakaan)",
+        topic: "Contoh Industri Minuman (飲料製造業)",
+        qJp: "② 「いんりょうせいぞうぎょう（Industri Minuman）」の れい（3つ）は 何ですか？",
+        qId: "Apa saja 3 contoh Industri Minuman (飲料製造業) yang disebutkan di modul Hal. 2?",
+        template: "└──► ② いんりょうせいぞうぎょう は ＿＿＿＿＿＿＿＿＿＿ です。",
+        chunks: [
+          "① ジュース や",
+          "② おちゃ（お茶）、",
+          "③ コーヒー などです。"
+        ],
+        distractors: ["ハム・ソーセージ", "さかなの かんづめ"],
+        fullJp: "① ジュース や ② おちゃ（お茶）、③ コーヒー などです。",
+        audioJp: "いんりょうせいぞうぎょうは、ジュースやおちゃ、コーヒーなどです",
+        romaji: "Juusu ya ocha, koohii nado desu.",
+        meaning: "1. Jus (juusu), 2. Teh (ocha), 3. Kopi (koohii).",
+        acceptKeys: ["juusu ocha koohii", "juusu ya ocha koohii", "ジュースおちゃコーヒー"]
+      },
+      {
+        board: "0",
+        boardTitle: "Papan 0 (Industri & Kecelakaan)",
+        topic: "おもな ろうどうさいがい (3 Terbanyak)",
+        qJp: "📌 おもな ろうどうさいがい（多いじゅん 3つ）を せつめいしてください！",
+        qId: "Sebutkan 3 Kecelakaan Kerja Utama (主な労働災害) sesuai urutan terbanyak!",
+        template: "☆ おもな ろうどうさいがい（おおいじゅん）は：",
+        chunks: [
+          "① てんとう（転倒）、",
+          "② はさまれ・まきこまれ、",
+          "③ きれ・こすれ です。"
+        ],
+        distractors: ["④ せんじょう・せんべつ", "⑤ かみのけ・ガラスへん"],
+        fullJp: "① てんとう、② はさまれ・まきこまれ、③ きれ・こすれ です。",
+        audioJp: "おおいじゅんに、いち、てんとう。に、はさまれ、まきこまれ。さん、きれ、こすれです",
+        romaji: "(1) Tentou, (2) Hasamare / makikomare, (3) Kire / kosure desu.",
+        meaning: "1. Terjatuh/terpeleset (31.3%), 2. Terjepit/tergulung (19.2%), 3. Teriris/tergores (10.8%).",
+        acceptKeys: ["tentou hasamare makikomare kire kosure", "てんとうはさまれまきこまれきれこすれ"]
+      },
+
+      // ===== CHECKPOINT PAPAN 1: 食品えいせい & ろうどうあんぜん =====
+      {
+        board: "1",
+        boardTitle: "Papan 1 (食品えいせい & ろうどうあんぜん)",
+        topic: "① 食品えいせい と えいせいかんり",
+        qJp: "① 「食品えいせい」と「えいせいかんり」は 何ですか？",
+        qId: "Apa pengertian 食品えいせい & えいせいかんり di Papan Tulis 1 Sensei?",
+        template: "① 食品えいせい と えいせいかんり：",
+        chunks: [
+          "食べた人が",
+          "びょうきに ならないこと、",
+          "ケガを しないこと です。"
+        ],
+        distractors: ["さぎょうふくを ちゃくようする", "かいしゃの しんようを なくす"],
+        fullJp: "食べた人が びょうきに ならないこと、ケガを しないこと です。",
+        audioJp: "たべたひとが、びょうきにならないこと、けがをしないことです",
+        romaji: "Tabeta hito ga byouki ni naranai koto, kega wo shinai koto desu.",
+        meaning: "Agar orang yang makan tidak menjadi sakit dan tidak terluka.",
+        acceptKeys: ["tabeta hito ga byouki ni naranai koto kega wo shinai koto desu", "byouki ni naranai koto kega wo shinai koto"]
+      },
+      {
+        board: "1",
+        boardTitle: "Papan 1 (食品えいせい & ろうどうあんぜん)",
+        topic: "➔ じゅうぶんではないなら (Jika Tidak Memadai)",
+        qJp: "① えいせいかんりが「じゅうぶんではないなら」どうなりますか？",
+        qId: "Jika manajemen kebersihan tidak cukup/memadai (じゅうぶんではないなら), apa akibatnya?",
+        template: "➔ じゅうぶんではないなら：",
+        chunks: [
+          "食べた人が びょうきに なって、",
+          "ケガを します。",
+          "そして、かいしゃの しんようを なくします。"
+        ],
+        distractors: ["きまった おんどで ほかんします。", "あんぜんほごぐを ちゃくようします。"],
+        fullJp: "食べた人が びょうきに なって、ケガを します。そして、かいしゃの しんようを なくします。",
+        audioJp: "たべたひとがびょうきになって、けがをします。そして、かいしゃのしんようをなくします",
+        romaji: "Tabeta hito ga byouki ni natte, kega wo shimasu. Soshite, kaisha no shinyou wo nakushimasu.",
+        meaning: "Orang yang makan menjadi sakit dan terluka. Lalu menghilangkan kepercayaan perusahaan.",
+        acceptKeys: ["kaisha no shinyou wo nakushimasu", "tabeta hito ga byouki ni natte kega wo shimasu soshite kaisha no shinyou wo nakushimasu"]
+      },
+      {
+        board: "1",
+        boardTitle: "Papan 1 (食品えいせい & ろうどうあんぜん)",
+        topic: "② ろうどうあんぜん は (Poin 1)",
+        qJp: "② 「ろうどうあんぜん（労働安全）」は 何ですか？（☆1）",
+        qId: "Apa pengertian ろうどうあんぜん (Keselamatan Kerja) di Papan Tulis 1 Sensei?",
+        template: "☆ ろうどうあんぜん は：",
+        chunks: [
+          "さぎょうしゃの",
+          "あんぜんと けんこうを",
+          "まもること です。"
+        ],
+        distractors: ["きがいよういんを ぶんせきする", "食べた人が ケガをしない"],
+        fullJp: "さぎょうしゃの あんぜんと けんこうを まもること です。",
+        audioJp: "さぎょうしゃのあんぜんと、けんこうをまもることです",
+        romaji: "Sagyousha no anzen to kenkou wo mamoru koto desu.",
+        meaning: "Melindungi keselamatan dan kesehatan pekerja.",
+        acceptKeys: ["sagyousha no anzen to kenkou wo mamoru koto desu", "anzen to kenkou wo mamoru"]
+      },
+      {
+        board: "1",
+        boardTitle: "Papan 1 (食品えいせい & ろうどうあんぜん)",
+        topic: "② さぎょうじょうで ケガを しないためには (Poin 2)",
+        qJp: "② さぎょうじょうで ケガを しないためには、何を しますか？（☆2）",
+        qId: "Agar tidak terluka di tempat kerja, apa yang harus dilakukan sesuai Papan Tulis 1 Sensei?",
+        template: "☆ さぎょうじょうで ケガを しないためには：",
+        chunks: [
+          "さぎょうふく と",
+          "あんぜんほごぐ を",
+          "ただしく ちゃくようします。"
+        ],
+        distractors: ["せんじょうしたり せんべつしたり", "きまった おんどで ほかんします。"],
+        fullJp: "さぎょうふく と あんぜんほごぐ を ただしく ちゃくようします。",
+        audioJp: "さぎょうふくと、あんぜんほごぐを、ただしくちゃくようします",
+        romaji: "Sagyoufuku to anzen hogogu wo tadashiku chakuyou shimasu.",
+        meaning: "Memakai baju kerja (sagyoufuku) dan alat pelindung keselamatan (anzen hogogu) dengan benar.",
+        acceptKeys: ["sagyoufuku to anzen hogogu wo tadashiku chakuyou shimasu", "sagyoufuku to anzen hogogu"]
+      },
+
+      // ===== CHECKPOINT PAPAN 2: BAB 2 (きほん・いっぱんえいせいかんり・HACCP) =====
+      {
+        board: "2",
+        boardTitle: "Papan 2 (Bab 2: きほん・一般衛生・HACCP)",
+        topic: "① 食品えいせいの きほん (4 Dasar)",
+        qJp: "① 「食品えいせいの きほん（4つ）」は 何ですか？",
+        qId: "Sebutkan 4 tindakan dasar 食品えいせいの きほん di Papan Tulis 2 Sensei!",
+        template: "├──► ① 食品えいせいの きほん（4つ）：",
+        chunks: [
+          "① 手洗いを する、",
+          "② さぎょうふくや 手ぶくろを ただしく ちゃくようします、",
+          "③ せいけつな せつび・きかいと きぐなどを 使う、",
+          "④ 食品や げんざいりょうを きまった おんどで ほかんする。"
+        ],
+        distractors: ["⑤ かいしゃの しんようを なくします。"],
+        fullJp: "① 手洗いをする ② さぎょうふくや手ぶくろをただしくちゃくようします ③ せいけつなせつび・きかいときぐなどを使う ④ 食品やげんざいりょうをきまったおんどでほかんする",
+        audioJp: "いち、てあらいをする。に、さぎょうふくやてぶくろをただしくちゃくようします。さん、せいけつなせつび、きかいときぐなどをつかう。よん、しょくひんやげんざいりょうをきまったおんどでほかんする。",
+        romaji: "(1) Tearai wo suru (2) Sagyoufuku ya tebukuro wo tadashiku chakuyou shimasu (3) Seiketsu na setsubi, kikai to kigu nado wo tsukau (4) Shokuhin ya genzairyou wo kimatta ondo de hokan suru.",
+        meaning: "1. Cuci tangan, 2. Pakai baju kerja & sarung tangan dgn benar, 3. Pakai fasilitas/mesin/alat bersih, 4. Simpan makanan & bahan baku di suhu yg ditentukan.",
+        acceptKeys: ["tearai wo suru", "kimatta ondo de hokan suru"]
+      },
+      {
+        board: "2",
+        boardTitle: "Papan 2 (Bab 2: きほん・一般衛生・HACCP)",
+        topic: "② いっぱんえいせいかんりの じゅうようなこと (4 Hal)",
+        qJp: "② 「いっぱんえいせいかんりの じゅうようなこと（4つ）」は 何ですか？",
+        qId: "Sebutkan 4 hal penting dalam いっぱんえいせいかんり di Papan Tulis 2 Sensei!",
+        template: "└──► ② いっぱんえいせいかんりの じゅうようなことは：",
+        chunks: [
+          "① 5S（ごエス）、",
+          "② しせつ・せつび、きぐなどの えいせいかんり、",
+          "③ さぎょうしゃの えいせいかんり、",
+          "④ げんざいりょう・食品の えいせいかんり。"
+        ],
+        distractors: ["⑤ てんとう・はさまれ・まきこまれ"],
+        fullJp: "① 5S ② しせつ・せつび、きぐなどの えいせいかんり ③ さぎょうしゃの えいせいかんり ④ げんざいりょう・食品の えいせいかんり",
+        audioJp: "いち、ごえす。に、しせつ、せつび、きぐなどのえいせいかんり。さん、さぎょうしゃのえいせいかんり。よん、げんざいりょう、しょくひんのえいせいかんり。",
+        romaji: "(1) 5S, (2) Shisetsu, setsubi, kigu nado no eisei kanri, (3) Sagyousha no eisei kanri, (4) Genzairyou, shokuhin no eisei kanri.",
+        meaning: "1. 5S, 2. Manajemen kebersihan fasilitas/peralatan/perkakas, 3. Manajemen kebersihan pekerja, 4. Manajemen kebersihan bahan baku & makanan.",
+        acceptKeys: ["5s shisetsu setsubi kigu sagyousha genzairyou shokuhin", "5s"]
+      },
+      {
+        board: "2",
+        boardTitle: "Papan 2 (Bab 2: きほん・一般衛生・HACCP)",
+        topic: "☆ いっぱんえいせいかんり は (Tulisan Biru)",
+        qJp: "☆ 「いっぱんえいせいかんり」は 何ですか？（Papan 2 Bawah）",
+        qId: "Apa pengertian いっぱんえいせいかんり sesuai tulisan spidol biru Sensei?",
+        template: "☆ いっぱんえいせいかんり は：",
+        chunks: [
+          "食品の あんぜんを まもるために",
+          "きほんてきな",
+          "えいせいかんり です。"
+        ],
+        distractors: ["きがいよういんを ぶんせきする", "かたくて はが かける"],
+        fullJp: "食品の あんぜんを まもるために きほんてきな えいせいかんり です。",
+        audioJp: "しょくひんのあんぜんをまもるために、きほんてきなえいせいかんりです",
+        romaji: "Shokuhin no anzen wo mamoru tame ni kihonteki na eisei kanri desu.",
+        meaning: "Manajemen kebersihan dasar untuk melindungi keamanan makanan.",
+        acceptKeys: ["shokuhin no anzen wo mamoru tame ni kihonteki na eisei kanri desu", "kihonteki na eisei kanri"]
+      },
+      {
+        board: "2",
+        boardTitle: "Papan 2 (Bab 2: きほん・一般衛生・HACCP)",
+        topic: "☆ HACCP（ハサップ）は (Tulisan Biru)",
+        qJp: "☆ 「HACCP（ハサップ）」は 何ですか？（Papan 2 Bawah）",
+        qId: "Apa pengertian HACCP sesuai tulisan spidol biru Sensei di Papan 2?",
+        template: "☆ HACCP は：",
+        chunks: [
+          "食品を あんぜんに 作るためには、",
+          "きがいよういんを ぶんせきして",
+          "かんりする システム です。"
+        ],
+        distractors: ["きほんてきな えいせいかんり です。", "したしょりによって とりのぞきます。"],
+        fullJp: "食品を あんぜんに 作るためには、きがいよういんを ぶんせきして かんりする システム です。",
+        audioJp: "しょくひんをあんぜんにつくるためには、きがいよういんをぶんせきしてかんりするシステムです",
+        romaji: "Shokuhin wo anzen ni tsukuru tame ni wa, kigai youin wo bunseki shite kanri suru shisutemu desu.",
+        meaning: "Sistem yang menganalisis dan mengelola faktor bahaya untuk membuat makanan dengan aman.",
+        acceptKeys: ["kigai youin wo bunseki shite kanri suru shisutemu", "kigai youin wo bunseki shite kanri suru shisutemu desu"]
+      },
+
+      // ===== CHECKPOINT PAPAN 3: ぶつりてききがいよういん & こうしついぶつ =====
+      {
+        board: "3",
+        boardTitle: "Papan 3 (物理的危害要因 & 硬質異物)",
+        topic: "① ぶつりてききがいよういん：げんいん (Penyebab)",
+        qJp: "① ぶつりてききがいよういんの「げんいん（Penyebab）」は 何ですか？",
+        qId: "Apa penyebab (げんいん) bahaya fisik sesuai Papan Tulis 3 Sensei?",
+        template: "├──► げんいん：",
+        chunks: [
+          "かたい ものが 食品の 中に 入って、",
+          "かたくて はが かける、",
+          "とがっていて 口の 中に きずが できます。"
+        ],
+        distractors: ["せんじょうしたり せんべつしたり", "かいしゃの しんようを なくします。"],
+        fullJp: "かたい ものが 食品の 中に 入って、かたくて はが かける、とがっていて 口の 中に きずが できます。",
+        audioJp: "かたいものがしょくひんのなかにはいって、かたくてはがかける、とがっていてくちのなかにきずができます",
+        romaji: "Katai mono ga shokuhin no naka ni haitte, katakute ha ga kakeru, togatte ite kuchi no naka ni kizu ga dekimasu.",
+        meaning: "Benda keras masuk ke makanan, karena keras membuat gigi patah, dan karena lancip membuat luka di dalam mulut.",
+        acceptKeys: ["katakute ha ga kakeru", "katai mono ga shokuhin no naka ni haitte"]
+      },
+      {
+        board: "3",
+        boardTitle: "Papan 3 (物理的危害要因 & 硬質異物)",
+        topic: "① ぶつりてききがいよういん：ふせぐためには (Pencegahan)",
+        qJp: "① ぶつりてききがいよういんを「ふせぐためには」どうしますか？",
+        qId: "Bagaimana cara mencegah (ふせぐためには) bahaya fisik di Papan Tulis 3 Sensei?",
+        template: "└──► ふせぐためには：",
+        chunks: [
+          "ただしく せんじょうしたり、",
+          "せんべつしたり、",
+          "したしょりに よって とりのぞきます。"
+        ],
+        distractors: ["きまった おんどで ほかんします。", "あんぜんほごぐを ちゃくようします。"],
+        fullJp: "ただしく せんじょうしたり、せんべつしたり、したしょりに よって とりのぞきます。",
+        audioJp: "ただしくせんじょうしたり、せんべつしたり、したしょりによってとりのぞきます",
+        romaji: "Tadashiku senjou shitari, senbetsu shitari, shitashori ni yotte torinozokimasu.",
+        meaning: "Menghilangkannya dengan mencuci secara benar, menyortir, dan melalui persiapan awal (shitashori).",
+        acceptKeys: ["tadashiku senjou shitari senbetsu shitari shitashori ni yotte torinozokimasu", "senjou senbetsu shitashori"]
+      },
+      {
+        board: "3",
+        boardTitle: "Papan 3 (物理的危害要因 & 硬質異物)",
+        topic: "⭕ こうしついぶつ（5 Contoh di Lingkaran Sensei）",
+        qJp: "⭕ こうしついぶつ（Benda Asing Keras）の れい（5つ）は 何ですか？",
+        qId: "Sebutkan 5 contoh こうしついぶつ yang dilingkari Sensei di Papan Tulis 3!",
+        template: "⭕ こうしついぶつ（5つ）：",
+        chunks: [
+          "いし・こいし、",
+          "きんぞくへん、",
+          "ガラスへん・プラスチックへん です。"
+        ],
+        distractors: ["かみのけ・むし・しへん", "ジュース・おちゃ・コーヒー"],
+        fullJp: "いし、こいし、きんぞくへん、ガラスへん、プラスチックへん です。",
+        audioJp: "こうしついぶつは、いし、こいし、きんぞくへん、ガラスへん、プラスチックへんです",
+        romaji: "Ishi, koishi, kinzokuhen, garasuhen, purasuchikkuhen desu.",
+        meaning: "Batu (ishi), kerikil (koishi), serpihan logam (kinzokuhen), pecahan kaca (garasuhen), potongan plastik (purasuchikkuhen).",
+        acceptKeys: ["ishi koishi kinzokuhen garasuhen purasuchikkuhen", "kinzokuhen garasuhen"]
+      }
+    ];
+
+    let sdIndex = 0;
+    let sdResets = 0;
+    let sdBuiltChunks = [];
+    let sdOptionPool = [];
+    let sdInPenalty = false;
+    let sdPenaltyInterval = null;
+    let sdPenaltyTimeLeft = 0;
 
     // ==================== MESIN AUDIO ANTI-BISU (MULTI-ENGINE + EFEK SUARA) ====================
     let selectedAudioEngine = "auto";
@@ -1636,176 +3006,428 @@
     }
 
     function setMode(mode) {
-      stopAutoFiveSec();
       clearPenaltyTimers();
+      clearSenseiDrillTimers();
       currentMode = mode;
-      ["hack", "list", "drill"].forEach(m => {
+      ["sensei", "senseidrill", "list", "drill"].forEach(m => {
         const sec = document.getElementById("section-" + m);
         const btn = document.getElementById("modeBtn-" + m);
+        if (!sec || !btn) return;
         if (m === mode) {
           sec.classList.remove("hidden");
-          btn.className = "py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow transition flex items-center justify-center gap-1.5";
+          btn.className = "py-2.5 px-3 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow transition flex items-center justify-center gap-1.5";
         } else {
           sec.classList.add("hidden");
-          btn.className = "py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5";
+          btn.className = "py-2.5 px-3 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5";
         }
       });
       refreshCurrentMode();
     }
 
     function refreshCurrentMode() {
-      if (currentMode === "hack") renderHackCard();
+      if (currentMode === "senseidrill") {
+        renderSenseiGauntletStep();
+      }
       if (currentMode === "list") renderCheatList();
       if (currentMode === "drill") resetGauntletToStart();
     }
 
-    // ==================== MODE 1: SUNTIK BAYANGAN 5 DETIK ====================
-    function renderHackCard() {
-      const emptyBox = document.getElementById("hackEmptyBox");
-      const cardBox = document.getElementById("hackCardBox");
+    // ==================== FUNGSI PAPAN TULIS SENSEI ====================
+    function speakSenseiSentence(jpSentence) {
+      speakJP({ kanji: jpSentence, furigana: jpSentence, romaji: jpSentence });
+    }
 
-      if (!activeList.length) {
-        emptyBox.classList.remove("hidden");
-        cardBox.classList.add("hidden");
-        document.getElementById("cardCounterText").textContent = "0 / 0";
-        stopAutoFiveSec();
+    function filterSenseiBoard(boardNum) {
+      document.querySelectorAll(".board-pill").forEach(btn => {
+        if (btn.dataset.board === boardNum) {
+          btn.className = "board-pill px-3 py-1.5 rounded-xl text-xs font-extrabold bg-emerald-500 text-slate-950 transition";
+        } else {
+          btn.className = "board-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+        }
+      });
+
+      ["0", "1", "2", "3"].forEach(n => {
+        const el = document.getElementById("senseiBoard-" + n);
+        if (!el) return;
+        if (boardNum === "ALL" || boardNum === n) {
+          el.classList.remove("hidden");
+        } else {
+          el.classList.add("hidden");
+        }
+      });
+    }
+
+    // ==================== FUNGSI MODE 2: GAUNTLET PAPAN TULIS SENSEI ====================
+    function getSenseiBoardCheckpointStart(idx) {
+      const safeIdx = Math.min(Math.max(0, idx), SENSEI_BOARD_GAUNTLET.length - 1);
+      const targetBoard = SENSEI_BOARD_GAUNTLET[safeIdx].board;
+      const firstIdx = SENSEI_BOARD_GAUNTLET.findIndex(item => item.board === targetBoard);
+      return firstIdx >= 0 ? firstIdx : 0;
+    }
+
+    function getSenseiBoardCheckpointEnd(idx) {
+      const safeIdx = Math.min(Math.max(0, idx), SENSEI_BOARD_GAUNTLET.length - 1);
+      const targetBoard = SENSEI_BOARD_GAUNTLET[safeIdx].board;
+      let lastIdx = safeIdx;
+      for (let i = safeIdx; i < SENSEI_BOARD_GAUNTLET.length; i++) {
+        if (SENSEI_BOARD_GAUNTLET[i].board === targetBoard) lastIdx = i;
+        else break;
+      }
+      return lastIdx;
+    }
+
+    function clearSenseiDrillTimers() {
+      if (sdPenaltyInterval) {
+        clearInterval(sdPenaltyInterval);
+        sdPenaltyInterval = null;
+      }
+      clearAudioRepeatTimeouts();
+      sdInPenalty = false;
+      const bar = document.getElementById("sdPenaltyBar");
+      if (bar) bar.style.width = "0%";
+    }
+
+    function resetSenseiDrillToStart() {
+      clearSenseiDrillTimers();
+      sdIndex = 0;
+      renderSenseiGauntletStep();
+    }
+
+    function jumpToSenseiBoardStage(boardId) {
+      clearSenseiDrillTimers();
+      const idx = SENSEI_BOARD_GAUNTLET.findIndex(item => item.board === boardId);
+      if (idx >= 0) {
+        sdIndex = idx;
+        renderSenseiGauntletStep();
+      }
+    }
+
+    function speakCurrentSenseiDrillAnswer() {
+      const item = SENSEI_BOARD_GAUNTLET[sdIndex];
+      if (!item) return;
+      speakSenseiSentence(item.audioJp);
+    }
+
+    function renderSenseiDrillStagesAndDots() {
+      const stageContainer = document.getElementById("sdStageButtons");
+      const dotsContainer = document.getElementById("sdChainDots");
+      if (!stageContainer || !dotsContainer) return;
+
+      stageContainer.innerHTML = "";
+      dotsContainer.innerHTML = "";
+
+      const safeIdx = Math.min(sdIndex, SENSEI_BOARD_GAUNTLET.length - 1);
+      const currentBoard = SENSEI_BOARD_GAUNTLET[safeIdx]?.board || "0";
+
+      const boards = ["0", "1", "2", "3"];
+      const boardNames = {
+        "0": "⭐ Papan 0: 飲食料品製造業 & Contoh Industri",
+        "1": "🖼️ Papan 1: 食品えいせい & ろうどうあんぜん",
+        "2": "🖼️ Papan 2: きほん・一般衛生・HACCP",
+        "3": "🖼️ Papan 3: ぶつりてききがいよういん & こうしついぶつ"
+      };
+
+      boards.forEach(b => {
+        const firstIdx = SENSEI_BOARD_GAUNTLET.findIndex(x => x.board === b);
+        const count = SENSEI_BOARD_GAUNTLET.filter(x => x.board === b).length;
+        const lastIdx = firstIdx + count - 1;
+        const isDone = sdIndex > lastIdx;
+        const isCurrent = currentBoard === b && sdIndex < SENSEI_BOARD_GAUNTLET.length;
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.onclick = () => jumpToSenseiBoardStage(b);
+        if (isDone) {
+          btn.className = "px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-extrabold text-xs";
+          btn.textContent = `✅ ${boardNames[b]} (${count})`;
+        } else if (isCurrent) {
+          btn.className = "px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 font-black text-xs shadow ring-2 ring-amber-300";
+          btn.textContent = `🚩 ${boardNames[b]} (${count})`;
+        } else {
+          btn.className = "px-3 py-1.5 rounded-xl bg-slate-800 text-slate-400 hover:text-white font-bold text-xs border border-slate-700";
+          btn.textContent = `${boardNames[b]} (${count})`;
+        }
+        stageContainer.appendChild(btn);
+      });
+
+      const cpStart = getSenseiBoardCheckpointStart(safeIdx);
+      const cpEnd = getSenseiBoardCheckpointEnd(safeIdx);
+
+      for (let i = cpStart; i <= cpEnd; i++) {
+        const dot = document.createElement("div");
+        const localNum = (i - cpStart) + 1;
+        if (i < sdIndex) {
+          dot.className = "px-2.5 py-1 rounded-lg bg-emerald-500 text-slate-950 font-black text-xs";
+          dot.textContent = `✓ Poin ${localNum}`;
+        } else if (i === sdIndex) {
+          dot.className = "px-2.5 py-1 rounded-lg bg-cyan-400 text-slate-950 font-black text-xs ring-2 ring-white animate-pulse";
+          dot.textContent = `🎯 Poin ${localNum}: ${SENSEI_BOARD_GAUNTLET[i].topic}`;
+        } else {
+          dot.className = "px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 font-bold text-xs border border-slate-700";
+          dot.textContent = `Poin ${localNum}`;
+        }
+        dotsContainer.appendChild(dot);
+      }
+
+      document.getElementById("sdPosText").textContent = `${Math.min(sdIndex + 1, SENSEI_BOARD_GAUNTLET.length)} / ${SENSEI_BOARD_GAUNTLET.length}`;
+      document.getElementById("sdResetText").textContent = `${sdResets}x`;
+    }
+
+    function renderSenseiGauntletStep() {
+      clearSenseiDrillTimers();
+      const victoryBox = document.getElementById("sdVictoryBox");
+      const penaltyBox = document.getElementById("sdPenaltyBox");
+      const builderBox = document.getElementById("sdBuilderContainer");
+      const typeForm = document.getElementById("sdTypeForm");
+
+      penaltyBox.classList.add("hidden");
+
+      if (sdIndex >= SENSEI_BOARD_GAUNTLET.length) {
+        victoryBox.classList.remove("hidden");
+        builderBox.classList.add("hidden");
+        typeForm.classList.add("hidden");
+        renderSenseiDrillStagesAndDots();
         return;
       }
 
-      emptyBox.classList.add("hidden");
-      cardBox.classList.remove("hidden");
+      victoryBox.classList.add("hidden");
+      typeForm.classList.remove("hidden");
 
-      if (currentIndex >= activeList.length) currentIndex = 0;
-      const w = activeList[currentIndex];
-      const isLocked = lockedIds.includes(w.id);
-      const isBlind = document.getElementById("blindTestToggle").checked;
-
-      document.getElementById("hkPageBadge").textContent = `Hal. ${w.page} • No. ${w.no}`;
-      document.getElementById("cardCounterText").textContent = `Kata ${currentIndex + 1} dari ${activeList.length}`;
-
-      const statusBadge = document.getElementById("hkStatusBadge");
-      if (isLocked) {
-        statusBadge.textContent = "🔒 Terkunci di Otak";
-        statusBadge.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+      const modeVal = document.getElementById("sdInputModeSelect")?.value || "both";
+      if (modeVal === "type") {
+        builderBox.classList.add("hidden");
       } else {
-        statusBadge.textContent = "⚡ Belum Terkunci";
-        statusBadge.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30";
+        builderBox.classList.remove("hidden");
       }
 
-      document.getElementById("hkFurigana").textContent = w.furigana;
-      document.getElementById("hkKanji").textContent = w.kanji;
-      document.getElementById("hkRomaji").textContent = w.romaji;
-      document.getElementById("hkMeaning").textContent = w.meaning;
+      const item = SENSEI_BOARD_GAUNTLET[sdIndex];
+      const cpStart = getSenseiBoardCheckpointStart(sdIndex);
+      const cpEnd = getSenseiBoardCheckpointEnd(sdIndex);
+      const localNum = (sdIndex - cpStart) + 1;
+      const localTotal = (cpEnd - cpStart) + 1;
 
-      document.getElementById("hkSoundHook").textContent = w.hook;
-      document.getElementById("hkSceneEmoji").textContent = w.emoji;
-      document.getElementById("hkStory").innerHTML = w.story;
-      document.getElementById("hkKanjiTip").textContent = w.kanjiTip;
+      document.getElementById("sdMetaBadge").textContent = `🚩 Papan ${item.board} (Poin ${localNum}/${localTotal})`;
+      document.getElementById("sdTopicBadge").textContent = item.topic;
+      document.getElementById("sdQuestionJp").textContent = item.qJp;
+      document.getElementById("sdQuestionId").textContent = item.qId;
+      document.getElementById("sdPromptTemplate").textContent = item.template;
 
-      const meaningBox = document.getElementById("hkMeaningBox");
-      const trickBox = document.getElementById("hkTrickContainer");
-      meaningBox.classList.remove("revealed");
-      trickBox.classList.remove("revealed");
+      // Siapkan potongan kalimat + pengecoh
+      sdBuiltChunks = [];
+      sdOptionPool = [
+        ...item.chunks.map((t, i) => ({ text: t, correctOrder: i, used: false })),
+        ...item.distractors.map((t) => ({ text: t, correctOrder: -1, used: false }))
+      ];
+      for (let i = sdOptionPool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [sdOptionPool[i], sdOptionPool[j]] = [sdOptionPool[j], sdOptionPool[i]];
+      }
 
-      if (isBlind) {
-        meaningBox.classList.add("blind-blur");
-        trickBox.classList.add("blind-blur");
+      renderSenseiDrillBuilderUI();
+      renderSenseiDrillStagesAndDots();
+
+      const inputEl = document.getElementById("sdTypeInput");
+      inputEl.disabled = false;
+      inputEl.value = "";
+      if (modeVal === "type") inputEl.focus();
+    }
+
+    function renderSenseiDrillBuilderUI() {
+      const item = SENSEI_BOARD_GAUNTLET[sdIndex];
+      if (!item) return;
+
+      document.getElementById("sdChunkCounter").textContent = `${sdBuiltChunks.length} / ${item.chunks.length} Potongan`;
+      const builtZone = document.getElementById("sdBuiltZone");
+      const choicesZone = document.getElementById("sdChunkChoices");
+      builtZone.innerHTML = "";
+      choicesZone.innerHTML = "";
+
+      if (sdBuiltChunks.length === 0) {
+        builtZone.innerHTML = `<span class="text-xs text-slate-500 italic">Klik potongan kalimat yang benar secara berurutan (1 ➔ ${item.chunks.length})...</span>`;
       } else {
-        meaningBox.classList.remove("blind-blur");
-        trickBox.classList.remove("blind-blur");
+        sdBuiltChunks.forEach(t => {
+          const span = document.createElement("span");
+          span.className = "px-3 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs sm:text-sm jp-font shadow";
+          span.textContent = t;
+          builtZone.appendChild(span);
+        });
       }
+
+      sdOptionPool.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.disabled = opt.used || sdInPenalty;
+        btn.className = opt.used
+          ? "px-3.5 py-2.5 rounded-xl bg-slate-900 text-slate-600 border border-slate-800 text-xs sm:text-sm font-bold jp-font cursor-not-allowed"
+          : "px-3.5 py-2.5 rounded-xl bg-[#090d16] hover:bg-indigo-500/20 hover:border-indigo-400 text-white border-2 border-slate-700 text-xs sm:text-sm font-bold jp-font transition";
+        btn.textContent = opt.text;
+        btn.onclick = () => pickSenseiDrillChunk(idx);
+        choicesZone.appendChild(btn);
+      });
     }
 
-    function nextWord() {
-      if (!activeList.length) return;
-      currentIndex = (currentIndex + 1) % activeList.length;
-      fiveSecProgress = 100;
-      renderHackCard();
-      if (autoTimer) speakCurrentWord();
-    }
+    function pickSenseiDrillChunk(poolIdx) {
+      if (sdInPenalty) return;
+      const item = SENSEI_BOARD_GAUNTLET[sdIndex];
+      const picked = sdOptionPool[poolIdx];
+      if (!picked || picked.used) return;
 
-    function prevWord() {
-      if (!activeList.length) return;
-      currentIndex = (currentIndex - 1 + activeList.length) % activeList.length;
-      fiveSecProgress = 100;
-      renderHackCard();
-    }
+      const expectedOrder = sdBuiltChunks.length;
+      if (picked.correctOrder === expectedOrder) {
+        picked.used = true;
+        sdBuiltChunks.push(picked.text);
+        playToneBeep("correct");
+        speakSenseiSentence(picked.text);
+        renderSenseiDrillBuilderUI();
 
-    function markLocked(locked) {
-      if (!activeList.length) return;
-      const w = activeList[currentIndex];
-      if (locked && !lockedIds.includes(w.id)) {
-        lockedIds.push(w.id);
-      } else if (!locked && lockedIds.includes(w.id)) {
-        lockedIds = lockedIds.filter(id => id !== w.id);
-      }
-      saveLocked();
-
-      const onlyUnlocked = document.getElementById("onlyUnlockedToggle").checked;
-      if (onlyUnlocked && locked) {
-        applyFilter();
+        if (sdBuiltChunks.length === item.chunks.length) {
+          handleSenseiDrillSuccess();
+        }
       } else {
-        nextWord();
+        triggerSenseiDrillPenalty(`Salah memilih potongan: "${picked.text}"`);
       }
     }
 
-    // Auto 5-Second Injector
-    function toggleAutoFiveSec() {
-      if (autoTimer) {
-        stopAutoFiveSec();
+    function submitSenseiDrillType(e) {
+      if (e) e.preventDefault();
+      if (sdInPenalty) return;
+      const item = SENSEI_BOARD_GAUNTLET[sdIndex];
+      if (!item) return;
+
+      const inputEl = document.getElementById("sdTypeInput");
+      const raw = inputEl.value.trim();
+      if (!raw) return;
+
+      const normUser = normalizeRomaji(raw);
+      const normFullRomaji = normalizeRomaji(item.romaji);
+      const normFullJp = normalizeRomaji(item.fullJp);
+
+      let matched = (normUser === normFullRomaji || normUser === normFullJp);
+      if (!matched && item.acceptKeys) {
+        matched = item.acceptKeys.some(k => {
+          const nk = normalizeRomaji(k);
+          return normUser.includes(nk) || (nk.includes(normUser) && normUser.length >= 6);
+        });
+      }
+
+      if (matched) {
+        handleSenseiDrillSuccess();
       } else {
-        startAutoFiveSec();
+        triggerSenseiDrillPenalty(`Ketikan Anda: "${raw}"`);
       }
     }
 
-    function startAutoFiveSec() {
-      if (!activeList.length) return;
-      fiveSecProgress = 100;
-      speakCurrentWord();
-      const btn = document.getElementById("autoTimerBtn");
-      btn.className = "px-3 py-1.5 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-300 font-bold flex items-center gap-1.5 transition";
-      document.getElementById("autoTimerText").textContent = "Hentikan Auto-Suntik (5s Berjalan)";
+    function handleSenseiDrillSuccess() {
+      const item = SENSEI_BOARD_GAUNTLET[sdIndex];
+      playToneBeep("correct");
+      speakSenseiSentence(item.audioJp);
 
-      autoTimer = setInterval(() => {
-        fiveSecProgress -= 2; // 50 ticks x 100ms = 5000ms (5 detik)
-        document.getElementById("fiveSecBar").style.width = Math.max(0, fiveSecProgress) + "%";
-        if (fiveSecProgress <= 0) {
-          nextWord();
+      const toast = document.getElementById("sdSuccessToast");
+      document.getElementById("sdSuccessText").textContent = `✅ TEPAT! ${item.fullJp}`;
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 1500);
+
+      sdIndex++;
+      setTimeout(() => {
+        if (!sdInPenalty) renderSenseiGauntletStep();
+      }, 900);
+    }
+
+    function triggerSenseiDrillPenalty(reasonText) {
+      sdInPenalty = true;
+      sdResets++;
+      playToneBeep("wrong");
+
+      const item = SENSEI_BOARD_GAUNTLET[sdIndex];
+      const inputEl = document.getElementById("sdTypeInput");
+      if (inputEl) inputEl.disabled = true;
+
+      const penaltyBox = document.getElementById("sdPenaltyBox");
+      penaltyBox.classList.remove("hidden");
+
+      document.getElementById("sdPenaltyBadge").textContent = `💀 SALAH! ULANG KE #1 PAPAN ${item.board}`;
+      document.getElementById("sdPenaltyFullJp").textContent = item.fullJp;
+      document.getElementById("sdPenaltyRomaji").textContent = `Cara Baca: ${item.romaji}`;
+      document.getElementById("sdPenaltyMeaning").textContent = `Arti: ${item.meaning}`;
+      document.getElementById("sdPenaltyWrongInfo").textContent = reasonText;
+
+      // Putar Audio Sensei 3 kali berturut-turut
+      clearAudioRepeatTimeouts();
+      stopAllAudioPlayback();
+      const badge = document.getElementById("sdAudioRepeatBadge");
+      const playStep = (step) => {
+        if (!sdInPenalty) return;
+        if (badge) badge.textContent = `🔊 Audio Sensei: ${step} / 3`;
+        speakSenseiSentence(item.audioJp);
+      };
+      playStep(1);
+      audioRepeatTimeouts.push(setTimeout(() => playStep(2), 2300));
+      audioRepeatTimeouts.push(setTimeout(() => playStep(3), 4600));
+
+      sdPenaltyTimeLeft = 7.0;
+      const bar = document.getElementById("sdPenaltyBar");
+      const numEl = document.getElementById("sdPenaltyTimerNum");
+      bar.style.width = "100%";
+      numEl.textContent = "7.0";
+
+      sdPenaltyInterval = setInterval(() => {
+        sdPenaltyTimeLeft -= 0.1;
+        if (sdPenaltyTimeLeft <= 0) {
+          finishSenseiDrillPenaltyNow();
+        } else {
+          numEl.textContent = sdPenaltyTimeLeft.toFixed(1);
+          bar.style.width = Math.max(0, (sdPenaltyTimeLeft / 7.0) * 100) + "%";
         }
       }, 100);
+
+      renderSenseiDrillStagesAndDots();
     }
 
-    function stopAutoFiveSec() {
-      if (autoTimer) {
-        clearInterval(autoTimer);
-        autoTimer = null;
-      }
-      fiveSecProgress = 100;
-      const bar = document.getElementById("fiveSecBar");
-      if (bar) bar.style.width = "100%";
-      const btn = document.getElementById("autoTimerBtn");
+    function finishSenseiDrillPenaltyNow() {
+      const cpStart = getSenseiBoardCheckpointStart(sdIndex);
+      clearSenseiDrillTimers();
+      sdIndex = cpStart;
+      renderSenseiGauntletStep();
+    }
+
+    function toggleSenseiCloze() {
+      senseiClozeActive = !senseiClozeActive;
+      const btn = document.getElementById("btnSenseiCloze");
       if (btn) {
-        btn.className = "px-3 py-1.5 rounded-lg bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 hover:bg-indigo-500/30 font-bold flex items-center gap-1.5 transition";
-        document.getElementById("autoTimerText").textContent = "Mulai Auto-Suntik 5 Detik";
+        btn.className = senseiClozeActive
+          ? "px-3 py-1.5 rounded-xl text-xs font-extrabold bg-amber-400 text-slate-950 transition shadow"
+          : "px-3 py-1.5 rounded-xl text-xs font-extrabold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 transition";
+        btn.textContent = senseiClozeActive
+          ? "👁️ Buka Kata Kunci (Mode Tes Aktif)"
+          : "🙈 Tutup Kata Kunci (Tes Lisan Sensei)";
       }
+      document.querySelectorAll(".sensei-key").forEach(el => {
+        el.classList.remove("revealed");
+        if (senseiClozeActive) {
+          el.classList.add("blind-blur");
+          el.onclick = function () { this.classList.toggle("revealed"); };
+        } else {
+          el.classList.remove("blind-blur");
+        }
+      });
     }
 
-    // Keyboard shortcuts
-    window.addEventListener("keydown", (e) => {
-      if (currentMode !== "hack" || ["INPUT", "SELECT"].includes(document.activeElement.tagName)) return;
-      if (e.code === "ArrowRight") nextWord();
-      if (e.code === "ArrowLeft") prevWord();
-      if (e.code === "Enter") {
-        e.preventDefault();
-        markLocked(true);
+    function toggleSenseiRomaji() {
+      senseiRomajiVisible = !senseiRomajiVisible;
+      const btn = document.getElementById("btnSenseiRomaji");
+      if (btn) {
+        btn.textContent = senseiRomajiVisible ? "🔤 Romaji: ON" : "🔤 Romaji: OFF";
       }
-      if (e.code === "Space") {
-        e.preventDefault();
-        speakCurrentWord();
-      }
-    });
+      document.querySelectorAll(".sensei-romaji").forEach(el => {
+        if (senseiRomajiVisible) {
+          el.classList.remove("hidden");
+        } else {
+          el.classList.add("hidden");
+        }
+      });
+    }
 
-    // ==================== MODE 2: CHEAT SHEET SEMUA TRIK ====================
+    // ==================== MODE 4: CHEAT SHEET SEMUA TRIK ====================
     function toggleListBlind(field) {
       listBlind[field] = !listBlind[field];
       const btnM = document.getElementById("btnBlindMeaning");
@@ -1969,6 +3591,54 @@
       }
     }
 
+    function toggleCheckpointPreview(forceState) {
+      checkpointPreviewOpen = typeof forceState === "boolean" ? forceState : !checkpointPreviewOpen;
+      const box = document.getElementById("checkpointPreviewBox");
+      const btn = document.getElementById("btnCheckpointPreview");
+      if (!box || !btn) return;
+
+      if (checkpointPreviewOpen) {
+        renderCheckpointPreviewItems();
+        box.classList.remove("hidden");
+        btn.className = "px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 font-black transition flex items-center gap-1 shadow";
+        btn.innerHTML = "🙈 Tutup Intip Checkpoint";
+      } else {
+        box.classList.add("hidden");
+        btn.className = "px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 font-extrabold transition flex items-center gap-1";
+        btn.innerHTML = "⚡ Intip Kotoba Checkpoint Ini";
+        const inputEl = document.getElementById("gauntletInput");
+        if (inputEl && !inputEl.disabled) inputEl.focus();
+      }
+    }
+
+    function renderCheckpointPreviewItems() {
+      const listEl = document.getElementById("checkpointPreviewList");
+      if (!listEl) return;
+      listEl.innerHTML = "";
+
+      const pool = getGauntletPool();
+      const safeIdx = Math.min(gauntletIndex, pool.length - 1);
+      const cpStart = getCheckpointStartIndex(pool, safeIdx);
+      const cpEnd = getCheckpointEndIndex(pool, safeIdx);
+
+      for (let i = cpStart; i <= cpEnd; i++) {
+        const w = pool[i];
+        if (!w) continue;
+        const item = document.createElement("div");
+        item.className = "bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-col gap-1";
+        item.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-black text-white jp-font text-base">${w.emoji.slice(0, 2)} ${w.kanji} <span class="text-xs text-cyan-400 font-bold">(${w.furigana} / ${w.romaji})</span></span>
+            <button type="button" onclick="speakJP('${w.furigana}')" class="text-xs text-emerald-400 font-bold">🔊</button>
+          </div>
+          <div class="text-xs font-extrabold text-emerald-400">= ${w.meaning}</div>
+          <div class="text-[11px] text-amber-300 font-bold mt-0.5">⚡ ${w.hook}</div>
+          <div class="text-[11px] text-slate-300 leading-snug">${w.story}</div>
+        `;
+        listEl.appendChild(item);
+      }
+    }
+
     function shuffleAndRestartGauntlet() {
       const pool = getGauntletPool();
       const cpStart = getCheckpointStartIndex(pool, gauntletIndex < pool.length ? gauntletIndex : 0);
@@ -2122,6 +3792,7 @@
       inputEl.value = "";
       inputEl.focus();
       renderGauntletChain();
+      if (checkpointPreviewOpen) renderCheckpointPreviewItems();
 
       // Otomatis bacakan soal setiap kali soal tampil / pindah nomor (jika sedang di mode Ketik Gauntlet)
       if (currentMode === "drill") {
@@ -2209,6 +3880,7 @@
     function submitGauntletAnswer(e) {
       if (e) e.preventDefault();
       if (isInPenalty) return;
+      if (checkpointPreviewOpen) toggleCheckpointPreview(false);
 
       const inputEl = document.getElementById("gauntletInput");
       const userAns = inputEl.value.trim();
