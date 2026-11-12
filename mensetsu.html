@@ -1,0 +1,2122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Master 5S & Mensetsu PM - Giodan Karaman</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans JP', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+    .jp-text {
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    ruby {
+      ruby-align: center;
+    }
+    rt {
+      font-size: 0.62em;
+      color: #2563eb;
+      font-weight: 600;
+      user-select: none;
+    }
+    .hide-furigana rt {
+      display: none;
+    }
+    .pdf-card {
+      background: linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 100%);
+      border: 2px solid #bae6fd;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: white;
+      }
+      .print-break {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- TOP HEADER & NAVIGATION -->
+  <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50 no-print">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-lg shadow-inner">
+            PM
+          </div>
+          <div>
+            <h1 class="font-extrabold text-base md:text-lg tracking-tight flex items-center gap-2">
+              <span>Master 5S & Mensetsu PM</span>
+              <span class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-semibold">Giodan Karaman</span>
+            </h1>
+            <p class="text-xs text-slate-400">Modul PM Edisi 5.1 (Hal. 15) & Template 30 Soal Mensetsu</p>
+          </div>
+        </div>
+        <!-- Overall Progress Pill Mobile -->
+        <div id="headerStatsMobile" class="md:hidden text-xs bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 font-semibold text-blue-300">
+          Hafal: 0/35
+        </div>
+      </div>
+
+      <!-- 4 MAIN PAGE TABS -->
+      <nav class="flex flex-wrap gap-1.5 bg-slate-800/90 p-1.5 rounded-xl border border-slate-700">
+        <button onclick="switchPage('page-5s')" id="tab-page-5s" class="tab-btn flex-1 md:flex-initial px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all bg-blue-600 text-white shadow">
+          1. Materi & Otak 5S (Hal. 15)
+        </button>
+        <button onclick="switchPage('page-template')" id="tab-page-template" class="tab-btn flex-1 md:flex-initial px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700">
+          2. Template PDF Mensetsu (1-30)
+        </button>
+        <button onclick="switchPage('page-explain')" id="tab-page-explain" class="tab-btn flex-1 md:flex-initial px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700">
+          3. Halaman Penjelasan & Arti Kata
+        </button>
+        <button onclick="switchPage('page-drill')" id="tab-page-drill" class="tab-btn flex-1 md:flex-initial px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700">
+          4. Latihan Kuasai & Simulasi
+        </button>
+      </nav>
+
+      <!-- Overall Progress Pill Desktop -->
+      <div class="hidden md:flex items-center gap-3">
+        <div id="headerStatsDesktop" class="text-xs bg-slate-800 px-3 py-2 rounded-lg border border-slate-700 font-semibold text-blue-300">
+          Penguasaan: 0/35 Materi
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6">
+
+    <!-- ================================================================= -->
+    <!-- HALAMAN 1: MASTER 5S (HALAMAN 15 MODUL PM EDISI 5.1)              -->
+    <!-- ================================================================= -->
+    <section id="page-5s" class="space-y-6">
+      <!-- Intro Banner -->
+      <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-6 shadow-md">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-2">
+            <div class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 px-3 py-1 rounded-full text-xs font-bold text-blue-200">
+              <span>📖 Bab 2: Higiene Pangan (食品衛生) — Halaman 15 (dan Bab 3 Hal. 45-46)</span>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-black tracking-tight">Sistem Hafal & Paham 5S (ごエス) Nyantol di Otak</h2>
+            <p class="text-sm text-slate-300 max-w-3xl">
+              Jangan cuma hafal urutannya! Dalam ujian SSW Pengolahan Makanan (PM) dan wawancara, soal sering menukar definisi <strong>Seiri vs Seiton</strong> dan <strong>Seisou vs Seiketsu</strong>. Gunakan rumus <em>Kata Kunci Jembatan Otak</em> di bawah ini agar langsung tahu jawabannya dalam 3 detik.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2 shrink-0">
+            <button onclick="toggleFurigana()" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold transition">
+              👁️ Tampilkan/Sembunyikan Cara Baca (Furigana)
+            </button>
+            <button onclick="scrollToElement('quiz-5s-section')" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-xs font-extrabold transition shadow">
+              ⚡ Langsung Tes Otak 5S
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTI KONSEP HALAMAN 15 (KOTAK PENGANTAR MODUL) -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <h3 class="font-extrabold text-slate-800 flex items-center gap-2">
+            <span class="bg-blue-100 text-blue-800 px-2.5 py-1 rounded-lg text-xs">Halaman 15 Modul</span>
+            <span>Apa itu 一般衛生管理 (Manajemen Higiene Umum) & 5S?</span>
+          </h3>
+          <button onclick="speakJP('ごエスとは、エスではじまる、いつつの、かつどうを、いみする、ことばです。')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold px-3 py-1.5 rounded-lg border border-blue-200 transition">
+            🔊 Dengarkan Definisi
+          </button>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4 text-sm">
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <p class="text-xs font-bold text-slate-500 uppercase mb-1">Teks Asli Modul Halaman 15:</p>
+            <p class="jp-text text-base font-medium leading-relaxed text-slate-900">
+              「5S（<ruby>エス<rt>esu</rt></ruby>）」とは、「S」で<ruby>始<rt>はじ</rt></ruby>まる5つの<ruby>活動<rt>かつどう</rt></ruby>を<ruby>意味<rt>いみ</rt></ruby>する<ruby>言葉<rt>ことば</rt></ruby>です。<br>
+              <span class="text-xs text-slate-600 mt-1 block">
+                <ruby>一般衛生管理<rt>いっぱんえいせいかんり</rt></ruby>はどれも<strong>5Sの<ruby>考<rt>かんが</rt></ruby>え<ruby>方<rt>かた</rt></ruby>が<ruby>基本<rt>きほん</rt></ruby></strong>です。5Sは、<ruby>食品衛生<rt>しょくひんえいせい</rt></ruby>のためだけでなく、<ruby>労働安全<rt>ろうどうあんぜん</rt></ruby>にも<ruby>役立<rt>やくだ</rt></ruby>ちます。
+              </span>
+            </p>
+          </div>
+          <div class="bg-amber-50/80 p-4 rounded-xl border border-amber-200 space-y-1.5">
+            <p class="text-xs font-extrabold text-amber-900 uppercase">💡 Poin Kunci yang Wajib Diingat:</p>
+            <ul class="text-xs md:text-sm text-amber-950 space-y-1 list-disc list-inside">
+              <li><strong>一般衛生管理 (Ippan Eisei Kanri)</strong> = Manajemen kebersihan dasar yang dilakukan di semua pabrik makanan. Fondasi dasarnya adalah <strong>5S</strong>.</li>
+              <li><strong>2 Fungsi Utama 5S:</strong> Untuk <strong>食品衛生 (Higiene Pangan)</strong> agar konsumen tidak sakit/luka, DAN <strong>労働安全 (Keselamatan Kerja)</strong> agar pekerja tidak celaka di pabrik.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 CARDS FOR 5S (DENGAN JEMBATAN KELEDAI & BEDAH KATA MODUL) -->
+      <div id="cards5SContainer" class="grid grid-cols-1 gap-4">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- TABEL PERBANDINGAN ANTI-TERTUKAR + KAITAN KESELAMATAN KERJA (HAL 45-46) -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+          <h3 class="font-extrabold text-base text-rose-700 flex items-center gap-2 mb-3">
+            <span>⚠️ Awas Tertukar Saat Ujian! (Rumus 3 Detik)</span>
+          </h3>
+          <div class="space-y-3 text-xs md:text-sm">
+            <div class="p-3 rounded-xl bg-rose-50 border border-rose-200">
+              <div class="font-bold text-rose-900 mb-1">1. Bedanya SEIRI (整理) vs SEITON (整頓)</div>
+              <p class="text-slate-700">
+                • Kalau ada kata <strong>使わない / いらないものをなくす</strong> (membuang/menyingkirkan barang yang tidak dipakai) ➔ Pasti <strong>① 整理 (SEIRI = Singkirkan)</strong>.<br>
+                • Kalau ada kata <strong>すぐに取り出せる / 場所を決めて置く / 順序に並べる / 表示する</strong> (mudah diambil, taruh di tempatnya, beri label) ➔ Pasti <strong>② 整頓 (SEITON = Tempatkan)</strong>.
+              </p>
+            </div>
+            <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-200">
+              <div class="font-bold text-indigo-900 mb-1">2. Bedanya SEISOU (清掃) vs SEIKETSU (清潔)</div>
+              <p class="text-slate-700">
+                • Kalau ada aksi fisik <strong>洗う・磨く・拭く・汚れを取り除く</strong> (mencuci, menggosok, mengelap, membuang kotoran) ➔ Pasti <strong>③ 清掃 (SEISOU = Sapu/Cuci)</strong>.<br>
+                • Kalau ada kata <strong>見た目がきれい + 病原性微生物に汚染されていない</strong> (tampilan bersih & bebas kontaminasi bakteri/mikroba patogen) ➔ Pasti <strong>④ 清潔 (SEIKETSU = Steril/Higienis)</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+          <h3 class="font-extrabold text-base text-emerald-800 flex items-center gap-2 mb-3">
+            <span>🦺 5S di Bab 3: Keselamatan Kerja (Hal. 45–46 Modul)</span>
+          </h3>
+          <div class="space-y-2.5 text-xs md:text-sm text-slate-700">
+            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+              <strong>• 整理 (Seiri):</strong> Menjaga area kerja bebas dari barang tidak perlu (<span class="jp-text">不要なものが作業場にない状態</span>).
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+              <strong>• 整頓 (Seiton):</strong> Menaruh kotak/palet sesuai garis lantai (<span class="jp-text">枠の中や床のテープに沿って置く</span>) agar alur gerak (<span class="jp-text">動線 / Dōsen</span>) rapi ➔ <strong>Mencegah kecelakaan jatuh/terpeleset (<span class="jp-text">転倒災害</span>)!</strong>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+              <strong>• 清掃 (Seisou):</strong> Menjaga mesin selalu bersih ➔ <strong>Mencegah mesin rusak mendadak (<span class="jp-text">急に故障する</span>) & kecelakaan terjepit/tergulung (<span class="jp-text">巻き込まれ災害</span>)!</strong>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+              <strong>• 清潔 (Seiketsu) & 習慣付け (Shūkanzuke):</strong> Mencegah keracunan makanan & penyakit menular pada pekerja, serta membuat tempat kerja selalu aman setiap hari.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE 5S BRAIN DRILL SECTION -->
+      <div id="quiz-5s-section" class="bg-white rounded-2xl p-6 border-2 border-blue-500 shadow-md space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-200 pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-blue-600">Latihan Interaktif Anti-Lupa</span>
+            <h3 class="text-xl font-black text-slate-900">🎯 Game Sortir Kasus Pabrik & Kuis Ujian 5S</h3>
+            <p class="text-xs text-slate-600">Baca kalimat kasus bahasa Jepang/Indonesia di bawah ini, lalu klik tombol S yang paling tepat!</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="score5SBadge" class="px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 font-extrabold text-xs">
+              Skor Benar: 0 / 10
+            </span>
+            <button onclick="reset5SQuiz()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
+              🔄 Acak Ulang Soal
+            </button>
+          </div>
+        </div>
+
+        <!-- Question Display Box -->
+        <div id="quiz5SBox" class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- HALAMAN 2: TEMPLATE PDF MENSETSU PM (SOAL 1 - 30 SIAP TEMPEL)     -->
+    <!-- ================================================================= -->
+    <section id="page-template" class="hidden space-y-6">
+
+      <!-- PENGATURAN IDENTITAS GIODAN KARAMAN (REAL-TIME AUTO UPDATE) -->
+      <div class="bg-white rounded-2xl p-5 border-2 border-indigo-500 shadow-sm space-y-4 no-print">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <div class="inline-flex items-center gap-2 bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full text-xs font-extrabold mb-1">
+              <span>👤 Identitas Otomatis: Giodan Karaman</span>
+            </div>
+            <h2 class="text-lg md:text-xl font-black text-slate-900">Panel Data Diri Giodan Karaman (Otomatis Mengisi 30 Jawaban)</h2>
+            <p class="text-xs text-slate-600">
+              Semua jawaban No. 1–30 di bawah sudah disesuaikan dengan profil Anda (<strong>Giodan Karaman - Malang</strong>). Jika ada detail dari LPK/CV Anda yang ingin disesuaikan (misal kelas, gaji sebelumnya, atau pernah wawancara berapa kali), ubah di sini dan <strong>30 jawaban Jepang otomatis berubah detik itu juga!</strong>
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2 shrink-0">
+            <button onclick="toggleProfileEditor()" id="btnToggleProfile" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold transition shadow">
+              ⚙️ Buka / Sesuaikan Data Giodan
+            </button>
+            <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-extrabold transition">
+              🖨️ Cetak / Simpan PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Collapsible Profile Editor -->
+        <div id="profileEditorPanel" class="hidden pt-4 border-t border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Nama Lengkap (Romaji & Katakana)</label>
+            <input type="text" id="prof_name" value="GIODAN KARAMAN (ギオダン・カラマン)" oninput="updateProfileData()" class="w-full px-3 py-2 rounded-lg border border-slate-300 font-semibold" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Kelas (クラス di Lembar PDF)</label>
+            <input type="text" id="prof_class" value="PM - 特定技能 (Tokutei Ginou)" oninput="updateProfileData()" class="w-full px-3 py-2 rounded-lg border border-slate-300 font-semibold" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Tempat Tinggal Saat Ini (Soal No. 8)</label>
+            <select id="prof_residence" onchange="updateProfileData()" class="w-full px-3 py-2 rounded-lg border border-slate-300 font-semibold bg-white">
+              <option value="malang_dorm">Asrama (Ryou) di Malang (マランの寮)</option>
+              <option value="malang_home">Rumah bersama keluarga di Malang (マランの家)</option>
+              <option value="dorm_general">Asrama LPK (LPKの寮)</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Pekerjaan Sebelumnya (Soal No. 3 & 6)</label>
+            <select id="prof_job" onchange="updateProfileData()" class="w-full px-3 py-2 rounded-lg border border-slate-300 font-semibold bg-white">
+              <option value="fnb_store">Usaha/Toko Makanan & Minuman (飲食店・食品販売の仕事)</option>
+              <option value="shop_staff">Staf Toko / Pelayanan & Stok Barang (店のスタッフ)</option>
+              <option value="factory_other">Pabrik Non-Makanan / Perakitan (工場の作業員)</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Gaji Sebelumnya dlm Yen & Jam Kerja (No. 4)</label>
+            <input type="text" id="prof_salary" value="月3万円くらい (08:00〜17:00)" oninput="updateProfileData()" class="w-full px-3 py-2 rounded-lg border border-slate-300 font-semibold" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Pengalaman Wawancara (Soal No. 26 & 27)</label>
+            <select id="prof_interview_count" onchange="updateProfileData()" class="w-full px-3 py-2 rounded-lg border border-slate-300 font-semibold bg-white">
+              <option value="first_time">Baru Pertama Kali (はじめてです / 0回)</option>
+              <option value="once">Pernah 1 Kali - Pabrik Ayam Aomori (1回・青森県の鶏肉工場)</option>
+              <option value="once_bento">Pernah 1 Kali - Pabrik Bento (1回・お弁当の工場)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Filter & Display Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-bold text-slate-500">Mode Tampilan Jawaban:</span>
+            <button onclick="setAnswerMode('all')" id="mode-all" class="ans-mode-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white">
+              Lengkap (Jepang + Cara Baca + Indo)
+            </button>
+            <button onclick="setAnswerMode('paste-jp')" id="mode-paste-jp" class="ans-mode-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">
+              📋 Mode Hanya Jawaban Jepang (Siap Tempel)
+            </button>
+          </div>
+          <div class="flex items-center gap-2 w-full md:w-auto">
+            <input type="text" id="searchMensetsu" oninput="renderTemplateCards()" placeholder="🔍 Cari nomor atau kata (misal: babi, gaji, 12)..." class="w-full md:w-64 px-3 py-1.5 rounded-lg border border-slate-300 text-xs" />
+          </div>
+        </div>
+      </div>
+
+      <!-- COVER & HALAMAN 2 PDF: 注意する事 (HAL-HAL YANG HARUS DIPERHATIKAN) -->
+      <div class="pdf-card rounded-2xl p-5 shadow-sm print-break">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-sky-200 pb-3 mb-4">
+          <div>
+            <span class="text-xs font-black uppercase tracking-wider text-rose-600 bg-rose-100 px-2.5 py-1 rounded-md">Halaman 1 & 2 PDF Mensetsu PM</span>
+            <h3 class="text-xl font-black text-slate-900 mt-1">注意する事 (HAL-HAL YANG HARUS DIPERHATIKAN)</h3>
+          </div>
+          <div class="bg-white px-4 py-2 rounded-xl border border-sky-200 text-xs font-bold text-slate-700">
+            名前: <span class=" profile-name-display text-blue-700 font-black">GIODAN KARAMAN (ギオダン・カラマン)</span>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-white p-4 rounded-xl border border-sky-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold text-rose-600">📌 Poin Wajib 1 (Halaman 2 PDF)</span>
+              <button onclick="speakJP('もんだいがあったり、わからないことがあったら、かならずじょうしにきく')" class="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded font-bold no-print">🔊 Suara</button>
+            </div>
+            <p class="jp-text font-bold text-base text-slate-900">
+              ・<ruby>問題<rt>もんだい</rt></ruby>があったり、わからない<ruby>事<rt>こと</rt></ruby>があったら<ruby>必<rt>かなら</rt></ruby>ず<ruby>上司<rt>じょうし</rt></ruby>に<ruby>聞<rt>き</rt></ruby>く
+            </p>
+            <p class="text-xs text-blue-700 font-medium">Mondai ga attari, wakaranai koto ga attara kanarazu jōshi ni kiku.</p>
+            <p class="text-xs text-slate-700 border-t border-slate-100 pt-1.5">
+              <strong>Arti:</strong> Jika ada masalah atau ada hal yang tidak dimengerti, wajib bertanya kepada atasan (<span class="jp-text">上司 / Jōshi</span>).
+            </p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-sky-200 shadow-sm space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold text-rose-600">📌 Poin Wajib 2 (Halaman 2 PDF)</span>
+              <button onclick="speakJP('しごとのてじゅんにふあんがあったら、せんぱいにきいてもらい、かくにんする')" class="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded font-bold no-print">🔊 Suara</button>
+            </div>
+            <p class="jp-text font-bold text-base text-slate-900">
+              ・<ruby>仕事<rt>しごと</rt></ruby>の<ruby>手順<rt>てじゅん</rt></ruby>に<ruby>不安<rt>ふあん</rt></ruby>があったら、<ruby>先輩<rt>せんぱい</rt></ruby>に<ruby>聞<rt>き</rt></ruby>いてもらい<ruby>確認<rt>かくにん</rt></ruby>する
+            </p>
+            <p class="text-xs text-blue-700 font-medium">Shigoto no tejun ni fuan ga attara, senpai ni kiite morai kakunin suru.</p>
+            <p class="text-xs text-slate-700 border-t border-slate-100 pt-1.5">
+              <strong>Arti:</strong> Jika merasa ragu atau tidak yakin dengan prosedur kerja (<span class="jp-text">仕事の手順</span>), tanyakan kepada senior (<span class="jp-text">先輩 / Senpai</span>) dan lakukan konfirmasi (<span class="jp-text">確認</span>).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTAINER LEMBAR SOAL MENSETSU 1 - 30 (PERSIS URUTAN HALAMAN PDF) -->
+      <div id="templateCardsContainer" class="space-y-6">
+        <!-- Populated by JS -->
+      </div>
+
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- HALAMAN 3: PENJELASAN MENDALAM, ARTI PER KATA & MAKSUD (TERPISAH) -->
+    <!-- ================================================================= -->
+    <section id="page-explain" class="hidden space-y-6">
+      <div class="bg-gradient-to-r from-amber-900 via-orange-900 to-slate-900 text-white rounded-2xl p-6 shadow-md">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-2">
+            <span class="inline-flex items-center gap-2 bg-amber-400/20 border border-amber-300/30 px-3 py-1 rounded-full text-xs font-bold text-amber-200">
+              🧠 Halaman Khusus Pemahaman Mendalam (Anti Hafal Buta)
+            </span>
+            <h2 class="text-2xl md:text-3xl font-black">Bedah Maksud Pewawancara & Arti Per Kata (No. 1–30)</h2>
+            <p class="text-sm text-amber-100 max-w-3xl">
+              Halaman ini dipisahkan khusus agar Anda paham <strong>mengapa pewawancara bertanya demikian</strong>, <strong>apa arti setiap potong kata Jepang yang Anda ucapkan</strong>, dan <strong>bagaimana menjawab jika pertanyaan dikembangkan</strong>.
+            </p>
+          </div>
+          <div class="w-full md:w-64 shrink-0">
+            <label class="text-xs font-bold text-amber-200 block mb-1">Pilih / Lompat ke Nomor:</label>
+            <select id="explainJumpSelect" onchange="jumpToExplanation(this.value)" class="w-full px-3 py-2 rounded-xl bg-slate-900 text-white border border-amber-400/40 text-xs font-bold">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explanation Cards Container -->
+      <div id="explainCardsContainer" class="space-y-4">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- HALAMAN 4: LATIHAN KUASAI & SIMULASI MENSETSU INTERAKTIF          -->
+    <!-- ================================================================= -->
+    <section id="page-drill" class="hidden space-y-6">
+      <div class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white rounded-2xl p-6 shadow-md">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5">
+            <span class="inline-flex items-center gap-2 bg-emerald-400/20 border border-emerald-300/30 px-3 py-1 rounded-full text-xs font-bold text-emerald-200">
+              🎤 Sistem Penguasaan Aktif (Active Recall)
+            </span>
+            <h2 class="text-2xl font-black">Simulator Mensetsu & Tes Pemahaman Giodan Karaman</h2>
+            <p class="text-xs md:text-sm text-emerald-100 max-w-2xl">
+              Latih telinga dan otak Anda dengan 3 tahapan: <strong>1) Tebak Maksud Pertanyaan</strong>, <strong>2) Susun Kalimat Jawaban</strong>, dan <strong>3) Simulasi Wawancara Tatap Muka</strong>.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="setDrillMode('mock')" id="drill-btn-mock" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs shadow">
+              🎙️ 1. Simulasi Wawancara
+            </button>
+            <button onclick="setDrillMode('meaning')" id="drill-btn-meaning" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs">
+              👂 2. Tebak Arti Pertanyaan
+            </button>
+            <button onclick="setDrillMode('builder')" id="drill-btn-builder" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs">
+              🧩 3. Susun Kalimat Jawaban
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DRILL MODE 1: MOCK INTERVIEW -->
+      <div id="drill-mock-container" class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- DRILL MODE 2: MEANING & LISTENING QUIZ -->
+      <div id="drill-meaning-container" class="hidden bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- DRILL MODE 3: SENTENCE BUILDER -->
+      <div id="drill-builder-container" class="hidden bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastBox" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 text-xs font-bold flex items-center gap-2">
+    <span id="toastText">Berhasil disalin!</span>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- JAVASCRIPT ENGINE (100% SELF-CONTAINED, ZERO EXTERNAL DEPENDENCY) -->
+  <!-- ================================================================= -->
+  <script>
+    // --- SAFE STORAGE HELPER ---
+    var storage = {
+      get: function(key, def) {
+        try {
+          var v = localStorage.getItem(key);
+          return v ? JSON.parse(v) : def;
+        } catch (e) {
+          return def;
+        }
+      },
+      set: function(key, val) {
+        try {
+          localStorage.setItem(key, JSON.stringify(val));
+        } catch (e) {}
+      }
+    };
+
+    // --- STATE ---
+    var appState = {
+      currentPage: 'page-5s',
+      showFurigana: true,
+      answerDisplayMode: 'all', // 'all' or 'paste-jp'
+      masteredIds: storage.get('giodan_mastered_v1', {}),
+      customAnswers: storage.get('giodan_custom_ans_v1', {}),
+      profile: storage.get('giodan_profile_v1', {
+        name: 'GIODAN KARAMAN (ギオダン・カラマン)',
+        className: 'PM - 特定技能 (Tokutei Ginou)',
+        residence: 'malang_dorm',
+        job: 'fnb_store',
+        salary: '月3万円くらい (08:00〜17:00)',
+        interviewCount: 'first_time'
+      }),
+      quiz5SIndex: 0,
+      quiz5SScore: 0,
+      quiz5SAnswered: false,
+      drillMode: 'mock',
+      mockIndex: 0,
+      mockRevealAnswer: false,
+      mockRevealHint: false,
+      meaningQuizIndex: 0,
+      meaningQuizScore: 0,
+      builderIndex: 0,
+      builderSelected: []
+    };
+
+    // --- DATA 1: MATERI 5S HALAMAN 15 MODUL PM EDISI 5.1 ---
+    var data5S = [
+      {
+        id: '5s-1',
+        num: '①',
+        kanji: '整理',
+        furigana: '<ruby>整理<rt>せいり</rt></ruby>',
+        romaji: 'SEIRI',
+        indoTitle: 'Ringkas / Pemilahan (Singkirkan yang Tidak Dipakai)',
+        mnemonicTitle: 'SEIRI = SINGKIRKAN (Buang barang yang tidak perlu!)',
+        mnemonicDesc: 'Ingat huruf akhirnya "RI" = SingkIRkan! Kalau di soal ada kata「使わないものをなくす」(menghilangkan yang tidak dipakai) atau「いらない器具をなくす」(membuang alat yang tidak perlu), 100% jawabannya SEIRI.',
+        moduleJpRuby: '<ruby>使<rt>つか</rt></ruby>わないものをなくして、<ruby>使<rt>つか</rt></ruby>うものだけにすること。いらない<ruby>器具<rt>きぐ</rt></ruby>や<ruby>道具<rt>どうぐ</rt></ruby>をなくして、<ruby>必要<rt>ひつよう</rt></ruby>な<ruby>器具<rt>きぐ</rt></ruby>や<ruby>道具<rt>どうぐ</rt></ruby>だけにすること。',
+        moduleJpPlain: '使わないものをなくして、使うものだけにすること。いらない器具や道具をなくして、必要な器具や道具だけにすること。',
+        moduleIndo: 'Menghilangkan barang yang tidak dipakai, dan menyisakan barang yang dipakai saja. Menyingkirkan peralatan atau perkakas yang tidak diperlukan, dan menyisakan peralatan atau perkakas yang diperlukan saja.',
+        keywords: [
+          { jp: '使わないものをなくす (Tsukawanai mono o nakusu)', id: 'Menghilangkan barang yang tidak dipakai' },
+          { jp: 'いらない器具や道具をなくす (Iranai kigu ya dōgu o nakusu)', id: 'Menyingkirkan alat/perkakas yang tidak perlu' },
+          { jp: '必要なものだけにする (Hitsuyō na mono dake ni suru)', id: 'Menyisakan yang penting/perlu saja' }
+        ],
+        safetyLink: 'Bab 3 (Hal. 46): Menjaga kondisi tempat kerja agar tidak ada barang yang tidak diperlukan (不要なものが作業場にない状態を保ちます).'
+      },
+      {
+        id: '5s-2',
+        num: '②',
+        kanji: '整頓',
+        furigana: '<ruby>整頓<rt>せいとん</rt></ruby>',
+        romaji: 'SEITON',
+        indoTitle: 'Rapi / Penataan (Tempatkan & Beri Label Agar Mudah Diambil)',
+        mnemonicTitle: 'SEITON = TEMPATKAN (Taruh di tempatnya, urutkan, kasih label!)',
+        mnemonicDesc: 'Ingat huruf "TON" = Tempatkan & TOnjolkan labelnya! Setelah barang dipilah (Seiri), barang yang penting ditata tempatnya (場所を決めて置く) supaya kapan pun dibutuhkan BISA LANGSUNG DIAMBIL (すぐに取り出せる).',
+        moduleJpRuby: '<ruby>器具<rt>きぐ</rt></ruby>や<ruby>道具<rt>どうぐ</rt></ruby>を、<ruby>必要<rt>ひつよう</rt></ruby>なときにすぐに<ruby>取<rt>と</rt></ruby>り<ruby>出<rt>だ</rt></ruby>せるようにすること。そのために、<ruby>場所<rt>ばしょ</rt></ruby>を<ruby>決<rt>き</rt></ruby>めて<ruby>置<rt>お</rt></ruby>いたり、<ruby>使<rt>つか</rt></ruby>いやすい<ruby>順序<rt>じゅんじょ</rt></ruby>に<ruby>並<rt>なら</rt></ruby>べたり、<ruby>名前<rt>なまえ</rt></ruby>や<ruby>数量<rt>すうりょう</rt></ruby>を<ruby>表示<rt>ひょうじ</rt></ruby>したりすること。',
+        moduleJpPlain: '器具や道具を、必要なときにすぐに取り出せるようにすること。そのために、場所を決めて置いたり、使いやすい順序に並べたり、名前や数量を表示したりすること。',
+        moduleIndo: 'Membuat peralatan dan perkakas bisa langsung diambil saat dibutuhkan. Untuk itu, ditentukan tempat meletakkannya, disusun sesuai urutan yang mudah dipakai, serta diberi label nama dan jumlahnya.',
+        keywords: [
+          { jp: 'すぐに取り出せる (Sugu ni toridaseru)', id: 'Bisa segera diambil saat dibutuhkan' },
+          { jp: '場所を決めて置く (Basho o kimete oku)', id: 'Menentukan tempat dan meletakkannya' },
+          { jp: '名前や数量を表示する (Namae ya sūryō o hyōji suru)', id: 'Menampilkan/memberi label nama dan jumlah' }
+        ],
+        safetyLink: 'Bab 3 (Hal. 46): Menaruh kotak/palet di dalam garis/pita lantai agar alur jalan (動線/Dōsen) rapi sehingga mengurangi bahaya kecelakaan jatuh/terpeleset (転倒災害).'
+      },
+      {
+        id: '5s-3',
+        num: '③',
+        kanji: '清掃',
+        furigana: '<ruby>清掃<rt>せいそう</rt></ruby>',
+        romaji: 'SEISOU',
+        indoTitle: 'Resik / Pembersihan (Cuci, Gosok, Lap, Hilangkan Kotoran)',
+        mnemonicTitle: 'SEISOU = SAPU & SIKAT (Aksi fisik mencuci, menggosok, mengelap!)',
+        mnemonicDesc: 'Ingat "SOU" = Sapu / SOdok kotoran! Ciri khasnya adalah KATA KERJA FISIK membersihkan: mencuci (洗う), menggosok/memoles (磨く), mengelap (拭く), dan menghilangkan kotoran (汚れを取り除く).',
+        moduleJpRuby: '<ruby>設備<rt>せつび</rt></ruby>や<ruby>器具<rt>きぐ</rt></ruby>、<ruby>道具<rt>どうぐ</rt></ruby>を、<ruby>洗<rt>あら</rt></ruby>ったり、<ruby>磨<rt>みが</rt></ruby>いたり、<ruby>拭<rt>ふ</rt></ruby>いたりしてきれいな<ruby>状態<rt>じょうたい</rt></ruby>にすること。<ruby>汚<rt>よご</rt></ruby>れを<ruby>取<rt>と</rt></ruby>り<ruby>除<rt>のぞ</rt></ruby>くこと。',
+        moduleJpPlain: '設備や器具、道具を、洗ったり、磨いたり、拭いたりしてきれいな状態にすること。汚れを取り除くこと。',
+        moduleIndo: 'Mencuci, menggosok, atau mengelap fasilitas, peralatan, dan perkakas sehingga menjadi kondisi bersih. Menghilangkan kotoran.',
+        keywords: [
+          { jp: '洗ったり、磨いたり、拭いたり (Arattari, migaitari, fuitari)', id: 'Mencuci, menggosok, mengelap' },
+          { jp: '汚れを取り除く (Yogore o torinozoku)', id: 'Menghilangkan noda/kotoran' }
+        ],
+        safetyLink: 'Bab 3 (Hal. 46): Menjaga mesin selalu bersih agar mesin tidak mendadak rusak (急に故障するのを減らす) dan mencegah kecelakaan terjepit/tergulung mesin (巻き込まれ災害).'
+      },
+      {
+        id: '5s-4',
+        num: '④',
+        kanji: '清潔',
+        furigana: '<ruby>清潔<rt>せいけつ</rt></ruby>',
+        romaji: 'SEIKETSU',
+        indoTitle: 'Rawat / Higienis & Steril (Tampilan Bersih & Bebas Kuman/Mikroba)',
+        mnemonicTitle: 'SEIKETSU = KESEHATAN & STERIL (Hasil 1+2+3 + Bebas Bakteri Patogen!)',
+        mnemonicDesc: 'Hati-hati! Di pabrik makanan, SEIKETSU bukan cuma bersih mata (見た目がきれい), tapi fasilitas & alat TIDAK TERKONTAMINASI MIKROBA PATOGEN (病原性微生物に汚染されていないこと)!',
+        moduleJpRuby: '<ruby>整理<rt>せいり</rt></ruby>、<ruby>整頓<rt>せいとん</rt></ruby>、<ruby>清掃<rt>せいそう</rt></ruby>をして<ruby>見<rt>み</rt></ruby>た<ruby>目<rt>め</rt></ruby>がきれいで、<ruby>食品衛生<rt>しょくひんえいせい</rt></ruby>にも<ruby>問題<rt>もんだい</rt></ruby>がないこと。<ruby>設備<rt>せつび</rt></ruby>や<ruby>器具<rt>きぐ</rt></ruby>が、<ruby>病原性微生物<rt>びょうげんせいびせいぶつ</rt></ruby>に<ruby>汚染<rt>おせん</rt></ruby>されていないこと。',
+        moduleJpPlain: '整理、整頓、清掃をして見た目がきれいで、食品衛生にも問題がないこと。設備や器具が、病原性微生物に汚染されていないこと。',
+        moduleIndo: 'Melakukan Seiri, Seiton, dan Seisou sehingga tampak bersih secara visual dan tidak ada masalah pada higiene pangan. Fasilitas serta peralatan tidak terkontaminasi oleh mikroorganisme patogen (bakteri/virus penyebab penyakit).',
+        keywords: [
+          { jp: '見た目がきれい (Mitame ga kirei)', id: 'Tampak bersih dari luar/visual' },
+          { jp: '食品衛生にも問題がない (Shokuhin eisei ni mo mondai ga nai)', id: 'Tidak bermasalah bagi kebersihan/kesehatan pangan' },
+          { jp: '病原性微生物に汚染されていない (Byōgensei biseibutsu ni osen sarete inai)', id: 'Tidak tercemar mikroba/bakteri patogen' }
+        ],
+        safetyLink: 'Bab 3 (Hal. 46): Mencegah keracunan makanan (食中毒予防) sekaligus mencegah penyakit menular pada pekerja (作業者の感染症の予防).'
+      },
+      {
+        id: '5s-5',
+        num: '⑤',
+        kanji: '習慣付け・しつけ',
+        furigana: '<ruby>習慣付<rt>しゅうかんづ</rt></ruby>け（または しつけ）',
+        romaji: 'SHŪKANZUKE / SHITSUKE',
+        indoTitle: 'Rajin / Pembiasaan & Disiplin (Taat Aturan Setiap Hari)',
+        mnemonicTitle: 'SHŪKANZUKE = KEBIASAAN PATUH ATURAN (Taat prosedur tanpa disuruh!)',
+        mnemonicDesc: 'Kata "Shūkan" (習慣) artinya Kebiasaan. Ciri mutlak di soal ujian adalah kalimat kembar:「決められたことを決められたとおりにできること」(Melakukan hal yang sudah ditetapkan persis sesuai aturan yang ditetapkan).',
+        moduleJpRuby: '<ruby>決<rt>き</rt></ruby>められたことを<ruby>決<rt>き</rt></ruby>められたとおりにできること。<ruby>整理<rt>せいり</rt></ruby>、<ruby>整頓<rt>せいとん</rt></ruby>、<ruby>清掃<rt>せいそう</rt></ruby>、<ruby>清潔<rt>せいけつ</rt></ruby>のルールをそのとおりに<ruby>実行<rt>じっこう</rt></ruby>できるようになること。',
+        moduleJpPlain: '決められたことを決められたとおりにできること。整理、整頓、清掃、清潔のルールをそのとおりに実行できるようになること。',
+        moduleIndo: 'Mampu melakukan hal yang telah ditetapkan persis sesuai cara yang telah ditetapkan. Menjadi terbiasa menjalankan aturan Seiri, Seiton, Seisou, dan Seiketsu dengan benar.',
+        keywords: [
+          { jp: '決められたことを決められたとおりに (Kimerareta koto o kimerareta tōri ni)', id: 'Melakukan aturan yang ditetapkan sesuai prosedur yang ditetapkan' },
+          { jp: 'ルールをそのとおりに実行できる (Rūru o sono tōri ni jikkō dekiru)', id: 'Menjalankan aturan persis sebagaimana mestinya' }
+        ],
+        safetyLink: 'Bab 3 (Hal. 46): Membuat tempat kerja selalu dalam kondisi aman yang sama setiap hari sehingga pekerja tenang dan terhindar dari kecelakaan kerja.'
+      }
+    ];
+
+    // --- KUIS 10 SOAL 5S (SESUAI MODUL HAL 15 & HAL 45-46) ---
+    var quiz5SQuestions = [
+      {
+        qJp: '使わないものをなくして、使うものだけにすること。いらない器具や道具をなくして、必要な器具や道具だけにすること。',
+        qIndo: 'Menghilangkan barang yang tidak dipakai, menyisakan peralatan dan perkakas yang diperlukan saja.',
+        correct: '整理 (Seiri)',
+        clue: 'Ada kata kunci「使わないものをなくす / いらない器具をなくす」(Singkirkan yang tidak dipakai) ➔ Pasti SEIRI!'
+      },
+      {
+        qJp: '器具や道具を、必要なときにすぐに取り出せるように、場所を決めて置いたり、名前や数量を表示したりすること。',
+        qIndo: 'Menentukan tempat peletakan alat dan memberi label nama/jumlah agar bisa langsung diambil saat dibutuhkan.',
+        correct: '整頓 (Seiton)',
+        clue: 'Ada kata kunci「すぐに取り出せる / 場所を決めて置く / 表示する」(Tempatkan & Beri Label) ➔ Pasti SEITON!'
+      },
+      {
+        qJp: '設備や器具、道具を、洗ったり、磨いたり、拭いたりしてきれいな状態にすること。汚れを取り除くこと。',
+        qIndo: 'Mencuci, menggosok, dan mengelap fasilitas serta alat untuk menghilangkan kotoran.',
+        correct: '清掃 (Seisou)',
+        clue: 'Ada aksi fisik「洗う・磨く・拭く・汚れを取り除く」(Cuci, Gosok, Lap) ➔ Pasti SEISOU!'
+      },
+      {
+        qJp: '整理、整頓、清掃をして見た目がきれいで、設備や器具が「病原性微生物」に汚染されていないこと。',
+        qIndo: 'Tampak bersih secara visual serta peralatan tidak terkontaminasi oleh mikroorganisme patogen (bakteri/virus).',
+        correct: '清潔 (Seiketsu)',
+        clue: 'Ada kata kunci「見た目がきれい + 病原性微生物に汚染されていない」(Higienis/Steril bebas kuman) ➔ Pasti SEIKETSU!'
+      },
+      {
+        qJp: '決められたことを決められたとおりにできること。整理、整頓、清掃、清潔のルールをそのとおりに実行できるようになること。',
+        qIndo: 'Melakukan hal yang telah ditetapkan sesuai aturan yang ditetapkan, serta menjalankan aturan 4S secara disiplin.',
+        correct: '習慣付け・しつけ (Shūkanzuke)',
+        clue: 'Ada kalimat kembar「決められたことを決められたとおりに」(Kebiasaan taat aturan) ➔ Pasti SHŪKANZUKE / SHITSUKE!'
+      },
+      {
+        qJp: '【工場のケース】作業場に壊れたボウルや使わない古い包丁があったので、廃棄して必要な道具だけにした。',
+        qIndo: '[Kasus Pabrik] Di ruang kerja ada mangkuk rusak dan pisau lama yang tidak dipakai, lalu dibuang dan disisakan alat yang perlu saja.',
+        correct: '整理 (Seiri)',
+        clue: 'Membuang alat rusak/tidak terpakai dari ruang kerja = SEIRI (Singkirkan).'
+      },
+      {
+        qJp: '【労働安全・46ページ】箱やパレットを決められた枠の中や床のテープに沿って置き、動線を確保して「転倒災害」を防ぐ。',
+        qIndo: '[Keselamatan Kerja Hal. 46] Meletakkan kotak/palet sesuai garis pita di lantai agar jalur jalan rapi dan mencegah kecelakaan tersandung/jatuh.',
+        correct: '整頓 (Seiton)',
+        clue: 'Menaruh barang sesuai garis/tempat yang ditentukan (枠の中や床のテープに沿って置く) = SEITON (Tempatkan).'
+      },
+      {
+        qJp: '【労働安全・46ページ】設備や機械の汚れを取り除き、機械が急に故障することや「巻き込まれ災害」を防ぐ。',
+        qIndo: '[Keselamatan Kerja Hal. 46] Membersihkan kotoran pada mesin agar mesin tidak rusak mendadak dan mencegah kecelakaan tergencet/tergulung.',
+        correct: '清掃 (Seisou)',
+        clue: 'Membersihkan kotoran pada mesin/peralatan = SEISOU.'
+      },
+      {
+        qJp: '一般衛生管理（施設・設備、作業者、原材料の衛生管理）の3つすべてに共通している基本的な考え方は何ですか？',
+        qIndo: 'Apa konsep dasar yang menjadi fondasi bersama dari seluruh Manajemen Higiene Umum (Ippan Eisei Kanri)?',
+        correct: '5S (ごエス)',
+        clue: 'Di Halaman 15 tertulis jelas: 一般衛生管理はどれも「5S」の考え方が基本です。'
+      },
+      {
+        qJp: '5Sは「食品衛生」のためだけでなく、作業場で病気になったりケガをしないための何にも役立ちますか？',
+        qIndo: 'Selain untuk Higiene Pangan (Shokuhin Eisei), 5S juga bermanfaat untuk menjaga apa di pabrik?',
+        correct: '労働安全 (Rōdō Anzen)',
+        clue: '5S berguna untuk 2 pilar utama SSW PM: 食品衛生 (Higiene Pangan) dan 労働安全 (Keselamatan Kerja)!'
+      }
+    ];
+
+    // --- HELPER UNTUK GENERATE JAWABAN DINAMIS SESUAI PROFIL GIODAN KARAMAN ---
+    function getMensetsuData() {
+      var p = appState.profile;
+
+      // Variasi pekerjaan sebelumnya (No 3 & 6)
+      var jobJp3 = '飲食店の仕事です。毎日、料理の下処理や調理、お店の掃除をしていました。';
+      var jobRomaji3 = 'Inshokuten no shigoto desu. Mainichi, ryōri no shitashori ya chōri, omise no sōji o shite imashita.';
+      var jobIndo3 = 'Pekerjaan di tempat usaha makanan & minuman (kuliner). Setiap hari saya melakukan persiapan bahan, memasak, dan membersihkan tempat usaha.';
+
+      var jobJp6 = '前職でも食べ物を扱っていたので、日本の清潔で進んでいる食品工場でもっと技術を学びたいからです。';
+      var jobRomaji6 = 'Zenshoku demo tabemono o atsukatte ita node, Nihon no seiketsu de susunde iru shokuhin kōjō de motto gijutsu o manabitai kara desu.';
+      var jobIndo6 = 'Karena di pekerjaan sebelumnya saya juga menangani makanan, saya ingin mempelajari teknologi dan keterampilan lebih lanjut di pabrik makanan Jepang yang bersih dan maju.';
+
+      if (p.job === 'shop_staff') {
+        jobJp3 = '店のスタッフです。商品の整理整頓や在庫の確認、接客をしていました。';
+        jobRomaji3 = 'Mise no sutaffu desu. Shōhin no seiri seiton ya zaiko no kakunin, sekkyaku o shite imashita.';
+        jobIndo3 = 'Staf toko. Saya melakukan penataan barang (Seiri Seiton), pengecekan stok, dan melayani pembeli.';
+
+        jobJp6 = '私は料理や食品を作ることが好きで、日本の高い衛生管理（5SやHACCP）を食品工場で学びたいからです。';
+        jobRomaji6 = 'Watashi wa ryōri ya shokuhin o tsukuru koto ga suki de, Nihon no takai eisei kanri (5S ya HACCP) o shokuhin kōjō de manabitai kara desu.';
+        jobIndo6 = 'Karena saya suka memasak dan membuat produk makanan, serta ingin mempelajari manajemen kebersihan Jepang yang tinggi (5S dan HACCP) di pabrik makanan.';
+      } else if (p.job === 'factory_other') {
+        jobJp3 = '工場の作業員です。製品の組み立てや検査、作業場の5Sをしていました。';
+        jobRomaji3 = 'Kōjō no sagyōin desu. Seihin no kumitate ya kensa, sagyōjō no 5S o shite imashita.';
+        jobIndo3 = 'Operator pabrik. Saya melakukan perakitan produk, pemeriksaan kualitas, dan kegiatan 5S di area kerja.';
+
+        jobJp6 = '工場のルールや5Sには慣れており、将来インドネシアで食品の店を開きたいので、日本の食品工場で働きたいです。';
+        jobRomaji6 = 'Kōjō no rūru ya 5S ni wa narete ori, shōrai Indoneshia de shokuhin no mise o hirakitai node, Nihon no shokuhin kōjō de hatarakitai desu.';
+        jobIndo6 = 'Saya sudah terbiasa dengan aturan pabrik serta 5S, dan karena di masa depan saya ingin membuka usaha makanan di Indonesia, saya ingin bekerja di pabrik makanan Jepang.';
+      }
+
+      // Variasi Tempat Tinggal (No 8)
+      var resJp8 = 'はい、作れます。野菜炒めやフライドチキンなどをよく作ります。今はマランの寮に住んでいます。';
+      var resRomaji8 = 'Hai, tsukuremasu. Yasai itame ya furaido chikin nado o yoku tsukurimasu. Ima wa Maran no ryō ni sunde imasu.';
+      var resIndo8 = 'Ya, saya bisa memasak. Saya sering memasak tumis sayur, ayam goreng, dan lainnya. Sekarang saya tinggal di asrama di Malang.';
+
+      if (p.residence === 'malang_home') {
+        resJp8 = 'はい、作れます。野菜炒めやチャーハンなどをよく作ります。今は東ジャワのマランで家族と住んでいます。';
+        resRomaji8 = 'Hai, tsukuremasu. Yasai itame ya chāhan nado o yoku tsukurimasu. Ima wa Higashi Jawa no Maran de kazoku to sunde imasu.';
+        resIndo8 = 'Ya, saya bisa memasak. Saya sering memasak tumis sayur dan nasi goreng. Sekarang saya tinggal bersama keluarga di Malang, Jawa Timur.';
+      } else if (p.residence === 'dorm_general') {
+        resJp8 = 'はい、作れます。毎日自分で野菜炒めや卵料理を作っています。今はLPKの寮に住んでいます。';
+        resRomaji8 = 'Hai, tsukuremasu. Mainichi jibun de yasai itame ya tamago ryōri o tsukutte imasu. Ima wa LPK no ryō ni sunde imasu.';
+        resIndo8 = 'Ya, saya bisa memasak. Setiap hari saya memasak sendiri tumis sayur dan olahan telur. Sekarang saya tinggal di asrama LPK.';
+      }
+
+      // Variasi Wawancara ke berapa (No 26 & 27)
+      var intJp26 = 'いいえ、今回が初めてです。この面接のために一生懸命準備しました。';
+      var intRomaji26 = 'Iie, konkai ga hajimete desu. Kono mensetsu no tame ni isshōkenmei junbi shimashita.';
+      var intIndo26 = 'Tidak, kali ini adalah yang pertama kali. Saya sudah mempersiapkan diri dengan sungguh-sungguh untuk wawancara ini.';
+
+      var intJp27 = '今回が初めてですので、前の会社はありません。（※もし1回ある場合：青森県の鶏肉工場です）';
+      var intRomaji27 = 'Konkai ga hajimete desu node, mae no kaisha wa arimasen. (Moshi ikkai aru baai: Aomori-ken no toriniku kōjō desu)';
+      var intIndo27 = 'Karena kali ini yang pertama, belum ada perusahaan sebelumnya. (Jika ditanya contoh/pernah 1x: Pabrik daging ayam di Prefektur Aomori).';
+
+      if (p.interviewCount === 'once') {
+        intJp26 = 'これまでに1回受けました。今回が2回目です。';
+        intRomaji26 = 'Kore made ni ikkai ukemashita. Konkai ga nikai-me desu.';
+        intIndo26 = 'Sejauh ini saya pernah mengikuti 1 kali. Kali ini adalah yang ke-2.';
+
+        intJp27 = '青森県の鶏肉工場です。';
+        intRomaji27 = 'Aomori-ken no toriniku kōjō desu.';
+        intIndo27 = 'Pabrik pengolahan daging ayam di Prefektur Aomori.';
+      } else if (p.interviewCount === 'once_bento') {
+        intJp26 = 'これまでに1回受けました。今回が2回目です。';
+        intRomaji26 = 'Kore made ni ikkai ukemashita. Konkai ga nikai-me desu.';
+        intIndo26 = 'Sejauh ini saya pernah mengikuti 1 kali. Kali ini adalah yang ke-2.';
+
+        intJp27 = '埼玉県のお弁当の工場です。';
+        intRomaji27 = 'Saitama-ken no obentō no kōjō desu.';
+        intIndo27 = 'Pabrik bento (nasi kotak) di Prefektur Saitama.';
+      }
+
+      return [
+        {
+          no: 1,
+          pdfPage: 3,
+          qJp: 'なぜ日本で働きたいのですか?',
+          qRuby: 'なぜ<ruby>日本<rt>にほん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>きたいのですか?',
+          qRomaji: 'Naze Nihon de hatarakitai no desu ka?',
+          qIndo: 'Mengapa Anda ingin bekerja di Jepang?',
+          aJp: '日本の進んでいる食品製造の技術や衛生管理を学び、家族を助け、将来自分の店を開くための資金を貯めたいからです。',
+          aRuby: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>進<rt>すす</rt></ruby>んでいる<ruby>食品製造<rt>しょくひんせいぞう</rt></ruby>の<ruby>技術<rt>ぎじゅつ</rt></ruby>や<ruby>衛生管理<rt>えいせいかんり</rt></ruby>を<ruby>学<rt>まな</rt></ruby>び、<ruby>家族<rt>かぞく</rt></ruby>を<ruby>助<rt>たす</rt></ruby>け、<ruby>将来<rt>しょうらい</rt></ruby><ruby>自分<rt>じぶん</rt></ruby>の<ruby>店<rt>みせ</rt></ruby>を<ruby>開<rt>ひら</rt></ruby>くための<ruby>資金<rt>しきん</rt></ruby>を<ruby>貯<rt>た</rt></ruby>めたいからです。',
+          aRomaji: 'Nihon no susunde iru shokuhin seizō no gijutsu ya eisei kanri o manabi, kazoku o tasuke, shōrai jibun no mise o hiraku tame no shikin o tametai kara desu.',
+          aIndo: 'Karena saya ingin mempelajari teknologi pengolahan makanan dan manajemen kebersihan Jepang yang maju, membantu keluarga, serta menabung modal untuk membuka usaha sendiri di masa depan.',
+          intent: 'Pewawancara ingin melihat apakah motivasi Anda jelas dan realistis. Jawaban terbaik selalu menggabungkan 2 hal: (1) Ingin belajar teknik/kebersihan pabrik Jepang, dan (2) Tujuan ekonomi yang jelas (membantu keluarga & menabung modal usaha).',
+          words: [
+            { w: '進んでいる (susunde iru)', m: 'yang maju / modern' },
+            { w: '食品製造の技術 (shokuhin seizō no gijutsu)', m: 'teknik pengolahan makanan' },
+            { w: '衛生管理 (eisei kanri)', m: 'manajemen kebersihan/higiene' },
+            { w: '家族を助け (kazoku o tasuke)', m: 'membantu keluarga' },
+            { w: '資金を貯めたい (shikin o tametai)', m: 'ingin menabung modal usaha' }
+          ],
+          builderChunks: ['日本の食品製造の技術を学び、', '家族を助け、', '将来の資金を', '貯めたいからです。']
+        },
+        {
+          no: 2,
+          pdfPage: 3,
+          qJp: 'どれくらい日本で働きたいですか?',
+          qRuby: 'どれくらい<ruby>日本<rt>にほん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>きたいですか?',
+          qRomaji: 'Dore kurai Nihon de hatarakitai desu ka?',
+          qIndo: 'Berapa tahun Anda dapat bekerja di Jepang?',
+          aJp: '特定技能1号として5年間働きたいです。もしチャンスがあれば、特定技能2号に合格して、もっと長く働きたいです。',
+          aRuby: '<ruby>特定技能<rt>とくていぎのう</rt></ruby>1<ruby>号<rt>ごう</rt></ruby>として5<ruby>年間<rt>ねんかん</rt></ruby><ruby>働<rt>はたら</rt></ruby>きたいです。もしチャンスがあれば、<ruby>特定技能<rt>とくていぎのう</rt></ruby>2<ruby>号<rt>ごう</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>して、もっと<ruby>長<rt>なが</rt></ruby>く<ruby>働<rt>はたら</rt></ruby>きたいです。',
+          aRomaji: 'Tokutei Ginō ichi-gō toshite go-nenkan hatarakitai desu. Moshi chansu ga areba, Tokutei Ginō ni-gō ni gōkaku shite, motto nagaku hatarakitai desu.',
+          aIndo: 'Sebagai Tokutei Ginou 1 saya ingin bekerja selama 5 tahun. Jika ada kesempatan, saya ingin lulus Tokutei Ginou 2 dan bekerja lebih lama lagi.',
+          intent: 'Perusahaan Jepang mengeluarkan biaya besar untuk merekrut Anda. Mereka takut Anda baru kerja 1-2 tahun sudah minta pulang. Jawab minimal 5 tahun penuh (dan sebut ingin lanjut TG 2 jika diberi kesempatan).',
+          words: [
+            { w: '特定技能1号 (Tokutei Ginō 1-gō)', m: 'visa SSW / Tokutei Ginou 1' },
+            { w: '5年間 (go-nenkan)', m: 'selama 5 tahun' },
+            { w: 'チャンスがあれば (chansu ga areba)', m: 'jika ada kesempatan' },
+            { w: 'もっと長く (motto nagaku)', m: 'lebih lama lagi' }
+          ],
+          builderChunks: ['特定技能1号として', '5年間働きたいです。', 'チャンスがあれば', 'もっと長く働きたいです。']
+        },
+        {
+          no: 3,
+          pdfPage: 4,
+          qJp: '前職/前の仕事は何ですか? 詳しく教えてください',
+          qRuby: '<ruby>前職<rt>ぜんしょく</rt></ruby>/<ruby>前<rt>まえ</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>は<ruby>何<rt>なに</rt></ruby>ですか? <ruby>詳<rt>くわ</rt></ruby>しく<ruby>教<rt>おし</rt></ruby>えてください',
+          qRomaji: 'Zenshoku / mae no shigoto wa nan desu ka? Kuwashiku oshiete kudasai.',
+          qIndo: 'Apa pekerjaan Anda sebelumnya? Tolong jelaskan secara detail.',
+          aJp: jobJp3,
+          aRuby: jobJp3,
+          aRomaji: jobRomaji3,
+          aIndo: jobIndo3,
+          intent: 'Pewawancara ingin tahu apakah Anda terbiasa bekerja fisik, berdiri lama, dan bekerja rapi. Jelaskan jenis pekerjaan dan tugas harian Anda secara singkat & jelas.',
+          words: [
+            { w: '前職 / 前の仕事 (zenshoku / mae no shigoto)', m: 'pekerjaan sebelumnya' },
+            { w: '詳しく (kuwashiku)', m: 'secara detail/rinci' },
+            { w: '下処理 (shitashori)', m: 'persiapan awal bahan' },
+            { w: '整理整頓・掃除 (seiri seiton / sōji)', m: 'merapikan dan membersihkan' }
+          ],
+          builderChunks: ['飲食店の仕事です。', '毎日、料理の下処理や', '調理、お店の掃除を', 'していました。']
+        },
+        {
+          no: 4,
+          pdfPage: 4,
+          qJp: '給料は日本円でいくらでしたか? 何時から何時まで働きましたか?',
+          qRuby: '<ruby>給料<rt>きゅうりょう</rt></ruby>は<ruby>日本円<rt>にほんえん</rt></ruby>でいくらでしたか? <ruby>何時<rt>なんじ</rt></ruby>から<ruby>何時<rt>なんじ</rt></ruby>まで<ruby>働<rt>はたら</rt></ruby>きましたか?',
+          qRomaji: 'Kyūryō wa Nihon-en de ikura deshita ka? Nan-ji kara nan-ji made hatarakimashita ka?',
+          qIndo: 'Berapa gaji Anda (dalam yen) waktu itu? Anda bekerja dari jam berapa sampai jam berapa?',
+          aJp: '給料は1ヶ月で約3万円（30,000円）くらいでした。朝8時から夕方5時（17時）まで働きました。',
+          aRuby: '<ruby>給料<rt>きゅうりょう</rt></ruby>は1ヶ<ruby>月<rt>げつ</rt></ruby>で<ruby>約<rt>やく</rt></ruby>3<ruby>万円<rt>まんえん</rt></ruby>くらいでした。<ruby>朝<rt>あさ</rt></ruby>8<ruby>時<rt>じ</rt></ruby>から<ruby>夕方<rt>ゆうがた</rt></ruby>5<ruby>時<rt>じ</rt></ruby>まで<ruby>働<rt>はたら</rt></ruby>きました。',
+          aRomaji: 'Kyūryō wa ikkagetsu de yaku san-man en kurai deshita. Asa hachi-ji kara yūgata go-ji made hatarakimashita.',
+          aIndo: 'Gaji saya sekitar 30.000 yen (Rp3 jutaan) per bulan. Saya bekerja dari jam 8 pagi sampai jam 5 sore.',
+          intent: 'Perhatikan! Ada 2 pertanyaan sekaligus dalam 1 nomor: (1) Gaji dalam Yen Jepang (日本円で = Nihon-en de), dan (2) Jam kerja (何時から何時まで). Rp2,5–3 juta di Indonesia setara dengan 25.000–30.000 Yen (2万5千円〜3万円).',
+          words: [
+            { w: '給料 (kyūryō)', m: 'gaji / upah' },
+            { w: '日本円で (Nihon-en de)', m: 'dalam mata uang Yen Jepang' },
+            { w: '約3万円 (yaku san-man en)', m: 'sekitar 30.000 Yen' },
+            { w: '朝8時から夕方5時まで (asa 8-ji kara yūgata 5-ji made)', m: 'dari jam 8 pagi sampai 5 sore' }
+          ],
+          builderChunks: ['給料は1ヶ月で', '約3万円くらいでした。', '朝8時から夕方5時まで', '働きました。']
+        },
+        {
+          no: 5,
+          pdfPage: 5,
+          qJp: 'どうしてその会社をやめたのですか?',
+          qRuby: 'どうしてその<ruby>会社<rt>かいしゃ</rt></ruby>をやめたのですか?',
+          qRomaji: 'Dōshite sono kaisha o yameta no desu ka?',
+          qIndo: 'Mengapa Anda berhenti dari perusahaan tersebut?',
+          aJp: '日本で働くという夢を叶えるために、LPKに入って日本語と特定技能の勉強に集中したかったからです。',
+          aRuby: '<ruby>日本<rt>にほん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>くという<ruby>夢<rt>ゆめ</rt></ruby>を<ruby>叶<rt>かな</rt></ruby>えるために、LPKに<ruby>入<rt>はい</rt></ruby>って<ruby>日本語<rt>にほんご</rt></ruby>と<ruby>特定技能<rt>とくていぎのう</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>に<ruby>集中<rt>しゅうちゅう</rt></ruby>したかったからです。',
+          aRomaji: 'Nihon de hataraku to iu yume o kanaeru tame ni, LPK ni haitte Nihongo to Tokutei Ginō no benkyō ni shūchū shitakatta kara desu.',
+          aIndo: 'Karena demi mewujudkan impian bekerja di Jepang, saya ingin masuk LPK dan fokus penuh belajar bahasa Jepang serta materi Tokutei Ginou.',
+          intent: 'JANGAN PERNAH menjelekkan perusahaan lama (misal: bos galak, capek, atau gaji kecil). Alasan terbaik dan paling disukai orang Jepang adalah berhenti secara baik-baik karena ingin fokus penuh belajar bahasa Jepang di LPK.',
+          words: [
+            { w: 'やめた (yameta)', m: 'berhenti / resign' },
+            { w: '夢を叶えるために (yume o kanaeru tame ni)', m: 'demi mewujudkan impian' },
+            { w: '勉強に集中したかった (benkyō ni shūchū shitakatta)', m: 'ingin fokus/konsentrasi belajar' }
+          ],
+          builderChunks: ['日本で働く夢を叶えるために、', 'LPKに入って', '日本語の勉強に', '集中したかったからです。']
+        },
+        {
+          no: 6,
+          pdfPage: 5,
+          qJp: 'なぜ前職と違う食品工場で働きたいですか?',
+          qRuby: 'なぜ<ruby>前職<rt>ぜんしょく</rt></ruby>と<ruby>違<rt>ちが</rt></ruby>う<ruby>食品工場<rt>しょくひんこうじょう</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>きたいですか?',
+          qRomaji: 'Naze zenshoku to chigau shokuhin kōjō de hatarakitai desu ka?',
+          qIndo: 'Mengapa Anda ingin bekerja di pabrik makanan, yang berbeda dari pekerjaan sebelumnya?',
+          aJp: jobJp6,
+          aRuby: jobJp6,
+          aRomaji: jobRomaji6,
+          aIndo: jobIndo6,
+          intent: 'Pewawancara ingin memastikan Anda benar-benar minat di bidang Pengolahan Makanan (PM) dan siap mengikuti aturan higienis pabrik makanan yang ketat.',
+          words: [
+            { w: '前職と違う (zenshoku to chigau)', m: 'berbeda dengan pekerjaan sebelumnya' },
+            { w: '食品工場 (shokuhin kōjō)', m: 'pabrik makanan' },
+            { w: '清潔で進んでいる (seiketsu de susunde iru)', m: 'higienis dan maju' }
+          ],
+          builderChunks: ['日本の清潔で進んでいる', '食品工場で、', '衛生管理と技術を', 'もっと学びたいからです。']
+        },
+        {
+          no: 7,
+          pdfPage: 6,
+          qJp: 'ルームシェアをします。共同生活で大切な事はなんですか?',
+          qRuby: 'ルームシェアをします。<ruby>共同生活<rt>きょうどうせいかつ</rt></ruby>で<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>事<rt>こと</rt></ruby>はなんですか?',
+          qRomaji: 'Rūmushea o shimasu. Kyōdō seikatsu de taisetsu na koto wa nan desu ka?',
+          qIndo: 'Anda akan tinggal bersama (roomshare). Hal apa yang penting dalam hidup bersama?',
+          aJp: '掃除やゴミ出しなどのルールを守ることと、友達と助け合って、お互いに思いやりを持つことです。',
+          aRuby: '<ruby>掃除<rt>そうじ</rt></ruby>やゴミ<ruby>出<rt>だ</rt></ruby>しなどのルールを<ruby>守<rt>まも</rt></ruby>ることと、<ruby>友達<rt>ともだち</rt></ruby>と<ruby>助<rt>たす</rt></ruby>け<ruby>合<rt>あ</rt></ruby>って、お<ruby>互<rt>たが</rt></ruby>いに<ruby>思<rt>おも</rt></ruby>いやりを<ruby>持<rt>も</rt></ruby>つことです。',
+          aRomaji: 'Sōji ya gomidashi nado no rūru o mamoru koto to, tomodachi to tasukeatte, otagai ni omoiyari o motsu koto desu.',
+          aIndo: 'Mematuhi aturan seperti piket kebersihan dan membuang sampah, serta saling membantu dengan teman dan memiliki tenggang rasa (omoiyari).',
+          intent: 'Di Jepang banyak pekerja tinggal satu kamar/apartemen (roomshare). Masalah paling sering adalah soal kebersihan dapur/kamar mandi, sampah, dan berisik. Menyebut kata「ルールを守る」(taat aturan) dan「思いやり」(tenggang rasa) nilainya sangat tinggi!',
+          words: [
+            { w: '共同生活 (kyōdō seikatsu)', m: 'hidup bersama / asrama' },
+            { w: 'ゴミ出し (gomidashi)', m: 'membuang sampah sesuai jadwal' },
+            { w: '助け合って (tasukeatte)', m: 'saling tolong-menolong' },
+            { w: '思いやり (omoiyari)', m: 'tenggang rasa / peduli sesama' }
+          ],
+          builderChunks: ['掃除などのルールを守ることと、', '友達と助け合って、', 'お互いに思いやりを', '持つことです。']
+        },
+        {
+          no: 8,
+          pdfPage: 6,
+          qJp: '料理は作れますか? 今はどこに住んでいますか?',
+          qRuby: '<ruby>料理<rt>りょうり</rt></ruby>は<ruby>作<rt>つく</rt></ruby>れますか? <ruby>今<rt>いま</rt></ruby>はどこに<ruby>住<rt>す</rt></ruby>んでいますか?',
+          qRomaji: 'Ryōri wa tsukuremasu ka? Ima wa doko ni sunde imasu ka?',
+          qIndo: 'Apakah Anda bisa memasak? Sekarang Anda tinggal di mana?',
+          aJp: resJp8,
+          aRuby: resJp8,
+          aRomaji: resRomaji8,
+          aIndo: resIndo8,
+          intent: 'Pewawancara bertanya apakah Anda bisa masak sendiri karena kalau beli makan terus di luar biaya hidup jadi boros. Sebutkan juga contoh masakan yang biasa Anda buat dan lokasi tinggal Anda di Malang.',
+          words: [
+            { w: '料理は作れますか (ryōri wa tsukuremasu ka)', m: 'apakah bisa memasak?' },
+            { w: '野菜炒め (yasai itame)', m: 'tumis sayur' },
+            { w: '今は〜に住んでいます (ima wa ~ ni sunde imasu)', m: 'sekarang tinggal di ~' }
+          ],
+          builderChunks: ['はい、作れます。', '野菜炒めなどをよく作ります。', '今はマランの寮に', '住んでいます。']
+        },
+        {
+          no: 9,
+          pdfPage: 7,
+          qJp: '寮生活は楽しいですか? けんかはしますか?',
+          qRuby: '<ruby>寮生活<rt>りょうせいかつ</rt></ruby>は<ruby>楽<rt>たの</rt></ruby>しいですか? けんかはしますか?',
+          qRomaji: 'Ryō seikatsu wa tanoshii desu ka? Kenka wa shimasu ka?',
+          qIndo: 'Apakah kehidupan di asrama menyenangkan? Apakah Anda pernah bertengkar?',
+          aJp: 'はい、とても楽しいです。みんな家族のように仲がいいので、けんかは一度もしません。',
+          aRuby: 'はい、とても<ruby>楽<rt>たの</rt></ruby>しいです。みんな<ruby>家族<rt>かぞく</rt></ruby>のように<ruby>仲<rt>なか</rt></ruby>がいいので、けんかは<ruby>一度<rt>いちど</rt></ruby>もしません。',
+          aRomaji: 'Hai, totemo tanoshii desu. Minna kazoku no yō ni naka ga ii node, kenka wa ichido mo shimasen.',
+          aIndo: 'Ya, sangat menyenangkan. Karena semuanya akrab seperti keluarga, kami tidak pernah bertengkar sekalipun.',
+          intent: 'Pewawancara menguji karakter emosional Anda. Pastikan menjawab dengan senyum bahwa asrama menyenangkan dan TIDAK PERNAH bertengkar (けんかはしません).',
+          words: [
+            { w: '寮生活 (ryō seikatsu)', m: 'kehidupan asrama' },
+            { w: '仲がいい (naka ga ii)', m: 'akrab / rukun' },
+            { w: 'けんか (kenka)', m: 'bertengkar / berkelahi' },
+            { w: '一度もしません (ichido mo shimasen)', m: 'tidak pernah sekalipun' }
+          ],
+          builderChunks: ['はい、とても楽しいです。', 'みんな仲がいいので、', 'けんかは', '一度もしません。']
+        },
+        {
+          no: 10,
+          pdfPage: 7,
+          qJp: '日本で働く事で不安なことはありますか?',
+          qRuby: '<ruby>日本<rt>にほん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>く<ruby>事<rt>こと</rt></ruby>で<ruby>不安<rt>ふあん</rt></ruby>なことはありますか?',
+          qRomaji: 'Nihon de hataraku koto de fuan na koto wa arimasu ka?',
+          qIndo: 'Apakah ada hal yang membuat Anda khawatir tentang bekerja di Jepang?',
+          aJp: '日本の冬の寒さに少し不安がありますが、暖かい服を着て、運動や健康管理をしっかりして頑張ります。',
+          aRuby: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>冬<rt>ふゆ</rt></ruby>の<ruby>寒<rt>さむ</rt></ruby>さに<ruby>少<rt>すこ</rt></ruby>し<ruby>不安<rt>ふあん</rt></ruby>がありますが、<ruby>暖<rt>あたた</rt></ruby>かい<ruby>服<rt>ふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>て、<ruby>運動<rt>うんどう</rt></ruby>や<ruby>健康管理<rt>けんこうかんり</rt></ruby>をしっかりして<ruby>頑張<rt>がんば</rt></ruby>ります。',
+          aRomaji: 'Nihon no fuyu no samusa ni sukoshi fuan ga arimasu ga, atatakai fuku o kite, undō ya kenkō kanri o shikkari shite ganbarimasu.',
+          aIndo: 'Saya sedikit khawatir dengan dinginnya musim dingin di Jepang, tetapi saya akan memakai pakaian hangat, berolahraga, dan menjaga kesehatan dengan baik.',
+          intent: 'Trik menjawab pertanyaan "Kekhawatiran (不安)": Sebutkan hal wajar seperti cuaca dingin musim dingin (冬の寒さ), LALU wajib tutup dengan solusi positif (pakai baju hangat & jaga kesehatan). Jangan bilang khawatir soal kerjaan atau takut tidak betah!',
+          words: [
+            { w: '不安なこと (fuan na koto)', m: 'hal yang dikhawatirkan / dicemaskan' },
+            { w: '冬の寒さ (fuyu no samusa)', m: 'dinginnya musim dingin' },
+            { w: '暖かい服 (atatakai fuku)', m: 'pakaian hangat' },
+            { w: '健康管理 (kenkō kanri)', m: 'manajemen/menjaga kesehatan' }
+          ],
+          builderChunks: ['冬の寒さに少し不安がありますが、', '暖かい服を着て、', '健康管理をしっかりして', '頑張ります。']
+        },
+        {
+          no: 11,
+          pdfPage: 8,
+          qJp: '日本にお友達はいますか? どこにいますか? 仕事はなんですか?',
+          qRuby: '<ruby>日本<rt>にほん</rt></ruby>にお<ruby>友達<rt>ともだち</rt></ruby>はいますか? どこにいますか? <ruby>仕事<rt>しごと</rt></ruby>はなんですか?',
+          qRomaji: 'Nihon ni otomodachi wa imasu ka? Doko ni imasu ka? Shigoto wa nan desu ka?',
+          qIndo: 'Apakah Anda punya teman di Jepang? Di mana mereka tinggal? Apa pekerjaan mereka?',
+          aJp: 'はい、います。静岡県にいます。仕事は食品加工の仕事をしています。',
+          aRuby: 'はい、います。<ruby>静岡県<rt>しずおかけん</rt></ruby>にいます。<ruby>仕事<rt>しごと</rt></ruby>は<ruby>食品加工<rt>しょくひんかこう</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>をしています。',
+          aRomaji: 'Hai, imasu. Shizuoka-ken ni imasu. Shigoto wa shokuhin kakō no shigoto o shite imasu.',
+          aIndo: 'Ya, ada. Dia berada di Prefektur Shizuoka. Pekerjaannya adalah pengolahan makanan.',
+          intent: 'Ada 3 pertanyaan beruntun: (1) Ada teman? (2) Di mana? (3) Kerja apa? Jawab berurutan. Jika Anda tidak punya teman di Jepang, Anda juga boleh menjawab singkat:「いいえ、日本に友達はいません。」(Tidak ada teman di Jepang).',
+          words: [
+            { w: 'お友達はいますか (otomodachi wa imasu ka)', m: 'apakah ada teman?' },
+            { w: 'どこにいますか (doko ni imasu ka)', m: 'ada di mana?' },
+            { w: '食品加工 (shokuhin kakō)', m: 'pengolahan makanan' }
+          ],
+          builderChunks: ['はい、います。', '静岡県にいます。', '仕事は食品加工の', '仕事をしています。']
+        },
+        {
+          no: 12,
+          pdfPage: 8,
+          qJp: '仕事で豚肉はさわれますか',
+          qRuby: '<ruby>仕事<rt>しごと</rt></ruby>で<ruby>豚肉<rt>ぶたにく</rt></ruby>はさわれますか',
+          qRomaji: 'Shigoto de butaniku wa sawaremasu ka?',
+          qIndo: 'Apakah Anda bisa menyentuh daging babi dalam pekerjaan?',
+          aJp: 'はい、仕事ですので全く問題ありません。豚肉もさわれます。',
+          aRuby: 'はい、<ruby>仕事<rt>しごと</rt></ruby>ですので<ruby>全<rt>まった</rt></ruby>く<ruby>問題<rt>もんだい</rt></ruby>ありません。<ruby>豚肉<rt>ぶたにく</rt></ruby>もさわれます。',
+          aRomaji: 'Hai, shigoto desu node mattaku mondai arimasen. Butaniku mo sawaremasu.',
+          aIndo: 'Ya, karena ini adalah pekerjaan, sama sekali tidak ada masalah. Saya bisa menyentuh/menangani daging babi.',
+          intent: 'Di pabrik makanan Jepang (bento, sosis, daging, ramen), bahan daging babi sangat umum digunakan. Perusahaan wajib memastikan kandidat tidak menolak memegang bahan kerja di pabrik.',
+          words: [
+            { w: '豚肉 (butaniku)', m: 'daging babi' },
+            { w: 'さわれますか (sawaremasu ka)', m: 'apakah bisa menyentuh?' },
+            { w: '全く問題ありません (mattaku mondai arimasen)', m: 'sama sekali tidak masalah' }
+          ],
+          builderChunks: ['はい、仕事ですので', '全く問題ありません。', '豚肉も', 'さわれます。']
+        },
+        {
+          no: 13,
+          pdfPage: 9,
+          qJp: 'バイクや機械の修理はできますか?',
+          qRuby: 'バイクや<ruby>機械<rt>きかい</rt></ruby>の<ruby>修理<rt>しゅうり</rt></ruby>はできますか?',
+          qRomaji: 'Baiku ya kikai no shūri wa dekimasu ka?',
+          qIndo: 'Apakah Anda bisa memperbaiki sepeda motor atau mesin?',
+          aJp: 'バイクの簡単なメンテナンスはできますが、工場の機械が故障した時は、自分で勝手に修理せず、すぐに機械を止めて上司に報告します。',
+          aRuby: 'バイクの<ruby>簡単<rt>かんたん</rt></ruby>なメンテナンスはできますが、<ruby>工場<rt>こうじょう</rt></ruby>の<ruby>機械<rt>きかい</rt></ruby>が<ruby>故障<rt>こしょう</rt></ruby>した<ruby>時<rt>とき</rt></ruby>は、<ruby>自分<rt>じぶん</rt></ruby>で<ruby>勝手<rt>かって</rt></ruby>に<ruby>修理<rt>しゅうり</rt></ruby>せず、すぐに<ruby>機械<rt>きかい</rt></ruby>を<ruby>止<rt>と</rt></ruby>めて<ruby>上司<rt>じょうし</rt></ruby>に<ruby>報告<rt>ほうこく</rt></ruby>します。',
+          aRomaji: 'Baiku no kantan na mentenansu wa dekimasu ga, kōjō no kikai ga koshō shita toki wa, jibun de katte ni shūri sezu, sugu ni kikai o tomete jōshi ni hōkoku shimasu.',
+          aIndo: 'Perawatan ringan sepeda motor saya bisa, tetapi saat mesin pabrik rusak, saya tidak akan memperbaikinya sendiri secara sembarangan, melainkan langsung menghentikan mesin dan melapor ke atasan.',
+          intent: 'AWAS JEBAKAN! Di pabrik Jepang (sesuai Modul PM Bab 3 Hal. 50-52), pekerja baru DILARang KERAS mengutak-atik/membongkar mesin pabrik sendiri karena menyebabkan kecelakaan terjepit (はさまれ・巻き込まれ). Jawaban ini menunjukkan Anda paham aturan K3 Jepang!',
+          words: [
+            { w: '修理 (shūri)', m: 'perbaikan / servis' },
+            { w: '故障した時 (koshō shita toki)', m: 'saat mengalami kerusakan' },
+            { w: '勝手に (katte ni)', m: 'seenaknya / tanpa izin' },
+            { w: '上司に報告します (jōshi ni hōkoku shimasu)', m: 'melapor kepada atasan' }
+          ],
+          builderChunks: ['バイクの簡単な整備はできますが、', '工場の機械が故障した時は、', 'すぐに機械を止めて', '上司に報告します。']
+        },
+        {
+          no: 14,
+          pdfPage: 9,
+          qJp: 'イスラム教のお祈りは仕事しますか?',
+          qRuby: 'イスラム<ruby>教<rt>きょう</rt></ruby>のお<ruby>祈<rt>いの</rt></ruby>りは<ruby>仕事<rt>しごと</rt></ruby>しますか?',
+          qRomaji: 'Isuramukyō no oinori wa shigoto shimasu ka?',
+          qIndo: 'Apakah Anda akan melakukan ibadah/shalat agama Islam saat jam kerja?',
+          aJp: '仕事中にはお祈りをしません。休憩時間や、仕事が終わってから家でします。',
+          aRuby: '<ruby>仕事中<rt>しごとちゅう</rt></ruby>にはお<ruby>祈<rt>いの</rt></ruby>りをしません。<ruby>休憩時間<rt>きゅうけいじかん</rt></ruby>や、<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終<rt>お</rt></ruby>わってから<ruby>家<rt>いえ</rt></ruby>でします。',
+          aRomaji: 'Shigoto-chū ni wa oinori o shimasen. Kyūkei jikan ya, shigoto ga owatte kara ie de shimasu.',
+          aIndo: 'Saat jam kerja berlangsung saya tidak meninggalkan pekerjaan untuk shalat. Saya melakukannya pada jam istirahat atau setelah pekerjaan selesai di rumah.',
+          intent: 'Jalur produksi (line conveyor) pabrik makanan tidak bisa ditinggal di tengah jam kerja. Pewawancara hanya ingin kepastian bahwa Anda tidak meninggalkan line produksi saat mesin sedang jalan.',
+          words: [
+            { w: 'お祈り (oinori)', m: 'ibadah / doa / shalat' },
+            { w: '仕事中には (shigoto-chū ni wa)', m: 'pada saat sedang jam kerja' },
+            { w: '休憩時間 (kyūkei jikan)', m: 'waktu istirahat' }
+          ],
+          builderChunks: ['仕事中には', 'お祈りをしません。', '休憩時間や仕事が終わってから', '家でします。']
+        },
+        {
+          no: 15,
+          pdfPage: 10,
+          qJp: '家族は日本で働くことは賛成していますか? なんと言ってますか?',
+          qRuby: '<ruby>家族<rt>かぞく</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>くことは<ruby>賛成<rt>さんせい</rt></ruby>していますか? なんと<ruby>言<rt>い</rt></ruby>ってますか?',
+          qRomaji: 'Kazoku wa Nihon de hataraku koto wa sansei shite imasu ka? Nan to ittemasu ka?',
+          qIndo: 'Apakah keluarga menyetujui Anda bekerja di Jepang? Apa yang mereka katakan?',
+          aJp: 'はい、大賛成しています。「健康と安全に気をつけて、日本で一生懸命頑張りなさい」と言っています。',
+          aRuby: 'はい、<ruby>大賛成<rt>だいさんせい</rt></ruby>しています。「<ruby>健康<rt>けんこう</rt></ruby>と<ruby>安全<rt>あんぜん</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけて、<ruby>日本<rt>にほん</rt></ruby>で<ruby>一生懸命<rt>いっしょうけんめい</rt></ruby><ruby>頑張<rt>がんば</rt></ruby>りなさい」と<ruby>言<rt>い</rt></ruby>っています。',
+          aRomaji: 'Hai, daisansee shite imasu. "Kenkō to anzen ni ki o tsukete, Nihon de isshōkenmei ganbarinasai" to itte imasu.',
+          aIndo: 'Ya, sangat setuju. Mereka berkata, "Jaga kesehatan dan keselamatan, serta bekerjalah dengan sungguh-sungguh di Jepang."',
+          intent: 'Dukungan penuh keluarga sangat penting agar pekerja tidak disuruh pulang mendadak oleh orang tua. Gunakan kata「大賛成しています」(Sangat setuju!).',
+          words: [
+            { w: '賛成していますか (sansei shite imasu ka)', m: 'apakah setuju?' },
+            { w: '大賛成 (daisansei)', m: 'sangat setuju' },
+            { w: '気をつけて (ki o tsukete)', m: 'berhati-hati / menjaga' },
+            { w: '頑張りなさい (ganbarinasai)', m: 'berjuanglah / semangatlah' }
+          ],
+          builderChunks: ['はい、大賛成しています。', '「健康と安全に気をつけて、', '一生懸命頑張りなさい」と', '言っています。']
+        },
+        {
+          no: 16,
+          pdfPage: 10,
+          qJp: '家族にいくらくらい仕送りしますか?',
+          qRuby: '<ruby>家族<rt>かぞく</rt></ruby>にいくらくらい<ruby>仕送<rt>しおく</rt></ruby>りしますか?',
+          qRomaji: 'Kazoku ni ikura kurai shiokuri shimasu ka?',
+          qIndo: 'Berapa banyak uang yang akan Anda kirimkan untuk keluarga setiap bulannya?',
+          aJp: '毎月3万円から4万円くらい家族に仕送りしたいです。',
+          aRuby: '<ruby>毎月<rt>まいつき</rt></ruby>3<ruby>万円<rt>まんえん</rt></ruby>から4<ruby>万円<rt>まんえん</rt></ruby>くらい<ruby>家族<rt>かぞく</rt></ruby>に<ruby>仕送<rt>しおく</rt></ruby>りしたいです。',
+          aRomaji: 'Maitsuki san-man en kara yon-man en kurai kazoku ni shiokuri shitai desu.',
+          aIndo: 'Setiap bulan saya ingin mengirim uang kepada keluarga sekitar 30.000 sampai 40.000 yen.',
+          intent: 'Pastikan angkanya masuk akal dengan gaji bersih di Jepang (sekitar 14–16 man Yen). Kirim ke orang tua 3–4 man Yen (Rp3-4 juta), tabung 7–8 man Yen, dan sisanya untuk makan/hidup di Jepang.',
+          words: [
+            { w: '毎月 (maitsuki)', m: 'setiap bulan' },
+            { w: '3万円〜4万円 (san-man en ~ yon-man en)', m: '30.000 ~ 40.000 Yen' },
+            { w: '仕送りします (shiokuri shimasu)', m: 'mengirim uang (ke keluarga)' }
+          ],
+          builderChunks: ['毎月', '3万円から4万円くらい', '家族に', '仕送りしたいです。']
+        },
+        {
+          no: 17,
+          pdfPage: 11,
+          qJp: '毎月いくらくらい貯金しますか? そのお金は何に使いますか?',
+          qRuby: '<ruby>毎月<rt>まいつき</rt></ruby>いくらくらい<ruby>貯金<rt>ちょきん</rt></ruby>しますか? そのお<ruby>金<rt>かね</rt></ruby>は<ruby>何<rt>なに</rt></ruby>に<ruby>使<rt>つか</rt></ruby>いますか?',
+          qRomaji: 'Maitsuki ikura kurai chokin shimasu ka? Sono okane wa nani ni tsukaimasu ka?',
+          qIndo: 'Berapa banyak uang yang akan Anda tabung setiap bulan? Uang tersebut akan digunakan untuk apa?',
+          aJp: '毎月8万円くらい貯金します。そのお金は、将来インドネシアで自分の食品の店を開くための資金に使います。',
+          aRuby: '<ruby>毎月<rt>まいつき</rt></ruby>8<ruby>万円<rt>まんえん</rt></ruby>くらい<ruby>貯金<rt>ちょきん</rt></ruby>します。そのお<ruby>金<rt>かね</rt></ruby>は、<ruby>将来<rt>しょうらい</rt></ruby>インドネシアで<ruby>自分<rt>じぶん</rt></ruby>の<ruby>食品<rt>しょくひん</rt></ruby>の<ruby>店<rt>みせ</rt></ruby>を<ruby>開<rt>ひら</rt></ruby>くための<ruby>資金<rt>しきん</rt></ruby>に<ruby>使<rt>つか</rt></ruby>います。',
+          aRomaji: 'Maitsuki hachi-man en kurai chokin shimasu. Sono okane wa, shōrai Indoneshia de jibun no shokuhin no mise o hiraku tame no shikin ni tsukaimasu.',
+          aIndo: 'Setiap bulan saya menabung sekitar 80.000 yen. Uang tersebut akan digunakan untuk modal membuka usaha makanan sendiri di Indonesia di masa depan.',
+          intent: 'Soal No. 17, 18, dan 19 adalah satu rangkaian matematika! Jika Anda menabung 80.000 Yen (8万円) per bulan x 60 bulan (5 tahun) = 4.800.000 Yen (sekitar Rp480 juta). Jadi nyambung dengan jawaban No. 18 dan 19!',
+          words: [
+            { w: '貯金します (chokin shimasu)', m: 'menabung' },
+            { w: '8万円くらい (hachi-man en kurai)', m: 'sekitar 80.000 Yen' },
+            { w: '何に使いますか (nani ni tsukaimasu ka)', m: 'dipakai untuk apa?' },
+            { w: '店を開くための資金 (mise o hiraku tame no shikin)', m: 'modal untuk membuka toko/usaha' }
+          ],
+          builderChunks: ['毎月8万円くらい貯金します。', '将来インドネシアで', '自分の店を開くための', '資金に使います。']
+        },
+        {
+          no: 18,
+          pdfPage: 11,
+          qJp: 'インドネシアに帰ったら何をしたいですか?',
+          qRuby: 'インドネシアに<ruby>帰<rt>かえ</rt></ruby>ったら<ruby>何<rt>なに</rt></ruby>をしたいですか?',
+          qRomaji: 'Indoneshia ni kaettara nani o shitai desu ka?',
+          qIndo: 'Apa yang ingin Anda lakukan setelah pulang ke Indonesia?',
+          aJp: '日本で学んだ衛生管理（5S）を活かして、地元のマランで清潔で美味しいパンや惣菜の店を開きたいです。',
+          aRuby: '<ruby>日本<rt>にほん</rt></ruby>で<ruby>学<rt>まな</rt></ruby>んだ<ruby>衛生管理<rt>えいせいかんり</rt></ruby>（5S）を<ruby>活<rt>い</rt></ruby>かして、<ruby>地元<rt>じもと</rt></ruby>のマランで<ruby>清潔<rt>せいけつ</rt></ruby>で<ruby>美味<rt>おい</rt></ruby>しいパンや<ruby>惣菜<rt>そうざい</rt></ruby>の<ruby>店<rt>みせ</rt></ruby>を<ruby>開<rt>ひら</rt></ruby>きたいです。',
+          aRomaji: 'Nihon de mananda eisei kanri (5S) o ikashite, jimoto no Maran de seiketsu de oishii pan ya sōzai no mise o hirakitai desu.',
+          aIndo: 'Memanfaatkan manajemen kebersihan (5S) yang saya pelajari di Jepang, saya ingin membuka toko roti dan lauk-pauk (souzai) yang bersih dan lezat di kampung halaman saya di Malang.',
+          intent: 'Pewawancara sangat terkesan jika impian masa depan Anda di Malang menggunakan ilmu dari pabrik mereka (seperti 5S dan kebersihan pangan).',
+          words: [
+            { w: '帰ったら (kaettara)', m: 'kalau sudah pulang' },
+            { w: '活かして (ikashite)', m: 'memanfaatkan / menerapkan' },
+            { w: '地元のマラン (jimoto no Maran)', m: 'kampung halaman di Malang' },
+            { w: '惣菜の店 (sōzai no mise)', m: 'toko lauk-pauk / makanan siap saji' }
+          ],
+          builderChunks: ['日本で学んだ5Sを活かして、', '地元のマランで', 'パンや惣菜の店を', '開きたいです。']
+        },
+        {
+          no: 19,
+          pdfPage: 12,
+          qJp: 'あなたの夢を叶えるのにいくらかかりますか?',
+          qRuby: 'あなたの<ruby>夢<rt>ゆめ</rt></ruby>を<ruby>叶<rt>かな</rt></ruby>えるのにいくらかかりますか?',
+          qRomaji: 'Anata no yume o kanaeru no ni ikura kakarimasu ka?',
+          qIndo: 'Berapa biaya yang dibutuhkan untuk mewujudkan impian Anda tersebut?',
+          aJp: '日本円で約300万円（さんびゃくまんえん）くらいかかります。5年間真面目に働いて貯金します。',
+          aRuby: '<ruby>日本円<rt>にほんえん</rt></ruby>で<ruby>約<rt>やく</rt></ruby>300<ruby>万円<rt>まんえん</rt></ruby>くらいかかります。5<ruby>年間<rt>ねんかん</rt></ruby><ruby>真面目<rt>まじめ</rt></ruby>に<ruby>働<rt>はたら</rt></ruby>いて<ruby>貯金<rt>ちょきん</rt></ruby>します。',
+          aRomaji: 'Nihon-en de yaku sanbyaku-man en kurai kakarimasu. Go-nenkan majime ni hataraite chokin shimasu.',
+          aIndo: 'Dalam Yen Jepang membutuhkan biaya sekitar 3.000.000 Yen (sekitar Rp300 juta). Saya akan bekerja dengan tekun selama 5 tahun dan menabungnya.',
+          intent: 'Perhitungan logis: Tabung 8万/bulan x 60 bulan = 480万円. Jadi kalau modal usaha butuh 300万円 (Rp300 juta), target itu sangat masuk akal dan membuktikan Anda wajib kerja penuh 5 tahun!',
+          words: [
+            { w: '夢を叶えるのに (yume o kanaeru no ni)', m: 'untuk mewujudkan impian' },
+            { w: 'いくらかかりますか (ikura kakarimasu ka)', m: 'butuh biaya berapa?' },
+            { w: '約300万円 (yaku sanbyaku-man en)', m: 'sekitar 3 juta Yen (±Rp300 juta)' },
+            { w: '真面目に (majime ni)', m: 'dengan rajin / sungguh-sungguh' }
+          ],
+          builderChunks: ['日本円で', '約300万円くらいかかります。', '5年間真面目に働いて', '貯金します。']
+        },
+        {
+          no: 20,
+          pdfPage: 12,
+          qJp: '日本語の勉強をどれくらいしていますか?',
+          qRuby: '<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>をどれくらいしていますか?',
+          qRomaji: 'Nihongo no benkyō o dore kurai shite imasu ka?',
+          qIndo: 'Sudah berapa lama Anda belajar bahasa Jepang?',
+          aJp: '約6ヶ月（半年）くらい勉強しています。日本に行ってからも毎日勉強を続けます。',
+          aRuby: '<ruby>約<rt>やく</rt></ruby>6ヶ<ruby>月<rt>げつ</rt></ruby>（<ruby>半年<rt>はんとし</rt></ruby>）くらい<ruby>勉強<rt>べんきょう</rt></ruby>しています。<ruby>日本<rt>にほん</rt></ruby>に<ruby>行<rt>い</rt></ruby>ってからも<ruby>毎日<rt>まいにち</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けます。',
+          aRomaji: 'Yaku rokkagetsu (hantoshi) kurai benkyō shite imasu. Nihon ni itte kara mo mainichi benkyō o tsuzukemasu.',
+          aIndo: 'Saya sudah belajar sekitar 6 bulan (setengah tahun). Setelah pergi ke Jepang pun saya akan terus belajar setiap hari.',
+          intent: 'Sebutkan lama belajar Anda saat ini (misal 6 bulan / 8 bulan / 1 tahun) dan tambahkan komitmen bahwa setelah tiba di Jepang Anda tetap lanjut belajar.',
+          words: [
+            { w: 'どれくらい (dore kurai)', m: 'berapa lama' },
+            { w: '約6ヶ月 / 半年 (yaku rokkagetsu / hantoshi)', m: 'sekitar 6 bulan / setengah tahun' },
+            { w: '勉強を続けます (benkyō o tsuzukemasu)', m: 'melanjutkan belajar' }
+          ],
+          builderChunks: ['約6ヶ月くらい', '勉強しています。', '日本に行ってからも', '毎日勉強を続けます。']
+        },
+        {
+          no: 21,
+          pdfPage: 13,
+          qJp: 'どんな勉強をしていますか? 何が難しいですか?',
+          qRuby: 'どんな<ruby>勉強<rt>べんきょう</rt></ruby>をしていますか? <ruby>何<rt>なに</rt></ruby>が<ruby>難<rt>むずか</rt></ruby>しいですか?',
+          qRomaji: 'Donna benkyō o shite imasu ka? Nani ga muzukashii desu ka?',
+          qIndo: 'Pelajaran seperti apa yang Anda pelajari? Bagian mana yang sulit?',
+          aJp: '日本語の会話や文法、そして食品衛生（5SやHACCP）を勉強しています。漢字と聴解が少し難しいですが、毎日練習しています。',
+          aRuby: '<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>会話<rt>かいわ</rt></ruby>や<ruby>文法<rt>ぶんぽう</rt></ruby>、そして<ruby>食品衛生<rt>しょくひんえいせい</rt></ruby>（5SやHACCP）を<ruby>勉強<rt>べんきょう</rt></ruby>しています。<ruby>漢字<rt>かんじ</rt></ruby>と<ruby>聴解<rt>ちょうかい</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>し<ruby>難<rt>むずか</rt></ruby>しいですが、<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>しています。',
+          aRomaji: 'Nihongo no kaiwa ya bunpō, soshite shokuhin eisei (5S ya HACCP) o benkyō shite imasu. Kanji to chōkai ga sukoshi muzukashii desu ga, mainichi renshū shite imasu.',
+          aIndo: 'Saya mempelajari percakapan dan tata bahasa Jepang, serta higiene pangan (5S dan HACCP). Kanji dan pendengaran (choukai) sedikit sulit, tetapi saya berlatih setiap hari.',
+          intent: 'Sebutkan belajar Bahasa Jepang + Materi Pengolahan Makanan (5S/HACCP). Saat ditanya apa yang sulit, sebutkan Kanji/Choukai TAPI akhiri dengan usaha Anda berlatih setiap hari.',
+          words: [
+            { w: '会話や文法 (kaiwa ya bunpō)', m: 'percakapan dan tata bahasa' },
+            { w: '食品衛生 (shokuhin eisei)', m: 'higiene/kebersihan pangan' },
+            { w: '聴解 (chōkai)', m: 'pendengaran (listening)' },
+            { w: '毎日練習しています (mainichi renshū shite imasu)', m: 'berlatih setiap hari' }
+          ],
+          builderChunks: ['日本語の会話と食品衛生を', '勉強しています。', '漢字が少し難しいですが、', '毎日練習しています。']
+        },
+        {
+          no: 22,
+          pdfPage: 13,
+          qJp: '毎日家で何時間くらい勉強しますか?',
+          qRuby: '<ruby>毎日<rt>まいにち</rt></ruby><ruby>家<rt>いえ</rt></ruby>で<ruby>何時間<rt>なんじかん</rt></ruby>くらい<ruby>勉強<rt>べんきょう</rt></ruby>しますか?',
+          qRomaji: 'Mainichi ie de nan-jikan kurai benkyō shimasu ka?',
+          qIndo: 'Berapa jam Anda belajar di rumah setiap hari?',
+          aJp: '毎日、家（または寮）で2時間から3時間くらい復習と会話の練習をしています。',
+          aRuby: '<ruby>毎日<rt>まいにち</rt></ruby>、<ruby>家<rt>いえ</rt></ruby>（または<ruby>寮<rt>りょう</rt></ruby>）で2<ruby>時間<rt>じかん</rt></ruby>から3<ruby>時間<rt>じかん</rt></ruby>くらい<ruby>復習<rt>ふくしゅう</rt></ruby>と<ruby>会話<rt>かいわ</rt></ruby>の<ruby>練習<rt>れんしゅう</rt></ruby>をしています。',
+          aRomaji: 'Mainichi, ie (matawa ryō) de ni-jikan kara san-jikan kurai fukushū to kaiwa no renshū o shite imasu.',
+          aIndo: 'Setiap hari di rumah (atau asrama) saya mengulang pelajaran (fukushuu) dan berlatih percakapan sekitar 2 sampai 3 jam.',
+          intent: 'Menunjukkan kedisiplinan belajar mandiri di luar jam kelas. 2 sampai 3 jam setiap malam adalah jawaban yang sangat ideal.',
+          words: [
+            { w: '何時間くらい (nan-jikan kurai)', m: 'sekitar berapa jam' },
+            { w: '2時間から3時間 (ni-jikan kara san-jikan)', m: '2 sampai 3 jam' },
+            { w: '復習 (fukushū)', m: 'mengulang pelajaran (review)' }
+          ],
+          builderChunks: ['毎日、家で', '2時間から3時間くらい', '復習と会話の練習を', 'しています。']
+        },
+        {
+          no: 23,
+          pdfPage: 14,
+          qJp: 'N3の勉強はしていますか? 何を勉強したか教えて下さい',
+          qRuby: 'N3の<ruby>勉強<rt>べんきょう</rt></ruby>はしていますか? <ruby>何<rt>なに</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>したか<ruby>教<rt>おし</rt></ruby>えて<ruby>下<rt>くだ</rt></ruby>さい',
+          qRomaji: 'Enu-san no benkyō wa shite imasu ka? Nani o benkyō shita ka oshiete kudasai.',
+          qIndo: 'Apakah Anda sedang belajar untuk tingkat N3? Tolong ceritakan apa yang sudah Anda pelajari.',
+          aJp: 'はい、少しずつN3の勉強も始めています。N3の言葉や漢字、そして仕事で使う丁寧な話し方（敬語）を勉強しています。',
+          aRuby: 'はい、<ruby>少<rt>すこ</rt></ruby>しずつN3の<ruby>勉強<rt>べんきょう</rt></ruby>も<ruby>始<rt>はじ</rt></ruby>めています。N3の<ruby>言葉<rt>ことば</rt></ruby>や<ruby>漢字<rt>かんじ</rt></ruby>、そして<ruby>仕事<rt>しごと</rt></ruby>で<ruby>使<rt>つか</rt></ruby>う<ruby>丁寧<rt>ていねい</rt></ruby>な<ruby>話<rt>はな</rt></ruby>し<ruby>方<rt>かた</rt></ruby>（<ruby>敬語<rt>けいご</rt></ruby>）を<ruby>勉強<rt>べんきょう</rt></ruby>しています。',
+          aRomaji: 'Hai, sukoshizutsu Enu-san no benkyō mo hajimete imasu. Enu-san no kotoba ya kanji, soshite shigoto de tsukau teinei na hanashikata (keigo) o benkyō shite imasu.',
+          aIndo: 'Ya, sedikit demi sedikit saya juga mulai belajar N3. Saya mempelajari kosakata dan kanji N3, serta cara bicara sopan (Keigo) yang digunakan dalam pekerjaan.',
+          intent: 'Jangan bilang "Belum belajar sama sekali". Jawab bahwa Anda sudah mulai mencicil kosakata N3, Kanji kerja, dan bahasa sopan (丁寧な話し方) untuk berkomunikasi dengan atasan di pabrik.',
+          words: [
+            { w: '少しずつ (sukoshizutsu)', m: 'sedikit demi sedikit' },
+            { w: '言葉や漢字 (kotoba ya kanji)', m: 'kosakata dan kanji' },
+            { w: '丁寧な話し方 (teinei na hanashikata)', m: 'cara berbicara yang sopan' }
+          ],
+          builderChunks: ['はい、少しずつN3の勉強も', '始めています。', 'N3の言葉や漢字、', '丁寧な話し方を勉強しています。']
+        },
+        {
+          no: 24,
+          pdfPage: 14,
+          qJp: '日本に来てやってみたい事や食べてみたい物はなんですか?',
+          qRuby: '<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>てやってみたい<ruby>事<rt>こと</rt></ruby>や<ruby>食<rt>た</rt></ruby>べてみたい<ruby>物<rt>もの</rt></ruby>はなんですか?',
+          qRomaji: 'Nihon ni kite yatte mitai koto ya tabete mitai mono wa nan desu ka?',
+          qIndo: 'Hal apa yang ingin Anda coba lakukan dan makanan apa yang ingin Anda coba setelah datang ke Jepang?',
+          aJp: '休みの日に新幹線に乗ってみたいです。食べてみたい物は、本場の日本のラーメンとお寿司です。',
+          aRuby: '<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>に<ruby>新幹線<rt>しんかんせん</rt></ruby>に<ruby>乗<rt>の</rt></ruby>ってみたいです。<ruby>食<rt>た</rt></ruby>べてみたい<ruby>物<rt>もの</rt></ruby>は、<ruby>本場<rt>ほんば</rt></ruby>の<ruby>日本<rt>にほん</rt></ruby>のラーメンとお<ruby>寿司<rt>すし</rt></ruby>です。',
+          aRomaji: 'Yasumi no hi ni shinkansen ni notte mitai desu. Tabete mitai mono wa, honba no Nihon no rāmen to osushi desu.',
+          aIndo: 'Saat hari libur saya ingin mencoba naik Shinkansen. Makanan yang ingin saya coba adalah Ramen dan Sushi asli Jepang.',
+          intent: 'Pertanyaan santai untuk melihat antusiasme Anda terhadap budaya Jepang. Perhatikan ada 2 poin: (1) Hal yang ingin dicoba (やってみたい事) dan (2) Makanan yang ingin dicoba (食べてみたい物).',
+          words: [
+            { w: 'やってみたい事 (yatte mitai koto)', m: 'hal yang ingin dicoba dilakukan' },
+            { w: '新幹線に乗ってみたい (shinkansen ni notte mitai)', m: 'ingin mencoba naik kereta cepat Shinkansen' },
+            { w: '食べてみたい物 (tabete mitai mono)', m: 'makanan yang ingin dicoba' },
+            { w: '本場の (honba no)', m: 'asli / autentik dari tempat asalnya' }
+          ],
+          builderChunks: ['休みの日に新幹線に', '乗ってみたいです。', '食べてみたい物は、', '日本のラーメンとお寿司です。']
+        },
+        {
+          no: 25,
+          pdfPage: 15,
+          qJp: '日本で行きたい場所はありますか?',
+          qRuby: '<ruby>日本<rt>にほん</rt></ruby>で<ruby>行<rt>い</rt></ruby>きたい<ruby>場所<rt>ばしょ</rt></ruby>はありますか?',
+          qRomaji: 'Nihon de ikitai basho wa arimasu ka?',
+          qIndo: 'Apakah ada tempat di Jepang yang ingin Anda kunjungi?',
+          aJp: 'はい、富士山と京都へ行きたいです。日本のきれいな景色や桜を見たいです。',
+          aRuby: 'はい、<ruby>富士山<rt>ふじさん</rt></ruby>と<ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいです。<ruby>日本<rt>にほん</rt></ruby>のきれいな<ruby>景色<rt>けしき</rt></ruby>や<ruby>桜<rt>さくら</rt></ruby>を<ruby>見<rt>み</rt></ruby>たいです。',
+          aRomaji: 'Hai, Fujisan to Kyōto e ikitai desu. Nihon no kirei na keshiki ya sakura o mitai desu.',
+          aIndo: 'Ya, saya ingin pergi ke Gunung Fuji dan Kyoto. Saya ingin melihat pemandangan indah Jepang dan bunga Sakura.',
+          intent: 'Jawab dengan ceria dan antusias! Menyebut Gunung Fuji (富士山), Kyoto (京都), dan bunga Sakura (桜) sangat mudah diucapkan dan disukai orang Jepang.',
+          words: [
+            { w: '行きたい場所 (ikitai basho)', m: 'tempat yang ingin dikunjungi' },
+            { w: '富士山と京都 (Fujisan to Kyōto)', m: 'Gunung Fuji dan Kyoto' },
+            { w: 'きれいな景色 (kirei na keshiki)', m: 'pemandangan yang indah' }
+          ],
+          builderChunks: ['はい、富士山と京都へ', '行きたいです。', '日本のきれいな景色や桜を', '見たいです。']
+        },
+        {
+          no: 26,
+          pdfPage: 15,
+          qJp: 'これまで日本の会社の面接を何回うけましたか?',
+          qRuby: 'これまで<ruby>日本<rt>にほん</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>面接<rt>めんせつ</rt></ruby>を<ruby>何回<rt>なんかい</rt></ruby>うけましたか?',
+          qRomaji: 'Kore made Nihon no kaisha no mensetsu o nan-kai ukemashita ka?',
+          qIndo: 'Sudah berapa kali Anda mengikuti wawancara dengan perusahaan Jepang sejauh ini?',
+          aJp: intJp26,
+          aRuby: intJp26,
+          aRomaji: intRomaji26,
+          aIndo: intIndo26,
+          intent: 'Jawab jujur sesuai arahan LPK Anda (apakah baru pertama kali atau pernah 1 kali). Anda bisa mengganti pilihan ini di Panel Data Giodan di atas jika diperlukan.',
+          words: [
+            { w: 'これまで (kore made)', m: 'sejauh ini / sampai sekarang' },
+            { w: '面接を何回うけましたか (mensetsu o nan-kai ukemashita ka)', m: 'sudah ikut wawancara berapa kali?' },
+            { w: '今回が初めてです (konkai ga hajimete desu)', m: 'kali ini adalah yang pertama kali' }
+          ],
+          builderChunks: ['今回が', '初めてです。', 'この面接のために', '一生懸命準備しました。']
+        },
+        {
+          no: 27,
+          pdfPage: 16,
+          qJp: 'それはどこの会社ですか? 青森県の鳥肉工場ですなど、、、会社名は言いません',
+          qRuby: 'それはどこの<ruby>会社<rt>かいしゃ</rt></ruby>ですか? <ruby>青森県<rt>あおもりけん</rt></ruby>の<ruby>鶏肉工場<rt>とりにくこうじょう</rt></ruby>ですなど、、、<ruby>会社名<rt>かいしゃめい</rt></ruby>は<ruby>言<rt>い</rt></ruby>いません',
+          qRomaji: 'Sore wa doko no kaisha desu ka? Aomori-ken no toriniku kōjō desu nado... Kaishamei wa iimasen.',
+          qIndo: 'Perusahaan di mana itu? (Contoh jawaban: "Pabrik daging ayam di Prefektur Aomori", tidak perlu sebutkan nama perusahaannya).',
+          aJp: intJp27,
+          aRuby: intJp27,
+          aRomaji: intRomaji27,
+          aIndo: intIndo27,
+          intent: 'Sesuai instruksi di PDF Mensetsu Anda: jika pernah wawancara sebelumnya, JANGAN sebutkan nama PT/perusahaannya, cukup sebutkan "[Nama Prefektur] + [Jenis Pabrik]", contohnya: 青森県の鶏肉工場です (Pabrik daging ayam di Prefektur Aomori).',
+          words: [
+            { w: 'どこの会社ですか (doko no kaisha desu ka)', m: 'perusahaan daerah mana / bergerak di bidang apa?' },
+            { w: '青森県の鶏肉工場 (Aomori-ken no toriniku kōjō)', m: 'pabrik daging ayam di Prefektur Aomori' },
+            { w: '会社名は言いません (kaishamei wa iimasen)', m: 'tidak menyebutkan nama perusahaan' }
+          ],
+          builderChunks: ['青森県の', '鶏肉工場です。', '（※初めての場合：', '今回が初めてです）']
+        },
+        {
+          no: 28,
+          pdfPage: 16,
+          qJp: '残業はできますか?',
+          qRuby: '<ruby>残業<rt>ざんぎょう</rt></ruby>はできますか?',
+          qRomaji: 'Zangyō wa dekimasu ka?',
+          qIndo: 'Apakah Anda bisa bekerja lembur?',
+          aJp: 'はい、喜んでできます。たくさん働いて、会社の役に立ちたいです。',
+          aRuby: 'はい、<ruby>喜<rt>よろこ</rt></ruby>んでできます。たくさん<ruby>働<rt>はたら</rt></ruby>いて、<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>ちたいです。',
+          aRomaji: 'Hai, yorokonde dekimasu. Takusan hataraite, kaisha no yaku ni tachitai desu.',
+          aIndo: 'Ya, dengan senang hati saya bisa. Saya ingin bekerja banyak dan berguna bagi perusahaan.',
+          intent: 'Pabrik makanan sering mengalami lonjakan pesanan (musim panas/akhir tahun). Jangan cuma jawab "Hai, dekimasu", tapi tambahkan kata「喜んでできます！」(Dengan senang hati saya siap!).',
+          words: [
+            { w: '残業 (zangyō)', m: 'kerja lembur' },
+            { w: '喜んでできます (yorokonde dekimasu)', m: 'bisa dengan senang hati' },
+            { w: '会社の役に立ちたい (kaisha no yaku ni tachitai)', m: 'ingin bermanfaat bagi perusahaan' }
+          ],
+          builderChunks: ['はい、喜んでできます。', 'たくさん働いて、', '会社の役に', '立ちたいです。']
+        },
+        {
+          no: 29,
+          pdfPage: 17,
+          qJp: '体調が悪い時言い出しにくい時はどうしますか? すぐ言う',
+          qRuby: '<ruby>体調<rt>たいちょう</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>い<ruby>時<rt>とき</rt></ruby><ruby>言<rt>い</rt></ruby>い<ruby>出<rt>だ</rt></ruby>しにくい<ruby>時<rt>とき</rt></ruby>はどうしますか? すぐ<ruby>言<rt>い</rt></ruby>う',
+          qRomaji: 'Taichō ga warui toki iidashinikui toki wa dō shimasu ka? Sugu iu.',
+          qIndo: 'Apa yang akan Anda lakukan jika merasa tidak enak badan tetapi merasa sungkan untuk mengatakannya? (Jawaban yang diharapkan: Langsung mengatakannya/melapor).',
+          aJp: '我慢しないで、すぐに作業を止めて上司や責任者に報告します。食品工場では健康管理が一番大切だからです。',
+          aRuby: '<ruby>我慢<rt>がまん</rt></ruby>しないで、すぐに<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>止<rt>と</rt></ruby>めて<ruby>上司<rt>じょうし</rt></ruby>や<ruby>責任者<rt>せきにんしゃ</rt></ruby>に<ruby>報告<rt>ほうこく</rt></ruby>します。<ruby>食品工場<rt>しょくひんこうじょう</rt></ruby>では<ruby>健康管理<rt>けんこうかんり</rt></ruby>が<ruby>一番大切<rt>いちばんたいせつ</rt></ruby>だからです。',
+          aRomaji: 'Gaman shinaide, sugu ni sagyō o tomete jōshi ya sekininsha ni hōkoku shimasu. Shokuhin kōjō de wa kenkō kanri ga ichiban taisetsu dakara desu.',
+          aIndo: 'Tanpa menahan/menyembunyikannya, saya langsung menghentikan pekerjaan dan melapor kepada atasan atau penanggung jawab. Karena di pabrik makanan manajemen kesehatan adalah yang paling penting.',
+          intent: 'SANGAT PENTING! Sesuai Modul PM Halaman 18 (健康チェック): Jika pekerja diare/demam/mual atau jari terluka namun diam saja karena sungkan (言い出しにくい), makanan seluruh pabrik bisa tercemar Norovirus / bakteri! Jadi wajib jawab: LANGSUNG BILANG / LAPOR ATASAN (すぐ言う / すぐ上司に報告します).',
+          words: [
+            { w: '体調が悪い時 (taichō ga warui toki)', m: 'saat kondisi badan tidak sehat' },
+            { w: '言い出しにくい (iidashinikui)', m: 'sungkan / sulit mengatakannya' },
+            { w: '我慢しないで (gaman shinaide)', m: 'jangan ditahan / jangan disembunyikan' },
+            { w: 'すぐに上司に報告します (sugu ni jōshi ni hōkoku shimasu)', m: 'langsung melapor kepada atasan' }
+          ],
+          builderChunks: ['我慢しないで、', 'すぐに上司や責任者に', '報告します。', '健康管理が大切だからです。']
+        },
+        {
+          no: 30,
+          pdfPage: 17,
+          qJp: '遅刻しそうになったらどうしますか?',
+          qRuby: '<ruby>遅刻<rt>ちこく</rt></ruby>しそうになったらどうしますか?',
+          qRomaji: 'Chikoku shisō ni nattara dō shimasu ka?',
+          qIndo: 'Apa yang akan Anda lakukan jika hampir terlambat?',
+          aJp: '遅刻は絶対にしないようにいつも早く家を出ますが、もし電車の遅延などで遅刻しそうになったら、すぐに会社と上司に電話で連絡します。',
+          aRuby: '<ruby>遅刻<rt>ちこく</rt></ruby>は<ruby>絶対<rt>ぜったい</rt></ruby>にしないようにいつも<ruby>早<rt>はや</rt></ruby>く<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>ますが、もし<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>遅延<rt>ちえん</rt></ruby>などで<ruby>遅刻<rt>ちこく</rt></ruby>しそうになったら、すぐに<ruby>会社<rt>かいしゃ</rt></ruby>と<ruby>上司<rt>じょうし</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>で<ruby>連絡<rt>れんらく</rt></ruby>します。',
+          aRomaji: 'Chikoku wa zettai ni shinai yō ni itsumo hayaku ie o demasu ga, moshi densha no chien nado de chikoku shisō ni nattara, sugu ni kaisha to jōshi ni denwa de renraku shimasu.',
+          aIndo: 'Agar tidak terlambat saya selalu berangkat lebih awal dari rumah, tetapi jika hampir terlambat karena kereta terlambat dan sebagainya, saya akan langsung menghubungi perusahaan dan atasan melalui telepon.',
+          intent: 'Di budaya kerja Jepang (Hou-Ren-Sou), terlambat tanpa kabar adalah pelanggaran berat. Jika baru "hampir terlambat" (遅刻しそうになったら), wajib SEGERA TELEPON (すぐに電話で連絡します) sebelum jam masuk kerja dimulai!',
+          words: [
+            { w: '遅刻しそうになったら (chikoku shisō ni nattara)', m: 'jika hampir terlambat' },
+            { w: '電車の遅延 (densha no chien)', m: 'keterlambatan kereta' },
+            { w: 'すぐに電話で連絡します (sugu ni denwa de renraku shimasu)', m: 'segera menghubungi lewat telepon' }
+          ],
+          builderChunks: ['いつも早く家を出ますが、', 'もし遅刻しそうになったら、', 'すぐに会社と上司に', '電話で連絡します。']
+        }
+      ];
+    }
+
+    // --- SPEECH ENGINE (WEB SPEECH API) ---
+    function speakJP(text) {
+      try {
+        if (!('speechSynthesis' in window)) {
+          showToast('Browser perangkat ini belum mendukung suara otomatis.');
+          return;
+        }
+        window.speechSynthesis.cancel();
+        var utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'ja-JP';
+        utter.rate = 0.92;
+        window.speechSynthesis.speak(utter);
+      } catch (e) {
+        showToast('Gagal memutar audio.');
+      }
+    }
+
+    // --- CLIPBOARD HELPER ---
+    function copyText(text, label) {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('📋 Berhasil disalin: ' + (label || 'Jawaban Jepang'));
+      } catch (e) {
+        showToast('Gagal menyalin teks.');
+      }
+    }
+
+    function showToast(msg) {
+      var box = document.getElementById('toastBox');
+      var txt = document.getElementById('toastText');
+      if (!box || !txt) return;
+      txt.textContent = msg;
+      box.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(function() {
+        box.classList.add('hidden');
+      }, 2400);
+    }
+
+    function scrollToElement(id) {
+      var el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // --- NAVIGATION & FURIGANA TOGGLE ---
+    function switchPage(pageId) {
+      appState.currentPage = pageId;
+      var pages = ['page-5s', 'page-template', 'page-explain', 'page-drill'];
+      for (var i = 0; i < pages.length; i++) {
+        var sec = document.getElementById(pages[i]);
+        var btn = document.getElementById('tab-' + pages[i]);
+        if (sec) {
+          if (pages[i] === pageId) sec.classList.remove('hidden');
+          else sec.classList.add('hidden');
+        }
+        if (btn) {
+          if (pages[i] === pageId) {
+            btn.className = 'tab-btn flex-1 md:flex-initial px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all bg-blue-600 text-white shadow';
+          } else {
+            btn.className = 'tab-btn flex-1 md:flex-initial px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-700';
+          }
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleFurigana() {
+      appState.showFurigana = !appState.showFurigana;
+      if (appState.showFurigana) {
+        document.body.classList.remove('hide-furigana');
+        showToast('👁️ Cara baca (Furigana) ditampilkan');
+      } else {
+        document.body.classList.add('hide-furigana');
+        showToast('🙈 Cara baca (Furigana) disembunyikan untuk tes baca Kanji');
+      }
+    }
+
+    function toggleMastered(id) {
+      if (appState.masteredIds[id]) {
+        delete appState.masteredIds[id];
+      } else {
+        appState.masteredIds[id] = true;
+      }
+      storage.set('giodan_mastered_v1', appState.masteredIds);
+      updateProgressHeader();
+      render5SCards();
+      renderTemplateCards();
+      renderExplanationCards();
+    }
+
+    function updateProgressHeader() {
+      var count = Object.keys(appState.masteredIds).length;
+      var mob = document.getElementById('headerStatsMobile');
+      var dsk = document.getElementById('headerStatsDesktop');
+      if (mob) mob.textContent = 'Hafal: ' + count + '/35';
+      if (dsk) dsk.textContent = 'Penguasaan: ' + count + '/35 Materi';
+    }
+
+    // =================================================================
+    // RENDER HALAMAN 1: 5S CARDS & QUIZ
+    // =================================================================
+    function render5SCards() {
+      var container = document.getElementById('cards5SContainer');
+      if (!container) return;
+      var html = '';
+      for (var i = 0; i < data5S.length; i++) {
+        var item = data5S[i];
+        var isMastered = !!appState.masteredIds[item.id];
+        var kwHtml = '';
+        for (var k = 0; k < item.keywords.length; k++) {
+          kwHtml += '<span class="inline-flex items-center gap-1.5 bg-slate-100 border border-slate-300 px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-800">' +
+            '<span class="text-blue-700 font-bold jp-text">' + item.keywords[k].jp + '</span>' +
+            '<span class="text-slate-400">=</span>' +
+            '<span>' + item.keywords[k].id + '</span>' +
+          '</span>';
+        }
+
+        html += '<div class="bg-white rounded-2xl p-5 border-2 ' + (isMastered ? 'border-emerald-500 bg-emerald-50/10' : 'border-slate-200') + ' shadow-sm transition-all">' +
+          '<div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4 mb-4">' +
+            '<div class="flex items-center gap-3">' +
+              '<div class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex flex-col items-center justify-center font-black shrink-0 shadow">' +
+                '<span class="text-xs leading-none opacity-80">' + item.num + '</span>' +
+                '<span class="text-base leading-tight jp-text">' + item.kanji.slice(0,2) + '</span>' +
+              '</div>' +
+              '<div>' +
+                '<div class="flex flex-wrap items-center gap-2">' +
+                  '<h3 class="text-xl font-black text-slate-900 jp-text">' + item.num + ' ' + item.furigana + ' <span class="text-blue-600">(' + item.romaji + ')</span></h3>' +
+                  '<span class="text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-300 px-2.5 py-0.5 rounded-full">⚡ ' + item.mnemonicTitle + '</span>' +
+                '</div>' +
+                '<p class="text-xs md:text-sm font-bold text-slate-600 mt-0.5">' + item.indoTitle + '</p>' +
+              '</div>' +
+            '</div>' +
+            '<div class="flex items-center gap-2 shrink-0">' +
+              '<button onclick="speakJP(\'' + item.kanji + '。' + item.moduleJpPlain + '\')" class="px-3 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 transition">' +
+                '🔊 Dengarkan' +
+              '</button>' +
+              '<button onclick="toggleMastered(\'' + item.id + '\')" class="px-3 py-2 rounded-xl font-extrabold text-xs transition ' + (isMastered ? 'bg-emerald-600 text-white shadow' : 'bg-slate-100 hover:bg-slate-200 text-slate-700') + '">' +
+                (isMastered ? '✅ Sudah Nyantol' : '⬜ Tandai Hafal') +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="grid md:grid-cols-2 gap-4">' +
+            '<div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">' +
+              '<div class="text-xs font-extrabold text-slate-500 uppercase">📖 Kalimat Persis Halaman 15 Modul PM:</div>' +
+              '<p class="jp-text text-base font-bold text-slate-900 leading-relaxed">' + item.moduleJpRuby + '</p>' +
+              '<p class="text-xs text-slate-700 border-t border-slate-200 pt-2"><strong>Arti Modul:</strong> ' + item.moduleIndo + '</p>' +
+            '</div>' +
+
+            '<div class="bg-amber-50/70 p-4 rounded-xl border border-amber-200 space-y-2">' +
+              '<div class="text-xs font-extrabold text-amber-900 uppercase">🧠 Jembatan Otak (Cara Langsung Tahu Saat Ujian):</div>' +
+              '<p class="text-xs md:text-sm text-slate-800 leading-relaxed font-medium">' + item.mnemonicDesc + '</p>' +
+              '<div class="pt-1 text-xs text-emerald-900 bg-emerald-50 border border-emerald-200 p-2 rounded-lg">' +
+                '<strong>🦺 Kaitan Keselamatan Kerja:</strong> ' + item.safetyLink +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="mt-3 pt-3 border-t border-slate-100">' +
+            '<div class="text-xs font-bold text-slate-500 mb-1.5">🔑 Potongan Kata Kunci Ujian:</div>' +
+            '<div class="flex flex-wrap gap-1.5">' + kwHtml + '</div>' +
+          '</div>' +
+        '</div>';
+      }
+      container.innerHTML = html;
+    }
+
+    function render5SQuiz() {
+      var box = document.getElementById('quiz5SBox');
+      var badge = document.getElementById('score5SBadge');
+      if (!box) return;
+
+      if (badge) {
+        badge.textContent = 'Skor Benar: ' + appState.quiz5SScore + ' / ' + quiz5SQuestions.length;
+      }
+
+      var q = quiz5SQuestions[appState.quiz5SIndex];
+      var options = [
+        '整理 (Seiri)',
+        '整頓 (Seiton)',
+        '清掃 (Seisou)',
+        '清潔 (Seiketsu)',
+        '習慣付け・しつけ (Shūkanzuke)',
+        '5S (ごエス)',
+        '労働安全 (Rōdō Anzen)'
+      ];
+
+      var btnsHtml = '';
+      for (var i = 0; i < options.length; i++) {
+        var opt = options[i];
+        btnsHtml += '<button onclick="answer5SQuiz(\'' + opt + '\')" class="px-3.5 py-2.5 rounded-xl border-2 border-slate-300 bg-white hover:border-blue-500 hover:bg-blue-50 font-extrabold text-xs md:text-sm text-slate-800 transition shadow-sm">' +
+          opt +
+        '</button>';
+      }
+
+      box.innerHTML =
+        '<div class="flex items-center justify-between text-xs font-bold text-slate-500">' +
+          '<span>Soal Latihan ' + (appState.quiz5SIndex + 1) + ' dari ' + quiz5SQuestions.length + '</span>' +
+          '<button onclick="speakJP(\'' + q.qJp.replace(/'/g, '') + '\')" class="text-blue-600 hover:underline font-bold">🔊 Dengarkan Soal</button>' +
+        '</div>' +
+        '<div class="p-4 rounded-xl bg-white border border-slate-200 space-y-2">' +
+          '<p class="jp-text font-bold text-base md:text-lg text-slate-900">' + q.qJp + '</p>' +
+          '<p class="text-xs md:text-sm text-slate-600"><strong>Terjemahan:</strong> ' + q.qIndo + '</p>' +
+        '</div>' +
+        '<div class="flex flex-wrap gap-2">' + btnsHtml + '</div>' +
+        '<div id="quiz5SFeedback" class="hidden p-4 rounded-xl border text-xs md:text-sm"></div>';
+    }
+
+    function answer5SQuiz(selected) {
+      var q = quiz5SQuestions[appState.quiz5SIndex];
+      var fb = document.getElementById('quiz5SFeedback');
+      if (!fb) return;
+
+      var isCorrect = (selected === q.correct);
+      if (isCorrect && !appState.quiz5SAnswered) {
+        appState.quiz5SScore++;
+      }
+      appState.quiz5SAnswered = true;
+
+      var badge = document.getElementById('score5SBadge');
+      if (badge) badge.textContent = 'Skor Benar: ' + appState.quiz5SScore + ' / ' + quiz5SQuestions.length;
+
+      fb.classList.remove('hidden');
+      if (isCorrect) {
+        fb.className = 'p-4 rounded-xl border bg-emerald-50 border-emerald-300 text-emerald-950 space-y-2';
+        fb.innerHTML = '<div class="font-black text-sm text-emerald-700">✅ TEPAT SEKALI! Jawaban: ' + q.correct + '</div>' +
+          '<p class="text-xs">' + q.clue + '</p>' +
+          '<button onclick="next5SQuiz()" class="mt-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs">Soal Berikutnya ➔</button>';
+      } else {
+        fb.className = 'p-4 rounded-xl border bg-rose-50 border-rose-300 text-rose-950 space-y-2';
+        fb.innerHTML = '<div class="font-black text-sm text-rose-700">❌ Kurang Tepat! Yang benar adalah: ' + q.correct + '</div>' +
+          '<p class="text-xs">' + q.clue + '</p>' +
+          '<button onclick="next5SQuiz()" class="mt-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs">Lanjut Soal Berikutnya ➔</button>';
+      }
+    }
+
+    function next5SQuiz() {
+      appState.quiz5SAnswered = false;
+      appState.quiz5SIndex = (appState.quiz5SIndex + 1) % quiz5SQuestions.length;
+      render5SQuiz();
+    }
+
+    function reset5SQuiz() {
+      appState.quiz5SIndex = 0;
+      appState.quiz5SScore = 0;
+      appState.quiz5SAnswered = false;
+      render5SQuiz();
+      showToast('🔄 Kuis 5S direset dari awal!');
+    }
+
+    // =================================================================
+    // RENDER HALAMAN 2: TEMPLATE PDF MENSETSU PM (1-30)
+    // =================================================================
+    function toggleProfileEditor() {
+      var panel = document.getElementById('profileEditorPanel');
+      if (panel) panel.classList.toggle('hidden');
+    }
+
+    function updateProfileData() {
+      var nameEl = document.getElementById('prof_name');
+      var classEl = document.getElementById('prof_class');
+      var resEl = document.getElementById('prof_residence');
+      var jobEl = document.getElementById('prof_job');
+      var salEl = document.getElementById('prof_salary');
+      var intEl = document.getElementById('prof_interview_count');
+
+      if (nameEl) appState.profile.name = nameEl.value;
+      if (classEl) appState.profile.className = classEl.value;
+      if (resEl) appState.profile.residence = resEl.value;
+      if (jobEl) appState.profile.job = jobEl.value;
+      if (salEl) appState.profile.salary = salEl.value;
+      if (intEl) appState.profile.interviewCount = intEl.value;
+
+      storage.set('giodan_profile_v1', appState.profile);
+
+      var nameDisplays = document.querySelectorAll('.profile-name-display');
+      for (var i = 0; i < nameDisplays.length; i++) {
+        nameDisplays[i].textContent = appState.profile.name;
+      }
+
+      renderTemplateCards();
+      renderExplanationCards();
+      renderDrillAll();
+    }
+
+    function setAnswerMode(mode) {
+      appState.answerDisplayMode = mode;
+      var btnAll = document.getElementById('mode-all');
+      var btnPaste = document.getElementById('mode-paste-jp');
+      if (btnAll && btnPaste) {
+        if (mode === 'all') {
+          btnAll.className = 'ans-mode-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white';
+          btnPaste.className = 'ans-mode-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200';
+        } else {
+          btnPaste.className = 'ans-mode-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white';
+          btnAll.className = 'ans-mode-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200';
+        }
+      }
+      renderTemplateCards();
+    }
+
+    function saveCustomAnswer(no, val) {
+      appState.customAnswers['q_' + no] = val;
+      storage.set('giodan_custom_ans_v1', appState.customAnswers);
+      showToast('✅ Jawaban No. ' + no + ' disimpan!');
+      renderTemplateCards();
+    }
+
+    function resetCustomAnswer(no) {
+      delete appState.customAnswers['q_' + no];
+      storage.set('giodan_custom_ans_v1', appState.customAnswers);
+      showToast('↩️ Jawaban No. ' + no + ' dikembalikan ke bawaan Giodan');
+      renderTemplateCards();
+    }
+
+    function goToExplanationNo(no) {
+      switchPage('page-explain');
+      setTimeout(function() {
+        var el = document.getElementById('explain-card-' + no);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+
+    function renderTemplateCards() {
+      var container = document.getElementById('templateCardsContainer');
+      if (!container) return;
+      var list = getMensetsuData();
+      var searchInput = document.getElementById('searchMensetsu');
+      var query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+      var filtered = [];
+      for (var i = 0; i < list.length; i++) {
+        var it = list[i];
+        if (!query ||
+            String(it.no) === query ||
+            it.qJp.toLowerCase().indexOf(query) !== -1 ||
+            it.qIndo.toLowerCase().indexOf(query) !== -1 ||
+            it.aJp.toLowerCase().indexOf(query) !== -1 ||
+            it.aIndo.toLowerCase().indexOf(query) !== -1) {
+          filtered.push(it);
+        }
+      }
+
+      // Group by PDF Page so it looks like the actual PDF sheets (2 questions per sheet)
+      var pagesMap = {};
+      var pageOrder = [];
+      for (var j = 0; j < filtered.length; j++) {
+        var pNo = filtered[j].pdfPage;
+        if (!pagesMap[pNo]) {
+          pagesMap[pNo] = [];
+          pageOrder.push(pNo);
+        }
+        pagesMap[pNo].push(filtered[j]);
+      }
+
+      var html = '';
+      for (var pIdx = 0; pIdx < pageOrder.length; pIdx++) {
+        var pdfPageNum = pageOrder[pIdx];
+        var itemsOnPage = pagesMap[pdfPageNum];
+
+        html += '<div class="pdf-card rounded-2xl p-5 shadow-sm space-y-5 print-break">' +
+          '<!-- HEADER PERSIS TEMPLATE PDF: 名前 & クラス -->' +
+          '<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-white/90 px-4 py-2.5 rounded-xl border border-sky-200">' +
+            '<div class="text-xs md:text-sm font-black text-slate-800">' +
+              '名前: <span class="text-blue-700">' + appState.profile.name + '</span>' +
+            '</div>' +
+            '<div class="flex items-center gap-3">' +
+              '<span class="text-xs md:text-sm font-black text-slate-800">クラス: <span class="text-indigo-700">' + appState.profile.className + '</span></span>' +
+              '<span class="text-[11px] bg-sky-100 text-sky-800 px-2 py-0.5 rounded font-bold no-print">Hal. ' + pdfPageNum + ' PDF</span>' +
+            '</div>' +
+          '</div>';
+
+        for (var k = 0; k < itemsOnPage.length; k++) {
+          var q = itemsOnPage[k];
+          var mKey = 'm-' + q.no;
+          var isMastered = !!appState.masteredIds[mKey];
+          var customJp = appState.customAnswers['q_' + q.no];
+          var finalJpPlain = customJp ? customJp : q.aJp;
+          var finalJpDisplay = customJp ? customJp : q.aRuby;
+
+          html += '<div class="bg-white rounded-xl p-4 md:p-5 border-2 ' + (isMastered ? 'border-emerald-500' : 'border-sky-100') + ' shadow-sm space-y-3">' +
+            '<div class="flex flex-col md:flex-row md:items-start justify-between gap-2 border-b border-slate-100 pb-3">' +
+              '<div class="space-y-1">' +
+                '<div class="flex items-center gap-2">' +
+                  '<span class="px-2.5 py-0.5 rounded-lg bg-slate-900 text-white font-black text-xs">No. ' + q.no + '</span>' +
+                  '<p class="jp-text font-extrabold text-base md:text-lg text-slate-900">' + q.no + '. ' + q.qRuby + '</p>' +
+                '</div>' +
+                '<p class="text-xs font-semibold text-slate-600 pl-1">' + q.qIndo + '</p>' +
+              '</div>' +
+              '<div class="flex flex-wrap items-center gap-1.5 shrink-0 no-print">' +
+                '<button onclick="speakJP(\'' + q.qJp.replace(/'/g, '') + '\')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs" title="Dengarkan Pertanyaan">' +
+                  '🔊 Tanya' +
+                '</button>' +
+                '<button onclick="speakJP(\'' + finalJpPlain.replace(/'/g, '') + '\')" class="px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200" title="Dengarkan Jawaban">' +
+                  '🔊 Jawab' +
+                '</button>' +
+                '<button onclick="copyText(\'' + finalJpPlain.replace(/'/g, '') + '\', \'Jawaban No. ' + q.no + '\')" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-sm">' +
+                  '📋 Salin Jawaban' +
+                '</button>' +
+                '<button onclick="goToExplanationNo(' + q.no + ')" class="px-2.5 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs">' +
+                  '💡 Bedah Arti' +
+                '</button>' +
+                '<button onclick="toggleMastered(\'' + mKey + '\')" class="px-2.5 py-1.5 rounded-lg font-extrabold text-xs ' + (isMastered ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700') + '">' +
+                  (isMastered ? '✅ Hafal' : '⬜ Hafal') +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+
+            '<!-- KOTAK JAWABAN SIAP TEMPEL -->' +
+            '<div class="bg-emerald-50/70 rounded-xl p-4 border-2 border-dashed border-emerald-300 space-y-2">' +
+              '<div class="flex items-center justify-between">' +
+                '<span class="text-[11px] font-black uppercase tracking-wider text-emerald-800">✍️ Jawaban Siap Tempel (Giodan Karaman):</span>' +
+                '<button onclick="document.getElementById(\'edit-box-' + q.no + '\').classList.toggle(\'hidden\')" class="text-[11px] text-slate-500 hover:text-blue-600 font-bold no-print">✏️ Ubah Kalimat Sendiri</button>' +
+              '</div>' +
+              '<p class="jp-text font-black text-base md:text-lg text-slate-900 leading-relaxed select-all">' + finalJpDisplay + '</p>' +
+              (appState.answerDisplayMode === 'all' ? (
+                '<p class="text-xs font-semibold text-blue-700">' + q.aRomaji + '</p>' +
+                '<p class="text-xs text-slate-700 border-t border-emerald-200/70 pt-1.5"><strong>Arti Jawaban:</strong> ' + q.aIndo + '</p>'
+              ) : '') +
+
+              '<!-- Editor Kalimat Kustom -->' +
+              '<div id="edit-box-' + q.no + '" class="hidden pt-2 border-t border-emerald-200 space-y-2 no-print">' +
+                '<textarea id="ta-custom-' + q.no + '" rows="2" class="w-full p-2 rounded-lg border border-slate-300 text-xs jp-text font-bold">' + finalJpPlain + '</textarea>' +
+                '<div class="flex gap-2">' +
+                  '<button onclick="saveCustomAnswer(' + q.no + ', document.getElementById(\'ta-custom-' + q.no + '\').value)" class="px-3 py-1 rounded-lg bg-emerald-600 text-white font-bold text-xs">Simpan Jawaban</button>' +
+                  '<button onclick="resetCustomAnswer(' + q.no + ')" class="px-3 py-1 rounded-lg bg-slate-200 text-slate-700 font-bold text-xs">Reset ke Default</button>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+        }
+
+        html += '</div>';
+      }
+
+      container.innerHTML = html;
+    }
+
+    // =================================================================
+    // RENDER HALAMAN 3: PENJELASAN MENDALAM & ARTI PER KATA (TERPISAH)
+    // =================================================================
+    function renderExplanationCards() {
+      var container = document.getElementById('explainCardsContainer');
+      var jumpSel = document.getElementById('explainJumpSelect');
+      if (!container) return;
+
+      var list = getMensetsuData();
+      var selectHtml = '<option value="">-- Pilih Nomor Soal (1 - 30) --</option>';
+      var html = '';
+
+      for (var i = 0; i < list.length; i++) {
+        var q = list[i];
+        selectHtml += '<option value="' + q.no + '">No. ' + q.no + ' — ' + q.qIndo.slice(0, 42) + '...</option>';
+
+        var wordsHtml = '';
+        for (var w = 0; w < q.words.length; w++) {
+          wordsHtml += '<div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between">' +
+            '<span class="jp-text font-extrabold text-xs md:text-sm text-blue-800">' + q.words[w].w + '</span>' +
+            '<span class="text-xs text-slate-700 font-medium mt-0.5">= ' + q.words[w].m + '</span>' +
+          '</div>';
+        }
+
+        html += '<div id="explain-card-' + q.no + '" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">' +
+          '<div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-3">' +
+            '<div>' +
+              '<span class="inline-block px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-900 font-black text-xs mb-1">Bedah Pemahaman Nomor ' + q.no + ' (Hal. ' + q.pdfPage + ' PDF)</span>' +
+              '<h3 class="jp-text font-black text-lg text-slate-900">' + q.no + '. ' + q.qRuby + '</h3>' +
+              '<p class="text-xs font-bold text-slate-500">' + q.qRomaji + ' — "' + q.qIndo + '"</p>' +
+            '</div>' +
+            '<div class="flex gap-2 shrink-0">' +
+              '<button onclick="speakJP(\'' + q.qJp.replace(/'/g, '') + '\')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">🔊 Suara Tanya</button>' +
+              '<button onclick="speakJP(\'' + q.aJp.replace(/'/g, '') + '\')" class="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200">🔊 Suara Jawab</button>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="grid md:grid-cols-2 gap-4">' +
+            '<div class="bg-amber-50/80 p-4 rounded-xl border border-amber-200 space-y-1.5">' +
+              '<div class="text-xs font-black uppercase text-amber-900">🎯 Maksud & Tujuan Pewawancara Jepang:</div>' +
+              '<p class="text-xs md:text-sm text-slate-800 leading-relaxed">' + q.intent + '</p>' +
+            '</div>' +
+            '<div class="bg-emerald-50/70 p-4 rounded-xl border border-emerald-200 space-y-1.5">' +
+              '<div class="text-xs font-black uppercase text-emerald-900">🗣️ Kalimat Jawaban Giodan & Artinya:</div>' +
+              '<p class="jp-text font-bold text-sm md:text-base text-slate-900">' + q.aRuby + '</p>' +
+              '<p class="text-xs text-blue-700 font-medium">' + q.aRomaji + '</p>' +
+              '<p class="text-xs text-slate-700 pt-1 border-t border-emerald-200/60"><strong>Arti Utuh:</strong> ' + q.aIndo + '</p>' +
+            '</div>' +
+          '</div>' +
+
+          '<div>' +
+            '<div class="text-xs font-extrabold text-slate-500 uppercase mb-2">🔍 Bedah Arti Per Potong Kata (Supaya Paham & Tidak Hafal Buta):</div>' +
+            '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">' + wordsHtml + '</div>' +
+          '</div>' +
+        '</div>';
+      }
+
+      if (jumpSel && !jumpSel.innerHTML.trim()) {
+        jumpSel.innerHTML = selectHtml;
+      }
+      container.innerHTML = html;
+    }
+
+    function jumpToExplanation(no) {
+      if (!no) return;
+      var el = document.getElementById('explain-card-' + no);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // =================================================================
+    // RENDER HALAMAN 4: SIMULATOR MENSETSU & LATIHAN KUASAI
+    // =================================================================
+    function setDrillMode(mode) {
+      appState.drillMode = mode;
+      var modes = ['mock', 'meaning', 'builder'];
+      for (var i = 0; i < modes.length; i++) {
+        var cont = document.getElementById('drill-' + modes[i] + '-container');
+        var btn = document.getElementById('drill-btn-' + modes[i]);
+        if (cont) {
+          if (modes[i] === mode) cont.classList.remove('hidden');
+          else cont.classList.add('hidden');
+        }
+        if (btn) {
+          if (modes[i] === mode) {
+            btn.className = 'px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs shadow';
+          } else {
+            btn.className = 'px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs';
+          }
+        }
+      }
+      renderDrillAll();
+    }
+
+    function renderDrillAll() {
+      renderMockInterview();
+      renderMeaningQuiz();
+      renderSentenceBuilder();
+    }
+
+    // --- DRILL 1: MOCK INTERVIEW ---
+    function renderMockInterview() {
+      var box = document.getElementById('drill-mock-container');
+      if (!box) return;
+      var list = getMensetsuData();
+      var item = list[appState.mockIndex];
+
+      var kwPills = '';
+      for (var i = 0; i < item.words.length; i++) {
+        kwPills += '<span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 font-bold text-xs">' + item.words[i].w + ' = ' + item.words[i].m + '</span>';
+      }
+
+      box.innerHTML =
+        '<div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-4">' +
+          '<div>' +
+            '<span class="text-xs font-extrabold text-emerald-700 uppercase">🎙️ Simulasi Tatap Muka Pewawancara Jepang</span>' +
+            '<h3 class="text-lg font-black text-slate-900">Pertanyaan No. ' + item.no + ' dari 30</h3>' +
+          '</div>' +
+          '<div class="flex flex-wrap gap-2">' +
+            '<button onclick="prevMockQuestion()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 font-bold text-xs">⬅️ Sebelumnya</button>' +
+            '<button onclick="randomMockQuestion()" class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs">🎲 Acak Nomor</button>' +
+            '<button onclick="nextMockQuestion()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs">Berikutnya ➡️</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="bg-slate-900 text-white rounded-2xl p-6 space-y-4">' +
+          '<div class="flex items-center justify-between">' +
+            '<span class="text-xs font-bold text-emerald-400">👔 Pewawancara Jepang Bertanya:</span>' +
+            '<button onclick="speakJP(\'' + item.qJp.replace(/'/g, '') + '\')" class="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow">' +
+              '🔊 Putar Suara Pewawancara' +
+            '</button>' +
+          '</div>' +
+          '<p class="jp-text text-xl md:text-2xl font-black leading-relaxed">' + item.no + '. ' + item.qRuby + '</p>' +
+          '<p class="text-xs text-slate-300">' + item.qRomaji + '</p>' +
+        '</div>' +
+
+        '<div class="flex flex-wrap gap-2">' +
+          '<button onclick="appState.mockRevealHint = !appState.mockRevealHint; renderMockInterview();" class="px-4 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-extrabold text-xs">' +
+            (appState.mockRevealHint ? '🙈 Tutup Petunjuk Arti' : '💡 1. Lihat Arti Pertanyaan & Kata Kunci') +
+          '</button>' +
+          '<button onclick="appState.mockRevealAnswer = !appState.mockRevealAnswer; renderMockInterview();" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow">' +
+            (appState.mockRevealAnswer ? '🙈 Tutup Jawaban Giodan' : '👀 2. Buka Jawaban Lengkap Giodan') +
+          '</button>' +
+        '</div>' +
+
+        (appState.mockRevealHint ? (
+          '<div class="p-4 rounded-xl bg-amber-50 border border-amber-200 space-y-2">' +
+            '<p class="text-xs md:text-sm font-bold text-amber-950">Arti Pertanyaan: "' + item.qIndo + '"</p>' +
+            '<p class="text-xs text-slate-700"><strong>Maksud Pewawancara:</strong> ' + item.intent + '</p>' +
+            '<div class="flex flex-wrap gap-1.5 pt-1">' + kwPills + '</div>' +
+          '</div>'
+        ) : '') +
+
+        (appState.mockRevealAnswer ? (
+          '<div class="p-5 rounded-xl bg-emerald-50 border-2 border-emerald-400 space-y-2">' +
+            '<div class="flex items-center justify-between">' +
+              '<span class="text-xs font-black text-emerald-900 uppercase">✅ Jawaban Terbaik Giodan Karaman:</span>' +
+              '<button onclick="speakJP(\'' + item.aJp.replace(/'/g, '') + '\')" class="px-3 py-1 rounded-lg bg-emerald-600 text-white font-bold text-xs">🔊 Dengarkan & Tirukan</button>' +
+            '</div>' +
+            '<p class="jp-text text-lg md:text-xl font-black text-slate-900 leading-relaxed">' + item.aRuby + '</p>' +
+            '<p class="text-xs md:text-sm font-semibold text-blue-700">' + item.aRomaji + '</p>' +
+            '<p class="text-xs text-slate-700 border-t border-emerald-200 pt-2"><strong>Arti:</strong> ' + item.aIndo + '</p>' +
+          '</div>'
+        ) : '');
+    }
+
+    function nextMockQuestion() {
+      appState.mockIndex = (appState.mockIndex + 1) % 30;
+      appState.mockRevealAnswer = false;
+      appState.mockRevealHint = false;
+      renderMockInterview();
+    }
+
+    function prevMockQuestion() {
+      appState.mockIndex = (appState.mockIndex - 1 + 30) % 30;
+      appState.mockRevealAnswer = false;
+      appState.mockRevealHint = false;
+      renderMockInterview();
+    }
+
+    function randomMockQuestion() {
+      appState.mockIndex = Math.floor(Math.random() * 30);
+      appState.mockRevealAnswer = false;
+      appState.mockRevealHint = false;
+      renderMockInterview();
+      var list = getMensetsuData();
+      speakJP(list[appState.mockIndex].qJp);
+    }
+
+    // --- DRILL 2: TEBAK ARTI PERTANYAAN (AGAR TIDAK BUTA MAKSUD) ---
+    function renderMeaningQuiz() {
+      var box = document.getElementById('drill-meaning-container');
+      if (!box) return;
+      var list = getMensetsuData();
+      var current = list[appState.meaningQuizIndex];
+
+      // Build 4 choices
+      var choices = [current];
+      while (choices.length < 4) {
+        var r = list[Math.floor(Math.random() * list.length)];
+        var exists = false;
+        for (var i = 0; i < choices.length; i++) {
+          if (choices[i].no === r.no) exists = true;
+        }
+        if (!exists) choices.push(r);
+      }
+      // Deterministic shuffle based on question number + score
+      choices.sort(function(a, b) {
+        return ((a.no * 7 + appState.meaningQuizIndex) % 11) - ((b.no * 7 + appState.meaningQuizIndex) % 11);
+      });
+
+      var btns = '';
+      for (var c = 0; c < choices.length; c++) {
+        btns += '<button onclick="checkMeaningAnswer(' + choices[c].no + ')" class="w-full text-left p-3.5 rounded-xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition font-bold text-xs md:text-sm text-slate-800">' +
+          choices[c].qIndo +
+        '</button>';
+      }
+
+      box.innerHTML =
+        '<div class="flex items-center justify-between border-b border-slate-200 pb-3">' +
+          '<div>' +
+            '<span class="text-xs font-extrabold text-blue-600 uppercase">👂 Tes Paham Maksud Pertanyaan</span>' +
+            '<h3 class="text-lg font-black text-slate-900">Apa arti pertanyaan wawancara di bawah ini?</h3>' +
+          '</div>' +
+          '<span class="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-800 font-black text-xs">Benar: ' + appState.meaningQuizScore + '</span>' +
+        '</div>' +
+        '<div class="p-5 rounded-2xl bg-slate-900 text-white space-y-2">' +
+          '<div class="flex items-center justify-between">' +
+            '<span class="text-xs text-slate-400">Pertanyaan No. ' + current.no + '</span>' +
+            '<button onclick="speakJP(\'' + current.qJp.replace(/'/g, '') + '\')" class="px-3 py-1 rounded-lg bg-blue-600 text-white text-xs font-bold">🔊 Dengarkan</button>' +
+          '</div>' +
+          '<p class="jp-text text-xl font-black">' + current.qRuby + '</p>' +
+          '<p class="text-xs text-blue-300">' + current.qRomaji + '</p>' +
+        '</div>' +
+        '<div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">' + btns + '</div>' +
+        '<div id="meaningFeedbackBox" class="hidden p-4 rounded-xl border text-xs"></div>';
+    }
+
+    function checkMeaningAnswer(chosenNo) {
+      var list = getMensetsuData();
+      var current = list[appState.meaningQuizIndex];
+      var fb = document.getElementById('meaningFeedbackBox');
+      if (!fb) return;
+      fb.classList.remove('hidden');
+
+      if (chosenNo === current.no) {
+        appState.meaningQuizScore++;
+        fb.className = 'p-4 rounded-xl border bg-emerald-50 border-emerald-300 text-emerald-950 space-y-2';
+        fb.innerHTML = '<div class="font-black text-sm text-emerald-700">✅ BENAR! Anda paham maksud pertanyaannya.</div>' +
+          '<p class="text-xs"><strong>Jawaban Anda nanti:</strong> <span class="jp-text font-bold">' + current.aJp + '</span> (' + current.aIndo + ')</p>' +
+          '<button onclick="appState.meaningQuizIndex = (appState.meaningQuizIndex + 1) % 30; renderMeaningQuiz();" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-bold text-xs">Soal Berikutnya ➔</button>';
+      } else {
+        fb.className = 'p-4 rounded-xl border bg-rose-50 border-rose-300 text-rose-950 space-y-2';
+        fb.innerHTML = '<div class="font-black text-sm text-rose-700">❌ Belum Tepat!</div>' +
+          '<p class="text-xs">Arti yang benar adalah: <strong>"' + current.qIndo + '"</strong></p>' +
+          '<button onclick="appState.meaningQuizIndex = (appState.meaningQuizIndex + 1) % 30; renderMeaningQuiz();" class="px-4 py-2 rounded-lg bg-slate-800 text-white font-bold text-xs">Lanjut ➔</button>';
+      }
+    }
+
+    // --- DRILL 3: SUSUN KALIMAT JAWABAN (ACTIVE RECALL BUILDER) ---
+    function renderSentenceBuilder() {
+      var box = document.getElementById('drill-builder-container');
+      if (!box) return;
+      var list = getMensetsuData();
+      var item = list[appState.builderIndex];
+
+      var pool = item.builderChunks.slice();
+      pool.sort(function(a, b) {
+        return a.localeCompare(b);
+      });
+
+      var selectedHtml = '';
+      for (var s = 0; s < appState.builderSelected.length; s++) {
+        selectedHtml += '<span class="px-3 py-1.5 rounded-xl bg-blue-600 text-white font-bold text-xs md:text-sm jp-text">' + appState.builderSelected[s] + '</span>';
+      }
+      if (!selectedHtml) {
+        selectedHtml = '<span class="text-xs text-slate-400">Klik potongan kalimat di bawah secara berurutan untuk menyusun jawaban Giodan...</span>';
+      }
+
+      var poolBtns = '';
+      for (var p = 0; p < pool.length; p++) {
+        var chunk = pool[p];
+        var used = appState.builderSelected.indexOf(chunk) !== -1;
+        poolBtns += '<button ' + (used ? 'disabled' : '') + ' onclick="selectBuilderChunk(\'' + chunk.replace(/'/g, '') + '\')" class="px-3.5 py-2 rounded-xl border-2 font-bold text-xs md:text-sm jp-text transition ' + (used ? 'bg-slate-100 border-slate-200 text-slate-300' : 'bg-white border-slate-300 hover:border-blue-500 text-slate-900 shadow-sm') + '">' +
+          chunk +
+        '</button>';
+      }
+
+      var isComplete = appState.builderSelected.length === item.builderChunks.length;
+      var isCorrect = isComplete && (appState.builderSelected.join('') === item.builderChunks.join(''));
+
+      box.innerHTML =
+        '<div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">' +
+          '<div>' +
+            '<span class="text-xs font-extrabold text-indigo-600 uppercase">🧩 Latihan Susun Kalimat Jawaban (No. ' + item.no + '/30)</span>' +
+            '<h3 class="jp-text text-base md:text-lg font-black text-slate-900">' + item.no + '. ' + item.qRuby + '</h3>' +
+            '<p class="text-xs text-slate-600">' + item.qIndo + '</p>' +
+          '</div>' +
+          '<div class="flex gap-2">' +
+            '<button onclick="appState.builderSelected = []; renderSentenceBuilder();" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold">🔄 Ulangi Susunan</button>' +
+            '<button onclick="appState.builderIndex = (appState.builderIndex + 1) % 30; appState.builderSelected = []; renderSentenceBuilder();" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold">Nomor Berikutnya ➔</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="p-4 rounded-xl bg-slate-50 border-2 border-dashed border-slate-300 min-h-[64px] flex flex-wrap items-center gap-2">' +
+          selectedHtml +
+        '</div>' +
+
+        '<div class="flex flex-wrap gap-2">' + poolBtns + '</div>' +
+
+        (isComplete ? (
+          isCorrect ? (
+            '<div class="p-4 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-950 space-y-2">' +
+              '<div class="font-black text-sm text-emerald-700">🎉 SEMPURNA! Susunan kalimat jawaban Anda 100% benar!</div>' +
+              '<p class="jp-text font-bold text-base">' + item.aRuby + '</p>' +
+              '<p class="text-xs text-blue-700">' + item.aRomaji + '</p>' +
+              '<button onclick="speakJP(\'' + item.aJp.replace(/'/g, '') + '\')" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs">🔊 Dengarkan Pelafalan</button>' +
+            '</div>'
+          ) : (
+            '<div class="p-4 rounded-xl bg-rose-50 border border-rose-300 text-rose-950 space-y-2">' +
+              '<div class="font-black text-sm text-rose-700">⚠️ Urutan kalimat belum tepat.</div>' +
+              '<p class="text-xs">Urutan yang benar: <strong class="jp-text">' + item.builderChunks.join(' ➔ ') + '</strong></p>' +
+              '<button onclick="appState.builderSelected = []; renderSentenceBuilder();" class="px-3 py-1.5 rounded-lg bg-rose-600 text-white font-bold text-xs">Coba Susun Lagi</button>' +
+            '</div>'
+          )
+        ) : '');
+    }
+
+    function selectBuilderChunk(chunk) {
+      appState.builderSelected.push(chunk);
+      renderSentenceBuilder();
+    }
+
+    // --- INITIALIZE ON LOAD ---
+    window.onload = function() {
+      // Sync saved profile inputs
+      var nameEl = document.getElementById('prof_name');
+      var classEl = document.getElementById('prof_class');
+      var resEl = document.getElementById('prof_residence');
+      var jobEl = document.getElementById('prof_job');
+      var salEl = document.getElementById('prof_salary');
+      var intEl = document.getElementById('prof_interview_count');
+
+      if (nameEl) nameEl.value = appState.profile.name;
+      if (classEl) classEl.value = appState.profile.className;
+      if (resEl) resEl.value = appState.profile.residence;
+      if (jobEl) jobEl.value = appState.profile.job;
+      if (salEl) salEl.value = appState.profile.salary;
+      if (intEl) intEl.value = appState.profile.interviewCount;
+
+      updateProgressHeader();
+      render5SCards();
+      render5SQuiz();
+      renderTemplateCards();
+      renderExplanationCards();
+      renderDrillAll();
+    };
+  </script>
+</body>
+</html>
