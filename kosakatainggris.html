@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vocab Gauntlet — 50 Kosa Kata Dasar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        bgMain: '#090d16',
+                        bgCard: '#111827',
+                        bgElevated: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #090d16;
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Animasi Halus untuk Transisi Otak */
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.06); opacity: 0.85; }
+        }
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        @keyframes soundWave {
+            0%, 100% { height: 8px; }
+            50% { height: 28px; }
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.92); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .animate-pop {
+            animation: popIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-shake {
+            animation: shakeError 0.4s ease-in-out;
+        }
+        .wave-bar {
+            width: 5px;
+            background: #f43f5e;
+            border-radius: 9999px;
+            height: 8px;
+            transition: height 0.15s ease;
+        }
+        .wave-active .wave-bar:nth-child(1) { animation: soundWave 0.55s infinite ease-in-out 0.0s; }
+        .wave-active .wave-bar:nth-child(2) { animation: soundWave 0.55s infinite ease-in-out 0.15s; }
+        .wave-active .wave-bar:nth-child(3) { animation: soundWave 0.55s infinite ease-in-out 0.3s; }
+        .wave-active .wave-bar:nth-child(4) { animation: soundWave 0.55s infinite ease-in-out 0.15s; }
+        .wave-active .wave-bar:nth-child(5) { animation: soundWave 0.55s infinite ease-in-out 0.0s; }
+
+        /* Custom Scrollbar Gelap */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950">
+
+    <!-- HEADER & NAVIGASI -->
+    <header class="w-full max-w-2xl mx-auto px-4 pt-4 pb-2">
+        <div class="flex items-center justify-between bg-slate-900/90 border border-slate-800/80 rounded-2xl px-4 py-3 shadow-lg backdrop-blur-md">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-black text-lg shadow-inner">
+                    ⚡
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-lg tracking-tight text-slate-100 leading-none">
+                        VOCAB GAUNTLET
+                    </h1>
+                    <p class="text-xs text-slate-400 mt-1">50 Kosa Kata Inggris Paling Dasar (Level 0)</p>
+                </div>
+            </div>
+
+            <!-- Tombol Mode Daftar 50 Kata & Pengaturan -->
+            <div class="flex items-center gap-2">
+                <button id="btnToggleCatalog" onclick="toggleViewMode()" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5 active:scale-95">
+                    <span id="catalogBtnIcon">📖</span>
+                    <span id="catalogBtnText">50 Kata</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-1 w-full max-w-2xl mx-auto px-4 py-2 flex flex-col justify-center">
+
+        <!-- ================= VIEW 1: GAUNTLET ARENA ================= -->
+        <section id="gauntletView" class="w-full space-y-4">
+
+            <!-- STATUS BAR: PROGRESS, REKOR, & OPSI BANTUAN VISUAL -->
+            <div class="bg-slate-900/75 border border-slate-800/90 rounded-2xl p-3.5 sm:p-4 shadow-md">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Progress Gauntlet:</span>
+                        <span id="progressBadge" class="px-2.5 py-0.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-mono font-bold text-sm">
+                            1 / 50
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="text-xs text-slate-400">
+                            Rekor Terbaik: <strong id="bestStreakText" class="text-amber-400 font-mono">0 / 50</strong>
+                        </div>
+                        <button onclick="toggleOrderMode()" id="btnOrderMode" title="Ubah pola urutan kata saat mengulang" class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                            Urutan: Bertahap
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Progress Bar Visual -->
+                <div class="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                    <div id="progressBar" class="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 rounded-full transition-all duration-300" style="width: 2%;"></div>
+                </div>
+
+                <!-- Jejak Nomor Kecil (Mini Steps) -->
+                <div class="flex items-center justify-between mt-2.5 text-[11px] text-slate-400">
+                    <span>🔥 Salah 1 huruf = Audio 3x & Ulang dari Kata ke-1</span>
+                    <button onclick="toggleHintBox()" id="btnToggleHint" class="text-emerald-400 hover:underline font-medium">
+                        Bantuan Visual: ON
+                    </button>
+                </div>
+            </div>
+
+            <!-- KARTU UTAMA GAUNTLET -->
+            <div id="questionCard" class="relative bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-7 shadow-2xl transition-all overflow-hidden">
+                
+                <!-- Latar Glow Halus Sesuai Kategori Kata -->
+                <div id="ambientGlow" class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-72 h-48 bg-emerald-500/10 blur-3xl rounded-full transition-all duration-500"></div>
+
+                <!-- Baris Atas: Badge Arah Terjemahan & Kategori Memori -->
+                <div class="relative z-10 flex items-center justify-between gap-2 mb-5">
+                    <div id="directionBadge" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-extrabold tracking-wide uppercase border">
+                        <!-- Diisi oleh JS: INGGRIS -> INDONESIA atau INDONESIA -> INGGRIS -->
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span id="categoryBadge" class="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">
+                            Kata Dasar
+                        </span>
+                        <button type="button" onclick="playCurrentPromptAudio()" title="Dengarkan pengucapan bahasa Inggris" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-slate-300 active:scale-95 transition">
+                            🔊
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Area Jangkar Visual & Kata Soal -->
+                <div class="relative z-10 text-center my-4 sm:my-6">
+                    <!-- Emoji Visual Besar (Membantu otak mengaitkan gambar + kata) -->
+                    <div id="visualAnchorWrap" class="mb-3 flex flex-col items-center justify-center">
+                        <div id="wordEmoji" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-800/90 border border-slate-700/80 flex items-center justify-center text-4xl sm:text-5xl shadow-inner mb-2 select-none">
+                            🍎
+                        </div>
+                    </div>
+
+                    <p id="instructionLabel" class="text-xs font-medium uppercase tracking-widest text-slate-400 mb-1">
+                        Ketik arti Bahasa Indonesianya:
+                    </p>
+
+                    <h2 id="promptWord" class="text-3xl sm:text-5xl font-black tracking-tight text-white break-words select-none">
+                        eat
+                    </h2>
+
+                    <!-- Cara Baca / Jembatan Otak (Muncul halus jika mode bantuan aktif) -->
+                    <div id="brainBridgeHint" class="mt-3 inline-flex flex-wrap items-center justify-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-950/70 border border-slate-800/80 text-xs text-slate-300">
+                        <span id="phoneticHint" class="text-cyan-400 font-mono font-semibold">🔊 Cara baca: it</span>
+                        <span class="text-slate-600">•</span>
+                        <span id="bridgeHintText" class="text-slate-300 italic">Jembatan: ITu roti langsung diMAKAN</span>
+                    </div>
+                </div>
+
+                <!-- Siluet Kotak Huruf Target (Membantu otak memetakan panjang ejaan) -->
+                <div id="letterSlotsContainer" class="relative z-10 flex flex-wrap items-center justify-center gap-1.5 my-4 min-h-[36px]">
+                    <!-- Kotak huruf dirender otomatis oleh JS -->
+                </div>
+
+                <!-- FORM INPUT KETIK -->
+                <form id="answerForm" onsubmit="handleSubmitAnswer(event)" class="relative z-10 mt-5 space-y-3" autocomplete="off">
+                    <div class="relative">
+                        <input
+                            id="answerInput"
+                            type="text"
+                            inputmode="text"
+                            autocapitalize="off"
+                            autocomplete="off"
+                            autocorrect="off"
+                            spellcheck="false"
+                            placeholder="Ketik jawaban di sini..."
+                            oninput="handleLiveTyping(this.value)"
+                            class="w-full px-4 py-4 rounded-2xl bg-slate-950 border-2 border-slate-700 focus:border-emerald-400 focus:outline-none text-center font-mono text-xl sm:text-2xl font-bold text-white placeholder-slate-600 shadow-inner transition"
+                        />
+                    </div>
+
+                    <div class="flex items-center gap-2.5 pt-1">
+                        <button
+                            type="button"
+                            onclick="triggerGiveUp()"
+                            class="px-4 py-3.5 rounded-xl bg-slate-800/90 hover:bg-rose-950/60 hover:border-rose-700/60 text-slate-300 hover:text-rose-300 border border-slate-700 text-xs sm:text-sm font-semibold transition active:scale-95"
+                        >
+                            Lupa / Lihat Jawaban
+                        </button>
+
+                        <button
+                            type="submit"
+                            id="btnSubmit"
+                            class="flex-1 py-3.5 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm sm:text-base tracking-wide shadow-lg shadow-emerald-500/20 transition active:scale-98 flex items-center justify-center gap-2"
+                        >
+                            <span>CEK EJAAN</span>
+                            <span class="text-xs font-mono bg-slate-950/20 px-2 py-0.5 rounded">ENTER ↵</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- OVERLAY KILAT SAAT JAWABAN BENAR (MICRO-IMPRINT) -->
+                <div id="correctFlashOverlay" class="hidden absolute inset-0 z-20 bg-emerald-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-pop">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-3xl mb-3">
+                        ✅
+                    </div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-emerald-300 mb-1">Tepat! Mengunci ke Memori</p>
+                    <h3 id="correctFlashPair" class="text-2xl sm:text-3xl font-black text-white font-mono">
+                        EAT = MAKAN
+                    </h3>
+                    <p id="correctFlashPhonetic" class="text-sm text-emerald-200/80 mt-1 font-mono">
+                        Cara baca: "it"
+                    </p>
+                </div>
+
+                <!-- OVERLAY HUKUMAN & PENGUNCI MEMORI SAAT SALAH (AUDIO 3X OTOMATIS -> RESET KE 1) -->
+                <div id="penaltyOverlay" class="hidden absolute inset-0 z-30 bg-slate-950/98 backdrop-blur-lg flex flex-col items-center justify-between p-5 sm:p-7 text-center animate-pop">
+                    
+                    <div class="w-full flex items-center justify-between border-b border-rose-900/50 pb-3">
+                        <span class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-rose-400">
+                            ⚠️ Ejaan Salah — Gauntlet Gugur!
+                        </span>
+                        <span id="failedAtBadge" class="text-xs font-mono px-2.5 py-0.5 rounded bg-rose-500/15 text-rose-300 border border-rose-500/30">
+                            Gagal di Kata #6
+                        </span>
+                    </div>
+
+                    <!-- Perbandingan Jawaban & Koreksi Visual -->
+                    <div class="my-auto py-3 w-full max-w-md space-y-3">
+                        <div class="flex items-center justify-center gap-2 text-xs text-slate-400">
+                            <span>Soal: <strong id="penaltyPromptWord" class="text-slate-200">water</strong></span>
+                            <span>•</span>
+                            <span>Ketikanmu: <del id="penaltyUserTyped" class="text-rose-400 font-mono">woter</del></span>
+                        </div>
+
+                        <div class="bg-slate-900 border-2 border-emerald-500/50 rounded-2xl p-4 shadow-xl">
+                            <p class="text-[11px] uppercase tracking-widest text-emerald-400 font-bold mb-1">
+                                Rekam Ejaan yang Benar di Otak:
+                            </p>
+                            <div id="penaltyCorrectAnswer" class="text-2xl sm:text-4xl font-black font-mono tracking-wider text-white">
+                                W - A - T - E - R
+                            </div>
+                            <p id="penaltyFullPair" class="text-sm font-semibold text-amber-300 mt-1.5">
+                                water (baca: woter) = air
+                            </p>
+                            <p id="penaltyBridge" class="text-xs text-slate-300 mt-2 bg-slate-950/80 py-1.5 px-3 rounded-lg border border-slate-800">
+                                💡 Jembatan Ingatan: Tenggorokan kering butuh AIR (WATER)
+                            </p>
+                        </div>
+
+                        <!-- Indikator Pemutar Audio 3 Kali Berturut-turut -->
+                        <div class="bg-rose-950/30 border border-rose-500/30 rounded-2xl p-3.5 flex flex-col items-center justify-center space-y-2">
+                            <div class="flex items-center gap-3">
+                                <div id="soundWaveBox" class="flex items-center gap-1 h-7 wave-active">
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                    <div class="wave-bar"></div>
+                                </div>
+                                <span id="audioCountStatus" class="text-sm font-extrabold text-rose-200 tracking-wide">
+                                    Memutar Audio Jawaban (1 / 3)...
+                                </span>
+                            </div>
+
+                            <!-- 3 Titik Putaran Audio -->
+                            <div class="flex items-center gap-3 pt-1">
+                                <div id="audioDot1" class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-rose-500 text-white transition-all">
+                                    🔊 1x
+                                </div>
+                                <div id="audioDot2" class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-slate-800 text-slate-500 transition-all">
+                                    🔊 2x
+                                </div>
+                                <div id="audioDot3" class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-slate-800 text-slate-500 transition-all">
+                                    🔊 3x
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                        <span>Otomatis kembali ke Kata 1 setelah 3x audio selesai...</span>
+                        <button onclick="forceFinishPenaltyReset()" class="text-slate-300 hover:text-white underline font-semibold">
+                            Langsung Ulang ↻
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- MODAL KEMENANGAN 50/50 -->
+            <div id="victoryCard" class="hidden bg-slate-900 border-2 border-emerald-500/60 rounded-3xl p-7 text-center shadow-2xl space-y-5 animate-pop">
+                <div class="w-20 h-20 mx-auto rounded-3xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-5xl">
+                    🏆
+                </div>
+                <div>
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-extrabold uppercase tracking-widest">
+                        Tamat 50 / 50 Tanpa Salah!
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white mt-3">
+                        Luar Biasa! 50 Kata Dasar Sudah Menempel di Kepala!
+                    </h2>
+                    <p class="text-sm text-slate-300 mt-2 max-w-md mx-auto">
+                        Kamu berhasil menyelesaikan seluruh tantangan ketik bolak-balik Inggris–Indonesia dari kata ke-1 sampai ke-50 tanpa gugur sekalipun.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                    <button onclick="restartFullGauntlet(true)" class="px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition shadow-lg">
+                        🔀 Main Lagi (Acak Urutan Kata)
+                    </button>
+                    <button onclick="restartFullGauntlet(false)" class="px-5 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm border border-slate-700 transition">
+                        Ulangi dari Kata 1
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= VIEW 2: DAFTAR 50 KATA & KARTU JEMBATAN OTAK ================= -->
+        <section id="catalogView" class="hidden w-full space-y-4 animate-pop">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-white flex items-center gap-2">
+                            <span>🧠</span> Daftar 50 Kosa Kata Paling Dasar
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Klik tombol 🔊 untuk mendengar cara baca sebelum masuk ke tantangan Gauntlet Ketik.
+                        </p>
+                    </div>
+                    <button onclick="toggleViewMode()" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shrink-0 transition">
+                        ⚔️ Kembali ke Gauntlet
+                    </button>
+                </div>
+
+                <!-- Filter Kategori Cepat -->
+                <div class="flex flex-wrap items-center gap-2 my-3">
+                    <button onclick="renderCatalog('ALL')" id="filter_ALL" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 text-slate-950 transition">Semua (50)</button>
+                    <button onclick="renderCatalog('Kata Kerja')" id="filter_Kata Kerja" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Kata Kerja (20)</button>
+                    <button onclick="renderCatalog('Benda Dasar')" id="filter_Benda Dasar" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Benda Dasar (14)</button>
+                    <button onclick="renderCatalog('Waktu')" id="filter_Waktu" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Waktu (6)</button>
+                    <button onclick="renderCatalog('Kata Sifat')" id="filter_Kata Sifat" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Kata Sifat (10)</button>
+                </div>
+
+                <!-- Grid 50 Kata -->
+                <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[60vh] overflow-y-auto pr-1 pt-1">
+                    <!-- Diisi oleh JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER RINGKAS -->
+    <footer class="w-full max-w-2xl mx-auto px-4 py-3 text-center text-[11px] text-slate-500">
+        <span>Tips Pemula: Perhatikan ikon gambar & ucapkan keras-keras saat mengetik agar memori visual + suara langsung terkunci.</span>
+    </footer>
+
+    <script>
+        // ============================================================================
+        // DATA 50 KOSA KATA INGGRIS PALING DASAR (LEVEL 0 - TANPA AMBIGUITAS)
+        // Dilengkapi Ikon Visual, Cara Baca Fonetik Indonesia, & Jembatan Ingatan Otak
+        // ============================================================================
+        const VOCAB_DATA = [
+            // --- 1-20: KATA KERJA SEHARI-HARI PALING INTI ---
+            { id: 1, en: "eat", id_primary: "makan", id_alt: ["memakan"], phonetic: "it", emoji: "🍽️", category: "Kata Kerja", bridge: "ITu roti langsung diMAKAN" },
+            { id: 2, en: "drink", id_primary: "minum", id_alt: ["meminum"], phonetic: "dringk", emoji: "🥤", category: "Kata Kerja", bridge: "Haus MINUM es ber-DRINGK" },
+            { id: 3, en: "sleep", id_primary: "tidur", id_alt: ["tertidur"], phonetic: "slip", emoji: "😴", category: "Kata Kerja", bridge: "Mata SLIP langsung TIDUR" },
+            { id: 4, en: "wake", id_primary: "bangun", id_alt: ["terbangun"], phonetic: "weik", emoji: "🌅", category: "Kata Kerja", bridge: "Alarm bunyi WEIK langsung BANGUN" },
+            { id: 5, en: "go", id_primary: "pergi", id_alt: ["berangkat"], phonetic: "go", emoji: "🚶", category: "Kata Kerja", bridge: "Lampu hijau GO artinya PERGI" },
+            { id: 6, en: "come", id_primary: "datang", id_alt: ["kemari"], phonetic: "kam", emoji: "👋", category: "Kata Kerja", bridge: "KAMu DATANG ke sini" },
+            { id: 7, en: "see", id_primary: "melihat", id_alt: ["lihat"], phonetic: "si", emoji: "👀", category: "Kata Kerja", bridge: "SI dia sedang MELIHAT pemandangan" },
+            { id: 8, en: "hear", id_primary: "mendengar", id_alt: ["dengar"], phonetic: "hir", emoji: "👂", category: "Kata Kerja", bridge: "Telinga MENDENGAR suara HIRuk-pikuk" },
+            { id: 9, en: "speak", id_primary: "bicara", id_alt: ["berbicara", "ngomong"], phonetic: "spik", emoji: "🗣️", category: "Kata Kerja", bridge: "SPIKer berbunyi saat orang BICARA" },
+            { id: 10, en: "read", id_primary: "membaca", id_alt: ["baca"], phonetic: "rid", emoji: "📖", category: "Kata Kerja", bridge: "RIDwan rajin MEMBACA buku" },
+            { id: 11, en: "write", id_primary: "menulis", id_alt: ["tulis"], phonetic: "rait", emoji: "✍️", category: "Kata Kerja", bridge: "Pegang pena RAIT untuk MENULIS" },
+            { id: 12, en: "buy", id_primary: "membeli", id_alt: ["beli"], phonetic: "bai", emoji: "🛒", category: "Kata Kerja", bridge: "BAyar uang untuk MEMBELI barang" },
+            { id: 13, en: "pay", id_primary: "membayar", id_alt: ["bayar"], phonetic: "pei", emoji: "💳", category: "Kata Kerja", bridge: "Dompet dibuka untuk MEMBAYAR (PEI)" },
+            { id: 14, en: "open", id_primary: "buka", id_alt: ["membuka"], phonetic: "open", emoji: "🔓", category: "Kata Kerja", bridge: "Toko OPEN artinya BUKA" },
+            { id: 15, en: "close", id_primary: "tutup", id_alt: ["menutup"], phonetic: "klous", emoji: "🔒", category: "Kata Kerja", bridge: "Pintu KLOUS artinya TUTUP" },
+            { id: 16, en: "help", id_primary: "tolong", id_alt: ["menolong", "bantu", "membantu"], phonetic: "help", emoji: "🤝", category: "Kata Kerja", bridge: "Teriak HELP saat minta TOLONG" },
+            { id: 17, en: "work", id_primary: "kerja", id_alt: ["bekerja"], phonetic: "werk", emoji: "💼", category: "Kata Kerja", bridge: "Semangat KERJA setiap pagi" },
+            { id: 18, en: "walk", id_primary: "jalan", id_alt: ["berjalan", "jalan kaki"], phonetic: "wok", emoji: "👟", category: "Kata Kerja", bridge: "Kaki melangkah JALAN santai (WOK)" },
+            { id: 19, en: "run", id_primary: "lari", id_alt: ["berlari"], phonetic: "ran", emoji: "🏃", category: "Kata Kerja", bridge: "Kaki cepat LARI mengejar waktu (RAN)" },
+            { id: 20, en: "wait", id_primary: "tunggu", id_alt: ["menunggu"], phonetic: "weit", emoji: "⏳", category: "Kata Kerja", bridge: "Sabar WEIT artinya TUNGGU sebentar" },
+
+            // --- 21-34: BENDA DASAR SEHARI-HARI ---
+            { id: 21, en: "water", id_primary: "air", id_alt: [], phonetic: "woter", emoji: "💧", category: "Benda Dasar", bridge: "Tenggorokan kering butuh AIR (WOTER)" },
+            { id: 22, en: "food", id_primary: "makanan", id_alt: ["pangan"], phonetic: "fud", emoji: "🍱", category: "Benda Dasar", bridge: "Perut lapar cari MAKANAN (FUD)" },
+            { id: 23, en: "house", id_primary: "rumah", id_alt: [], phonetic: "haus", emoji: "🏠", category: "Benda Dasar", bridge: "Merasa HAUS langsung pulang ke RUMAH" },
+            { id: 24, en: "room", id_primary: "kamar", id_alt: ["ruangan"], phonetic: "rum", emoji: "🛏️", category: "Benda Dasar", bridge: "Istirahat tenang di dalam KAMAR (RUM)" },
+            { id: 25, en: "door", id_primary: "pintu", id_alt: [], phonetic: "dor", emoji: "🚪", category: "Benda Dasar", bridge: "Ketuk PINTU bunyinya DOR" },
+            { id: 26, en: "chair", id_primary: "kursi", id_alt: ["bangku"], phonetic: "cer", emoji: "🪑", category: "Benda Dasar", bridge: "Duduk santai di atas KURSI (CER)" },
+            { id: 27, en: "table", id_primary: "meja", id_alt: [], phonetic: "teibel", emoji: "🪵", category: "Benda Dasar", bridge: "Taruh piring di atas MEJA (TEIBEL)" },
+            { id: 28, en: "book", id_primary: "buku", id_alt: [], phonetic: "buk", emoji: "📚", category: "Benda Dasar", bridge: "BUKa halaman BUKU pelajaran" },
+            { id: 29, en: "money", id_primary: "uang", id_alt: ["duit"], phonetic: "mani", emoji: "💵", category: "Benda Dasar", bridge: "Dompet tebal penuh UANG (MANI)" },
+            { id: 30, en: "friend", id_primary: "teman", id_alt: ["kawan", "sahabat"], phonetic: "fren", emoji: "🧑‍🤝‍🧑", category: "Benda Dasar", bridge: "FREN akrab artinya TEMAN" },
+            { id: 31, en: "car", id_primary: "mobil", id_alt: [], phonetic: "kar", emoji: "🚗", category: "Benda Dasar", bridge: "Naik MOBIL roda empat (KAR)" },
+            { id: 32, en: "school", id_primary: "sekolah", id_alt: [], phonetic: "skul", emoji: "🏫", category: "Benda Dasar", bridge: "Belajar pintar di SEKOLAH (SKUL)" },
+            { id: 33, en: "hand", id_primary: "tangan", id_alt: [], phonetic: "hend", emoji: "✋", category: "Benda Dasar", bridge: "Melambaikan lima jari TANGAN (HEND)" },
+            { id: 34, en: "eye", id_primary: "mata", id_alt: [], phonetic: "ai", emoji: "👁️", category: "Benda Dasar", bridge: "Kedipkan kedua MATA (AI)" },
+
+            // --- 35-40: WAKTU SEHARI-HARI ---
+            { id: 35, en: "time", id_primary: "waktu", id_alt: [], phonetic: "taim", emoji: "⌚", category: "Waktu", bridge: "Jam berdetak menunjukkan WAKTU (TAIM)" },
+            { id: 36, en: "day", id_primary: "hari", id_alt: ["siang"], phonetic: "dei", emoji: "☀️", category: "Waktu", bridge: "Matahari bersinar sepanjang HARI (DEI)" },
+            { id: 37, en: "night", id_primary: "malam", id_alt: [], phonetic: "nait", emoji: "🌙", category: "Waktu", bridge: "Bulan muncul saat MALAM (NAIT)" },
+            { id: 38, en: "morning", id_primary: "pagi", id_alt: ["pagi hari"], phonetic: "morning", emoji: "🐓", category: "Waktu", bridge: "Ayam berkokok di PAGI hari (MORNING)" },
+            { id: 39, en: "today", id_primary: "hari ini", id_alt: [], phonetic: "tudei", emoji: "📅", category: "Waktu", bridge: "Sekarang juga adalah HARI INI (TUDEI)" },
+            { id: 40, en: "tomorrow", id_primary: "besok", id_alt: ["esok"], phonetic: "tumorow", emoji: "⏭️", category: "Waktu", bridge: "Jangan tunda sampai BESOK (TUMOROW)" },
+
+            // --- 41-50: KATA SIFAT DASAR ---
+            { id: 41, en: "big", id_primary: "besar", id_alt: ["gede"], phonetic: "big", emoji: "🐘", category: "Kata Sifat", bridge: "Gajah badannya BESAR (BIG)" },
+            { id: 42, en: "small", id_primary: "kecil", id_alt: ["mungil"], phonetic: "smol", emoji: "🐜", category: "Kata Sifat", bridge: "Semut ukurannya KECIL (SMOL)" },
+            { id: 43, en: "good", id_primary: "bagus", id_alt: ["baik"], phonetic: "gud", emoji: "👍", category: "Kata Sifat", bridge: "Jempol naik tandanya BAGUS (GUD)" },
+            { id: 44, en: "bad", id_primary: "buruk", id_alt: ["jelek"], phonetic: "bed", emoji: "👎", category: "Kata Sifat", bridge: "Jempol turun artinya BURUK (BED)" },
+            { id: 45, en: "hot", id_primary: "panas", id_alt: [], phonetic: "hot", emoji: "🔥", category: "Kata Sifat", bridge: "Api menyala rasanya PANAS (HOT)" },
+            { id: 46, en: "cold", id_primary: "dingin", id_alt: [], phonetic: "kold", emoji: "🧊", category: "Kata Sifat", bridge: "Es batu membeku terasa DINGIN (KOLD)" },
+            { id: 47, en: "new", id_primary: "baru", id_alt: [], phonetic: "nyu", emoji: "✨", category: "Kata Sifat", bridge: "Beli sepatu kinclong masih BARU (NYU)" },
+            { id: 48, en: "fast", id_primary: "cepat", id_alt: ["kencang"], phonetic: "fest", emoji: "⚡", category: "Kata Sifat", bridge: "Kilat menyambar sangat CEPAT (FEST)" },
+            { id: 49, en: "slow", id_primary: "lambat", id_alt: ["pelan"], phonetic: "slou", emoji: "🐢", category: "Kata Sifat", bridge: "Kura-kura melangkah LAMBAT (SLOU)" },
+            { id: 50, en: "happy", id_primary: "senang", id_alt: ["bahagia", "gembira"], phonetic: "hepi", emoji: "😄", category: "Kata Sifat", bridge: "Tertawa lebar karena hati SENANG (HEPI)" }
+        ];
+
+        // ============================================================================
+        // STATE GAUNTLET
+        // ============================================================================
+        let gauntletDeck = [...VOCAB_DATA];
+        let currentIndex = 0;               // 0 sampai 49 (Kata ke-1 sampai ke-50)
+        let currentDirection = "EN_TO_ID";  // "EN_TO_ID" atau "ID_TO_EN" (diacak tiap soal)
+        let bestStreak = 0;
+        let showVisualHint = true;
+        let orderMode = "BERTAHAP";         // "BERTAHAP" (1-50 konsisten agar makin hafal saat ulang) atau "ACAK"
+        let isLocked = false;               // Mengunci input saat transisi atau saat memutar audio 3x
+        let penaltyAbortToken = 0;          // Token untuk membatalkan loop audio jika user klik "Langsung Ulang"
+
+        // Audio Context untuk efek suara sintetis (tanpa file eksternal)
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        // Efek suara chime lembut untuk penguat dopamin & penanda putaran audio
+        function playTone(freq = 520, duration = 0.14, type = 'sine', gainVal = 0.08) {
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {
+                // Abaikan jika browser memblokir audio sebelum interaksi
+            }
+        }
+
+        function playSuccessChime() {
+            playTone(587.33, 0.1, 'sine', 0.08);
+            setTimeout(() => playTone(880, 0.18, 'sine', 0.09), 80);
+        }
+
+        function playErrorBuzz() {
+            playTone(220, 0.18, 'sawtooth', 0.07);
+            setTimeout(() => playTone(165, 0.25, 'sawtooth', 0.07), 130);
+        }
+
+        // ============================================================================
+        // SISTEM TEXT-TO-SPEECH (SUARA JAWABAN OTOMATIS)
+        // ============================================================================
+        function speakSingleUtterance(text, langCode) {
+            return new Promise((resolve) => {
+                // Bunyi indikator halus di awal tiap pengucapan
+                playTone(langCode.startsWith('en') ? 660 : 520, 0.09, 'triangle', 0.05);
+
+                if (!('speechSynthesis' in window)) {
+                    setTimeout(resolve, 950);
+                    return;
+                }
+
+                try {
+                    window.speechSynthesis.cancel();
+                    const utter = new SpeechSynthesisUtterance(text);
+                    utter.lang = langCode;
+                    utter.rate = 0.92; // Sedikit diperlambat agar jelas bagi pemula dari 0
+                    utter.pitch = 1.0;
+
+                    const voices = window.speechSynthesis.getVoices();
+                    const matchedVoice = voices.find(v => v.lang.toLowerCase().startsWith(langCode.slice(0, 2).toLowerCase()));
+                    if (matchedVoice) {
+                        utter.voice = matchedVoice;
+                    }
+
+                    let settled = false;
+                    const finish = () => {
+                        if (!settled) {
+                            settled = true;
+                            resolve();
+                        }
+                    };
+
+                    // Safety timeout agar tidak pernah macet di browser mobile
+                    const safetyTimer = setTimeout(finish, 2100);
+
+                    utter.onend = () => {
+                        clearTimeout(safetyTimer);
+                        finish();
+                    };
+                    utter.onerror = () => {
+                        clearTimeout(safetyTimer);
+                        finish();
+                    };
+
+                    window.speechSynthesis.speak(utter);
+                } catch (err) {
+                    setTimeout(resolve, 950);
+                }
+            });
+        }
+
+        function delayMs(ms) {
+            return new Promise(res => setTimeout(res, ms));
+        }
+
+        // Tombol 🔊 manual untuk mendengar pengucapan Bahasa Inggris
+        function playCurrentPromptAudio() {
+            const item = gauntletDeck[currentIndex];
+            if (!item) return;
+            speakSingleUtterance(item.en, 'en-US');
+            document.getElementById('answerInput').focus();
+        }
+
+        // ============================================================================
+        // INISIALISASI & PENGATURAN SOAL
+        // ============================================================================
+        function initApp() {
+            try {
+                const savedBest = localStorage.getItem('vocab_gauntlet_best');
+                if (savedBest) {
+                    bestStreak = parseInt(savedBest, 10) || 0;
+                }
+            } catch (e) {}
+
+            updateBestStreakUI();
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices();
+            }
+            startGauntletFromZero();
+            renderCatalog('ALL');
+        }
+
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function startGauntletFromZero() {
+            isLocked = false;
+            currentIndex = 0;
+
+            if (orderMode === "ACAK") {
+                gauntletDeck = shuffleArray(VOCAB_DATA);
+            } else {
+                gauntletDeck = [...VOCAB_DATA];
+            }
+
+            document.getElementById('victoryCard').classList.add('hidden');
+            document.getElementById('questionCard').classList.remove('hidden');
+            document.getElementById('penaltyOverlay').classList.add('hidden');
+            document.getElementById('correctFlashOverlay').classList.add('hidden');
+
+            loadCurrentQuestion();
+        }
+
+        function pickRandomDirection() {
+            // Diacak 50:50 antara Inggris -> Indonesia dan Indonesia -> Inggris
+            return Math.random() < 0.5 ? "EN_TO_ID" : "ID_TO_EN";
+        }
+
+        function loadCurrentQuestion() {
+            const item = gauntletDeck[currentIndex];
+            if (!item) return;
+
+            currentDirection = pickRandomDirection();
+
+            // Update Progress Bar & Badge
+            const stepNumber = currentIndex + 1;
+            document.getElementById('progressBadge').textContent = `${stepNumber} / ${gauntletDeck.length}`;
+            const pct = Math.max(2, Math.round((stepNumber / gauntletDeck.length) * 100));
+            document.getElementById('progressBar').style.width = `${pct}%`;
+
+            // Update Kategori & Glow Warna agar otak punya asosiasi kelompok
+            const categoryBadge = document.getElementById('categoryBadge');
+            const ambientGlow = document.getElementById('ambientGlow');
+            categoryBadge.textContent = item.category;
+
+            if (item.category === 'Kata Kerja') {
+                ambientGlow.className = "pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-72 h-48 bg-emerald-500/15 blur-3xl rounded-full transition-all duration-500";
+            } else if (item.category === 'Benda Dasar') {
+                ambientGlow.className = "pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-72 h-48 bg-amber-500/15 blur-3xl rounded-full transition-all duration-500";
+            } else if (item.category === 'Waktu') {
+                ambientGlow.className = "pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-72 h-48 bg-cyan-500/15 blur-3xl rounded-full transition-all duration-500";
+            } else {
+                ambientGlow.className = "pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-72 h-48 bg-purple-500/15 blur-3xl rounded-full transition-all duration-500";
+            }
+
+            // Update Badge Arah Tebakan (EN -> ID atau ID -> EN)
+            const dirBadge = document.getElementById('directionBadge');
+            const instructionLabel = document.getElementById('instructionLabel');
+            const promptWordEl = document.getElementById('promptWord');
+            const answerInput = document.getElementById('answerInput');
+
+            if (currentDirection === "EN_TO_ID") {
+                dirBadge.className = "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-extrabold tracking-wide uppercase bg-cyan-500/15 text-cyan-300 border border-cyan-500/30";
+                dirBadge.innerHTML = `<span>🇬🇧 INGGRIS</span> <span>➔</span> <span>🇮🇩 INDONESIA</span>`;
+                instructionLabel.textContent = "Ketik arti Bahasa Indonesianya:";
+                promptWordEl.textContent = item.en;
+                answerInput.placeholder = "Ketik artinya dalam Bhs Indonesia...";
+            } else {
+                dirBadge.className = "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-extrabold tracking-wide uppercase bg-amber-500/15 text-amber-300 border border-amber-500/30";
+                dirBadge.innerHTML = `<span>🇮🇩 INDONESIA</span> <span>➔</span> <span>🇬🇧 INGGRIS</span>`;
+                instructionLabel.textContent = "Ketik ejaan Bahasa Inggrisnya:";
+                promptWordEl.textContent = item.id_primary;
+                answerInput.placeholder = "Ketik ejaan Bahasa Inggrisnya...";
+            }
+
+            // Update Ikon Visual & Jembatan Otak
+            document.getElementById('wordEmoji').textContent = item.emoji;
+            const bridgeContainer = document.getElementById('brainBridgeHint');
+            const phoneticHint = document.getElementById('phoneticHint');
+            const bridgeHintText = document.getElementById('bridgeHintText');
+
+            if (showVisualHint) {
+                bridgeContainer.classList.remove('hidden');
+                document.getElementById('letterSlotsContainer').classList.remove('hidden');
+
+                if (currentDirection === "EN_TO_ID") {
+                    phoneticHint.textContent = `🔊 Cara baca: "${item.phonetic}"`;
+                    // Samarkan kata target Indonesia di jembatan agar tidak membocorkan secara langsung tapi memicu ingatan
+                    const maskedBridge = maskTargetWord(item.bridge, item.id_primary);
+                    bridgeHintText.textContent = `💡 Konteks: ${maskedBridge}`;
+                } else {
+                    phoneticHint.textContent = `🔊 Bunyi Inggris: "${item.phonetic}"`;
+                    const maskedBridge = maskTargetWord(item.bridge, item.en);
+                    bridgeHintText.textContent = `💡 Ingat bunyi: "${item.phonetic}" (${item.en.length} huruf)`;
+                }
+            } else {
+                bridgeContainer.classList.add('hidden');
+                document.getElementById('letterSlotsContainer').classList.add('hidden');
+            }
+
+            // Reset Input & Render Siluet Kotak Huruf Target
+            answerInput.value = "";
+            renderLetterSlots("");
+            setTimeout(() => answerInput.focus(), 40);
+        }
+
+        function maskTargetWord(sentence, target) {
+            const regex = new RegExp(target, 'gi');
+            return sentence.replace(regex, '___');
+        }
+
+        function getPrimaryTargetAnswer() {
+            const item = gauntletDeck[currentIndex];
+            if (!item) return "";
+            return currentDirection === "EN_TO_ID" ? item.id_primary : item.en;
+        }
+
+        // Render kotak siluet per huruf agar otak langsung terbayang jumlah huruf ejaannya
+        function renderLetterSlots(typedValue) {
+            const container = document.getElementById('letterSlotsContainer');
+            container.innerHTML = "";
+            if (!showVisualHint) return;
+
+            const target = getPrimaryTargetAnswer();
+            const cleanTyped = typedValue.trimStart();
+
+            for (let i = 0; i < target.length; i++) {
+                const targetChar = target[i];
+                const typedChar = cleanTyped[i] || "";
+
+                if (targetChar === " ") {
+                    const spaceEl = document.createElement('div');
+                    spaceEl.className = "w-3 h-8 flex items-center justify-center text-slate-500 font-mono text-xs";
+                    spaceEl.textContent = "␣";
+                    container.appendChild(spaceEl);
+                    continue;
+                }
+
+                const box = document.createElement('div');
+                const hasChar = typedChar.length > 0;
+                box.className = `w-7 h-8 sm:w-8 sm:h-9 rounded-lg border font-mono font-bold text-sm sm:text-base flex items-center justify-center uppercase transition-all ${
+                    hasChar
+                        ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200 scale-105'
+                        : 'bg-slate-950/90 border-slate-800 text-slate-600'
+                }`;
+                // Huruf pertama diberi petunjuk tipis bila mode bantuan menyala
+                if (!hasChar && i === 0) {
+                    box.textContent = target[0].toLowerCase();
+                    box.classList.add('text-slate-600/70');
+                } else {
+                    box.textContent = typedChar;
+                }
+                container.appendChild(box);
+            }
+        }
+
+        function handleLiveTyping(val) {
+            if (isLocked) return;
+            renderLetterSlots(val);
+        }
+
+        // ============================================================================
+        // VALIDASI JAWABAN & LOGIKA BENAR / SALAH (AUDIO 3X + RESET KE AWAL)
+        // ============================================================================
+        function normalizeText(str) {
+            return str
+                .toLowerCase()
+                .trim()
+                .replace(/\s+/g, ' ');
+        }
+
+        function isAnswerCorrect(userRaw, item, direction) {
+            const cleanUser = normalizeText(userRaw);
+            if (!cleanUser) return false;
+
+            if (direction === "ID_TO_EN") {
+                // Tebakan ke Bahasa Inggris: Ejaan harus 100% tepat!
+                return cleanUser === normalizeText(item.en);
+            } else {
+                // Tebakan ke Bahasa Indonesia: Terima arti utama maupun imbuhan wajar (misal baca / membaca)
+                const validMeanings = [item.id_primary, ...(item.id_alt || [])].map(normalizeText);
+                return validMeanings.includes(cleanUser);
+            }
+        }
+
+        async function handleSubmitAnswer(event) {
+            if (event) event.preventDefault();
+            if (isLocked) return;
+
+            const inputEl = document.getElementById('answerInput');
+            const userTyped = inputEl.value;
+
+            if (!userTyped.trim()) {
+                inputEl.focus();
+                return;
+            }
+
+            const currentItem = gauntletDeck[currentIndex];
+            const correct = isAnswerCorrect(userTyped, currentItem, currentDirection);
+
+            if (correct) {
+                await handleCorrectStep(currentItem);
+            } else {
+                await handleWrongStep(currentItem, userTyped.trim());
+            }
+        }
+
+        function triggerGiveUp() {
+            if (isLocked) return;
+            const currentItem = gauntletDeck[currentIndex];
+            const typed = document.getElementById('answerInput').value.trim() || "(kosong)";
+            handleWrongStep(currentItem, typed);
+        }
+
+        async function handleCorrectStep(item) {
+            isLocked = true;
+            playSuccessChime();
+
+            // Update Rekor Terbaik
+            const completedCount = currentIndex + 1;
+            if (completedCount > bestStreak) {
+                bestStreak = completedCount;
+                try {
+                    localStorage.setItem('vocab_gauntlet_best', String(bestStreak));
+                } catch (e) {}
+                updateBestStreakUI();
+            }
+
+            // Tampilkan kilatan pengunci memori singkat & ucapkan Bahasa Inggrisnya sekali
+            const flashOverlay = document.getElementById('correctFlashOverlay');
+            document.getElementById('correctFlashPair').textContent = `${item.en.toUpperCase()} = ${item.id_primary.toUpperCase()}`;
+            document.getElementById('correctFlashPhonetic').textContent = `${item.emoji} Cara baca: "${item.phonetic}"`;
+            flashOverlay.classList.remove('hidden');
+
+            speakSingleUtterance(item.en, 'en-US');
+
+            await delayMs(520);
+            flashOverlay.classList.add('hidden');
+
+            // Cek apakah sudah tamat 50 kata
+            if (currentIndex + 1 >= gauntletDeck.length) {
+                showVictoryScreen();
+                isLocked = false;
+                return;
+            }
+
+            currentIndex++;
+            isLocked = false;
+            loadCurrentQuestion();
+        }
+
+        async function handleWrongStep(item, userTyped) {
+            isLocked = true;
+            const currentToken = ++penaltyAbortToken;
+            playErrorBuzz();
+
+            const cardEl = document.getElementById('questionCard');
+            cardEl.classList.add('animate-shake');
+            setTimeout(() => cardEl.classList.remove('animate-shake'), 450);
+
+            // Siapkan data jawaban benar sesuai arah tebakan
+            const expectedAnswer = currentDirection === "EN_TO_ID" ? item.id_primary : item.en;
+            const expectedLang = currentDirection === "EN_TO_ID" ? "id-ID" : "en-US";
+            const promptShown = currentDirection === "EN_TO_ID" ? item.en : item.id_primary;
+
+            // Isi UI Overlay Hukuman & Pengunci Otak
+            document.getElementById('failedAtBadge').textContent = `Gagal di Kata #${currentIndex + 1}`;
+            document.getElementById('penaltyPromptWord').textContent = promptShown;
+            document.getElementById('penaltyUserTyped').textContent = userTyped || "(kosong)";
+
+            // Ejaan dipisah per huruf agar visual otak langsung merekam pola hurufnya
+            const spacedSpelling = expectedAnswer.toUpperCase().split('').join(' ');
+            document.getElementById('penaltyCorrectAnswer').textContent = spacedSpelling;
+            document.getElementById('penaltyFullPair').textContent = `${item.emoji} ${item.en} (baca: ${item.phonetic}) = ${item.id_primary}`;
+            document.getElementById('penaltyBridge').textContent = `💡 Jembatan Ingatan: ${item.bridge}`;
+
+            const penaltyOverlay = document.getElementById('penaltyOverlay');
+            penaltyOverlay.classList.remove('hidden');
+
+            // Reset tampilan dot 1x, 2x, 3x
+            setPenaltyDotState(1);
+
+            // Putar audio jawaban yang benar sebanyak 3 KALI BERTURUT-TURUT secara otomatis
+            for (let count = 1; count <= 3; count++) {
+                if (currentToken !== penaltyAbortToken) return;
+                setPenaltyDotState(count);
+                document.getElementById('audioCountStatus').textContent = `Memutar Audio Jawaban (${count} / 3)...`;
+
+                await speakSingleUtterance(expectedAnswer, expectedLang);
+                if (currentToken !== penaltyAbortToken) return;
+
+                // Jeda antar pengulangan agar terdengar jelas 3 kali
+                await delayMs(420);
+            }
+
+            if (currentToken !== penaltyAbortToken) return;
+            document.getElementById('audioCountStatus').textContent = `Selesai 3x! Mengulang ke Kata #1...`;
+            await delayMs(450);
+
+            if (currentToken !== penaltyAbortToken) return;
+            // Otomatis ulang lagi dari awal (Kata ke-1)
+            startGauntletFromZero();
+        }
+
+        function setPenaltyDotState(activeStep) {
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById(`audioDot${i}`);
+                if (i < activeStep) {
+                    dot.className = "px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 transition-all";
+                    dot.textContent = `✓ ${i}x`;
+                } else if (i === activeStep) {
+                    dot.className = "px-3 py-1 rounded-lg text-xs font-mono font-bold bg-rose-500 text-white scale-110 shadow-lg shadow-rose-500/30 transition-all";
+                    dot.textContent = `🔊 ${i}x`;
+                } else {
+                    dot.className = "px-3 py-1 rounded-lg text-xs font-mono font-bold bg-slate-800 text-slate-500 transition-all";
+                    dot.textContent = `🔊 ${i}x`;
+                }
+            }
+        }
+
+        function forceFinishPenaltyReset() {
+            penaltyAbortToken++;
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            startGauntletFromZero();
+        }
+
+        function showVictoryScreen() {
+            document.getElementById('questionCard').classList.add('hidden');
+            document.getElementById('victoryCard').classList.remove('hidden');
+        }
+
+        function restartFullGauntlet(shuffleAll) {
+            if (shuffleAll) {
+                orderMode = "ACAK";
+                document.getElementById('btnOrderMode').textContent = `Urutan: Acak`;
+            }
+            startGauntletFromZero();
+        }
+
+        function updateBestStreakUI() {
+            document.getElementById('bestStreakText').textContent = `${bestStreak} / ${VOCAB_DATA.length}`;
+        }
+
+        // ============================================================================
+        // KONTROL BANTUAN VISUAL, URUTAN, & DAFTAR 50 KATA
+        // ============================================================================
+        function toggleHintBox() {
+            showVisualHint = !showVisualHint;
+            const btn = document.getElementById('btnToggleHint');
+            btn.textContent = showVisualHint ? "Bantuan Visual: ON" : "Bantuan Visual: OFF";
+            btn.className = showVisualHint
+                ? "text-emerald-400 hover:underline font-medium"
+                : "text-slate-500 hover:underline font-medium";
+            loadCurrentQuestion();
+        }
+
+        function toggleOrderMode() {
+            orderMode = orderMode === "BERTAHAP" ? "ACAK" : "BERTAHAP";
+            document.getElementById('btnOrderMode').textContent = `Urutan: ${orderMode === "BERTAHAP" ? "Bertahap" : "Acak"}`;
+            startGauntletFromZero();
+        }
+
+        function toggleViewMode() {
+            const gauntletView = document.getElementById('gauntletView');
+            const catalogView = document.getElementById('catalogView');
+            const btnText = document.getElementById('catalogBtnText');
+            const btnIcon = document.getElementById('catalogBtnIcon');
+
+            const isShowingCatalog = !catalogView.classList.contains('hidden');
+            if (isShowingCatalog) {
+                catalogView.classList.add('hidden');
+                gauntletView.classList.remove('hidden');
+                btnIcon.textContent = "📖";
+                btnText.textContent = "50 Kata";
+                setTimeout(() => document.getElementById('answerInput').focus(), 50);
+            } else {
+                gauntletView.classList.add('hidden');
+                catalogView.classList.remove('hidden');
+                btnIcon.textContent = "⚔️";
+                btnText.textContent = "Ke Gauntlet";
+            }
+        }
+
+        function renderCatalog(filterCategory) {
+            const categories = ['ALL', 'Kata Kerja', 'Benda Dasar', 'Waktu', 'Kata Sifat'];
+            categories.forEach(cat => {
+                const btn = document.getElementById(`filter_${cat}`);
+                if (!btn) return;
+                if (cat === filterCategory) {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 text-slate-950 transition";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+                }
+            });
+
+            const grid = document.getElementById('catalogGrid');
+            grid.innerHTML = "";
+
+            const filtered = filterCategory === 'ALL'
+                ? VOCAB_DATA
+                : VOCAB_DATA.filter(item => item.category === filterCategory);
+
+            filtered.forEach((item) => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-950/90 border border-slate-800/90 hover:border-slate-700 rounded-xl p-3 flex items-start justify-between gap-3 transition";
+                card.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-xl shrink-0">
+                            ${item.emoji}
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[11px] font-mono text-slate-500">#${item.id}</span>
+                                <span class="font-extrabold text-white font-mono text-base">${item.en}</span>
+                                <span class="text-slate-500">=</span>
+                                <span class="font-bold text-emerald-400 text-sm">${item.id_primary}</span>
+                            </div>
+                            <p class="text-[11px] text-cyan-400 font-mono mt-0.5">Cara baca: "${item.phonetic}"</p>
+                            <p class="text-[11px] text-slate-400 mt-1">${item.bridge}</p>
+                        </div>
+                    </div>
+                    <button
+                        onclick="speakSingleUtterance('${item.en}', 'en-US')"
+                        class="w-8 h-8 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 flex items-center justify-center text-xs shrink-0 active:scale-95 transition"
+                        title="Dengarkan pengucapan"
+                    >
+                        🔊
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
