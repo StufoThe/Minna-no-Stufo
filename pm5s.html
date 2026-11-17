@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5S God-Tier Mastery — Sistem SSW PM Ramah Otak</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            jp: ['"Noto Sans JP"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Eye-friendly deep slate background & generous readability */
+    body {
+      background-color: #0B101B;
+      color: #F1F5F9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .jp-text {
+      font-family: 'Noto Sans JP', sans-serif;
+      line-height: 2.35;
+    }
+
+    ruby rt {
+      font-size: 0.65em;
+      color: #7DD3FC;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    body.hide-furigana ruby rt {
+      display: none;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-view {
+      animation: fadeSlide 0.25s ease-out forwards;
+    }
+
+    .signal-glow {
+      background: rgba(250, 204, 21, 0.22);
+      border-bottom: 3px solid #FACC15;
+      color: #FEF08A;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 900;
+    }
+
+    /* Clean scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0B101B; }
+    ::-webkit-scrollbar-thumb { background: #26324B; border-radius: 999px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-cyan-500/30 selection:text-cyan-100">
+
+  <!-- ===================================================================== -->
+  <!-- TOP HEADER: CLEAN, SPACIOUS & EASY TO TAP                             -->
+  <!-- ===================================================================== -->
+  <header class="sticky top-0 z-40 bg-[#0B101B]/95 backdrop-blur-md border-b border-[#1E293B]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <!-- App Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-cyan-500/20">
+          5S
+        </div>
+        <div>
+          <h1 class="font-extrabold text-white text-base sm:text-lg leading-tight">5S HACKER — SSW PM</h1>
+          <p class="text-sm text-slate-400">25 Pola Resmi Buku SSW • Anti-Pusing</p>
+        </div>
+      </div>
+
+      <!-- Simple Controls -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="toggleFurigana()" class="px-3.5 py-2 rounded-xl bg-[#151E32] hover:bg-[#1E2A44] border border-[#2A3958] text-sm font-bold text-sky-300 transition flex items-center gap-1.5">
+          <span>あ</span>
+          <span id="furiganaStatus">Furigana: ON</span>
+        </button>
+
+        <button onclick="toggleSound()" class="px-3.5 py-2 rounded-xl bg-[#151E32] hover:bg-[#1E2A44] border border-[#2A3958] text-sm font-bold text-slate-200 transition" title="Suara">
+          <span id="soundStatus">🔊</span>
+        </button>
+
+        <div class="px-3.5 py-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-sm font-extrabold text-amber-300">
+          ⭐ <span id="xpDisplay">0</span> XP
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 BIG CLEAR NAVIGATION TABS -->
+    <nav class="max-w-4xl mx-auto px-4 sm:px-6 pb-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <button onclick="switchTab('formula')" id="nav-formula" class="nav-btn py-3 px-3 rounded-2xl text-sm sm:text-base font-extrabold transition flex items-center justify-center gap-2 bg-cyan-500/20 text-cyan-300 border-2 border-cyan-500/50">
+        <span>⚡</span> 1. Rumus 1 Detik
+      </button>
+      <button onclick="switchTab('factory')" id="nav-factory" class="nav-btn py-3 px-3 rounded-2xl text-sm sm:text-base font-bold transition flex items-center justify-center gap-2 bg-[#131B2E] text-slate-300 hover:text-white border-2 border-transparent">
+        <span>📚</span> 2. 25 Pola Resmi
+      </button>
+      <button onclick="switchTab('traps')" id="nav-traps" class="nav-btn py-3 px-3 rounded-2xl text-sm sm:text-base font-bold transition flex items-center justify-center gap-2 bg-[#131B2E] text-slate-300 hover:text-white border-2 border-transparent">
+        <span>⚔️</span> 3. Jebakan Kembar
+      </button>
+      <button onclick="switchTab('game')" id="nav-game" class="nav-btn py-3 px-3 rounded-2xl text-sm sm:text-base font-bold transition flex items-center justify-center gap-2 bg-[#131B2E] text-slate-300 hover:text-white border-2 border-transparent">
+        <span>🎮</span> 4. Game 100 Soal
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN CONTENT (SPACIOUS, BIG TEXT, ZERO WALLS OF TEXT)                 -->
+  <!-- ===================================================================== -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    <!-- =================================================================== -->
+    <!-- TAB 1: RUMUS OTAK 1 DETIK (1 PERTANYAAN SAKTI PER S)                -->
+    <!-- =================================================================== -->
+    <section id="view-formula" class="space-y-6 animate-view">
+      <!-- Simple Intro Card -->
+      <div class="rounded-3xl bg-[#131B2E] border border-[#24324D] p-6 sm:p-7 space-y-4">
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          🧠 Fakta Asli Buku SSW PM (100% Jujur &amp; Akurat)
+        </h2>
+        <p class="text-base sm:text-lg text-slate-300 leading-relaxed">
+          Di buku resmi ujian SSW Pengolahan Makanan Jepang (<span class="jp-text font-bold text-white"><ruby>飲食料品製造業<rt>いんしょくりょうひんせいぞうぎょう</rt></ruby></span>), jenis 5S memang <strong class="text-cyan-300">HANYA 5</strong> (tidak ada tambahan jenis aneh). Bedanya, tiap 1 S punya <strong class="text-amber-300">5 situasi resmi pabrik</strong> (= total <strong class="text-white">25 Pola Utuh</strong>).
+        </p>
+        <div class="p-4 rounded-2xl bg-[#0B101B] border border-cyan-500/30 text-base text-slate-200">
+          💡 <strong>Hasil Bedah Soal Sensei:</strong> 20 soal dari sensei Anda baru mengambil sebagian dari 25 pola resmi itu (contoh: di <em>Seiketsu</em> baru keluar 2 pola!). Kalau besok keluar <strong>100 soal baru</strong>, kata kunci dan situasinya pasti berputar di <strong>25 Pola Resmi</strong> ini!
+        </div>
+      </div>
+
+      <!-- 5 BIG VISUAL CARDS -->
+      <div class="space-y-5">
+
+        <!-- CARD #1: SEIRI -->
+        <div class="rounded-3xl bg-[#131B2E] border-2 border-rose-500/40 p-6 sm:p-7 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="w-11 h-11 rounded-2xl bg-rose-500/20 text-rose-300 font-black text-xl flex items-center justify-center">#1</span>
+              <div>
+                <h3 class="jp-text text-2xl sm:text-3xl font-black text-rose-400">
+                  せいり (<ruby>整理<rt>せいり</rt></ruby>)
+                </h3>
+                <p class="text-sm font-bold text-rose-200/80">Ringkas • Pilah &amp; Buang</p>
+              </div>
+            </div>
+            <span class="px-4 py-1.5 rounded-full bg-rose-500/15 text-rose-300 text-sm font-extrabold">
+              Cek Pertama!
+            </span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#0B101B] border border-rose-500/25">
+            <p class="text-lg sm:text-xl font-extrabold text-white">
+              ❓ Tanya: <span class="text-rose-300">"Barangnya masih dipakai, atau sudah SAMPAH / BASI / RUSAK?"</span>
+            </p>
+            <p class="text-base text-slate-300 mt-1">
+              Kalau barangnya <strong>tidak dipakai, kosong, kadaluarsa, atau rusak</strong> → Pasti <strong class="text-rose-400">せいり</strong>!
+            </p>
+          </div>
+
+          <!-- Clickable Audio Pills -->
+          <div>
+            <p class="text-sm font-bold text-slate-400 mb-2">🔊 Klik kata kunci untuk dengar suara Jepang:</p>
+            <div class="flex flex-wrap gap-2.5">
+              <button onclick="speakJP('つかわない')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-rose-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>使<rt>つか</rt></ruby>わない <span class="text-sm text-slate-400 font-sans">(tak dipakai)</span>
+              </button>
+              <button onclick="speakJP('ふるくなった')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-rose-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>古<rt>ふる</rt></ruby>くなった <span class="text-sm text-slate-400 font-sans">(sudah lama/basi)</span>
+              </button>
+              <button onclick="speakJP('からになった')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-rose-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>空<rt>から</rt></ruby>になった <span class="text-sm text-slate-400 font-sans">(sudah kosong)</span>
+              </button>
+              <button onclick="speakJP('きげんぎれ')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-rose-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>期限切<rt>きげんぎ</rt></ruby>れ <span class="text-sm text-slate-400 font-sans">(kadaluarsa)</span>
+              </button>
+              <button onclick="speakJP('こわれた')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-rose-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>壊<rt>こわ</rt></ruby>れた <span class="text-sm text-slate-400 font-sans">(rusak)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD #2: SEITON -->
+        <div class="rounded-3xl bg-[#131B2E] border-2 border-amber-500/40 p-6 sm:p-7 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-300 font-black text-xl flex items-center justify-center">#2</span>
+              <div>
+                <h3 class="jp-text text-2xl sm:text-3xl font-black text-amber-400">
+                  せいとん (<ruby>整頓<rt>せいとん</rt></ruby>)
+                </h3>
+                <p class="text-sm font-bold text-amber-200/80">Rapi • Posisi &amp; Label Jelas</p>
+              </div>
+            </div>
+            <span class="px-4 py-1.5 rounded-full bg-amber-500/15 text-amber-300 text-sm font-extrabold">
+              Cek Kedua!
+            </span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#0B101B] border border-amber-500/25">
+            <p class="text-lg sm:text-xl font-extrabold text-white">
+              ❓ Tanya: <span class="text-amber-300">"Barangnya MASIH DIPAKAI, tapi ditaruh di tempat tetap &amp; gampang dicari?"</span>
+            </p>
+            <p class="text-base text-slate-300 mt-1">
+              Fokusnya pada <strong>lokasi menaruh, mengembalikan ke tempat asal, atau memberi label</strong> → Pasti <strong class="text-amber-400">せいとん</strong>!
+            </p>
+          </div>
+
+          <div>
+            <p class="text-sm font-bold text-slate-400 mb-2">🔊 Klik kata kunci untuk dengar suara Jepang:</p>
+            <div class="flex flex-wrap gap-2.5">
+              <button onclick="speakJP('ばしょをきめる')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-amber-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>場所<rt>ばしょ</rt></ruby>を<ruby>決<rt>き</rt></ruby>める <span class="text-sm text-slate-400 font-sans">(tentukan tempat)</span>
+              </button>
+              <button onclick="speakJP('もとのばしょにもどす')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-amber-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>す <span class="text-sm text-slate-400 font-sans">(kembalikan ke asal)</span>
+              </button>
+              <button onclick="speakJP('おいたまま')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-amber-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>置<rt>お</rt></ruby>いたまま <span class="text-sm text-slate-400 font-sans">(dibiarkan tergeletak)</span>
+              </button>
+              <button onclick="speakJP('ラベルをはる')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-amber-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                ラベルを<ruby>貼<rt>は</rt></ruby>る <span class="text-sm text-slate-400 font-sans">(tempel label nama)</span>
+              </button>
+              <button onclick="speakJP('さきいれさきだし')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-amber-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>先入<rt>さきい</rt></ruby>れ<ruby>先出<rt>さきだ</rt></ruby>し <span class="text-sm text-slate-400 font-sans">(susun FIFO)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD #3: SEISOU -->
+        <div class="rounded-3xl bg-[#131B2E] border-2 border-cyan-500/40 p-6 sm:p-7 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="w-11 h-11 rounded-2xl bg-cyan-500/20 text-cyan-300 font-black text-xl flex items-center justify-center">#3</span>
+              <div>
+                <h3 class="jp-text text-2xl sm:text-3xl font-black text-cyan-400">
+                  せいそう (<ruby>清掃<rt>せいそう</rt></ruby>)
+                </h3>
+                <p class="text-sm font-bold text-cyan-200/80">Resik • Sapu, Lap &amp; Cuci Kotoran</p>
+              </div>
+            </div>
+            <span class="px-4 py-1.5 rounded-full bg-cyan-500/15 text-cyan-300 text-sm font-extrabold">
+              Cek Ketiga!
+            </span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#0B101B] border border-cyan-500/25">
+            <p class="text-lg sm:text-xl font-extrabold text-white">
+              ❓ Tanya: <span class="text-cyan-300">"Ada KOTORAN NYATA (tumpah/remah/sampah) atau aksi MENYAPU/MENGELAP?"</span>
+            </p>
+            <p class="text-base text-slate-300 mt-1">
+              Ada kotoran fisik atau tindakan membersihkan setelah bekerja → Pasti <strong class="text-cyan-400">せいそう</strong>!
+            </p>
+          </div>
+
+          <div>
+            <p class="text-sm font-bold text-slate-400 mb-2">🔊 Klik kata kunci untuk dengar suara Jepang:</p>
+            <div class="flex flex-wrap gap-2.5">
+              <button onclick="speakJP('こぼれている')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-cyan-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                こぼれている <span class="text-sm text-slate-400 font-sans">(tumpah)</span>
+              </button>
+              <button onclick="speakJP('くず・ゴミばこいっぱい')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-cyan-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                くず・ゴミ<ruby>箱<rt>ばこ</rt></ruby>いっぱい <span class="text-sm text-slate-400 font-sans">(remah/sampah penuh)</span>
+              </button>
+              <button onclick="speakJP('そうじします')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-cyan-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>掃除<rt>そうじ</rt></ruby>します <span class="text-sm text-slate-400 font-sans">(membersihkan)</span>
+              </button>
+              <button onclick="speakJP('きれいにします')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-cyan-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                きれいにします <span class="text-sm text-slate-400 font-sans">(aksi bersih-bersih)</span>
+              </button>
+              <button onclick="speakJP('ふく・あらう')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-cyan-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>拭<rt>ふ</rt></ruby>く・<ruby>洗<rt>あら</rt></ruby>う <span class="text-sm text-slate-400 font-sans">(mengelap/mencuci)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD #4: SEIKETSU -->
+        <div class="rounded-3xl bg-[#131B2E] border-2 border-emerald-500/40 p-6 sm:p-7 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="w-11 h-11 rounded-2xl bg-emerald-500/20 text-emerald-300 font-black text-xl flex items-center justify-center">#4</span>
+              <div>
+                <h3 class="jp-text text-2xl sm:text-3xl font-black text-emerald-400">
+                  せいけつ (<ruby>清潔<rt>せいけつ</rt></ruby>)
+                </h3>
+                <p class="text-sm font-bold text-emerald-200/80">Rawat • Higienis, Steril &amp; Bebas Bakteri</p>
+              </div>
+            </div>
+            <span class="px-4 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-sm font-extrabold">
+              Cek Keempat!
+            </span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#0B101B] border border-emerald-500/25">
+            <p class="text-lg sm:text-xl font-extrabold text-white">
+              ❓ Tanya: <span class="text-emerald-300">"Ini soal HIGIENIS MAKANAN (steril, seragam bersih, cegah bakteri/rambut)?"</span>
+            </p>
+            <p class="text-base text-slate-300 mt-1">
+              Mempertahankan kondisi bersih &amp; higienis (pisah alat daging/sayur, cuci tangan, cek seragam, cek kondisi bersih) → Pasti <strong class="text-emerald-400">せいけつ</strong>!
+            </p>
+          </div>
+
+          <div>
+            <p class="text-sm font-bold text-slate-400 mb-2">🔊 Klik kata kunci untuk dengar suara Jepang:</p>
+            <div class="flex flex-wrap gap-2.5">
+              <button onclick="speakJP('にくようとやさいようをわける')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-emerald-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>肉用<rt>にくよう</rt></ruby>と<ruby>野菜用<rt>やさいよう</rt></ruby>を<ruby>分<rt>わ</rt></ruby>ける <span class="text-sm text-slate-400 font-sans">(pisah daging &amp; sayur)</span>
+              </button>
+              <button onclick="speakJP('てあらい・しょうどく')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-emerald-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>手洗<rt>てあら</rt></ruby>い・<ruby>消毒<rt>しょうどく</rt></ruby> <span class="text-sm text-slate-400 font-sans">(cuci tangan &amp; disinfeksi)</span>
+              </button>
+              <button onclick="speakJP('きれいかかくにんする')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-emerald-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                きれいか<ruby>確認<rt>かくにん</rt></ruby>する <span class="text-sm text-slate-400 font-sans">(cek apakah bersih)</span>
+              </button>
+              <button onclick="speakJP('みだしなみ・せいふく')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-emerald-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>身<rt>み</rt></ruby>だしなみ・<ruby>制服<rt>せいふく</rt></ruby> <span class="text-sm text-slate-400 font-sans">(seragam bersih/rapi)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD #5: SHITSUKE -->
+        <div class="rounded-3xl bg-[#131B2E] border-2 border-violet-500/40 p-6 sm:p-7 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="w-11 h-11 rounded-2xl bg-violet-500/20 text-violet-300 font-black text-xl flex items-center justify-center">#5</span>
+              <div>
+                <h3 class="jp-text text-2xl sm:text-3xl font-black text-violet-400">
+                  しつけ (<ruby>躾<rt>しつけ</rt></ruby> / <ruby>習慣<rt>しゅうかん</rt></ruby>)
+                </h3>
+                <p class="text-sm font-bold text-violet-200/80">Rajin • Disiplin Manusia &amp; Patuh Aturan</p>
+              </div>
+            </div>
+            <span class="px-4 py-1.5 rounded-full bg-violet-500/15 text-violet-300 text-sm font-extrabold">
+              Cek Kelima!
+            </span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#0B101B] border border-violet-500/25">
+            <p class="text-lg sm:text-xl font-extrabold text-white">
+              ❓ Tanya: <span class="text-violet-300">"Fokusnya pada SIKAP MANUSIA (patuh aturan, tanpa disuruh, ajari teman)?"</span>
+            </p>
+            <p class="text-base text-slate-300 mt-1">
+              Membiasakan diri mematuhi aturan, tepat waktu, salam, dan mengingatkan rekan kerja → Pasti <strong class="text-violet-400">しつけ</strong>!
+            </p>
+          </div>
+
+          <div>
+            <p class="text-sm font-bold text-slate-400 mb-2">🔊 Klik kata kunci untuk dengar suara Jepang:</p>
+            <div class="flex flex-wrap gap-2.5">
+              <button onclick="speakJP('だれにもいわれなくても')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-violet-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>誰<rt>だれ</rt></ruby>にも<ruby>言<rt>い</rt></ruby>われなくても <span class="text-sm text-slate-400 font-sans">(tanpa disuruh siapapun)</span>
+              </button>
+              <button onclick="speakJP('ルールをまもる')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-violet-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                ルールを<ruby>守<rt>まも</rt></ruby>る <span class="text-sm text-slate-400 font-sans">(patuhi aturan)</span>
+              </button>
+              <button onclick="speakJP('かべにはる')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-violet-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                ルールを<ruby>壁<rt>かべ</rt></ruby>に<ruby>貼<rt>は</rt></ruby>る <span class="text-sm text-slate-400 font-sans">(tempel aturan)</span>
+              </button>
+              <button onclick="speakJP('ほかのひとにおしえる')" class="jp-text px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-violet-500/20 border border-[#26324B] text-base sm:text-lg font-bold text-white transition">
+                <ruby>他<rt>ほか</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>教<rt>おし</rt></ruby>える <span class="text-sm text-slate-400 font-sans">(ajari orang lain)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pt-2 flex justify-center">
+        <button onclick="switchTab('factory')" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-extrabold text-base sm:text-lg shadow-lg shadow-cyan-500/25 transition">
+          Buka Semua 25 Pola Resmi Pabrik SSW PM →
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 2: 25 POLA RESMI BUKU SSW PM (SENSEI + SISA POLA BARU)          -->
+    <!-- =================================================================== -->
+    <section id="view-factory" class="hidden space-y-6 animate-view">
+      <div class="rounded-3xl bg-[#131B2E] border border-[#24324D] p-6 sm:p-7">
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white mb-2">
+          📚 25 Pola Resmi 5S Pabrik Makanan (Tamat 100%)
+        </h2>
+        <p class="text-base text-slate-300">
+          Pilih salah satu dari 5S di bawah untuk melihat <strong class="text-white">5 situasi resmi</strong> masing-masing. Perhatikan label <span class="text-emerald-300 font-bold">✅ Ada di 20 Soal Sensei</span> vs <span class="text-amber-300 font-bold">🆕 Pola Resmi SSW (Baru)</span>!
+        </p>
+
+        <!-- Zone Selector Pills -->
+        <div class="mt-5 flex flex-wrap gap-2.5" id="zoneButtons"></div>
+      </div>
+
+      <!-- Zone Cases Container -->
+      <div id="zoneCasesList" class="space-y-4"></div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 3: DUEL JEBAKAN KEMBAR (PERBEDAAN 1 KATA YANG MEMATIKAN)        -->
+    <!-- =================================================================== -->
+    <section id="view-traps" class="hidden space-y-6 animate-view">
+      <div class="rounded-3xl bg-[#131B2E] border border-[#24324D] p-6 sm:p-7">
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white mb-2">
+          ⚔️ 5 Jebakan Kembar Paling Sering Bikin Salah
+        </h2>
+        <p class="text-base text-slate-300">
+          Kalimatnya mirip, tapi <strong>1 kata yang menyala kuning</strong> membedakan jawabannya 100%. Bandingkan bersebelahan di bawah ini:
+        </p>
+      </div>
+
+      <div id="twinTrapsList" class="space-y-5"></div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 4: GAME LATIHAN ANTI-STRESS (45+ SOAL PABRIK & SENSEI)          -->
+    <!-- =================================================================== -->
+    <section id="view-game" class="hidden space-y-6 animate-view">
+      <!-- Mode Selector Bar -->
+      <div class="rounded-3xl bg-[#131B2E] border border-[#24324D] p-5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap gap-2">
+          <button onclick="startGame('chill')" id="gmode-chill" class="px-4 py-2.5 rounded-2xl text-sm sm:text-base font-extrabold bg-cyan-500/20 text-cyan-300 border-2 border-cyan-500/50 transition">
+            🧘 Santai (Semua)
+          </button>
+          <button onclick="startGame('factoryOnly')" id="gmode-factoryOnly" class="px-4 py-2.5 rounded-2xl text-sm sm:text-base font-bold bg-[#0B101B] text-slate-300 border-2 border-transparent hover:border-[#2A3958] transition">
+            🆕 Pola Baru SSW
+          </button>
+          <button onclick="startGame('exam40')" id="gmode-exam40" class="px-4 py-2.5 rounded-2xl text-sm sm:text-base font-bold bg-[#0B101B] text-slate-300 border-2 border-transparent hover:border-[#2A3958] transition">
+            🏆 Ujian 40 Soal
+          </button>
+          <button onclick="startGame('exam100')" id="gmode-exam100" class="px-4 py-2.5 rounded-2xl text-sm sm:text-base font-bold bg-[#0B101B] text-slate-300 border-2 border-transparent hover:border-[#2A3958] transition">
+            👑 Marathon 100 Soal
+          </button>
+        </div>
+
+        <div class="flex items-center gap-3 text-base font-extrabold">
+          <span class="px-3.5 py-1.5 rounded-xl bg-[#0B101B] text-amber-400">🔥 <span id="streakCount">0</span></span>
+          <span class="px-3.5 py-1.5 rounded-xl bg-[#0B101B] text-emerald-400">🎯 <span id="accCount">100%</span></span>
+        </div>
+      </div>
+
+      <!-- GAME CARD -->
+      <div id="activeGameCard" class="rounded-3xl bg-[#131B2E] border-2 border-[#24324D] p-6 sm:p-8 space-y-6 shadow-xl">
+        <!-- Exam Progress (visible in exam40 / exam100 mode) -->
+        <div id="examProgressBox" class="hidden space-y-2">
+          <div class="flex justify-between text-sm font-bold text-slate-300">
+            <span id="examTitleLabel">Progres Tantangan 40 Soal</span>
+            <span id="examCounter">Soal 1 / 40</span>
+          </div>
+          <div class="w-full h-3 rounded-full bg-[#0B101B] overflow-hidden">
+            <div id="examBar" class="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-all duration-300" style="width: 2.5%"></div>
+          </div>
+        </div>
+
+        <!-- Top Badges & Helper Buttons (Zero-Stress N4 Tools!) -->
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span id="qCategoryTag" class="px-3.5 py-1.5 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-sm font-bold">
+            Area Pabrik
+          </span>
+
+          <div class="flex flex-wrap gap-2">
+            <button onclick="playCurrentAudio()" class="px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-cyan-500/20 border border-[#2A3958] text-sm font-bold text-cyan-300 transition">
+              🔊 Suara
+            </button>
+            <button onclick="toggleN4TranslateHint()" id="btnTranslateHint" class="px-4 py-2 rounded-xl bg-[#0B101B] hover:bg-sky-500/20 border border-[#2A3958] text-sm font-bold text-sky-300 transition">
+              📖 Arti ID (N4)
+            </button>
+            <button onclick="revealSignalHint()" id="btnSignalHint" class="px-4 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/35 text-sm font-bold text-amber-300 transition">
+              📡 Sinyal
+            </button>
+          </div>
+        </div>
+
+        <!-- BIG JAPANESE SENTENCE BOX -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-[#0B101B] border border-[#24324D] text-center space-y-3">
+          <p id="gameQuestionJP" class="jp-text text-2xl sm:text-3xl font-black text-white"></p>
+          <p id="gameHintBox" class="hidden text-base sm:text-lg text-sky-300 font-semibold pt-3 border-t border-[#1E293B]"></p>
+        </div>
+
+        <!-- 5 BIG ANSWER BUTTONS -->
+        <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+          <button onclick="checkGameAnswer('seiri')" data-choice="seiri" class="choice-btn p-4 rounded-2xl bg-[#0B101B] hover:bg-rose-500/15 border-2 border-[#24324D] hover:border-rose-500/60 text-center transition">
+            <div class="jp-text text-xl sm:text-2xl font-black text-rose-400">せいり</div>
+            <div class="text-sm font-bold text-slate-300 mt-1">整理 • Ringkas</div>
+          </button>
+
+          <button onclick="checkGameAnswer('seiton')" data-choice="seiton" class="choice-btn p-4 rounded-2xl bg-[#0B101B] hover:bg-amber-500/15 border-2 border-[#24324D] hover:border-amber-500/60 text-center transition">
+            <div class="jp-text text-xl sm:text-2xl font-black text-amber-400">せいとん</div>
+            <div class="text-sm font-bold text-slate-300 mt-1">整頓 • Rapi</div>
+          </button>
+
+          <button onclick="checkGameAnswer('seisou')" data-choice="seisou" class="choice-btn p-4 rounded-2xl bg-[#0B101B] hover:bg-cyan-500/15 border-2 border-[#24324D] hover:border-cyan-500/60 text-center transition">
+            <div class="jp-text text-xl sm:text-2xl font-black text-cyan-400">せいそう</div>
+            <div class="text-sm font-bold text-slate-300 mt-1">清掃 • Resik</div>
+          </button>
+
+          <button onclick="checkGameAnswer('seiketsu')" data-choice="seiketsu" class="choice-btn p-4 rounded-2xl bg-[#0B101B] hover:bg-emerald-500/15 border-2 border-[#24324D] hover:border-emerald-500/60 text-center transition">
+            <div class="jp-text text-xl sm:text-2xl font-black text-emerald-400">せいけつ</div>
+            <div class="text-sm font-bold text-slate-300 mt-1">清潔 • Rawat</div>
+          </button>
+
+          <button onclick="checkGameAnswer('shitsuke')" data-choice="shitsuke" class="choice-btn p-4 rounded-2xl bg-[#0B101B] hover:bg-violet-500/15 border-2 border-[#24324D] hover:border-violet-500/60 text-center transition">
+            <div class="jp-text text-xl sm:text-2xl font-black text-violet-400">しつけ</div>
+            <div class="text-sm font-bold text-slate-300 mt-1">躾 • Rajin</div>
+          </button>
+        </div>
+
+        <!-- CLEAR, SIMPLE EXPLANATION BOX -->
+        <div id="gameFeedbackBox" class="hidden rounded-2xl p-6 border-2 space-y-4 animate-view">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h4 id="feedbackHeadline" class="text-lg sm:text-xl font-black"></h4>
+              <p id="feedbackMeaning" class="text-base text-slate-200 mt-1"></p>
+            </div>
+            <button onclick="goNextQuestion()" class="px-6 py-3.5 rounded-2xl bg-white hover:bg-cyan-200 text-slate-950 font-black text-base transition shadow-md shrink-0">
+              Lanjut Soal Berikutnya →
+            </button>
+          </div>
+          <div id="feedbackReason" class="p-4 rounded-xl bg-[#0B101B]/80 text-base text-slate-200 leading-relaxed"></div>
+        </div>
+      </div>
+
+      <!-- EXAM COMPLETE SUMMARY CARD -->
+      <div id="examFinishCard" class="hidden rounded-3xl bg-[#131B2E] border-2 border-cyan-500/50 p-8 text-center space-y-5 animate-view">
+        <div class="text-5xl" id="finishEmoji">👑</div>
+        <h3 class="text-2xl sm:text-3xl font-black text-white" id="finishScoreText">Nilai Simulasi: 100 / 100</h3>
+        <p class="text-base sm:text-lg text-slate-300 max-w-xl mx-auto" id="finishMessage"></p>
+        <div class="pt-2 flex flex-wrap justify-center gap-3">
+          <button onclick="startGame(appState.gameMode)" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-extrabold text-base">
+            🔄 Ulangi Simulasi Ini
+          </button>
+          <button onclick="startGame('chill')" class="px-6 py-3.5 rounded-2xl bg-[#0B101B] border border-[#2A3958] text-slate-200 font-bold text-base">
+            🧘 Kembali ke Mode Santai
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT DATA & ENGINE -->
+  <script>
+    // =========================================================================
+    // 1. 25 OFFICIAL SSW PM PATTERNS (5S x 5 AUTHENTIC PATTERNS = 25 TOTAL)
+    // =========================================================================
+    const factoryZones = [
+      {
+        id: 'seiri',
+        title: '1. せいり (整理 • 5 Pola)',
+        desc: 'Inti Seiri: Memisahkan "Yang Dipakai" vs "Yang Tidak Dipakai" (いるもの・いらないもの) lalu menyingkirkannya.',
+        items: [
+          {
+            ans: 'seiri',
+            inSensei: true,
+            patternName: 'Pola 1A: Barang / Kardus / Alat yang Tidak Dipakai',
+            jp: '<span class="signal-glow"><ruby>使<rt>つか</rt></ruby>わない</span><ruby>段<rt>だん</rt></ruby>ボールや<ruby>道具<rt>どうぐ</rt></ruby>を<ruby>片付<rt>かたづ</rt></ruby>けます。',
+            plain: '使わない段ボールや道具を片付けます。',
+            id: 'Membereskan/menyingkirkan kardus dan alat yang tidak dipakai.',
+            why: 'Kata kunci "使わない" (tidak dipakai) = barang tidak perlu → せいり (Seiri).'
+          },
+          {
+            ans: 'seiri',
+            inSensei: true,
+            patternName: 'Pola 1B: Bahan Makanan Lama / Kadaluarsa (期限切れ)',
+            jp: '<span class="signal-glow"><ruby>賞味期限<rt>しょうみきげん</rt></ruby>が<ruby>切<rt>き</rt></ruby>れた</span><ruby>食材<rt>しょくざい</rt></ruby>や<ruby>古<rt>ふる</rt></ruby>くなった<ruby>調味料<rt>ちょうみりょう</rt></ruby>を<ruby>捨<rt>す</rt></ruby>てます。',
+            plain: '賞味期限が切れた食材や古くなった調味料を捨てます。',
+            id: 'Membuang bahan makanan yang lewat tanggal kadaluarsa atau bumbu yang sudah lama.',
+            why: 'Di Sensei muncul sebagai "古くなった食材". Di ujian SSW sering pakai "賞味期限切れ / 消費期限切れ" → せいり (Seiri).'
+          },
+          {
+            ans: 'seiri',
+            inSensei: true,
+            patternName: 'Pola 1C: Wadah / Botol yang Sudah Kosong (空になった)',
+            jp: '<span class="signal-glow"><ruby>空<rt>から</rt></ruby>になった</span><ruby>洗剤<rt>せんざい</rt></ruby>のボトルや<ruby>ダンボール箱<rt>ばこ</rt></ruby>を<ruby>処分<rt>しょぶん</rt></ruby>します。',
+            plain: '空になった洗剤のボトルやダンボール箱を処分します。',
+            id: 'Membuang botol deterjen atau kardus yang isinya sudah kosong.',
+            why: 'Wadah yang sudah kosong ("空になった") bukan lagi alat aktif, melainkan sampah → せいり (Seiri).'
+          },
+          {
+            ans: 'seiri',
+            inSensei: false,
+            patternName: 'Pola 1D: Alat / Wadah Retak, Pecah, atau Berkarat (破損・錆び)',
+            jp: '<span class="signal-glow"><ruby>欠<rt>か</rt></ruby>けた<ruby>容器<rt>ようき</rt></ruby>や<ruby>壊<rt>こわ</rt></ruby>れた<ruby>機械<rt>きかい</rt></ruby></span>を<ruby>作業場<rt>さぎょうじょう</rt></ruby>から<ruby>出<rt>だ</rt></ruby>します。',
+            plain: '欠けた容器や壊れた機械を作業場から出します。',
+            id: 'Mengeluarkan wadah yang gompal/retak atau mesin rusak dari area kerja.',
+            why: 'Alat rusak/gompal tidak boleh dipakai karena serpihannya bisa masuk ke makanan (異物混入) → せいり (Seiri).'
+          },
+          {
+            ans: 'seiri',
+            inSensei: false,
+            patternName: 'Pola 1E: Barang Pribadi / Barang di Luar Tugas Hari Ini (私物・不要物)',
+            jp: '<ruby>作業場<rt>さぎょうじょう</rt></ruby>に<span class="signal-glow"><ruby>今日<rt>きょう</rt></ruby><ruby>使<rt>つか</rt></ruby>わないものや<ruby>私物<rt>しぶつ</rt></ruby></span>を<ruby>持<rt>も</rt></ruby>ち<ruby>込<rt>こ</rt></ruby>みません。',
+            plain: '作業場に今日使わないものや私物を持ち込みません。',
+            id: 'Tidak membawa barang yang tidak dipakai hari ini atau barang pribadi ke ruang kerja.',
+            why: 'Prinsip buku teks SSW: di meja kerja hanya boleh ada barang yang dipakai hari itu → せいり (Seiri).'
+          }
+        ]
+      },
+      {
+        id: 'seiton',
+        title: '2. せいとん (整頓 • 5 Pola)',
+        desc: 'Inti Seiton: Menata barang yang MASIH DIPAKAI dengan prinsip "3 Tetap" (Lokasi Tetap, Barang Tetap, Jumlah Tetap) agar cepat ditemukan.',
+        items: [
+          {
+            ans: 'seiton',
+            inSensei: true,
+            patternName: 'Pola 2A: Menentukan Lokasi Tetap Barang (定位置・場所を決める)',
+            jp: '<ruby>食材<rt>しょくざい</rt></ruby>や<ruby>調理器具<rt>ちょうりきぐ</rt></ruby>の<span class="signal-glow"><ruby>置<rt>お</rt></ruby>く<ruby>場所<rt>ばしょ</rt></ruby>を<ruby>決<rt>き</rt></ruby>めます</span>。',
+            plain: '食材や調理器具の置く場所を決めます。',
+            id: 'Menentukan lokasi tetap untuk menaruh bahan makanan dan peralatan masak.',
+            why: 'Menetapkan rumah/posisi untuk setiap barang ("置く場所を決める") → せいとん (Seiton).'
+          },
+          {
+            ans: 'seiton',
+            inSensei: true,
+            patternName: 'Pola 2B: Mengembalikan Alat ke Tempat Asal (元の場所に戻す)',
+            jp: '<ruby>包丁<rt>ほうちょう</rt></ruby>や<ruby>道具<rt>どうぐ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>ったら、<span class="signal-glow"><ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>します</span>。',
+            plain: '包丁や道具を使ったら、元の場所に戻します。',
+            id: 'Setelah memakai pisau atau alat, mengembalikannya ke tempat semula (tidak dibiarkan di meja).',
+            why: 'Lawan dari "机の上に置いたまま" (dibiarkan tergeletak di meja) → せいとん (Seiton).'
+          },
+          {
+            ans: 'seiton',
+            inSensei: false,
+            patternName: 'Pola 2C: First-In First-Out / FIFO (先入れ先出し)',
+            jp: '<ruby>古<rt>ふる</rt></ruby>い<ruby>食材<rt>しょくざい</rt></ruby>から<ruby>先<rt>さき</rt></ruby>に<ruby>使<rt>つか</rt></ruby>えるように、<span class="signal-glow"><ruby>先入<rt>さきい</rt></ruby>れ<ruby>先出<rt>さきだ</rt></ruby>し</span>で<ruby>並<rt>なら</rt></ruby>べます。',
+            plain: '古い食材から先に使えるように、先入れ先出しで並べます。',
+            id: 'Menyusun stok secara First-In First-Out (masuk dulu keluar dulu) agar bahan lama terpakai lebih dulu.',
+            why: 'Teknik penataan stok paling wajib di ujian SSW Pengolahan Makanan → せいとん (Seiton).'
+          },
+          {
+            ans: 'seiton',
+            inSensei: false,
+            patternName: 'Pola 2D: Label Nama, Tanggal Buka & Jumlah Tetap (表示・定量)',
+            jp: '<ruby>棚<rt>たな</rt></ruby>に<span class="signal-glow"><ruby>名前<rt>なまえ</rt></ruby>のラベルを<ruby>貼<rt>は</rt></ruby>り</span>、<ruby>道具<rt>どうぐ</rt></ruby>の<span class="signal-glow"><ruby>数<rt>かず</rt></ruby>を<ruby>揃<rt>そろ</rt></ruby>えて</span><ruby>並<rt>なら</rt></ruby>べます。',
+            plain: '棚に名前のラベルを貼り、道具の数を揃えて並べます。',
+            id: 'Menempel label nama di rak, dan menyusun peralatan sesuai jumlah standarnya.',
+            why: 'Membuat siapapun langsung tahu lokasi dan jumlah barang (定品・定量・表示) → せいとん (Seiton).'
+          },
+          {
+            ans: 'seiton',
+            inSensei: false,
+            patternName: 'Pola 2E: Lorong Bebas Hambatan & Merapikan Kabel/Selang (通路・配線)',
+            jp: '<span class="signal-glow"><ruby>通路<rt>つうろ</rt></ruby>に<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>置<rt>お</rt></ruby>かず</span>、ホースやコードは<span class="signal-glow"><ruby>壁<rt>かべ</rt></ruby>に<ruby>掛<rt>か</rt></ruby>けます</span>。',
+            plain: '通路に荷物を置かず、ホースやコードは壁に掛けます。',
+            id: 'Tidak menaruh barang di lorong jalan, serta menggantung selang dan kabel di dinding.',
+            why: 'Menata posisi jalur jalan dan kabel agar tidak menghalangi atau membuat orang tersandung → せいとん (Seiton).'
+          }
+        ]
+      },
+      {
+        id: 'seisou',
+        title: '3. せいそう (清掃 • 5 Pola)',
+        desc: 'Inti Seisou: Menyapu, mengelap, dan mencuci kotoran fisik, sekaligus memeriksa apakah ada kerusakan mesin ("清掃は点検").',
+        items: [
+          {
+            ans: 'seisou',
+            inSensei: true,
+            patternName: 'Pola 3A: Membersihkan Tumpahan & Remah Makanan Segera (こぼれ・くず)',
+            jp: '<ruby>床<rt>ゆか</rt></ruby>の<span class="signal-glow"><ruby>油<rt>あぶら</rt></ruby>こぼれ</span>や<ruby>作業台<rt>さぎょうだい</rt></ruby>の<span class="signal-glow"><ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>のくず</span>をすぐに<ruby>掃除<rt>そうじ</rt></ruby>します。',
+            plain: '床の油こぼれや作業台の食べ物のくずをすぐに掃除します。',
+            id: 'Segera membersihkan minyak yang tumpah di lantai atau remah makanan di meja kerja.',
+            why: 'Ada kotoran nyata (tumpahan/remah) yang langsung dibersihkan → せいそう (Seisou).'
+          },
+          {
+            ans: 'seisou',
+            inSensei: true,
+            patternName: 'Pola 3B: Bersih-Bersih Rutin Selesai Kerja (作業後の掃除)',
+            jp: '<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったら、<ruby>作業台<rt>さぎょうだい</rt></ruby>や<ruby>床<rt>ゆか</rt></ruby>を<span class="signal-glow">きれいに<ruby>掃除<rt>そうじ</rt></ruby>します</span>。',
+            plain: '仕事が終わったら、作業台や床をきれいに掃除します。',
+            id: 'Setelah pekerjaan selesai, membersihkan meja kerja dan lantai.',
+            why: 'Aksi mencuci/mengelap area kerja setelah produksi selesai → せいそう (Seisou).'
+          },
+          {
+            ans: 'seisou',
+            inSensei: true,
+            patternName: 'Pola 3C: Membuang Sampah & Membersihkan Saluran Air (ゴミ箱・排水溝)',
+            jp: 'いっぱいになった<span class="signal-glow">ゴミ<ruby>箱<rt>ばこ</rt></ruby>を<ruby>空<rt>から</rt></ruby>にし</span>、<span class="signal-glow"><ruby>排水溝<rt>はいすいこう</rt></ruby>のゴミ</span>を<ruby>取<rt>と</rt></ruby>ります。',
+            plain: 'いっぱいになったゴミ箱を空にし、排水溝のゴミを取ります。',
+            id: 'Mengosongkan tempat sampah yang penuh dan mengambil kotoran di saluran pembuangan air.',
+            why: 'Membuang kotoran/sampah produksi agar tidak bau atau mengundang serangga → せいそう (Seisou).'
+          },
+          {
+            ans: 'seisou',
+            inSensei: false,
+            patternName: 'Pola 3D: Membongkar Mesin & Cek Kerusakan Saat Mencuci (分解洗浄・点検)',
+            jp: '<ruby>機械<rt>きかい</rt></ruby>の<span class="signal-glow"><ruby>部品<rt>ぶひん</rt></ruby>を<ruby>外<rt>はず</rt></ruby>して<ruby>洗<rt>あら</rt></ruby>い</span>、ネジの<ruby>緩<rt>ゆる</rt></ruby>みがないか<ruby>見<rt>み</rt></ruby>ます。',
+            plain: '機械の部品を外して洗い、ネジの緩みがないか見ます。',
+            id: 'Melepas bagian mesin untuk dicuci sampai dalam, sambil mengecek apakah ada baut yang kendor.',
+            why: 'Konsep wajib buku SSW: "清掃は点検" (Membersihkan mesin = memeriksa kerusakan komponen) → せいそう (Seisou).'
+          },
+          {
+            ans: 'seisou',
+            inSensei: false,
+            patternName: 'Pola 3E: Membersihkan Ventilasi, Lampu & Alat Pel (高所・清掃用具)',
+            jp: '<ruby>換気扇<rt>かんきせん</rt></ruby>の<span class="signal-glow"><ruby>油汚<rt>あぶらよご</rt></ruby>れを<ruby>落<rt>お</rt></ruby>とし</span>、<ruby>使<rt>つか</rt></ruby>ったブラシも<span class="signal-glow"><ruby>洗<rt>あら</rt></ruby>って<ruby>乾<rt>かわ</rt></ruby>かします</span>。',
+            plain: '換気扇の油汚れを落とし、使ったブラシも洗って乾かします。',
+            id: 'Membersihkan noda minyak di kipas ventilasi, serta mencuci dan mengeringkan sikat yang dipakai.',
+            why: 'Menghilangkan kotoran fisik di atas (ventilasi/lampu) dan membersihkan alat pel/sikat → せいそう (Seisou).'
+          }
+        ]
+      },
+      {
+        id: 'seiketsu',
+        title: '4. せいけつ (清潔 • 5 Pola)',
+        desc: 'Inti Seiketsu: Mempertahankan kondisi bersih (3S) dan menjaga HIGIENIS makanan serta tubuh pekerja agar bebas bakteri & benda asing.',
+        items: [
+          {
+            ans: 'seiketsu',
+            inSensei: true,
+            patternName: 'Pola 4A: Memisahkan Alat Bahan Mentah vs Sayur/Matang (交差汚染防止)',
+            jp: '<span class="signal-glow"><ruby>肉用<rt>にくよう</rt></ruby>のまな<ruby>板<rt>いた</rt></ruby>と<ruby>野菜用<rt>やさいよう</rt></ruby>のまな<ruby>板<rt>いた</rt></ruby>を<ruby>分<rt>わ</rt></ruby>けて</span><ruby>使<rt>つか</rt></ruby>います。',
+            plain: '肉用のまな板と野菜用のまな板を分けて使います。',
+            id: 'Memisahkan penggunaan talenan khusus daging dan talenan khusus sayuran.',
+            why: 'Mencegah bakteri dari daging mentah berpindah ke sayuran (交差汚染防止) → せいけつ (Seiketsu).'
+          },
+          {
+            ans: 'seiketsu',
+            inSensei: true,
+            patternName: 'Pola 4B: Mengecek & Mempertahankan Kondisi Bersih (きれいな状態の維持)',
+            jp: '<ruby>毎日<rt>まいにち</rt></ruby>、<ruby>作業場<rt>さぎょうじょう</rt></ruby>が<span class="signal-glow">きれいか<ruby>確認<rt>かくにん</rt></ruby></span>し、3Sを<ruby>維持<rt>いじ</rt></ruby>します。',
+            plain: '毎日、作業場がきれいか確認し、3Sを維持します。',
+            id: 'Setiap hari mengecek apakah area kerja bersih dan mempertahankan kondisi 3S.',
+            why: 'Bukan aksi menyapu, melainkan menjaga & mengecek status tetap bersih → せいけつ (Seiketsu).'
+          },
+          {
+            ans: 'seiketsu',
+            inSensei: false,
+            patternName: 'Pola 4C: Disinfeksi & Sterilisasi Alat Kerja (殺菌・消毒)',
+            jp: '<ruby>調理器具<rt>ちょうりきぐ</rt></ruby>を<ruby>洗<rt>あら</rt></ruby>ったあと、<span class="signal-glow">アルコールや<ruby>薬剤<rt>やくざい</rt></ruby>で<ruby>消毒<rt>しょうどく</rt></ruby>・<ruby>殺菌<rt>さっきん</rt></ruby></span>します。',
+            plain: '調理器具を洗ったあと、アルコールや薬剤で消毒・殺菌します。',
+            id: 'Setelah mencuci peralatan masak, mendisinfeksi dan mensterilkannya dengan alkohol/cairan sanitasi.',
+            why: 'Mencuci kotoran = Seisou; mensterilkan kuman tak kasat mata (消毒・殺菌) = せいけつ (Seiketsu)!'
+          },
+          {
+            ans: 'seiketsu',
+            inSensei: false,
+            patternName: 'Pola 4D: Kebersihan Diri, Cuci Tangan & Rol Rambut (身だしなみ・手洗い)',
+            jp: '<span class="signal-glow"><ruby>粘着<rt>ねんちゃく</rt></ruby>ローラーで<ruby>毛髪<rt>もうはつ</rt></ruby>を<ruby>取<rt>と</rt></ruby>り</span>、石けんで<span class="signal-glow"><ruby>手<rt>て</rt></ruby>を<ruby>洗<rt>あら</rt></ruby>って<ruby>消毒<rt>しょうどく</rt></ruby></span>します。',
+            plain: '粘着ローラーで毛髪を取り、石けんで手を洗って消毒します。',
+            id: 'Membersihkan rambut/debu di seragam dengan rol perekat, lalu mencuci dan mendisinfeksi tangan.',
+            why: 'Kebersihan higienis pekerja (手洗い・消毒・清潔な制服・短い爪) → せいけつ (Seiketsu).'
+          },
+          {
+            ans: 'seiketsu',
+            inSensei: false,
+            patternName: 'Pola 4E: Cek Sarung Tangan, Kulkas & Zona Bersih/Kotor (衛生点検)',
+            jp: '<ruby>手袋<rt>てぶくろ</rt></ruby>に<span class="signal-glow"><ruby>破<rt>やぶ</rt></ruby>れがないか</span>、<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>に<span class="signal-glow">カビがないか<ruby>確認<rt>かくにん</rt></ruby></span>します。',
+            plain: '手袋に破れがないか、冷蔵庫にカビがないか確認します。',
+            id: 'Mengecek apakah sarung tangan bebas robekan dan apakah kulkas bebas dari jamur.',
+            why: 'Inspeksi higienis mencegah jamur atau sobekan plastik mencemari makanan → せいけつ (Seiketsu).'
+          }
+        ]
+      },
+      {
+        id: 'shitsuke',
+        title: '5. しつけ (躾 • 5 Pola)',
+        desc: 'Inti Shitsuke: Disiplin MANUSIA — mematuhi aturan/SOP, membiasakan diri tanpa disuruh, melapor cepat, dan saling mengingatkan.',
+        items: [
+          {
+            ans: 'shitsuke',
+            inSensei: true,
+            patternName: 'Pola 5A: Melakukan 5S Tanpa Disuruh Siapapun (習慣化)',
+            jp: '<span class="signal-glow"><ruby>誰<rt>だれ</rt></ruby>にも<ruby>言<rt>い</rt></ruby>われなくても</span>、<ruby>毎日<rt>まいにち</rt></ruby>5Sを<ruby>実行<rt>じっこう</rt></ruby>します。',
+            plain: '誰にも言われなくても、毎日5Sを実行します。',
+            id: 'Meskipun tidak disuruh siapapun, menjalankan 5S setiap hari.',
+            why: 'Sudah menjadi kebiasaan otomatis di dalam diri pekerja → しつけ (Shitsuke).'
+          },
+          {
+            ans: 'shitsuke',
+            inSensei: true,
+            patternName: 'Pola 5B: Membuat & Menempel Aturan / Jadwal Piket (ルールの掲示)',
+            jp: '<ruby>掃除<rt>そうじ</rt></ruby>の<span class="signal-glow">ルールや<ruby>当番表<rt>とうばんひょう</rt></ruby>を<ruby>決<rt>き</rt></ruby>めて、<ruby>壁<rt>かべ</rt></ruby>に<ruby>貼<rt>は</rt></ruby>ります</span>。',
+            plain: '掃除のルールや当番表を決めて、壁に貼ります。',
+            id: 'Membuat aturan bersih-bersih dan jadwal piket lalu menempelkannya di dinding.',
+            why: 'Menetapkan aturan bersama agar semua staf disiplin menjalankannya → しつけ (Shitsuke).'
+          },
+          {
+            ans: 'shitsuke',
+            inSensei: true,
+            patternName: 'Pola 5C: Mematuhi Aturan & Mengajari Rekan Kerja (遵守と指導)',
+            jp: '5Sの<span class="signal-glow">ルールを<ruby>守<rt>まも</rt></ruby>り</span>、<ruby>新<rt>あたら</rt></ruby>しい<ruby>人<rt>ひと</rt></ruby>にも<span class="signal-glow"><ruby>教<rt>おし</rt></ruby>えます</span>。',
+            plain: '5Sのルールを守り、新しい人にも教えます。',
+            id: 'Mematuhi aturan 5S dan mengajarkannya juga kepada pekerja baru.',
+            why: 'Kepatuhan aturan dan saling mengingatkan/membimbing antar pekerja → しつけ (Shitsuke).'
+          },
+          {
+            ans: 'shitsuke',
+            inSensei: false,
+            patternName: 'Pola 5D: Mematuhi SOP Kerja, Tepat Waktu & Salam (作業手順書・挨拶)',
+            jp: '<span class="signal-glow"><ruby>作業手順書<rt>さぎょうてじゅんしょ</rt></ruby>（マニュアル）を<ruby>守<rt>まも</rt></ruby>り</span>、<ruby>時間<rt>じかん</rt></ruby>どおりに<ruby>行動<rt>こうどう</rt></ruby>します。',
+            plain: '作業手順書（マニュアル）を守り、時間どおりに行動します。',
+            id: 'Mematuhi buku panduan SOP kerja dan bertindak tepat waktu.',
+            why: 'Disiplin mengikuti SOP pabrik (tidak jalan pintas) dan tepat waktu → しつけ (Shitsuke).'
+          },
+          {
+            ans: 'shitsuke',
+            inSensei: false,
+            patternName: 'Pola 5E: Lapor Cepat Saat Ada Masalah / Luka (報告・連絡・相談)',
+            jp: '<ruby>手<rt>て</rt></ruby>に<ruby>傷<rt>きず</rt></ruby>があるときや<ruby>機械<rt>きかい</rt></ruby>が<ruby>壊<rt>こわ</rt></ruby>れたときは、<span class="signal-glow">すぐに<ruby>責任者<rt>せきにんしゃ</rt></ruby>に<ruby>報告<rt>ほうこく</rt></ruby>します</span>。',
+            plain: '手に傷があるときや機械が壊れたときは、すぐに責任者に報告します。',
+            id: 'Jika tangan terluka atau mesin rusak, segera melapor kepada penanggung jawab.',
+            why: 'Budaya disiplin Ho-Ren-So (報告・連絡・相談) di pabrik Jepang → しつけ (Shitsuke).'
+          }
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // 2. TWIN TRAPS DATA (PERBEDAAN 1 KATA YANG MEMATIKAN)
+    // =========================================================================
+    const twinTrapsData = [
+      {
+        title: 'Jebakan #1: Kata "Bersih" (Aksi vs Cek Kondisi)',
+        left: {
+          ans: 'せいそう (Seisou)',
+          color: 'cyan',
+          jp: '<ruby>作業<rt>さぎょう</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったら、<ruby>作業台<rt>さぎょうだい</rt></ruby>を<span class="signal-glow">きれいにします</span>。',
+          plain: '作業が終わったら、作業台をきれいにします。',
+          id: 'Setelah selesai kerja, membersihkan meja kerja.',
+          tip: 'きれいにします = KATA KERJA AKSI (mengelap/membersihkan) → SEISOU!'
+        },
+        right: {
+          ans: 'せいけつ (Seiketsu)',
+          color: 'emerald',
+          jp: '<ruby>毎日<rt>まいにち</rt></ruby>、<ruby>作業場<rt>さぎょうじょう</rt></ruby>が<span class="signal-glow">きれいか<ruby>確認<rt>かくにん</rt></ruby>します</span>。',
+          plain: '毎日、作業場がきれいか確認します。',
+          id: 'Setiap hari mengecek apakah tempat kerja bersih.',
+          tip: 'きれいか確認します = MENGECEK KONDISI tetap bersih → SEIKETSU!'
+        }
+      },
+      {
+        title: 'Jebakan #2: Menempel Sesuatu di Dinding / Rak',
+        left: {
+          ans: 'せいとん (Seiton)',
+          color: 'amber',
+          jp: '<ruby>棚<rt>たな</rt></ruby>に<span class="signal-glow"><ruby>道具<rt>どうぐ</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>のラベルを<ruby>貼<rt>は</rt></ruby>ります</span>。',
+          plain: '棚に道具の名前のラベルを貼ります。',
+          id: 'Menempel label nama alat pada rak.',
+          tip: 'Label nama barang agar gampang dicari → SEITON!'
+        },
+        right: {
+          ans: 'しつけ (Shitsuke)',
+          color: 'violet',
+          jp: '<ruby>掃除<rt>そうじ</rt></ruby>の<span class="signal-glow">ルールを<ruby>決<rt>き</rt></ruby>めて、<ruby>壁<rt>かべ</rt></ruby>に<ruby>貼<rt>は</rt></ruby>ります</span>。',
+          plain: '掃除のルールを決めて、壁に貼ります。',
+          id: 'Membuat aturan bersih-bersih lalu menempelkannya di dinding.',
+          tip: 'Menempel ATURAN (ルール) agar semua orang patuh → SHITSUKE!'
+        }
+      },
+      {
+        title: 'Jebakan #3: "Memisahkan" Alat Dapur',
+        left: {
+          ans: 'せいとん (Seiton)',
+          color: 'amber',
+          jp: 'スプーン、フォーク、ナイフを<span class="signal-glow"><ruby>同<rt>おな</rt></ruby>じ<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れています</span>。',
+          plain: 'スプーン、フォーク、ナイフを同じ場所に入れています。',
+          id: 'Sendok, garpu, pisau dimasukkan campur ke tempat yang sama.',
+          tip: 'Soal wadah/laci penataan alat makan agar rapi → SEITON!'
+        },
+        right: {
+          ans: 'せいけつ (Seiketsu)',
+          color: 'emerald',
+          jp: '<ruby>肉用<rt>にくよう</rt></ruby>のまな<ruby>板<rt>いた</rt></ruby>と<ruby>野菜用<rt>やさいよう</rt></ruby>のまな<ruby>板<rt>いた</rt></ruby>を<span class="signal-glow"><ruby>分<rt>わ</rt></ruby>けています</span>。',
+          plain: '肉用のまな板と野菜用のまな板を分けています。',
+          id: 'Memisahkan talenan daging dan talenan sayur.',
+          tip: 'Mencegah bakteri daging mentah menular ke sayur → SEIKETSU!'
+        }
+      },
+      {
+        title: 'Jebakan #4: Barang Dibiarkan di Meja / Rak',
+        left: {
+          ans: 'せいとん (Seiton)',
+          color: 'amber',
+          jp: '<ruby>使<rt>つか</rt></ruby>った<ruby>包丁<rt>ほうちょう</rt></ruby>を<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<span class="signal-glow"><ruby>置<rt>お</rt></ruby>いたまま</span>です。',
+          plain: '使った包丁を机の上に置いたままです。',
+          id: 'Pisau yang sudah dipakai dibiarkan tergeletak di meja.',
+          tip: 'Pisau MASIH DIPAKAI, hanya salah taruh → SEITON!'
+        },
+        right: {
+          ans: 'せいり (Seiri)',
+          color: 'rose',
+          jp: '<span class="signal-glow"><ruby>空<rt>から</rt></ruby>になった<ruby>洗剤<rt>せんざい</rt></ruby>のボトル</span>をそのまま<ruby>置<rt>お</rt></ruby>いています。',
+          plain: '空になった洗剤のボトルをそのまま置いています。',
+          id: 'Botol deterjen yang sudah kosong dibiarkan ditaruh.',
+          tip: 'Botol SUDAH KOSONG = sampah tak berguna → SEIRI!'
+        }
+      },
+      {
+        title: 'Jebakan #5: Cek Pagi Sebelum Kerja',
+        left: {
+          ans: 'しつけ (Shitsuke)',
+          color: 'violet',
+          jp: '<span class="signal-glow"><ruby>毎朝<rt>まいあさ</rt></ruby>、<ruby>仕事<rt>しごと</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に</span><ruby>作業場<rt>さぎょうじょう</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>します。',
+          plain: '毎朝、仕事の前に作業場を確認します。',
+          id: 'Setiap pagi sebelum bekerja, mengecek tempat kerja.',
+          tip: 'Rutinitas disiplin setiap pagi sebelum mulai → SHITSUKE!'
+        },
+        right: {
+          ans: 'せいけつ (Seiketsu)',
+          color: 'emerald',
+          jp: '<ruby>毎日<rt>まいにち</rt></ruby>、<ruby>作業場<rt>さぎょうじょう</rt></ruby>が<span class="signal-glow">きれいか<ruby>確認<rt>かくにん</rt></ruby>します</span>。',
+          plain: '毎日、作業場がきれいか確認します。',
+          id: 'Setiap hari mengecek apakah tempat kerja bersih.',
+          tip: 'Ada kata "きれいか" (apakah bersih) → SEIKETSU!'
+        }
+      },
+      {
+        title: 'Jebakan #6: Mencuci Kotoran vs Disinfeksi Kuman (Sangat Sering di SSW PM!)',
+        left: {
+          ans: 'せいそう (Seisou)',
+          color: 'cyan',
+          jp: '<ruby>調理器具<rt>ちょうりきぐ</rt></ruby>についた<ruby>汚<rt>よご</rt></ruby>れを<span class="signal-glow"><ruby>洗剤<rt>せんざい</rt></ruby>で<ruby>洗<rt>あら</rt></ruby>い<ruby>落<rt>お</rt></ruby>とします</span>。',
+          plain: '調理器具についた汚れを洗剤で洗い落とします。',
+          id: 'Mencuci bersih kotoran yang menempel di alat masak dengan sabun.',
+          tip: 'Menghilangkan KOTORAN FISIK (汚れを落とす) → SEISOU!'
+        },
+        right: {
+          ans: 'せいけつ (Seiketsu)',
+          color: 'emerald',
+          jp: '<ruby>洗<rt>あら</rt></ruby>った<ruby>器具<rt>きぐ</rt></ruby>を<span class="signal-glow">アルコールで<ruby>消毒<rt>しょうどく</rt></ruby>・<ruby>殺菌<rt>さっきん</rt></ruby>します</span>。',
+          plain: '洗った器具をアルコールで消毒・殺菌します。',
+          id: 'Mendisinfeksi dan mensterilkan alat yang sudah dicuci dengan alkohol.',
+          tip: 'Membunuh BAKTERI TAK KASAT MATA (消毒・殺菌) → SEIKETSU!'
+        }
+      }
+    ];
+
+    // =========================================================================
+    // 3. COMPLETE GAME QUESTION BANK (20 SENSEI + AUTHENTIC SSW PM PATTERNS)
+    // =========================================================================
+    const senseiQuestions = [
+      { cat: 'Lembar Sensei #1', isNew: false, ans: 'seiri', jp: '<ruby>使<rt>つか</rt></ruby>わない<span class="signal-glow"><ruby>段<rt>だん</rt></ruby>ボール</span>がたくさんあります。', plain: '使わない段ボールがたくさんあります。', id: 'Ada banyak kardus yang tidak dipakai.', why: 'Kata kunci "使わない" (tidak dipakai) = barang tak berguna → せいり (Seiri).' },
+      { cat: 'Lembar Sensei #2', isNew: false, ans: 'seiton', jp: '<ruby>包丁<rt>ほうちょう</rt></ruby>を<ruby>使<rt>つか</rt></ruby>ったあと、<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<span class="signal-glow"><ruby>置<rt>お</rt></ruby>いたまま</span>です。', plain: '包丁を使ったあと、机の上に置いたままです。', id: 'Setelah memakai pisau, dibiarkan tergeletak di atas meja.', why: 'Pisau masih dipakai, tapi tidak dikembalikan ke wadahnya → せいとん (Seiton).' },
+      { cat: 'Lembar Sensei #3', isNew: false, ans: 'seisou', jp: '<ruby>床<rt>ゆか</rt></ruby>に<ruby>油<rt>あぶら</rt></ruby>が<span class="signal-glow">こぼれています</span>。', plain: '床に油がこぼれています。', id: 'Di lantai ada minyak tumpah.', why: 'Kotoran fisik tumpah di lantai → せいそう (Seisou).' },
+      { cat: 'Lembar Sensei #4', isNew: false, ans: 'seiton', jp: '<ruby>食材<rt>しょくざい</rt></ruby>を<span class="signal-glow"><ruby>置<rt>お</rt></ruby>く<ruby>場所<rt>ばしょ</rt></ruby>が<ruby>決<rt>き</rt></ruby>まっていません</span>。', plain: '食材を置く場所が決まっていません。', id: 'Tempat menaruh bahan makanan belum ditentukan.', why: 'Menentukan lokasi barang ("場所を決める") → せいとん (Seiton).' },
+      { cat: 'Lembar Sensei #5', isNew: false, ans: 'seisou', jp: '<ruby>作業<rt>さぎょう</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったら、<ruby>作業台<rt>さぎょうだい</rt></ruby>を<span class="signal-glow">きれいにします</span>。', plain: '作業が終わったら、作業台をきれいにします。', id: 'Setelah pekerjaan selesai, membersihkan meja kerja.', why: 'Kata kerja aksi "きれいにします" (membersihkan) setelah bekerja → せいそう (Seisou).' },
+      { cat: 'Lembar Sensei #6', isNew: false, ans: 'seiton', jp: '<ruby>使<rt>つか</rt></ruby>った<ruby>道具<rt>どうぐ</rt></ruby>をいつも<span class="signal-glow"><ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>します</span>。', plain: '使った道具をいつも元の場所に戻します。', id: 'Selalu mengembalikan alat yang sudah dipakai ke tempat asal.', why: 'Mengembalikan barang ke lokasi asalnya ("元の場所に戻す") → せいとん (Seiton).' },
+      { cat: 'Lembar Sensei #7', isNew: false, ans: 'seiri', jp: '<span class="signal-glow"><ruby>古<rt>ふる</rt></ruby>くなった<ruby>食材<rt>しょくざい</rt></ruby></span>が<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>に<ruby>残<rt>のこ</rt></ruby>っています。', plain: '古くなった食材が冷蔵庫に残っています。', id: 'Bahan makanan yang sudah lama/basi tertinggal di kulkas.', why: 'Bahan lama/basi ("古くなった") wajib dibuang → せいり (Seiri).' },
+      { cat: 'Lembar Sensei #8', isNew: false, ans: 'seiton', jp: 'スプーン、フォーク、ナイフを<span class="signal-glow"><ruby>全部<rt>ぜんぶ</rt></ruby><ruby>同<rt>おな</rt></ruby>じ<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れています</span>。', plain: 'スプーン、フォーク、ナイフを全部同じ場所に入れています。', id: 'Sendok, garpu, pisau dimasukkan campur di tempat yang sama.', why: 'Penataan wadah alat agar rapi & tidak tercampur → せいとん (Seiton).' },
+      { cat: 'Lembar Sensei #9', isNew: false, ans: 'seisou', jp: '<span class="signal-glow">ゴミ<ruby>箱<rt>ばこ</rt></ruby>がいっぱい</span>になっています。', plain: 'ゴミ箱がいっぱいになっています。', id: 'Tempat sampah sudah penuh.', why: 'Membuang sampah & membersihkan area kerja → せいそう (Seisou).' },
+      { cat: 'Lembar Sensei #10', isNew: false, ans: 'shitsuke', jp: '<ruby>掃除<rt>そうじ</rt></ruby>の<span class="signal-glow">ルールを<ruby>決<rt>き</rt></ruby>めて、<ruby>壁<rt>かべ</rt></ruby>に<ruby>貼<rt>は</rt></ruby>ります</span>。', plain: '掃除のルールを決めて、壁に貼ります。', id: 'Menentukan aturan bersih-bersih dan menempelkannya di dinding.', why: 'Membuat ATURAN ("ルール") agar semua staf disiplin → しつけ (Shitsuke).' },
+      { cat: 'Lembar Sensei #11', isNew: false, ans: 'shitsuke', jp: '<span class="signal-glow"><ruby>毎朝<rt>まいあさ</rt></ruby>、<ruby>仕事<rt>しごと</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に</span><ruby>作業場<rt>さぎょうじょう</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>します。', plain: '毎朝、仕事の前に作業場を確認します。', id: 'Setiap pagi sebelum bekerja, mengecek tempat kerja.', why: 'Kebiasaan disiplin rutin setiap pagi sebelum kerja → しつけ (Shitsuke).' },
+      { cat: 'Lembar Sensei #12', isNew: false, ans: 'seiri', jp: '<span class="signal-glow"><ruby>使<rt>つか</rt></ruby>わない<ruby>道具<rt>どうぐ</rt></ruby></span>が<ruby>作業場<rt>さぎょうじょう</rt></ruby>にたくさんあります。', plain: '使わない道具が作業場にたくさんあります。', id: 'Ada banyak alat yang tidak terpakai di tempat kerja.', why: 'Alat tak terpakai ("使わない") harus disingkirkan → せいり (Seiri).' },
+      { cat: 'Lembar Sensei #13', isNew: false, ans: 'seiketsu', jp: '<span class="signal-glow"><ruby>肉用<rt>にくよう</rt></ruby>のまな<ruby>板<rt>いた</rt></ruby>と<ruby>野菜用<rt>やさいよう</rt></ruby>のまな<ruby>板<rt>いた</rt></ruby>を<ruby>分<rt>わ</rt></ruby>けています</span>。', plain: '肉用のまな板と野菜用のまな板を分けています。', id: 'Memisahkan talenan khusus daging dan talenan khusus sayur.', why: 'Standar higienis mencegah bakteri daging kena sayur → せいけつ (Seiketsu).' },
+      { cat: 'Lembar Sensei #14', isNew: false, ans: 'seisou', jp: '<ruby>作業台<rt>さぎょうだい</rt></ruby>に<span class="signal-glow"><ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>のくず</span>があります。すぐに<ruby>掃除<rt>そうじ</rt></ruby>します。', plain: '作業台に食べ物のくずがあります。すぐに掃除します。', id: 'Di meja kerja ada remah makanan. Segera dibersihkan.', why: 'Membersihkan kotoran fisik sisa makanan → せいそう (Seisou).' },
+      { cat: 'Lembar Sensei #15', isNew: false, ans: 'seiketsu', jp: '<ruby>毎日<rt>まいにち</rt></ruby>、<ruby>作業場<rt>さぎょうじょう</rt></ruby>が<span class="signal-glow">きれいか<ruby>確認<rt>かくにん</rt></ruby>します</span>。', plain: '毎日、作業場がきれいか確認します。', id: 'Setiap hari mengecek apakah tempat kerja bersih.', why: 'Mengecek & mempertahankan kondisi tetap bersih ("きれいか確認") → せいけつ (Seiketsu).' },
+      { cat: 'Lembar Sensei #16', isNew: false, ans: 'shitsuke', jp: '<span class="signal-glow"><ruby>誰<rt>だれ</rt></ruby>にも<ruby>言<rt>い</rt></ruby>われなくても</span>、<ruby>毎日<rt>まいにち</rt></ruby>5Sをします。', plain: '誰にも言われなくても、毎日5Sをします。', id: 'Meskipun tidak disuruh siapapun, melakukan 5S setiap hari.', why: 'Kesadaran & disiplin diri tanpa perlu disuruh → しつけ (Shitsuke).' },
+      { cat: 'Lembar Sensei #17', isNew: false, ans: 'seiri', jp: '<span class="signal-glow"><ruby>空<rt>から</rt></ruby>になった<ruby>洗剤<rt>せんざい</rt></ruby>のボトル</span>をそのまま<ruby>置<rt>お</rt></ruby>いています。', plain: '空になった洗剤のボトルをそのまま置いています。', id: 'Botol deterjen yang sudah kosong dibiarkan ditaruh begitu saja.', why: 'Botol sudah KOSONG ("空になった") = sampah tak berguna → せいり (Seiri).' },
+      { cat: 'Lembar Sensei #18', isNew: false, ans: 'seiton', jp: 'すべての<ruby>調理器具<rt>ちょうりきぐ</rt></ruby>の<span class="signal-glow"><ruby>置<rt>お</rt></ruby>く<ruby>場所<rt>ばしょ</rt></ruby>を<ruby>決<rt>き</rt></ruby>めています</span>。', plain: 'すべての調理器具の置く場所を決めています。', id: 'Menentukan tempat menaruh untuk semua peralatan masak.', why: 'Menentukan posisi tetap penyimpanan alat → せいとん (Seiton).' },
+      { cat: 'Lembar Sensei #19', isNew: false, ans: 'seisou', jp: '<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったら、<ruby>床<rt>ゆか</rt></ruby>と<ruby>作業台<rt>さぎょうだい</rt></ruby>を<span class="signal-glow"><ruby>掃除<rt>そうじ</rt></ruby>します</span>。', plain: '仕事が終わったら、床と作業台を掃除します。', id: 'Setelah pekerjaan selesai, membersihkan lantai dan meja kerja.', why: 'Aksi membersihkan lantai dan meja kerja → せいそう (Seisou).' },
+      { cat: 'Lembar Sensei #20', isNew: false, ans: 'shitsuke', jp: '5Sの<span class="signal-glow">ルールを<ruby>毎日<rt>まいにち</rt></ruby><ruby>守<rt>まも</rt></ruby>り、<ruby>他<rt>ほか</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>にも<ruby>教<rt>おし</rt></ruby>えます</span>。', plain: '5Sのルールを毎日守り、他の人にも教えます。', id: 'Mematuhi aturan 5S setiap hari dan mengajarkannya juga kepada orang lain.', why: 'Mematuhi aturan dan membimbing rekan kerja → しつけ (Shitsuke).' }
+    ];
+
+    // Flatten new official pattern items + add extra SSW PM variations
+    const newFactoryQuestions = [
+      ...factoryZones.flatMap(z => z.items.filter(it => !it.inSensei).map(it => ({
+        cat: `🆕 ${it.patternName}`,
+        isNew: true,
+        ans: it.ans,
+        jp: it.jp,
+        plain: it.plain,
+        id: it.id,
+        why: it.why
+      }))),
+      {
+        cat: '🆕 Pola 1B • Kadaluarsa',
+        isNew: true,
+        ans: 'seiri',
+        jp: '<span class="signal-glow"><ruby>消費期限<rt>しょうひきげん</rt></ruby>が<ruby>過<rt>す</rt></ruby>ぎた</span>お<ruby>弁当<rt>べんとう</rt></ruby>の<ruby>材料<rt>ざいりょう</rt></ruby>を<ruby>廃棄<rt>はいき</rt></ruby>します。',
+        plain: '消費期限が過ぎたお弁当の材料を廃棄します。',
+        id: 'Membuang bahan bento yang sudah melewati batas konsumsi aman.',
+        why: 'Bahan lewat batas konsumsi (消費期限切れ) wajib disingkirkan/dibuang → せいり (Seiri).'
+      },
+      {
+        cat: '🆕 Pola 1D • Alat Rusak',
+        isNew: true,
+        ans: 'seiri',
+        jp: '<ruby>網<rt>あみ</rt></ruby>が<span class="signal-glow"><ruby>破<rt>やぶ</rt></ruby>れたザル</span>を<ruby>使<rt>つか</rt></ruby>わないで<ruby>捨<rt>す</rt></ruby>てます。',
+        plain: '網が破れたザルを使わないで捨てます。',
+        id: 'Membuang saringan yang jaringnya sudah sobek dan tidak memakainya.',
+        why: 'Alat rusak bisa menjatuhkan potongan kawat ke makanan → せいり (Seiri).'
+      },
+      {
+        cat: '🆕 Pola 1E • Barang Tak Perlu',
+        isNew: true,
+        ans: 'seiri',
+        jp: '<ruby>作業台<rt>さぎょうだい</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>には、<span class="signal-glow"><ruby>今<rt>いま</rt></ruby>の<ruby>作業<rt>さぎょう</rt></ruby>に<ruby>必要<rt>ひつよう</rt></ruby>なものだけ</span>を<ruby>置<rt>お</rt></ruby>きます。',
+        plain: '作業台の上には、今の作業に必要なものだけを置きます。',
+        id: 'Di atas meja kerja, hanya menaruh barang yang diperlukan untuk pekerjaan saat ini.',
+        why: 'Memisahkan yang perlu sekarang vs yang tidak perlu → せいり (Seiri).'
+      },
+      {
+        cat: '🆕 Pola 2C • FIFO Stok',
+        isNew: true,
+        ans: 'seiton',
+        jp: '<ruby>新<rt>あたら</rt></ruby>しく<ruby>入<rt>はい</rt></ruby>った<ruby>材料<rt>ざいりょう</rt></ruby>を<span class="signal-glow"><ruby>棚<rt>たな</rt></ruby>の<ruby>奥<rt>おく</rt></ruby>に<ruby>入<rt>い</rt></ruby>れ</span>、<ruby>古<rt>ふる</rt></ruby>いものを<ruby>手前<rt>てまえ</rt></ruby>に<ruby>出<rt>だ</rt></ruby>します。',
+        plain: '新しく入った材料を棚の奥に入れ、古いものを手前に出します。',
+        id: 'Menaruh bahan yang baru masuk di bagian dalam rak, dan mengeluarkan bahan lama ke depan.',
+        why: 'Ini adalah cara kerja FIFO (先入れ先出し) → せいとん (Seiton).'
+      },
+      {
+        cat: '🆕 Pola 2D • Jumlah Tetap (定量)',
+        isNew: true,
+        ans: 'seiton',
+        jp: '<ruby>作業<rt>さぎょう</rt></ruby>の<ruby>前後<rt>ぜんご</rt></ruby>に、<ruby>道具<rt>どうぐ</rt></ruby>が<span class="signal-glow"><ruby>決<rt>き</rt></ruby>まった<ruby>数<rt>かず</rt></ruby>だけあるか</span><ruby>並<rt>なら</rt></ruby>べて<ruby>数<rt>かぞ</rt></ruby>えます。',
+        plain: '作業の前後に、道具が決まった数だけあるか並べて数えます。',
+        id: 'Sebelum dan sesudah kerja, menyusun dan menghitung apakah jumlah alat sesuai standar.',
+        why: 'Prinsip 定量 (jumlah tetap) & penataan posisi alat agar tak ada yang hilang → せいとん (Seiton).'
+      },
+      {
+        cat: '🆕 Pola 2D • Label Tanggal Buka',
+        isNew: true,
+        ans: 'seiton',
+        jp: '<ruby>袋<rt>ふくろ</rt></ruby>を<ruby>開<rt>あ</rt></ruby>けたら、<span class="signal-glow"><ruby>開封日<rt>かいふうび</rt></ruby>を書いたラベル</span>を<ruby>貼<rt>は</rt></ruby>って<ruby>棚<rt>たな</rt></ruby>に<ruby>置<rt>お</rt></ruby>きます。',
+        plain: '袋を開けたら、開封日を書いたラベルを貼って棚に置きます。',
+        id: 'Setelah membuka kemasan, menempel label berisi tanggal buka lalu menaruhnya di rak.',
+        why: 'Pemberian label identifikasi pada barang di rak (表示) → せいとん (Seiton).'
+      },
+      {
+        cat: '🆕 Pola 2E • Pisah Rak Kimia',
+        isNew: true,
+        ans: 'seiton',
+        jp: '<ruby>洗剤<rt>せんざい</rt></ruby>や<ruby>殺虫剤<rt>さっちゅうざい</rt></ruby>は、<ruby>食材<rt>しょくざい</rt></ruby>と<span class="signal-glow"><ruby>別<rt>べつ</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>決<rt>き</rt></ruby>めて<ruby>保管<rt>ほかん</rt></ruby></span>します。',
+        plain: '洗剤や殺虫剤は、食材と別の場所に決めて保管します。',
+        id: 'Menyimpan deterjen dan pembasmi serangga di tempat khusus yang terpisah dari bahan makanan.',
+        why: 'Penetapan lokasi khusus penyimpanan bahan kimia vs pangan → せいとん (Seiton).'
+      },
+      {
+        cat: '🆕 Pola 3D • Seisou = Inspeksi',
+        isNew: true,
+        ans: 'seisou',
+        jp: '<ruby>機械<rt>きかい</rt></ruby>を<span class="signal-glow"><ruby>掃除<rt>そうじ</rt></ruby>しながら</span>、<ruby>部品<rt>ぶひん</rt></ruby>にひびや<ruby>壊<rt>こわ</rt></ruby>れがないか<ruby>点検<rt>てんけん</rt></ruby>します。',
+        plain: '機械を掃除しながら、部品にひびや壊れがないか点検します。',
+        id: 'Sambil membersihkan mesin, memeriksa apakah ada komponen yang retak atau rusak.',
+        why: 'Buku SSW PM: "清掃は点検" (Membersihkan sambil mengecek kerusakan mesin) → せいそう (Seisou).'
+      },
+      {
+        cat: '🆕 Pola 3E • Debu Lampu & Langit-langit',
+        isNew: true,
+        ans: 'seisou',
+        jp: '<ruby>天井<rt>てんじょう</rt></ruby>や<ruby>照明<rt>しょうめい</rt></ruby>についた<span class="signal-glow">ホコリを<ruby>拭<rt>ふ</rt></ruby>き<ruby>取<rt>と</rt></ruby>ります</span>。',
+        plain: '天井や照明についたホコリを拭き取ります。',
+        id: 'Mengelap debu yang menempel di langit-langit dan lampu.',
+        why: 'Menghilangkan kotoran debu fisik agar tidak jatuh ke produk di bawah → せいそう (Seisou).'
+      },
+      {
+        cat: '🆕 Pola 4A • Zona Bersih vs Kotor',
+        isNew: true,
+        ans: 'seiketsu',
+        jp: '<span class="signal-glow"><ruby>加熱前<rt>かねつまえ</rt></ruby>の<ruby>食材<rt>しょくざい</rt></ruby>と<ruby>加熱後<rt>かねつご</rt></ruby>の<ruby>食品<rt>しょくひん</rt></ruby></span>を<ruby>扱<rt>あつか</rt></ruby>う<ruby>場所<rt>ばしょ</rt></ruby>を<ruby>分<rt>わ</rt></ruby>けます。',
+        plain: '加熱前の食材と加熱後の食品を扱う場所を分けます。',
+        id: 'Memisahkan area penanganan bahan mentah sebelum dimasak dan makanan yang sudah matang.',
+        why: 'Pemisahan zona bersih & zona kotor (汚染区域・非汚染区域) mencegah kontaminasi bakteri → せいけつ (Seiketsu).'
+      },
+      {
+        cat: '🆕 Pola 4D • Seragam & Kuku',
+        isNew: true,
+        ans: 'seiketsu',
+        jp: '<ruby>爪<rt>つめ</rt></ruby>を<ruby>短<rt>みじか</rt></ruby>く<ruby>切<rt>き</rt></ruby>り、<span class="signal-glow"><ruby>毎日<rt>まいにち</rt></ruby><ruby>洗濯<rt>せんたく</rt></ruby>した<ruby>清潔<rt>せいけつ</rt></ruby>な<ruby>制服<rt>せいふく</rt></ruby></span>を<ruby>着<rt>き</rt></ruby>ます。',
+        plain: '爪を短く切り、毎日洗濯した清潔な制服を着ます。',
+        id: 'Memotong kuku pendek dan memakai seragam bersih yang dicuci setiap hari.',
+        why: 'Kebersihan higienis diri pekerja (身だしなみ) → せいけつ (Seiketsu).'
+      },
+      {
+        cat: '🆕 Pola 4D • Tutup Rambut & Masker',
+        isNew: true,
+        ans: 'seiketsu',
+        jp: '<ruby>髪<rt>かみ</rt></ruby>の<ruby>毛<rt>け</rt></ruby>が<ruby>外<rt>そと</rt></ruby>に<ruby>出<rt>で</rt></ruby>ないように、<span class="signal-glow"><ruby>帽子<rt>ぼうし</rt></ruby>を<ruby>正<rt>ただ</rt></ruby>しくかぶります</span>。',
+        plain: '髪の毛が外に出ないように、帽子を正しくかぶります。',
+        id: 'Memakai topi kerja dengan benar agar tidak ada helai rambut yang keluar.',
+        why: 'Mencegah rambut jatuh ke makanan (異物混入防止 / higienis diri) → せいけつ (Seiketsu).'
+      },
+      {
+        cat: '🆕 Pola 5D • Patuh SOP',
+        isNew: true,
+        ans: 'shitsuke',
+        jp: '<ruby>自分<rt>じぶん</rt></ruby>の<ruby>勝手<rt>かって</rt></ruby>なやり方をしないで、<span class="signal-glow"><ruby>決<rt>き</rt></ruby>められた<ruby>手順<rt>てじゅん</rt></ruby>を<ruby>守<rt>まも</rt></ruby>ります</span>。',
+        plain: '自分の勝手なやり方をしないで、決められた手順を守ります。',
+        id: 'Tidak bekerja dengan cara sendiri, melainkan mematuhi urutan SOP yang ditentukan.',
+        why: 'Disiplin mematuhi aturan/SOP pabrik → しつけ (Shitsuke).'
+      },
+      {
+        cat: '🆕 Pola 5E • Lapor Cepat (報告)',
+        isNew: true,
+        ans: 'shitsuke',
+        jp: '<ruby>体調<rt>たいちょう</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いときや<ruby>下痢<rt>げり</rt></ruby>のときは、<span class="signal-glow"><ruby>作業前<rt>さぎょうまえ</rt></ruby>に<ruby>必<rt>かなら</rt></ruby>ず<ruby>報告<rt>ほうこく</rt></ruby>します</span>。',
+        plain: '体調が悪いときや下痢のときは、作業前に必ず報告します。',
+        id: 'Saat kondisi badan tidak enak atau diare, wajib melapor sebelum bekerja.',
+        why: 'Kepatuhan aturan laporan kesehatan pekerja (報告) demi keamanan pangan → しつけ (Shitsuke).'
+      }
+    ];
+
+    const fullQuestionBank = [...senseiQuestions, ...newFactoryQuestions];
+
+    // =========================================================================
+    // 4. STATE & AUDIO HELPERS (IN-MEMORY ONLY)
+    // =========================================================================
+    const appState = {
+      furigana: true,
+      sound: true,
+      xp: 0,
+      streak: 0,
+      answered: 0,
+      correct: 0,
+      selectedZone: 'seiri',
+      gameMode: 'chill',
+      queue: [],
+      qIndex: 0,
+      currentQ: null,
+      isAnswered: false,
+      examCorrect: 0
+    };
+
+    let audioCtx = null;
+    function playSfx(type) {
+      if (!appState.sound) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+        if (type === 'ok') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.08);
+          osc.frequency.setValueAtTime(783.99, now + 0.16);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(230, now);
+          osc.frequency.linearRampToValueAtTime(175, now + 0.25);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+          osc.start(now);
+          osc.stop(now + 0.28);
+        }
+      } catch (e) {}
+    }
+
+    function speakJP(text) {
+      if (!appState.sound) return;
+      try {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(text);
+          u.lang = 'ja-JP';
+          u.rate = 0.9;
+          window.speechSynthesis.speak(u);
+        }
+      } catch (e) {}
+    }
+
+    // =========================================================================
+    // 5. NAVIGATION & UI CONTROLS
+    // =========================================================================
+    function switchTab(tab) {
+      ['formula', 'factory', 'traps', 'game'].forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        const btn = document.getElementById(`nav-${t}`);
+        if (t === tab) {
+          view.classList.remove('hidden');
+          btn.className = 'nav-btn py-3 px-3 rounded-2xl text-sm sm:text-base font-extrabold transition flex items-center justify-center gap-2 bg-cyan-500/20 text-cyan-300 border-2 border-cyan-500/50';
+        } else {
+          view.classList.add('hidden');
+          btn.className = 'nav-btn py-3 px-3 rounded-2xl text-sm sm:text-base font-bold transition flex items-center justify-center gap-2 bg-[#131B2E] text-slate-300 hover:text-white border-2 border-transparent';
+        }
+      });
+
+      if (tab === 'factory') renderFactoryZones();
+      if (tab === 'traps') renderTwinTraps();
+      if (tab === 'game' && !appState.currentQ) startGame(appState.gameMode);
+    }
+
+    function toggleFurigana() {
+      appState.furigana = !appState.furigana;
+      document.body.classList.toggle('hide-furigana', !appState.furigana);
+      document.getElementById('furiganaStatus').textContent = appState.furigana ? 'Furigana: ON' : 'Furigana: OFF';
+    }
+
+    function toggleSound() {
+      appState.sound = !appState.sound;
+      document.getElementById('soundStatus').textContent = appState.sound ? '🔊' : '🔇';
+    }
+
+    // =========================================================================
+    // 6. TAB 2 RENDERER: PETA KASUS PABRIK
+    // =========================================================================
+    const ansPillStyle = {
+      seiri: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+      seiton: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+      seisou: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+      seiketsu: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+      shitsuke: 'bg-violet-500/20 text-violet-300 border-violet-500/40'
+    };
+
+    const ansLabelText = {
+      seiri: 'せいり (整理)',
+      seiton: 'せいとん (整頓)',
+      seisou: 'せいそう (清掃)',
+      seiketsu: 'せいけつ (清潔)',
+      shitsuke: 'しつけ (躾)'
+    };
+
+    function selectFactoryZone(zoneId) {
+      appState.selectedZone = zoneId;
+      renderFactoryZones();
+    }
+
+    function renderFactoryZones() {
+      const btnContainer = document.getElementById('zoneButtons');
+      btnContainer.innerHTML = factoryZones.map(z => {
+        const active = z.id === appState.selectedZone;
+        return `
+          <button onclick="selectFactoryZone('${z.id}')" class="px-4 py-2.5 rounded-2xl text-sm sm:text-base font-extrabold transition ${active ? 'bg-cyan-500/20 text-cyan-300 border-2 border-cyan-500/50' : 'bg-[#0B101B] text-slate-300 border-2 border-[#24324D] hover:border-slate-500'}">
+            ${z.title}
+          </button>
+        `;
+      }).join('');
+
+      const activeZone = factoryZones.find(z => z.id === appState.selectedZone) || factoryZones[0];
+      const listContainer = document.getElementById('zoneCasesList');
+
+      listContainer.innerHTML = `
+        <div class="px-2 text-base font-bold text-cyan-300">${activeZone.desc}</div>
+        ${activeZone.items.map(it => `
+          <div onclick="speakJP('${it.plain}')" class="cursor-pointer rounded-3xl bg-[#131B2E] hover:bg-[#18233B] border border-[#24324D] p-6 transition space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-3.5 py-1.5 rounded-xl border text-sm sm:text-base font-black jp-text ${ansPillStyle[it.ans]}">
+                  ${ansLabelText[it.ans]}
+                </span>
+                ${it.inSensei
+                  ? '<span class="px-3 py-1 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs sm:text-sm font-extrabold">✅ Ada di 20 Soal Sensei</span>'
+                  : '<span class="px-3 py-1 rounded-xl bg-amber-500/15 border border-amber-500/35 text-amber-300 text-xs sm:text-sm font-extrabold">🆕 Pola Resmi SSW (Baru)</span>'
+                }
+              </div>
+              <span class="text-sm font-bold text-cyan-300">🔊 Dengar</span>
+            </div>
+            <div class="text-sm font-extrabold text-slate-400">${it.patternName}</div>
+            <p class="jp-text text-xl sm:text-2xl font-bold text-white">${it.jp}</p>
+            <p class="text-base text-slate-300 font-medium">${it.id}</p>
+            <div class="p-3.5 rounded-2xl bg-[#0B101B] text-base text-slate-200">
+              💡 <strong>Kunci:</strong> ${it.why}
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    // =========================================================================
+    // 7. TAB 3 RENDERER: DUEL JEBAKAN KEMBAR
+    // =========================================================================
+    function renderTwinTraps() {
+      const container = document.getElementById('twinTrapsList');
+      container.innerHTML = twinTrapsData.map(pair => `
+        <div class="rounded-3xl bg-[#131B2E] border border-[#24324D] p-6 sm:p-7 space-y-4">
+          <h3 class="text-lg sm:text-xl font-extrabold text-amber-300">${pair.title}</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Left Card -->
+            <div onclick="speakJP('${pair.left.plain}')" class="cursor-pointer rounded-2xl bg-[#0B101B] hover:bg-[#101829] border-2 border-[#24324D] p-5 space-y-2.5 transition">
+              <div class="flex items-center justify-between">
+                <span class="text-base font-black text-cyan-300">${pair.left.ans}</span>
+                <span class="text-sm text-slate-400">🔊 Audio</span>
+              </div>
+              <p class="jp-text text-lg sm:text-xl font-bold text-white">${pair.left.jp}</p>
+              <p class="text-sm sm:text-base text-slate-400">${pair.left.id}</p>
+              <p class="text-sm sm:text-base font-bold text-cyan-200 pt-2 border-t border-[#1E293B]">👉 ${pair.left.tip}</p>
+            </div>
+
+            <!-- Right Card -->
+            <div onclick="speakJP('${pair.right.plain}')" class="cursor-pointer rounded-2xl bg-[#0B101B] hover:bg-[#101829] border-2 border-[#24324D] p-5 space-y-2.5 transition">
+              <div class="flex items-center justify-between">
+                <span class="text-base font-black text-emerald-300">${pair.right.ans}</span>
+                <span class="text-sm text-slate-400">🔊 Audio</span>
+              </div>
+              <p class="jp-text text-lg sm:text-xl font-bold text-white">${pair.right.jp}</p>
+              <p class="text-sm sm:text-base text-slate-400">${pair.right.id}</p>
+              <p class="text-sm sm:text-base font-bold text-emerald-200 pt-2 border-t border-[#1E293B]">👉 ${pair.right.tip}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 8. TAB 4 ENGINE: GAME LATIHAN ANTI-STRESS
+    // =========================================================================
+    function shuffle(list) {
+      const a = [...list];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function startGame(mode) {
+      appState.gameMode = mode;
+      appState.qIndex = 0;
+      appState.examCorrect = 0;
+
+      ['chill', 'factoryOnly', 'exam40', 'exam100'].forEach(m => {
+        const btn = document.getElementById(`gmode-${m}`);
+        if (!btn) return;
+        if (m === mode) {
+          btn.className = 'px-4 py-2.5 rounded-2xl text-sm sm:text-base font-extrabold bg-cyan-500/20 text-cyan-300 border-2 border-cyan-500/50 transition';
+        } else {
+          btn.className = 'px-4 py-2.5 rounded-2xl text-sm sm:text-base font-bold bg-[#0B101B] text-slate-300 border-2 border-transparent hover:border-[#2A3958] transition';
+        }
+      });
+
+      document.getElementById('examFinishCard').classList.add('hidden');
+      document.getElementById('activeGameCard').classList.remove('hidden');
+
+      if (mode === 'factoryOnly') {
+        appState.queue = shuffle(newFactoryQuestions);
+        document.getElementById('examProgressBox').classList.add('hidden');
+      } else if (mode === 'exam40') {
+        appState.queue = shuffle(fullQuestionBank).slice(0, 40);
+        document.getElementById('examTitleLabel').textContent = 'Progres Ujian 40 Soal';
+        document.getElementById('examProgressBox').classList.remove('hidden');
+      } else if (mode === 'exam100') {
+        appState.queue = [
+          ...shuffle(fullQuestionBank),
+          ...shuffle(fullQuestionBank),
+          ...shuffle(fullQuestionBank)
+        ].slice(0, 100);
+        document.getElementById('examTitleLabel').textContent = 'Progres Marathon 100 Soal';
+        document.getElementById('examProgressBox').classList.remove('hidden');
+      } else {
+        appState.queue = shuffle(fullQuestionBank);
+        document.getElementById('examProgressBox').classList.add('hidden');
+      }
+
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const isTimedExam = appState.gameMode === 'exam40' || appState.gameMode === 'exam100';
+      if (isTimedExam && appState.qIndex >= appState.queue.length) {
+        finishExam40();
+        return;
+      }
+
+      if (appState.qIndex >= appState.queue.length) {
+        appState.queue = shuffle(appState.queue);
+        appState.qIndex = 0;
+      }
+
+      const q = appState.queue[appState.qIndex];
+      appState.currentQ = q;
+      appState.isAnswered = false;
+
+      if (isTimedExam) {
+        const currentNum = appState.qIndex + 1;
+        const total = appState.queue.length;
+        document.getElementById('examCounter').textContent = `Soal ${currentNum} / ${total}`;
+        document.getElementById('examBar').style.width = `${(currentNum / total) * 100}%`;
+      }
+
+      document.getElementById('qCategoryTag').textContent = q.cat;
+
+      // Show clean Japanese without glow until Sinyal button or answer is clicked
+      const plainFormatted = q.jp.replace(/<span class="signal-glow">(.*?)<\/span>/g, '$1');
+      document.getElementById('gameQuestionJP').innerHTML = plainFormatted;
+
+      const hintBox = document.getElementById('gameHintBox');
+      hintBox.classList.add('hidden');
+      hintBox.textContent = '';
+
+      document.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('ring-4', 'ring-emerald-400', 'ring-rose-500', 'bg-emerald-500/20', 'bg-rose-500/20', 'opacity-40');
+      });
+
+      document.getElementById('gameFeedbackBox').classList.add('hidden');
+    }
+
+    function playCurrentAudio() {
+      if (appState.currentQ) speakJP(appState.currentQ.plain);
+    }
+
+    function toggleN4TranslateHint() {
+      if (!appState.currentQ) return;
+      const hintBox = document.getElementById('gameHintBox');
+      hintBox.textContent = `📖 Arti: "${appState.currentQ.id}"`;
+      hintBox.classList.remove('hidden');
+    }
+
+    function revealSignalHint() {
+      if (!appState.currentQ) return;
+      document.getElementById('gameQuestionJP').innerHTML = appState.currentQ.jp;
+    }
+
+    function checkGameAnswer(choice) {
+      if (appState.isAnswered || !appState.currentQ) return;
+      appState.isAnswered = true;
+
+      const q = appState.currentQ;
+      const isRight = choice === q.ans;
+
+      // Reveal glowing signal in sentence
+      document.getElementById('gameQuestionJP').innerHTML = q.jp;
+
+      appState.answered++;
+      const isTimedExam = appState.gameMode === 'exam40' || appState.gameMode === 'exam100';
+      if (isRight) {
+        appState.correct++;
+        appState.streak++;
+        appState.xp += 15;
+        if (isTimedExam) appState.examCorrect++;
+        playSfx('ok');
+      } else {
+        appState.streak = 0;
+        playSfx('err');
+        if (!isTimedExam) {
+          const reInsert = Math.min(appState.qIndex + 3, appState.queue.length);
+          appState.queue.splice(reInsert, 0, q);
+        }
+      }
+
+      // Update Stats
+      document.getElementById('xpDisplay').textContent = appState.xp;
+      document.getElementById('streakCount').textContent = appState.streak;
+      const acc = Math.round((appState.correct / appState.answered) * 100);
+      document.getElementById('accCount').textContent = `${acc}%`;
+
+      speakJP(q.plain);
+
+      // Highlight Buttons
+      document.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.disabled = true;
+        const val = btn.getAttribute('data-choice');
+        if (val === q.ans) {
+          btn.classList.add('ring-4', 'ring-emerald-400', 'bg-emerald-500/20');
+        } else if (val === choice && !isRight) {
+          btn.classList.add('ring-4', 'ring-rose-500', 'bg-rose-500/20');
+        } else {
+          btn.classList.add('opacity-40');
+        }
+      });
+
+      // Show Feedback
+      const fbBox = document.getElementById('gameFeedbackBox');
+      fbBox.classList.remove('hidden', 'bg-emerald-500/10', 'border-emerald-500/50', 'bg-rose-500/10', 'border-rose-500/50');
+
+      if (isRight) {
+        fbBox.classList.add('bg-emerald-500/10', 'border-emerald-500/50');
+        document.getElementById('feedbackHeadline').textContent = `✅ TEPAT! Jawabannya: ${ansLabelText[q.ans]}`;
+        document.getElementById('feedbackHeadline').className = 'text-lg sm:text-xl font-black text-emerald-300';
+      } else {
+        fbBox.classList.add('bg-rose-500/10', 'border-rose-500/50');
+        document.getElementById('feedbackHeadline').textContent = `💡 Hampir! Jawaban Benar: ${ansLabelText[q.ans]}`;
+        document.getElementById('feedbackHeadline').className = 'text-lg sm:text-xl font-black text-rose-300';
+      }
+
+      document.getElementById('feedbackMeaning').textContent = `Arti: "${q.id}"`;
+      document.getElementById('feedbackReason').innerHTML = `<strong>Logika 1 Detik:</strong> ${q.why}`;
+    }
+
+    function goNextQuestion() {
+      appState.qIndex++;
+      renderQuestion();
+    }
+
+    function finishExam40() {
+      document.getElementById('activeGameCard').classList.add('hidden');
+      const card = document.getElementById('examFinishCard');
+      card.classList.remove('hidden');
+
+      const total = appState.queue.length;
+      const score = Math.round((appState.examCorrect / total) * 100);
+      document.getElementById('finishScoreText').textContent = `Skor Akhir: ${score} / 100 (${appState.examCorrect} dari ${total} Benar)`;
+
+      if (score === 100) {
+        document.getElementById('finishEmoji').textContent = '👑';
+        document.getElementById('finishMessage').textContent = 'SEMPURNA 100! Anda sudah menguasai seluruh situasi pabrik SSW PM dan siap bekerja di Jepang!';
+      } else if (score >= 85) {
+        document.getElementById('finishEmoji').textContent = '🔥';
+        document.getElementById('finishMessage').textContent = 'Mantap sekali! Tinggal sedikit lagi menuju 100 mutlak. Cek tab "Jebakan Kembar" untuk mengunci sisa celahnya.';
+      } else {
+        document.getElementById('finishEmoji').textContent = '🛡️';
+        document.getElementById('finishMessage').textContent = 'Bagus! Gunakan tombol "📖 Arti ID (N4)" dan "📡 Sinyal" di Mode Santai agar otak terbiasa membaca 5 kata kuncinya tanpa stres.';
+      }
+    }
+
+    // Boot
+    window.addEventListener('DOMContentLoaded', () => {
+      renderFactoryZones();
+      renderTwinTraps();
+      startGame('chill');
+    });
+  </script>
+</body>
+</html>
