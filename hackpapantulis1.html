@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hafalan 3 Papan Tulis Sensei - SSW Pengolahan Makanan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .jp-font {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        ruby rt {
+            font-size: 0.65em;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+        .tab-active {
+            border-bottom: 3px solid #4f46e5;
+            color: #4f46e5;
+            font-weight: 800;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased pb-20">
+
+    <!-- Header Khusus 3 Papan Tulis Sensei -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                    🧠
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-slate-900 text-base sm:text-lg leading-tight">
+                        Hafalan 3 Papan Tulis Sensei <span class="jp-font text-indigo-600 font-bold">(黒板暗記)</span>
+                    </h1>
+                    <p class="text-xs text-slate-500">Metode Akal Otak • Klik Dengar Suara • Tanpa Mengetik</p>
+                </div>
+            </div>
+
+            <!-- Live Score Kuis Papan Tulis -->
+            <div class="flex items-center gap-2">
+                <div class="bg-indigo-50 border border-indigo-200 px-3.5 py-1.5 rounded-full flex items-center gap-2">
+                    <span class="text-xs font-semibold text-indigo-900 uppercase tracking-wider">Skor Hafalan:</span>
+                    <span id="wb-quiz-score" class="text-base sm:text-lg font-extrabold text-indigo-600">0 / 10</span>
+                </div>
+                <button onclick="resetWhiteboardApp()" title="Reset Latihan" class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs Fokus Papan Tulis -->
+        <nav class="max-w-4xl mx-auto px-4 flex gap-4 sm:gap-6 overflow-x-auto text-sm font-medium text-slate-500 border-t border-slate-100">
+            <button onclick="switchTab('papan')" id="tab-papan" class="py-2.5 whitespace-nowrap tab-active transition">
+                📋 1. Trik Otak 3 Papan Tulis
+            </button>
+            <button onclick="switchTab('kartu')" id="tab-kartu" class="py-2.5 whitespace-nowrap hover:text-indigo-600 transition">
+                🃏 2. Kartu Flip + Audio Jepang
+            </button>
+            <button onclick="switchTab('kuis')" id="tab-kuis" class="py-2.5 whitespace-nowrap hover:text-indigo-600 transition">
+                🎯 3. Ujian 10 Soal Papan Tulis
+            </button>
+        </nav>
+    </header>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-slate-900 text-white text-xs sm:text-sm font-medium px-5 py-3 rounded-2xl shadow-xl transition-all">
+        Pesan notifikasi
+    </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-4xl mx-auto px-4 pt-6 space-y-6">
+
+        <!-- ======================================================== -->
+        <!-- TAB 1: TRIK AKAL OTAK UNTUK 3 PAPAN TULIS SENSEI         -->
+        <!-- ======================================================== -->
+        <div id="view-papan" class="space-y-6">
+            
+            <!-- Banner Utama -->
+            <section class="bg-gradient-to-r from-indigo-700 via-purple-700 to-indigo-800 text-white rounded-2xl p-5 sm:p-6 shadow-md">
+                <span class="px-3 py-1 bg-white/20 rounded-full text-xs font-bold tracking-wide">KHUSUS MATERI PAPAN TULIS SENSEI</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold mt-2">Cara Mengakali Otak Biar Langsung Hapal!</h2>
+                <p class="text-xs sm:text-sm text-indigo-100 mt-1.5 leading-relaxed">
+                    Ketiga papan tulis Anda sudah diringkas menjadi <strong>3 Rumus Rahasia</strong>. Cukup ingat <strong>Alur Angka</strong>, <strong>Suhu Keramat</strong>, dan <strong>3 Racun</strong> di bawah ini, lalu klik tombol 🔊 untuk membiasakan telinga.
+                </p>
+            </section>
+
+            <!-- PAPAN TULIS 1 -->
+            <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <div>
+                        <span class="px-2.5 py-0.5 rounded-md bg-indigo-100 text-indigo-800 text-xs font-extrabold">PAPAN TULIS 1</span>
+                        <h3 class="text-lg sm:text-xl font-bold text-slate-900 jp-font mt-1">
+                            <ruby>区分衛生管理<rt>くぶんえいせいかんり</rt></ruby> (Pembagian Zona Kebersihan)
+                        </h3>
+                    </div>
+                    <button onclick="speakJP('くぶんえいせいかんり。せいけつさぎょうくいき、じゅんせいけつさぎょうくいき、おせんさぎょうくいき。', event)" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
+                        🔊 Dengar Zona 1-2-3
+                    </button>
+                </div>
+
+                <!-- Rumus Akal Otak Papan 1 -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-xl p-4 space-y-1.5">
+                    <div class="font-extrabold text-amber-950 text-sm">💡 TRIK AKAL OTAK: Ingat Alur "3 → 2 → 1 → 3"</div>
+                    <p class="text-xs text-amber-900 leading-relaxed">
+                        Sayuran datang dari luar masih kotor (<strong>3: Osen</strong>) → masuk dicuci/dipotong/dimasak (<strong>2: Jun-seiketsu</strong>) → ditata & diberi topping steril (<strong>1: Seiketsu</strong>) → keluar dikirim ke mobil (<strong>3: Osen</strong>).<br>
+                        • <strong class="text-emerald-700">1 = SUDAH steril</strong> (<span class="jp-font font-bold">さっきん おわった</span>)<br>
+                        • <strong class="text-amber-700">2 = SEBELUM steril</strong> (<span class="jp-font font-bold">さっきん する まえ</span>)<br>
+                        • <strong class="text-rose-700">3 = TERIMA & KIRIM</strong> (<span class="jp-font font-bold">うけいれ・しゅっか</span>)
+                    </p>
+                </div>
+
+                <!-- 3 Zona Detail -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-emerald-800">① せいけつさぎょうくいき</span>
+                            <button onclick="speakJP('せいけつさぎょうくいき', event)" class="text-xs bg-white px-2 py-0.5 rounded border border-emerald-200">🔊</button>
+                        </div>
+                        <div class="text-xs font-bold text-slate-800">Zona Bersih / Steril</div>
+                        <p class="text-[11px] text-slate-600">Menangani makanan yang <strong>sudah selesai disterilkan</strong>. Contoh: Topping (<span class="jp-font">トッピング</span>), Tata saji (<span class="jp-font">もりつけ</span>).</p>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-amber-800">② じゅんせいけつさぎょうくいき</span>
+                            <button onclick="speakJP('じゅんせいけつさぎょうくいき', event)" class="text-xs bg-white px-2 py-0.5 rounded border border-amber-200">🔊</button>
+                        </div>
+                        <div class="text-xs font-bold text-slate-800">Zona Semi-Bersih</div>
+                        <p class="text-[11px] text-slate-600">Menangani bahan <strong>sebelum disterilkan</strong>. Contoh: Persiapan awal (<span class="jp-font">したしょり</span>), Masak panas (<span class="jp-font">かねつちょうり</span>).</p>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200 space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-rose-800">③ おせんさぎょうくいき</span>
+                            <button onclick="speakJP('おせんさぎょうくいき', event)" class="text-xs bg-white px-2 py-0.5 rounded border border-rose-200">🔊</button>
+                        </div>
+                        <div class="text-xs font-bold text-slate-800">Zona Kotor</div>
+                        <p class="text-[11px] text-slate-600">Saat <strong>penerimaan bahan baku</strong> (<span class="jp-font">げんざいりょうのうけいれ</span>) & saat <strong>pengiriman</strong> (<span class="jp-font">しゅっかするとき</span>).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAPAN TULIS 2 -->
+            <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <div>
+                        <span class="px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-xs font-extrabold">PAPAN TULIS 2</span>
+                        <h3 class="text-lg sm:text-xl font-bold text-slate-900 jp-font mt-1">
+                            <ruby>生物的危害要因<rt>せいぶつてききがいよういん</rt></ruby> (Bahaya Biologis)
+                        </h3>
+                    </div>
+                    <button onclick="speakJP('さいきん、ウイルス、カビ、きせいちゅう。', event)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
+                        🔊 Dengar 4 Makhluk
+                    </button>
+                </div>
+
+                <!-- Rumus Akal Otak Papan 2 -->
+                <div class="bg-emerald-50 border-l-4 border-emerald-500 rounded-r-xl p-4 space-y-1.5">
+                    <div class="font-extrabold text-emerald-950 text-sm">💡 TRIK AKAL OTAK: Hafalkan "4 ANGKA KERAMAT"</div>
+                    <p class="text-xs text-emerald-900 leading-relaxed">
+                        • <strong>Bakteri (<span class="jp-font">さいきん</span>):</strong> Mati di <strong>75°C / 1 menit+</strong> | Berkembang cepat di <strong>30°C–40°C</strong> (Zona bahaya: <strong>20°C–50°C</strong>).<br>
+                        • <strong>Norovirus (<span class="jp-font">ノロウイルス</span>):</strong> Mati di suhu inti <strong>85°C–90°C / 90 detik+</strong> (Tidak berbiak di makanan, cuci tangan setelah toilet!).<br>
+                        • <strong>Jamur (<span class="jp-font">カビ</span>):</strong> Makanan berjamur <strong>JANGAN DIPAKAI</strong> (<span class="jp-font">つかいません</span>). Cegah dengan pendinginan (<span class="jp-font">れいきゃく</span>).<br>
+                        • <strong>Parasit Anisakis (<span class="jp-font">アニサキス</span>):</strong> Pada ikan (Saba, Iwashi, Sake, Aji, Ika). Mati jika dipanaskan <strong>70°C+</strong> (atau <strong>60°C / 1 menit</strong>) ATAU dibekukan <strong>-20°C / 24 jam</strong>.
+                    </p>
+                </div>
+
+                <!-- 3 Prinsip vs 4 Prinsip -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+                        <div class="font-extrabold text-slate-900 flex items-center justify-between">
+                            <span>🛡️ 3 Prinsip Cegah Bakteri (3げんそく)</span>
+                            <button onclick="speakJP('つけない、ふやさない、やっつける', event)" class="px-2 py-0.5 bg-white border rounded">🔊</button>
+                        </div>
+                        <ol class="list-decimal pl-4 space-y-1 text-slate-700">
+                            <li><strong class="jp-font">つけない</strong> (Jangan dicemari — cuci tangan & sanitasi alat)</li>
+                            <li><strong class="jp-font">ふやさない</strong> (Jangan dibiakkan — simpan suhu dingin di bawah 10°C / 4°C)</li>
+                            <li><strong class="jp-font">やっつける / ころす</strong> (Bunuh — panaskan 75°C minimal 1 menit)</li>
+                        </ol>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200 space-y-1.5">
+                        <div class="font-extrabold text-purple-950 flex items-center justify-between">
+                            <span>🧬 4 Prinsip Cegah Norovirus</span>
+                            <button onclick="speakJP('もちこまない、つけない、やっつける、ひろげない', event)" class="px-2 py-0.5 bg-white border rounded">🔊</button>
+                        </div>
+                        <ol class="list-decimal pl-4 space-y-1 text-purple-950">
+                            <li><strong class="jp-font">もちこまない</strong> (Jangan bawa masuk ke pabrik)</li>
+                            <li><strong class="jp-font">つけない</strong> (Jangan tempelkan ke makanan)</li>
+                            <li><strong class="jp-font">やっつける</strong> (Bunuh — panaskan 85°C–90°C minimal 90 detik)</li>
+                            <li><strong class="jp-font">ひろげない</strong> (Jangan sebarkan — disinfeksi)</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAPAN TULIS 3 -->
+            <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <div>
+                        <span class="px-2.5 py-0.5 rounded-md bg-rose-100 text-rose-800 text-xs font-extrabold">PAPAN TULIS 3</span>
+                        <h3 class="text-lg sm:text-xl font-bold text-slate-900 jp-font mt-1">
+                            <ruby>物理的<rt>ぶつりてき</rt></ruby> & <ruby>化学的危害要因<rt>かがくてききがいよういん</rt></ruby> (Fisik & Kimia)
+                        </h3>
+                    </div>
+                    <button onclick="speakJP('ぶつりてききがいよういん、かがくてききがいよういん。アレルギー、ヒスタミン、ソラニン。', event)" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
+                        🔊 Dengar Fisik & Kimia
+                    </button>
+                </div>
+
+                <!-- Rumus Akal Otak Papan 3 -->
+                <div class="bg-rose-50 border-l-4 border-rose-500 rounded-r-xl p-4 space-y-1.5">
+                    <div class="font-extrabold text-rose-950 text-sm">💡 TRIK AKAL OTAK: Ingat "BENDA KERAS + 3 RACUN KIMIA"</div>
+                    <p class="text-xs text-rose-950 leading-relaxed">
+                        • <strong>Fisik (<span class="jp-font">ぶつりてき</span>):</strong> Benda keras/tajam (<span class="jp-font">かたいもの・とがっているもの</span>) → <strong>Gigi patah (<span class="jp-font">はがかける</span>)</strong> & mulut luka.<br>
+                        • <strong>Kimia 1 — Alergi (<span class="jp-font">アレルギー</span>):</strong> Wajib label <strong>9 Bahan (<span class="jp-font">9ひんもくひょうじぎむ</span>)</strong>.<br>
+                        • <strong>Kimia 2 — Histamin (<span class="jp-font">ヒスタミン</span>):</strong> <strong>Ikan Merah</strong> (Maguro, Iwashi, Saba) → Langsung kulkas/bekukan (<span class="jp-font">れいぞう・れいとう</span>)!<br>
+                        • <strong>Kimia 3 — Solanin (<span class="jp-font">ソラニン</span>):</strong> <strong>Kentang (<span class="jp-font">じゃがいも</span>)</strong> → Buang tunas & kulit hijau (<span class="jp-font">めとみどりかわをとりのぞく</span>)!
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                        <div class="font-extrabold text-slate-900">🪨 ① Bahaya Fisik (ぶつりてききがいよういん)</div>
+                        <p class="text-slate-600"><strong>Penyebab:</strong> Benda keras masuk makanan → gigi patah (<span class="jp-font">はがかける</span>) / mulut luka (<span class="jp-font">くちのなかにきず</span>).</p>
+                        <p class="text-emerald-700 font-semibold"><strong>Pencegahan:</strong> Cuci (<span class="jp-font">せんじょう</span>), Sortir (<span class="jp-font">せんべつ</span>), Persiapan awal (<span class="jp-font">したしょり</span>).</p>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                        <div class="font-extrabold text-slate-900">🧪 ② Bahaya Kimia (かがくてききがいよういん)</div>
+                        <p class="text-slate-600"><strong>Alergi:</strong> Gatal, biduran (<span class="jp-font">じんましん</span>), bibir/kelopak mata bengkak, bersin, bisa meninggal (<span class="jp-font">しぬこともあります</span>).</p>
+                        <p class="text-emerald-700 font-semibold"><strong>Pencegahan:</strong> Wajib label 9 bahan (<span class="jp-font">9ひんもくをひょうじぎむ</span>).</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- TAB 2: KARTU FLIP INTERAKTIF (KLIK BALIK & HAFAL)        -->
+        <!-- ======================================================== -->
+        <div id="view-kartu" class="hidden space-y-4">
+            <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-900">🃏 14 Kartu Flip Papan Tulis Sensei</h2>
+                        <p class="text-xs text-slate-500">Tebak dulu artinya dalam hati, lalu <strong>klik kartunya</strong> untuk membalik & dengar audio Jepang!</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="flipAllCards(false)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl">Tutup Semua</button>
+                        <button onclick="flipAllCards(true)" class="px-3 py-1.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 text-xs font-bold rounded-xl">Buka Semua</button>
+                    </div>
+                </div>
+
+                <div id="flashcard-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Di-render lewat JS -->
+                </div>
+            </section>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- TAB 3: UJIAN 10 SOAL DARI 3 PAPAN TULIS SENSEI           -->
+        <!-- ======================================================== -->
+        <div id="view-kuis" class="hidden space-y-4">
+            <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <div>
+                        <span class="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-xs font-bold">UJIAN HAFALAN PAPAN TULIS</span>
+                        <h2 class="text-lg font-extrabold text-slate-900 mt-1">10 Soal Langsung dari Tulisan Papan Tulis Anda</h2>
+                        <p class="text-xs text-slate-500">Cukup klik pilihan jawaban (tanpa mengetik) untuk mengetes hafalan!</p>
+                    </div>
+                </div>
+
+                <div id="wb-quiz-container" class="space-y-4">
+                    <!-- Di-render lewat JS -->
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <script>
+        // ==========================================
+        // DATA 14 KARTU FLIP DARI 3 PAPAN TULIS
+        // ==========================================
+        const whiteboardFlashcards = [
+            { cat: 'Papan 1 • Zona 1', jp: 'せいけつさぎょうくいき', kanji: '清潔作業区域', trick: 'Zona Bersih/Steril: Makanan SUDAH selesai disterilkan (Topping & Tata saji / トッピング・もりつけ).', flipped: false },
+            { cat: 'Papan 1 • Zona 2', jp: 'じゅんせいけつさぎょうくいき', kanji: '準清潔作業区域', trick: 'Zona Semi-Bersih: Bahan SEBELUM disterilkan (Persiapan awal / したしょり & Masak panas / かねつちょうり).', flipped: false },
+            { cat: 'Papan 1 • Zona 3', jp: 'おせんさぎょうくいき', kanji: '汚染作業区域', trick: 'Zona Kotor: Penerimaan bahan baku (げんざいりょうのうけいれ) & Pengiriman (しゅっかするとき).', flipped: false },
+            { cat: 'Papan 1 • Alur', jp: '3から2、2から1、1から3', kanji: '③ → ② → ① → ③', trick: 'Alur pabrik: Terima kotor (3) → Persiapan/Masak (2) → Tata steril (1) → Kirim (3).', flipped: false },
+            { cat: 'Papan 2 • Bakteri', jp: 'つけない・ふやさない・やっつける', kanji: '食中毒予防の3原則', trick: '3 Prinsip Cegah Keracunan Bakteri: Jangan tempel, Jangan biakkan, Bunuh!', flipped: false },
+            { cat: 'Papan 2 • Suhu Bakteri', jp: '75どで1ぷんかんいじょうかねつ', kanji: '75℃で1分間以上加熱', trick: 'Cara membunuh bakteri: Panaskan pada suhu 75°C selama minimal 1 menit!', flipped: false },
+            { cat: 'Papan 2 • Zona Bahaya', jp: '20どから50どはきけんなおんど', kanji: '20℃〜50℃（30〜40℃最速）', trick: 'Suhu bahaya bakteri berkembang biak! Paling cepat berkembang di 30°C–40°C.', flipped: false },
+            { cat: 'Papan 2 • Norovirus', jp: '85どから90どで90びょうかんいじょう', kanji: 'ノロウイルス（中心温度）', trick: 'Cara membunuh Norovirus: Panaskan suhu inti 85°C–90°C selama minimal 90 detik!', flipped: false },
+            { cat: 'Papan 2 • Jamur', jp: 'カビのはえたしょくひんはつかいません', kanji: 'カビ（防ぐには冷却）', trick: 'Makanan yang sudah berjamur DILARANG dipakai! Cegah jamur dengan pendinginan (れいきゃく).', flipped: false },
+            { cat: 'Papan 2 • Anisakis', jp: 'マイナス20どで24じかんれいとう', kanji: 'アニサキス（サバ・イワシ・サケ・イカ）', trick: 'Parasit pada ikan: Bunuh dengan beku -20°C selama 24 jam, atau panas 60°C 1 menit / 70°C+.', flipped: false },
+            { cat: 'Papan 3 • Fisik', jp: 'はがかける・くちのなかにきず', kanji: '物理的危害要因（かたいもの）', trick: 'Bahaya Fisik: Benda keras/tajam bikin gigi patah & mulut luka. Cegah dengan cuci, sortir, persiapan awal.', flipped: false },
+            { cat: 'Papan 3 • Alergi', jp: 'アレルギー9ひんもくひょうじぎむ', kanji: 'アレルギー物質（9品目表示義務）', trick: 'Bahaya Kimia Alergi: Wajib cantumkan label 9 bahan utama agar tidak bengkak/sesak/meninggal!', flipped: false },
+            { cat: 'Papan 3 • Histamin', jp: 'さかなをとったあとすぐにれいぞう', kanji: 'ヒスタミン（マグロ・イワシ・サバ）', trick: 'Cegah Histamin pada ikan daging merah: Segera dinginkan/bekukan setelah ikan ditangkap!', flipped: false },
+            { cat: 'Papan 3 • Solanin', jp: 'じゃがいものめとみどりかわをとる', kanji: 'ソラニン（じゃがいもの芽・緑皮）', trick: 'Cegah racun Solanin pada kentang: Buang tunasnya (め) dan bagian kulit yang hijau (みどりかわ)!', flipped: false }
+        ];
+
+        // ==========================================
+        // DATA 10 SOAL UJIAN DARI 3 PAPAN TULIS
+        // ==========================================
+        const wbQuizData = [
+            {
+                q: 'Urutan alur pembagian zona kebersihan pabrik (区分衛生管理) yang benar di Papan Tulis 1 adalah...',
+                options: ['① → ② → ③ → ①', '③ → ② → ① → ③', '② → ③ → ① → ②'],
+                correct: 1,
+                exp: 'Tepat! ③ Osen (Terima) → ② Jun-seiketsu (Persiapan/Masak) → ① Seiketsu (Tata steril) → ③ Osen (Kirim).'
+            },
+            {
+                q: 'Zona kerja yang menangani makanan yang SUDAH selesai disterilkan (seperti topping & tata saji / トッピング・もりつけ) disebut...',
+                options: ['① せいけつさぎょうくいき (Zona Bersih)', '② じゅんせいけつさぎょうくいき (Zona Semi-Bersih)', '③ おせんさぎょうくいき (Zona Kotor)'],
+                correct: 0,
+                exp: 'Benar! ① Seiketsu Sagyou Kuiki adalah zona paling bersih untuk makanan yang sudah disterilkan.'
+            },
+            {
+                q: 'Untuk membunuh BAKTERI (さいきん) penyebab keracunan makanan, berapa suhu dan waktu pemanasan yang benar?',
+                options: ['60°C selama 30 detik', '75°C selama 1 menit atau lebih (75℃で1分間以上)', '4°C selama 10 menit'],
+                correct: 1,
+                exp: 'Mantap! Bakteri mati pada pemanasan 75°C minimal 1 menit.'
+            },
+            {
+                q: 'Pada rentang suhu berapa bakteri berkembang biak PALING CEPAT (ふえかたは はやくなります)?',
+                options: ['4°C ke bawah', '10°C ke bawah', '30°C – 40°C (dalam zona bahaya 20°C–50°C)'],
+                correct: 2,
+                exp: 'Betul! Zona bahaya adalah 20°C–50°C, dan perkembangan paling cepat terjadi di suhu 30°C–40°C.'
+            },
+            {
+                q: 'Berapa suhu inti dan waktu pemanasan wajib untuk membunuh NOROVIRUS (ノロウイルス)?',
+                options: ['85°C – 90°C selama 90 detik atau lebih', '75°C selama 1 menit', '-15°C selama 1 jam'],
+                correct: 0,
+                exp: 'Sempurna! Norovirus membutuhkan suhu inti 85°C–90°C selama 90 detik atau lebih.'
+            },
+            {
+                q: 'Apa yang harus dilakukan jika menemukan makanan yang sudah ditumbuhi jamur (カビが生えた食品)?',
+                options: ['Buang bagian jamurnya lalu dimasak', 'Tidak boleh digunakan sama sekali (つかいません)', 'Dicuci dengan air hangat'],
+                correct: 1,
+                exp: 'Tepat! Makanan berjamur tidak boleh digunakan (つかいません), dan dicegah dengan pendinginan (れいきゃく).'
+            },
+            {
+                q: 'Bagaimana cara membunuh parasit ANISAKIS (アニサキス) pada ikan (Saba, Iwashi, Sake, Ika)?',
+                options: ['Didinginkan pada suhu 10°C selama 1 jam', 'Dibekukan -20°C selama 24 jam ATAU dipanaskan 60°C 1 menit / 70°C+', 'Dicuci dengan air garam saja'],
+                correct: 1,
+                exp: 'Benar! Anisakis mati dengan pembekuan -20°C selama 24 jam atau pemanasan 60°C 1 menit (70°C+).'
+            },
+            {
+                q: 'Bahaya fisik (物理的危害要因) seperti benda keras atau tajam di dalam makanan dapat menyebabkan...',
+                options: ['Gigi patah (歯が欠ける) dan luka di dalam mulut (口の中に傷)', 'Gatal-gatal dan biduran', 'Keracunan solanin'],
+                correct: 0,
+                exp: 'Tepat! Benda keras/tajam bikin gigi patah dan mulut terluka. Cegah dengan cuci, sortir, dan persiapan awal.'
+            },
+            {
+                q: 'Untuk mencegah bahaya bahan alergi (アレルギー物質), pabrik wajib mencantumkan label pada berapa jenis bahan utama?',
+                options: ['3 bahan (3品目)', '5 bahan (5品目)', '9 bahan wajib label (9品目を表示義務)'],
+                correct: 2,
+                exp: 'Betul! Di papan tulis Sensei tertulis: 9ひんもくを ひょうじぎむ (Wajib label 9 bahan).'
+            },
+            {
+                q: 'Bagaimana cara mencegah keracunan HISTAMIN pada ikan merah dan SOLANIN pada kentang?',
+                options: ['Ikan langsung didinginkan/dibekukan; kentang dibuang tunas & kulit hijaunya', 'Ikan disimpan di suhu ruang; kentang direbus dengan kulit hijaunya', 'Keduanya cukup dicuci dengan alkohol'],
+                correct: 0,
+                exp: 'Luar biasa! Histamin dicegah dengan segera mendinginkan/membekukan ikan, dan Solanin dicegah dengan membuang tunas & kulit hijau kentang.'
+            }
+        ];
+
+        let wbQuizAnswers = {};
+
+        // ==========================================
+        // AUDIO JEPANG (TEXT-TO-SPEECH)
+        // ==========================================
+        function speakJP(text, event) {
+            if (event) event.stopPropagation();
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+                showToast('🔊 Memutar suara: ' + text);
+            } else {
+                showToast('Browser tidak mendukung audio otomatis.');
+            }
+        }
+
+        // ==========================================
+        // RENDER KARTU FLIP & KUIS PAPAN TULIS
+        // ==========================================
+        function renderFlashcards() {
+            const fcGrid = document.getElementById('flashcard-grid');
+            fcGrid.innerHTML = whiteboardFlashcards.map((card, idx) => `
+                <div onclick="flipCard(${idx})"
+                     class="cursor-pointer p-4 rounded-2xl border-2 transition-all select-none flex flex-col justify-between min-h-[135px]
+                     ${card.flipped ? 'bg-indigo-600 text-white border-indigo-600 shadow-md' : 'bg-slate-50 hover:bg-indigo-50/60 border-slate-200 text-slate-900'}">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full
+                            ${card.flipped ? 'bg-white/20 text-white' : 'bg-indigo-100 text-indigo-800'}">
+                            ${card.cat}
+                        </span>
+                        <button onclick="speakJP('${card.jp}', event)"
+                                class="px-2.5 py-1 rounded-lg text-xs font-bold transition
+                                ${card.flipped ? 'bg-white/20 text-white hover:bg-white/30' : 'bg-white border border-slate-200 text-slate-700 hover:bg-indigo-100'}">
+                            🔊 Dengar
+                        </button>
+                    </div>
+
+                    ${!card.flipped ? `
+                        <div class="my-2.5">
+                            <div class="jp-font font-extrabold text-base sm:text-lg text-slate-900">${card.jp}</div>
+                            <div class="jp-font text-xs text-slate-500 mt-0.5">${card.kanji}</div>
+                        </div>
+                        <div class="text-[11px] font-semibold text-indigo-600">👆 Tap kartu untuk lihat arti & trik hafal</div>
+                    ` : `
+                        <div class="my-2.5">
+                            <div class="text-xs sm:text-sm font-bold leading-snug">${card.trick}</div>
+                        </div>
+                        <div class="text-[11px] text-indigo-200">👆 Tap lagi untuk tutup</div>
+                    `}
+                </div>
+            `).join('');
+        }
+
+        function renderQuiz() {
+            const qContainer = document.getElementById('wb-quiz-container');
+            qContainer.innerHTML = wbQuizData.map((item, qIdx) => {
+                const userChoice = wbQuizAnswers[qIdx];
+                const isAnswered = userChoice !== undefined;
+                const isCorrect = userChoice === item.correct;
+                return `
+                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2.5">
+                    <p class="text-xs sm:text-sm font-bold text-slate-900">
+                        <span class="inline-block px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded mr-1.5">Soal ${qIdx + 1}</span>
+                        ${item.q}
+                    </p>
+                    <div class="grid grid-cols-1 gap-2">
+                        ${item.options.map((opt, oIdx) => {
+                            let btnClass = 'bg-white hover:bg-indigo-50/70 border-slate-200 text-slate-800';
+                            if (isAnswered) {
+                                if (oIdx === item.correct) btnClass = 'bg-emerald-600 text-white border-emerald-600 font-bold shadow-sm';
+                                else if (oIdx === userChoice) btnClass = 'bg-rose-600 text-white border-rose-600 font-semibold';
+                            }
+                            return `
+                            <button onclick="answerWbQuiz(${qIdx}, ${oIdx})"
+                                    class="p-3 rounded-xl border text-left text-xs sm:text-sm transition ${btnClass}">
+                                ${opt}
+                            </button>
+                            `;
+                        }).join('')}
+                    </div>
+                    ${isAnswered ? `
+                        <div class="p-3 rounded-xl text-xs ${isCorrect ? 'bg-emerald-100 text-emerald-950' : 'bg-rose-100 text-rose-950'}">
+                            <strong>${isCorrect ? '🎉 Benar!' : '⚠️ Kurang Tepat!'}</strong> ${item.exp}
+                        </div>
+                    ` : ''}
+                </div>
+                `;
+            }).join('');
+        }
+
+        function flipCard(idx) {
+            whiteboardFlashcards[idx].flipped = !whiteboardFlashcards[idx].flipped;
+            renderFlashcards();
+        }
+
+        function flipAllCards(state) {
+            whiteboardFlashcards.forEach(c => c.flipped = state);
+            renderFlashcards();
+        }
+
+        function answerWbQuiz(qIdx, oIdx) {
+            wbQuizAnswers[qIdx] = oIdx;
+            renderQuiz();
+            let correct = 0;
+            wbQuizData.forEach((q, i) => {
+                if (wbQuizAnswers[i] === q.correct) correct++;
+            });
+            document.getElementById('wb-quiz-score').textContent = `${correct} / ${wbQuizData.length}`;
+            if (correct === wbQuizData.length) {
+                showToast('🏆 SEMPURNA 10/10! Semua isi 3 Papan Tulis Sensei sudah Anda kuasai!');
+            }
+        }
+
+        function resetWhiteboardApp() {
+            wbQuizAnswers = {};
+            whiteboardFlashcards.forEach(c => c.flipped = false);
+            document.getElementById('wb-quiz-score').textContent = `0 / ${wbQuizData.length}`;
+            renderFlashcards();
+            renderQuiz();
+            showToast('🔄 Kartu & kuis papan tulis berhasil di-reset.');
+        }
+
+        function switchTab(tabName) {
+            ['papan', 'kartu', 'kuis'].forEach(t => {
+                document.getElementById(`view-${t}`).classList.add('hidden');
+                document.getElementById(`tab-${t}`).classList.remove('tab-active');
+            });
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabName}`).classList.add('tab-active');
+        }
+
+        let toastTimeout;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.remove('hidden');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        window.onload = function() {
+            renderFlashcards();
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
