@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seimitsu Kotoba Master — Sistem Hapalan Kunci 2-Arah + FSRS</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0b1120;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-jp {
+      font-family: 'Noto Sans JP', 'Inter', sans-serif;
+    }
+    .card-enter {
+      animation: cardSlideIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes cardSlideIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .shake {
+      animation: shakeAnim 0.35s ease-in-out;
+    }
+    @keyframes shakeAnim {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+    /* Subtle custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- TOP NAVIGATION -->
+  <header class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur border-b border-slate-800">
+    <div class="max-w-5xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-2">
+      <button id="btnLogo" class="flex items-center gap-2 text-left shrink-0 group">
+        <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white font-jp font-bold text-sm flex items-center justify-center shadow-sm group-hover:bg-indigo-700 transition">精</div>
+        <div class="leading-tight hidden sm:block">
+          <div class="font-extrabold text-sm tracking-tight text-slate-100">Seimitsu Kotoba</div>
+          <div class="text-[11px] font-medium text-slate-400">Kunci 2-Arah + FSRS • 500 Kata</div>
+        </div>
+      </button>
+
+      <nav class="flex items-center gap-1 bg-slate-800/90 p-1 rounded-xl border border-slate-700/60">
+        <button data-nav="home" class="nav-btn px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition">Beranda</button>
+        <button data-nav="study" class="nav-btn px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition flex items-center gap-1.5">
+          <span>Belajar</span>
+          <span id="navStudyDot" class="hidden w-2 h-2 rounded-full bg-emerald-500"></span>
+        </button>
+        <button data-nav="dict" class="nav-btn px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition">Kamus</button>
+        <button data-nav="method" class="nav-btn px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition">Metode</button>
+      </nav>
+
+      <button id="btnOpenSettings" title="Pengaturan & Backup" class="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition shrink-0" aria-label="Pengaturan">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-5 sm:py-7">
+
+    <!-- VIEW 1: BERANDA (DASHBOARD & KELOMPOK) -->
+    <section id="view-home" class="space-y-6">
+      <!-- Hero Action Banner -->
+      <div class="bg-gradient-to-br from-slate-900 via-indigo-950/90 to-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-lg border border-indigo-500/25">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div class="space-y-2 max-w-xl">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/25 border border-indigo-400/30 text-indigo-200 text-xs font-semibold">
+              <span>⚡ Sistem Tunggal God-Tier</span>
+              <span>•</span>
+              <span>Sliding Window + Kunci 2-Arah + FSRS</span>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight" id="heroHeadline">Siap Mengunci Kotoba Seimitsu Hari Ini?</h1>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed" id="heroSubtext">
+              Setiap kata wajib lolos JP→ID, ketik/recall ID→JP, lalu verifikasi tunda sebelum terkunci ke jadwal FSRS. Cepat, anti-miss, dan tidak lupa besok.
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2.5 shrink-0">
+            <button id="btnHeroPrimary" class="px-5 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-400 active:scale-[0.98] text-white font-bold text-sm shadow-sm transition flex items-center justify-center gap-2">
+              <span id="heroPrimaryLabel">Mulai Pelajaran 1</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </button>
+            <button id="btnHeroLeech" class="hidden px-4 py-3 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/40 text-rose-100 font-semibold text-sm transition flex items-center justify-center gap-1.5">
+              <span>🔥 Rawan Lupa</span>
+              <span id="heroLeechCount" class="px-1.5 py-0.5 rounded-md bg-rose-500 text-white text-xs font-bold">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 KPI Strip -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-5 border-t border-white/10">
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+            <div class="text-[11px] text-slate-300 font-medium">Terkunci (Hapal)</div>
+            <div class="mt-1 flex items-baseline gap-1.5">
+              <span id="kpiMastered" class="text-xl font-extrabold text-emerald-400">0</span>
+              <span class="text-xs text-slate-400">/ 500</span>
+            </div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+            <div class="text-[11px] text-slate-300 font-medium">Jatuh Tempo FSRS</div>
+            <div class="mt-1 flex items-baseline gap-1.5">
+              <span id="kpiDue" class="text-xl font-extrabold text-amber-400">0</span>
+              <span class="text-xs text-slate-400">kata hari ini</span>
+            </div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+            <div class="text-[11px] text-slate-300 font-medium">Rawan Lupa (Leech)</div>
+            <div class="mt-1 flex items-baseline gap-1.5">
+              <span id="kpiLeech" class="text-xl font-extrabold text-rose-400">0</span>
+              <span class="text-xs text-slate-400">perlu fokus</span>
+            </div>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 border border-white/10">
+            <div class="text-[11px] text-slate-300 font-medium">Aktivitas Hari Ini</div>
+            <div class="mt-1 flex items-baseline gap-1.5">
+              <span id="kpiToday" class="text-xl font-extrabold text-sky-400">0</span>
+              <span class="text-xs text-slate-400">review selesai</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster Filter Bar -->
+      <div class="space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 class="text-base sm:text-lg font-extrabold text-slate-100">Kelompok Kotoba (24 Pelajaran • 500 Kata)</h2>
+            <p class="text-xs text-slate-400">Pilih 1 pelajaran untuk fokus cepat, atau latih 1 kelompok penuh dengan sistem Sliding Window.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btnStartDueQuick" class="hidden px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 font-bold text-xs transition">
+              ⏰ Review Jatuh Tempo (<span id="quickDueCount">0</span>)
+            </button>
+          </div>
+        </div>
+
+        <div id="clusterFilterPills" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <!-- Clusters & Lesson Cards -->
+      <div id="clustersContainer" class="space-y-6"></div>
+    </section>
+
+    <!-- VIEW 2: SESI BELAJAR (GOD-TIER ENGINE) -->
+    <section id="view-study" class="hidden max-w-2xl mx-auto space-y-4">
+      <!-- Empty state if no active session -->
+      <div id="studyEmptyState" class="hidden bg-slate-900 rounded-2xl border border-slate-800 p-8 text-center space-y-4 shadow-sm">
+        <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 mx-auto flex items-center justify-center text-2xl">🎯</div>
+        <div>
+          <h2 class="text-lg font-extrabold text-slate-100">Belum Ada Sesi Aktif</h2>
+          <p class="text-sm text-slate-400 mt-1">Pilih salah satu Pelajaran atau Kelompok di Beranda, atau langsung mulai Pelajaran 1.</p>
+        </div>
+        <div class="flex justify-center gap-2">
+          <button id="btnEmptyGoHome" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm transition">Pilih Kelompok</button>
+          <button id="btnEmptyStartL1" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition">Mulai Pelajaran 1</button>
+        </div>
+      </div>
+
+      <!-- Active Session Arena -->
+      <div id="studyActiveArena" class="hidden space-y-4">
+        <!-- Session Header & Controls -->
+        <div class="bg-slate-900 rounded-2xl border border-slate-800 p-3.5 sm:p-4 shadow-sm space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <button id="btnExitSession" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-300 hover:bg-slate-800 transition" title="Kembali ke Beranda">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              <div class="min-w-0">
+                <div id="sessionTitle" class="font-bold text-sm text-slate-100 truncate">Pelajaran 1: Dasar 30</div>
+                <div id="sessionSubtitle" class="text-[11px] text-slate-400">Terkunci 0 / 15 kata • Antrean aktif 5 kata</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button id="btnToggleFurigana" class="px-2.5 py-1 rounded-lg text-xs font-semibold border transition" title="Tampilkan/sembunyikan Hiragana di soal JP→ID">Furigana: ON</button>
+              <button id="btnToggleInputMode" class="px-2.5 py-1 rounded-lg text-xs font-semibold border transition" title="Ganti antara Ketik (Rekomendasi) dan Tebak Cepat">Ketik</button>
+              <button id="btnToggleMute" class="p-1.5 rounded-lg border border-slate-700 text-slate-400 hover:bg-slate-800 transition" title="Suara Efek">🔊</button>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+            <div id="sessionProgressBar" class="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+
+          <!-- Sliding Window Active Pool Pills -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-0.5">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 shrink-0">Jendela Aktif:</span>
+            <div id="activePoolPills" class="flex items-center gap-1.5"></div>
+          </div>
+        </div>
+
+        <!-- Flashcard Arena -->
+        <div id="studyCard" class="bg-slate-900 rounded-2xl border border-slate-800 shadow-sm overflow-hidden card-enter">
+          <!-- Card Top Strip -->
+          <div class="px-5 py-3 bg-slate-800/60 border-b border-slate-800 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span id="cardStageBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300">JP → ID • Tahap 1/3</span>
+              <span id="cardLessonTag" class="text-xs font-medium text-slate-400">L1 #1</span>
+              <span id="cardLeechTag" class="hidden px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300">🔥 Rawan Lupa</span>
+            </div>
+            <button id="btnSpeakPrompt" class="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 hover:border-indigo-400 hover:text-indigo-400 text-slate-400 text-xs font-semibold flex items-center gap-1 transition">
+              <span>🔈</span><span>Dengar</span>
+            </button>
+          </div>
+
+          <!-- Card Prompt Body -->
+          <div class="p-6 sm:p-8 text-center space-y-3">
+            <div id="cardPromptHint" class="text-xs font-semibold uppercase tracking-wider text-slate-400">Apa arti bahasa Indonesianya?</div>
+            <div id="cardPromptSub" class="font-jp text-sm sm:text-base font-medium text-indigo-400 min-h-[1.25rem]"></div>
+            <div id="cardPromptMain" class="font-jp text-3xl sm:text-4xl font-extrabold text-slate-100 tracking-tight break-words">技能実習</div>
+          </div>
+
+          <!-- Interactive Answer Area -->
+          <div class="px-5 sm:px-7 pb-6 space-y-4">
+
+            <!-- MODE A: TYPING (for ID -> JP) -->
+            <div id="areaTyping" class="hidden space-y-3">
+              <form id="typingForm" class="flex gap-2">
+                <input
+                  id="typingInput"
+                  type="text"
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  placeholder="Ketik Romaji / Hiragana / Kanji... (cth: kikai)"
+                  class="flex-1 px-4 py-3 rounded-xl bg-slate-800 border-2 border-slate-700 focus:border-indigo-500 focus:outline-none text-base font-medium text-slate-100 placeholder-slate-500 transition"
+                />
+                <button type="submit" class="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition shrink-0">Cek</button>
+              </form>
+              <div class="flex items-center justify-between text-xs text-slate-400 px-1">
+                <span>Bisa ketik romaji biasa (contoh: <code class="bg-slate-800 text-slate-300 px-1 rounded">anzen</code>) atau hiragana/kanji</span>
+                <button id="btnGiveUpTyping" type="button" class="text-slate-400 hover:text-rose-600 font-semibold underline">Lupa / Lihat Jawaban</button>
+              </div>
+            </div>
+
+            <!-- MODE B: REVEAL (for JP -> ID or Fast Mode) -->
+            <div id="areaReveal" class="hidden">
+              <button id="btnRevealAnswer" class="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-[0.99] text-white font-bold text-sm transition flex items-center justify-center gap-2">
+                <span>Tampilkan Jawaban</span>
+                <span class="text-xs font-normal text-slate-400 hidden sm:inline">(Spasi / Enter)</span>
+              </button>
+            </div>
+
+            <!-- RESULT & FEEDBACK PANEL -->
+            <div id="areaFeedback" class="hidden space-y-4">
+              <div id="feedbackBanner" class="rounded-xl p-4 border text-left space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                  <span id="feedbackStatusText" class="font-extrabold text-sm">✅ Benar!</span>
+                  <button id="btnSpeakAnswer" class="px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-300 transition">🔈 Ucapkan</button>
+                </div>
+                <div class="pt-1 space-y-1">
+                  <div class="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
+                    <span id="fbKanji" class="font-jp text-2xl font-extrabold text-slate-100"></span>
+                    <span id="fbHira" class="font-jp text-sm font-semibold text-indigo-300"></span>
+                    <span id="fbRomaji" class="text-xs font-mono text-slate-400"></span>
+                  </div>
+                  <div id="fbIndo" class="text-base font-bold text-slate-200"></div>
+                </div>
+                <div id="fbUserTypedRow" class="hidden text-xs text-slate-400 pt-1 border-t border-black/5">
+                  Ketikanmu: <span id="fbUserTyped" class="font-mono font-bold"></span>
+                </div>
+                <div id="fbNoteBox" class="hidden text-xs bg-slate-950/60 rounded-lg p-2.5 text-slate-300 border border-slate-700/70">
+                  <span class="font-bold text-slate-100">Catatan:</span> <span id="fbNote"></span>
+                </div>
+                <div id="fbExampleBox" class="hidden text-xs bg-slate-950/60 rounded-lg p-2.5 text-slate-300 border border-slate-700/70 whitespace-pre-line font-jp">
+                  <span class="font-bold text-slate-100 font-sans">Contoh:</span>
+                  <div id="fbExample" class="mt-0.5 leading-relaxed"></div>
+                </div>
+              </div>
+
+              <!-- Grading Buttons for Reveal Mode (Learning) -->
+              <div id="gradeLearningReveal" class="hidden grid grid-cols-2 gap-2.5">
+                <button id="btnGradeFail" class="py-3 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-bold text-sm transition">
+                  ✕ Lupa / Salah <span class="text-[11px] font-normal opacity-75 ml-1">[1]</span>
+                </button>
+                <button id="btnGradePass" class="py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition">
+                  ✓ Ingat Lancar <span class="text-[11px] font-normal opacity-80 ml-1">[2]</span>
+                </button>
+              </div>
+
+              <!-- Grading Buttons for FSRS Review Mode (4-grade) -->
+              <div id="gradeFsrsButtons" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <button data-fsrs="1" class="fsrs-btn py-2.5 px-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-bold text-xs transition">
+                  <div>Lupa [1]</div>
+                  <div class="text-[10px] font-normal opacity-80 mt-0.5" data-int="1">Ulangi</div>
+                </button>
+                <button data-fsrs="2" class="fsrs-btn py-2.5 px-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-bold text-xs transition">
+                  <div>Susah [2]</div>
+                  <div class="text-[10px] font-normal opacity-80 mt-0.5" data-int="2">1 hari</div>
+                </button>
+                <button data-fsrs="3" class="fsrs-btn py-2.5 px-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-bold text-xs transition">
+                  <div>Lancar [3]</div>
+                  <div class="text-[10px] font-normal opacity-80 mt-0.5" data-int="3">3 hari</div>
+                </button>
+                <button data-fsrs="4" class="fsrs-btn py-2.5 px-2 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-sky-300 font-bold text-xs transition">
+                  <div>Mudah [4]</div>
+                  <div class="text-[10px] font-normal opacity-80 mt-0.5" data-int="4">6 hari</div>
+                </button>
+              </div>
+
+              <!-- Next Button for Typing Mode -->
+              <div id="gradeTypingNext" class="hidden flex gap-2">
+                <button id="btnOverrideCorrect" class="hidden px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition shrink-0">
+                  Cuma Typo (Anggap Benar)
+                </button>
+                <button id="btnNextAfterTyping" class="flex-1 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition">
+                  Lanjut Kartu Berikutnya <span class="text-xs font-normal opacity-80 ml-1">(Enter)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Session Completed Summary -->
+      <div id="studyCompleteCard" class="hidden bg-slate-900 rounded-2xl border border-slate-800 p-6 sm:p-8 text-center space-y-5 shadow-sm card-enter">
+        <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 text-emerald-400 mx-auto flex items-center justify-center text-3xl">🏆</div>
+        <div class="space-y-1">
+          <h2 class="text-2xl font-extrabold text-slate-100">Sesi Selesai & Terkunci!</h2>
+          <p id="completeSubtitle" class="text-sm text-slate-400">Semua kata dalam sesi ini sudah lolos Kunci 2-Arah dan masuk jadwal FSRS.</p>
+        </div>
+        <div class="grid grid-cols-3 gap-3 max-w-md mx-auto">
+          <div class="bg-slate-800/70 rounded-xl p-3 border border-slate-700/70">
+            <div class="text-[11px] text-slate-400 font-medium">Kata Terkunci</div>
+            <div id="sumLocked" class="text-xl font-extrabold text-emerald-600 mt-0.5">0</div>
+          </div>
+          <div class="bg-slate-800/70 rounded-xl p-3 border border-slate-700/70">
+            <div class="text-[11px] text-slate-400 font-medium">Akurasi</div>
+            <div id="sumAccuracy" class="text-xl font-extrabold text-indigo-400 mt-0.5">100%</div>
+          </div>
+          <div class="bg-slate-800/70 rounded-xl p-3 border border-slate-700/70">
+            <div class="text-[11px] text-slate-400 font-medium">Total Aksi</div>
+            <div id="sumAttempts" class="text-xl font-extrabold text-slate-200 mt-0.5">0</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap justify-center gap-2.5 pt-2">
+          <button id="btnCompleteHome" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm transition">Kembali ke Beranda</button>
+          <button id="btnCompleteNextLesson" class="hidden px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition">Lanjut Pelajaran Berikutnya →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: KAMUS 500 KATA -->
+    <section id="view-dict" class="hidden space-y-4">
+      <div class="bg-slate-900 rounded-2xl border border-slate-800 p-4 shadow-sm space-y-3">
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <div class="relative flex-1">
+            <input id="dictSearch" type="text" placeholder="Cari Kanji, Hiragana, Romaji, atau Arti Indonesia..." class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 focus:border-indigo-500 focus:outline-none text-sm text-slate-100 placeholder-slate-500" />
+            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/></svg>
+          </div>
+          <select id="dictLessonFilter" class="px-3 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-200 text-sm font-medium text-slate-300 focus:border-indigo-500 focus:outline-none">
+            <option value="all">Semua Pelajaran (1–24)</option>
+          </select>
+          <select id="dictStatusFilter" class="px-3 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-200 text-sm font-medium text-slate-300 focus:border-indigo-500 focus:outline-none">
+            <option value="all">Semua Status</option>
+            <option value="new">Baru</option>
+            <option value="learning">Sedang Belajar</option>
+            <option value="mastered">Terkunci (Hapal)</option>
+            <option value="due">Jatuh Tempo</option>
+            <option value="leech">Rawan Lupa</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span id="dictCountLabel">Menampilkan 500 kata</span>
+          <span>Klik tombol 🔈 untuk mendengar pelafalan Jepang</span>
+        </div>
+      </div>
+
+      <div id="dictList" class="space-y-2"></div>
+    </section>
+
+    <!-- VIEW 4: METODE GOD-TIER -->
+    <section id="view-method" class="hidden space-y-5">
+      <div class="bg-slate-900 rounded-2xl border border-slate-800 p-5 sm:p-7 shadow-sm space-y-5">
+        <div class="space-y-2">
+          <span class="inline-block px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold">Arsitektur Memori Tunggal</span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-100">Kenapa "Kunci 2-Arah + Sliding Window + FSRS" adalah Sistem Tunggal Terbaik?</h2>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Masalah utama saat menghapal kotoba pabrik (seimitsu) bukan kurang rajin, melainkan jebakan <strong>short-term memory illusion</strong>: terasa cepat hapal saat diulang berturut-turut, tetapi hilang besok pagi, atau salah satu arah (JP→ID / ID→JP) terlewat.
+          </p>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="overflow-x-auto rounded-xl border border-slate-700">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead class="bg-slate-800/80 text-slate-200 border-b border-slate-700">
+              <tr>
+                <th class="p-3 font-bold">Metode</th>
+                <th class="p-3 font-bold">Kecepatan</th>
+                <th class="p-3 font-bold">Keseimbangan 2 Arah</th>
+                <th class="p-3 font-bold">Retensi Besok Hari</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800">
+              <tr class="text-slate-400">
+                <td class="p-3 font-semibold text-slate-200">Ketik Gauntlet</td>
+                <td class="p-3">Lambat jika 1 halaman</td>
+                <td class="p-3">Sering berat sebelah</td>
+                <td class="p-3 text-rose-600 font-medium">Cepat lupa (cramming)</td>
+              </tr>
+              <tr class="text-slate-400">
+                <td class="p-3 font-semibold text-slate-200">Ulang per 5 Kata</td>
+                <td class="p-3">Cepat di awal</td>
+                <td class="p-3 text-rose-600 font-medium">Banyak yang miss 1 arah</td>
+                <td class="p-3 text-rose-600 font-medium">Hanya memori jangka pendek</td>
+              </tr>
+              <tr class="text-slate-400">
+                <td class="p-3 font-semibold text-slate-200">Ulang per Halaman</td>
+                <td class="p-3 text-rose-600 font-medium">Sangat makan waktu</td>
+                <td class="p-3">Lumayan merata</td>
+                <td class="p-3 text-amber-600 font-medium">Besok tetap ada yang lupa & harus ulang semua</td>
+              </tr>
+              <tr class="bg-indigo-500/15 text-slate-100">
+                <td class="p-3 font-extrabold text-indigo-300">⚡ Kunci 2-Arah + Sliding Window + FSRS</td>
+                <td class="p-3 font-bold text-emerald-400">Sangat Cepat (jendela 5 kata)</td>
+                <td class="p-3 font-bold text-emerald-400">100% Wajib 2 Arah + Verifikasi</td>
+                <td class="p-3 font-bold text-emerald-400">Jangka Panjang (FSRS hanya ulang yang hampir lupa)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 3 Pillars -->
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/70 space-y-1.5">
+            <div class="font-extrabold text-sm text-indigo-300">1. Sliding Window (5 Kata Aktif)</div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Otak tidak dibebani 23 kata sekaligus. Hanya 5 kata aktif di jendela kerja. Begitu 1 kata lulus, 1 kata baru otomatis masuk menggantikan—kecepatan batch 5 tanpa jeda kaku.
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/70 space-y-1.5">
+            <div class="font-extrabold text-sm text-emerald-400">2. Wajib 3 Tahap Kunci 2-Arah</div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Tahap 1: <strong>JP→ID</strong> cepat. Tahap 2: <strong>ID→JP</strong> ketik romaji/kana (muncul 2–3 kartu kemudian). Tahap 3: <strong>Verifikasi Tunda</strong> (muncul setelah jeda 5–7 kartu acak). Zero miss!
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/70 space-y-1.5">
+            <div class="font-extrabold text-sm text-amber-400">3. FSRS + Deteksi Rawan Lupa</div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Besok hari kamu TIDAK perlu mengulang 1 halaman penuh. Cukup klik <strong>Review Jatuh Tempo</strong> (3–5 menit) untuk mengetes kata yang hampir lupa saja. Kata yang sering salah otomatis masuk daftar <strong>🔥 Rawan Lupa</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-indigo-600 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="font-bold text-sm">Rutinitas Harian Ideal (15 Menit/Hari)</div>
+            <div class="text-xs text-indigo-100 mt-0.5">1) Selesaikan semua Review Jatuh Tempo dulu → 2) Kunci 1 Pelajaran baru (15–25 kata) → 3) Selesai! Dalam 24 hari, 500 kata terkunci permanen.</div>
+          </div>
+          <button id="btnMethodGoHome" class="px-4 py-2 rounded-lg bg-white text-indigo-700 font-bold text-xs shrink-0 hover:bg-indigo-50 transition">Mulai Sekarang</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SETTINGS & BACKUP MODAL -->
+  <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-xl space-y-5">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-extrabold text-slate-100">Pengaturan & Backup Progres</h3>
+        <button id="btnCloseSettings" class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition">✕</button>
+      </div>
+
+      <div class="space-y-4 text-sm">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <div class="font-semibold text-slate-200">Ukuran Jendela Aktif (Sliding Window)</div>
+            <div class="text-xs text-slate-400">Jumlah kata aktif bersamaan dalam sesi</div>
+          </div>
+          <select id="setWindowSize" class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 font-bold text-slate-200">
+            <option value="4">4 kata</option>
+            <option value="5">5 kata (Ideal)</option>
+            <option value="6">6 kata</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <div class="font-semibold text-slate-200">Putar Audio Jepang Otomatis</div>
+            <div class="text-xs text-slate-400">Membacakan pelafalan saat kartu muncul/terjawab</div>
+          </div>
+          <input id="setAutoSpeak" type="checkbox" class="w-5 h-5 accent-indigo-600 rounded cursor-pointer" />
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 space-y-2.5">
+          <div class="font-semibold text-slate-200">Backup Data Hapalan (JSON)</div>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="btnExportBackup" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition">⬇ Unduh Backup</button>
+            <label class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition text-center cursor-pointer">
+              ⬆ Pulihkan Backup
+              <input id="inputImportBackup" type="file" accept=".json" class="hidden" />
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800">
+          <button id="btnAskReset" class="w-full py-2 rounded-xl border border-rose-500/40 text-rose-400 hover:bg-rose-500/15 font-semibold text-xs transition">Reset Semua Progres Hapalan</button>
+          <div id="resetConfirmBox" class="hidden mt-2 p-3 rounded-xl bg-rose-950/60 border border-rose-500/30 space-y-2">
+            <div class="text-xs font-bold text-rose-300">Yakin hapus seluruh progres 500 kata?</div>
+            <div class="flex gap-2">
+              <button id="btnCancelReset" class="flex-1 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold">Batal</button>
+              <button id="btnConfirmReset" class="flex-1 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-bold">Ya, Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-lg border border-indigo-400/30"></div>
+
+  <script>
+    // ==================== EMBEDDED VERIFIED DATA (500 WORDS, 24 LESSONS) ====================
+    const LESSONS = [{"id": 1, "title": "Pelajaran 1: Dasar 30", "shortTitle": "Dasar 30", "words": [{"id": "L1_1", "no": 1, "lesson": 1, "jp": "技能実習", "hira": "ぎのうじっしゅう", "id_text": "Pelatihan Kerja Teknis", "note": "", "example": "", "romaji": "ginoujisshuu"}, {"id": "L1_2", "no": 2, "lesson": 1, "jp": "技能実習生", "hira": "ぎのうじっしゅうせい", "id_text": "Pemagang Kerja Teknis", "note": "", "example": "", "romaji": "ginoujisshuusei"}, {"id": "L1_3", "no": 3, "lesson": 1, "jp": "工場", "hira": "こうじょう", "id_text": "Pabrik", "note": "", "example": "", "romaji": "koujou"}, {"id": "L1_4", "no": 4, "lesson": 1, "jp": "製造", "hira": "せいぞう", "id_text": "Manufaktur", "note": "", "example": "", "romaji": "seizou"}, {"id": "L1_5", "no": 5, "lesson": 1, "jp": "機械", "hira": "きかい", "id_text": "Mesin", "note": "", "example": "", "romaji": "kikai"}, {"id": "L1_6", "no": 6, "lesson": 1, "jp": "安全", "hira": "あんぜん", "id_text": "Keamanan", "note": "", "example": "", "romaji": "anzen"}, {"id": "L1_7", "no": 7, "lesson": 1, "jp": "危険（な）", "hira": "きけん（な）", "id_text": "Bahaya (Berbahaya)", "note": "Umumnya ditulis dengan kanji, namun terkadang ditulis dengan katakana 「キケン」\"berbahaya\".", "example": "", "romaji": "kiken(na)"}, {"id": "L1_8", "no": 8, "lesson": 1, "jp": "危ない", "hira": "あぶない", "id_text": "Berbahaya", "note": "", "example": "", "romaji": "abunai"}, {"id": "L1_9", "no": 9, "lesson": 1, "jp": "清掃", "hira": "せいそう", "id_text": "Bersih", "note": "", "example": "", "romaji": "seisou"}, {"id": "L1_10", "no": 10, "lesson": 1, "jp": "非常口", "hira": "ひじょうぐち", "id_text": "Pintu keluar darurat", "note": "", "example": "", "romaji": "hijouguchi"}, {"id": "L1_11", "no": 11, "lesson": 1, "jp": "注意", "hira": "ちゅうい", "id_text": "Peringatan", "note": "", "example": "", "romaji": "chuui"}, {"id": "L1_12", "no": 12, "lesson": 1, "jp": "火事", "hira": "かじ", "id_text": "Kebakaran", "note": "", "example": "", "romaji": "kaji"}, {"id": "L1_13", "no": 13, "lesson": 1, "jp": "事故", "hira": "じこ", "id_text": "Kecelakaan", "note": "", "example": "", "romaji": "jiko"}, {"id": "L1_14", "no": 14, "lesson": 1, "jp": "服装", "hira": "ふくそう", "id_text": "Pakaian", "note": "", "example": "", "romaji": "fukusou"}, {"id": "L1_15", "no": 15, "lesson": 1, "jp": "安全装置", "hira": "あんぜんそうち", "id_text": "Peralatan keamanan", "note": "", "example": "", "romaji": "anzensouchi"}]}, {"id": 2, "title": "Pelajaran 2: Dasar 30", "shortTitle": "Dasar 30", "words": [{"id": "L2_1", "no": 1, "lesson": 2, "jp": "安全カバー", "hira": "あんぜんかばー", "id_text": "Tutup pengaman", "note": "", "example": "", "romaji": "anzenkabaa"}, {"id": "L2_2", "no": 2, "lesson": 2, "jp": "けが", "hira": "けが", "id_text": "Luka", "note": "", "example": "", "romaji": "kega"}, {"id": "L2_3", "no": 3, "lesson": 2, "jp": "けがをします", "hira": "けがをします", "id_text": "Terluka", "note": "", "example": "", "romaji": "kegawoshimasu"}, {"id": "L2_4", "no": 4, "lesson": 2, "jp": "電源", "hira": "でんげん", "id_text": "Sumber listrik", "note": "", "example": "", "romaji": "dengen"}, {"id": "L2_5", "no": 5, "lesson": 2, "jp": "電源を切ります", "hira": "でんげんをきります", "id_text": "Mematikan listrik", "note": "", "example": "", "romaji": "dengenwokirimasu"}, {"id": "L2_6", "no": 6, "lesson": 2, "jp": "非常停止ボタン", "hira": "ひじょうていしぼたん", "id_text": "Tombol stop darurat", "note": "", "example": "", "romaji": "hijouteishibotan"}, {"id": "L2_7", "no": 7, "lesson": 2, "jp": "非常停止ボタンを押します", "hira": "ひじょうていしぼたんをおします", "id_text": "Menekan tombol stop darurat", "note": "", "example": "", "romaji": "hijouteishibotanwooshimasu"}, {"id": "L2_8", "no": 8, "lesson": 2, "jp": "ルール", "hira": "るーる", "id_text": "Peraturan", "note": "", "example": "", "romaji": "ruuru"}, {"id": "L2_9", "no": 9, "lesson": 2, "jp": "ルールを守ります", "hira": "るーるをまもります", "id_text": "Mematuhi peraturan", "note": "", "example": "", "romaji": "ruuruwomamorimasu"}, {"id": "L2_10", "no": 10, "lesson": 2, "jp": "止めます", "hira": "とめます", "id_text": "Menghentikan", "note": "", "example": "", "romaji": "tomemasu"}, {"id": "L2_11", "no": 11, "lesson": 2, "jp": "機械を止めます", "hira": "きかいをとめます", "id_text": "Menghentikan mesin", "note": "", "example": "", "romaji": "kikaiwotomemasu"}, {"id": "L2_12", "no": 12, "lesson": 2, "jp": "やって", "hira": "やって", "id_text": "Lakukan", "note": "", "example": "", "romaji": "yatte"}, {"id": "L2_13", "no": 13, "lesson": 2, "jp": "止めて", "hira": "とめて", "id_text": "Hentikan", "note": "", "example": "", "romaji": "tomete"}, {"id": "L2_14", "no": 14, "lesson": 2, "jp": "取って", "hira": "とって", "id_text": "Ambilkan", "note": "", "example": "", "romaji": "totte"}, {"id": "L2_15", "no": 15, "lesson": 2, "jp": "だめ（な）", "hira": "だめ（な）", "id_text": "Tidak boleh (Tidak bagus)", "note": "", "example": "", "romaji": "dame(na)"}]}, {"id": 3, "title": "Pelajaran 3: Status Tinggal, Kontrak Tenaga Kerja 1", "shortTitle": "Status Tinggal, Kontrak Tenaga Kerja 1", "words": [{"id": "L3_1", "no": 1, "lesson": 3, "jp": "監理団体", "hira": "かんりだんたい", "id_text": "Lembaga pengawas", "note": "Lembaga non-profit yang mengawasi atau mengarahkan pemagang kerja teknis terkait akuisisi keterampilan dan kegiatannya.", "example": "", "romaji": "kanridantai"}, {"id": "L3_2", "no": 2, "lesson": 3, "jp": "技術移転", "hira": "ぎじゅついてん", "id_text": "Transfer teknologi", "note": "", "example": "", "romaji": "gijutsuiten"}, {"id": "L3_3", "no": 3, "lesson": 3, "jp": "技能実習期間", "hira": "ぎのうじっしゅうきかん", "id_text": "Periode pelatihan kerja", "note": "", "example": "", "romaji": "ginoujisshuukikan"}, {"id": "L3_4", "no": 4, "lesson": 3, "jp": "職種", "hira": "しょくしゅ", "id_text": "Pekerjaan", "note": "", "example": "", "romaji": "shokushu"}, {"id": "L3_5", "no": 5, "lesson": 3, "jp": "在留資格", "hira": "ざいりゅうしかく", "id_text": "Jenis visa tinggal", "note": "", "example": "", "romaji": "zairyuushikaku"}, {"id": "L3_6", "no": 6, "lesson": 3, "jp": "パスポート", "hira": "ぱすぽーと", "id_text": "Paspor", "note": "", "example": "", "romaji": "pasupooto"}, {"id": "L3_7", "no": 7, "lesson": 3, "jp": "在留カード", "hira": "ざいりゅうかーど", "id_text": "Kartu izin tinggal", "note": "", "example": "", "romaji": "zairyuukaado"}, {"id": "L3_8", "no": 8, "lesson": 3, "jp": "入管", "hira": "にゅうかん", "id_text": "Imigrasi", "note": "にゅうこくかんりちょう Singkatan untuk 「入国管理庁」\"Badan にゅうこくかんりきょく Imigrasi\"、「入国管理局」 \"Biro Imigrasi\".", "example": "", "romaji": "nyuukan"}, {"id": "L3_9", "no": 9, "lesson": 3, "jp": "在留期間", "hira": "ざいりゅうきかん", "id_text": "Periode tinggal", "note": "", "example": "", "romaji": "zairyuukikan"}, {"id": "L3_10", "no": 10, "lesson": 3, "jp": "雇用契約", "hira": "こようけいやく", "id_text": "Kontrak kerja", "note": "", "example": "", "romaji": "koyoukeiyaku"}, {"id": "L3_11", "no": 11, "lesson": 3, "jp": "給与明細", "hira": "きゅうよめいさい", "id_text": "Slip gaji", "note": "", "example": "", "romaji": "kyuuyomeisai"}, {"id": "L3_12", "no": 12, "lesson": 3, "jp": "給料", "hira": "きゅうりょう", "id_text": "Gaji", "note": "", "example": "", "romaji": "kyuuryou"}, {"id": "L3_13", "no": 13, "lesson": 3, "jp": "残業手当", "hira": "ざんぎょうてあて", "id_text": "Tunjangan lembur", "note": "", "example": "", "romaji": "zangyouteate"}, {"id": "L3_14", "no": 14, "lesson": 3, "jp": "労働時間", "hira": "ろうどうじかん", "id_text": "Jam kerja", "note": "", "example": "", "romaji": "roudoujikan"}]}, {"id": 4, "title": "Pelajaran 4: Kontrak Tenaga Kerja 2, Pajak dan Asuransi", "shortTitle": "Kontrak Tenaga Kerja 2, Pajak dan Asuransi", "words": [{"id": "L4_1", "no": 1, "lesson": 4, "jp": "控除（します）", "hira": "こうじょ（します）", "id_text": "Pengurangan (Mengurangi)", "note": "Pengurangan sejumlah uang dari total uang yang ditentukan sebelumnya. Biasanya digunakaan pada saat pemotongan pajak.", "example": "かぞく よう ふようこうじょ\n家族を養っている人は、「扶養控除」を受け\nばあい\nられる場合があります。\nUntuk yang sudah berkeluarga, bisa mendapatkan\npengurangan tanggungan.", "romaji": "koujo(shimasu)"}, {"id": "L4_2", "no": 2, "lesson": 4, "jp": "ボーナス", "hira": "ぼーなす", "id_text": "Bonus", "note": "", "example": "", "romaji": "boonasu"}, {"id": "L4_3", "no": 3, "lesson": 4, "jp": "有休", "hira": "ゆうきゅう", "id_text": "Cuti tahunan", "note": "Upah tetap dibayarkan walaupun libur. Cuti tahunan berbayar. Cuti tahunan berbayar ゆうきゅう disingkat menjadi 「有休」.", "example": "らいしゅう ゆうきゅう しんせいしょ\n来週、有休をとるので申請書を出しました。\nSaya sudah memberikan formulir pendaftaran untuk\nmengambil Cuti tahunan berbayar minggu depan.", "romaji": "yuukyuu"}, {"id": "L4_4", "no": 4, "lesson": 4, "jp": "代休", "hira": "だいきゅう", "id_text": "Libur pengganti", "note": "Libur pengganti ketika masuk kerja di hari libur.", "example": "", "romaji": "daikyuu"}, {"id": "L4_5", "no": 5, "lesson": 4, "jp": "労働基準法", "hira": "ろうどうきじゅんほう", "id_text": "Aturan dasar ketenagakerjaan", "note": "Peraturan Jepang yang mengatur dasar terkait ketenagakerjaan.", "example": "", "romaji": "roudoukijunhou"}, {"id": "L4_6", "no": 6, "lesson": 4, "jp": "労働条件", "hira": "ろうどうじょうけん", "id_text": "Kondisi kerja", "note": "", "example": "", "romaji": "roudoujouken"}, {"id": "L4_7", "no": 7, "lesson": 4, "jp": "税金", "hira": "ぜいきん", "id_text": "Pajak", "note": "", "example": "", "romaji": "zeikin"}, {"id": "L4_8", "no": 8, "lesson": 4, "jp": "所得税", "hira": "しょとくぜい", "id_text": "Pajak penghasilan", "note": "Pajak penghasilan selama satu tahun.", "example": "", "romaji": "shotokuzei"}, {"id": "L4_9", "no": 9, "lesson": 4, "jp": "住民税", "hira": "じゅうみんぜい", "id_text": "Pajak penduduk", "note": "Pajak yang harus dibayarkan ke wilayah tempat tinggal.", "example": "", "romaji": "juuminzei"}, {"id": "L4_10", "no": 10, "lesson": 4, "jp": "厚生年金", "hira": "こうせいねんきん", "id_text": "Uang pensiun", "note": "Uang yang didapatkan oleh pegawai swasta atau negeri pada saat pensiun, cacat, atau meninggal.", "example": "", "romaji": "kouseinenkin"}, {"id": "L4_11", "no": 11, "lesson": 4, "jp": "雇用保険", "hira": "こようほけん", "id_text": "Asuransi ketenagakerjaan", "note": "Uang asuransi yang diberikan ketika kehilangan pekerjaan atau ketika memulai proses mencari pekerjaan baru.", "example": "", "romaji": "koyouhoken"}, {"id": "L4_12", "no": 12, "lesson": 4, "jp": "健康保険", "hira": "けんこうほけん", "id_text": "Asuransi kesehatan", "note": "Uang asuransi yang diberikan ketika orang yang bersangkutan atau keluarganya mendapat perawatan.", "example": "", "romaji": "kenkouhoken"}, {"id": "L4_13", "no": 13, "lesson": 4, "jp": "社会保険", "hira": "しゃかいほけん", "id_text": "Asuransi sosial", "note": "Sebutan untuk gabungan dari Asuransi kesehatan, Asuransi Pensiun, Asuransi Perawatan, Asuransi ketenagakerjaan, Asuransi kecelakaan kerja. Bisa juga digunakan untuk asuransi yang pada umumnya digunakan oleh para pegawai, yaitu Asuransi kesehatan dan Uang pensiun.", "example": "", "romaji": "shakaihoken"}, {"id": "L4_14", "no": 14, "lesson": 4, "jp": "労災", "hira": "ろうさい", "id_text": "Kecelakaan kerja", "note": "ろうどうさいがい Singkatan dari 「労働災害」\"Kecelakaan kerja\". Mengacu pada luka atau penyakit yang disebabkan oleh pekerjaan.", "example": "", "romaji": "rousai"}, {"id": "L4_15", "no": 15, "lesson": 4, "jp": "労災保険", "hira": "ろうさいほけん", "id_text": "Asuransi kecelakaan kerja", "note": "Uang asuransi yang diterika ketika terjadi kecelakaan pada saat kerja yang mengharuskan untuk mendapatkan perawatan, tidak dapat bekerja untuk jangka waktu tertentu, atau ketika terdapat cacat.", "example": "", "romaji": "rousaihoken"}]}, {"id": 5, "title": "Pelajaran 5: Pekerjaan", "shortTitle": "Pekerjaan", "words": [{"id": "L5_1", "no": 1, "lesson": 5, "jp": "遅刻（します）", "hira": "ちこく（します）", "id_text": "Terlambat (Terlambat)", "note": "", "example": "", "romaji": "chikoku(shimasu)"}, {"id": "L5_2", "no": 2, "lesson": 5, "jp": "早退（します）", "hira": "そうたい（します）", "id_text": "Pulang cepat (Pulang cepat)", "note": "", "example": "", "romaji": "soutai(shimasu)"}, {"id": "L5_3", "no": 3, "lesson": 5, "jp": "休憩（します）", "hira": "きゅうけい（します）", "id_text": "Istirahat (Beristirahat)", "note": "", "example": "", "romaji": "kyuukei(shimasu)"}, {"id": "L5_4", "no": 4, "lesson": 5, "jp": "残業（します）", "hira": "ざんぎょう（します）", "id_text": "Lembur (Lembur)", "note": "", "example": "", "romaji": "zangyou(shimasu)"}, {"id": "L5_5", "no": 5, "lesson": 5, "jp": "定時", "hira": "ていじ", "id_text": "On time", "note": "Waktu yang ditentukan. Umumnya merujuk pada waktu pulang kerja yang sudah ditentukan.", "example": "きょう ていじ かえ\n今日は定時に帰ります。\nHari ini saya pulang on time.", "romaji": "teiji"}, {"id": "L5_6", "no": 6, "lesson": 5, "jp": "規則", "hira": "きそく", "id_text": "Aturan", "note": "", "example": "", "romaji": "kisoku"}, {"id": "L5_7", "no": 7, "lesson": 5, "jp": "休日", "hira": "きゅうじつ", "id_text": "Hari libur", "note": "", "example": "", "romaji": "kyuujitsu"}, {"id": "L5_8", "no": 8, "lesson": 5, "jp": "始業時間", "hira": "しぎょうじかん", "id_text": "Jam mulai kerja", "note": "", "example": "", "romaji": "shigyoujikan"}, {"id": "L5_9", "no": 9, "lesson": 5, "jp": "終業時間", "hira": "しゅうぎょうじかん", "id_text": "Jam selesai kerja", "note": "", "example": "", "romaji": "shuugyoujikan"}, {"id": "L5_10", "no": 10, "lesson": 5, "jp": "指導員", "hira": "しどういん", "id_text": "Instruktur", "note": "", "example": "", "romaji": "shidouin"}, {"id": "L5_11", "no": 11, "lesson": 5, "jp": "生活指導員", "hira": "せいかつしどういん", "id_text": "Instruktur aktivitas sehari-hari", "note": "", "example": "", "romaji": "seikatsushidouin"}, {"id": "L5_12", "no": 12, "lesson": 5, "jp": "担当者", "hira": "たんとうしゃ", "id_text": "Penanggungjawab", "note": "", "example": "", "romaji": "tantousha"}, {"id": "L5_13", "no": 13, "lesson": 5, "jp": "スイッチ入れるな", "hira": "すいっちいれるな", "id_text": "Jangan dinyalakan", "note": "", "example": "", "romaji": "suitchiireruna"}, {"id": "L5_14", "no": 14, "lesson": 5, "jp": "スイッチ切るな", "hira": "すいっちきるな", "id_text": "Jangan dimatikan", "note": "", "example": "", "romaji": "suitchikiruna"}, {"id": "L5_15", "no": 15, "lesson": 5, "jp": "頭上注意", "hira": "ずじょうちゅうい", "id_text": "Hati-hati kepala", "note": "", "example": "", "romaji": "zujouchuui"}, {"id": "L5_16", "no": 16, "lesson": 5, "jp": "禁煙", "hira": "きんえん", "id_text": "Dilarang merokok", "note": "", "example": "", "romaji": "kinen"}, {"id": "L5_17", "no": 17, "lesson": 5, "jp": "立入禁止", "hira": "たちいりきんし", "id_text": "Dilarang masuk", "note": "", "example": "", "romaji": "tachiirikinshi"}, {"id": "L5_18", "no": 18, "lesson": 5, "jp": "使用禁止", "hira": "しようきんし", "id_text": "Dilarang pakai", "note": "", "example": "", "romaji": "shiyoukinshi"}]}, {"id": 6, "title": "Pelajaran 6: 5S, Keamanan dan Kebersihan 1", "shortTitle": "5S, Keamanan dan Kebersihan 1", "words": [{"id": "L6_1", "no": 1, "lesson": 6, "jp": "５S", "hira": "ごえす", "id_text": "5 S (Di Indonesia 5 R)", "note": "Sebutan untuk Seiri, Seiton, Seiso, Seiketsu, Shitsuke. S diambil dari awalan setiap kata. Kata ini digunakan untuk meningkatkan produktivitas kerja.", "example": "", "romaji": "goesu"}, {"id": "L6_2", "no": 2, "lesson": 6, "jp": "整理", "hira": "せいり", "id_text": "Ringkas", "note": "Meningkatkan produksi dan kualitas barang dengan memisahkan hal yang diperlukan dengan hal yang tidak diperlukan dan membagikan informasi terkait.", "example": "", "romaji": "seiri"}, {"id": "L6_3", "no": 3, "lesson": 6, "jp": "整頓", "hira": "せいとん", "id_text": "Rapi", "note": "Menempatkan hal atau barang yang dibutuhkan sesuai dengan yang ditetapkan sebelumnya, untuk mengurangi hal yang tidak perlu.", "example": "", "romaji": "seiton"}, {"id": "L6_4", "no": 4, "lesson": 6, "jp": "清掃", "hira": "せいそう", "id_text": "Resik", "note": "Membersihkan dan Membereskan tempat kerja sehingga kita tahu seperti apa kondisi tempat kerja seharusnya.", "example": "", "romaji": "seisou"}, {"id": "L6_5", "no": 5, "lesson": 6, "jp": "清潔", "hira": "せいけつ", "id_text": "Rawat", "note": "Menjaga kondisi tetap baik setelah melakukan Ringkas, Rapi, Resik.", "example": "", "romaji": "seiketsu"}, {"id": "L6_6", "no": 6, "lesson": 6, "jp": "しつけ", "hira": "しつけ", "id_text": "Rajin", "note": "Membiasakan diri menjalankan sesuatu sesuai dengan yang telah ditetapkan, untuk menciptakan budaya kerja bersama.", "example": "", "romaji": "shitsuke"}, {"id": "L6_7", "no": 7, "lesson": 6, "jp": "掃除（します）", "hira": "そうじ（します）", "id_text": "Bersih-bersih (Membersihkan)", "note": "", "example": "", "romaji": "souji(shimasu)"}, {"id": "L6_8", "no": 8, "lesson": 6, "jp": "片づけます", "hira": "かたづけます", "id_text": "Membereskan", "note": "", "example": "", "romaji": "katazukemasu"}, {"id": "L6_9", "no": 9, "lesson": 6, "jp": "捨てます", "hira": "すてます", "id_text": "Membuang", "note": "", "example": "", "romaji": "sutemasu"}, {"id": "L6_10", "no": 10, "lesson": 6, "jp": "汚い", "hira": "きたない", "id_text": "Kotor", "note": "", "example": "", "romaji": "kitanai"}, {"id": "L6_11", "no": 11, "lesson": 6, "jp": "汚れます", "hira": "よごれます", "id_text": "Kotor", "note": "", "example": "", "romaji": "yogoremasu"}, {"id": "L6_12", "no": 12, "lesson": 6, "jp": "分別（します）", "hira": "ぶんべつ（します）", "id_text": "Pemisahan (Memisahkan)", "note": "", "example": "", "romaji": "bunbetsu(shimasu)"}, {"id": "L6_13", "no": 13, "lesson": 6, "jp": "燃えないごみ", "hira": "もえないごみ", "id_text": "Sampah tidak terbakar", "note": "", "example": "", "romaji": "moenaigomi"}, {"id": "L6_14", "no": 14, "lesson": 6, "jp": "燃えるごみ", "hira": "もえるごみ", "id_text": "Sampah terbakar", "note": "", "example": "", "romaji": "moerugomi"}, {"id": "L6_15", "no": 15, "lesson": 6, "jp": "挟まれます", "hira": "はさまれます", "id_text": "Terjepit", "note": "", "example": "きかい て はさ\n機械に手が挟まれました。\nTangan saya terjepit mesin.", "romaji": "hasamaremasu"}, {"id": "L6_16", "no": 16, "lesson": 6, "jp": "巻き込まれます", "hira": "まきこまれます", "id_text": "Terlilit", "note": "", "example": "きかい て ま\n1)機械に手が巻き込まれます。\nTangan terlilit di mesin.\nてぶくろ ばん ま\n2)手袋がフライス盤に巻き込まれます。\nSarung tangan terlilit di mesin penggilingan.", "romaji": "makikomaremasu"}, {"id": "L6_17", "no": 17, "lesson": 6, "jp": "やけど（します）", "hira": "やけど（します）", "id_text": "Luka bakar (Terbakar)", "note": "", "example": "", "romaji": "yakedo(shimasu)"}, {"id": "L6_18", "no": 18, "lesson": 6, "jp": "落ちます", "hira": "おちます", "id_text": "Jatuh", "note": "", "example": "かいだん お\n階段から落ちます。\nJatuh dari tangga.", "romaji": "ochimasu"}, {"id": "L6_19", "no": 19, "lesson": 6, "jp": "すべります", "hira": "すべります", "id_text": "Terpeleset/Licin", "note": "", "example": "ゆか\n床がすべります。\nLantainya licin.", "romaji": "suberimasu"}, {"id": "L6_20", "no": 20, "lesson": 6, "jp": "転びます", "hira": "ころびます", "id_text": "Terjatuh", "note": "", "example": "こうじょう ころ\n工場ですべって転びました。\nJatuh terpeleset di pabrik.", "romaji": "korobimasu"}, {"id": "L6_21", "no": 21, "lesson": 6, "jp": "濡れます", "hira": "ぬれます", "id_text": "Basah", "note": "", "example": "", "romaji": "nuremasu"}, {"id": "L6_22", "no": 22, "lesson": 6, "jp": "衛生", "hira": "えいせい", "id_text": "Kebersihan", "note": "", "example": "", "romaji": "eisei"}, {"id": "L6_23", "no": 23, "lesson": 6, "jp": "避難（します）", "hira": "ひなん（します）", "id_text": "Evakuasi (Mengevakuasi)", "note": "", "example": "", "romaji": "hinan(shimasu)"}, {"id": "L6_24", "no": 24, "lesson": 6, "jp": "救急車", "hira": "きゅうきゅうしゃ", "id_text": "Ambulans", "note": "", "example": "", "romaji": "kyuukyuusha"}, {"id": "L6_25", "no": 25, "lesson": 6, "jp": "災害", "hira": "さいがい", "id_text": "Bencana", "note": "", "example": "", "romaji": "saigai"}, {"id": "L6_26", "no": 26, "lesson": 6, "jp": "地震", "hira": "じしん", "id_text": "Gempa bumi", "note": "", "example": "じしん お\n地震が起きます。\nAn earthquake hits.", "romaji": "jishin"}, {"id": "L6_27", "no": 27, "lesson": 6, "jp": "もぐります", "hira": "もぐります", "id_text": "Menyelam", "note": "", "example": "じしん つくえ した\n地震だ！机の下にもぐれ！\nEarthquake! Hide under the desk!", "romaji": "mogurimasu"}]}, {"id": 7, "title": "Pelajaran 7: Keamanan dan Kebersihan 2, Tugas Harian", "shortTitle": "Keamanan dan Kebersihan 2, Tugas Harian", "words": [{"id": "L7_1", "no": 1, "lesson": 7, "jp": "火気厳禁", "hira": "かきげんきん", "id_text": "Dilarang menyalakan api", "note": "", "example": "", "romaji": "kakigenkin"}, {"id": "L7_2", "no": 2, "lesson": 7, "jp": "開放厳禁", "hira": "かいほうげんきん", "id_text": "Dilarang membuka", "note": "", "example": "", "romaji": "kaihougenkin"}, {"id": "L7_3", "no": 3, "lesson": 7, "jp": "標識", "hira": "ひょうしき", "id_text": "Tanda", "note": "", "example": "", "romaji": "hyoushiki"}, {"id": "L7_4", "no": 4, "lesson": 7, "jp": "気をつけます", "hira": "きをつけます", "id_text": "Berhati-hati", "note": "", "example": "", "romaji": "kiwotsukemasu"}, {"id": "L7_5", "no": 5, "lesson": 7, "jp": "持ち込みます", "hira": "もちこみます", "id_text": "Membawa masuk", "note": "", "example": "こうじょう けいたいでんわ も こ\n工場に携帯電話を持ち込んではいけません。\nDilarang membawa masuk handphone ke pabrik.", "romaji": "mochikomimasu"}, {"id": "L7_6", "no": 6, "lesson": 7, "jp": "防ぎます", "hira": "ふせぎます", "id_text": "Mencegah", "note": "", "example": "あんぜんかくにん じこ ふせ\n安全確認して事故を防ぎます。\nMemastikan keamanan untuk mencegah kecelakaan.", "romaji": "fusegimasu"}, {"id": "L7_7", "no": 7, "lesson": 7, "jp": "火", "hira": "ひ", "id_text": "Api", "note": "", "example": "", "romaji": "hi"}, {"id": "L7_8", "no": 8, "lesson": 7, "jp": "煙", "hira": "けむり", "id_text": "Asap", "note": "", "example": "", "romaji": "kemuri"}, {"id": "L7_9", "no": 9, "lesson": 7, "jp": "消火", "hira": "しょうか", "id_text": "Pemadam kebakaran", "note": "", "example": "", "romaji": "shouka"}, {"id": "L7_10", "no": 10, "lesson": 7, "jp": "消火器", "hira": "しょうかき", "id_text": "Alat pemadam kebakaran", "note": "", "example": "", "romaji": "shoukaki"}, {"id": "L7_11", "no": 11, "lesson": 7, "jp": "非常ベル", "hira": "ひじょうべる", "id_text": "Bel darurat", "note": "", "example": "", "romaji": "hijouberu"}, {"id": "L7_12", "no": 12, "lesson": 7, "jp": "火災報知機", "hira": "かさいほうちき", "id_text": "Alarm kebakaran", "note": "", "example": "", "romaji": "kasaihouchiki"}, {"id": "L7_13", "no": 13, "lesson": 7, "jp": "逃げます", "hira": "にげます", "id_text": "Melarikan diri", "note": "", "example": "", "romaji": "nigemasu"}, {"id": "L7_14", "no": 14, "lesson": 7, "jp": "現場", "hira": "げんば", "id_text": "Tempat kerja/Pabrik", "note": "", "example": "", "romaji": "genba"}, {"id": "L7_15", "no": 15, "lesson": 7, "jp": "作業", "hira": "さぎょう", "id_text": "Pekerjaan", "note": "", "example": "", "romaji": "sagyou"}, {"id": "L7_16", "no": 16, "lesson": 7, "jp": "ミーティング", "hira": "みーてぃんぐ", "id_text": "Rapat/Meeting", "note": "Rapat, Rapat Pagi, Rapat Akhir juga disebut dengan rapat (meeting).", "example": "", "romaji": "miitingu"}, {"id": "L7_17", "no": 17, "lesson": 7, "jp": "研修（します）", "hira": "けんしゅう（します）", "id_text": "Pelatihan/Training (Berlatih)", "note": "", "example": "", "romaji": "kenshuu(shimasu)"}, {"id": "L7_18", "no": 18, "lesson": 7, "jp": "実習（します）", "hira": "じっしゅう（します）", "id_text": "Pelatihan (Berlatih)", "note": "", "example": "", "romaji": "jisshuu(shimasu)"}, {"id": "L7_19", "no": 19, "lesson": 7, "jp": "あいさつ", "hira": "あいさつ", "id_text": "Salam", "note": "", "example": "", "romaji": "aisatsu"}, {"id": "L7_20", "no": 20, "lesson": 7, "jp": "確認（します）", "hira": "かくにん（します）", "id_text": "Pengecekan (Mengecek)", "note": "", "example": "", "romaji": "kakunin(shimasu)"}, {"id": "L7_21", "no": 21, "lesson": 7, "jp": "報告（します）", "hira": "ほうこく（します）", "id_text": "Laporan (Melaporkan)", "note": "", "example": "", "romaji": "houkoku(shimasu)"}, {"id": "L7_22", "no": 22, "lesson": 7, "jp": "連絡（します）", "hira": "れんらく（します）", "id_text": "Kontak (Menghubungi)", "note": "", "example": "", "romaji": "renraku(shimasu)"}, {"id": "L7_23", "no": 23, "lesson": 7, "jp": "相談（します）", "hira": "そうだん（します）", "id_text": "Konsultasi (Konsultasi)", "note": "", "example": "", "romaji": "soudan(shimasu)"}, {"id": "L7_24", "no": 24, "lesson": 7, "jp": "渡します", "hira": "わたします", "id_text": "Menyerahkan", "note": "Digunakan ketika menyerahkan sesuatu ke orang lain.", "example": "", "romaji": "watashimasu"}, {"id": "L7_25", "no": 25, "lesson": 7, "jp": "申請書", "hira": "しんせいしょ", "id_text": "Formulir", "note": "", "example": "", "romaji": "shinseisho"}, {"id": "L7_26", "no": 26, "lesson": 7, "jp": "寝坊（します）", "hira": "ねぼう（します）", "id_text": "Kesiangan (Bangun kesiangan)", "note": "", "example": "", "romaji": "nebou(shimasu)"}]}, {"id": 8, "title": "Pelajaran 8: Pelatihan Teknis, Perusahaan", "shortTitle": "Pelatihan Teknis, Perusahaan", "words": [{"id": "L8_1", "no": 1, "lesson": 8, "jp": "技能", "hira": "ぎのう", "id_text": "Keahlian teknis", "note": "", "example": "", "romaji": "ginou"}, {"id": "L8_2", "no": 2, "lesson": 8, "jp": "技能検定試験", "hira": "ぎのうけんていしけん", "id_text": "Tes sertifikasi keahlian teknis", "note": "Ujian keahlihan yang diadakan oleh Negara. Terdapat ujian untuk setiap kategori pekerjaan.", "example": "", "romaji": "ginoukenteishiken"}, {"id": "L8_3", "no": 3, "lesson": 8, "jp": "受検（します）", "hira": "じゅけん（します）", "id_text": "Mengikuti ujian (Mengikuti ujian)", "note": "", "example": "", "romaji": "juken(shimasu)"}, {"id": "L8_4", "no": 4, "lesson": 8, "jp": "資格", "hira": "しかく", "id_text": "Kualifikasi", "note": "", "example": "", "romaji": "shikaku"}, {"id": "L8_5", "no": 5, "lesson": 8, "jp": "手当", "hira": "てあて", "id_text": "Tunjangan", "note": "Uang yang dibayarkan di luar dari gaji pokok. Terdapat tunjangan transportasi, tunjangan lembur dan lainnya.", "example": "ざんぎょう じかんがい てあて\n残業をすると、時間外手当がもらえます。\nApabila lembur, akan mendapatkan tunjangan di luar\njam kerja.", "romaji": "teate"}, {"id": "L8_6", "no": 6, "lesson": 8, "jp": "社員", "hira": "しゃいん", "id_text": "Pegawai", "note": "", "example": "", "romaji": "shain"}, {"id": "L8_7", "no": 7, "lesson": 8, "jp": "部長", "hira": "ぶちょう", "id_text": "Direktur", "note": "", "example": "", "romaji": "buchou"}, {"id": "L8_8", "no": 8, "lesson": 8, "jp": "課長", "hira": "かちょう", "id_text": "Manajer", "note": "", "example": "", "romaji": "kachou"}, {"id": "L8_9", "no": 9, "lesson": 8, "jp": "更衣室", "hira": "こういしつ", "id_text": "Ruang ganti", "note": "", "example": "", "romaji": "kouishitsu"}, {"id": "L8_10", "no": 10, "lesson": 8, "jp": "台車", "hira": "だいしゃ", "id_text": "Troli", "note": "", "example": "", "romaji": "daisha"}, {"id": "L8_11", "no": 11, "lesson": 8, "jp": "床", "hira": "ゆか", "id_text": "Lantai", "note": "", "example": "", "romaji": "yuka"}, {"id": "L8_12", "no": 12, "lesson": 8, "jp": "ライン", "hira": "らいん", "id_text": "Line", "note": "", "example": "", "romaji": "rain"}, {"id": "L8_13", "no": 13, "lesson": 8, "jp": "出口", "hira": "でぐち", "id_text": "Pintu keluar", "note": "", "example": "", "romaji": "deguchi"}, {"id": "L8_14", "no": 14, "lesson": 8, "jp": "フォークリフト", "hira": "ふぉーくりふと", "id_text": "Forklift", "note": "", "example": "", "romaji": "fookurifuto"}, {"id": "L8_15", "no": 15, "lesson": 8, "jp": "電気", "hira": "でんき", "id_text": "Listrik", "note": "", "example": "", "romaji": "denki"}, {"id": "L8_16", "no": 16, "lesson": 8, "jp": "設備", "hira": "せつび", "id_text": "Peralatan", "note": "", "example": "", "romaji": "setsubi"}, {"id": "L8_17", "no": 17, "lesson": 8, "jp": "警報音", "hira": "けいほうおん", "id_text": "Alarm peringatan bahaya", "note": "", "example": "", "romaji": "keihouon"}, {"id": "L8_18", "no": 18, "lesson": 8, "jp": "コンセント", "hira": "こんせんと", "id_text": "Stop kontak", "note": "Bagian untuk memasukkan colokan. Terkadang, colokan disalah sebutkan dengan Stop kontak.", "example": "", "romaji": "konsento"}, {"id": "L8_19", "no": 19, "lesson": 8, "jp": "作業場", "hira": "さぎょうば", "id_text": "Tempat kerja", "note": "", "example": "", "romaji": "sagyouba"}, {"id": "L8_20", "no": 20, "lesson": 8, "jp": "室温", "hira": "しつおん", "id_text": "Suhu ruangan", "note": "", "example": "", "romaji": "shitsuon"}, {"id": "L8_21", "no": 21, "lesson": 8, "jp": "表示", "hira": "ひょうじ", "id_text": "Tampilan", "note": "", "example": "", "romaji": "hyouji"}, {"id": "L8_22", "no": 22, "lesson": 8, "jp": "作業台", "hira": "さぎょうだい", "id_text": "Meja kerja", "note": "", "example": "", "romaji": "sagyoudai"}]}, {"id": 9, "title": "Pelajaran 9: Keamanan dan Kebersihan 3, Manajemen Kesehatan", "shortTitle": "Keamanan dan Kebersihan 3, Manajemen Kesehatan", "words": [{"id": "L9_1", "no": 1, "lesson": 9, "jp": "禁止", "hira": "きんし", "id_text": "Larangan", "note": "", "example": "", "romaji": "kinshi"}, {"id": "L9_2", "no": 2, "lesson": 9, "jp": "表示板", "hira": "ひょうじばん", "id_text": "Papan pengumuman", "note": "", "example": "", "romaji": "hyoujiban"}, {"id": "L9_3", "no": 3, "lesson": 9, "jp": "禁止事項", "hira": "きんしじこう", "id_text": "Hal yang dilarang", "note": "", "example": "", "romaji": "kinshijikou"}, {"id": "L9_4", "no": 4, "lesson": 9, "jp": "避難訓練", "hira": "ひなんくんれん", "id_text": "Latihan evakuasi", "note": "", "example": "", "romaji": "hinankunren"}, {"id": "L9_5", "no": 5, "lesson": 9, "jp": "感電（します）", "hira": "かんでん（します）", "id_text": "Sengatan listrik (Tersengat listrik)", "note": "", "example": "", "romaji": "kanden(shimasu)"}, {"id": "L9_6", "no": 6, "lesson": 9, "jp": "防止（します）", "hira": "ぼうし（します）", "id_text": "Pencegahan (Mencegah)", "note": "", "example": "", "romaji": "boushi(shimasu)"}, {"id": "L9_7", "no": 7, "lesson": 9, "jp": "予防（します）", "hira": "よぼう（します）", "id_text": "Pencegahan (Mencegah)", "note": "", "example": "", "romaji": "yobou(shimasu)"}, {"id": "L9_8", "no": 8, "lesson": 9, "jp": "転倒（します）", "hira": "てんとう（します）", "id_text": "Jatuh (Terjatuh)", "note": "", "example": "", "romaji": "tentou(shimasu)"}, {"id": "L9_9", "no": 9, "lesson": 9, "jp": "欠けます", "hira": "かけます", "id_text": "Cuil", "note": "", "example": "ほうちょう は か\n包丁の刃が欠けます。\nMata pisau cuil.", "romaji": "kakemasu"}, {"id": "L9_10", "no": 10, "lesson": 9, "jp": "挟まります", "hira": "はさまります", "id_text": "Terjepit", "note": "", "example": "きかい はさ\n機械にごみが挟まりました。\nSampah terjepit di mesin.", "romaji": "hasamarimasu"}, {"id": "L9_11", "no": 11, "lesson": 9, "jp": "足元", "hira": "あしもと", "id_text": "Langkah kaki", "note": "", "example": "", "romaji": "ashimoto"}, {"id": "L9_12", "no": 12, "lesson": 9, "jp": "不安定（な）", "hira": "ふあんてい（な）", "id_text": "Tidak stabil (Tidak stabil)", "note": "", "example": "ふあんてい しせい さぎょう\n不安定な姿勢での作業はやめましょう。\nJangan bekerja dalam posisi tubuh yang tidak stabil.", "romaji": "fuantei(na)"}, {"id": "L9_13", "no": 13, "lesson": 9, "jp": "後片付け", "hira": "あとかたづけ", "id_text": "Merapikan", "note": "", "example": "", "romaji": "atokatazuke"}, {"id": "L9_14", "no": 14, "lesson": 9, "jp": "救急箱", "hira": "きゅうきゅうばこ", "id_text": "Kotak P3K", "note": "", "example": "", "romaji": "kyuukyuubako"}, {"id": "L9_15", "no": 15, "lesson": 9, "jp": "絆創膏", "hira": "ばんそうこう", "id_text": "Plaster luka", "note": "", "example": "", "romaji": "bansoukou"}, {"id": "L9_16", "no": 16, "lesson": 9, "jp": "体調", "hira": "たいちょう", "id_text": "Kondisi fisik", "note": "", "example": "", "romaji": "taichou"}, {"id": "L9_17", "no": 17, "lesson": 9, "jp": "血", "hira": "ち", "id_text": "Darah", "note": "", "example": "", "romaji": "chi"}, {"id": "L9_18", "no": 18, "lesson": 9, "jp": "熱中症", "hira": "ねっちゅうしょう", "id_text": "Heat stroke", "note": "", "example": "", "romaji": "netchuushou"}, {"id": "L9_19", "no": 19, "lesson": 9, "jp": "吐き気", "hira": "はきけ", "id_text": "Mual", "note": "は き Digunakan dalam bentuk 「吐き気がします」 は き \"mual\" bukan「吐き気します」.", "example": "", "romaji": "hakike"}, {"id": "L9_20", "no": 20, "lesson": 9, "jp": "嘔吐（します）", "hira": "おうと（します）", "id_text": "Muntah (Muntah)", "note": "", "example": "", "romaji": "outo(shimasu)"}, {"id": "L9_21", "no": 21, "lesson": 9, "jp": "足がつります", "hira": "あしがつります", "id_text": "Kaki kram", "note": "Kondisi dimana tidak dapat menggerakkan otot-otot karena kram. Disebut juga dengan かえ kata lain seperti 「こむら返り」\"kram\" dan かえ 「コブラ返り」\"kram\".", "example": "", "romaji": "ashigatsurimasu"}, {"id": "L9_22", "no": 22, "lesson": 9, "jp": "気分が悪いです", "hira": "きぶんがわるいです", "id_text": "Tidak enak badan", "note": "", "example": "", "romaji": "kibungawaruidesu"}]}, {"id": 10, "title": "Pelajaran 10: Pakaian, Tugas, Pelatihan Teknis", "shortTitle": "Pakaian, Tugas, Pelatihan Teknis", "words": [{"id": "L10_1", "no": 1, "lesson": 10, "jp": "作業着", "hira": "さぎょうぎ", "id_text": "Seragam kerja", "note": "", "example": "", "romaji": "sagyougi"}, {"id": "L10_2", "no": 2, "lesson": 10, "jp": "作業服", "hira": "さぎょうふく", "id_text": "Seragam kerja", "note": "", "example": "", "romaji": "sagyoufuku"}, {"id": "L10_3", "no": 3, "lesson": 10, "jp": "作業靴", "hira": "さぎょうぐつ", "id_text": "Sepatu kerja", "note": "", "example": "", "romaji": "sagyougutsu"}, {"id": "L10_4", "no": 4, "lesson": 10, "jp": "手袋", "hira": "てぶくろ", "id_text": "Sarung tangan", "note": "", "example": "てぶくろ\n手袋をします。\nMemakai sarung tangan.", "romaji": "tebukuro"}, {"id": "L10_5", "no": 5, "lesson": 10, "jp": "帽子", "hira": "ぼうし", "id_text": "Topi", "note": "", "example": "", "romaji": "boushi"}, {"id": "L10_6", "no": 6, "lesson": 10, "jp": "保護帽", "hira": "ほごぼう", "id_text": "Helm pelindung", "note": "", "example": "ほご ぼう\n保護帽をかぶります。\nMemakai helm pelindung.", "romaji": "hogobou"}, {"id": "L10_7", "no": 7, "lesson": 10, "jp": "ヘルメット", "hira": "へるめっと", "id_text": "Helm", "note": "", "example": "ヘルメットをかぶります。\nMemakai helm.", "romaji": "herumetto"}, {"id": "L10_8", "no": 8, "lesson": 10, "jp": "保護具", "hira": "ほごぐ", "id_text": "Perlengkapan pelindung", "note": "", "example": "", "romaji": "hogogu"}, {"id": "L10_9", "no": 9, "lesson": 10, "jp": "あごひも", "hira": "あごひも", "id_text": "Tali dagu", "note": "", "example": "あごひもをしめます。\nMengunci tali dagu.", "romaji": "agohimo"}, {"id": "L10_10", "no": 10, "lesson": 10, "jp": "ボタン", "hira": "ぼたん", "id_text": "Tombol/Kancing", "note": "Ada ボタン untuk baju (kancing), dan ada ボ タン untuk mesin (tombol)", "example": "ボタンをとめます。\nMengancingkan kancing baju.", "romaji": "botan"}, {"id": "L10_11", "no": 11, "lesson": 10, "jp": "ポケット", "hira": "ぽけっと", "id_text": "Saku", "note": "", "example": "て い\nポケットに手を入れてはいけません。\nTidak boleh memasukkan tangan kedalam saku.", "romaji": "poketto"}, {"id": "L10_12", "no": 12, "lesson": 10, "jp": "保護メガネ", "hira": "ほごめがね", "id_text": "Kacamata pelindung", "note": "", "example": "", "romaji": "hogomegane"}, {"id": "L10_13", "no": 13, "lesson": 10, "jp": "マスク", "hira": "ますく", "id_text": "Masker", "note": "", "example": "マスクをします。\nMemakai masker.", "romaji": "masuku"}, {"id": "L10_14", "no": 14, "lesson": 10, "jp": "業務", "hira": "ぎょうむ", "id_text": "Pekerjaan/Tugas", "note": "", "example": "", "romaji": "gyoumu"}, {"id": "L10_15", "no": 15, "lesson": 10, "jp": "時間厳守", "hira": "じかんげんしゅ", "id_text": "Tepat waktu", "note": "", "example": "", "romaji": "jikangenshu"}, {"id": "L10_16", "no": 16, "lesson": 10, "jp": "予定", "hira": "よてい", "id_text": "Rencana", "note": "", "example": "", "romaji": "yotei"}, {"id": "L10_17", "no": 17, "lesson": 10, "jp": "日付", "hira": "ひづけ", "id_text": "Tanggal", "note": "", "example": "", "romaji": "hizuke"}, {"id": "L10_18", "no": 18, "lesson": 10, "jp": "準備（します）", "hira": "じゅんび（します）", "id_text": "Persiapan (Menyiapkan)", "note": "", "example": "", "romaji": "junbi(shimasu)"}, {"id": "L10_19", "no": 19, "lesson": 10, "jp": "会議", "hira": "かいぎ", "id_text": "Rapat", "note": "", "example": "", "romaji": "kaigi"}, {"id": "L10_20", "no": 20, "lesson": 10, "jp": "朝礼", "hira": "ちょうれい", "id_text": "Rapat pagi", "note": "Rapat singkat yang dilakukan bersama-sama saat pagi hari sebelum memulai pekerjaan. Terdiri dari salam, pidato, atau laporan.", "example": "", "romaji": "chourei"}, {"id": "L10_21", "no": 21, "lesson": 10, "jp": "報告書", "hira": "ほうこくしょ", "id_text": "Laporan", "note": "", "example": "", "romaji": "houkokusho"}, {"id": "L10_22", "no": 22, "lesson": 10, "jp": "マニュアル", "hira": "まにゅある", "id_text": "Buku petunjuk/Manual", "note": "", "example": "", "romaji": "manyuaru"}, {"id": "L10_23", "no": 23, "lesson": 10, "jp": "作業手順書", "hira": "さぎょうてじゅんしょ", "id_text": "Lembar prosedur kerja", "note": "", "example": "", "romaji": "sagyoutejunsho"}, {"id": "L10_24", "no": 24, "lesson": 10, "jp": "調子", "hira": "ちょうし", "id_text": "Kondisi fisik", "note": "", "example": "", "romaji": "choushi"}]}, {"id": 11, "title": "Pelajaran 11: Manufaktur 1", "shortTitle": "Manufaktur 1", "words": [{"id": "L11_1", "no": 1, "lesson": 11, "jp": "技術", "hira": "ぎじゅつ", "id_text": "Teknologi", "note": "", "example": "", "romaji": "gijutsu"}, {"id": "L11_2", "no": 2, "lesson": 11, "jp": "製品", "hira": "せいひん", "id_text": "Produk", "note": "", "example": "", "romaji": "seihin"}, {"id": "L11_3", "no": 3, "lesson": 11, "jp": "形", "hira": "かたち", "id_text": "Bentuk", "note": "", "example": "", "romaji": "katachi"}, {"id": "L11_4", "no": 4, "lesson": 11, "jp": "仕様書", "hira": "しようしょ", "id_text": "Lembar spesifikasi", "note": "", "example": "", "romaji": "shiyousho"}, {"id": "L11_5", "no": 5, "lesson": 11, "jp": "生産（します）", "hira": "せいさん（します）", "id_text": "Produksi (Memproduksi)", "note": "", "example": "", "romaji": "seisan(shimasu)"}, {"id": "L11_6", "no": 6, "lesson": 11, "jp": "納期", "hira": "のうき", "id_text": "Tanggal pengiriman", "note": "", "example": "", "romaji": "nouki"}, {"id": "L11_7", "no": 7, "lesson": 11, "jp": "出荷（します）", "hira": "しゅっか（します）", "id_text": "Kirim barang (Mengirim barang)", "note": "", "example": "", "romaji": "shukka(shimasu)"}, {"id": "L11_8", "no": 8, "lesson": 11, "jp": "在庫", "hira": "ざいこ", "id_text": "Stok", "note": "", "example": "", "romaji": "zaiko"}, {"id": "L11_9", "no": 9, "lesson": 11, "jp": "メンテナンス", "hira": "めんてなんす", "id_text": "Perawatan", "note": "", "example": "", "romaji": "mentenansu"}, {"id": "L11_10", "no": 10, "lesson": 11, "jp": "材料", "hira": "ざいりょう", "id_text": "Bahan-bahan/Material", "note": "", "example": "", "romaji": "zairyou"}, {"id": "L11_11", "no": 11, "lesson": 11, "jp": "部品", "hira": "ぶひん", "id_text": "Komponen/Parts", "note": "", "example": "", "romaji": "buhin"}, {"id": "L11_12", "no": 12, "lesson": 11, "jp": "工程", "hira": "こうてい", "id_text": "Proses", "note": "", "example": "", "romaji": "koutei"}, {"id": "L11_13", "no": 13, "lesson": 11, "jp": "作業指示", "hira": "さぎょうしじ", "id_text": "Instruksi kerja", "note": "", "example": "", "romaji": "sagyoushiji"}, {"id": "L11_14", "no": 14, "lesson": 11, "jp": "作業手順", "hira": "さぎょうてじゅん", "id_text": "Prosedur kerja", "note": "", "example": "", "romaji": "sagyoutejun"}, {"id": "L11_15", "no": 15, "lesson": 11, "jp": "壊れます", "hira": "こわれます", "id_text": "Rusak", "note": "", "example": "", "romaji": "kowaremasu"}, {"id": "L11_16", "no": 16, "lesson": 11, "jp": "覆い", "hira": "おおい", "id_text": "Penutup", "note": "", "example": "", "romaji": "ooi"}, {"id": "L11_17", "no": 17, "lesson": 11, "jp": "カバー", "hira": "かばー", "id_text": "Penutup", "note": "", "example": "", "romaji": "kabaa"}, {"id": "L11_18", "no": 18, "lesson": 11, "jp": "記号", "hira": "きごう", "id_text": "Simbol", "note": "Simbol untuk mengidentifikasi komponen dan bahan. Dengan simbol, bentuk dan metode pengolahannya bisa diketahui.", "example": "", "romaji": "kigou"}, {"id": "L11_19", "no": 19, "lesson": 11, "jp": "金属", "hira": "きんぞく", "id_text": "Logam", "note": "", "example": "", "romaji": "kinzoku"}, {"id": "L11_20", "no": 20, "lesson": 11, "jp": "種類", "hira": "しゅるい", "id_text": "Jenis", "note": "", "example": "", "romaji": "shurui"}, {"id": "L11_21", "no": 21, "lesson": 11, "jp": "取り扱い方法", "hira": "とりあつかいほうほう", "id_text": "Cara penanganan", "note": "", "example": "", "romaji": "toriatsukaihouhou"}, {"id": "L11_22", "no": 22, "lesson": 11, "jp": "職場", "hira": "しょくば", "id_text": "Tempat kerja", "note": "", "example": "", "romaji": "shokuba"}, {"id": "L11_23", "no": 23, "lesson": 11, "jp": "設備点検", "hira": "せつびてんけん", "id_text": "Pemeriksaan mesin", "note": "", "example": "", "romaji": "setsubitenken"}]}, {"id": 12, "title": "Pelajaran 12: Manufaktur 2", "shortTitle": "Manufaktur 2", "words": [{"id": "L12_1", "no": 1, "lesson": 12, "jp": "片手", "hira": "かたて", "id_text": "Satu tangan", "note": "", "example": "", "romaji": "katate"}, {"id": "L12_2", "no": 2, "lesson": 12, "jp": "右手", "hira": "みぎて", "id_text": "Tangan kanan", "note": "", "example": "", "romaji": "migite"}, {"id": "L12_3", "no": 3, "lesson": 12, "jp": "左手", "hira": "ひだりて", "id_text": "Tangan kiri", "note": "", "example": "", "romaji": "hidarite"}, {"id": "L12_4", "no": 4, "lesson": 12, "jp": "両手", "hira": "りょうて", "id_text": "Kedua tangan", "note": "", "example": "", "romaji": "ryoute"}, {"id": "L12_5", "no": 5, "lesson": 12, "jp": "手首", "hira": "てくび", "id_text": "Pergelangan tangan", "note": "", "example": "", "romaji": "tekubi"}, {"id": "L12_6", "no": 6, "lesson": 12, "jp": "手元", "hira": "てもと", "id_text": "Di tangan", "note": "", "example": "", "romaji": "temoto"}, {"id": "L12_7", "no": 7, "lesson": 12, "jp": "腰", "hira": "こし", "id_text": "Pinggang", "note": "", "example": "", "romaji": "koshi"}, {"id": "L12_8", "no": 8, "lesson": 12, "jp": "高温部", "hira": "こうおんぶ", "id_text": "Bagian bersuhu tinggi", "note": "", "example": "", "romaji": "kouonbu"}, {"id": "L12_9", "no": 9, "lesson": 12, "jp": "しばらく", "hira": "しばらく", "id_text": "Sementara", "note": "", "example": "", "romaji": "shibaraku"}, {"id": "L12_10", "no": 10, "lesson": 12, "jp": "順番", "hira": "じゅんばん", "id_text": "Urutan", "note": "", "example": "", "romaji": "junban"}, {"id": "L12_11", "no": 11, "lesson": 12, "jp": "小", "hira": "しょう", "id_text": "Kecil", "note": "Ukurannya kecil.", "example": "", "romaji": "shou"}, {"id": "L12_12", "no": 12, "lesson": 12, "jp": "大", "hira": "だい", "id_text": "Besar", "note": "Ukurannya besar.", "example": "", "romaji": "dai"}, {"id": "L12_13", "no": 13, "lesson": 12, "jp": "おしまい", "hira": "おしまい", "id_text": "Selesai", "note": "", "example": "", "romaji": "oshimai"}, {"id": "L12_14", "no": 14, "lesson": 12, "jp": "スピード", "hira": "すぴーど", "id_text": "Kecepatan", "note": "", "example": "", "romaji": "supiido"}, {"id": "L12_15", "no": 15, "lesson": 12, "jp": "たまに", "hira": "たまに", "id_text": "Jarang-jarang", "note": "", "example": "", "romaji": "tamani"}, {"id": "L12_16", "no": 16, "lesson": 12, "jp": "ちゃんと", "hira": "ちゃんと", "id_text": "Dengan benar", "note": "", "example": "", "romaji": "chanto"}, {"id": "L12_17", "no": 17, "lesson": 12, "jp": "必要（な）", "hira": "ひつよう（な）", "id_text": "Perlu (Perlu)", "note": "", "example": "", "romaji": "hitsuyou(na)"}, {"id": "L12_18", "no": 18, "lesson": 12, "jp": "他", "hira": "ほか", "id_text": "Yang lain", "note": "", "example": "", "romaji": "hoka"}, {"id": "L12_19", "no": 19, "lesson": 12, "jp": "包装", "hira": "ほうそう", "id_text": "Pembungkus", "note": "", "example": "", "romaji": "housou"}, {"id": "L12_20", "no": 20, "lesson": 12, "jp": "同時に", "hira": "どうじに", "id_text": "Bersamaan", "note": "", "example": "", "romaji": "doujini"}]}, {"id": 13, "title": "Pelajaran 13: Pekerjaan Manufaktur 1", "shortTitle": "Pekerjaan Manufaktur 1", "words": [{"id": "L13_1", "no": 1, "lesson": 13, "jp": "検査（します）", "hira": "けんさ（します）", "id_text": "Pemeriksaan (Periksa)", "note": "", "example": "", "romaji": "kensa(shimasu)"}, {"id": "L13_2", "no": 2, "lesson": 13, "jp": "加工（します）", "hira": "かこう（します）", "id_text": "Pemrosesan (Memproses)", "note": "", "example": "", "romaji": "kakou(shimasu)"}, {"id": "L13_3", "no": 3, "lesson": 13, "jp": "接触（します）", "hira": "せっしょく（します）", "id_text": "Sentuhan (Menyentuh)", "note": "", "example": "", "romaji": "sesshoku(shimasu)"}, {"id": "L13_4", "no": 4, "lesson": 13, "jp": "作動（します）", "hira": "さどう（します）", "id_text": "Kerja (Bekerja)", "note": "", "example": "", "romaji": "sadou(shimasu)"}, {"id": "L13_5", "no": 5, "lesson": 13, "jp": "設定（します）", "hira": "せってい（します）", "id_text": "Pengaturan (Mengatur)", "note": "", "example": "", "romaji": "settei(shimasu)"}, {"id": "L13_6", "no": 6, "lesson": 13, "jp": "調節（します）", "hira": "ちょうせつ（します）", "id_text": "Penyesuaian (Menyesuaikan)", "note": "", "example": "", "romaji": "chousetsu(shimasu)"}, {"id": "L13_7", "no": 7, "lesson": 13, "jp": "無効にします", "hira": "むこうにします", "id_text": "Menonaktifkan", "note": "", "example": "", "romaji": "mukounishimasu"}, {"id": "L13_8", "no": 8, "lesson": 13, "jp": "整備（します）", "hira": "せいび（します）", "id_text": "Perawatan (Merawat)", "note": "", "example": "", "romaji": "seibi(shimasu)"}, {"id": "L13_9", "no": 9, "lesson": 13, "jp": "点検（します）", "hira": "てんけん（します）", "id_text": "Pemeriksaan (Memeriksa)", "note": "", "example": "", "romaji": "tenken(shimasu)"}, {"id": "L13_10", "no": 10, "lesson": 13, "jp": "保全（します）", "hira": "ほぜん（します）", "id_text": "Pemeliharaan/Maintenance (Memelihara)", "note": "", "example": "", "romaji": "hozen(shimasu)"}, {"id": "L13_11", "no": 11, "lesson": 13, "jp": "動かします", "hira": "うごかします", "id_text": "Menggerakkan", "note": "うご Mempunyai arti mengoperasikan mesin. 「動 かします」\"memindahkan\" juga digunakan untuk memindahkan objek ke tempat lain.", "example": "", "romaji": "ugokashimasu"}, {"id": "L13_12", "no": 12, "lesson": 13, "jp": "運転（します）", "hira": "うんてん（します）", "id_text": "Pengemudian (Mengemudi)", "note": "うんてん Untuk mengoperasikan mesin. 「運転（しま す）」\"mengemudikan\" juga digunakan saat mengendarai mobil.", "example": "", "romaji": "unten(shimasu)"}, {"id": "L13_13", "no": 13, "lesson": 13, "jp": "はかります", "hira": "はかります", "id_text": "Mengukur", "note": "Digunakan saat Mengukur panjang, berat, dll.", "example": "おんど はか\n温度を計りました。\nMengukur suhu.", "romaji": "hakarimasu"}, {"id": "L13_14", "no": 14, "lesson": 13, "jp": "操作（します）", "hira": "そうさ（します）", "id_text": "Pengoperasian (Mengoperasikan)", "note": "", "example": "", "romaji": "sousa(shimasu)"}, {"id": "L13_15", "no": 15, "lesson": 13, "jp": "停止（します）", "hira": "ていし（します）", "id_text": "Berhenti (Menghentikan)", "note": "", "example": "", "romaji": "teishi(shimasu)"}, {"id": "L13_16", "no": 16, "lesson": 13, "jp": "切断（します）", "hira": "せつだん（します）", "id_text": "Pemotongan (Memotong)", "note": "", "example": "", "romaji": "setsudan(shimasu)"}, {"id": "L13_17", "no": 17, "lesson": 13, "jp": "切ります", "hira": "きります", "id_text": "Memotong", "note": "", "example": "", "romaji": "kirimasu"}, {"id": "L13_18", "no": 18, "lesson": 13, "jp": "回転（します）", "hira": "かいてん（します）", "id_text": "Memutar", "note": "", "example": "", "romaji": "kaiten(shimasu)"}, {"id": "L13_19", "no": 19, "lesson": 13, "jp": "回します", "hira": "まわします", "id_text": "Memutar", "note": "", "example": "みぎ まわ ちょうせつ\nハンドルを右に回して、調節します。\nMemutar pegangan ke kanan untuk menyesuaikan.", "romaji": "mawashimasu"}, {"id": "L13_20", "no": 20, "lesson": 13, "jp": "押します", "hira": "おします", "id_text": "Menekan", "note": "", "example": "", "romaji": "oshimasu"}, {"id": "L13_21", "no": 21, "lesson": 13, "jp": "集めます", "hira": "あつめます", "id_text": "Mengumpulkan", "note": "", "example": "", "romaji": "atsumemasu"}]}, {"id": 14, "title": "Pelajaran 14: Pekerjaan Manufaktur 2", "shortTitle": "Pekerjaan Manufaktur 2", "words": [{"id": "L14_1", "no": 1, "lesson": 14, "jp": "折れます", "hira": "おれます", "id_text": "Mematahkan", "note": "", "example": "", "romaji": "oremasu"}, {"id": "L14_2", "no": 2, "lesson": 14, "jp": "スイッチを切ります", "hira": "すいっちをきります", "id_text": "Mematikan saklar", "note": "", "example": "", "romaji": "suitchiwokirimasu"}, {"id": "L14_3", "no": 3, "lesson": 14, "jp": "近づきます", "hira": "ちかづきます", "id_text": "Mendekat", "note": "", "example": "", "romaji": "chikazukimasu"}, {"id": "L14_4", "no": 4, "lesson": 14, "jp": "作り直します", "hira": "つくりなおします", "id_text": "Membuat ulang", "note": "", "example": "", "romaji": "tsukurinaoshimasu"}, {"id": "L14_5", "no": 5, "lesson": 14, "jp": "電源を入れます", "hira": "でんげんをいれます", "id_text": "Menyalakan listrik", "note": "", "example": "", "romaji": "dengenwoiremasu"}, {"id": "L14_6", "no": 6, "lesson": 14, "jp": "電源を落とします", "hira": "でんげんをおとします", "id_text": "Mematikan listrik", "note": "", "example": "", "romaji": "dengenwootoshimasu"}, {"id": "L14_7", "no": 7, "lesson": 14, "jp": "離れます", "hira": "はなれます", "id_text": "Menjauh", "note": "", "example": "", "romaji": "hanaremasu"}, {"id": "L14_8", "no": 8, "lesson": 14, "jp": "固定（します）", "hira": "こてい（します）", "id_text": "Pengencangan (Mengencangkan)", "note": "", "example": "おお ぶひん りよう こてい\n大きい部品はクランプを利用して固定しま\nす。\nKomponen besar dikunci menggunakan clamp.", "romaji": "kotei(shimasu)"}, {"id": "L14_9", "no": 9, "lesson": 14, "jp": "挟みます", "hira": "はさみます", "id_text": "Menjepit", "note": "", "example": "プライヤでパイプをしっかりはさみます。\nMenjepit erat pipa dengan plier.", "romaji": "hasamimasu"}, {"id": "L14_10", "no": 10, "lesson": 14, "jp": "ゆるめます", "hira": "ゆるめます", "id_text": "Mengendurkan", "note": "", "example": "スパナでボルトをゆるめます。\nMengendurkan baut dengan kunci pas.", "romaji": "yurumemasu"}, {"id": "L14_11", "no": 11, "lesson": 14, "jp": "伸ばします", "hira": "のばします", "id_text": "Memanjangkan", "note": "", "example": "きんぞくばん の\n金属板をローラで伸ばします。\nMemanjangkan plat logam dengan roller.", "romaji": "nobashimasu"}, {"id": "L14_12", "no": 12, "lesson": 14, "jp": "外します", "hira": "はずします", "id_text": "Melepas", "note": "", "example": "かこうひん かた はず\n加工品を型から外します。\nMelepaskan benda kerja dari cetakan.", "romaji": "hazushimasu"}, {"id": "L14_13", "no": 13, "lesson": 14, "jp": "曲げます", "hira": "まげます", "id_text": "Membengkokkan", "note": "", "example": "ばん ま\nアルミ板をコの字に曲げます。\nMembengkokkan batang aluminium menjadi huruf", "romaji": "magemasu"}, {"id": "L14_14", "no": 14, "lesson": 14, "jp": "出します", "hira": "だします", "id_text": "Mengeluarkan", "note": "", "example": "コこ.の装 そう 置 ち は高 こう 圧 あつ の空 くう 気 き を出 だ します。\nPeralatan ini Mengeluarkan udara bertekanan tinggi.", "romaji": "dashimasu"}, {"id": "L14_15", "no": 15, "lesson": 14, "jp": "乾かします", "hira": "かわかします", "id_text": "Mengeringkan", "note": "", "example": "", "romaji": "kawakashimasu"}, {"id": "L14_16", "no": 16, "lesson": 14, "jp": "乾燥（します）", "hira": "かんそう（します）", "id_text": "Kering (Mengeringkan)", "note": "", "example": "", "romaji": "kansou(shimasu)"}, {"id": "L14_17", "no": 17, "lesson": 14, "jp": "数えます", "hira": "かぞえます", "id_text": "Menghitung", "note": "", "example": "", "romaji": "kazoemasu"}, {"id": "L14_18", "no": 18, "lesson": 14, "jp": "運びます", "hira": "はこびます", "id_text": "Mengangkut", "note": "", "example": "", "romaji": "hakobimasu"}, {"id": "L14_19", "no": 19, "lesson": 14, "jp": "積みます", "hira": "つみます", "id_text": "Menumpukkan", "note": "", "example": "", "romaji": "tsumimasu"}, {"id": "L14_20", "no": 20, "lesson": 14, "jp": "載せます", "hira": "のせます", "id_text": "Menaruh (di atas sesuatu)", "note": "", "example": "しゅっか ぶひん うえ の\n出荷する部品をコンベアの上に載せます。\nLoad the parts to ship on the conveyor.", "romaji": "nosemasu"}, {"id": "L14_21", "no": 21, "lesson": 14, "jp": "下ろします", "hira": "おろします", "id_text": "Menurunkan", "note": "", "example": "つ に お\nフォークリフトで積み荷を下ろします。\nUnload with forklift.", "romaji": "oroshimasu"}]}, {"id": 15, "title": "Pelajaran 15: Pekerjaan Manufaktur 3", "shortTitle": "Pekerjaan Manufaktur 3", "words": [{"id": "L15_1", "no": 1, "lesson": 15, "jp": "触ります", "hira": "さわります", "id_text": "Menyentuh", "note": "", "example": "しあ かくにん て さわ\n仕上がりを確認するため手で触ります。\nUntuk mengecek hasil akhir harus menyentuh dengan\ntangan.", "romaji": "sawarimasu"}, {"id": "L15_2", "no": 2, "lesson": 15, "jp": "縛ります", "hira": "しばります", "id_text": "Mengikat kuat", "note": "", "example": "あんぜんぐつ しば\n安全靴のひもをしっかり縛ります。\nMengikat kuat tali sepatu keamanan dengan erat.", "romaji": "shibarimasu"}, {"id": "L15_3", "no": 3, "lesson": 15, "jp": "揃えます", "hira": "そろえます", "id_text": "Menyeragamkan", "note": "", "example": "こうぐ む そろ\n工具の向きを揃えます。\nMenyeragamkan posisi alat.", "romaji": "soroemasu"}, {"id": "L15_4", "no": 4, "lesson": 15, "jp": "掴みます", "hira": "つかみます", "id_text": "Menggenggam", "note": "", "example": "お つか\n落とさないようにハンドルをしっかり掴みま\nす。\nAgar tidak jatuh genggam hanldenya dengan erat.", "romaji": "tsukamimasu"}, {"id": "L15_5", "no": 5, "lesson": 15, "jp": "残します", "hira": "のこします", "id_text": "Menyisahkan", "note": "", "example": "かんせい のこ\n完成していないものは残します。\nMenyisahkan barang yang belum selesai.", "romaji": "nokoshimasu"}, {"id": "L15_6", "no": 6, "lesson": 15, "jp": "結びます", "hira": "むすびます", "id_text": "Mengikat", "note": "", "example": "るい まえ むす\nコード類はしまう前に結びます。\nKabel diikat sebelum disimpan.", "romaji": "musubimasu"}, {"id": "L15_7", "no": 7, "lesson": 15, "jp": "記録（します）", "hira": "きろく（します）", "id_text": "Catatan (Mencatat)", "note": "", "example": "", "romaji": "kiroku(shimasu)"}, {"id": "L15_8", "no": 8, "lesson": 15, "jp": "移ります", "hira": "うつります", "id_text": "Memindahkan", "note": "", "example": "さぎょう お つぎ さぎょう うつ\nこの作業は終わりましたから、次の作業に移\nります。\nKarena pekerjaan ini sudah selesai, saya akan pindah\nke pekerjaan berikutnya.", "romaji": "utsurimasu"}, {"id": "L15_9", "no": 9, "lesson": 15, "jp": "失敗（します）", "hira": "しっぱい（します）", "id_text": "Kegagalan (Gagal)", "note": "", "example": "", "romaji": "shippai(shimasu)"}, {"id": "L15_10", "no": 10, "lesson": 15, "jp": "しゃがみます", "hira": "しゃがみます", "id_text": "Jongkok", "note": "", "example": "", "romaji": "shagamimasu"}, {"id": "L15_11", "no": 11, "lesson": 15, "jp": "調整（します）", "hira": "ちょうせい（します）", "id_text": "Penyesuaian (Menyesuaikan)", "note": "", "example": "", "romaji": "chousei(shimasu)"}, {"id": "L15_12", "no": 12, "lesson": 15, "jp": "閉じます", "hira": "とじます", "id_text": "Menutup", "note": "", "example": "", "romaji": "tojimasu"}, {"id": "L15_13", "no": 13, "lesson": 15, "jp": "留めます", "hira": "とめます", "id_text": "Menjepit", "note": "", "example": "", "romaji": "tomemasu"}, {"id": "L15_14", "no": 14, "lesson": 15, "jp": "取り出します", "hira": "とりだします", "id_text": "Mengeluarkan", "note": "", "example": "れいとうこ と だ\n冷凍庫からサバを取り出してください。\nTolong keluarkan ikan makarel dari kulkas.", "romaji": "toridashimasu"}, {"id": "L15_15", "no": 15, "lesson": 15, "jp": "拭きます", "hira": "ふきます", "id_text": "Mengelap", "note": "", "example": "きかい ふ\n1)機械を拭きました。でも、きれいになりま\nせん。\nSaya sudah mengelap mesin. Tetapi tidak bisa menjadi\nbersih.\nせんざい れいぞうこ ふ\n2)洗剤をつけて、冷蔵庫をよく拭きます。\nMengelap kulkas dengan menggunakan sabun.", "romaji": "fukimasu"}, {"id": "L15_16", "no": 16, "lesson": 15, "jp": "回ります", "hira": "まわります", "id_text": "Berputar", "note": "", "example": "せんばん はや まわ\n旋盤はここが速く回ります。\nMesin bubut berputar cepat di sini.", "romaji": "mawarimasu"}, {"id": "L15_17", "no": 17, "lesson": 15, "jp": "戻します", "hira": "もどします", "id_text": "Mengembalikan", "note": "", "example": "", "romaji": "modoshimasu"}, {"id": "L15_18", "no": 18, "lesson": 15, "jp": "抜きます", "hira": "ぬきます", "id_text": "Mencabut", "note": "", "example": "ぶひんこうかん まえ ねんりょう ぬ\n部品交換の前にタンクから燃料を抜きます。\nMengeluarkan bahan bakar dari tangki sebelum\nmengganti komponen.", "romaji": "nukimasu"}, {"id": "L15_19", "no": 19, "lesson": 15, "jp": "加熱（します）", "hira": "かねつ（します）", "id_text": "Memanaskan", "note": "", "example": "", "romaji": "kanetsu(shimasu)"}, {"id": "L15_20", "no": 20, "lesson": 15, "jp": "仕上げます", "hira": "しあげます", "id_text": "Menyelesaikan", "note": "", "example": "さいご いろ ぬ し あ\n最後に色を塗って仕上げます。\nTerakhir, diberi warna dan selesai", "romaji": "shiagemasu"}, {"id": "L15_21", "no": 21, "lesson": 15, "jp": "冷却（します）", "hira": "れいきゃく（します）", "id_text": "Pendinginan (Mendinginkan)", "note": "", "example": "", "romaji": "reikyaku(shimasu)"}]}, {"id": 16, "title": "Pelajaran 16: Pengukuran, Posisi", "shortTitle": "Pengukuran, Posisi", "words": [{"id": "L16_1", "no": 1, "lesson": 16, "jp": "位置", "hira": "いち", "id_text": "Posisi", "note": "", "example": "", "romaji": "ichi"}, {"id": "L16_2", "no": 2, "lesson": 16, "jp": "寸法", "hira": "すんぽう", "id_text": "Ukuran", "note": "", "example": "", "romaji": "sunpou"}, {"id": "L16_3", "no": 3, "lesson": 16, "jp": "測定（します）", "hira": "そくてい（します）", "id_text": "Pengukuran (Mengukur)", "note": "", "example": "", "romaji": "sokutei(shimasu)"}, {"id": "L16_4", "no": 4, "lesson": 16, "jp": "計測（します）", "hira": "けいそく（します）", "id_text": "Pengukuran (Mengukur)", "note": "", "example": "", "romaji": "keisoku(shimasu)"}, {"id": "L16_5", "no": 5, "lesson": 16, "jp": "計測器", "hira": "けいそくき", "id_text": "Alat ukur", "note": "", "example": "", "romaji": "keisokuki"}, {"id": "L16_6", "no": 6, "lesson": 16, "jp": "温度", "hira": "おんど", "id_text": "Suhu", "note": "", "example": "", "romaji": "ondo"}, {"id": "L16_7", "no": 7, "lesson": 16, "jp": "高さ", "hira": "たかさ", "id_text": "Ketinggian", "note": "", "example": "", "romaji": "takasa"}, {"id": "L16_8", "no": 8, "lesson": 16, "jp": "長さ", "hira": "ながさ", "id_text": "Panjang", "note": "", "example": "", "romaji": "nagasa"}, {"id": "L16_9", "no": 9, "lesson": 16, "jp": "重さ", "hira": "おもさ", "id_text": "Berat", "note": "", "example": "", "romaji": "omosa"}, {"id": "L16_10", "no": 10, "lesson": 16, "jp": "厚さ", "hira": "あつさ", "id_text": "Ketebalan", "note": "", "example": "", "romaji": "atsusa"}, {"id": "L16_11", "no": 11, "lesson": 16, "jp": "硬さ", "hira": "かたさ", "id_text": "Kekerasan", "note": "", "example": "", "romaji": "katasa"}, {"id": "L16_12", "no": 12, "lesson": 16, "jp": "深さ", "hira": "ふかさ", "id_text": "Kedalaman", "note": "", "example": "", "romaji": "fukasa"}, {"id": "L16_13", "no": 13, "lesson": 16, "jp": "表面", "hira": "ひょうめん", "id_text": "Permukaan", "note": "", "example": "", "romaji": "hyoumen"}, {"id": "L16_14", "no": 14, "lesson": 16, "jp": "すきま", "hira": "すきま", "id_text": "Celah", "note": "", "example": "", "romaji": "sukima"}, {"id": "L16_15", "no": 15, "lesson": 16, "jp": "中心", "hira": "ちゅうしん", "id_text": "Pusat", "note": "", "example": "", "romaji": "chuushin"}, {"id": "L16_16", "no": 16, "lesson": 16, "jp": "値", "hira": "あたい", "id_text": "Nilai", "note": "", "example": "", "romaji": "atai"}, {"id": "L16_17", "no": 17, "lesson": 16, "jp": "安定（します）", "hira": "あんてい（します）", "id_text": "Stabil (Menstabilkan)", "note": "", "example": "", "romaji": "antei(shimasu)"}, {"id": "L16_18", "no": 18, "lesson": 16, "jp": "大きさ", "hira": "おおきさ", "id_text": "Besar/Ukuran", "note": "", "example": "", "romaji": "ookisa"}, {"id": "L16_19", "no": 19, "lesson": 16, "jp": "数", "hira": "かず", "id_text": "Jumlah", "note": "", "example": "", "romaji": "kazu"}, {"id": "L16_20", "no": 20, "lesson": 16, "jp": "誤差", "hira": "ごさ", "id_text": "Selisih kesalahan penghitungan", "note": "", "example": "", "romaji": "gosa"}, {"id": "L16_21", "no": 21, "lesson": 16, "jp": "中", "hira": "なか", "id_text": "Dalam", "note": "", "example": "", "romaji": "naka"}, {"id": "L16_22", "no": 22, "lesson": 16, "jp": "反対", "hira": "はんたい", "id_text": "Berlawanan", "note": "", "example": "", "romaji": "hantai"}, {"id": "L16_23", "no": 23, "lesson": 16, "jp": "周り", "hira": "まわり", "id_text": "Sekeliling", "note": "", "example": "", "romaji": "mawari"}]}, {"id": 17, "title": "Pelajaran 17: Manajemen Kualitas", "shortTitle": "Manajemen Kualitas", "words": [{"id": "L17_1", "no": 1, "lesson": 17, "jp": "不良品", "hira": "ふりょうひん", "id_text": "Produk cacat", "note": "", "example": "", "romaji": "furyouhin"}, {"id": "L17_2", "no": 2, "lesson": 17, "jp": "不具合", "hira": "ふぐあい", "id_text": "Kondisi buruk", "note": "", "example": "", "romaji": "fuguai"}, {"id": "L17_3", "no": 3, "lesson": 17, "jp": "ミス（します）", "hira": "みす（します）", "id_text": "Kesalahan (Membuat kesalahan)", "note": "", "example": "", "romaji": "misu(shimasu)"}, {"id": "L17_4", "no": 4, "lesson": 17, "jp": "苦情", "hira": "くじょう", "id_text": "Komplain", "note": "", "example": "", "romaji": "kujou"}, {"id": "L17_5", "no": 5, "lesson": 17, "jp": "修理（します）", "hira": "しゅうり（します）", "id_text": "Perbaikan (Memperbaiki)", "note": "", "example": "", "romaji": "shuuri(shimasu)"}, {"id": "L17_6", "no": 6, "lesson": 17, "jp": "異常音", "hira": "いじょうおん", "id_text": "Suara tidak normal", "note": "", "example": "", "romaji": "ijouon"}, {"id": "L17_7", "no": 7, "lesson": 17, "jp": "故障（します）", "hira": "こしょう（します）", "id_text": "Kerusakan (Rusak)", "note": "", "example": "", "romaji": "koshou(shimasu)"}, {"id": "L17_8", "no": 8, "lesson": 17, "jp": "品質", "hira": "ひんしつ", "id_text": "Kualitas", "note": "", "example": "", "romaji": "hinshitsu"}, {"id": "L17_9", "no": 9, "lesson": 17, "jp": "品質管理", "hira": "ひんしつかんり", "id_text": "Kontrol Kualitas (Quality Control)", "note": "", "example": "", "romaji": "hinshitsukanri"}, {"id": "L17_10", "no": 10, "lesson": 17, "jp": "おかしい", "hira": "おかしい", "id_text": "Aneh (Aneh)", "note": "Juga berarti tidak normal / tidak seperti biasa.", "example": "", "romaji": "okashii"}, {"id": "L17_11", "no": 11, "lesson": 17, "jp": "温度管理", "hira": "おんどかんり", "id_text": "Kontrol suhu", "note": "", "example": "", "romaji": "ondokanri"}, {"id": "L17_12", "no": 12, "lesson": 17, "jp": "チェック（します）", "hira": "ちぇっく（します）", "id_text": "Cek (Mengecek)", "note": "", "example": "", "romaji": "chekku(shimasu)"}, {"id": "L17_13", "no": 13, "lesson": 17, "jp": "なくなります", "hira": "なくなります", "id_text": "Habis", "note": "", "example": "", "romaji": "nakunarimasu"}, {"id": "L17_14", "no": 14, "lesson": 17, "jp": "残り", "hira": "のこり", "id_text": "Sisa", "note": "", "example": "", "romaji": "nokori"}, {"id": "L17_15", "no": 15, "lesson": 17, "jp": "破損（します）", "hira": "はそん（します）", "id_text": "Hancur (Menghancurkan)", "note": "", "example": "", "romaji": "hason(shimasu)"}, {"id": "L17_16", "no": 16, "lesson": 17, "jp": "不足（します）", "hira": "ふそく（します）", "id_text": "Kurang (Kekurangan)", "note": "", "example": "", "romaji": "fusoku(shimasu)"}, {"id": "L17_17", "no": 17, "lesson": 17, "jp": "変（な）", "hira": "へん（な）", "id_text": "Aneh (Aneh)", "note": "", "example": "", "romaji": "hen(na)"}, {"id": "L17_18", "no": 18, "lesson": 17, "jp": "補充（します）", "hira": "ほじゅう（します）", "id_text": "Pengisian ulang (Mengisi ulang)", "note": "", "example": "", "romaji": "hojuu(shimasu)"}, {"id": "L17_19", "no": 19, "lesson": 17, "jp": "目視", "hira": "もくし", "id_text": "Inspeksi visual", "note": "", "example": "", "romaji": "mokushi"}, {"id": "L17_20", "no": 20, "lesson": 17, "jp": "もったいない", "hira": "もったいない", "id_text": "Mubazir", "note": "", "example": "ひつよう こうぐ み じかん\n必要な工具がすぐ見つけられないと、時間が\nもったいないです。\nJika tidak menemukan alat yang butuhkan dengan seg\nwaktunya mubazir (membuang-buang waktu).", "romaji": "mottainai"}, {"id": "L17_21", "no": 21, "lesson": 17, "jp": "割れます", "hira": "われます", "id_text": "Retak", "note": "", "example": "", "romaji": "waremasu"}, {"id": "L17_22", "no": 22, "lesson": 17, "jp": "サンプル", "hira": "さんぷる", "id_text": "Sample / Contoh", "note": "", "example": "", "romaji": "sanpuru"}, {"id": "L17_23", "no": 23, "lesson": 17, "jp": "変色", "hira": "へんしょく", "id_text": "Perubahan warna", "note": "", "example": "", "romaji": "henshoku"}]}, {"id": 18, "title": "Pelajaran 18: Tempat Manufaktur", "shortTitle": "Tempat Manufaktur", "words": [{"id": "L18_1", "no": 1, "lesson": 18, "jp": "金型", "hira": "かながた", "id_text": "Cetakan (dies)", "note": "", "example": "", "romaji": "kanagata"}, {"id": "L18_2", "no": 2, "lesson": 18, "jp": "配線", "hira": "はいせん", "id_text": "Kabel", "note": "", "example": "", "romaji": "haisen"}, {"id": "L18_3", "no": 3, "lesson": 18, "jp": "軍手", "hira": "ぐんて", "id_text": "Sarung tangan", "note": "", "example": "", "romaji": "gunte"}, {"id": "L18_4", "no": 4, "lesson": 18, "jp": "防護めがね", "hira": "ぼうごめがね", "id_text": "Kacamata pelindung", "note": "", "example": "", "romaji": "bougomegane"}, {"id": "L18_5", "no": 5, "lesson": 18, "jp": "安全靴", "hira": "あんぜんぐつ", "id_text": "Sepatu pelindung", "note": "", "example": "", "romaji": "anzengutsu"}, {"id": "L18_6", "no": 6, "lesson": 18, "jp": "図面", "hira": "ずめん", "id_text": "Gambar/drawing", "note": "", "example": "", "romaji": "zumen"}, {"id": "L18_7", "no": 7, "lesson": 18, "jp": "見本", "hira": "みほん", "id_text": "Contoh", "note": "", "example": "", "romaji": "mihon"}, {"id": "L18_8", "no": 8, "lesson": 18, "jp": "作業フロー", "hira": "さぎょうふろー", "id_text": "Alur kerja", "note": "", "example": "", "romaji": "sagyoufuroo"}, {"id": "L18_9", "no": 9, "lesson": 18, "jp": "作業票", "hira": "さぎょうひょう", "id_text": "Slip kerja", "note": "", "example": "", "romaji": "sagyouhyou"}, {"id": "L18_10", "no": 10, "lesson": 18, "jp": "標準作業票", "hira": "ひょうじゅんさぎょうひょう", "id_text": "Slip kerja standar", "note": "", "example": "", "romaji": "hyoujunsagyouhyou"}, {"id": "L18_11", "no": 11, "lesson": 18, "jp": "指示書", "hira": "しじしょ", "id_text": "Lampiran instruksi", "note": "", "example": "", "romaji": "shijisho"}, {"id": "L18_12", "no": 12, "lesson": 18, "jp": "ラベル", "hira": "らべる", "id_text": "Label", "note": "", "example": "", "romaji": "raberu"}, {"id": "L18_13", "no": 13, "lesson": 18, "jp": "段取り", "hira": "だんどり", "id_text": "Perencanaan", "note": "Langkah-langkah dan persiapan untuk menyelesaikan pekerjaan.", "example": "", "romaji": "dandori"}, {"id": "L18_14", "no": 14, "lesson": 18, "jp": "手順", "hira": "てじゅん", "id_text": "Langkah-langkah", "note": "", "example": "", "romaji": "tejun"}, {"id": "L18_15", "no": 15, "lesson": 18, "jp": "コンベヤ", "hira": "こんべや", "id_text": "Konveyor", "note": "", "example": "", "romaji": "konbeya"}, {"id": "L18_16", "no": 16, "lesson": 18, "jp": "治具", "hira": "じぐ", "id_text": "Jig", "note": "Instrumen yang digunakan untuk mengetahui posisi komponen dan peralatan selama pemrosesan dan perakitan. Berasal dari kata dalam bahasa Inggris \"jig\" yang diubah menjadi Kanji.", "example": "", "romaji": "jigu"}, {"id": "L18_17", "no": 17, "lesson": 18, "jp": "穴", "hira": "あな", "id_text": "Lubang", "note": "", "example": "", "romaji": "ana"}, {"id": "L18_18", "no": 18, "lesson": 18, "jp": "溝", "hira": "みぞ", "id_text": "Celah lubang", "note": "", "example": "", "romaji": "mizo"}, {"id": "L18_19", "no": 19, "lesson": 18, "jp": "金属くず", "hira": "きんぞくくず", "id_text": "Serpihan logam", "note": "", "example": "", "romaji": "kinzokukuzu"}, {"id": "L18_20", "no": 20, "lesson": 18, "jp": "制御", "hira": "せいぎょ", "id_text": "Kontrol", "note": "", "example": "", "romaji": "seigyo"}, {"id": "L18_21", "no": 21, "lesson": 18, "jp": "試作品", "hira": "しさくひん", "id_text": "Prototipe", "note": "", "example": "", "romaji": "shisakuhin"}, {"id": "L18_22", "no": 22, "lesson": 18, "jp": "模型", "hira": "もけい", "id_text": "Model", "note": "", "example": "", "romaji": "mokei"}, {"id": "L18_23", "no": 23, "lesson": 18, "jp": "管理図", "hira": "かんりず", "id_text": "Diagram kontrol", "note": "", "example": "", "romaji": "kanrizu"}]}, {"id": 19, "title": "Pelajaran 19: Pengoperasian Pekerjaan", "shortTitle": "Pengoperasian Pekerjaan", "words": [{"id": "L19_1", "no": 1, "lesson": 19, "jp": "穴をあけます", "hira": "あなをあけます", "id_text": "Melubangi", "note": "", "example": "", "romaji": "anawoakemasu"}, {"id": "L19_2", "no": 2, "lesson": 19, "jp": "締めます", "hira": "しめます", "id_text": "Mengencangkan", "note": "Pengencangan sekrup dan baut.", "example": "し\nネジを締めます。\nMengencangkan sekrup.\nし\nボルトを締めます。\nMengencangkan baut.", "romaji": "shimemasu"}, {"id": "L19_3", "no": 3, "lesson": 19, "jp": "締め付けます", "hira": "しめつけます", "id_text": "Mengencangkan dengan kuat", "note": "", "example": "", "romaji": "shimetsukemasu"}, {"id": "L19_4", "no": 4, "lesson": 19, "jp": "分解（します）", "hira": "ぶんかい（します）", "id_text": "Pembongkaran (Membongkar)", "note": "", "example": "しゅうり きかい ぶんかい\n修理のために機械を分解します。\nDismantle the machine to fix it.", "romaji": "bunkai(shimasu)"}, {"id": "L19_5", "no": 5, "lesson": 19, "jp": "交換（します）", "hira": "こうかん（します）", "id_text": "Pertukaran (Menukar)", "note": "", "example": "あたら ぶひん こうかん\n1)新しい部品と交換します。\nMenukar dengan komponen baru.\nふる あたら こうかん\n2)古いペンチと新しいペンチを交換します。\nMenukar tang yang lama dengan tang yang\nbaru.", "romaji": "koukan(shimasu)"}, {"id": "L19_6", "no": 6, "lesson": 19, "jp": "取り付けます", "hira": "とりつけます", "id_text": "Memasang", "note": "", "example": "あんぜん と つ\n安全カバーを取り付けます。\nMemasang tutup pengaman.", "romaji": "toritsukemasu"}, {"id": "L19_7", "no": 7, "lesson": 19, "jp": "取ります", "hira": "とります", "id_text": "Mengambil", "note": "", "example": "よご と\nハンドルの汚れを取ります。\nRemove stains from the wheel.", "romaji": "torimasu"}, {"id": "L19_8", "no": 8, "lesson": 19, "jp": "はつります", "hira": "はつります", "id_text": "Mengikir", "note": "Mengikir produk kerja menggunakan pahat さぎょう dan palu. Pekerjaan ini disebut 「はつり作業」 \"Chipping work\".", "example": "", "romaji": "hatsurimasu"}, {"id": "L19_9", "no": 9, "lesson": 19, "jp": "取り外します", "hira": "とりはずします", "id_text": "Melepas", "note": "", "example": "かながた と はず\n金型を取り外します。\nMelepas cetakan /dies.", "romaji": "torihazushimasu"}, {"id": "L19_10", "no": 10, "lesson": 19, "jp": "出来上がります", "hira": "できあがります", "id_text": "Menyelesaikan", "note": "", "example": "", "romaji": "dekiagarimasu"}, {"id": "L19_11", "no": 11, "lesson": 19, "jp": "巻きます", "hira": "まきます", "id_text": "Menggulung", "note": "", "example": "ま\nコードがからまないように巻きます。\nMenggulung kabel agar tidak melilit.", "romaji": "makimasu"}, {"id": "L19_12", "no": 12, "lesson": 19, "jp": "通します", "hira": "とおします", "id_text": "Melewatkan / Memasukkan", "note": "", "example": "はいかん とお\n配管にケーブルを通します。\nMemasukkan kabel ke pipa.", "romaji": "tooshimasu"}, {"id": "L19_13", "no": 13, "lesson": 19, "jp": "下げます", "hira": "さげます", "id_text": "Menurunkan", "note": "", "example": "あいず さ\n合図があったらクレーンを下げます。\nLower the crane after a cue.", "romaji": "sagemasu"}, {"id": "L19_14", "no": 14, "lesson": 19, "jp": "ばらします", "hira": "ばらします", "id_text": "Membongkar", "note": "", "example": "く た せいひん\n組み立てた製品をばらします。\nMenurunkan crane bila ada aba-aba.", "romaji": "barashimasu"}, {"id": "L19_15", "no": 15, "lesson": 19, "jp": "取り替えます", "hira": "とりかえます", "id_text": "Mengganti", "note": "", "example": "", "romaji": "torikaemasu"}, {"id": "L19_16", "no": 16, "lesson": 19, "jp": "引っ掛けます", "hira": "ひっかけます", "id_text": "Mengaitkan", "note": "", "example": "ひ か\nクレーンのフックにワイヤーロープを引っ掛\nけます。\nMengaitkan tali kawat ke pengait crane.", "romaji": "hikkakemasu"}, {"id": "L19_17", "no": 17, "lesson": 19, "jp": "包みます", "hira": "つつみます", "id_text": "Membungkus", "note": "", "example": "", "romaji": "tsutsumimasu"}, {"id": "L19_18", "no": 18, "lesson": 19, "jp": "組み立てます", "hira": "くみたてます", "id_text": "Merakit", "note": "", "example": "", "romaji": "kumitatemasu"}, {"id": "L19_19", "no": 19, "lesson": 19, "jp": "ずらします", "hira": "ずらします", "id_text": "Memindahkan", "note": "", "example": "ざいりょう かさ すこ お\n材料を重ねないで、少しずつずらして置きま\nす。\nJangan tumpuk materialnya, pindahkan sedikit\nagar terpisah-pisah.", "romaji": "zurashimasu"}, {"id": "L19_20", "no": 20, "lesson": 19, "jp": "付けます", "hira": "つけます", "id_text": "Memasang", "note": "", "example": "こうぐ つ\n1)工具にタグを付けます。\nMemasang tanda ke peralatan.\nきかい あんぜん つ\n2)機械に安全カバーを付けます。\nMemasang tutup pengaman ke mesin.", "romaji": "tsukemasu"}, {"id": "L19_21", "no": 21, "lesson": 19, "jp": "油を差します", "hira": "あぶらをさします", "id_text": "Melumasi/Meminyaki", "note": "", "example": "", "romaji": "aburawosashimasu"}]}, {"id": 20, "title": "Pelajaran 20: Proses Manufaktur", "shortTitle": "Proses Manufaktur", "words": [{"id": "L20_1", "no": 1, "lesson": 20, "jp": "プレス（します）", "hira": "ぷれす（します）", "id_text": "Pres (Mengepres)", "note": "", "example": "", "romaji": "puresu(shimasu)"}, {"id": "L20_2", "no": 2, "lesson": 20, "jp": "プレス加工", "hira": "ぷれすかこう", "id_text": "Proses press", "note": "", "example": "", "romaji": "puresukakou"}, {"id": "L20_3", "no": 3, "lesson": 20, "jp": "組み立て", "hira": "くみたて", "id_text": "Merakit", "note": "", "example": "", "romaji": "kumitate"}, {"id": "L20_4", "no": 4, "lesson": 20, "jp": "穴あけ（します）", "hira": "あなあけ（します）", "id_text": "Pengeboran (Mengebor)", "note": "", "example": "", "romaji": "anaake(shimasu)"}, {"id": "L20_5", "no": 5, "lesson": 20, "jp": "削ります", "hira": "けずります", "id_text": "Mengikir", "note": "", "example": "", "romaji": "kezurimasu"}, {"id": "L20_6", "no": 6, "lesson": 20, "jp": "研削", "hira": "けんさく", "id_text": "Gerinda", "note": "Menggunakan alat untuk mengikir permukaan benda kerja sehingga menjadi halus.", "example": "", "romaji": "kensaku"}, {"id": "L20_7", "no": 7, "lesson": 20, "jp": "切削", "hira": "せっさく", "id_text": "Cutting", "note": "Menggunakan alat untuk menghilangkan bagian yang tidak perlu dan dibentuk sesuai bentuk dan ukuran yang ditentukan.", "example": "", "romaji": "sessaku"}, {"id": "L20_8", "no": 8, "lesson": 20, "jp": "研磨", "hira": "けんま", "id_text": "Poles", "note": "Menggunakan partikel dan bubuk keras untuk menghaluskan permukaan benda kerja.", "example": "", "romaji": "kenma"}, {"id": "L20_9", "no": 9, "lesson": 20, "jp": "磨きます", "hira": "みがきます", "id_text": "Memoles", "note": "", "example": "", "romaji": "migakimasu"}, {"id": "L20_10", "no": 10, "lesson": 20, "jp": "バリ取り", "hira": "ばりとり", "id_text": "Pembersihan duri / burr", "note": "Proses pembersihan 「バリ」\"burr\" yang berupa tonjolan dan bagian bergerigi yang terbentuk selama pemrosesan.", "example": "", "romaji": "baritori"}, {"id": "L20_11", "no": 11, "lesson": 20, "jp": "面取り", "hira": "めんとり", "id_text": "Pemotongan pinggiran", "note": "Pemotongan sudut-sudut produk yang diproses secara diagonal untuk menghilangkan ujung yang tajam.", "example": "", "romaji": "mentori"}, {"id": "L20_12", "no": 12, "lesson": 20, "jp": "めっき", "hira": "めっき", "id_text": "Penyepuhan", "note": "", "example": "", "romaji": "mekki"}, {"id": "L20_13", "no": 13, "lesson": 20, "jp": "はんだ", "hira": "はんだ", "id_text": "Solder", "note": "Biasanya merupakan logam hasil gabungan timbal dan timah. Ini digunakan dalam proses 「はんだ付け」 \"menyolder\" logam.", "example": "", "romaji": "handa"}, {"id": "L20_14", "no": 14, "lesson": 20, "jp": "原料", "hira": "げんりょう", "id_text": "Bahan baku", "note": "", "example": "", "romaji": "genryou"}, {"id": "L20_15", "no": 15, "lesson": 20, "jp": "梱包（します）", "hira": "こんぽう（します）", "id_text": "Pengemasan (Mengemas)", "note": "", "example": "", "romaji": "konpou(shimasu)"}, {"id": "L20_16", "no": 16, "lesson": 20, "jp": "成形（します）", "hira": "せいけい（します）", "id_text": "Pencetakan (Mencetak)", "note": "Proses pembentukan dengan cara menuangkan material ke dalam cetakan, membentuk atau memotong benda dengan kekuatan besar.", "example": "", "romaji": "seikei(shimasu)"}, {"id": "L20_17", "no": 17, "lesson": 20, "jp": "溶剤", "hira": "ようざい", "id_text": "Pelarut", "note": "", "example": "", "romaji": "youzai"}, {"id": "L20_18", "no": 18, "lesson": 20, "jp": "角度", "hira": "かくど", "id_text": "Sudut", "note": "", "example": "", "romaji": "kakudo"}, {"id": "L20_19", "no": 19, "lesson": 20, "jp": "けがき", "hira": "けがき", "id_text": "Penandaan", "note": "", "example": "ざいりょう お\n材料のけがきが終わりました。\nPenandaan material selesai.", "romaji": "kegaki"}, {"id": "L20_20", "no": 20, "lesson": 20, "jp": "内径", "hira": "ないけい", "id_text": "Diameter dalam", "note": "", "example": "", "romaji": "naikei"}, {"id": "L20_21", "no": 21, "lesson": 20, "jp": "外径", "hira": "がいけい", "id_text": "Diameter luar", "note": "", "example": "", "romaji": "gaikei"}, {"id": "L20_22", "no": 22, "lesson": 20, "jp": "測定ゲージ", "hira": "そくていげーじ", "id_text": "Alat ukur (gauge)", "note": "", "example": "", "romaji": "sokuteigeeji"}]}, {"id": 21, "title": "Pelajaran 21: Mesin Kerja", "shortTitle": "Mesin Kerja", "words": [{"id": "L21_1", "no": 1, "lesson": 21, "jp": "工作機械", "hira": "こうさくきかい", "id_text": "Mesin produksi", "note": "", "example": "", "romaji": "kousakukikai"}, {"id": "L21_2", "no": 2, "lesson": 21, "jp": "装置", "hira": "そうち", "id_text": "Peralatan", "note": "", "example": "", "romaji": "souchi"}, {"id": "L21_3", "no": 3, "lesson": 21, "jp": "旋盤", "hira": "せんばん", "id_text": "Bubut", "note": "Mesin yang digunakan untuk memasang benda kerja di atas meja, kemudian diputar dan dikikir dengan alat kerja.", "example": "", "romaji": "senban"}, {"id": "L21_4", "no": 4, "lesson": 21, "jp": "フライス盤", "hira": "ふらいすばん", "id_text": "Mesin pengilingan/milling", "note": "Mesin yang melakukan pemotongan dengan menggerakkan alat yang terpasang pada", "example": "", "romaji": "furaisuban"}, {"id": "L21_5", "no": 5, "lesson": 21, "jp": "ボール盤", "hira": "ぼーるばん", "id_text": "Mesin bor", "note": "pSeobrousa hy amnges bine rypauntga rm. engebor lubang dengan memutar bor atau sejenisnya dekat dengan benda kerja yang dipasang.", "example": "", "romaji": "booruban"}, {"id": "L21_6", "no": 6, "lesson": 21, "jp": "操作盤", "hira": "そうさばん", "id_text": "Control panel", "note": "", "example": "", "romaji": "sousaban"}, {"id": "L21_7", "no": 7, "lesson": 21, "jp": "コード", "hira": "こーど", "id_text": "Kabel", "note": "", "example": "", "romaji": "koodo"}, {"id": "L21_8", "no": 8, "lesson": 21, "jp": "プラグ", "hira": "ぷらぐ", "id_text": "Steker", "note": "", "example": "", "romaji": "puragu"}, {"id": "L21_9", "no": 9, "lesson": 21, "jp": "燃料", "hira": "ねんりょう", "id_text": "Bahan bakar", "note": "", "example": "", "romaji": "nenryou"}, {"id": "L21_10", "no": 10, "lesson": 21, "jp": "ハンドル", "hira": "はんどる", "id_text": "Handle", "note": "Bagian yang digunakan untuk membuka, menutup, dan mengunci pintu dan tutup besar.", "example": "", "romaji": "handoru"}, {"id": "L21_11", "no": 11, "lesson": 21, "jp": "メーター", "hira": "めーたー", "id_text": "Meteran", "note": "", "example": "", "romaji": "meetaa"}, {"id": "L21_12", "no": 12, "lesson": 21, "jp": "ランプ", "hira": "らんぷ", "id_text": "Lampu", "note": "", "example": "", "romaji": "ranpu"}, {"id": "L21_13", "no": 13, "lesson": 21, "jp": "レバー", "hira": "ればー", "id_text": "Tuas", "note": "", "example": "さ\nレバーを下げます。\nMenurunkan tuas.", "romaji": "rebaa"}, {"id": "L21_14", "no": 14, "lesson": 21, "jp": "スイッチ", "hira": "すいっち", "id_text": "Saklar", "note": "", "example": "", "romaji": "suitchi"}, {"id": "L21_15", "no": 15, "lesson": 21, "jp": "ボタン", "hira": "ぼたん", "id_text": "Tombol", "note": "Bagian yang dapat menghidupkan dan mematikan power saat ditekan.", "example": "でんげん お\nはじめに電源ボタンを押します。\nPertama tekan tombol power.", "romaji": "botan"}, {"id": "L21_16", "no": 16, "lesson": 21, "jp": "グラインダー", "hira": "ぐらいんだー", "id_text": "Mesin gerinda", "note": "", "example": "", "romaji": "guraindaa"}, {"id": "L21_17", "no": 17, "lesson": 21, "jp": "プレス機", "hira": "ぷれすき", "id_text": "Mesin press", "note": "", "example": "", "romaji": "puresuki"}, {"id": "L21_18", "no": 18, "lesson": 21, "jp": "軸", "hira": "じく", "id_text": "Poros", "note": "Juga disebut shaft.", "example": "", "romaji": "jiku"}, {"id": "L21_19", "no": 19, "lesson": 21, "jp": "ギヤ", "hira": "ぎや", "id_text": "Gear/roda gigi", "note": "Ada banyak cara penulisan lainnya seperti 「ギア」「ギヤー」「ギアー」.", "example": "", "romaji": "giya"}]}, {"id": 22, "title": "Pelajaran 22: Peralatan 1", "shortTitle": "Peralatan 1", "words": [{"id": "L22_1", "no": 1, "lesson": 22, "jp": "工具", "hira": "こうぐ", "id_text": "Peralatan", "note": "", "example": "", "romaji": "kougu"}, {"id": "L22_2", "no": 2, "lesson": 22, "jp": "レンチ", "hira": "れんち", "id_text": "Kunci pas", "note": "", "example": "", "romaji": "renchi"}, {"id": "L22_3", "no": 3, "lesson": 22, "jp": "ペンチ", "hira": "ぺんち", "id_text": "Tang", "note": "", "example": "", "romaji": "penchi"}, {"id": "L22_4", "no": 4, "lesson": 22, "jp": "ドライバー", "hira": "どらいばー", "id_text": "Obeng", "note": "Alat untuk mengencangkan dan mengendurkan sekrup.", "example": "", "romaji": "doraibaa"}, {"id": "L22_5", "no": 5, "lesson": 22, "jp": "ドリル", "hira": "どりる", "id_text": "Bor", "note": "", "example": "", "romaji": "doriru"}, {"id": "L22_6", "no": 6, "lesson": 22, "jp": "ねじ", "hira": "ねじ", "id_text": "Sekrup", "note": "", "example": "", "romaji": "neji"}, {"id": "L22_7", "no": 7, "lesson": 22, "jp": "ボルト", "hira": "ぼると", "id_text": "Baut", "note": "", "example": "", "romaji": "boruto"}, {"id": "L22_8", "no": 8, "lesson": 22, "jp": "ハンマ", "hira": "はんま", "id_text": "Palu", "note": "Biasa juga ditulis 「ハンマー」.", "example": "", "romaji": "hanma"}, {"id": "L22_9", "no": 9, "lesson": 22, "jp": "やすり", "hira": "やすり", "id_text": "Kikir", "note": "", "example": "", "romaji": "yasuri"}, {"id": "L22_10", "no": 10, "lesson": 22, "jp": "ノギス", "hira": "のぎす", "id_text": "Jangka sorong", "note": "Alat ukur yang bisa mengukur panjang hingga 5/100 milimeter.", "example": "", "romaji": "nogisu"}, {"id": "L22_11", "no": 11, "lesson": 22, "jp": "パッキン", "hira": "ぱっきん", "id_text": "Seal", "note": "", "example": "", "romaji": "pakkin"}, {"id": "L22_12", "no": 12, "lesson": 22, "jp": "まきじゃく", "hira": "まきじゃく", "id_text": "Pita pengukur", "note": "Biasa juga disebut 「メジャー」.", "example": "", "romaji": "makijaku"}, {"id": "L22_13", "no": 13, "lesson": 22, "jp": "万力", "hira": "まんりき", "id_text": "Ragum", "note": "", "example": "", "romaji": "manriki"}, {"id": "L22_14", "no": 14, "lesson": 22, "jp": "クレーン", "hira": "くれーん", "id_text": "Crane", "note": "", "example": "", "romaji": "kureen"}, {"id": "L22_15", "no": 15, "lesson": 22, "jp": "ゲージ", "hira": "げーじ", "id_text": "Gauge/Pengukur", "note": "", "example": "", "romaji": "geeji"}, {"id": "L22_16", "no": 16, "lesson": 22, "jp": "エアー", "hira": "えあー", "id_text": "Udara", "note": "Udara dikurangi volumenya dengan cara diberikan tekanan. Digunakan untuk memindahkan mesin.", "example": "", "romaji": "eaa"}, {"id": "L22_17", "no": 17, "lesson": 22, "jp": "スパナ", "hira": "すぱな", "id_text": "Kunci pas", "note": "", "example": "", "romaji": "supana"}, {"id": "L22_18", "no": 18, "lesson": 22, "jp": "マシン", "hira": "ましん", "id_text": "Mesin", "note": "", "example": "", "romaji": "mashin"}, {"id": "L22_19", "no": 19, "lesson": 22, "jp": "油", "hira": "あぶら", "id_text": "Minyak/Oli", "note": "Minyak/Oli yang digunakan untuk meningkatkan pergerakan motor mesin dan persneling.", "example": "", "romaji": "abura"}, {"id": "L22_20", "no": 20, "lesson": 22, "jp": "オイル", "hira": "おいる", "id_text": "Minyak/Oli", "note": "Minyak/Oli yang digunakan untuk meningkatkan pergerakan motor mesin dan persneling.", "example": "", "romaji": "oiru"}, {"id": "L22_21", "no": 21, "lesson": 22, "jp": "工具掛け", "hira": "こうぐかけ", "id_text": "Rak gantungan peralatan", "note": "", "example": "", "romaji": "kougukake"}, {"id": "L22_22", "no": 22, "lesson": 22, "jp": "接着剤", "hira": "せっちゃくざい", "id_text": "Perekat", "note": "", "example": "", "romaji": "setchakuzai"}, {"id": "L22_23", "no": 23, "lesson": 22, "jp": "プリント配線板", "hira": "ぷりんとはいせんばん", "id_text": "Papan kabel cetak", "note": "", "example": "", "romaji": "purintohaisenban"}]}, {"id": 23, "title": "Pelajaran 23: Peralatan 2, Stok", "shortTitle": "Peralatan 2, Stok", "words": [{"id": "L23_1", "no": 1, "lesson": 23, "jp": "ワイヤ", "hira": "わいや", "id_text": "Kawat", "note": "", "example": "", "romaji": "waiya"}, {"id": "L23_2", "no": 2, "lesson": 23, "jp": "ダイヤル", "hira": "だいやる", "id_text": "Dial", "note": "Bagian berbentuk cakram tempat tulisan ditampilkan. Alat ukur dengan dial 「ダイヤ ルゲージ」 \"dial gauge\" sering digunakan dalam pemrosesan bubut.", "example": "", "romaji": "daiyaru"}, {"id": "L23_3", "no": 3, "lesson": 23, "jp": "カッター", "hira": "かったー", "id_text": "Cutter/Pemotong", "note": "", "example": "", "romaji": "kattaa"}, {"id": "L23_4", "no": 4, "lesson": 23, "jp": "ブラシ", "hira": "ぶらし", "id_text": "Sikat", "note": "Sikat industri digunakan untuk deburring, finishing permukaan, pembersihan, dll, dan tersedia dalam berbagai bentuk, seperti tipe roda dan tipe cup/cangkir.", "example": "", "romaji": "burashi"}, {"id": "L23_5", "no": 5, "lesson": 23, "jp": "ベアリング", "hira": "べありんぐ", "id_text": "Bearing", "note": "", "example": "", "romaji": "bearingu"}, {"id": "L23_6", "no": 6, "lesson": 23, "jp": "ナット", "hira": "なっと", "id_text": "Mur", "note": "", "example": "", "romaji": "natto"}, {"id": "L23_7", "no": 7, "lesson": 23, "jp": "ウエス", "hira": "うえす", "id_text": "Kain lap", "note": "Kain lap yang digunakan untuk membersihkan minyak/oli dan kotoran dari mesin.", "example": "", "romaji": "uesu"}, {"id": "L23_8", "no": 8, "lesson": 23, "jp": "砥石", "hira": "といし", "id_text": "Batu asahan", "note": "", "example": "", "romaji": "toishi"}, {"id": "L23_9", "no": 9, "lesson": 23, "jp": "倉庫", "hira": "そうこ", "id_text": "Gudang", "note": "", "example": "", "romaji": "souko"}, {"id": "L23_10", "no": 10, "lesson": 23, "jp": "注文", "hira": "ちゅうもん", "id_text": "Pesanan", "note": "", "example": "", "romaji": "chuumon"}, {"id": "L23_11", "no": 11, "lesson": 23, "jp": "仕掛品", "hira": "しかかりひん", "id_text": "Produk dalam penyelesaian", "note": "Produk yang sedang dalam proses diproduksi dan tidak dapat dijual atau diganti.", "example": "", "romaji": "shikakarihin"}, {"id": "L23_12", "no": 12, "lesson": 23, "jp": "入荷", "hira": "にゅうか", "id_text": "Kedatangan barang", "note": "", "example": "", "romaji": "nyuuka"}, {"id": "L23_13", "no": 13, "lesson": 23, "jp": "搬入(します)", "hira": "はんにゅう（します）", "id_text": "Pemasukan barang (Memasukkan barang)", "note": "", "example": "", "romaji": "hannyuu(shimasu)"}, {"id": "L23_14", "no": 14, "lesson": 23, "jp": "コンテナ", "hira": "こんてな", "id_text": "Wadah", "note": "Wadah kecil untuk menempatkan alat.", "example": "", "romaji": "kontena"}, {"id": "L23_15", "no": 15, "lesson": 23, "jp": "しまいます", "hira": "しまいます", "id_text": "Membereskan", "note": "かた Sama artinya dengan kata 「片づける」 \"membereskan\".", "example": "どうぐ もと\n道具を元のところにしまいます。\nMembereskan/mengembalikan peralatan ke\ntempat semula.", "romaji": "shimaimasu"}, {"id": "L23_16", "no": 16, "lesson": 23, "jp": "緩衝材", "hira": "かんしょうざい", "id_text": "Bahan bantalan", "note": "", "example": "", "romaji": "kanshouzai"}, {"id": "L23_17", "no": 17, "lesson": 23, "jp": "テープ", "hira": "てーぷ", "id_text": "Plester", "note": "Plester untuk menutup kotak pembungkus.", "example": "せいひん はこ と\n製品を箱に入れたら、ふたをテープで留めま\nす。\nSetelah produk dimasukkan ke dalam kotak,\nrekatkan tutupnya dengan plester.", "romaji": "teepu"}, {"id": "L23_18", "no": 18, "lesson": 23, "jp": "保管（します）", "hira": "ほかん（します）", "id_text": "Penyimpanan (Menyimpan)", "note": "", "example": "", "romaji": "hokan(shimasu)"}]}, {"id": 24, "title": "Pelajaran 24: Inspeksi", "shortTitle": "Inspeksi", "words": [{"id": "L24_1", "no": 1, "lesson": 24, "jp": "基準", "hira": "きじゅん", "id_text": "Standar", "note": "", "example": "", "romaji": "kijun"}, {"id": "L24_2", "no": 2, "lesson": 24, "jp": "標準", "hira": "ひょうじゅん", "id_text": "Standar", "note": "", "example": "", "romaji": "hyoujun"}, {"id": "L24_3", "no": 3, "lesson": 24, "jp": "保証", "hira": "ほしょう", "id_text": "Jaminan", "note": "", "example": "", "romaji": "hoshou"}, {"id": "L24_4", "no": 4, "lesson": 24, "jp": "不良", "hira": "ふりょう", "id_text": "Buruk", "note": "", "example": "", "romaji": "furyou"}, {"id": "L24_5", "no": 5, "lesson": 24, "jp": "欠陥", "hira": "けっかん", "id_text": "Cacat", "note": "", "example": "", "romaji": "kekkan"}, {"id": "L24_6", "no": 6, "lesson": 24, "jp": "バラつき", "hira": "ばらつき", "id_text": "Tidak seragam", "note": "Ukuran dan berat produk tidak merata/tidak seragam.", "example": "", "romaji": "baratsuki"}, {"id": "L24_7", "no": 7, "lesson": 24, "jp": "歪み", "hira": "ゆがみ", "id_text": "Kebengkokan", "note": "", "example": "", "romaji": "yugami"}, {"id": "L24_8", "no": 8, "lesson": 24, "jp": "ずれ", "hira": "ずれ", "id_text": "Pergeseran", "note": "", "example": "", "romaji": "zure"}, {"id": "L24_9", "no": 9, "lesson": 24, "jp": "バリ", "hira": "ばり", "id_text": "Duri (Burr)", "note": "Bagian tidak rata/kasar pada logam tajam yang timbul dari pemrosesan/pemotongan logam.", "example": "と\nバリをやすりで取ります。\nMenghaluskan duri (burr) dengan kikir.", "romaji": "bari"}, {"id": "L24_10", "no": 10, "lesson": 24, "jp": "ひび", "hira": "ひび", "id_text": "Keretakan", "note": "", "example": "", "romaji": "hibi"}, {"id": "L24_11", "no": 11, "lesson": 24, "jp": "むら", "hira": "むら", "id_text": "Bercak", "note": "", "example": "", "romaji": "mura"}, {"id": "L24_12", "no": 12, "lesson": 24, "jp": "漏れ", "hira": "もれ", "id_text": "Kebocoran", "note": "", "example": "", "romaji": "more"}, {"id": "L24_13", "no": 13, "lesson": 24, "jp": "劣化（します）", "hira": "れっか（します）", "id_text": "Degradasi (Degradasi)", "note": "", "example": "", "romaji": "rekka(shimasu)"}, {"id": "L24_14", "no": 14, "lesson": 24, "jp": "無駄", "hira": "むだ", "id_text": "Limbah", "note": "", "example": "", "romaji": "muda"}, {"id": "L24_15", "no": 15, "lesson": 24, "jp": "錆びます", "hira": "さびます", "id_text": "Berkarat", "note": "", "example": "", "romaji": "sabimasu"}, {"id": "L24_16", "no": 16, "lesson": 24, "jp": "錆", "hira": "さび", "id_text": "Karat", "note": "", "example": "", "romaji": "sabi"}, {"id": "L24_17", "no": 17, "lesson": 24, "jp": "標準化", "hira": "ひょうじゅんか", "id_text": "Standarisasi", "note": "", "example": "", "romaji": "hyoujunka"}, {"id": "L24_18", "no": 18, "lesson": 24, "jp": "性能", "hira": "せいのう", "id_text": "Performa", "note": "", "example": "", "romaji": "seinou"}, {"id": "L24_19", "no": 19, "lesson": 24, "jp": "欠陥品", "hira": "けっかんひん", "id_text": "Barang cacat / NG", "note": "", "example": "", "romaji": "kekkanhin"}, {"id": "L24_20", "no": 20, "lesson": 24, "jp": "ぽかミス", "hira": "ぽかみす", "id_text": "Kesalahan/Human error", "note": "Kegagalan produk (NG), komplain, kerugian yang diakibatkan oleh kesalahan manusia (human error).", "example": "", "romaji": "pokamisu"}, {"id": "L24_21", "no": 21, "lesson": 24, "jp": "センサー", "hira": "せんさー", "id_text": "Sensor", "note": "", "example": "", "romaji": "sensaa"}, {"id": "L24_22", "no": 22, "lesson": 24, "jp": "検品（します）", "hira": "けんぴん（します）", "id_text": "Inspeksi (Menginspeksi)", "note": "", "example": "", "romaji": "kenpin(shimasu)"}, {"id": "L24_23", "no": 23, "lesson": 24, "jp": "傷", "hira": "きず", "id_text": "Luka/Lecet/Goresan", "note": "Kata ini digunakan untuk merujuk pada cedera tubuh atau bagian dari bahan atau produk yang terkelupas, retak, atau tergores.", "example": "", "romaji": "kizu"}, {"id": "L24_24", "no": 24, "lesson": 24, "jp": "歩留まり", "hira": "ぶどまり", "id_text": "Hasil", "note": "Persentase dari semua hasil produksi setelah dikurangi jumlah produk yang rusak (NG).", "example": "", "romaji": "budomari"}]}];
+    const CLUSTERS = [{"id": "G1", "name": "Kelompok 1: Dasar & Kontrak Kerja", "desc": "Kosakata dasar pabrik, status tinggal, kontrak, pajak & aturan kerja", "lessonIds": [1, 2, 3, 4, 5], "color": "indigo"}, {"id": "G2", "name": "Kelompok 2: 5S, K3 & Kehidupan Kerja", "desc": "5S, keamanan, kebersihan, kesehatan, seragam & tugas harian", "lessonIds": [6, 7, 8, 9, 10], "color": "emerald"}, {"id": "G3", "name": "Kelompok 3: Manufaktur & Pekerjaan Dasar", "desc": "Istilah manufaktur, bagian tubuh & kata kerja operasional 1–3", "lessonIds": [11, 12, 13, 14, 15], "color": "sky"}, {"id": "G4", "name": "Kelompok 4: Pengukuran, Kualitas & Tempat Kerja", "desc": "Dimensi, pengukuran, manajemen kualitas (QC) & area pabrik", "lessonIds": [16, 17, 18], "color": "amber"}, {"id": "G5", "name": "Kelompok 5: Operasi & Proses Seimitsu", "desc": "Gerakan kerja, proses permesinan (bubut, milling, press) & mesin kerja", "lessonIds": [19, 20, 21], "color": "violet"}, {"id": "G6", "name": "Kelompok 6: Peralatan, Stok & Inspeksi", "desc": "Alat teknik, perkakas, gudang/stok & inspeksi cacat produk (NG)", "lessonIds": [22, 23, 24], "color": "rose"}];
+
+    const ALL_WORDS = [];
+    const WORD_MAP = {};
+    const LESSON_MAP = {};
+    LESSONS.forEach(lesson => {
+      LESSON_MAP[lesson.id] = lesson;
+      lesson.words.forEach(w => {
+        ALL_WORDS.push(w);
+        WORD_MAP[w.id] = w;
+      });
+    });
+
+    // ==================== STORAGE & SETTINGS ====================
+    const STORAGE_KEY = 'seimitsu_kotoba_fsrs_v1';
+    const SETTINGS_KEY = 'seimitsu_kotoba_settings_v1';
+    const STATS_KEY = 'seimitsu_kotoba_stats_v1';
+
+    let progress = {}; // wordId -> { state, stability, difficulty, due, reps, lapses, lastDir }
+    let settings = { windowSize: 5, furigana: true, inputMode: 'typing', autoSpeak: false, muted: false };
+    let stats = { date: '', todayReviews: 0 };
+
+    function getTodayStr() {
+      const d = new Date();
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    function loadState() {
+      try {
+        const p = localStorage.getItem(STORAGE_KEY);
+        if (p) progress = JSON.parse(p) || {};
+      } catch (e) { progress = {}; }
+      try {
+        const s = localStorage.getItem(SETTINGS_KEY);
+        if (s) settings = Object.assign(settings, JSON.parse(s) || {});
+      } catch (e) {}
+      try {
+        const st = localStorage.getItem(STATS_KEY);
+        if (st) stats = Object.assign(stats, JSON.parse(st) || {});
+      } catch (e) {}
+      if (stats.date !== getTodayStr()) {
+        stats.date = getTodayStr();
+        stats.todayReviews = 0;
+        saveStats();
+      }
+    }
+
+    function saveProgress() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
+    }
+    function saveSettings() {
+      try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) {}
+    }
+    function saveStats() {
+      try { localStorage.setItem(STATS_KEY, JSON.stringify(stats)); } catch (e) {}
+    }
+
+    function getCardProgress(wordId) {
+      return progress[wordId] || {
+        state: 'new', // 'new' | 'learning' | 'mastered'
+        stability: 0, // days
+        difficulty: 5, // 1..10
+        due: 0,
+        reps: 0,
+        lapses: 0,
+        lastDir: 'jp2id'
+      };
+    }
+
+    function isDue(wordId) {
+      const p = progress[wordId];
+      if (!p || p.state === 'new') return false;
+      return p.due > 0 && p.due <= Date.now();
+    }
+
+    function isLeech(wordId) {
+      const p = progress[wordId];
+      return !!(p && p.lapses >= 2);
+    }
+
+    // ==================== FSRS-INSPIRED SCHEDULER ====================
+    const DAY_MS = 24 * 60 * 60 * 1000;
+
+    function computeFsrsNext(card, rating) {
+      // rating: 1=Lupa, 2=Susah, 3=Lancar, 4=Mudah
+      let S = card.stability || 1;
+      let D = card.difficulty || 5;
+      let reps = card.reps || 0;
+      let lapses = card.lapses || 0;
+
+      if (rating === 1) {
+        lapses += 1;
+        D = Math.min(10, D + 1.2);
+        S = Math.max(0.5, S * 0.25);
+        return { stability: S, difficulty: D, intervalDays: 0, reps, lapses };
+      }
+      reps += 1;
+      const dFactor = Math.max(1.2, 2.8 - (D - 1) * 0.14);
+      if (rating === 2) {
+        D = Math.min(10, D + 0.4);
+        S = Math.max(1, S * 1.25);
+      } else if (rating === 3) {
+        D = Math.max(1, D - 0.1);
+        S = Math.max(1, S * dFactor);
+      } else if (rating === 4) {
+        D = Math.max(1, D - 0.5);
+        S = Math.max(2, S * dFactor * 1.35);
+      }
+      S = Math.min(180, Math.round(S * 10) / 10);
+      return { stability: S, difficulty: D, intervalDays: S, reps, lapses };
+    }
+
+    function formatInterval(days) {
+      if (days <= 0) return 'Ulangi';
+      if (days < 1) return Math.round(days * 24) + ' jam';
+      if (days < 30) return Math.round(days) + ' hari';
+      return (days / 30).toFixed(1).replace('.0', '') + ' bln';
+    }
+
+    // ==================== SMART JAPANESE MATCHER ====================
+    function normalizeRomaji(str) {
+      let s = (str || '').toLowerCase().trim();
+      s = s.replace(/[（(][^）)]*[）)]/g, ''); // remove optional (shimasu)/(na)
+      s = s.replace(/[\s\-_'’.,!?・\/]/g, '');
+      // Kunrei / variant normalization
+      s = s.replace(/shi/g, 'si')
+           .replace(/chi/g, 'ti')
+           .replace(/tsu/g, 'tu')
+           .replace(/fu/g, 'hu')
+           .replace(/ji/g, 'zi')
+           .replace(/dzu/g, 'zu')
+           .replace(/sha/g, 'sya').replace(/shu/g, 'syu').replace(/sho/g, 'syo')
+           .replace(/cha/g, 'tya').replace(/chu/g, 'tyu').replace(/cho/g, 'tyo')
+           .replace(/ja/g, 'zya').replace(/ju/g, 'zyu').replace(/jo/g, 'zyo')
+           .replace(/tch/g, 'tt')
+           .replace(/ou/g, 'o').replace(/oo/g, 'o')
+           .replace(/uu/g, 'u')
+           .replace(/aa/g, 'a')
+           .replace(/ii/g, 'i')
+           .replace(/ee/g, 'e');
+      return s;
+    }
+
+    function stripKanaParens(str) {
+      return (str || '').replace(/[（(][^）)]*[）)]/g, '').replace(/[\s・]/g, '').trim();
+    }
+
+    function kataToHira(str) {
+      return (str || '').replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+    }
+
+    function levenshtein(a, b) {
+      const m = a.length, n = b.length;
+      if (!m) return n;
+      if (!n) return m;
+      const dp = Array.from({ length: m + 1 }, (_, i) => [i]);
+      for (let j = 1; j <= n; j++) dp[0][j] = j;
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          dp[i][j] = Math.min(
+            dp[i - 1][j] + 1,
+            dp[i][j - 1] + 1,
+            dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+          );
+        }
+      }
+      return dp[m][n];
+    }
+
+    function checkJapaneseAnswer(inputRaw, word) {
+      const raw = (inputRaw || '').trim();
+      if (!raw) return { ok: false, close: false };
+
+      // 1. Exact or paren-stripped Kanji / Kana match
+      const rawClean = raw.replace(/[\s　]/g, '');
+      const rawHira = kataToHira(stripKanaParens(rawClean));
+      const targetJpFull = word.jp.replace(/[\s　]/g, '');
+      const targetJpBase = stripKanaParens(targetJpFull);
+      const targetHiraFull = kataToHira(word.hira.replace(/[\s　]/g, ''));
+      const targetHiraBase = kataToHira(stripKanaParens(word.hira));
+
+      if (
+        rawClean === targetJpFull ||
+        rawClean === targetJpBase ||
+        kataToHira(rawClean) === targetHiraFull ||
+        rawHira === targetHiraBase ||
+        (targetJpBase && stripKanaParens(rawClean) === targetJpBase)
+      ) {
+        return { ok: true, close: false };
+      }
+
+      // 2. Romaji match (base or with shimasu/na)
+      const inNorm = normalizeRomaji(raw);
+      const targetBaseNorm = normalizeRomaji(word.romaji);
+      const targetFullNorm = normalizeRomaji(word.romaji.replace(/[()]/g, ''));
+
+      if (inNorm && (inNorm === targetBaseNorm || inNorm === targetFullNorm)) {
+        return { ok: true, close: false };
+      }
+
+      // 3. Check near-miss (1 char typo for longer words)
+      const distBase = levenshtein(inNorm, targetBaseNorm);
+      const distFull = levenshtein(inNorm, targetFullNorm);
+      const bestDist = Math.min(distBase, distFull);
+      if (targetBaseNorm.length >= 5 && bestDist === 1) {
+        return { ok: false, close: true };
+      }
+      return { ok: false, close: false };
+    }
+
+    // ==================== AUDIO (TTS + WEB AUDIO SFX) ====================
+    let audioCtx = null;
+    function playChime(type) {
+      if (settings.muted) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        if (type === 'ok') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.09);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.start(now); osc.stop(now + 0.19);
+        } else if (type === 'lock') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.07);
+          osc.frequency.setValueAtTime(1046.5, now + 0.14);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+          osc.start(now); osc.stop(now + 0.34);
+        } else if (type === 'err') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.linearRampToValueAtTime(165, now + 0.14);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.start(now); osc.stop(now + 0.19);
+        }
+      } catch (e) {}
+    }
+
+    function speakJapanese(text) {
+      try {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        const clean = stripKanaParens(text);
+        const u = new SpeechSynthesisUtterance(clean);
+        u.lang = 'ja-JP';
+        u.rate = 0.92;
+        window.speechSynthesis.speak(u);
+      } catch (e) {}
+    }
+
+    // ==================== TOAST ====================
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.add('hidden'), 2400);
+    }
+
+    // ==================== UNIFIED GOD-TIER SESSION ENGINE ====================
+    let session = null;
+    /*
+      session = {
+        title: string,
+        mode: 'learn' | 'fsrs',
+        lessonId: number | null,
+        totalWords: number,
+        pendingQueue: [wordId, ...], // waiting to enter sliding window
+        activePool: [
+          {
+            wordId: string,
+            stage: 0 | 1 | 2, // 0: JP->ID, 1: ID->JP, 2: Delayed Verification Lock (random dir)
+            dir: 'jp2id' | 'id2jp',
+            cooldown: number, // cards to wait before showing again
+            errors: number
+          }
+        ],
+        lockedIds: [wordId, ...],
+        currentItem: object | null,
+        lastWordId: string | null,
+        answered: boolean,
+        attempts: number,
+        corrects: number
+      }
+    */
+
+    function startSession(title, wordIds, mode = 'learn', lessonId = null) {
+      const uniqueIds = [...new Set(wordIds)].filter(id => WORD_MAP[id]);
+      if (!uniqueIds.length) {
+        showToast('Tidak ada kata yang perlu dipelajari di pilihan ini.');
+        return;
+      }
+
+      session = {
+        title,
+        mode,
+        lessonId,
+        totalWords: uniqueIds.length,
+        pendingQueue: [...uniqueIds],
+        activePool: [],
+        lockedIds: [],
+        currentItem: null,
+        lastWordId: null,
+        answered: false,
+        attempts: 0,
+        corrects: 0
+      };
+
+      fillSlidingWindow();
+      document.getElementById('navStudyDot').classList.remove('hidden');
+      switchView('study');
+      pickNextCard();
+    }
+
+    function fillSlidingWindow() {
+      if (!session) return;
+      const maxWin = session.mode === 'fsrs' ? Math.min(settings.windowSize, 5) : settings.windowSize;
+      while (session.activePool.length < maxWin && session.pendingQueue.length > 0) {
+        const wid = session.pendingQueue.shift();
+        const p = getCardProgress(wid);
+        if (session.mode === 'fsrs') {
+          // Test opposite direction of last review for lifelong 2-way balance
+          const dir = p.lastDir === 'jp2id' ? 'id2jp' : 'jp2id';
+          session.activePool.push({ wordId: wid, stage: 2, dir, cooldown: 0, errors: 0 });
+        } else {
+          session.activePool.push({ wordId: wid, stage: 0, dir: 'jp2id', cooldown: 0, errors: 0 });
+        }
+      }
+    }
+
+    function pickNextCard() {
+      if (!session) return;
+      fillSlidingWindow();
+
+      if (session.activePool.length === 0) {
+        finishSession();
+        return;
+      }
+
+      // Decrement cooldowns on all active items
+      session.activePool.forEach(item => {
+        if (item.cooldown > 0) item.cooldown -= 1;
+      });
+
+      // Prefer items with cooldown === 0 and not the immediately previous word
+      let candidates = session.activePool.filter(x => x.cooldown === 0 && x.wordId !== session.lastWordId);
+      if (!candidates.length) {
+        candidates = session.activePool.filter(x => x.wordId !== session.lastWordId);
+      }
+      if (!candidates.length) {
+        candidates = [...session.activePool];
+      }
+
+      // Sort by lowest cooldown, then prioritize Stage 2 verification when ready, then Stage 1, then Stage 0
+      candidates.sort((a, b) => {
+        if (a.cooldown !== b.cooldown) return a.cooldown - b.cooldown;
+        return b.stage - a.stage;
+      });
+
+      // Pick top candidate (with slight tie randomization if multiple have same cooldown & stage)
+      const top = candidates[0];
+      const tied = candidates.filter(c => c.cooldown === top.cooldown && c.stage === top.stage);
+      session.currentItem = tied[Math.floor(Math.random() * tied.length)];
+      session.lastWordId = session.currentItem.wordId;
+      session.answered = false;
+
+      renderStudyCard();
+    }
+
+    function renderStudyCard() {
+      document.getElementById('studyEmptyState').classList.add('hidden');
+      document.getElementById('studyCompleteCard').classList.add('hidden');
+      document.getElementById('studyActiveArena').classList.remove('hidden');
+
+      const item = session.currentItem;
+      const word = WORD_MAP[item.wordId];
+      const p = getCardProgress(item.wordId);
+
+      // Update Header
+      document.getElementById('sessionTitle').textContent = session.title;
+      document.getElementById('sessionSubtitle').textContent =
+        `Terkunci ${session.lockedIds.length} / ${session.totalWords} kata • Aktif ${session.activePool.length} • Sisa antrean ${session.pendingQueue.length}`;
+      const pct = Math.round((session.lockedIds.length / Math.max(1, session.totalWords)) * 100);
+      document.getElementById('sessionProgressBar').style.width = pct + '%';
+
+      // Toggles
+      const btnFuri = document.getElementById('btnToggleFurigana');
+      btnFuri.textContent = settings.furigana ? 'Furigana: ON' : 'Furigana: OFF';
+      btnFuri.className = settings.furigana
+        ? 'px-2.5 py-1 rounded-lg text-xs font-semibold border border-indigo-500/40 bg-indigo-500/20 text-indigo-300 transition'
+        : 'px-2.5 py-1 rounded-lg text-xs font-semibold border border-slate-700 bg-slate-800 text-slate-400 transition';
+
+      const btnMode = document.getElementById('btnToggleInputMode');
+      btnMode.textContent = settings.inputMode === 'typing' ? '⌨️ Ketik' : '⚡ Tebak Cepat';
+      btnMode.className = settings.inputMode === 'typing'
+        ? 'px-2.5 py-1 rounded-lg text-xs font-semibold border border-emerald-500/40 bg-emerald-500/20 text-emerald-300 transition'
+        : 'px-2.5 py-1 rounded-lg text-xs font-semibold border border-amber-500/40 bg-amber-500/20 text-amber-300 transition';
+
+      document.getElementById('btnToggleMute').textContent = settings.muted ? '🔇' : '🔊';
+
+      // Active Pool Pills
+      const poolEl = document.getElementById('activePoolPills');
+      poolEl.innerHTML = session.activePool.map(act => {
+        const w = WORD_MAP[act.wordId];
+        const isCurr = act.wordId === item.wordId;
+        const dots = session.mode === 'fsrs'
+          ? (act.errors > 0 ? '↺' : '●')
+          : [0, 1, 2].map(i => i < act.stage ? '●' : '○').join('');
+        return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-jp shrink-0 border ${
+          isCurr ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-xs' : 'bg-slate-800 text-slate-300 border-slate-700'
+        }">
+          <span>${w.jp.slice(0, 6)}</span>
+          <span class="text-[9px] tracking-tighter ${isCurr ? 'text-indigo-200' : 'text-emerald-600'}">${dots}</span>
+        </span>`;
+      }).join('');
+
+      // Stage Badge
+      const badge = document.getElementById('cardStageBadge');
+      if (session.mode === 'fsrs') {
+        badge.textContent = item.dir === 'jp2id' ? '🔄 REVIEW FSRS • JP → ID' : '🔄 REVIEW FSRS • ID → JP';
+        badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300';
+      } else if (item.stage === 0) {
+        badge.textContent = 'JP → ID • Tahap 1/3 (Kenali)';
+        badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300';
+      } else if (item.stage === 1) {
+        badge.textContent = 'ID → JP • Tahap 2/3 (Produksi)';
+        badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300';
+      } else {
+        badge.textContent = item.dir === 'jp2id' ? '🔒 VERIFIKASI 3/3 • JP → ID' : '🔒 VERIFIKASI 3/3 • ID → JP';
+        badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-violet-500/20 text-violet-300';
+      }
+
+      document.getElementById('cardLessonTag').textContent = `L${word.lesson} #${word.no}`;
+      document.getElementById('cardLeechTag').classList.toggle('hidden', !isLeech(word.id));
+
+      // Prompt Content
+      const promptHint = document.getElementById('cardPromptHint');
+      const promptSub = document.getElementById('cardPromptSub');
+      const promptMain = document.getElementById('cardPromptMain');
+      const btnSpeakPrompt = document.getElementById('btnSpeakPrompt');
+
+      if (item.dir === 'jp2id') {
+        promptHint.textContent = 'Apa arti bahasa Indonesianya?';
+        promptSub.textContent = settings.furigana && word.hira !== word.jp ? word.hira : '';
+        promptMain.textContent = word.jp;
+        promptMain.className = 'font-jp text-3xl sm:text-4xl font-extrabold text-slate-100 tracking-tight break-words';
+        btnSpeakPrompt.classList.remove('hidden');
+        if (settings.autoSpeak) speakJapanese(word.hira);
+      } else {
+        promptHint.textContent = settings.inputMode === 'typing' ? 'Ketik bahasa Jepangnya (Romaji / Kana / Kanji):' : 'Apa bahasa Jepangnya?';
+        promptSub.textContent = '';
+        promptMain.textContent = word.id_text;
+        promptMain.className = 'text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight break-words';
+        btnSpeakPrompt.classList.add('hidden');
+      }
+
+      // Reset interactive areas
+      document.getElementById('areaFeedback').classList.add('hidden');
+      document.getElementById('gradeLearningReveal').classList.add('hidden');
+      document.getElementById('gradeFsrsButtons').classList.add('hidden');
+      document.getElementById('gradeTypingNext').classList.add('hidden');
+      document.getElementById('btnOverrideCorrect').classList.add('hidden');
+
+      const useTyping = (item.dir === 'id2jp' && settings.inputMode === 'typing');
+      if (useTyping) {
+        document.getElementById('areaTyping').classList.remove('hidden');
+        document.getElementById('areaReveal').classList.add('hidden');
+        const inp = document.getElementById('typingInput');
+        inp.value = '';
+        setTimeout(() => inp.focus(), 40);
+      } else {
+        document.getElementById('areaTyping').classList.add('hidden');
+        document.getElementById('areaReveal').classList.remove('hidden');
+      }
+
+      // Trigger subtle card re-animation
+      const cardEl = document.getElementById('studyCard');
+      cardEl.classList.remove('card-enter');
+      void cardEl.offsetWidth;
+      cardEl.classList.add('card-enter');
+    }
+
+    function showFeedbackPanel(statusType, typedStr = null) {
+      const item = session.currentItem;
+      const word = WORD_MAP[item.wordId];
+      const banner = document.getElementById('feedbackBanner');
+      const statusText = document.getElementById('feedbackStatusText');
+
+      document.getElementById('areaTyping').classList.add('hidden');
+      document.getElementById('areaReveal').classList.add('hidden');
+      document.getElementById('areaFeedback').classList.remove('hidden');
+
+      if (statusType === 'ok') {
+        banner.className = 'rounded-xl p-4 border border-emerald-500/30 bg-emerald-950/50 text-left space-y-2';
+        statusText.textContent = item.stage === 2 ? '🔒 Tepat! Kata Terkunci ke Memori Jangka Panjang' : '✅ Benar! Lanjut tahap berikutnya';
+        statusText.className = 'font-extrabold text-sm text-emerald-400';
+      } else if (statusType === 'close') {
+        banner.className = 'rounded-xl p-4 border border-amber-500/30 bg-amber-950/50 text-left space-y-2';
+        statusText.textContent = '⚠️ Hampir Benar (Beda 1 huruf) — Cek ejaan di bawah';
+        statusText.className = 'font-extrabold text-sm text-amber-800';
+      } else if (statusType === 'err') {
+        banner.className = 'rounded-xl p-4 border border-rose-500/30 bg-rose-950/50 text-left space-y-2';
+        statusText.textContent = '❌ Belum Tepat — Akan muncul lagi dalam 2 kartu';
+        statusText.className = 'font-extrabold text-sm text-rose-700';
+      } else {
+        banner.className = 'rounded-xl p-4 border border-slate-700 bg-slate-800/80 text-left space-y-2';
+        statusText.textContent = '💡 Jawaban Lengkap';
+        statusText.className = 'font-extrabold text-sm text-slate-300';
+      }
+
+      document.getElementById('fbKanji').textContent = word.jp;
+      document.getElementById('fbHira').textContent = word.hira;
+      document.getElementById('fbRomaji').textContent = word.romaji;
+      document.getElementById('fbIndo').textContent = word.id_text;
+
+      const typedRow = document.getElementById('fbUserTypedRow');
+      if (typedStr !== null) {
+        typedRow.classList.remove('hidden');
+        document.getElementById('fbUserTyped').textContent = typedStr || '(kosong)';
+      } else {
+        typedRow.classList.add('hidden');
+      }
+
+      const noteBox = document.getElementById('fbNoteBox');
+      if (word.note) {
+        noteBox.classList.remove('hidden');
+        document.getElementById('fbNote').textContent = word.note;
+      } else {
+        noteBox.classList.add('hidden');
+      }
+
+      const exBox = document.getElementById('fbExampleBox');
+      if (word.example) {
+        exBox.classList.remove('hidden');
+        document.getElementById('fbExample').textContent = word.example;
+      } else {
+        exBox.classList.add('hidden');
+      }
+
+      if (settings.autoSpeak) speakJapanese(word.hira);
+    }
+
+    function handleTypingSubmit(e) {
+      if (e) e.preventDefault();
+      if (!session || session.answered) return;
+      const inp = document.getElementById('typingInput');
+      const val = inp.value.trim();
+      const item = session.currentItem;
+      const word = WORD_MAP[item.wordId];
+      const res = checkJapaneseAnswer(val, word);
+
+      session.answered = true;
+      session.attempts += 1;
+
+      if (res.ok) {
+        session.corrects += 1;
+        playChime(item.stage === 2 ? 'lock' : 'ok');
+        showFeedbackPanel('ok', val);
+        if (session.mode === 'fsrs') {
+          showFsrsGradeButtons();
+        } else {
+          applyLearningOutcome(true);
+          document.getElementById('gradeTypingNext').classList.remove('hidden');
+        }
+      } else {
+        playChime('err');
+        const cardEl = document.getElementById('studyCard');
+        cardEl.classList.remove('shake'); void cardEl.offsetWidth; cardEl.classList.add('shake');
+        showFeedbackPanel(res.close ? 'close' : 'err', val);
+        if (session.mode === 'fsrs') {
+          showFsrsGradeButtons();
+        } else {
+          applyLearningOutcome(false);
+          document.getElementById('gradeTypingNext').classList.remove('hidden');
+          document.getElementById('btnOverrideCorrect').classList.remove('hidden');
+        }
+      }
+    }
+
+    function handleRevealClick() {
+      if (!session || session.answered) return;
+      session.answered = true;
+      showFeedbackPanel('reveal');
+      if (session.mode === 'fsrs') {
+        showFsrsGradeButtons();
+      } else {
+        document.getElementById('gradeLearningReveal').classList.remove('hidden');
+      }
+    }
+
+    function showFsrsGradeButtons() {
+      const p = getCardProgress(session.currentItem.wordId);
+      [1, 2, 3, 4].forEach(r => {
+        const next = computeFsrsNext(p, r);
+        const span = document.querySelector(`.fsrs-btn [data-int="${r}"]`);
+        if (span) span.textContent = formatInterval(next.intervalDays);
+      });
+      document.getElementById('gradeFsrsButtons').classList.remove('hidden');
+    }
+
+    let lastTypingWasFail = false;
+    let prevStageBeforeFail = 0;
+
+    function applyLearningOutcome(passed) {
+      const item = session.currentItem;
+      const p = getCardProgress(item.wordId);
+      lastTypingWasFail = !passed;
+      if (!passed) prevStageBeforeFail = item.stage;
+
+      if (passed) {
+        if (item.stage === 0) {
+          // Passed JP->ID, schedule ID->JP in 2-3 cards
+          item.stage = 1;
+          item.dir = 'id2jp';
+          item.cooldown = Math.min(3, Math.max(1, session.activePool.length - 1));
+          p.state = p.state === 'mastered' ? 'mastered' : 'learning';
+        } else if (item.stage === 1) {
+          // Passed ID->JP, schedule Delayed Verification Lock in 4-6 cards
+          item.stage = 2;
+          item.dir = Math.random() < 0.5 ? 'jp2id' : 'id2jp';
+          item.cooldown = Math.min(5, Math.max(2, session.activePool.length));
+        } else {
+          // Passed Stage 2 Verification Lock -> GRADUATE to FSRS!
+          session.activePool = session.activePool.filter(x => x.wordId !== item.wordId);
+          session.lockedIds.push(item.wordId);
+          const initStab = item.errors === 0 ? 1 : 0.5;
+          progress[item.wordId] = {
+            state: 'mastered',
+            stability: Math.max(p.stability || 0, initStab),
+            difficulty: p.difficulty || (item.errors > 0 ? 6 : 4.5),
+            due: Date.now() + initStab * DAY_MS,
+            reps: (p.reps || 0) + 1,
+            lapses: p.lapses || 0,
+            lastDir: item.dir
+          };
+          saveProgress();
+        }
+        if (item.stage < 2) {
+          progress[item.wordId] = p;
+          saveProgress();
+        }
+      } else {
+        // Failed -> reset stage if needed, re-queue in 2 cards, track lapse
+        item.errors += 1;
+        item.cooldown = Math.min(2, Math.max(1, session.activePool.length - 1));
+        if (item.stage === 2) {
+          // Drop back to the direction they missed so they lock it cleanly
+          item.stage = item.dir === 'jp2id' ? 0 : 1;
+        }
+        p.lapses = (p.lapses || 0) + (item.errors === 2 ? 1 : 0);
+        p.state = p.state === 'mastered' ? 'learning' : (p.state === 'new' ? 'learning' : p.state);
+        progress[item.wordId] = p;
+        saveProgress();
+      }
+
+      stats.todayReviews += 1;
+      saveStats();
+    }
+
+    function handleLearningRevealGrade(passed) {
+      if (!session) return;
+      session.attempts += 1;
+      if (passed) {
+        session.corrects += 1;
+        playChime(session.currentItem.stage === 2 ? 'lock' : 'ok');
+      } else {
+        playChime('err');
+      }
+      applyLearningOutcome(passed);
+      pickNextCard();
+    }
+
+    function handleFsrsGrade(rating) {
+      if (!session) return;
+      const item = session.currentItem;
+      const p = getCardProgress(item.wordId);
+      const next = computeFsrsNext(p, rating);
+
+      session.attempts += 1;
+      stats.todayReviews += 1;
+      saveStats();
+
+      if (rating === 1) {
+        playChime('err');
+        item.errors += 1;
+        item.cooldown = Math.min(2, Math.max(1, session.activePool.length - 1));
+        progress[item.wordId] = {
+          state: 'learning',
+          stability: next.stability,
+          difficulty: next.difficulty,
+          due: Date.now(),
+          reps: next.reps,
+          lapses: next.lapses,
+          lastDir: item.dir
+        };
+      } else {
+        session.corrects += 1;
+        playChime('lock');
+        session.activePool = session.activePool.filter(x => x.wordId !== item.wordId);
+        session.lockedIds.push(item.wordId);
+        progress[item.wordId] = {
+          state: 'mastered',
+          stability: next.stability,
+          difficulty: next.difficulty,
+          due: Date.now() + next.intervalDays * DAY_MS,
+          reps: next.reps,
+          lapses: next.lapses,
+          lastDir: item.dir
+        };
+      }
+      saveProgress();
+      pickNextCard();
+    }
+
+    function handleOverrideCorrect() {
+      if (!session || !lastTypingWasFail) return;
+      // Restore stage before fail, undo error & promote cleanly
+      const item = session.currentItem;
+      item.stage = prevStageBeforeFail;
+      item.errors = Math.max(0, item.errors - 1);
+      session.corrects += 1;
+      playChime(item.stage === 2 ? 'lock' : 'ok');
+      applyLearningOutcome(true);
+      pickNextCard();
+    }
+
+    function finishSession() {
+      document.getElementById('studyActiveArena').classList.add('hidden');
+      document.getElementById('studyCompleteCard').classList.remove('hidden');
+      document.getElementById('navStudyDot').classList.add('hidden');
+
+      const acc = session.attempts > 0 ? Math.round((session.corrects / session.attempts) * 100) : 100;
+      document.getElementById('sumLocked').textContent = session.lockedIds.length;
+      document.getElementById('sumAccuracy').textContent = acc + '%';
+      document.getElementById('sumAttempts').textContent = session.attempts;
+      document.getElementById('completeSubtitle').textContent =
+        `${session.title} selesai! Seluruh ${session.lockedIds.length} kata sudah lolos Kunci 2-Arah dan dijadwalkan otomatis oleh FSRS.`;
+
+      const btnNext = document.getElementById('btnCompleteNextLesson');
+      if (session.lessonId && session.lessonId < 24) {
+        btnNext.classList.remove('hidden');
+        btnNext.textContent = `Lanjut Pelajaran ${session.lessonId + 1} →`;
+        btnNext.dataset.nextLesson = session.lessonId + 1;
+      } else {
+        btnNext.classList.add('hidden');
+      }
+      playChime('lock');
+      renderHome();
+    }
+
+    // ==================== RENDER BERANDA ====================
+    let selectedCluster = 'ALL';
+
+    function renderHome() {
+      let masteredCount = 0;
+      let dueIds = [];
+      let leechIds = [];
+
+      ALL_WORDS.forEach(w => {
+        const p = progress[w.id];
+        if (p && p.state === 'mastered') masteredCount++;
+        if (isDue(w.id)) dueIds.push(w.id);
+        if (isLeech(w.id)) leechIds.push(w.id);
+      });
+
+      document.getElementById('kpiMastered').textContent = masteredCount;
+      document.getElementById('kpiDue').textContent = dueIds.length;
+      document.getElementById('kpiLeech').textContent = leechIds.length;
+      document.getElementById('kpiToday').textContent = stats.todayReviews;
+
+      // Primary Hero CTA
+      const btnHeroPrimary = document.getElementById('btnHeroPrimary');
+      const heroPrimaryLabel = document.getElementById('heroPrimaryLabel');
+      const heroHeadline = document.getElementById('heroHeadline');
+      const btnQuickDue = document.getElementById('btnStartDueQuick');
+
+      if (dueIds.length > 0) {
+        heroHeadline.textContent = `Ada ${dueIds.length} Kotoba Jatuh Tempo Hari Ini!`;
+        heroPrimaryLabel.textContent = `Review Jatuh Tempo (${dueIds.length})`;
+        btnHeroPrimary.onclick = () => startSession(`Review Jatuh Tempo FSRS (${dueIds.length} kata)`, dueIds, 'fsrs', null);
+        btnQuickDue.classList.remove('hidden');
+        document.getElementById('quickDueCount').textContent = dueIds.length;
+        btnQuickDue.onclick = () => startSession(`Review Jatuh Tempo FSRS (${dueIds.length} kata)`, dueIds, 'fsrs', null);
+      } else {
+        btnQuickDue.classList.add('hidden');
+        // Find first lesson not 100% mastered
+        let nextLesson = LESSONS.find(l => l.words.some(w => getCardProgress(w.id).state !== 'mastered')) || LESSONS[0];
+        const unmasteredInLesson = nextLesson.words.filter(w => getCardProgress(w.id).state !== 'mastered').map(w => w.id);
+        const targetIds = unmasteredInLesson.length ? unmasteredInLesson : nextLesson.words.map(w => w.id);
+        heroHeadline.textContent = masteredCount === 0
+          ? 'Siap Mengunci 500 Kotoba Seimitsu?'
+          : `Lanjutkan ke Pelajaran ${nextLesson.id}: ${nextLesson.shortTitle}`;
+        heroPrimaryLabel.textContent = `Mulai Pelajaran ${nextLesson.id} (${targetIds.length} kata)`;
+        btnHeroPrimary.onclick = () => startSession(nextLesson.title, targetIds, 'learn', nextLesson.id);
+      }
+
+      // Leech button
+      const btnHeroLeech = document.getElementById('btnHeroLeech');
+      if (leechIds.length > 0) {
+        btnHeroLeech.classList.remove('hidden');
+        document.getElementById('heroLeechCount').textContent = leechIds.length;
+        btnHeroLeech.onclick = () => startSession(`Penyelamatan Kata Rawan Lupa (${leechIds.length} kata)`, leechIds, 'learn', null);
+      } else {
+        btnHeroLeech.classList.add('hidden');
+      }
+
+      // Cluster Filter Pills
+      const pillsEl = document.getElementById('clusterFilterPills');
+      const pillItems = [{ id: 'ALL', label: 'Semua Kelompok (6)' }, ...CLUSTERS.map((c, idx) => ({ id: c.id, label: `Kelompok ${idx + 1}` }))];
+      pillsEl.innerHTML = pillItems.map(p => `
+        <button data-cluster="${p.id}" class="cluster-pill px-3 py-1.5 rounded-xl text-xs font-bold border transition ${
+          selectedCluster === p.id
+            ? 'bg-indigo-600 text-white border-indigo-500'
+            : 'bg-slate-900 text-slate-400 border-slate-700 hover:border-slate-500 hover:text-slate-100'
+        }">${p.label}</button>
+      `).join('');
+
+      pillsEl.querySelectorAll('.cluster-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          selectedCluster = btn.dataset.cluster;
+          renderHome();
+        });
+      });
+
+      // Render Clusters & Lesson Grid
+      const container = document.getElementById('clustersContainer');
+      const visibleClusters = selectedCluster === 'ALL' ? CLUSTERS : CLUSTERS.filter(c => c.id === selectedCluster);
+
+      container.innerHTML = visibleClusters.map(cl => {
+        const clLessons = cl.lessonIds.map(id => LESSON_MAP[id]);
+        const clWordIds = clLessons.flatMap(l => l.words.map(w => w.id));
+        const clMastered = clWordIds.filter(id => getCardProgress(id).state === 'mastered').length;
+        const clPct = Math.round((clMastered / Math.max(1, clWordIds.length)) * 100);
+
+        const lessonCardsHtml = clLessons.map(l => {
+          const total = l.words.length;
+          const mCount = l.words.filter(w => getCardProgress(w.id).state === 'mastered').length;
+          const dCount = l.words.filter(w => isDue(w.id)).length;
+          const pct = Math.round((mCount / Math.max(1, total)) * 100);
+          return `
+            <div class="bg-slate-900 rounded-xl border border-slate-800 p-4 hover:border-indigo-300 hover:shadow-xs transition flex flex-col justify-between gap-3">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 font-extrabold text-[11px]">Pelajaran ${l.id}</span>
+                  <div class="flex items-center gap-1.5">
+                    ${dCount > 0 ? `<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-bold">⏰ ${dCount}</span>` : ''}
+                    <span class="text-[11px] font-semibold text-slate-400">${total} kata</span>
+                  </div>
+                </div>
+                <div class="font-bold text-sm text-slate-100 leading-snug">${l.shortTitle}</div>
+              </div>
+
+              <div class="space-y-2.5">
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold mb-1">
+                    <span class="text-slate-400">${mCount} / ${total} terkunci</span>
+                    <span class="${pct === 100 ? 'text-emerald-600' : 'text-indigo-400'}">${pct}%</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div class="h-full rounded-full ${pct === 100 ? 'bg-emerald-500' : 'bg-indigo-500'}" style="width: ${pct}%"></div>
+                  </div>
+                </div>
+                <div class="flex gap-1.5">
+                  <button data-start-lesson="${l.id}" class="btn-start-lesson flex-1 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition">
+                    ${mCount === 0 ? 'Mulai' : (mCount === total ? 'Ulangi' : 'Lanjut')}
+                  </button>
+                  <button data-view-lesson="${l.id}" class="btn-view-lesson px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition" title="Lihat daftar kata">
+                    Kamus
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900 rounded-xl border border-slate-800 px-4 py-3">
+              <div>
+                <div class="font-extrabold text-sm sm:text-base text-slate-100">${cl.name}</div>
+                <div class="text-xs text-slate-400">${cl.desc} • <strong>${clMastered}/${clWordIds.length}</strong> terkunci (${clPct}%)</div>
+              </div>
+              <button data-start-cluster="${cl.id}" class="btn-start-cluster px-3.5 py-2 rounded-lg bg-indigo-600/90 hover:bg-indigo-500 text-white font-bold text-xs transition shrink-0">
+                ⚡ Latih Kelompok Ini
+              </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              ${lessonCardsHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.btn-start-lesson').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const lid = Number(btn.dataset.startLesson);
+          const l = LESSON_MAP[lid];
+          const unmastered = l.words.filter(w => getCardProgress(w.id).state !== 'mastered').map(w => w.id);
+          const targetIds = unmastered.length > 0 ? unmastered : l.words.map(w => w.id);
+          startSession(l.title, targetIds, 'learn', lid);
+        });
+      });
+
+      container.querySelectorAll('.btn-view-lesson').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById('dictLessonFilter').value = btn.dataset.viewLesson;
+          document.getElementById('dictStatusFilter').value = 'all';
+          document.getElementById('dictSearch').value = '';
+          switchView('dict');
+          renderDict();
+        });
+      });
+
+      container.querySelectorAll('.btn-start-cluster').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cl = CLUSTERS.find(c => c.id === btn.dataset.startCluster);
+          const allIds = cl.lessonIds.flatMap(id => LESSON_MAP[id].words.map(w => w.id));
+          const unmastered = allIds.filter(id => getCardProgress(id).state !== 'mastered');
+          const targetIds = unmastered.length > 0 ? unmastered : allIds;
+          startSession(cl.name, targetIds, 'learn', null);
+        });
+      });
+    }
+
+    // ==================== RENDER KAMUS 500 ====================
+    function populateDictLessonSelect() {
+      const sel = document.getElementById('dictLessonFilter');
+      LESSONS.forEach(l => {
+        const opt = document.createElement('option');
+        opt.value = String(l.id);
+        opt.textContent = `Pelajaran ${l.id}: ${l.shortTitle} (${l.words.length})`;
+        sel.appendChild(opt);
+      });
+    }
+
+    function renderDict() {
+      const q = (document.getElementById('dictSearch').value || '').trim().toLowerCase();
+      const lFilter = document.getElementById('dictLessonFilter').value;
+      const sFilter = document.getElementById('dictStatusFilter').value;
+
+      const filtered = ALL_WORDS.filter(w => {
+        if (lFilter !== 'all' && String(w.lesson) !== lFilter) return false;
+        const p = getCardProgress(w.id);
+        if (sFilter === 'new' && p.state !== 'new') return false;
+        if (sFilter === 'learning' && p.state !== 'learning') return false;
+        if (sFilter === 'mastered' && p.state !== 'mastered') return false;
+        if (sFilter === 'due' && !isDue(w.id)) return false;
+        if (sFilter === 'leech' && !isLeech(w.id)) return false;
+        if (q) {
+          const hay = (w.jp + ' ' + w.hira + ' ' + w.romaji + ' ' + w.id_text + ' ' + w.note).toLowerCase();
+          return hay.includes(q);
+        }
+        return true;
+      });
+
+      document.getElementById('dictCountLabel').textContent = `Menampilkan ${filtered.length} dari ${ALL_WORDS.length} kata`;
+
+      const listEl = document.getElementById('dictList');
+      if (!filtered.length) {
+        listEl.innerHTML = `<div class="bg-slate-900 rounded-xl border border-slate-800 p-8 text-center text-sm text-slate-400">Tidak ada kotoba yang cocok dengan filter tersebut.</div>`;
+        return;
+      }
+
+      // Render up to 150 at a time if unfiltered? 500 lightweight cards render fast in modern browsers (<20ms)
+      listEl.innerHTML = filtered.map(w => {
+        const p = getCardProgress(w.id);
+        let badgeHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400">Baru</span>`;
+        if (isLeech(w.id)) badgeHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300">🔥 Rawan Lupa</span>`;
+        else if (isDue(w.id)) badgeHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300">⏰ Jatuh Tempo</span>`;
+        else if (p.state === 'mastered') badgeHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300">✓ Terkunci (${formatInterval(p.stability)})</span>`;
+        else if (p.state === 'learning') badgeHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300">Belajar</span>`;
+
+        return `
+          <div class="bg-slate-900 rounded-xl border border-slate-800 px-4 py-3 flex items-start justify-between gap-3 hover:border-indigo-200 transition">
+            <div class="space-y-1 min-w-0">
+              <div class="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="text-[11px] font-bold text-slate-400">L${w.lesson}.${w.no}</span>
+                <span class="font-jp text-lg font-extrabold text-slate-100">${w.jp}</span>
+                <span class="font-jp text-xs font-semibold text-indigo-400">${w.hira}</span>
+                <span class="text-xs font-mono text-slate-400">${w.romaji}</span>
+              </div>
+              <div class="text-sm font-semibold text-slate-300">${w.id_text}</div>
+              ${w.note ? `<div class="text-xs text-slate-400 bg-slate-800/80 rounded-lg px-2.5 py-1.5 mt-1"><strong>Catatan:</strong> ${w.note}</div>` : ''}
+              ${w.example ? `<div class="text-xs text-slate-400 font-jp whitespace-pre-line mt-1 pl-2 border-l-2 border-indigo-200">${w.example}</div>` : ''}
+            </div>
+            <div class="flex flex-col items-end gap-2 shrink-0">
+              ${badgeHtml}
+              <button data-speak="${w.hira}" class="btn-dict-speak p-1.5 rounded-lg bg-slate-800 hover:bg-indigo-500/20 text-slate-300 hover:text-indigo-300 border border-slate-700 text-xs transition" title="Dengar pelafalan">🔈</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      listEl.querySelectorAll('.btn-dict-speak').forEach(btn => {
+        btn.addEventListener('click', () => speakJapanese(btn.dataset.speak));
+      });
+    }
+
+    // ==================== NAVIGATION ====================
+    let activeView = 'home';
+
+    function switchView(view) {
+      activeView = view;
+      ['home', 'study', 'dict', 'method'].forEach(v => {
+        document.getElementById('view-' + v).classList.toggle('hidden', v !== view);
+      });
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        const isAct = btn.dataset.nav === view;
+        btn.className = isAct
+          ? 'nav-btn px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-indigo-600 text-white shadow-xs transition flex items-center gap-1.5'
+          : 'nav-btn px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-400 hover:text-slate-100 transition flex items-center gap-1.5';
+      });
+
+      if (view === 'home') renderHome();
+      if (view === 'dict') renderDict();
+      if (view === 'study') {
+        if (!session) {
+          document.getElementById('studyEmptyState').classList.remove('hidden');
+          document.getElementById('studyActiveArena').classList.add('hidden');
+          document.getElementById('studyCompleteCard').classList.add('hidden');
+        } else if (session.activePool.length === 0 && session.pendingQueue.length === 0) {
+          document.getElementById('studyEmptyState').classList.add('hidden');
+          document.getElementById('studyActiveArena').classList.add('hidden');
+          document.getElementById('studyCompleteCard').classList.remove('hidden');
+        } else {
+          document.getElementById('studyEmptyState').classList.add('hidden');
+          document.getElementById('studyCompleteCard').classList.add('hidden');
+          document.getElementById('studyActiveArena').classList.remove('hidden');
+        }
+      }
+    }
+
+    // ==================== EVENT WIRING ====================
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchView(btn.dataset.nav));
+    });
+    document.getElementById('btnLogo').addEventListener('click', () => switchView('home'));
+    document.getElementById('btnMethodGoHome').addEventListener('click', () => switchView('home'));
+    document.getElementById('btnEmptyGoHome').addEventListener('click', () => switchView('home'));
+    document.getElementById('btnEmptyStartL1').addEventListener('click', () => {
+      const l = LESSON_MAP[1];
+      startSession(l.title, l.words.map(w => w.id), 'learn', 1);
+    });
+
+    document.getElementById('btnExitSession').addEventListener('click', () => switchView('home'));
+    document.getElementById('btnCompleteHome').addEventListener('click', () => {
+      session = null;
+      switchView('home');
+    });
+    document.getElementById('btnCompleteNextLesson').addEventListener('click', (e) => {
+      const nextId = Number(e.currentTarget.dataset.nextLesson);
+      const l = LESSON_MAP[nextId];
+      if (l) startSession(l.title, l.words.map(w => w.id), 'learn', nextId);
+    });
+
+    document.getElementById('btnToggleFurigana').addEventListener('click', () => {
+      settings.furigana = !settings.furigana;
+      saveSettings();
+      if (session && session.currentItem) renderStudyCard();
+    });
+    document.getElementById('btnToggleInputMode').addEventListener('click', () => {
+      settings.inputMode = settings.inputMode === 'typing' ? 'fast' : 'typing';
+      saveSettings();
+      showToast(settings.inputMode === 'typing' ? 'Mode Ketik Aktif (Produksi Memori Maksimal)' : 'Mode Tebak Cepat Aktif');
+      if (session && session.currentItem && !session.answered) renderStudyCard();
+    });
+    document.getElementById('btnToggleMute').addEventListener('click', () => {
+      settings.muted = !settings.muted;
+      saveSettings();
+      document.getElementById('btnToggleMute').textContent = settings.muted ? '🔇' : '🔊';
+    });
+
+    document.getElementById('btnSpeakPrompt').addEventListener('click', () => {
+      if (session && session.currentItem) speakJapanese(WORD_MAP[session.currentItem.wordId].hira);
+    });
+    document.getElementById('btnSpeakAnswer').addEventListener('click', () => {
+      if (session && session.currentItem) speakJapanese(WORD_MAP[session.currentItem.wordId].hira);
+    });
+
+    document.getElementById('typingForm').addEventListener('submit', handleTypingSubmit);
+    document.getElementById('btnGiveUpTyping').addEventListener('click', () => {
+      document.getElementById('typingInput').value = '';
+      handleTypingSubmit();
+    });
+    document.getElementById('btnRevealAnswer').addEventListener('click', handleRevealClick);
+    document.getElementById('btnGradeFail').addEventListener('click', () => handleLearningRevealGrade(false));
+    document.getElementById('btnGradePass').addEventListener('click', () => handleLearningRevealGrade(true));
+    document.getElementById('btnNextAfterTyping').addEventListener('click', () => pickNextCard());
+    document.getElementById('btnOverrideCorrect').addEventListener('click', handleOverrideCorrect);
+
+    document.querySelectorAll('.fsrs-btn').forEach(btn => {
+      btn.addEventListener('click', () => handleFsrsGrade(Number(btn.dataset.fsrs)));
+    });
+
+    // Keyboard shortcuts in study view
+    document.addEventListener('keydown', (e) => {
+      if (activeView !== 'study' || !session || !session.currentItem) return;
+      if (document.getElementById('settingsModal').classList.contains('hidden') === false) return;
+      const inTyping = document.activeElement === document.getElementById('typingInput');
+      if (inTyping) return;
+
+      if (!session.answered) {
+        if (e.code === 'Space' || e.code === 'Enter') {
+          const revealVisible = !document.getElementById('areaReveal').classList.contains('hidden');
+          if (revealVisible) {
+            e.preventDefault();
+            handleRevealClick();
+          }
+        }
+      } else {
+        if (!document.getElementById('gradeTypingNext').classList.contains('hidden')) {
+          if (e.code === 'Enter' || e.code === 'Space') {
+            e.preventDefault();
+            pickNextCard();
+          }
+        } else if (!document.getElementById('gradeLearningReveal').classList.contains('hidden')) {
+          if (e.key === '1') { e.preventDefault(); handleLearningRevealGrade(false); }
+          if (e.key === '2' || e.code === 'Enter') { e.preventDefault(); handleLearningRevealGrade(true); }
+        } else if (!document.getElementById('gradeFsrsButtons').classList.contains('hidden')) {
+          if (['1', '2', '3', '4'].includes(e.key)) {
+            e.preventDefault();
+            handleFsrsGrade(Number(e.key));
+          }
+        }
+      }
+    });
+
+    // Dictionary filters
+    document.getElementById('dictSearch').addEventListener('input', renderDict);
+    document.getElementById('dictLessonFilter').addEventListener('change', renderDict);
+    document.getElementById('dictStatusFilter').addEventListener('change', renderDict);
+
+    // Settings Modal
+    document.getElementById('btnOpenSettings').addEventListener('click', () => {
+      document.getElementById('setWindowSize').value = String(settings.windowSize);
+      document.getElementById('setAutoSpeak').checked = !!settings.autoSpeak;
+      document.getElementById('resetConfirmBox').classList.add('hidden');
+      document.getElementById('settingsModal').classList.remove('hidden');
+    });
+    document.getElementById('btnCloseSettings').addEventListener('click', () => {
+      document.getElementById('settingsModal').classList.add('hidden');
+    });
+    document.getElementById('settingsModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) document.getElementById('settingsModal').classList.add('hidden');
+    });
+    document.getElementById('setWindowSize').addEventListener('change', (e) => {
+      settings.windowSize = Number(e.target.value);
+      saveSettings();
+      showToast(`Jendela aktif diubah ke ${settings.windowSize} kata`);
+    });
+    document.getElementById('setAutoSpeak').addEventListener('change', (e) => {
+      settings.autoSpeak = e.target.checked;
+      saveSettings();
+    });
+
+    document.getElementById('btnExportBackup').addEventListener('click', () => {
+      const payload = JSON.stringify({ progress, settings, stats, exportedAt: new Date().toISOString() }, null, 2);
+      const blob = new Blob([payload], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `seimitsu_kotoba_backup_${getTodayStr()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Backup progres berhasil diunduh');
+    });
+
+    document.getElementById('inputImportBackup').addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (data.progress) {
+            progress = data.progress;
+            saveProgress();
+            renderHome();
+            showToast('Backup progres berhasil dipulihkan!');
+          }
+        } catch (err) {
+          showToast('File backup tidak valid');
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    document.getElementById('btnAskReset').addEventListener('click', () => {
+      document.getElementById('resetConfirmBox').classList.remove('hidden');
+    });
+    document.getElementById('btnCancelReset').addEventListener('click', () => {
+      document.getElementById('resetConfirmBox').classList.add('hidden');
+    });
+    document.getElementById('btnConfirmReset').addEventListener('click', () => {
+      progress = {};
+      stats.todayReviews = 0;
+      session = null;
+      saveProgress();
+      saveStats();
+      document.getElementById('settingsModal').classList.add('hidden');
+      document.getElementById('navStudyDot').classList.add('hidden');
+      switchView('home');
+      showToast('Seluruh progres berhasil direset');
+    });
+
+    // ==================== INIT ====================
+    loadState();
+    populateDictLessonSelect();
+    switchView('home');
+  </script>
+</body>
+</html>
