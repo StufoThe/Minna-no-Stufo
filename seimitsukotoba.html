@@ -97,6 +97,10 @@
               <span id="heroPrimaryLabel">Mulai Pelajaran 1</span>
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
             </button>
+            <button id="btnHeroPatch" class="hidden px-4 py-3 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-100 font-semibold text-sm transition flex items-center justify-center gap-1.5">
+              <span>🛡️ Tambal Bolong</span>
+              <span id="heroPatchCount" class="px-1.5 py-0.5 rounded-md bg-emerald-500 text-slate-950 text-xs font-extrabold">0</span>
+            </button>
             <button id="btnHeroLeech" class="hidden px-4 py-3 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/40 text-rose-100 font-semibold text-sm transition flex items-center justify-center gap-1.5">
               <span>🔥 Rawan Lupa</span>
               <span id="heroLeechCount" class="px-1.5 py-0.5 rounded-md bg-rose-500 text-white text-xs font-bold">0</span>
@@ -191,6 +195,8 @@
             <div class="flex items-center gap-1.5 shrink-0">
               <button id="btnToggleFurigana" class="px-2.5 py-1 rounded-lg text-xs font-semibold border transition" title="Tampilkan/sembunyikan Hiragana di soal JP→ID">Furigana: ON</button>
               <button id="btnToggleInputMode" class="px-2.5 py-1 rounded-lg text-xs font-semibold border transition" title="Ganti antara Ketik (Rekomendasi) dan Tebak Cepat">Ketik</button>
+              <button id="btnToggleAutoSpeak" class="px-2.5 py-1 rounded-lg text-xs font-semibold border transition" title="Putar suara Jepang otomatis tiap kartu muncul">🗣️ Suara: ON</button>
+              <button id="btnToggleAutoFlow" class="px-2.5 py-1 rounded-lg text-xs font-semibold border transition" title="Otomatis ulang audio 3x saat salah & lanjut otomatis">⚡ Auto 3×</button>
               <button id="btnToggleMute" class="p-1.5 rounded-lg border border-slate-700 text-slate-400 hover:bg-slate-800 transition" title="Suara Efek">🔊</button>
             </div>
           </div>
@@ -316,6 +322,17 @@
                 <button data-fsrs="4" class="fsrs-btn py-2.5 px-2 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-sky-300 font-bold text-xs transition">
                   <div>Mudah [4]</div>
                   <div class="text-[10px] font-normal opacity-80 mt-0.5" data-int="4">6 hari</div>
+                </button>
+              </div>
+
+              <!-- Auto-Repeat 3x Audio & Auto-Advance Banner -->
+              <div id="autoFlowBar" class="hidden flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/35 text-xs">
+                <div class="flex items-center gap-2 text-indigo-200 font-semibold">
+                  <span id="autoFlowIcon" class="animate-pulse">🔊</span>
+                  <span id="autoFlowText">Mengulang audio 1/3... otomatis lanjut</span>
+                </div>
+                <button id="btnSkipAutoFlow" type="button" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition shrink-0">
+                  Skip / Lanjut Cepat →
                 </button>
               </div>
 
@@ -504,9 +521,25 @@
         <div class="flex items-center justify-between gap-3">
           <div>
             <div class="font-semibold text-slate-200">Putar Audio Jepang Otomatis</div>
-            <div class="text-xs text-slate-400">Membacakan pelafalan saat kartu muncul/terjawab</div>
+            <div class="text-xs text-slate-400">Otomatis bunyi setiap kata muncul & saat dijawab</div>
           </div>
           <input id="setAutoSpeak" type="checkbox" class="w-5 h-5 accent-indigo-600 rounded cursor-pointer" />
+        </div>
+
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <div class="font-semibold text-slate-200">Salah → Ulang Audio 3× & Auto-Lanjut</div>
+            <div class="text-xs text-slate-400">Saat salah, audio diputar 3× lalu lanjut otomatis (bisa di-skip)</div>
+          </div>
+          <input id="setWrongRepeat3x" type="checkbox" class="w-5 h-5 accent-indigo-600 rounded cursor-pointer" />
+        </div>
+
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <div class="font-semibold text-slate-200">Tambal Bolong Otomatis (Lintas Bab)</div>
+            <div class="text-xs text-slate-400">Otomatis sisipkan kata rawan lupa dari bab sebelumnya ke sesi baru</div>
+          </div>
+          <input id="setAutoSpiral" type="checkbox" class="w-5 h-5 accent-indigo-600 rounded cursor-pointer" />
         </div>
 
         <div class="pt-3 border-t border-slate-800 space-y-2.5">
@@ -534,6 +567,9 @@
     </div>
   </div>
 
+  <!-- PERSISTENT JAPANESE AUDIO PLAYER -->
+  <audio id="ttsAudio" preload="none" referrerpolicy="no-referrer" class="hidden"></audio>
+
   <!-- TOAST -->
   <div id="toast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-lg border border-indigo-400/30"></div>
 
@@ -555,11 +591,11 @@
 
     // ==================== STORAGE & SETTINGS ====================
     const STORAGE_KEY = 'seimitsu_kotoba_fsrs_v1';
-    const SETTINGS_KEY = 'seimitsu_kotoba_settings_v1';
+    const SETTINGS_KEY = 'seimitsu_kotoba_settings_v2';
     const STATS_KEY = 'seimitsu_kotoba_stats_v1';
 
     let progress = {}; // wordId -> { state, stability, difficulty, due, reps, lapses, lastDir }
-    let settings = { windowSize: 5, furigana: true, inputMode: 'typing', autoSpeak: false, muted: false };
+    let settings = { windowSize: 5, furigana: true, inputMode: 'typing', autoSpeak: true, autoAdvance: true, wrongRepeat3x: true, autoSpiral: true, muted: false };
     let stats = { date: '', todayReviews: 0 };
 
     function getTodayStr() {
@@ -791,16 +827,219 @@
       } catch (e) {}
     }
 
-    function speakJapanese(text) {
+    let autoFlowTimer = null;
+    let autoFlowToken = 0;
+    let speakToken = 0;
+    let cachedJaVoice = null;
+    let activeUtterance = null;
+
+    function refreshJaVoice() {
       try {
-        if (!('speechSynthesis' in window)) return;
-        window.speechSynthesis.cancel();
-        const clean = stripKanaParens(text);
-        const u = new SpeechSynthesisUtterance(clean);
-        u.lang = 'ja-JP';
-        u.rate = 0.92;
-        window.speechSynthesis.speak(u);
+        if (!('speechSynthesis' in window)) return null;
+        const voices = window.speechSynthesis.getVoices() || [];
+        cachedJaVoice =
+          voices.find(v => v.lang && v.lang.toLowerCase() === 'ja-jp' && /google|kyoko|o-ren|haruka|ayumi|nanami|keita/i.test(v.name)) ||
+          voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja')) ||
+          null;
+        return cachedJaVoice;
+      } catch (e) { return null; }
+    }
+    try {
+      if ('speechSynthesis' in window) {
+        refreshJaVoice();
+        window.speechSynthesis.onvoiceschanged = refreshJaVoice;
+      }
+    } catch (e) {}
+
+    function stopAllSpeech() {
+      speakToken += 1;
+      try {
+        const audio = document.getElementById('ttsAudio');
+        if (audio) {
+          audio.onended = null;
+          audio.onerror = null;
+          audio.pause();
+        }
       } catch (e) {}
+      try {
+        if ('speechSynthesis' in window && (window.speechSynthesis.speaking || window.speechSynthesis.pending)) {
+          window.speechSynthesis.cancel();
+        }
+      } catch (e) {}
+    }
+
+    function cancelAutoFlow() {
+      autoFlowToken += 1;
+      clearTimeout(autoFlowTimer);
+      autoFlowTimer = null;
+      stopAllSpeech();
+      const bar = document.getElementById('autoFlowBar');
+      if (bar) bar.classList.add('hidden');
+    }
+
+    function speakViaBrowserTts(clean, mySpeakToken, onDone) {
+      let finished = false;
+      const doneOnce = () => {
+        if (finished || mySpeakToken !== speakToken) return;
+        finished = true;
+        if (onDone) onDone();
+      };
+      try {
+        if (!('speechSynthesis' in window)) {
+          setTimeout(doneOnce, 450);
+          return;
+        }
+        const synth = window.speechSynthesis;
+        const doSpeak = () => {
+          if (mySpeakToken !== speakToken) return;
+          try {
+            if (synth.paused) synth.resume();
+            const u = new SpeechSynthesisUtterance(clean);
+            const jaVoice = cachedJaVoice || refreshJaVoice();
+            if (jaVoice) u.voice = jaVoice;
+            u.lang = 'ja-JP';
+            u.rate = 0.92;
+            u.volume = 1.0;
+            activeUtterance = u;
+            u.onend = doneOnce;
+            u.onerror = doneOnce;
+            synth.speak(u);
+            if (onDone) {
+              const estMs = Math.max(1300, Math.min(4200, clean.length * 200 + 950));
+              setTimeout(doneOnce, estMs);
+            }
+          } catch (e) {
+            setTimeout(doneOnce, 450);
+          }
+        };
+        if (synth.speaking || synth.pending) {
+          synth.cancel();
+          setTimeout(doSpeak, 55);
+        } else {
+          doSpeak();
+        }
+      } catch (e) {
+        setTimeout(doneOnce, 450);
+      }
+    }
+
+    function speakJapanese(text, onDone = null, isManualTap = false) {
+      stopAllSpeech();
+      const mySpeakToken = speakToken;
+      const clean = stripKanaParens(text);
+      if (!clean) {
+        if (onDone) setTimeout(onDone, 200);
+        return;
+      }
+
+      const audio = document.getElementById('ttsAudio');
+      if (!audio) {
+        speakViaBrowserTts(clean, mySpeakToken, onDone);
+        return;
+      }
+
+      const enc = encodeURIComponent(clean);
+      const urls = [
+        `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ja&q=${enc}`,
+        `https://dict.youdao.com/dictvoice?audio=${enc}&le=jap`
+      ];
+
+      let finished = false;
+      const doneOnce = () => {
+        if (finished || mySpeakToken !== speakToken) return;
+        finished = true;
+        if (onDone) onDone();
+      };
+
+      const tryUrl = (idx) => {
+        if (mySpeakToken !== speakToken) return;
+        if (idx >= urls.length) {
+          speakViaBrowserTts(clean, mySpeakToken, onDone);
+          return;
+        }
+        try {
+          audio.onended = () => doneOnce();
+          audio.onerror = () => {
+            if (mySpeakToken !== speakToken) return;
+            tryUrl(idx + 1);
+          };
+          audio.src = urls[idx];
+          audio.playbackRate = 0.96;
+          audio.volume = 1.0;
+          const p = audio.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(() => {
+              if (mySpeakToken !== speakToken) return;
+              tryUrl(idx + 1);
+            });
+          }
+        } catch (err) {
+          tryUrl(idx + 1);
+        }
+      };
+
+      tryUrl(0);
+    }
+
+    function triggerWrongRepeat3x(word, onFinish) {
+      cancelAutoFlow();
+      const myToken = autoFlowToken;
+      const bar = document.getElementById('autoFlowBar');
+      const txt = document.getElementById('autoFlowText');
+      if (!settings.wrongRepeat3x) {
+        if (statusType === 'reveal' && settings.autoSpeak && item.dir === 'id2jp') speakJapanese(word.hira);
+        return;
+      }
+      bar.classList.remove('hidden');
+      let count = 0;
+      const playStep = () => {
+        if (myToken !== autoFlowToken) return;
+        count += 1;
+        txt.textContent = `Mengulang audio ${count}/3... (otomatis lanjut, tekan Spasi/Enter untuk skip)`;
+        speakJapanese(word.hira, () => {
+          if (myToken !== autoFlowToken) return;
+          if (count < 3) {
+            autoFlowTimer = setTimeout(playStep, 320);
+          } else {
+            txt.textContent = 'Selesai 3× • Lanjut kartu berikutnya...';
+            autoFlowTimer = setTimeout(() => {
+              if (myToken !== autoFlowToken) return;
+              cancelAutoFlow();
+              onFinish();
+            }, 420);
+          }
+        });
+      };
+      playStep();
+    }
+
+    function triggerCorrectAutoNext(word, onFinish) {
+      cancelAutoFlow();
+      const myToken = autoFlowToken;
+      if (!settings.autoAdvance) {
+        if (settings.autoSpeak) speakJapanese(word.hira);
+        return;
+      }
+      const bar = document.getElementById('autoFlowBar');
+      const txt = document.getElementById('autoFlowText');
+      bar.classList.remove('hidden');
+      txt.textContent = 'Benar! Memutar audio lalu lanjut otomatis...';
+      if (settings.autoSpeak) {
+        speakJapanese(word.hira, () => {
+          if (myToken !== autoFlowToken) return;
+          autoFlowTimer = setTimeout(() => {
+            if (myToken !== autoFlowToken) return;
+            cancelAutoFlow();
+            onFinish();
+          }, 420);
+        });
+      } else {
+        autoFlowTimer = setTimeout(() => {
+          if (myToken !== autoFlowToken) return;
+          cancelAutoFlow();
+          onFinish();
+        }, 700);
+      }
     }
 
     // ==================== TOAST ====================
@@ -840,19 +1079,69 @@
       }
     */
 
+    function getFragileWordIds(excludeSet = new Set(), maxCount = 20) {
+      const now = Date.now();
+      const scored = [];
+      ALL_WORDS.forEach(w => {
+        if (excludeSet.has(w.id)) return;
+        const p = progress[w.id];
+        if (!p || p.state === 'new') return;
+        // Fragility score: higher = more likely to be forgotten ("bolong")
+        let score = 0;
+        if (p.due && p.due <= now) score += 50;
+        if (p.lapses > 0) score += p.lapses * 22;
+        if (p.state === 'learning') score += 30;
+        if (p.stability <= 1.5) score += 18;
+        else if (p.stability <= 4) score += 10;
+        // Time elapsed since last review (approximated from due - stability)
+        const lastReview = p.due ? (p.due - (p.stability || 1) * DAY_MS) : 0;
+        const minsAgo = lastReview > 0 ? (now - lastReview) / 60000 : 999;
+        if (minsAgo >= 10) score += Math.min(25, minsAgo / 30);
+        if (score >= 15) scored.push({ id: w.id, score });
+      });
+      scored.sort((a, b) => b.score - a.score);
+      return scored.slice(0, maxCount).map(x => x.id);
+    }
+
     function startSession(title, wordIds, mode = 'learn', lessonId = null) {
+      cancelAutoFlow();
       const uniqueIds = [...new Set(wordIds)].filter(id => WORD_MAP[id]);
       if (!uniqueIds.length) {
         showToast('Tidak ada kata yang perlu dipelajari di pilihan ini.');
         return;
       }
 
+      // Auto-Spiral Injection: mix fragile words from previously completed lessons into new lessons!
+      let finalQueue = [...uniqueIds];
+      const spiralSet = new Set();
+      if (mode === 'learn' && settings.autoSpiral && lessonId !== null) {
+        const excludeSet = new Set(uniqueIds);
+        const spiralQuota = Math.min(8, Math.max(3, Math.floor(uniqueIds.length * 0.25)));
+        const fragileIds = getFragileWordIds(excludeSet, spiralQuota);
+        if (fragileIds.length > 0) {
+          fragileIds.forEach(id => spiralSet.add(id));
+          // Interleave 1 spiral word every ~4 new words so retroactive interference is crushed!
+          const merged = [];
+          let fi = 0;
+          uniqueIds.forEach((id, idx) => {
+            merged.push(id);
+            if ((idx + 1) % 4 === 0 && fi < fragileIds.length) {
+              merged.push(fragileIds[fi++]);
+            }
+          });
+          while (fi < fragileIds.length) merged.push(fragileIds[fi++]);
+          finalQueue = merged;
+          showToast(`🛡️ +${fragileIds.length} kata Tambal Bolong dari bab lalu disisipkan otomatis!`);
+        }
+      }
+
       session = {
         title,
         mode,
         lessonId,
-        totalWords: uniqueIds.length,
-        pendingQueue: [...uniqueIds],
+        totalWords: finalQueue.length,
+        pendingQueue: finalQueue,
+        spiralSet,
         activePool: [],
         lockedIds: [],
         currentItem: null,
@@ -874,17 +1163,19 @@
       while (session.activePool.length < maxWin && session.pendingQueue.length > 0) {
         const wid = session.pendingQueue.shift();
         const p = getCardProgress(wid);
-        if (session.mode === 'fsrs') {
+        const isSpiral = session.spiralSet && session.spiralSet.has(wid);
+        if (session.mode === 'fsrs' || isSpiral) {
           // Test opposite direction of last review for lifelong 2-way balance
           const dir = p.lastDir === 'jp2id' ? 'id2jp' : 'jp2id';
-          session.activePool.push({ wordId: wid, stage: 2, dir, cooldown: 0, errors: 0 });
+          session.activePool.push({ wordId: wid, stage: 2, dir, cooldown: 0, errors: 0, isSpiral });
         } else {
-          session.activePool.push({ wordId: wid, stage: 0, dir: 'jp2id', cooldown: 0, errors: 0 });
+          session.activePool.push({ wordId: wid, stage: 0, dir: 'jp2id', cooldown: 0, errors: 0, isSpiral: false });
         }
       }
     }
 
     function pickNextCard() {
+      cancelAutoFlow();
       if (!session) return;
       fillSlidingWindow();
 
@@ -952,6 +1243,16 @@
         ? 'px-2.5 py-1 rounded-lg text-xs font-semibold border border-emerald-500/40 bg-emerald-500/20 text-emerald-300 transition'
         : 'px-2.5 py-1 rounded-lg text-xs font-semibold border border-amber-500/40 bg-amber-500/20 text-amber-300 transition';
 
+      const btnSpeakAuto = document.getElementById('btnToggleAutoSpeak');
+      btnSpeakAuto.textContent = settings.autoSpeak ? '🗣️ Suara: ON' : '🗣️ Suara: OFF';
+      btnSpeakAuto.className = settings.autoSpeak
+        ? 'px-2.5 py-1 rounded-lg text-xs font-semibold border border-indigo-500/40 bg-indigo-500/20 text-indigo-300 transition'
+        : 'px-2.5 py-1 rounded-lg text-xs font-semibold border border-slate-700 bg-slate-800 text-slate-400 transition';
+      const btnAuto = document.getElementById('btnToggleAutoFlow');
+      btnAuto.textContent = settings.wrongRepeat3x ? '⚡ Auto 3×: ON' : '⚡ Auto 3×: OFF';
+      btnAuto.className = settings.wrongRepeat3x
+        ? 'px-2.5 py-1 rounded-lg text-xs font-semibold border border-sky-500/40 bg-sky-500/20 text-sky-300 transition'
+        : 'px-2.5 py-1 rounded-lg text-xs font-semibold border border-slate-700 bg-slate-800 text-slate-400 transition';
       document.getElementById('btnToggleMute').textContent = settings.muted ? '🔇' : '🔊';
 
       // Active Pool Pills
@@ -981,6 +1282,9 @@
       } else if (item.stage === 1) {
         badge.textContent = 'ID → JP • Tahap 2/3 (Produksi)';
         badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300';
+      } else if (item.isSpiral) {
+        badge.textContent = item.dir === 'jp2id' ? '🛡️ TAMBAL BOLONG • JP → ID' : '🛡️ TAMBAL BOLONG • ID → JP';
+        badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
       } else {
         badge.textContent = item.dir === 'jp2id' ? '🔒 VERIFIKASI 3/3 • JP → ID' : '🔒 VERIFIKASI 3/3 • ID → JP';
         badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-violet-500/20 text-violet-300';
@@ -1131,10 +1435,12 @@
         playChime(item.stage === 2 ? 'lock' : 'ok');
         showFeedbackPanel('ok', val);
         if (session.mode === 'fsrs') {
+          if (settings.autoSpeak) speakJapanese(word.hira);
           showFsrsGradeButtons();
         } else {
           applyLearningOutcome(true);
           document.getElementById('gradeTypingNext').classList.remove('hidden');
+          triggerCorrectAutoNext(word, () => pickNextCard());
         }
       } else {
         playChime('err');
@@ -1143,10 +1449,16 @@
         showFeedbackPanel(res.close ? 'close' : 'err', val);
         if (session.mode === 'fsrs') {
           showFsrsGradeButtons();
+          if (settings.wrongRepeat3x) {
+            triggerWrongRepeat3x(word, () => handleFsrsGrade(1));
+          } else if (settings.autoSpeak) {
+            speakJapanese(word.hira);
+          }
         } else {
           applyLearningOutcome(false);
           document.getElementById('gradeTypingNext').classList.remove('hidden');
           document.getElementById('btnOverrideCorrect').classList.remove('hidden');
+          triggerWrongRepeat3x(word, () => pickNextCard());
         }
       }
     }
@@ -1233,15 +1545,26 @@
 
     function handleLearningRevealGrade(passed) {
       if (!session) return;
+      const word = WORD_MAP[session.currentItem.wordId];
       session.attempts += 1;
       if (passed) {
         session.corrects += 1;
         playChime(session.currentItem.stage === 2 ? 'lock' : 'ok');
+        applyLearningOutcome(true);
+        pickNextCard();
       } else {
         playChime('err');
+        applyLearningOutcome(false);
+        document.getElementById('gradeLearningReveal').classList.add('hidden');
+        document.getElementById('feedbackStatusText').textContent = '❌ Lupa — Memutar audio 3× lalu lanjut otomatis...';
+        document.getElementById('feedbackStatusText').className = 'font-extrabold text-sm text-rose-300';
+        document.getElementById('feedbackBanner').className = 'rounded-xl p-4 border border-rose-500/30 bg-rose-950/50 text-left space-y-2';
+        if (settings.wrongRepeat3x) {
+          triggerWrongRepeat3x(word, () => pickNextCard());
+        } else {
+          pickNextCard();
+        }
       }
-      applyLearningOutcome(passed);
-      pickNextCard();
     }
 
     function handleFsrsGrade(rating) {
@@ -1288,6 +1611,7 @@
 
     function handleOverrideCorrect() {
       if (!session || !lastTypingWasFail) return;
+      cancelAutoFlow();
       // Restore stage before fail, undo error & promote cleanly
       const item = session.currentItem;
       item.stage = prevStageBeforeFail;
@@ -1371,6 +1695,17 @@
           : `Lanjutkan ke Pelajaran ${nextLesson.id}: ${nextLesson.shortTitle}`;
         heroPrimaryLabel.textContent = `Mulai Pelajaran ${nextLesson.id} (${targetIds.length} kata)`;
         btnHeroPrimary.onclick = () => startSession(nextLesson.title, targetIds, 'learn', nextLesson.id);
+      }
+
+      // Tambal Bolong button (scans all studied words by fragility)
+      const fragileIds = getFragileWordIds(new Set(), 20);
+      const btnHeroPatch = document.getElementById('btnHeroPatch');
+      if (fragileIds.length > 0) {
+        btnHeroPatch.classList.remove('hidden');
+        document.getElementById('heroPatchCount').textContent = fragileIds.length;
+        btnHeroPatch.onclick = () => startSession(`🛡️ Tambal Bolong Lintas Bab (${fragileIds.length} kata)`, fragileIds, 'fsrs', null);
+      } else {
+        btnHeroPatch.classList.add('hidden');
       }
 
       // Leech button
@@ -1637,7 +1972,7 @@
       }).join('');
 
       listEl.querySelectorAll('.btn-dict-speak').forEach(btn => {
-        btn.addEventListener('click', () => speakJapanese(btn.dataset.speak));
+        btn.addEventListener('click', () => speakJapanese(btn.dataset.speak, null, true));
       });
     }
 
@@ -1687,7 +2022,7 @@
       startSession(l.title, l.words.map(w => w.id), 'learn', 1);
     });
 
-    document.getElementById('btnExitSession').addEventListener('click', () => switchView('home'));
+    document.getElementById('btnExitSession').addEventListener('click', () => { cancelAutoFlow(); switchView('home'); });
     document.getElementById('btnCompleteHome').addEventListener('click', () => {
       session = null;
       switchView('home');
@@ -1709,6 +2044,26 @@
       showToast(settings.inputMode === 'typing' ? 'Mode Ketik Aktif (Produksi Memori Maksimal)' : 'Mode Tebak Cepat Aktif');
       if (session && session.currentItem && !session.answered) renderStudyCard();
     });
+    document.getElementById('btnToggleAutoSpeak').addEventListener('click', () => {
+      settings.autoSpeak = !settings.autoSpeak;
+      saveSettings();
+      showToast(settings.autoSpeak ? '🗣️ Audio Jepang Otomatis AKTIF' : '🗣️ Audio Jepang Otomatis MATI');
+      if (session && session.currentItem) {
+        renderStudyCard();
+        if (settings.autoSpeak) speakJapanese(WORD_MAP[session.currentItem.wordId].hira, null, true);
+      }
+    });
+    document.getElementById('btnToggleAutoFlow').addEventListener('click', () => {
+      settings.wrongRepeat3x = !settings.wrongRepeat3x;
+      settings.autoAdvance = settings.wrongRepeat3x;
+      saveSettings();
+      showToast(settings.wrongRepeat3x ? '⚡ Auto Audio 3× & Lanjut Otomatis AKTIF' : 'Mode Manual (klik Lanjut sendiri)');
+      if (session && session.currentItem) renderStudyCard();
+    });
+    document.getElementById('btnSkipAutoFlow').addEventListener('click', () => {
+      cancelAutoFlow();
+      pickNextCard();
+    });
     document.getElementById('btnToggleMute').addEventListener('click', () => {
       settings.muted = !settings.muted;
       saveSettings();
@@ -1716,10 +2071,10 @@
     });
 
     document.getElementById('btnSpeakPrompt').addEventListener('click', () => {
-      if (session && session.currentItem) speakJapanese(WORD_MAP[session.currentItem.wordId].hira);
+      if (session && session.currentItem) speakJapanese(WORD_MAP[session.currentItem.wordId].hira, null, true);
     });
     document.getElementById('btnSpeakAnswer').addEventListener('click', () => {
-      if (session && session.currentItem) speakJapanese(WORD_MAP[session.currentItem.wordId].hira);
+      if (session && session.currentItem) speakJapanese(WORD_MAP[session.currentItem.wordId].hira, null, true);
     });
 
     document.getElementById('typingForm').addEventListener('submit', handleTypingSubmit);
@@ -1753,6 +2108,14 @@
           }
         }
       } else {
+        if (!document.getElementById('autoFlowBar').classList.contains('hidden')) {
+          if (e.code === 'Enter' || e.code === 'Space') {
+            e.preventDefault();
+            cancelAutoFlow();
+            pickNextCard();
+            return;
+          }
+        }
         if (!document.getElementById('gradeTypingNext').classList.contains('hidden')) {
           if (e.code === 'Enter' || e.code === 'Space') {
             e.preventDefault();
@@ -1783,6 +2146,8 @@
     document.getElementById('btnOpenSettings').addEventListener('click', () => {
       document.getElementById('setWindowSize').value = String(settings.windowSize);
       document.getElementById('setAutoSpeak').checked = !!settings.autoSpeak;
+      document.getElementById('setWrongRepeat3x').checked = !!settings.wrongRepeat3x;
+      document.getElementById('setAutoSpiral').checked = !!settings.autoSpiral;
       document.getElementById('resetConfirmBox').classList.add('hidden');
       document.getElementById('settingsModal').classList.remove('hidden');
     });
@@ -1799,6 +2164,15 @@
     });
     document.getElementById('setAutoSpeak').addEventListener('change', (e) => {
       settings.autoSpeak = e.target.checked;
+      saveSettings();
+    });
+    document.getElementById('setWrongRepeat3x').addEventListener('change', (e) => {
+      settings.wrongRepeat3x = e.target.checked;
+      settings.autoAdvance = e.target.checked;
+      saveSettings();
+    });
+    document.getElementById('setAutoSpiral').addEventListener('change', (e) => {
+      settings.autoSpiral = e.target.checked;
       saveSettings();
     });
 
