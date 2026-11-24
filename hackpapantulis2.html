@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Papan Tulis Sensei — Aplikasi Hapalan Murni</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans JP', 'system-ui', 'sans-serif'],
+            jp: ['Noto Sans JP', 'Inter', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      background-color: #0b1120;
+      color: #f1f5f9;
+      font-family: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    .jp-text {
+      font-family: 'Noto Sans JP', 'Inter', sans-serif;
+      letter-spacing: 0.02em;
+      line-height: 1.85;
+    }
+    .cloze-chip {
+      display: inline-block;
+      border-radius: 0.4rem;
+      padding: 0.05rem 0.45rem;
+      margin: 0 0.1rem;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+    .cloze-hidden {
+      background-color: #1e293b;
+      border: 1px dashed #38bdf8;
+      color: transparent;
+      text-shadow: 0 0 11px rgba(56, 189, 248, 0.55);
+    }
+    .cloze-hidden:hover {
+      background-color: #0f172a;
+      border-color: #7dd3fc;
+    }
+    .cloze-shown {
+      background-color: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      color: #6ee7b7;
+    }
+    .fade-in {
+      animation: fadeIn 0.2s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased selection:bg-sky-500/30 selection:text-sky-200">
+  <!-- Sticky Header -->
+  <header class="sticky top-0 z-30 border-b border-slate-800/90 bg-slate-950/90 backdrop-blur-md">
+    <div class="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-400 font-jp font-bold text-sm">
+          板
+        </div>
+        <div class="min-w-0">
+          <h1 class="truncate text-sm sm:text-base font-bold tracking-tight text-slate-100">
+            Papan Tulis Sensei (Murni 100%)
+          </h1>
+          <p class="truncate text-xs text-slate-400">
+            6 Papan Berurutan • Tanpa Diubah &amp; Tanpa Ditambah
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <button id="btnSpeedToggle" type="button" class="inline-flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs font-medium text-slate-200 hover:border-sky-500/60 hover:text-sky-300 transition" title="Kecepatan Suara Jepang">
+          <span>🔊</span>
+          <span id="speedLabel">0.85x</span>
+        </button>
+        <button id="btnResetOpen" type="button" class="inline-flex items-center rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:border-rose-500/50 hover:text-rose-300 transition" title="Reset Progres Hapalan">
+          ↺
+        </button>
+      </div>
+    </div>
+
+    <!-- 6-Board Linear Track -->
+    <div class="border-t border-slate-800/70 bg-slate-900/50">
+      <div class="mx-auto max-w-4xl px-4 py-2.5">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+          <span id="progressText" class="font-medium text-slate-300">Hapalan Selesai: 0 / 6 Papan</span>
+          <span id="progressPct" class="font-mono text-sky-400 font-semibold">0%</span>
+        </div>
+        <div id="boardRail" class="grid grid-cols-6 gap-1.5 sm:gap-2"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="mx-auto max-w-4xl px-4 py-6 pb-20">
+    <!-- Active Board Header & 3-Step Memorization Gate -->
+    <section class="mb-5 rounded-2xl border border-slate-800 bg-slate-900/80 p-4 sm:p-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <span id="boardBadge" class="inline-flex items-center rounded-full bg-sky-500/15 border border-sky-400/30 px-3 py-0.5 text-xs font-semibold text-sky-300">
+          Papan 1 dari 6
+        </span>
+        <span id="boardDate" class="text-xs font-mono text-slate-400"></span>
+      </div>
+      <h2 id="boardTitle" class="jp-text text-xl sm:text-2xl font-bold text-white"></h2>
+
+      <!-- 3-Step Linear Memorization Stepper -->
+      <div id="modeStepper" class="mt-4 grid grid-cols-3 gap-2"></div>
+    </section>
+
+    <!-- Dynamic Stage Content -->
+    <div id="contentArea" class="fade-in space-y-4"></div>
+  </main>
+
+  <!-- Reset Confirmation Modal -->
+  <div id="resetModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-sm rounded-2xl border border-slate-700 bg-slate-900 p-5 shadow-2xl">
+      <h3 class="text-base font-bold text-white">Ulangi Progres Hapalan?</h3>
+      <p class="mt-1.5 text-sm text-slate-400">Semua tanda sudah hafal akan dikosongkan supaya kamu bisa mengulang dari Papan 1.</p>
+      <div class="mt-5 flex justify-end gap-2">
+        <button id="btnCancelReset" type="button" class="rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700">Batal</button>
+        <button id="btnConfirmReset" type="button" class="rounded-xl bg-rose-500 px-3.5 py-2 text-xs font-semibold text-white hover:bg-rose-400">Ya, Ulangi</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. VERBATIM DATA FROM SENSEI'S 6 WHITEBOARDS (ZERO EDITS, ZERO ADDITIONS)
+    // Tokens wrapped in {{...}} mark key phrases for Mode 2 (Tutup Kata Kunci).
+    // =========================================================================
+    const BOARDS = [
+      {
+        id: 'papan_1',
+        num: 1,
+        shortLabel: '安全・衛生',
+        date: '05 Nov',
+        title: 'ろうどうあんぜん ＆ 食品えいせい と えいせいかんり',
+        blocks: [
+          {
+            heading: 'おぼえてください！ ① おもな ろうどうさいがい',
+            prompt: 'おぼえてください！ ① おもな ろうどうさいがい',
+            tts: 'おもな ろうどうさいがい。せつめいしてください。',
+            lines: [
+              '① おもな {{ろうどうさいがい}} → せつめいしてください (日本語で).'
+            ]
+          },
+          {
+            heading: '② ろうどうあんぜん は ?',
+            prompt: 'ろうどうあんぜん は ?',
+            tts: 'ろうどうあんぜん は、さぎょうしゃ の あんぜん と けんこう を まもることです。さぎょうじょう で ケガ を しないためには、さぎょうふく と あんぜんほごぐ を ただしく ちゃくようします。',
+            lines: [
+              '・{{さぎょうしゃ の あんぜん と けんこう}} を まもることです。',
+              '・さぎょうじょう で ケガ を しないためには、{{さぎょうふく と あんぜんほごぐ}} を ただしく {{ちゃくようします}}。'
+            ]
+          },
+          {
+            heading: '① 食品えいせい と えいせいかんり。',
+            prompt: '食品えいせい と えいせいかんり は ? (じゅうぶん ではない なら ?)',
+            tts: '食品えいせい と えいせいかんり。食べた人 が びょうき にならない と ケガ も しないこと です。じゅうぶん ではない なら、食べた人 が びょうき になって、ケガ も します。そして、かいしゃ の しんよう を なくします。',
+            lines: [
+              '{{食べた人 が びょうき にならない}} と {{ケガ も しないこと}} です。',
+              '→ {{じゅうぶん ではない なら}}',
+              '　食べた人 が {{びょうき になって}}、{{ケガ も します}}。',
+              '　そして、{{かいしゃ の しんよう を なくします}}。'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'papan_2',
+        num: 2,
+        shortLabel: 'BAB 2',
+        date: '06 Nov',
+        title: 'BAB 2 (だい2しょう) — 食品えいせい・いっぱんえいせいかんり・HACCP',
+        blocks: [
+          {
+            heading: '① 食品えいせい → ① 食品えいせい の きほん',
+            prompt: '食品えいせい の きほん (4つ)',
+            tts: '食品えいせい の きほん。いち、手洗い を する。に、さぎょうふく や 手ぶくろ を ただしく ちゃくようします。さん、せいけつな きかい せつび と きぐ など を 使う。よん、食品 や げんざいりょう を きまった おんど で ほかん する。',
+            lines: [
+              '① {{手洗い を する}}',
+              '② {{さぎょうふく や 手ぶくろ}} を ただしく ちゃくようします',
+              '③ {{せいけつな きかい (せつび) と きぐ}} など を 使う',
+              '④ 食品 や げんざいりょう を {{きまった おんど で ほかん する}}'
+            ]
+          },
+          {
+            heading: '① 食品えいせい → ② いっぱんえいせいかんり の じゅうようなことは',
+            prompt: 'いっぱんえいせいかんり の じゅうようなことは (4つ)',
+            tts: 'いっぱんえいせいかんり の じゅうようなことは。いち、5S。に、しせつ せつび、きぐなどの えいせいかんり。さん、さぎょうしゃ の えいせいかんり。よん、げんざいりょう 食品の えいせいかんり。',
+            lines: [
+              '① {{5S}}',
+              '② {{しせつ・せつび、きぐなどの}} えいせいかんり',
+              '③ {{さぎょうしゃ の}} えいせいかんり',
+              '④ {{げんざいりょう・食品の}} えいせいかんり'
+            ]
+          },
+          {
+            heading: '★ いっぱんえいせいかんり ＆ ★ HACCP',
+            prompt: 'いっぱんえいせいかんり は ? HACCP は ? あんぜんな 食品を 作るためには ?',
+            tts: 'いっぱんえいせいかんり は 食品の あんぜん を まもる ために きほんてきな えいせいかんりです。ハサップ は 食品 を あんぜん に 作るためには、きがいよういん を ぶんせきして かんりする システム です。あんぜんな 食品を 作るためには、この りょうほう を いっしょ に おこなうことが たいせつです。',
+            lines: [
+              '★ いっぱんえいせいかんり は {{食品の あんぜん を まもる ために}} {{きほんてきな えいせいかんり}}です。',
+              '★ HACCP は 食品 を あんぜん に 作るためには、{{きがいよういん を ぶんせきして かんりする システム}} です。',
+              '→ あんぜんな 食品を 作るためには、{{この りょうほう を いっしょ に おこなうことが たいせつです}}。'
+            ]
+          },
+          {
+            heading: 'だい2しょう (Catatan Kanan Papan)',
+            prompt: 'だい2しょう (①〜④) ＆ faktor bahaya',
+            tts: 'だい2しょう。いち、食品えいせい。に、きがいよういん。さん、いっぱんえいせいかんり。よん、ハサップ。',
+            lines: [
+              'faktor bahaya {{きがいよういん}} → Penyebab {{げんいん}} / Pencegahan {{ふせぐために}}',
+              'だい2しょう： ① {{食品えいせい}}　② {{きがいよういん}}　③ {{いっぱんえいせいかんり}}　④ {{HACCP}}'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'papan_3',
+        num: 3,
+        shortLabel: '物理的',
+        date: '09 Nov',
+        title: 'きがいよういん — ① ぶつりてききがいよういん (faktor bahaya fisik)',
+        blocks: [
+          {
+            heading: '① ぶつりてききがいよういん (faktor bahaya fisik)',
+            prompt: 'ぶつりてききがいよういん の げんいん と ふせぐためには ?',
+            tts: 'ぶつりてききがいよういん。げんいん、かたい もの を 食品の中に入って。かたくて はが かける。とがっていて 口 の 中 に きずができます。ふせぐためには、ただしく せんじょうしたり、せんべつしたり、したしょり によって とりのぞきます。',
+            lines: [
+              'げんいん = {{かたい もの}} を 食品の中に入って。',
+              '　→ {{かたくて はが かける}}。',
+              '　→ {{とがっていて 口 の 中 に きずができます}}。',
+              'ふせぐためには',
+              '　{{ただしく せんじょうしたり、せんべつしたり、したしょり}} によって {{とりのぞきます}}。'
+            ]
+          },
+          {
+            heading: 'こうしつ いぶつ ＆ いぶつ',
+            prompt: 'こうしつ いぶつ と いぶつ の れい は ?',
+            tts: 'こうしついぶつ。いし、こいし、きんぞくへん、ガラスへん、プラスチックへん。いぶつ。かみのけ。',
+            lines: [
+              'こうしつ いぶつ： {{いし}}、{{こいし}}、{{きんぞくへん}}、{{ガラスへん}}、{{プラスチックへん}}。',
+              'いぶつ： {{かみのけ}}'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'papan_4',
+        num: 4,
+        shortLabel: '化学的',
+        date: '10 Nov',
+        title: 'きがいよういん — ② かがくてききがいよういん',
+        blocks: [
+          {
+            heading: '① アレルギーぶっしつ',
+            prompt: 'アレルギーぶっしつ の げんいん、しょうじょう、ふせぐためには ?',
+            tts: 'アレルギーぶっしつ。げんいん は アレルゲン です。体 の 中 に 入った ぶっしつ は よくない しょうじょう に なりました。その よくない しょうじょう は かゆみ、じんましん、くちびる や まぶたの はれ、はなみず と くしゃみ が とまらない です。いきが できない です。おもい しょうじょう なら しぬことも あります。アレルギーぶっしつ の ふせぐためには 9 ひんもく を ひょうじぎむ してください。',
+            lines: [
+              '= げんいん は → {{アレルゲン}} です。',
+              '体 の 中 に 入った ぶっしつ は {{よくない しょうじょう}} に なりました。',
+              'その よくない しょうじょう は {{かゆみ、じんましん、くちびる や まぶたの はれ、はなみず と くしゃみ が とまらない}} です。',
+              '{{いきが できない}} です。おもい しょうじょう なら {{しぬことも あります}}。',
+              'アレルギーぶっしつ の ふせぐためには {{9 ひんもく を ひょうじぎむ}} してください。'
+            ]
+          },
+          {
+            heading: '② ヒスタミン',
+            prompt: 'ヒスタミン の げんいん (さかな) と ふせぐためには ?',
+            tts: 'ヒスタミン。げんいん は、さかな、マグロ、イワシ、サバ、あかみざかな を とった あと すぐに れいぞう しない と れいとう しないことです。ほぞん じょうたい が わるかったら、ヒスタミン が ふえます。ふせぐためには、さかな げんざいりょう を とった あと すぐに れいぞうして、れいとうしてください。',
+            lines: [
+              '① げんいん は',
+              '　(−) a) さかな (→ {{マグロ、イワシ、サバ、あかみざかな}}) を とった あと {{すぐに れいぞう しない と れいとう しないこと}}です。',
+              '　　　b) {{ほぞん じょうたい が わるかったら}}、{{ヒスタミン が ふえます}}。',
+              '② ふせぐためには',
+              '　(+) さかな (げんざいりょう) を とった あと {{すぐに れいぞうして、れいとうしてください}}。'
+            ]
+          },
+          {
+            heading: '③ ソラニン',
+            prompt: 'ソラニン の げんいん と ふせぐためには ?',
+            tts: 'ソラニン。げんいんは、じゃがいもの め です。ふせぐためには じゃがいもの めの みどりかわ の ぶぶん を とりのぞきます。',
+            lines: [
+              '① げんいんは、{{じゃがいもの め}} です。',
+              '② ふせぐためには {{じゃがいもの めの みどりかわ の ぶぶん を とりのぞきます}}。'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'papan_5',
+        num: 5,
+        shortLabel: '生物的',
+        date: '11 Nov',
+        title: '③ せいぶつてききがいよういん',
+        blocks: [
+          {
+            heading: '① さいきん (しょくちゅうどく) — 3げんそく',
+            prompt: 'しょくちゅうどく よぼう の 3げんそく と おんど は ?',
+            tts: 'さいきん。しょくちゅうどく の げんいん になる しょくちゅうどくきん。しょくちゅうどく よぼう の 3げんそく は、いち、つけない。ただしい 手あらい、きぐ を せんじょうさっきんします。に、ふやさない。20度から50度、たかい おんど。30度から40度、ふえかた は はやくなります。10度いか、ふえかた は おそくなります。4度いか、ほとんど ふえません。マイナス15度いか、ふえなくなります。さん、やっつける、ころす。かねつするのは 75度 で 1分間 いじょう。',
+            lines: [
+              '① さいきん (しょくちゅうどく) → の げんいん になる {{しょくちゅうどくきん}}',
+              '★ しょくちゅうどく よぼう の 3げんそく は',
+              '① {{つけない}} (jangan dicemari) の ころすためには ・{{ただしい 手あらい、きぐ を せんじょうさっきんします}}。',
+              '② {{ふやさない}} (jgn sampai berkembangbiak) — ころすためには',
+              '　20℃ - 50℃ = {{たかい おんど}}',
+              '　30℃ - 40℃ = {{ふえかた は はやくなります}}',
+              '　10℃ いか = {{ふえかた は おそくなります}}',
+              '　4℃ いか = {{ほとんど ふえません}}',
+              '　-15℃ いか = {{ふえなくなります}}',
+              '③ {{やっつける (ころす)}} (dibunuh).',
+              '　かねつするのは {{75℃ で 1分間 いじょう}}。'
+            ]
+          },
+          {
+            heading: '② ウィルス → ノロウィルス',
+            prompt: 'ノロウィルス の とくちょう、ころすためには、ふせぐためには (4つ) ?',
+            tts: 'ウィルス、ノロウィルス。食品 の 中 に ふえません。トイレ に 行った あと 手あらい は じゅうようです。ころすためには かねつします。ちゅうしんおんど は 85度 から 90度、90びょうかん いじょう。ノロウィルス の しょくちゅうどくきん を ふせぐためには、いち、もちこまない。に、つけない。さん、やっつける。よん、ひろげない。',
+            lines: [
+              'ノロウィルス = {{食品 の 中 に ふえません}}。',
+              '→ {{トイレ に 行った あと 手あらい は じゅうようです}}。',
+              '→ ころすためには {{かねつします}}。 → ちゅうしんおんど は {{85℃ ～ 90℃ 90びょうかん いじょう}}',
+              'ノロウィルス の しょくちゅうどくきん を ふせぐためには：',
+              '　① {{もちこまない}}　② {{つけない}}　③ {{やっつける}}　④ {{ひろげない}}'
+            ]
+          },
+          {
+            heading: '③ カビ ＆ ④ きせいちゅう (アニサキス)',
+            prompt: 'カビ と きせいちゅう (アニサキス) の 説明 と ころすためには ?',
+            tts: 'カビ は、はえた 食品 は つかいません。ふせぐためには れいきゃくします。きせいちゅう は、人 や どうぶつ の からだ の ひょうめん や たいない です。えいよう から とって いきているのです。アニサキス、サバ、イワシ、サケ、アジ、イカ。ころすためには 70度 以上 かねつします。かねつする は 60度 なら 1分間。れいとうする は マイナス20度 なら 24時間。',
+            lines: [
+              '③ カビ = {{はえた 食品 は つかいません}}。',
+              '　ふせぐためには {{れいきゃくします}}。',
+              '④ きせいちゅう = {{人 や どうぶつ の からだ の ひょうめん や たいない}} です。',
+              '　→ {{えいよう から とって いきているのです}}。',
+              '　→ {{アニサキス}} → {{サバ、イワシ、サケ、アジ、イカ}}',
+              '　　の ころすためには → {{70℃ 以上 かねつします}}。',
+              '　　かねつする は {{60℃ なら 1分間}}',
+              '　　れいとうする は {{-20℃ なら 24時間}}'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'papan_6',
+        num: 6,
+        shortLabel: '区分衛生',
+        date: '17 Nov',
+        title: 'くぶんえいせいかんり',
+        blocks: [
+          {
+            heading: 'ひおせんさぎょうくいき (① ＆ ②)',
+            prompt: 'せいけつ さぎょうくいき と じゅんせいけつ さぎょうくいき は ?',
+            tts: 'くぶんえいせいかんり。ひおせんさぎょうくいき。いち、せいけつ さぎょうくいき。かねつ や やくざい による さっきん おわった 食品 を とりあつかいます。トピング、もりつけ。に、じゅんせいけつ さぎょうくいき。さっきんする 前 の げんざいりょう を とりあつかいます。したしょり、かねつちょうりします。',
+            lines: [
+              'ひおせんさぎょうくいき',
+              '① {{せいけつ さぎょうくいき}} = {{かねつ や やくざい による さっきん おわった 食品}} を とりあつかいます。{{{トピング、もりつけ}}}',
+              '② {{じゅんせいけつ さぎょうくいき}} = {{さっきんする 前 の げんざいりょう}} を とりあつかいます。{{{したしょり、かねつちょうりします}}}'
+            ]
+          },
+          {
+            heading: '③ おせんさぎょうくいき ＆ Alur ③ → ② → ① → ③',
+            prompt: 'おせんさぎょうくいき と ながれ (③→②→①→③) は ?',
+            tts: 'さん、おせんさぎょうくいき。げんざいりょう の うけいれ。しゅっか する 時に。ながれは、さん、に、いち、さん。',
+            lines: [
+              '③ {{おせんさぎょうくいき}} =',
+              '　・{{げんざいりょう の うけいれ}}。',
+              '　・{{しゅっか する 時に}}。',
+              'Alur Panah Sensei： {{③ (げんざいりょう の うけいれ) → ② → ① → ③ (しゅっか する 時に)}}'
+            ]
+          }
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // 2. STATE & STORAGE
+    // =========================================================================
+    const STORAGE_KEY = 'papan_tulis_sensei_hapalan_v1';
+    const state = {
+      boardIdx: 0,
+      mode: 'read', // 'read' | 'cloze' | 'recall'
+      masteredBoards: [],
+      speechRate: 0.85,
+      revealedCloze: {}, // key: `${boardIdx}-${bIdx}-${lIdx}-${tokIdx}`
+      recallIdx: 0,
+      recallShown: false,
+      recallKnown: [] // block indices marked memorized in current session
+    };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.masteredBoards)) {
+          state.masteredBoards = parsed.masteredBoards.filter((i) => typeof i === 'number' && i >= 0 && i < BOARDS.length);
+        }
+        if (typeof parsed.boardIdx === 'number' && parsed.boardIdx >= 0 && parsed.boardIdx < BOARDS.length) {
+          state.boardIdx = parsed.boardIdx;
+        }
+      } catch (e) {
+        // Ignore storage error
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          masteredBoards: state.masteredBoards,
+          boardIdx: state.boardIdx
+        }));
+      } catch (e) {
+        // Ignore storage error
+      }
+    }
+
+    // =========================================================================
+    // 3. TEXT TOKENIZER (PRESERVES VERBATIM TEXT, HANDLES {{...}} FOR CLOZE)
+    // =========================================================================
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function renderLinePlain(raw) {
+      // Strip {{ and }} while keeping any literal { and } (like {トピング、もりつけ})
+      // Note: {{{...}}} means literal { + cloze content + literal }
+      const cleaned = raw.replace(/\{\{\{([^}]+)\}\}\}/g, '{$1}').replace(/\{\{([^}]+)\}\}/g, '$1');
+      return escapeHtml(cleaned);
+    }
+
+    function renderLineCloze(raw, bIdx, lIdx) {
+      // Handle {{{...}}} first so literal braces remain outside the blur chip
+      let tokCounter = 0;
+      const withBraces = raw.replace(/\{\{\{([^}]+)\}\}\}/g, (_, inner) => {
+        const key = `${state.boardIdx}-${bIdx}-${lIdx}-${tokCounter++}`;
+        const shown = !!state.revealedCloze[key];
+        return `{<span class="cloze-chip ${shown ? 'cloze-shown' : 'cloze-hidden'}" data-cloze-key="${key}">${escapeHtml(inner)}</span>}`;
+      });
+      return withBraces.replace(/\{\{([^}]+)\}\}/g, (_, inner) => {
+        const key = `${state.boardIdx}-${bIdx}-${lIdx}-${tokCounter++}`;
+        const shown = !!state.revealedCloze[key];
+        return `<span class="cloze-chip ${shown ? 'cloze-shown' : 'cloze-hidden'}" data-cloze-key="${key}">${escapeHtml(inner)}</span>`;
+      });
+    }
+
+    function speakJapanese(text) {
+      if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utt = new SpeechSynthesisUtterance(text);
+        utt.lang = 'ja-JP';
+        utt.rate = state.speechRate;
+        window.speechSynthesis.speak(utt);
+      } catch (e) {
+        // Ignore TTS error if blocked
+      }
+    }
+
+    // =========================================================================
+    // 4. RENDER UI
+    // =========================================================================
+    function renderAll() {
+      const board = BOARDS[state.boardIdx];
+
+      // Progress
+      const done = state.masteredBoards.length;
+      const pct = Math.round((done / BOARDS.length) * 100);
+      document.getElementById('progressText').textContent = `Hapalan Selesai: ${done} / ${BOARDS.length} Papan`;
+      document.getElementById('progressPct').textContent = `${pct}%`;
+
+      // Top 6-board rail
+      document.getElementById('boardRail').innerHTML = BOARDS.map((b, idx) => {
+        const isCurrent = idx === state.boardIdx;
+        const isDone = state.masteredBoards.includes(idx);
+        let cls = 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-600 hover:text-slate-200';
+        if (isCurrent) cls = 'border-sky-400 bg-sky-500/20 text-sky-200 ring-1 ring-sky-400/40';
+        else if (isDone) cls = 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25';
+        return `
+          <button type="button" data-board-idx="${idx}" class="board-btn flex flex-col items-center justify-center rounded-lg border px-1 py-1.5 text-center transition ${cls}">
+            <span class="text-[11px] font-mono font-bold">${isDone ? '✓' : 'P' + b.num}</span>
+            <span class="truncate w-full text-[10px] sm:text-xs font-jp mt-0.5">${b.shortLabel}</span>
+          </button>
+        `;
+      }).join('');
+
+      // Active header
+      document.getElementById('boardBadge').textContent = `Papan ${board.num} dari ${BOARDS.length}`;
+      document.getElementById('boardDate').textContent = `Catatan Sensei • ${board.date}`;
+      document.getElementById('boardTitle').textContent = board.title;
+
+      // 3-step linear memorization stepper
+      const modes = [
+        { id: 'read', label: '1. Baca Bersih' },
+        { id: 'cloze', label: '2. Tutup Kata Kunci' },
+        { id: 'recall', label: '3. Tes Jelaskan' }
+      ];
+      document.getElementById('modeStepper').innerHTML = modes.map((m) => {
+        const active = state.mode === m.id;
+        return `
+          <button type="button" data-mode="${m.id}" class="mode-btn rounded-xl border px-2.5 py-2 text-xs sm:text-sm transition text-center ${
+            active
+              ? 'border-sky-400/70 bg-sky-500/15 text-sky-200 font-bold'
+              : 'border-slate-800 bg-slate-950/70 text-slate-400 hover:text-slate-200'
+          }">${m.label}</button>
+        `;
+      }).join('');
+
+      // Stage content
+      const area = document.getElementById('contentArea');
+      area.classList.remove('fade-in');
+      void area.offsetWidth;
+      area.classList.add('fade-in');
+
+      if (state.mode === 'read') {
+        area.innerHTML = renderReadMode(board);
+      } else if (state.mode === 'cloze') {
+        area.innerHTML = renderClozeMode(board);
+      } else {
+        area.innerHTML = renderRecallMode(board);
+      }
+
+      wireEvents(board);
+    }
+
+    function renderReadMode(board) {
+      return `
+        <div class="rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-3 text-xs sm:text-sm text-slate-300 flex items-center justify-between gap-2">
+          <span>Baca utuh kalimat asli Sensei dulu. Klik <strong>🔊</strong> di tiap kotak untuk dengar pelafalan Jepangnya.</span>
+        </div>
+
+        ${board.blocks.map((blk, bIdx) => `
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/90 p-5">
+            <div class="flex items-start justify-between gap-3 border-b border-slate-800 pb-3 mb-3">
+              <h3 class="jp-text text-sm sm:text-base font-bold text-sky-300">${escapeHtml(blk.heading)}</h3>
+              <button type="button" data-tts-idx="${bIdx}" class="tts-btn shrink-0 inline-flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-950 px-2.5 py-1 text-xs font-medium text-slate-200 hover:border-sky-400 hover:text-sky-300 transition">
+                <span>🔊</span><span>Dengar</span>
+              </button>
+            </div>
+            <div class="space-y-2 jp-text text-base sm:text-lg text-slate-100">
+              ${blk.lines.map((ln) => `<p class="whitespace-pre-wrap">${renderLinePlain(ln)}</p>`).join('')}
+            </div>
+          </div>
+        `).join('')}
+
+        <div class="flex justify-end pt-2">
+          <button id="btnToCloze" type="button" class="w-full sm:w-auto rounded-xl bg-sky-500 px-6 py-3.5 text-sm font-bold text-slate-950 shadow-lg shadow-sky-500/20 hover:bg-sky-400 transition">
+            Lanjut ke Tahap 2: Tutup Kata Kunci →
+          </button>
+        </div>
+      `;
+    }
+
+    function renderClozeMode(board) {
+      return `
+        <div class="rounded-xl border border-sky-500/25 bg-sky-500/10 px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+          <span class="text-xs sm:text-sm text-sky-200">Coba ucapkan kalimat Sensei dengan keras, lalu <strong>klik kotak buram</strong> untuk mengecek.</span>
+          <div class="flex items-center gap-2">
+            <button id="btnHideAll" type="button" class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-medium text-slate-200 hover:border-sky-400">Tutup Semua</button>
+            <button id="btnRevealAll" type="button" class="rounded-lg border border-emerald-500/40 bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-300 hover:bg-emerald-500/25">Buka Semua</button>
+          </div>
+        </div>
+
+        ${board.blocks.map((blk, bIdx) => `
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/90 p-5">
+            <div class="flex items-start justify-between gap-3 border-b border-slate-800 pb-3 mb-3">
+              <h3 class="jp-text text-sm sm:text-base font-bold text-sky-300">${escapeHtml(blk.heading)}</h3>
+              <button type="button" data-tts-idx="${bIdx}" class="tts-btn shrink-0 inline-flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-950 px-2.5 py-1 text-xs font-medium text-slate-200 hover:border-sky-400 hover:text-sky-300 transition">
+                <span>🔊</span>
+              </button>
+            </div>
+            <div class="space-y-2.5 jp-text text-base sm:text-lg text-slate-100">
+              ${blk.lines.map((ln, lIdx) => `<p class="whitespace-pre-wrap">${renderLineCloze(ln, bIdx, lIdx)}</p>`).join('')}
+            </div>
+          </div>
+        `).join('')}
+
+        <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 pt-2">
+          <button id="btnBackRead" type="button" class="w-full sm:w-auto rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-slate-300 hover:bg-slate-800 transition">
+            ← Kembali Baca Bersih
+          </button>
+          <button id="btnToRecall" type="button" class="w-full sm:w-auto rounded-xl bg-emerald-500 px-6 py-3.5 text-sm font-bold text-slate-950 shadow-lg shadow-emerald-500/20 hover:bg-emerald-400 transition">
+            Lanjut ke Tahap 3: Tes Jelaskan Lisan →
+          </button>
+        </div>
+      `;
+    }
+
+    function renderRecallMode(board) {
+      const total = board.blocks.length;
+      if (state.recallIdx >= total) {
+        const isLast = state.boardIdx === BOARDS.length - 1;
+        return `
+          <div class="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-6 text-center">
+            <div class="text-4xl mb-2">🏆</div>
+            <h3 class="text-xl font-extrabold text-white">
+              ${isLast ? 'Semua 6 Papan Sensei Sudah Tuntas!' : `Papan ${board.num} Selesai Dihafal!`}
+            </h3>
+            <p class="mt-1.5 text-sm text-slate-300">
+              Kamu sudah melatih semua bagian pada papan ini dengan bahasa asli Sensei.
+            </p>
+            <div class="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <button id="btnRetryRecall" type="button" class="w-full sm:w-auto rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-slate-200 hover:bg-slate-800 transition">
+                ↺ Ulangi Tes Papan Ini
+              </button>
+              ${!isLast ? `
+                <button id="btnNextBoard" type="button" class="w-full sm:w-auto rounded-xl bg-sky-500 px-6 py-3 text-sm font-bold text-slate-950 hover:bg-sky-400 transition">
+                  Lanjut ke Papan ${board.num + 1} (${BOARDS[state.boardIdx + 1].shortLabel}) →
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }
+
+      const blk = board.blocks[state.recallIdx];
+      return `
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/90 p-5 sm:p-6">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+            <span class="font-mono font-semibold text-sky-400">KARTU ${state.recallIdx + 1} / ${total}</span>
+            <span class="text-slate-400">Ucapkan dalam bahasa Jepang versi Sensei</span>
+          </div>
+
+          <div class="rounded-xl border border-sky-500/30 bg-slate-950 p-5 text-center">
+            <div class="text-xs uppercase tracking-wider text-slate-400 mb-2">Jelaskan Topik Ini (日本語で):</div>
+            <div class="jp-text text-lg sm:text-2xl font-bold text-white">${escapeHtml(blk.prompt)}</div>
+          </div>
+
+          ${!state.recallShown ? `
+            <div class="mt-5 flex justify-center">
+              <button id="btnRevealAnswer" type="button" class="w-full sm:w-auto rounded-xl bg-sky-500 px-6 py-3.5 text-sm font-bold text-slate-950 hover:bg-sky-400 transition">
+                Buka Tulisan Asli Sensei
+              </button>
+            </div>
+          ` : `
+            <div class="mt-4 rounded-xl border border-emerald-500/35 bg-emerald-500/10 p-4 sm:p-5">
+              <div class="flex items-center justify-between gap-2 mb-2.5">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-300">Tulisan Asli di Papan Sensei</span>
+                <button type="button" data-tts-idx="${state.recallIdx}" class="tts-btn inline-flex items-center gap-1 rounded-lg border border-emerald-500/40 bg-slate-950 px-2.5 py-1 text-xs font-medium text-emerald-300 hover:bg-slate-900">
+                  <span>🔊</span><span>Dengar</span>
+                </button>
+              </div>
+              <div class="space-y-2 jp-text text-base sm:text-lg text-slate-100">
+                ${blk.lines.map((ln) => `<p class="whitespace-pre-wrap">${renderLinePlain(ln)}</p>`).join('')}
+              </div>
+            </div>
+
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <button id="btnRecallAgain" type="button" class="rounded-xl border border-amber-500/40 bg-amber-500/10 py-3 text-sm font-semibold text-amber-300 hover:bg-amber-500/20 transition">
+                Belum Lancar (Ulangi)
+              </button>
+              <button id="btnRecallGotIt" type="button" class="rounded-xl bg-emerald-500 py-3 text-sm font-bold text-slate-950 hover:bg-emerald-400 transition">
+                Sudah Hafal ✓ →
+              </button>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 5. EVENT WIRING
+    // =========================================================================
+    function wireEvents(board) {
+      document.querySelectorAll('.board-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.boardIdx = Number(btn.getAttribute('data-board-idx'));
+          state.mode = 'read';
+          state.recallIdx = 0;
+          state.recallShown = false;
+          saveState();
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      document.querySelectorAll('.mode-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.mode = btn.getAttribute('data-mode');
+          if (state.mode === 'recall') {
+            state.recallIdx = 0;
+            state.recallShown = false;
+          }
+          renderAll();
+        });
+      });
+
+      document.querySelectorAll('.tts-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const idx = Number(btn.getAttribute('data-tts-idx'));
+          if (board.blocks[idx]) speakJapanese(board.blocks[idx].tts);
+        });
+      });
+
+      const btnToCloze = document.getElementById('btnToCloze');
+      if (btnToCloze) {
+        btnToCloze.addEventListener('click', () => {
+          state.mode = 'cloze';
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      const btnBackRead = document.getElementById('btnBackRead');
+      if (btnBackRead) {
+        btnBackRead.addEventListener('click', () => {
+          state.mode = 'read';
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      const btnToRecall = document.getElementById('btnToRecall');
+      if (btnToRecall) {
+        btnToRecall.addEventListener('click', () => {
+          state.mode = 'recall';
+          state.recallIdx = 0;
+          state.recallShown = false;
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      // Cloze toggles
+      document.querySelectorAll('[data-cloze-key]').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          const k = chip.getAttribute('data-cloze-key');
+          state.revealedCloze[k] = !state.revealedCloze[k];
+          if (state.revealedCloze[k]) {
+            chip.classList.remove('cloze-hidden');
+            chip.classList.add('cloze-shown');
+          } else {
+            chip.classList.remove('cloze-shown');
+            chip.classList.add('cloze-hidden');
+          }
+        });
+      });
+
+      const btnHideAll = document.getElementById('btnHideAll');
+      if (btnHideAll) {
+        btnHideAll.addEventListener('click', () => {
+          document.querySelectorAll('[data-cloze-key]').forEach((chip) => {
+            const k = chip.getAttribute('data-cloze-key');
+            state.revealedCloze[k] = false;
+            chip.classList.remove('cloze-shown');
+            chip.classList.add('cloze-hidden');
+          });
+        });
+      }
+
+      const btnRevealAll = document.getElementById('btnRevealAll');
+      if (btnRevealAll) {
+        btnRevealAll.addEventListener('click', () => {
+          document.querySelectorAll('[data-cloze-key]').forEach((chip) => {
+            const k = chip.getAttribute('data-cloze-key');
+            state.revealedCloze[k] = true;
+            chip.classList.remove('cloze-hidden');
+            chip.classList.add('cloze-shown');
+          });
+        });
+      }
+
+      // Recall mode buttons
+      const btnRevealAnswer = document.getElementById('btnRevealAnswer');
+      if (btnRevealAnswer) {
+        btnRevealAnswer.addEventListener('click', () => {
+          state.recallShown = true;
+          renderAll();
+        });
+      }
+
+      const btnRecallAgain = document.getElementById('btnRecallAgain');
+      if (btnRecallAgain) {
+        btnRecallAgain.addEventListener('click', () => {
+          state.recallShown = false;
+          renderAll();
+        });
+      }
+
+      const btnRecallGotIt = document.getElementById('btnRecallGotIt');
+      if (btnRecallGotIt) {
+        btnRecallGotIt.addEventListener('click', () => {
+          state.recallIdx += 1;
+          state.recallShown = false;
+          if (state.recallIdx >= board.blocks.length && !state.masteredBoards.includes(state.boardIdx)) {
+            state.masteredBoards.push(state.boardIdx);
+            saveState();
+          }
+          renderAll();
+        });
+      }
+
+      const btnRetryRecall = document.getElementById('btnRetryRecall');
+      if (btnRetryRecall) {
+        btnRetryRecall.addEventListener('click', () => {
+          state.recallIdx = 0;
+          state.recallShown = false;
+          renderAll();
+        });
+      }
+
+      const btnNextBoard = document.getElementById('btnNextBoard');
+      if (btnNextBoard) {
+        btnNextBoard.addEventListener('click', () => {
+          if (state.boardIdx + 1 < BOARDS.length) {
+            state.boardIdx += 1;
+            state.mode = 'read';
+            state.recallIdx = 0;
+            state.recallShown = false;
+            saveState();
+            renderAll();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      }
+    }
+
+    function initGlobalControls() {
+      const rates = [0.7, 0.85, 1.0];
+      let rateIdx = 1;
+      document.getElementById('btnSpeedToggle').addEventListener('click', () => {
+        rateIdx = (rateIdx + 1) % rates.length;
+        state.speechRate = rates[rateIdx];
+        document.getElementById('speedLabel').textContent = `${state.speechRate}x`;
+      });
+
+      const modal = document.getElementById('resetModal');
+      const openM = () => { modal.classList.remove('hidden'); modal.classList.add('flex'); };
+      const closeM = () => { modal.classList.add('hidden'); modal.classList.remove('flex'); };
+
+      document.getElementById('btnResetOpen').addEventListener('click', openM);
+      document.getElementById('btnCancelReset').addEventListener('click', closeM);
+      modal.addEventListener('click', (e) => { if (e.target === modal) closeM(); });
+      document.getElementById('btnConfirmReset').addEventListener('click', () => {
+        state.masteredBoards = [];
+        state.boardIdx = 0;
+        state.mode = 'read';
+        state.revealedCloze = {};
+        state.recallIdx = 0;
+        state.recallShown = false;
+        saveState();
+        closeM();
+        renderAll();
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      initGlobalControls();
+      renderAll();
+    });
+  </script>
+</body>
+</html>
