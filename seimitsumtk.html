@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seimitsu Math Mastery — Sistem Belajar Tunggal Matematika SSW Manufaktur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      background-color: #0b1120;
+      color: #f1f5f9;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    ruby {
+      ruby-align: center;
+    }
+    rt {
+      font-size: 0.62em;
+      color: #38bdf8;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: #1e293b;
+      height: 8px;
+      border-radius: 999px;
+      outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #38bdf8;
+      border: 3px solid #0f172a;
+      cursor: pointer;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.35);
+      transition: transform 0.12s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.12);
+    }
+    @keyframes spinChuck {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .chuck-spin {
+      transform-origin: 90px 90px;
+      animation: spinChuck linear infinite;
+    }
+    .fade-in {
+      animation: fadeIn 0.22s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased selection:bg-sky-500/30 selection:text-sky-200">
+  <!-- Sticky Top Bar -->
+  <header class="sticky top-0 z-30 border-b border-slate-800/90 bg-slate-950/90 backdrop-blur-md">
+    <div class="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-400 font-mono font-bold text-sm">
+          μm
+        </div>
+        <div class="min-w-0">
+          <h1 class="truncate text-sm sm:text-base font-bold tracking-tight text-slate-100">
+            Seimitsu Math Mastery
+          </h1>
+          <p class="truncate text-xs text-slate-400">
+            Jalur Tunggal 3-Langkah • SSW <ruby>精密<rt>せいみつ</rt></ruby> Manufaktur
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <button id="btnCheatSheet" type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-200 hover:border-sky-500/60 hover:text-sky-300 transition">
+          <span>📘</span>
+          <span class="hidden sm:inline">Rumus &amp; Info Ujian</span>
+          <span class="sm:hidden">Rumus</span>
+        </button>
+        <button id="btnResetModal" type="button" class="inline-flex items-center rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:border-rose-500/50 hover:text-rose-300 transition" title="Ulangi Progres">
+          ↺
+        </button>
+      </div>
+    </div>
+
+    <!-- Linear 6-Module Progress Track -->
+    <div class="border-t border-slate-800/70 bg-slate-900/50">
+      <div class="mx-auto max-w-4xl px-4 py-2.5">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+          <span id="trackProgressLabel" class="font-medium text-slate-300">Progres Jalur: 0 / 6 Modul Selesai</span>
+          <span id="trackPercent" class="font-mono text-sky-400 font-semibold">0%</span>
+        </div>
+        <div id="moduleRail" class="grid grid-cols-6 gap-1.5 sm:gap-2"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Linear Learning Workspace -->
+  <main class="mx-auto max-w-4xl px-4 py-6 pb-20">
+    <!-- Active Module Header & 3-Step Linear Gate -->
+    <section class="mb-5 rounded-2xl border border-slate-800 bg-slate-900/80 p-4 sm:p-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span id="moduleBadge" class="inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 border border-sky-400/30 px-3 py-0.5 text-xs font-semibold text-sky-300">
+          Modul 1 dari 6
+        </span>
+        <span id="moduleJpTag" class="text-xs text-slate-400 font-medium"></span>
+      </div>
+      <h2 id="moduleTitle" class="text-xl sm:text-2xl font-extrabold tracking-tight text-white"></h2>
+      <p id="moduleSubtitle" class="mt-1 text-sm text-slate-400"></p>
+
+      <!-- 3-Step Gate Indicator -->
+      <div id="stageStepper" class="mt-4 grid grid-cols-3 gap-2"></div>
+    </section>
+
+    <!-- Dynamic Stage Content Area -->
+    <div id="stageContent" class="fade-in space-y-5"></div>
+  </main>
+
+  <!-- Cheat Sheet & Exam Info Modal -->
+  <div id="cheatSheetModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
+    <div class="max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-700 bg-slate-900 p-5 sm:p-6 shadow-2xl">
+      <div class="flex items-start justify-between gap-3 border-b border-slate-800 pb-3">
+        <div>
+          <h3 class="text-lg font-bold text-white">📘 Kartu Rumus &amp; Fakta Resmi Ujian SSW Manufaktur</h3>
+          <p class="text-xs text-slate-400 mt-0.5">Acuan <ruby>機械金属加工<rt>きかいきんぞくかこう</rt></ruby> (Machining &amp; Metal Processing — M50-J11J)</p>
+        </div>
+        <button id="btnCloseCheat" type="button" class="rounded-lg bg-slate-800 px-2.5 py-1 text-sm text-slate-300 hover:bg-slate-700 hover:text-white">✕</button>
+      </div>
+
+      <div class="mt-4 space-y-4 text-sm text-slate-300">
+        <div class="rounded-xl border border-sky-500/25 bg-sky-500/10 p-3.5">
+          <div class="font-semibold text-sky-300 mb-1.5">Aturan Ujian Resmi (Prometric / JAIM)</div>
+          <ul class="space-y-1 text-xs sm:text-sm text-slate-200 list-disc pl-4">
+            <li>Format CBT: <strong>40 soal</strong> (30 soal tertulis ○/× dalam 40 menit, lulus ≥65%; 10 soal praktik dalam 40 menit, lulus ≥60%).</li>
+            <li><strong>Kalkulator: Tidak diperbolehkan</strong> — karena itu semua angka di latihan ini pakai trik geser koma &amp; mental cepat.</li>
+            <li>Tersedia furigana (ruby) pada ujian, setara tingkat <ruby>技能検定<rt>ぎのうけんてい</rt></ruby>3級.</li>
+          </ul>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div class="rounded-xl border border-slate-800 bg-slate-950/70 p-3.5">
+            <div class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1">1. Konversi Mikron</div>
+            <div class="font-mono text-xs text-slate-200 space-y-1">
+              <div>1 cm = 10 mm</div>
+              <div>1 mm = 1.000 μm</div>
+              <div>0,01 mm = 10 μm</div>
+              <div>0,001 mm = 1 μm</div>
+            </div>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-950/70 p-3.5">
+            <div class="text-xs font-semibold uppercase tracking-wider text-emerald-400 mb-1">2. <ruby>公差<rt>こうさ</rt></ruby> (Toleransi)</div>
+            <div class="font-mono text-xs text-slate-200 space-y-1">
+              <div>Batas Atas = Nominal + Atas</div>
+              <div>Batas Bawah = Nominal + Bawah</div>
+              <div>Lebar = Atas − Bawah</div>
+              <div>OK jika Bawah ≤ Ukur ≤ Atas</div>
+            </div>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-950/70 p-3.5">
+            <div class="text-xs font-semibold uppercase tracking-wider text-sky-400 mb-1">3. Alat Ukur &amp; Offset CNC</div>
+            <div class="font-mono text-xs text-slate-200 space-y-1">
+              <div>Mikrometer = Atas + (0 / 0,5) + Putar</div>
+              <div>Nokisu = Skala Utama + (Garis Lurus × 0,05)</div>
+              <div><ruby>補正値<rt>ほせいち</rt></ruby> = Target − Hasil Ukur</div>
+            </div>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-950/70 p-3.5">
+            <div class="text-xs font-semibold uppercase tracking-wider text-violet-400 mb-1">4. <ruby>切削<rt>せっさく</rt></ruby> (KEYENCE) &amp; QC</div>
+            <div class="font-mono text-xs text-slate-200 space-y-1">
+              <div>vc = (3,14 × Dm × n) ÷ 1000</div>
+              <div>f = l ÷ n &nbsp;|&nbsp; Tc = lm ÷ (n × f)</div>
+              <div><ruby>不良率<rt>ふりょうりつ</rt></ruby> = (NG ÷ Total) × 100%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 flex justify-end">
+        <button id="btnCloseCheatBottom" type="button" class="rounded-xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-sky-400 transition">
+          Kembali Belajar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset Progress Confirmation Modal -->
+  <div id="resetModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-sm rounded-2xl border border-slate-700 bg-slate-900 p-5 shadow-2xl">
+      <h3 class="text-base font-bold text-white">Ulangi Progres dari Modul 1?</h3>
+      <p class="mt-1.5 text-sm text-slate-400">Semua centang modul selesai akan dikosongkan supaya kamu bisa mengulang jalur dari awal.</p>
+      <div class="mt-5 flex justify-end gap-2">
+        <button id="btnCancelReset" type="button" class="rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700">Batal</button>
+        <button id="btnConfirmReset" type="button" class="rounded-xl bg-rose-500 px-3.5 py-2 text-xs font-semibold text-white hover:bg-rose-400">Ya, Ulangi</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. CURRICULUM DATA (6 SEQUENTIAL MODULES — EXPLAIN FIRST, THEN PRACTICE)
+    // =========================================================================
+    const MODULES = [
+      {
+        id: 'mikron',
+        num: 1,
+        shortTitle: 'Mikron',
+        title: 'Dunia Mikron: Rahasia Geser 3 Nol',
+        subtitle: 'Kuasai satuan pabrik presisi (mm ↔ μm) tanpa menghafal rumus rumit.',
+        jpTag: '<ruby>単位換算<rt>たんいかんざん</rt></ruby> (Konversi Satuan)',
+        analogyTitle: 'Analogi Uang Ribuan — Kamu Pasti Sudah Bisa!',
+        analogyBody: 'Di pabrik <ruby>精密<rt>せいみつ</rt></ruby> (presisi) Jepang, satuan <strong>1 mm = 1.000 μm</strong> (mikron). Itu persis seperti uang Indonesia: <strong>1 ribu = 1.000 rupiah</strong>. Kalau ada yang bilang "0,05 mm", bayangkan saja "0,05 ribu" → geser koma 3 langkah ke kanan → <strong>50 μm</strong>! Tidak perlu bakat matematika, cukup geser koma 3 kali.',
+        rules: [
+          { label: 'mm → μm (Jadi Lebih Banyak)', formula: 'Geser koma 3 langkah ke KANAN (× 1.000)', example: '0,025 mm → 25 μm' },
+          { label: 'μm → mm (Jadi Desimal)', formula: 'Geser koma 3 langkah ke KIRI (÷ 1.000)', example: '8 μm → 0,008 mm' },
+          { label: 'cm → mm (Tambahkan 1 Nol)', formula: 'Geser koma 1 langkah ke KANAN (× 10)', example: '2,4 cm → 24 mm' }
+        ],
+        vocab: [
+          { jp: 'ミリ (mm)', id: 'Milimeter — satuan standar gambar teknik' },
+          { jp: 'ミクロン (μm)', id: 'Mikrometer / mikron (1/1000 mm)' },
+          { jp: '<ruby>単位換算<rt>たんいかんざん</rt></ruby>', id: 'Konversi satuan' }
+        ],
+        simType: 'mikron',
+        examples: [
+          {
+            question: 'Di gambar teknik tertulis batas celah <strong>0,03 mm</strong>. Senpai bertanya: "Itu berapa mikron?"',
+            steps: [
+              'Tulis angkanya dengan 3 angka di belakang koma: <strong>0,030 mm</strong>.',
+              'Karena ubah mm → μm, geser koma 3 langkah ke kanan (hapus "0," di depan).',
+              'Hasilnya langsung terbaca: <strong>30 μm</strong>.'
+            ],
+            answer: '30 μm'
+          },
+          {
+            question: 'Mesin inspeksi menampilkan penyimpangan <strong>5 μm</strong>. Berapa milimeter (mm) nilainya?',
+            steps: [
+              'Ubah μm → mm berarti geser koma 3 langkah ke kiri.',
+              'Tulis 5 menjadi tiga digit di belakang koma: <strong>005</strong> → beri "0," di depan.',
+              'Hasilnya: <strong>0,005 mm</strong> (sekitar 1/15 tebal sehelai rambut!).'
+            ],
+            answer: '0,005 mm'
+          }
+        ],
+        drills: [
+          {
+            q: 'Konversikan <strong>0,04 mm</strong> ke satuan mikron (μm):',
+            hint: 'Tambahkan nol di belakang jadi 0,040, lalu geser koma 3 langkah ke kanan.',
+            options: ['4 μm', '40 μm', '400 μm', '0,4 μm'],
+            correct: 1,
+            explain: '0,04 mm = 0,040 mm → geser koma 3 langkah ke kanan = <strong>40 μm</strong>.'
+          },
+          {
+            q: 'Hasil ukur kekasaran adalah <strong>12 μm</strong>. Berapa nilainya dalam milimeter (mm)?',
+            hint: 'Geser koma 3 langkah ke kiri dari 12 → butuh satu angka 0 di belakang koma.',
+            options: ['0,12 mm', '0,012 mm', '0,0012 mm', '1,2 mm'],
+            correct: 1,
+            explain: '12 ÷ 1.000 = <strong>0,012 mm</strong> (3 angka di belakang koma: 0-1-2).'
+          },
+          {
+            q: 'Panjang batang logam adalah <strong>3,5 cm</strong>. Dalam gambar teknik Jepang (satuan mm), angka yang ditulis adalah:',
+            hint: '1 cm = 10 mm. Geser koma 1 langkah ke kanan.',
+            options: ['35 mm', '350 mm', '0,35 mm', '3.500 mm'],
+            correct: 0,
+            explain: '3,5 cm × 10 = <strong>35 mm</strong>. Ingat: gambar teknik manufaktur Jepang selalu memakai mm.'
+          }
+        ]
+      },
+      {
+        id: 'toleransi',
+        num: 2,
+        shortTitle: 'Toleransi',
+        title: 'Zona Aman Toleransi (OK vs NG)',
+        subtitle: 'Membaca angka ± dan +/− pada gambar teknik untuk menentukan barang lulus atau cacat.',
+        jpTag: '<ruby>寸法公差<rt>すんぽうこうさ</rt></ruby> (Toleransi Dimensi)',
+        analogyTitle: 'Analogi Jalur Jalan Tol — Cukup Cek Batas Kiri & Kanan',
+        analogyBody: 'Tidak ada mesin di dunia yang bisa memotong logam tepat 50,00000 mm terus-menerus. Karena itu gambar teknik memberi <strong>zona aman</strong> bernama <ruby>公差<rt>こうさ</rt></ruby> (toleransi). Selama hasil ukur berada di dalam batas bawah sampai batas atas (termasuk tepat di garis batas), barangnya <strong>OK (<ruby>合格<rt>ごうかく</rt></ruby>)</strong>. Keluar sedikit saja = <strong>NG (<ruby>不良<rt>ふりょう</rt></ruby>)</strong>.',
+        rules: [
+          { label: 'Batas Atas (最大許容寸法)', formula: 'Ukuran Dasar + Angka Atas', example: '50 + 0,03 = 50,03 mm' },
+          { label: 'Batas Bawah (最小許容寸法)', formula: 'Ukuran Dasar + Angka Bawah', example: '50 + (−0,02) = 49,98 mm' },
+          { label: 'Lebar Toleransi (公差幅)', formula: 'Batas Atas − Batas Bawah', example: '50,03 − 49,98 = 0,05 mm' }
+        ],
+        vocab: [
+          { jp: '<ruby>公差<rt>こうさ</rt></ruby>', id: 'Toleransi dimensi yang diizinkan' },
+          { jp: '<ruby>合格<rt>ごうかく</rt></ruby> (OK)', id: 'Lulus inspeksi (dalam batas)' },
+          { jp: '<ruby>不良<rt>ふりょう</rt></ruby> (NG)', id: 'Cacat / di luar batas toleransi' }
+        ],
+        simType: 'toleransi',
+        examples: [
+          {
+            question: 'Gambar teknik bertuliskan <strong>20,00 +0,02 / −0,01 mm</strong>. Kamu mengukur produk hasilnya <strong>19,99 mm</strong>. Apakah OK atau NG?',
+            steps: [
+              'Cari <strong>Batas Atas</strong>: 20,00 + 0,02 = <strong>20,02 mm</strong>.',
+              'Cari <strong>Batas Bawah</strong>: 20,00 − 0,01 = <strong>19,99 mm</strong>.',
+              'Cek hasil ukur (19,99 mm): Tepat di garis batas bawah. Di manufaktur, tepat di batas masih <strong>OK (<ruby>合格<rt>ごうかく</rt></ruby>)</strong>!'
+            ],
+            answer: 'OK (合格) — tepat di batas bawah 19,99 mm'
+          },
+          {
+            question: 'Tentukan lebar toleransi (<ruby>公差幅<rt>こうさはば</rt></ruby>) dari ukuran <strong>30 ± 0,05 mm</strong>.',
+            steps: [
+              'Batas Atas = 30 + 0,05 = <strong>30,05 mm</strong>.',
+              'Batas Bawah = 30 − 0,05 = <strong>29,95 mm</strong>.',
+              'Lebar = 30,05 − 29,95 = <strong>0,10 mm</strong> (trik cepat: kalau ±, cukup kalikan 2 → 0,05 × 2 = 0,10 mm).'
+            ],
+            answer: '0,10 mm (100 μm)'
+          }
+        ],
+        drills: [
+          {
+            q: 'Ukuran di gambar: <strong>40,00 ± 0,03 mm</strong>. Hasil ukur produk adalah <strong>39,96 mm</strong>. Status produk ini adalah:',
+            hint: 'Hitung batas bawah dulu: 40,00 − 0,03 = 39,97 mm. Bandingkan 39,96 dengan 39,97.',
+            options: ['OK (合格)', 'NG — Terlalu kecil (di bawah batas bawah)', 'NG — Terlalu besar (di atas batas atas)', 'Perlu ditambah 0,03 mm'],
+            correct: 1,
+            explain: 'Batas aman adalah 39,97 mm s/d 40,03 mm. Karena 39,96 mm lebih kecil dari 39,97 mm, produk ini <strong>NG (terlalu kecil)</strong>.'
+          },
+          {
+            q: 'Ukuran di gambar: <strong>25,00 +0,04 / +0,01 mm</strong> (keduanya positif!). Batas bawahnya adalah:',
+            hint: 'Hati-hati jebakan ujian! Angka bawahnya bertanda PLUS (+0,01), bukan minus.',
+            options: ['24,99 mm', '25,00 mm', '25,01 mm', '25,04 mm'],
+            correct: 2,
+            explain: 'Batas bawah = 25,00 + 0,01 = <strong>25,01 mm</strong>. Batas atas = 25,04 mm. Jadi 25,00 mm justru NG!'
+          },
+          {
+            q: 'Berapa lebar toleransi (<ruby>公差幅<rt>こうさはば</rt></ruby>) dari <strong>60 +0,05 / −0,02 mm</strong>?',
+            hint: 'Hitung jarak dari −0,02 sampai +0,05 (tambahkan saja 0,05 + 0,02).',
+            options: ['0,03 mm', '0,05 mm', '0,07 mm', '0,10 mm'],
+            correct: 2,
+            explain: 'Batas atas 60,05 − Batas bawah 59,98 = <strong>0,07 mm</strong> (atau 0,05 + 0,02 = 0,07 mm).'
+          },
+          {
+            q: 'Untuk gambar <strong>15,00 +0,00 / −0,04 mm</strong>, hasil ukur manakah yang <strong>OK (<ruby>合格<rt>ごうかく</rt></ruby>)</strong>?',
+            hint: 'Batas atas = 15,00 mm, batas bawah = 14,96 mm.',
+            options: ['15,01 mm', '14,95 mm', '14,98 mm', '15,04 mm'],
+            correct: 2,
+            explain: 'Rentang aman adalah 14,96 mm s/d 15,00 mm. Hanya <strong>14,98 mm</strong> yang masuk zona OK.'
+          }
+        ]
+      },
+      {
+        id: 'mikrometer',
+        num: 3,
+        shortTitle: 'Mikrometer',
+        title: 'Membaca Mikrometer: Aturan 3 Laci',
+        subtitle: 'Membaca alat ukur presisi 0,01 mm (マイクロメータ) dalam 5 detik tanpa salah.',
+        jpTag: 'マイクロメータの<ruby>読<rt>よ</rt></ruby>み<ruby>取<rt>と</rt></ruby>り',
+        analogyTitle: 'Analogi 3 Laci — Cukup Jumlahkan 3 Angka Sederhana',
+        analogyBody: 'Banyak pemula bingung membaca mikrometer karena melihat banyak garis sekaligus. Kuncinya adalah memecah pandangan jadi <strong>3 Laci Berurutan</strong>: (1) Lihat garis <strong>ATAS</strong> paling kanan yang terlihat (mm utuh), (2) Cek garis <strong>BAWAH</strong> — apakah ada garis setengah di kanan garis atas terakhir? Kalau ya tambah <strong>0,50 mm</strong>, kalau tidak tambah <strong>0,00</strong>, (3) Lihat angka di tabung <strong>PUTAR</strong> yang sejajar garis tengah (0,01–0,49 mm). Tinggal jumlahkan ketiganya!',
+        rules: [
+          { label: 'Laci 1 — Garis Atas (Skala Utama)', formula: 'Tiap garis = 1,00 mm', example: 'Garis ke-7 terlihat → 7,00 mm' },
+          { label: 'Laci 2 — Garis Bawah (Setengah mm)', formula: 'Kelihatan setelah garis atas terakhir = +0,50 mm', example: 'Kelihatan → +0,50 mm' },
+          { label: 'Laci 3 — Tabung Putar (Thimble)', formula: 'Tiap garis = 0,01 mm', example: 'Angka 23 sejajar → +0,23 mm' }
+        ],
+        vocab: [
+          { jp: 'マイクロメータ', id: 'Mikrometer (ketelitian 0,01 mm)' },
+          { jp: '<ruby>測定<rt>そくてい</rt></ruby>', id: 'Pengukuran' },
+          { jp: 'ラチェットストップ', id: 'Ratchet stop (diputar 2-3 klik agar tekanan pas)' }
+        ],
+        simType: 'mikrometer',
+        examples: [
+          {
+            question: 'Skala atas terlihat sampai garis <strong>8</strong>, di kanannya <strong>terlihat</strong> garis bawah 0,5, dan skala putar sejajar di angka <strong>14</strong>. Berapa hasil ukurnya?',
+            steps: [
+              'Laci 1 (Atas): <strong>8,00 mm</strong>.',
+              'Laci 2 (Bawah): Garis 0,5 terlihat → <strong>+ 0,50 mm</strong> (sekarang jadi 8,50 mm).',
+              'Laci 3 (Putar): Angka 14 → <strong>+ 0,14 mm</strong>.',
+              'Jumlahkan: 8,50 + 0,14 = <strong>8,64 mm</strong>.'
+            ],
+            answer: '8,64 mm'
+          },
+          {
+            question: 'Skala atas terlihat sampai garis <strong>5</strong>, garis bawah 0,5 <strong>belum terlihat</strong> di kanannya, dan skala putar sejajar di angka <strong>32</strong>.',
+            steps: [
+              'Laci 1 (Atas): <strong>5,00 mm</strong>.',
+              'Laci 2 (Bawah): Tidak terlihat → <strong>+ 0,00 mm</strong>.',
+              'Laci 3 (Putar): Angka 32 → <strong>+ 0,32 mm</strong>.',
+              'Jumlahkan: 5,00 + 0,00 + 0,32 = <strong>5,32 mm</strong>.'
+            ],
+            answer: '5,32 mm'
+          }
+        ],
+        drills: [
+          {
+            q: 'Baca hasil pengukuran mikrometer di bawah ini:',
+            svgType: 'micro',
+            svgVal: 6.72,
+            hint: 'Laci 1 = 6,00 mm | Laci 2 (garis bawah 0,5 terlihat!) = +0,50 mm | Laci 3 (skala putar) = +0,22 mm.',
+            options: ['6,22 mm', '6,72 mm', '7,22 mm', '6,52 mm'],
+            correct: 1,
+            explain: '6,00 + 0,50 (garis bawah terlihat) + 0,22 (thimble) = <strong>6,72 mm</strong>.'
+          },
+          {
+            q: 'Baca hasil pengukuran mikrometer di bawah ini:',
+            svgType: 'micro',
+            svgVal: 11.18,
+            hint: 'Laci 1 = 11,00 mm | Cek garis bawah di kanan garis 11: belum terlihat (+0,00) | Laci 3 = +0,18 mm.',
+            options: ['11,18 mm', '11,68 mm', '10,68 mm', '12,18 mm'],
+            correct: 0,
+            explain: '11,00 + 0,00 (garis bawah belum lewat) + 0,18 = <strong>11,18 mm</strong>.'
+          },
+          {
+            q: 'Baca hasil pengukuran mikrometer di bawah ini:',
+            svgType: 'micro',
+            svgVal: 4.85,
+            hint: 'Laci 1 = 4,00 mm | Laci 2 (garis bawah terlihat) = +0,50 mm | Laci 3 = +0,35 mm.',
+            options: ['4,35 mm', '4,53 mm', '4,85 mm', '5,35 mm'],
+            correct: 2,
+            explain: '4,00 + 0,50 + 0,35 = <strong>4,85 mm</strong>.'
+          }
+        ]
+      },
+      {
+        id: 'nogisu',
+        num: 4,
+        shortTitle: 'Nokisu',
+        title: 'Membaca Jangka Sorong (Nokisu 0,05 mm)',
+        subtitle: 'Trik "Cari 1 Garis yang Menyatu Lurus" untuk alat ukur serbaguna pabrik.',
+        jpTag: 'ノギスの<ruby>読<rt>よ</rt></ruby>み<ruby>取<rt>と</rt></ruby>り (Jangka Sorong)',
+        analogyTitle: 'Analogi Resleting — Cari Gigi yang Paling Lurus Menyatu',
+        analogyBody: 'Di ujian SSW(i) 機械金属加工, soal tentang <strong>ノギス (Nokisu / Jangka Sorong)</strong> sangat sering keluar — baik fungsinya (bisa ukur diameter luar, diameter dalam/<ruby>内径<rt>ないけい</rt></ruby>, dan kedalaman) maupun cara membacanya. Cukup 2 langkah: (1) Lihat angka <strong>mm tepat di sebelah KIRI angka 0</strong> skala geser, (2) Cari <strong>1 garis skala geser</strong> yang paling lurus menyatu dengan garis di atasnya, lalu baca angkanya!',
+        rules: [
+          { label: 'Langkah 1 — Angka Utuh (Skala Utama)', formula: 'Cari garis mm tepat di KIRI nol (0) vernier', example: 'Nol lewat garis 14 → 14,00 mm' },
+          { label: 'Langkah 2 — Angka Koma (Skala Vernier)', formula: 'Angka 1=0,10 | 2=0,20 ... garis tengah di antaranya = ,05', example: 'Garis lurus di 3,5 (antara 3 & 4) → +0,35 mm' },
+          { label: 'Fungsi Penting Ujian SSW', formula: 'Bisa ukur Luar (外径), Dalam (内径), & Kedalaman (深さ)', example: 'Bukan cuma luar saja!' }
+        ],
+        vocab: [
+          { jp: 'ノギス', id: 'Jangka sorong / vernier caliper (0,05 mm)' },
+          { jp: '<ruby>内径<rt>ないけい</rt></ruby> / <ruby>外径<rt>がいけい</rt></ruby>', id: 'Diameter dalam / Diameter luar' },
+          { jp: '<ruby>深<rt>ふか</rt></ruby>さ', id: 'Kedalaman lubang' }
+        ],
+        simType: 'nogisu',
+        examples: [
+          {
+            question: 'Angka 0 skala geser berada tepat di sebelah kanan garis <strong>12 mm</strong>. Garis yang paling lurus menyatu adalah garis <strong>ke-4</strong> (bertuliskan angka 4). Berapa hasilnya?',
+            steps: [
+              'Langkah 1 (Utuh): Angka 0 lewat 12 mm → <strong>12,00 mm</strong>.',
+              'Langkah 2 (Koma): Garis angka 4 lurus sempurna → <strong>+ 0,40 mm</strong>.',
+              'Total: 12,00 + 0,40 = <strong>12,40 mm</strong>.'
+            ],
+            answer: '12,40 mm'
+          },
+          {
+            question: 'Angka 0 berada di antara <strong>7 mm dan 8 mm</strong>. Garis yang lurus menyatu adalah garis pendek di tengah antara angka 6 dan 7.',
+            steps: [
+              'Langkah 1 (Utuh): Selalu ambil yang di KIRI nol → <strong>7,00 mm</strong>.',
+              'Langkah 2 (Koma): Garis tengah antara 6 dan 7 bernilai <strong>0,65 mm</strong>.',
+              'Total: 7,00 + 0,65 = <strong>7,65 mm</strong>.'
+            ],
+            answer: '7,65 mm'
+          }
+        ],
+        drills: [
+          {
+            q: 'Baca hasil pengukuran jangka sorong (ノギス) di bawah ini:',
+            svgType: 'vernier',
+            svgVal: 13.45,
+            hint: 'Lihat posisi 0 di skala bawah (lewat 13 mm), lalu lihat garis hijau yang menyatu (antara 4 dan 5 = 0,45).',
+            options: ['13,40 mm', '13,45 mm', '14,45 mm', '13,50 mm'],
+            correct: 1,
+            explain: 'Skala utama di kiri nol = 13 mm. Garis lurus di 4,5 (0,45 mm). Total = <strong>13,45 mm</strong>.'
+          },
+          {
+            q: 'Baca hasil pengukuran jangka sorong (ノギス) di bawah ini:',
+            svgType: 'vernier',
+            svgVal: 8.20,
+            hint: 'Nol lewat garis 8 mm, dan garis lurus tepat di angka 2.',
+            options: ['8,02 mm', '8,20 mm', '8,25 mm', '9,20 mm'],
+            correct: 1,
+            explain: 'Skala utama = 8 mm + garis angka 2 (0,20 mm) = <strong>8,20 mm</strong>.'
+          },
+          {
+            q: 'Soal tipe ○/× Ujian SSW(i): "Dengan menggunakan ノギス (jangka sorong), kita TIDAK BISA mengukur <ruby>内径<rt>ないけい</rt></ruby> (diameter dalam)." Pernyataan ini:',
+            hint: 'Ingat 3 fungsi utama nokisu: rahang bawah (luar), rahang atas (dalam), ekor (kedalaman).',
+            options: ['○ Benar (tidak bisa)', '× Salah (bisa mengukur diameter dalam)'],
+            correct: 1,
+            explain: '<strong>× Salah!</strong> Rahang atas nokisu khusus dipakai untuk mengukur diameter dalam (<ruby>内径<rt>ないけい</rt></ruby>). Ini soal asli pola ujian JAIM!'
+          }
+        ]
+      },
+      {
+        id: 'offset_qc',
+        num: 5,
+        shortTitle: 'Offset & QC',
+        title: 'Koreksi Offset CNC & Persentase QC',
+        subtitle: 'Cara menentukan angka + / − di panel CNC dan menghitung tingkat cacat tanpa kalkulator.',
+        jpTag: '<ruby>補正値<rt>ほせいち</rt></ruby> &amp; <ruby>不良率<rt>ふりょうりつ</rt></ruby>',
+        analogyTitle: 'Analogi Timbangan & Trik Persen Tanpa Kalkulator',
+        analogyBody: 'Operator CNC setiap hari melakukan <strong><ruby>補正<rt>ほせい</rt></ruby> (koreksi offset)</strong> karena pisau makin lama makin aus. Kuncinya super simpel: <strong>Kalau barang KEBESARAN → masukkan MINUS (−)</strong> supaya pisau memotong lebih dalam. <strong>Kalau barang KEKECILAN → masukkan PLUS (+)</strong>. Sedangkan untuk <strong><ruby>不良率<rt>ふりょうりつ</rt></ruby> (rasio cacat)</strong>, cukup ingat: "Cacat per 100 barang". Kalau dari 200 barang cacat 4, bagi 2 saja → berarti 2 per 100 = <strong>2%</strong>!',
+        rules: [
+          { label: 'Koreksi Offset CNC (補正値)', formula: 'Target − Hasil Ukur', example: 'Target 20,000 − Ukur 20,015 = −0,015 mm' },
+          { label: 'Rasio Cacat (不良率)', formula: '(Jumlah NG ÷ Total Produksi) × 100%', example: '3 NG dari 200 pcs = 1,5%' },
+          { label: 'Hasil Baik / Yield (歩留まり)', formula: '100% − Rasio Cacat', example: '100% − 1,5% = 98,5%' }
+        ],
+        vocab: [
+          { jp: '<ruby>補正値<rt>ほせいち</rt></ruby>', id: 'Nilai koreksi / offset pada mesin CNC' },
+          { jp: '<ruby>不良率<rt>ふりょうりつ</rt></ruby>', id: 'Persentase barang cacat (defect rate)' },
+          { jp: '<ruby>歩留<rt>ぶど</rt></ruby>まり', id: 'Yield / persentase barang bagus' }
+        ],
+        simType: 'offset',
+        examples: [
+          {
+            question: 'Target diameter luar (外径) adalah <strong>20,000 mm</strong>. Setelah diukur, hasilnya <strong>20,018 mm</strong> (kebesaran). Berapa <ruby>補正値<rt>ほせいち</rt></ruby> yang harus dimasukkan ke mesin CNC?',
+            steps: [
+              'Tanya dulu: Kebesaran atau kekecilan? 20,018 lebih besar dari 20,000 → <strong>Kebesaran = MINUS (−)</strong>.',
+              'Hitung selisihnya: 20,018 − 20,000 = 0,018 mm.',
+              'Gabungkan tandanya: <strong>−0,018 mm</strong> (atau −18 μm).'
+            ],
+            answer: '−0,018 mm'
+          },
+          {
+            question: 'Hari ini shift kamu memproduksi <strong>500 pcs</strong> komponen, dan ada <strong>10 pcs NG</strong>. Berapa <ruby>不良率<rt>ふりょうりつ</rt></ruby> (rasio cacat)?',
+            steps: [
+              'Trik tanpa kalkulator: Ubah total 500 menjadi 100 (dibagi 5).',
+              'Bagi juga jumlah NG dengan 5: 10 ÷ 5 = <strong>2</strong>.',
+              'Karena sudah per 100, langsung ketemu: <strong>2%</strong>! (Dan <ruby>歩留<rt>ぶど</rt></ruby>まり = 98%).'
+            ],
+            answer: '2%'
+          }
+        ],
+        drills: [
+          {
+            q: 'Target diameter adalah <strong>30,000 mm</strong>. Hasil ukur aktual adalah <strong>29,985 mm</strong>. Berapa nilai offset (<ruby>補正値<rt>ほせいち</rt></ruby>) yang benar?',
+            hint: '29,985 lebih KECIL dari 30,000 → butuh tanda PLUS (+). Selisihnya 0,015.',
+            options: ['−0,015 mm', '+0,015 mm', '+0,025 mm', '−0,025 mm'],
+            correct: 1,
+            explain: 'Target 30,000 − Ukur 29,985 = <strong>+0,015 mm</strong> (kekecilan 15 μm, jadi ditambah +0,015).'
+          },
+          {
+            q: 'Dari <strong>400 pcs</strong> barang yang diperiksa, ditemukan <strong>6 pcs NG</strong>. Berapa <ruby>不良率<rt>ふりょうりつ</rt></ruby> (rasio cacat)?',
+            hint: 'Ubah 400 jadi 100 dengan dibagi 4 → maka 6 juga dibagi 4.',
+            options: ['1,2%', '1,5%', '2,0%', '2,4%'],
+            correct: 1,
+            explain: '6 ÷ 4 = <strong>1,5%</strong> (atau 6 ÷ 400 × 100% = 1,5%).'
+          },
+          {
+            q: 'Jika rasio cacat (<ruby>不良率<rt>ふりょうりつ</rt></ruby>) sebuah line produksi adalah <strong>3,5%</strong>, maka nilai <ruby>歩留<rt>ぶど</rt></ruby>まり (yield / rasio barang baik) adalah:',
+            hint: '100% dikurangi 3,5%.',
+            options: ['96,5%', '97,5%', '95,5%', '93,5%'],
+            correct: 0,
+            explain: '100% − 3,5% = <strong>96,5%</strong>.'
+          }
+        ]
+      },
+      {
+        id: 'cutting',
+        num: 6,
+        shortTitle: 'Kecepatan',
+        title: 'Kecepatan Potong (vc) & Waktu Mesin (Tc)',
+        subtitle: 'Resep 3 langkah rumus pemesinan standar KEYENCE tanpa perlu kalkulator.',
+        jpTag: '<ruby>切削速度<rt>せっさくそくど</rt></ruby> &amp; <ruby>切削時間<rt>せっさくじかん</rt></ruby>',
+        analogyTitle: 'Analogi Ban Sepeda — Makin Besar Lingkaran, Makin Kencang Pinggirnya',
+        analogyBody: 'Di mesin bubut (<ruby>旋盤<rt>せんばん</rt></ruby>) dan CNC, ada 2 rumus penting standar pabrik (KEYENCE): <strong>Kecepatan Potong (vc)</strong> dan <strong>Waktu Potong (Tc)</strong>. Jangan takut melihat simbol π (3,14)! Trik tanpa kalkulator: <strong>kalikan dulu angka bulatnya (Dm × n), geser koma 3 langkah ke kiri (÷ 1.000), baru kalikan 3,14</strong> (atau kalikan 3 dulu untuk cek pilihan ganda yang paling dekat!).',
+        rules: [
+          { label: 'Kecepatan Potong (vc — m/min)', formula: 'vc = (3,14 × Dm × n) ÷ 1.000', example: 'Dm=60, n=500 → 30.000÷1000=30 → 30×3,14 ≈ 94 m/min' },
+          { label: 'Pemakanan per Putaran (f — mm/rev)', formula: 'f = l ÷ n  (l = kecepatan maju mm/min)', example: 'l=150, n=600 → 150 ÷ 600 = 0,25 mm/rev' },
+          { label: 'Waktu Potong (Tc — menit)', formula: 'Tc = Panjang (lm) ÷ (n × f)', example: 'lm=120, n=1100, f=0,2 → 120 ÷ 220 ≈ 0,55 mnt (33 dtk)' }
+        ],
+        vocab: [
+          { jp: '<ruby>切削速度<rt>せっさくそくど</rt></ruby> (vc)', id: 'Kecepatan potong (m/menit)' },
+          { jp: '<ruby>回転数<rt>かいてんすう</rt></ruby> (n)', id: 'Putaran spindel per menit (min⁻¹ / RPM)' },
+          { jp: '<ruby>直径<rt>ちょっけい</rt></ruby> (Dm)', id: 'Diameter benda kerja (mm)' }
+        ],
+        simType: 'cutting',
+        examples: [
+          {
+            question: 'Contoh resmi KEYENCE: Diameter benda kerja <strong>Dm = 60 mm</strong>, putaran spindel <strong>n = 500 min⁻¹</strong>. Hitung kecepatan potong <strong>vc</strong>!',
+            steps: [
+              'Langkah 1: Kalikan angka mudah dulu: 60 × 500 = <strong>30.000</strong>.',
+              'Langkah 2: Bagi 1.000 (coret 3 nol!) → <strong>30</strong>.',
+              'Langkah 3: Kalikan 3,14 → 30 × 3,14 = <strong>94,2 m/min</strong> (dibulatkan <strong>≈ 94 m/min</strong>).'
+            ],
+            answer: '≈ 94 m/min'
+          },
+          {
+            question: 'Contoh resmi KEYENCE: Kecepatan maju pemotongan <strong>l = 150 mm/min</strong>, putaran spindel <strong>n = 600 min⁻¹</strong>. Berapa pemakanan per 1 putaran (<strong>f</strong>)?',
+            steps: [
+              'Pakai rumus f = l ÷ n → <strong>150 ÷ 600</strong>.',
+              'Coret 1 nol di atas dan bawah → 15 ÷ 60.',
+              'Sederhanakan: 15/60 = 1/4 = <strong>0,25 mm/rev</strong>.'
+            ],
+            answer: '0,25 mm/rev'
+          }
+        ],
+        drills: [
+          {
+            q: 'Diameter benda kerja <strong>Dm = 100 mm</strong>, putaran spindel <strong>n = 200 min⁻¹</strong>. Berapa kecepatan potong <strong>vc</strong>?',
+            hint: '100 × 200 = 20.000 → coret 3 nol jadi 20 → kalikan 3,14.',
+            options: ['31,4 m/min', '62,8 m/min', '94,2 m/min', '125,6 m/min'],
+            correct: 1,
+            explain: '(100 × 200) ÷ 1.000 = 20. Lalu 20 × 3,14 = <strong>62,8 m/min</strong>.'
+          },
+          {
+            q: 'Spindel berputar <strong>n = 1.000 min⁻¹</strong> dengan pemakanan <strong>f = 0,2 mm/rev</strong>. Berapa panjang pemotongan dalam 1 menit (<strong>l = n × f</strong>)?',
+            hint: '1.000 × 0,2 sama dengan 100 × 2.',
+            options: ['20 mm/min', '200 mm/min', '500 mm/min', '2.000 mm/min'],
+            correct: 1,
+            explain: 'l = 1.000 × 0,2 = <strong>200 mm/min</strong>.'
+          },
+          {
+            q: 'Panjang potong <strong>lm = 100 mm</strong>, kecepatan maju <strong>l = 200 mm/min</strong>. Berapa detik waktu pemotongan (<strong>Tc</strong>)?',
+            hint: 'Tc = 100 ÷ 200 = 0,5 menit. Ingat 1 menit = 60 detik!',
+            options: ['20 detik', '30 detik', '45 detik', '60 detik'],
+            correct: 1,
+            explain: '100 ÷ 200 = 0,5 menit → 0,5 × 60 detik = <strong>30 detik</strong>.'
+          }
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // 2. APPLICATION STATE (PERSISTED SAFELY IN LOCALSTORAGE)
+    // =========================================================================
+    const STORAGE_KEY = 'seimitsu_math_mastery_v1';
+
+    const state = {
+      currentModuleIndex: 0,
+      currentStage: 'learn', // 'learn' | 'example' | 'drill'
+      completedModules: [],
+      drill: {
+        qIndex: 0,
+        selected: null,
+        answered: false,
+        showHint: false,
+        correctCount: 0,
+        finished: false
+      },
+      sim: {
+        mmVal: 0.05,
+        tolMeasured: 50.01,
+        microVal: 7.73,
+        vernierVal: 14.35,
+        cncActual: 20.015,
+        cutDm: 60,
+        cutN: 500
+      }
+    };
+
+    function loadProgress() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.completedModules)) {
+          state.completedModules = parsed.completedModules.filter(
+            (i) => typeof i === 'number' && i >= 0 && i < MODULES.length
+          );
+        }
+        if (typeof parsed.currentModuleIndex === 'number' && parsed.currentModuleIndex >= 0 && parsed.currentModuleIndex < MODULES.length) {
+          state.currentModuleIndex = parsed.currentModuleIndex;
+        }
+      } catch (e) {
+        // Ignore storage errors in sandboxed environments
+      }
+    }
+
+    function saveProgress() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          completedModules: state.completedModules,
+          currentModuleIndex: state.currentModuleIndex
+        }));
+      } catch (e) {
+        // Ignore storage errors
+      }
+    }
+
+    function isModuleUnlocked(idx) {
+      if (idx === 0) return true;
+      return state.completedModules.includes(idx - 1) || state.completedModules.includes(idx);
+    }
+
+    function resetDrill() {
+      state.drill = {
+        qIndex: 0,
+        selected: null,
+        answered: false,
+        showHint: false,
+        correctCount: 0,
+        finished: false
+      };
+    }
+
+    function formatId(num, decimals) {
+      return Number(num).toFixed(decimals).replace('.', ',');
+    }
+
+    // =========================================================================
+    // 3. INTERACTIVE SVG GENERATORS (MICROMETER, VERNIER, LATHE)
+    // =========================================================================
+    function renderMicrometerSVG(val) {
+      const clamped = Math.max(0, Math.min(15, Number(val) || 0));
+      const whole = Math.floor(clamped + 1e-9);
+      const frac = +(clamped - whole).toFixed(2);
+      const hasHalf = frac >= 0.499;
+      const thimble = Math.round((hasHalf ? frac - 0.5 : frac) * 100) % 50;
+
+      // Sleeve geometry: x starts at 40, each 1mm = 18px
+      const pxPerMm = 18;
+      const sleeveStart = 42;
+      const thimbleEdgeX = sleeveStart + clamped * pxPerMm;
+
+      let sleeveTicks = '';
+      for (let m = 0; m <= 15; m++) {
+        const x = sleeveStart + m * pxPerMm;
+        const isFive = m % 5 === 0;
+        const h = isFive ? 24 : 15;
+        sleeveTicks += `<line x1="${x}" y1="80" x2="${x}" y2="${80 - h}" stroke="${m <= whole ? '#38bdf8' : '#475569'}" stroke-width="${isFive ? 2 : 1.3}" />`;
+        if (isFive) {
+          sleeveTicks += `<text x="${x}" y="47" fill="${m <= whole ? '#e2e8f0' : '#64748b'}" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" font-weight="600">${m}</text>`;
+        }
+        // Lower 0.5 mm tick
+        if (m < 15) {
+          const hx = x + pxPerMm / 2;
+          const visibleHalf = hx <= thimbleEdgeX + 0.5;
+          sleeveTicks += `<line x1="${hx}" y1="80" x2="${hx}" y2="95" stroke="${visibleHalf && m === whole && hasHalf ? '#fbbf24' : (visibleHalf ? '#94a3b8' : '#334155')}" stroke-width="${visibleHalf && m === whole && hasHalf ? 2.4 : 1.3}" />`;
+        }
+      }
+
+      // Thimble vertical scale around datum line y = 80
+      let thimbleTicks = '';
+      const stepY = 7.5;
+      for (let offset = -7; offset <= 7; offset++) {
+        const tickNum = (thimble + offset + 50) % 50;
+        const y = 80 - offset * stepY;
+        const isMajor = tickNum % 5 === 0;
+        const isCenter = offset === 0;
+        const len = isMajor ? 24 : 14;
+        thimbleTicks += `<line x1="${thimbleEdgeX + 12}" y1="${y}" x2="${thimbleEdgeX + 12 + len}" y2="${y}" stroke="${isCenter ? '#34d399' : (isMajor ? '#e2e8f0' : '#64748b')}" stroke-width="${isCenter ? 2.4 : 1.2}" />`;
+        if (isMajor) {
+          thimbleTicks += `<text x="${thimbleEdgeX + 42}" y="${y + 3.5}" fill="${isCenter ? '#34d399' : '#cbd5e1'}" font-size="11" font-family="JetBrains Mono, monospace" font-weight="${isCenter ? '700' : '500'}">${String(tickNum).padStart(2, '0')}</text>`;
+        }
+      }
+
+      return `
+        <svg viewBox="0 0 460 160" class="w-full h-auto rounded-xl bg-slate-950 border border-slate-800" role="img" aria-label="Diagram Mikrometer">
+          <!-- Sleeve Body -->
+          <rect x="20" y="32" width="310" height="96" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
+          <!-- Datum Line -->
+          <line x1="28" y1="80" x2="${thimbleEdgeX}" y2="80" stroke="#94a3b8" stroke-width="1.6" />
+          ${sleeveTicks}
+          <!-- Beveled Thimble Body -->
+          <polygon points="${thimbleEdgeX},28 ${thimbleEdgeX + 12},18 440,18 440,142 ${thimbleEdgeX + 12},142 ${thimbleEdgeX},132" fill="#1e293b" stroke="#475569" stroke-width="1.8" />
+          <line x1="${thimbleEdgeX + 12}" y1="18" x2="${thimbleEdgeX + 12}" y2="142" stroke="#334155" stroke-width="1.5" />
+          <!-- Center highlight pointer on thimble -->
+          <line x1="${thimbleEdgeX}" y1="80" x2="${thimbleEdgeX + 12}" y2="80" stroke="#34d399" stroke-width="2.5" />
+          ${thimbleTicks}
+          <!-- Knurling grip lines on far right -->
+          <rect x="405" y="24" width="28" height="112" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1" />
+          <text x="26" y="148" fill="#64748b" font-size="10" font-family="Inter, sans-serif">Skala Utama (Atas 1mm / Bawah 0,5mm)</text>
+          <text x="434" y="152" fill="#64748b" font-size="10" font-family="Inter, sans-serif" text-anchor="end">Thimble (0,01mm)</text>
+        </svg>
+      `;
+    }
+
+    function renderVernierSVG(val) {
+      const clamped = Math.max(0, Math.min(25, Number(val) || 0));
+      const whole = Math.floor(clamped + 1e-9);
+      const vernierIdx = Math.round((clamped - whole) * 20); // 0..19 (each = 0.05 mm)
+      const pxPerMm = 14;
+      const originX = 34;
+
+      // Main scale ticks 0..38 mm
+      let mainTicks = '';
+      for (let m = 0; m <= 36; m++) {
+        const x = originX + m * pxPerMm;
+        if (x > 555) break;
+        const isTen = m % 10 === 0;
+        const isFive = m % 5 === 0;
+        const h = isTen ? 26 : (isFive ? 19 : 13);
+        const isWholeHighlight = m === whole;
+        mainTicks += `<line x1="${x}" y1="74" x2="${x}" y2="${74 - h}" stroke="${isWholeHighlight ? '#38bdf8' : '#cbd5e1'}" stroke-width="${isWholeHighlight ? 2.5 : (isTen ? 1.8 : 1.1)}" />`;
+        if (isTen) {
+          mainTicks += `<text x="${x}" y="40" fill="#e2e8f0" font-size="12" font-family="JetBrains Mono, monospace" text-anchor="middle" font-weight="700">${m}</text>`;
+        }
+      }
+
+      // Vernier slider (20 divisions spanning 19 mm -> each division = 0.95 mm)
+      const vStartX = originX + clamped * pxPerMm;
+      const vStepPx = 0.95 * pxPerMm;
+      let vernierTicks = '';
+      for (let i = 0; i <= 20; i++) {
+        const x = vStartX + i * vStepPx;
+        const isMajor = i % 2 === 0; // 0, 1, 2, ... 10
+        const isAligned = i === vernierIdx;
+        const h = isMajor ? 22 : 14;
+        vernierTicks += `<line x1="${x}" y1="76" x2="${x}" y2="${76 + h}" stroke="${isAligned ? '#34d399' : (isMajor ? '#cbd5e1' : '#64748b')}" stroke-width="${isAligned ? 2.8 : 1.2}" />`;
+        if (isMajor) {
+          const lbl = i / 2;
+          vernierTicks += `<text x="${x}" y="114" fill="${isAligned ? '#34d399' : '#94a3b8'}" font-size="10.5" font-family="JetBrains Mono, monospace" text-anchor="middle" font-weight="${isAligned ? '700' : '500'}">${lbl === 10 ? '0' : lbl}</text>`;
+        }
+        if (isAligned) {
+          // Vertical alignment beam across both scales
+          vernierTicks += `<line x1="${x}" y1="48" x2="${x}" y2="100" stroke="#34d399" stroke-width="1.6" stroke-dasharray="3,2" opacity="0.85" />`;
+        }
+      }
+
+      return `
+        <svg viewBox="0 0 560 148" class="w-full h-auto rounded-xl bg-slate-950 border border-slate-800" role="img" aria-label="Diagram Jangka Sorong">
+          <!-- Main Scale Bar -->
+          <rect x="14" y="20" width="532" height="54" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
+          ${mainTicks}
+          <!-- Vernier Sliding Jaw -->
+          <rect x="${vStartX - 10}" y="76" width="${20 * vStepPx + 20}" height="52" rx="5" fill="#1e293b" stroke="#475569" stroke-width="1.5" />
+          ${vernierTicks}
+          <!-- Zero pointer indicator -->
+          <polygon points="${vStartX},76 ${vStartX - 4},83 ${vStartX + 4},83" fill="#38bdf8" />
+          <text x="18" y="142" fill="#64748b" font-size="10" font-family="Inter, sans-serif">Biru = posisi 0 (mm utuh) • Hijau = garis lurus menyatu (0,05 mm)</text>
+        </svg>
+      `;
+    }
+
+    function renderLatheSVG(dm, n) {
+      // Visual spin duration inversely proportional to n (clamped for smooth animation)
+      const dur = Math.max(0.25, Math.min(4.0, 900 / Math.max(100, n))).toFixed(2);
+      const radius = Math.max(22, Math.min(58, (dm / 120) * 58));
+      return `
+        <svg viewBox="0 0 260 180" class="w-full max-w-[260px] mx-auto h-auto rounded-xl bg-slate-950 border border-slate-800" role="img" aria-label="Visualisasi Putaran Spindel">
+          <!-- Rotating workpiece -->
+          <g class="chuck-spin" style="animation-duration: ${dur}s;">
+            <circle cx="90" cy="90" r="${radius}" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5" />
+            <line x1="90" y1="${90 - radius}" x2="90" y2="${90 + radius}" stroke="#38bdf8" stroke-width="1.2" opacity="0.5" />
+            <line x1="${90 - radius}" y1="90" x2="${90 + radius}" y2="90" stroke="#38bdf8" stroke-width="1.2" opacity="0.5" />
+            <circle cx="90" cy="90" r="6" fill="#38bdf8" />
+            <circle cx="${90 + radius - 6}" cy="90" r="3.5" fill="#fbbf24" />
+          </g>
+          <!-- Cutting Tool Tip -->
+          <polygon points="${90 + radius + 4},90 ${90 + radius + 28},78 ${90 + radius + 28},102" fill="#f59e0b" />
+          <rect x="${90 + radius + 28}" y="82" width="44" height="16" rx="2" fill="#475569" />
+          <!-- Labels -->
+          <text x="90" y="166" fill="#94a3b8" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle">Dm = ${dm} mm</text>
+          <text x="195" y="55" fill="#fbbf24" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle">Pisau</text>
+          <text x="195" y="128" fill="#38bdf8" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle">${n} min⁻¹</text>
+        </svg>
+      `;
+    }
+
+    // =========================================================================
+    // 4. INTERACTIVE SIMULATOR BUILDERS (PER MODULE)
+    // =========================================================================
+    function buildSimulatorHTML(mod) {
+      if (mod.simType === 'mikron') {
+        const mm = state.sim.mmVal;
+        const um = Math.round(mm * 1000);
+        const hairPct = Math.min(100, (um / 100) * 100);
+        let compareText = 'Sangat tipis (level toleransi CNC presisi!)';
+        if (um >= 70 && um <= 90) compareText = 'Sekitar setebal 1 helai rambut manusia (~80 μm)';
+        else if (um > 90 && um <= 120) compareText = 'Sekitar setebal 1 lembar kertas HVS (~100 μm)';
+        else if (um > 120) compareText = `Sekitar ${(um / 100).toFixed(1).replace('.', ',')}× ketebalan kertas HVS`;
+
+        return `
+          <div class="rounded-2xl border border-sky-500/30 bg-slate-900 p-4 sm:p-5">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <h4 class="text-sm font-bold text-sky-300">🎛️ Simulator Geser Koma (mm ↔ μm)</h4>
+              <span class="text-xs text-slate-400">Geser untuk lihat polanya</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <div class="rounded-xl bg-slate-950 border border-slate-800 p-3 text-center">
+                <div class="text-xs text-slate-400">Milimeter (mm)</div>
+                <div id="simMmOut" class="mt-1 font-mono text-2xl font-bold text-white">${formatId(mm, 3)} <span class="text-sm text-slate-400">mm</span></div>
+              </div>
+              <div class="rounded-xl bg-sky-500/10 border border-sky-500/30 p-3 text-center">
+                <div class="text-xs text-sky-300">Mikron (μm)</div>
+                <div id="simUmOut" class="mt-1 font-mono text-2xl font-bold text-sky-300">${um} <span class="text-sm text-sky-400/80">μm</span></div>
+              </div>
+            </div>
+            <input id="simMmSlider" type="range" min="0.001" max="0.200" step="0.001" value="${mm}" class="w-full" />
+            <div class="mt-3 flex flex-wrap gap-2">
+              <button type="button" data-sim-mm="0.005" class="sim-preset rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1 text-xs text-slate-200 hover:border-sky-400">Presisi CNC (0,005 mm)</button>
+              <button type="button" data-sim-mm="0.050" class="sim-preset rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1 text-xs text-slate-200 hover:border-sky-400">Toleransi Umum (0,05 mm)</button>
+              <button type="button" data-sim-mm="0.080" class="sim-preset rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1 text-xs text-slate-200 hover:border-sky-400">Rambut (0,08 mm)</button>
+              <button type="button" data-sim-mm="0.100" class="sim-preset rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1 text-xs text-slate-200 hover:border-sky-400">Kertas HVS (0,10 mm)</button>
+            </div>
+            <div class="mt-3 rounded-xl bg-slate-950/80 border border-slate-800 p-3">
+              <div class="flex justify-between text-xs text-slate-400 mb-1.5">
+                <span>Perbandingan Visual vs Kertas HVS (100 μm)</span>
+                <span id="simCompareText" class="text-amber-300 font-medium">${compareText}</span>
+              </div>
+              <div class="h-2.5 w-full rounded-full bg-slate-800 overflow-hidden">
+                <div id="simHairBar" class="h-full rounded-full bg-gradient-to-r from-sky-400 to-emerald-400 transition-all duration-150" style="width:${hairPct}%"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (mod.simType === 'toleransi') {
+        const val = state.sim.tolMeasured;
+        const low = 49.98;
+        const high = 50.03;
+        const isOk = val >= low - 1e-6 && val <= high + 1e-6;
+        const pct = ((val - 49.95) / (50.06 - 49.95)) * 100;
+        const okLeftPct = ((low - 49.95) / (50.06 - 49.95)) * 100;
+        const okWidthPct = ((high - low) / (50.06 - 49.95)) * 100;
+
+        return `
+          <div class="rounded-2xl border border-emerald-500/30 bg-slate-900 p-4 sm:p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h4 class="text-sm font-bold text-emerald-300">🎛️ Simulator Zona Aman: <span class="font-mono text-white">50,00 +0,03 / −0,02 mm</span></h4>
+              <span id="tolVerdictBadge" class="rounded-full px-3 py-0.5 text-xs font-bold ${isOk ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/40' : 'bg-rose-500/20 text-rose-300 border border-rose-400/40'}">
+                ${isOk ? '✓ OK (合格)' : '✕ NG (不良)'}
+              </span>
+            </div>
+
+            <div class="mb-3 rounded-xl bg-slate-950 border border-slate-800 p-4">
+              <div class="flex justify-between text-xs font-mono text-slate-400 mb-2">
+                <span>49,95</span>
+                <span class="text-emerald-400 font-semibold">Bawah: 49,98</span>
+                <span class="text-emerald-400 font-semibold">Atas: 50,03</span>
+                <span>50,06</span>
+              </div>
+              <div class="relative h-8 w-full rounded-lg bg-rose-950/60 border border-rose-500/30 overflow-hidden">
+                <div class="absolute top-0 bottom-0 bg-emerald-500/25 border-x-2 border-emerald-400" style="left:${okLeftPct}%; width:${okWidthPct}%;"></div>
+                <div id="tolPointer" class="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_10px_#fff] transition-all duration-100" style="left:calc(${pct}% - 2px);"></div>
+              </div>
+              <div class="mt-3 flex items-center justify-between text-sm">
+                <span class="text-slate-400">Hasil Ukur Produk:</span>
+                <span id="tolValOut" class="font-mono text-lg font-bold ${isOk ? 'text-emerald-300' : 'text-rose-300'}">${formatId(val, 2)} mm</span>
+              </div>
+            </div>
+
+            <input id="simTolSlider" type="range" min="49.95" max="50.06" step="0.01" value="${val}" class="w-full" />
+            <p class="mt-2 text-xs text-slate-400">Coba geser sampai tepat di <strong class="text-emerald-300">49,98</strong> atau <strong class="text-emerald-300">50,03</strong> — selama masih di garis batas, statusnya tetap OK!</p>
+          </div>
+        `;
+      }
+
+      if (mod.simType === 'mikrometer') {
+        const val = state.sim.microVal;
+        const whole = Math.floor(val + 1e-9);
+        const frac = +(val - whole).toFixed(2);
+        const hasHalf = frac >= 0.499;
+        const thimble = Math.round((hasHalf ? frac - 0.5 : frac) * 100) % 50;
+
+        return `
+          <div class="rounded-2xl border border-sky-500/30 bg-slate-900 p-4 sm:p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h4 class="text-sm font-bold text-sky-300">🎛️ Simulator Mikrometer Interaktif (0,01 mm)</h4>
+              <span id="microTotalBadge" class="font-mono text-base font-bold text-white bg-slate-950 border border-slate-700 px-3 py-0.5 rounded-lg">${formatId(val, 2)} mm</span>
+            </div>
+
+            <div id="microSvgWrap">${renderMicrometerSVG(val)}</div>
+
+            <div class="mt-3 grid grid-cols-3 gap-2 text-center">
+              <div class="rounded-xl bg-slate-950 border border-sky-500/30 p-2.5">
+                <div class="text-[11px] text-sky-300 font-semibold">Laci 1 (Atas)</div>
+                <div id="microL1" class="font-mono text-base font-bold text-white mt-0.5">${formatId(whole, 2)}</div>
+              </div>
+              <div class="rounded-xl bg-slate-950 border border-amber-500/30 p-2.5">
+                <div class="text-[11px] text-amber-300 font-semibold">Laci 2 (Bawah)</div>
+                <div id="microL2" class="font-mono text-base font-bold text-amber-300 mt-0.5">+${hasHalf ? '0,50' : '0,00'}</div>
+              </div>
+              <div class="rounded-xl bg-slate-950 border border-emerald-500/30 p-2.5">
+                <div class="text-[11px] text-emerald-300 font-semibold">Laci 3 (Putar)</div>
+                <div id="microL3" class="font-mono text-base font-bold text-emerald-300 mt-0.5">+0,${String(thimble).padStart(2, '0')}</div>
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <input id="simMicroSlider" type="range" min="0" max="14.50" step="0.01" value="${val}" class="w-full" />
+            </div>
+          </div>
+        `;
+      }
+
+      if (mod.simType === 'nogisu') {
+        const val = state.sim.vernierVal;
+        const whole = Math.floor(val + 1e-9);
+        const koma = +(val - whole).toFixed(2);
+        return `
+          <div class="rounded-2xl border border-emerald-500/30 bg-slate-900 p-4 sm:p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h4 class="text-sm font-bold text-emerald-300">🎛️ Simulator Jangka Sorong / ノギス (0,05 mm)</h4>
+              <span id="vernierTotalBadge" class="font-mono text-base font-bold text-white bg-slate-950 border border-slate-700 px-3 py-0.5 rounded-lg">${formatId(val, 2)} mm</span>
+            </div>
+
+            <div id="vernierSvgWrap">${renderVernierSVG(val)}</div>
+
+            <div class="mt-3 grid grid-cols-2 gap-2.5 text-center">
+              <div class="rounded-xl bg-slate-950 border border-sky-500/30 p-2.5">
+                <div class="text-xs text-sky-300 font-semibold">Langkah 1: Di Kiri Nol (0)</div>
+                <div id="vernierL1" class="font-mono text-base font-bold text-white mt-0.5">${whole},00 mm</div>
+              </div>
+              <div class="rounded-xl bg-slate-950 border border-emerald-500/30 p-2.5">
+                <div class="text-xs text-emerald-300 font-semibold">Langkah 2: Garis Lurus Hijau</div>
+                <div id="vernierL2" class="font-mono text-base font-bold text-emerald-300 mt-0.5">+${formatId(koma, 2)} mm</div>
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <input id="simVernierSlider" type="range" min="0" max="24.95" step="0.05" value="${val}" class="w-full" />
+            </div>
+          </div>
+        `;
+      }
+
+      if (mod.simType === 'offset') {
+        const target = 20.000;
+        const actual = state.sim.cncActual;
+        const offset = +(target - actual).toFixed(3);
+        const sign = offset > 0 ? '+' : (offset < 0 ? '−' : '');
+        const absOffset = Math.abs(offset);
+        const statusMsg = offset < 0
+          ? 'Barang KEBESARAN → masukkan MINUS agar pisau memotong lebih dalam.'
+          : (offset > 0 ? 'Barang KEKECILAN → masukkan PLUS agar pisau mundur sedikit.' : 'Tepat di target! Tidak perlu koreksi offset.');
+
+        return `
+          <div class="rounded-2xl border border-amber-500/30 bg-slate-900 p-4 sm:p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h4 class="text-sm font-bold text-amber-300">🎛️ Simulator Koreksi Offset CNC (Target 20,000 mm)</h4>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-3">
+              <div class="rounded-xl bg-slate-950 border border-slate-800 p-3 text-center">
+                <div class="text-xs text-slate-400">Hasil Ukur Aktual</div>
+                <div id="cncActualOut" class="mt-1 font-mono text-xl font-bold text-white">${formatId(actual, 3)} mm</div>
+              </div>
+              <div class="rounded-xl bg-amber-500/10 border border-amber-500/30 p-3 text-center">
+                <div class="text-xs text-amber-300">Input <ruby>補正値<rt>ほせいち</rt></ruby> di CNC</div>
+                <div id="cncOffsetOut" class="mt-1 font-mono text-xl font-bold text-amber-300">${sign}${formatId(absOffset, 3)} mm</div>
+              </div>
+            </div>
+            <input id="simCncSlider" type="range" min="19.950" max="20.050" step="0.005" value="${actual}" class="w-full" />
+            <p id="cncHintOut" class="mt-2.5 text-xs font-medium text-slate-300">${statusMsg}</p>
+          </div>
+        `;
+      }
+
+      // Module 6: Cutting Speed
+      const dm = state.sim.cutDm;
+      const n = state.sim.cutN;
+      const vc = (3.14 * dm * n) / 1000;
+      const step1 = dm * n;
+      const step2 = step1 / 1000;
+      return `
+        <div class="rounded-2xl border border-violet-500/30 bg-slate-900 p-4 sm:p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <h4 class="text-sm font-bold text-violet-300">🎛️ Simulator Kecepatan Potong (vc) — Standar KEYENCE</h4>
+            <span id="cutVcBadge" class="font-mono text-base font-bold text-violet-200 bg-violet-500/15 border border-violet-400/30 px-3 py-0.5 rounded-lg">vc ≈ ${formatId(vc, 1)} m/min</span>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4 items-center">
+            <div id="latheSvgWrap">${renderLatheSVG(dm, n)}</div>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-300">Diameter Benda Kerja (Dm)</span>
+                  <span id="cutDmVal" class="font-mono text-sky-300 font-bold">${dm} mm</span>
+                </div>
+                <input id="simDmSlider" type="range" min="10" max="120" step="10" value="${dm}" class="w-full" />
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-300">Putaran Spindel (n)</span>
+                  <span id="cutNVal" class="font-mono text-sky-300 font-bold">${n} min⁻¹</span>
+                </div>
+                <input id="simNSlider" type="range" min="100" max="2000" step="100" value="${n}" class="w-full" />
+              </div>
+              <div id="cutStepsBox" class="rounded-xl bg-slate-950 border border-slate-800 p-3 font-mono text-xs text-slate-300 space-y-1">
+                <div>1) Dm × n = ${dm} × ${n} = <span class="text-white">${step1.toLocaleString('id-ID')}</span></div>
+                <div>2) Bagi 1.000 = <span class="text-sky-300">${formatId(step2, 1)}</span></div>
+                <div>3) × 3,14 = <span class="text-violet-300 font-bold">${formatId(vc, 1)} m/min</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 5. MAIN RENDERER
+    // =========================================================================
+    function renderAll() {
+      const mod = MODULES[state.currentModuleIndex];
+
+      // 1) Progress Rail
+      const doneCount = state.completedModules.length;
+      const pct = Math.round((doneCount / MODULES.length) * 100);
+      document.getElementById('trackProgressLabel').textContent = `Progres Jalur: ${doneCount} / ${MODULES.length} Modul Selesai`;
+      document.getElementById('trackPercent').textContent = `${pct}%`;
+
+      const railEl = document.getElementById('moduleRail');
+      railEl.innerHTML = MODULES.map((m, idx) => {
+        const isDone = state.completedModules.includes(idx);
+        const isCurrent = idx === state.currentModuleIndex;
+        const unlocked = isModuleUnlocked(idx);
+        let cls = 'border-slate-800 bg-slate-950 text-slate-500 cursor-not-allowed opacity-65';
+        if (isCurrent) {
+          cls = 'border-sky-400 bg-sky-500/20 text-sky-200 ring-1 ring-sky-400/40 cursor-pointer';
+        } else if (isDone) {
+          cls = 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 cursor-pointer';
+        } else if (unlocked) {
+          cls = 'border-slate-700 bg-slate-900 text-slate-300 hover:border-sky-500/50 cursor-pointer';
+        }
+        return `
+          <button type="button" data-module-idx="${idx}" ${unlocked ? '' : 'disabled'} class="rail-btn flex flex-col items-center justify-center rounded-lg border px-1 py-1.5 text-center transition ${cls}">
+            <span class="text-[11px] font-mono font-bold">${isDone ? '✓' : 'M' + m.num}</span>
+            <span class="truncate w-full text-[10px] sm:text-xs font-medium mt-0.5">${m.shortTitle}</span>
+          </button>
+        `;
+      }).join('');
+
+      // 2) Active Module Header
+      document.getElementById('moduleBadge').textContent = `Modul ${mod.num} dari ${MODULES.length}`;
+      document.getElementById('moduleJpTag').innerHTML = mod.jpTag;
+      document.getElementById('moduleTitle').textContent = mod.title;
+      document.getElementById('moduleSubtitle').textContent = mod.subtitle;
+
+      // 3) 3-Step Gate Indicator
+      const stages = [
+        { id: 'learn', label: '1. Pahami Materi' },
+        { id: 'example', label: '2. Bedah Contoh' },
+        { id: 'drill', label: '3. Latihan Terbimbing' }
+      ];
+      document.getElementById('stageStepper').innerHTML = stages.map((st, idx) => {
+        const active = state.currentStage === st.id;
+        const stageOrder = { learn: 0, example: 1, drill: 2 };
+        const passed = stageOrder[state.currentStage] > idx;
+        let cls = 'border-slate-800 bg-slate-950/70 text-slate-400 hover:text-slate-200';
+        if (active) cls = 'border-sky-400/70 bg-sky-500/15 text-sky-200 font-bold';
+        else if (passed) cls = 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300';
+        return `
+          <button type="button" data-stage="${st.id}" class="stage-btn rounded-xl border px-2.5 py-2 text-xs sm:text-sm transition text-center ${cls}">
+            ${passed ? '✓ ' : ''}${st.label}
+          </button>
+        `;
+      }).join('');
+
+      // 4) Render Stage Content
+      const container = document.getElementById('stageContent');
+      container.classList.remove('fade-in');
+      void container.offsetWidth;
+      container.classList.add('fade-in');
+
+      if (state.currentStage === 'learn') {
+        container.innerHTML = renderLearnStage(mod);
+      } else if (state.currentStage === 'example') {
+        container.innerHTML = renderExampleStage(mod);
+      } else {
+        container.innerHTML = renderDrillStage(mod);
+      }
+
+      wireStageListeners(mod);
+    }
+
+    function renderLearnStage(mod) {
+      return `
+        <!-- Everyday Analogy Card -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/90 p-5">
+          <div class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-amber-400 mb-2">
+            <span>💡</span><span>${mod.analogyTitle}</span>
+          </div>
+          <p class="text-sm sm:text-base leading-relaxed text-slate-200">${mod.analogyBody}</p>
+        </div>
+
+        <!-- Interactive Visual Simulator -->
+        ${buildSimulatorHTML(mod)}
+
+        <!-- 3 Golden Rules -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/90 p-5">
+          <h4 class="text-sm font-bold text-white mb-3">📌 3 Pola Kunci yang Cukup Kamu Ingat</h4>
+          <div class="grid gap-3 sm:grid-cols-3">
+            ${mod.rules.map((r) => `
+              <div class="rounded-xl border border-slate-800 bg-slate-950/80 p-3.5">
+                <div class="text-xs font-semibold text-sky-300">${r.label}</div>
+                <div class="mt-1.5 text-xs sm:text-sm font-medium text-slate-100">${r.formula}</div>
+                <div class="mt-2 rounded-lg bg-slate-900 px-2.5 py-1.5 font-mono text-xs text-emerald-300">${r.example}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Selective Furigana Vocab -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 sm:p-5">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">🇯🇵 Istilah Pabrik Jepang di Modul Ini</h4>
+          <div class="grid gap-2 sm:grid-cols-3">
+            ${mod.vocab.map((v) => `
+              <div class="rounded-xl bg-slate-950 border border-slate-800/90 px-3 py-2.5">
+                <div class="text-sm font-bold text-white">${v.jp}</div>
+                <div class="text-xs text-slate-400 mt-0.5">${v.id}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Single Linear CTA -->
+        <div class="flex justify-end pt-1">
+          <button id="btnToExample" type="button" class="w-full sm:w-auto rounded-xl bg-sky-500 px-6 py-3.5 text-sm font-bold text-slate-950 shadow-lg shadow-sky-500/20 hover:bg-sky-400 transition">
+            Saya Paham Materinya — Lanjut Bedah Contoh →
+          </button>
+        </div>
+      `;
+    }
+
+    function renderExampleStage(mod) {
+      return `
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/90 p-5">
+          <h4 class="text-base font-bold text-white">🔍 Bedah Contoh Langkah-demi-Langkah</h4>
+          <p class="mt-1 text-xs sm:text-sm text-slate-400">Lihat bagaimana soal pabrik diselesaikan tanpa kalkulator dan tanpa hafalan rumit.</p>
+
+          <div class="mt-4 space-y-4">
+            ${mod.examples.map((ex, i) => `
+              <div class="rounded-xl border border-slate-800 bg-slate-950/90 p-4">
+                <div class="text-xs font-semibold uppercase tracking-wider text-sky-400 mb-1.5">Contoh ${i + 1}</div>
+                <p class="text-sm sm:text-base text-slate-100 leading-relaxed">${ex.question}</p>
+                <ol class="mt-3 space-y-2 border-l-2 border-sky-500/40 pl-3.5 text-xs sm:text-sm text-slate-300">
+                  ${ex.steps.map((st, sIdx) => `
+                    <li><span class="font-mono text-sky-400 font-semibold">Langkah ${sIdx + 1}:</span> ${st}</li>
+                  `).join('')}
+                </ol>
+                <div class="mt-3 inline-flex items-center gap-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 px-3 py-1.5 text-xs sm:text-sm font-bold text-emerald-300">
+                  <span>✓ Jawaban:</span>
+                  <span>${ex.answer}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 pt-1">
+          <button id="btnBackLearn" type="button" class="w-full sm:w-auto rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-slate-300 hover:bg-slate-800 transition">
+            ← Ulangi Penjelasan
+          </button>
+          <button id="btnToDrill" type="button" class="w-full sm:w-auto rounded-xl bg-emerald-500 px-6 py-3.5 text-sm font-bold text-slate-950 shadow-lg shadow-emerald-500/20 hover:bg-emerald-400 transition">
+            Siap! Mulai Latihan Terbimbing (${mod.drills.length} Soal) →
+          </button>
+        </div>
+      `;
+    }
+
+    function renderDrillStage(mod) {
+      const d = state.drill;
+
+      // Completed all questions in this module
+      if (d.finished) {
+        const total = mod.drills.length;
+        const passed = d.correctCount >= Math.ceil(total * 0.65);
+        const isLastModule = state.currentModuleIndex === MODULES.length - 1;
+        return `
+          <div class="rounded-2xl border ${passed ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-amber-500/40 bg-amber-500/10'} p-6 text-center">
+            <div class="text-4xl mb-2">${passed ? '🏆' : '💪'}</div>
+            <h3 class="text-xl font-extrabold text-white">
+              ${passed ? (isLastModule ? 'Selamat! Semua 6 Modul Seimitsu Tuntas!' : `Modul ${mod.num} Dikuasai!`) : 'Hampir Tuntas — Ayo Ulangi Sebentar'}
+            </h3>
+            <p class="mt-1.5 text-sm text-slate-300">
+              Skor kamu: <span class="font-mono font-bold text-white">${d.correctCount} / ${total}</span> benar.
+              ${passed ? 'Jalur berikutnya sudah terbuka dan tersimpan otomatis.' : 'Coba ulangi latihan sekali lagi agar polanya benar-benar menempel.'}
+            </p>
+            <div class="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <button id="btnRetryDrill" type="button" class="w-full sm:w-auto rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-slate-200 hover:bg-slate-800 transition">
+                ↺ Ulangi Latihan Modul Ini
+              </button>
+              ${passed && !isLastModule ? `
+                <button id="btnNextModule" type="button" class="w-full sm:w-auto rounded-xl bg-sky-500 px-6 py-3 text-sm font-bold text-slate-950 hover:bg-sky-400 transition">
+                  Lanjut ke Modul ${mod.num + 1}: ${MODULES[state.currentModuleIndex + 1].shortTitle} →
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }
+
+      const item = mod.drills[d.qIndex];
+      const svgBlock = item.svgType === 'micro'
+        ? `<div class="my-4">${renderMicrometerSVG(item.svgVal)}</div>`
+        : (item.svgType === 'vernier' ? `<div class="my-4">${renderVernierSVG(item.svgVal)}</div>` : '');
+
+      return `
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/90 p-5">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+            <span class="font-mono font-semibold text-sky-400">SOAL ${d.qIndex + 1} / ${mod.drills.length}</span>
+            <button id="btnToggleHint" type="button" class="rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-300 hover:bg-amber-500/20 transition">
+              ${d.showHint ? 'Sembunyikan Petunjuk' : '💡 Tampilkan Petunjuk Langkah'}
+            </button>
+          </div>
+
+          <p class="text-base sm:text-lg font-semibold text-white leading-relaxed">${item.q}</p>
+          ${svgBlock}
+
+          ${d.showHint ? `
+            <div class="mt-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3.5 py-2.5 text-xs sm:text-sm text-amber-200">
+              <strong>Petunjuk:</strong> ${item.hint}
+            </div>
+          ` : ''}
+
+          <div class="mt-4 grid gap-2.5">
+            ${item.options.map((opt, idx) => {
+              let btnCls = 'border-slate-700 bg-slate-950 text-slate-200 hover:border-sky-400 hover:bg-slate-800';
+              if (d.answered) {
+                if (idx === item.correct) {
+                  btnCls = 'border-emerald-400 bg-emerald-500/20 text-emerald-200 font-semibold';
+                } else if (idx === d.selected && idx !== item.correct) {
+                  btnCls = 'border-rose-400 bg-rose-500/20 text-rose-200';
+                } else {
+                  btnCls = 'border-slate-800 bg-slate-950/50 text-slate-500';
+                }
+              }
+              return `
+                <button type="button" data-opt-idx="${idx}" ${d.answered ? 'disabled' : ''} class="drill-opt flex items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm sm:text-base transition ${btnCls}">
+                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-slate-800 font-mono text-xs font-bold text-slate-300">${String.fromCharCode(65 + idx)}</span>
+                  <span>${opt}</span>
+                </button>
+              `;
+            }).join('')}
+          </div>
+
+          ${d.answered ? `
+            <div class="mt-4 rounded-xl border ${d.selected === item.correct ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200' : 'border-rose-500/40 bg-rose-500/10 text-rose-200'} p-3.5 text-xs sm:text-sm">
+              <div class="font-bold mb-1">${d.selected === item.correct ? '✓ Benar Sekali!' : 'Belum Tepat — Ini Penjelasannya:'}</div>
+              <div>${item.explain}</div>
+            </div>
+            <div class="mt-4 flex justify-end">
+              <button id="btnNextQuestion" type="button" class="w-full sm:w-auto rounded-xl bg-sky-500 px-6 py-3 text-sm font-bold text-slate-950 hover:bg-sky-400 transition">
+                ${d.qIndex + 1 < mod.drills.length ? 'Soal Berikutnya →' : 'Lihat Hasil Modul →'}
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 6. EVENT WIRING
+    // =========================================================================
+    function wireStageListeners(mod) {
+      // Module rail navigation
+      document.querySelectorAll('.rail-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const idx = Number(btn.getAttribute('data-module-idx'));
+          if (!isModuleUnlocked(idx)) return;
+          state.currentModuleIndex = idx;
+          state.currentStage = 'learn';
+          resetDrill();
+          saveProgress();
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // Stage stepper navigation inside current module
+      document.querySelectorAll('.stage-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const st = btn.getAttribute('data-stage');
+          state.currentStage = st;
+          if (st === 'drill') resetDrill();
+          renderAll();
+        });
+      });
+
+      // Stage transition CTAs
+      const btnToExample = document.getElementById('btnToExample');
+      if (btnToExample) {
+        btnToExample.addEventListener('click', () => {
+          state.currentStage = 'example';
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      const btnBackLearn = document.getElementById('btnBackLearn');
+      if (btnBackLearn) {
+        btnBackLearn.addEventListener('click', () => {
+          state.currentStage = 'learn';
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      const btnToDrill = document.getElementById('btnToDrill');
+      if (btnToDrill) {
+        btnToDrill.addEventListener('click', () => {
+          state.currentStage = 'drill';
+          resetDrill();
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      // Drill interactions
+      const btnToggleHint = document.getElementById('btnToggleHint');
+      if (btnToggleHint) {
+        btnToggleHint.addEventListener('click', () => {
+          state.drill.showHint = !state.drill.showHint;
+          renderAll();
+        });
+      }
+
+      document.querySelectorAll('.drill-opt').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (state.drill.answered) return;
+          const idx = Number(btn.getAttribute('data-opt-idx'));
+          const item = mod.drills[state.drill.qIndex];
+          state.drill.selected = idx;
+          state.drill.answered = true;
+          if (idx === item.correct) state.drill.correctCount += 1;
+          renderAll();
+        });
+      });
+
+      const btnNextQuestion = document.getElementById('btnNextQuestion');
+      if (btnNextQuestion) {
+        btnNextQuestion.addEventListener('click', () => {
+          if (state.drill.qIndex + 1 < mod.drills.length) {
+            state.drill.qIndex += 1;
+            state.drill.selected = null;
+            state.drill.answered = false;
+            state.drill.showHint = false;
+          } else {
+            state.drill.finished = true;
+            const passed = state.drill.correctCount >= Math.ceil(mod.drills.length * 0.65);
+            if (passed && !state.completedModules.includes(state.currentModuleIndex)) {
+              state.completedModules.push(state.currentModuleIndex);
+              saveProgress();
+            }
+          }
+          renderAll();
+        });
+      }
+
+      const btnRetryDrill = document.getElementById('btnRetryDrill');
+      if (btnRetryDrill) {
+        btnRetryDrill.addEventListener('click', () => {
+          resetDrill();
+          renderAll();
+        });
+      }
+
+      const btnNextModule = document.getElementById('btnNextModule');
+      if (btnNextModule) {
+        btnNextModule.addEventListener('click', () => {
+          if (state.currentModuleIndex + 1 < MODULES.length) {
+            state.currentModuleIndex += 1;
+            state.currentStage = 'learn';
+            resetDrill();
+            saveProgress();
+            renderAll();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      }
+
+      // Simulators (live DOM updates without full re-render flicker)
+      const simMmSlider = document.getElementById('simMmSlider');
+      if (simMmSlider) {
+        const updateMikron = (val) => {
+          const mm = Number(val);
+          state.sim.mmVal = mm;
+          const um = Math.round(mm * 1000);
+          document.getElementById('simMmOut').innerHTML = `${formatId(mm, 3)} <span class="text-sm text-slate-400">mm</span>`;
+          document.getElementById('simUmOut').innerHTML = `${um} <span class="text-sm text-sky-400/80">μm</span>`;
+          document.getElementById('simHairBar').style.width = `${Math.min(100, (um / 100) * 100)}%`;
+          let txt = 'Sangat tipis (level toleransi CNC presisi!)';
+          if (um >= 70 && um <= 90) txt = 'Sekitar setebal 1 helai rambut manusia (~80 μm)';
+          else if (um > 90 && um <= 120) txt = 'Sekitar setebal 1 lembar kertas HVS (~100 μm)';
+          else if (um > 120) txt = `Sekitar ${(um / 100).toFixed(1).replace('.', ',')}× ketebalan kertas HVS`;
+          document.getElementById('simCompareText').textContent = txt;
+        };
+        simMmSlider.addEventListener('input', (e) => updateMikron(e.target.value));
+        document.querySelectorAll('.sim-preset').forEach((p) => {
+          p.addEventListener('click', () => {
+            const v = p.getAttribute('data-sim-mm');
+            simMmSlider.value = v;
+            updateMikron(v);
+          });
+        });
+      }
+
+      const simTolSlider = document.getElementById('simTolSlider');
+      if (simTolSlider) {
+        simTolSlider.addEventListener('input', (e) => {
+          const val = Number(e.target.value);
+          state.sim.tolMeasured = val;
+          const isOk = val >= 49.98 - 1e-6 && val <= 50.03 + 1e-6;
+          const pct = ((val - 49.95) / (50.06 - 49.95)) * 100;
+          document.getElementById('tolPointer').style.left = `calc(${pct}% - 2px)`;
+          const outEl = document.getElementById('tolValOut');
+          outEl.textContent = `${formatId(val, 2)} mm`;
+          outEl.className = `font-mono text-lg font-bold ${isOk ? 'text-emerald-300' : 'text-rose-300'}`;
+          const badge = document.getElementById('tolVerdictBadge');
+          badge.textContent = isOk ? '✓ OK (合格)' : '✕ NG (不良)';
+          badge.className = `rounded-full px-3 py-0.5 text-xs font-bold ${isOk ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/40' : 'bg-rose-500/20 text-rose-300 border border-rose-400/40'}`;
+        });
+      }
+
+      const simMicroSlider = document.getElementById('simMicroSlider');
+      if (simMicroSlider) {
+        simMicroSlider.addEventListener('input', (e) => {
+          const val = Number(e.target.value);
+          state.sim.microVal = val;
+          const whole = Math.floor(val + 1e-9);
+          const frac = +(val - whole).toFixed(2);
+          const hasHalf = frac >= 0.499;
+          const thimble = Math.round((hasHalf ? frac - 0.5 : frac) * 100) % 50;
+          document.getElementById('microTotalBadge').textContent = `${formatId(val, 2)} mm`;
+          document.getElementById('microSvgWrap').innerHTML = renderMicrometerSVG(val);
+          document.getElementById('microL1').textContent = formatId(whole, 2);
+          document.getElementById('microL2').textContent = `+${hasHalf ? '0,50' : '0,00'}`;
+          document.getElementById('microL3').textContent = `+0,${String(thimble).padStart(2, '0')}`;
+        });
+      }
+
+      const simVernierSlider = document.getElementById('simVernierSlider');
+      if (simVernierSlider) {
+        simVernierSlider.addEventListener('input', (e) => {
+          const val = Number(e.target.value);
+          state.sim.vernierVal = val;
+          const whole = Math.floor(val + 1e-9);
+          const koma = +(val - whole).toFixed(2);
+          document.getElementById('vernierTotalBadge').textContent = `${formatId(val, 2)} mm`;
+          document.getElementById('vernierSvgWrap').innerHTML = renderVernierSVG(val);
+          document.getElementById('vernierL1').textContent = `${whole},00 mm`;
+          document.getElementById('vernierL2').textContent = `+${formatId(koma, 2)} mm`;
+        });
+      }
+
+      const simCncSlider = document.getElementById('simCncSlider');
+      if (simCncSlider) {
+        simCncSlider.addEventListener('input', (e) => {
+          const actual = Number(e.target.value);
+          state.sim.cncActual = actual;
+          const offset = +(20.000 - actual).toFixed(3);
+          const sign = offset > 0 ? '+' : (offset < 0 ? '−' : '');
+          document.getElementById('cncActualOut').textContent = `${formatId(actual, 3)} mm`;
+          document.getElementById('cncOffsetOut').textContent = `${sign}${formatId(Math.abs(offset), 3)} mm`;
+          document.getElementById('cncHintOut').textContent = offset < 0
+            ? 'Barang KEBESARAN → masukkan MINUS agar pisau memotong lebih dalam.'
+            : (offset > 0 ? 'Barang KEKECILAN → masukkan PLUS agar pisau mundur sedikit.' : 'Tepat di target! Tidak perlu koreksi offset.');
+        });
+      }
+
+      const simDmSlider = document.getElementById('simDmSlider');
+      const simNSlider = document.getElementById('simNSlider');
+      if (simDmSlider && simNSlider) {
+        const updateCutting = () => {
+          const dm = Number(simDmSlider.value);
+          const n = Number(simNSlider.value);
+          state.sim.cutDm = dm;
+          state.sim.cutN = n;
+          const step1 = dm * n;
+          const step2 = step1 / 1000;
+          const vc = (3.14 * dm * n) / 1000;
+          document.getElementById('cutDmVal').textContent = `${dm} mm`;
+          document.getElementById('cutNVal').textContent = `${n} min⁻¹`;
+          document.getElementById('cutVcBadge').textContent = `vc ≈ ${formatId(vc, 1)} m/min`;
+          document.getElementById('latheSvgWrap').innerHTML = renderLatheSVG(dm, n);
+          document.getElementById('cutStepsBox').innerHTML = `
+            <div>1) Dm × n = ${dm} × ${n} = <span class="text-white">${step1.toLocaleString('id-ID')}</span></div>
+            <div>2) Bagi 1.000 = <span class="text-sky-300">${formatId(step2, 1)}</span></div>
+            <div>3) × 3,14 = <span class="text-violet-300 font-bold">${formatId(vc, 1)} m/min</span></div>
+          `;
+        };
+        simDmSlider.addEventListener('input', updateCutting);
+        simNSlider.addEventListener('input', updateCutting);
+      }
+    }
+
+    // =========================================================================
+    // 7. GLOBAL MODALS & INITIALIZATION
+    // =========================================================================
+    function initModals() {
+      const cheatModal = document.getElementById('cheatSheetModal');
+      const resetModal = document.getElementById('resetModal');
+
+      const openModal = (el) => { el.classList.remove('hidden'); el.classList.add('flex'); };
+      const closeModal = (el) => { el.classList.add('hidden'); el.classList.remove('flex'); };
+
+      document.getElementById('btnCheatSheet').addEventListener('click', () => openModal(cheatModal));
+      document.getElementById('btnCloseCheat').addEventListener('click', () => closeModal(cheatModal));
+      document.getElementById('btnCloseCheatBottom').addEventListener('click', () => closeModal(cheatModal));
+      cheatModal.addEventListener('click', (e) => { if (e.target === cheatModal) closeModal(cheatModal); });
+
+      document.getElementById('btnResetModal').addEventListener('click', () => openModal(resetModal));
+      document.getElementById('btnCancelReset').addEventListener('click', () => closeModal(resetModal));
+      resetModal.addEventListener('click', (e) => { if (e.target === resetModal) closeModal(resetModal); });
+      document.getElementById('btnConfirmReset').addEventListener('click', () => {
+        state.completedModules = [];
+        state.currentModuleIndex = 0;
+        state.currentStage = 'learn';
+        resetDrill();
+        saveProgress();
+        closeModal(resetModal);
+        renderAll();
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProgress();
+      initModals();
+      renderAll();
+    });
+  </script>
+</body>
+</html>
